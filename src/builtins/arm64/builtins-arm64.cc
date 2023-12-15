@@ -4762,19 +4762,24 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   Register call_data = no_reg;
   Register callback = no_reg;
   Register holder = no_reg;
+  Register caller_context = no_reg;
   Register scratch = x4;
   Register scratch2 = x5;
 
   switch (mode) {
     case CallApiCallbackMode::kGeneric:
-      api_function_address = x1;
       argc = CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister();
+      caller_context =
+          CallApiCallbackGenericDescriptor::CallerContextRegister();
       callback = CallApiCallbackGenericDescriptor::CallHandlerInfoRegister();
       holder = CallApiCallbackGenericDescriptor::HolderRegister();
       break;
 
     case CallApiCallbackMode::kOptimizedNoProfiling:
     case CallApiCallbackMode::kOptimized:
+      // Caller context is always equal to current context because we don't
+      // inline Api calls cross-context.
+      caller_context = kContextRegister;
       api_function_address =
           CallApiCallbackOptimizedDescriptor::ApiFunctionAddressRegister();
       argc = CallApiCallbackOptimizedDescriptor::ActualArgumentsCountRegister();
@@ -4782,10 +4787,11 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       holder = CallApiCallbackOptimizedDescriptor::HolderRegister();
       break;
   }
-  DCHECK(!AreAliased(api_function_address, argc, holder, call_data, callback,
-                     scratch, scratch2));
+  DCHECK(!AreAliased(api_function_address, caller_context, argc, holder,
+                     call_data, callback, scratch, scratch2));
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
@@ -4820,6 +4826,13 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
 
   // kPadding
   __ Str(xzr, MemOperand(sp, FCA::kUnusedIndex * kSystemPointerSize));
+
+  __ StoreRootRelative(IsolateData::topmost_script_having_context_offset(),
+                       caller_context);
+
+  if (mode == CallApiCallbackMode::kGeneric) {
+    api_function_address = ReassignRegister(caller_context);
+  }
 
   // kReturnValue
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
