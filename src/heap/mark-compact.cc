@@ -174,7 +174,7 @@ class FullMarkingVerifier : public MarkingVerifierBase {
       CHECK(heap_->SharedHeapContains(heap_object));
     }
 
-    CHECK(heap_object.InReadOnlySpace() ||
+    CHECK(i::InReadOnlySpace(heap_object) ||
           marking_state_->IsMarked(heap_object));
   }
 
