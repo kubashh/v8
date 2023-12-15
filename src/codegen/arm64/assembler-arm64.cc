@@ -4709,7 +4709,8 @@ void Assembler::EmitVeneers(bool force_emit, bool need_protection,
         pc_offset -= Instruction::ImmBranchRange(CondBranchType);
       }
       tasks.emplace_back(FarBranchInfo{pc_offset, it->second});
-      it = unresolved_branches_.erase(it);
+      auto eraser_it = it++;
+      unresolved_branches_.erase(eraser_it);
     }
   }
 
