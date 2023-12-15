@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec5883ec_11a48467",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-15T13:03:17Z",
+      "side": 1,
+      "message": "so if we enter efficiency mode we\u0027ll just compile everything that is already in the batch. if we leave efficiency mode we\u0027ll start filling up batches again. or am I missing something?",
+      "parentUuid": "12a50e20_6dc59de0",
+      "range": {
+        "startLine": 264,
+        "startChar": 8,
+        "endLine": 264,
+        "endChar": 18
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6e5156b_426e0b36",
         "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
         "patchSetId": 9
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-15T12:32:16Z",
       "side": 1,
       "message": "this posting doesn\u0027t happen very often, we should talk to scheduler folks about getting an API for changing the job\u0027s priority.",
+      "range": {
+        "startLine": 151,
+        "startChar": 42,
+        "endLine": 151,
+        "endChar": 49
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92820790_256cee70",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-15T13:03:17Z",
+      "side": 1,
+      "message": "ah, good catch!",
+      "parentUuid": "d6e5156b_426e0b36",
       "range": {
         "startLine": 151,
         "startChar": 42,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7e92009_3974dbd2",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-15T13:03:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3419417e_e96839d5",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 21
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bf5da6a_9f2feb0c",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-12-15T12:32:16Z",
       "side": 1,
       "message": "I wonder if this should bottleneck elsewhere (e.g. in `JSFunction::MarkForOptimization`, where we also check for `concurrent_recompilation_enabled`)",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 3
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4e5ef06_224143fd",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-15T13:03:17Z",
+      "side": 1,
+      "message": "I know but these are kind of two different things. MarkForOptimization is also used by test api\u0027s and I would like to let them decide what they want, regardles of the mode. Imho, this is already a good bottleneck here, for any heuristics based tiering request.",
+      "parentUuid": "1bf5da6a_9f2feb0c",
       "range": {
         "startLine": 337,
         "startChar": 0,
