@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76226a76_742f71e9",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-16T21:00:12Z",
+      "side": 1,
+      "message": "No.  For the logic to be equivalent, we would need to also check that cond \u003d\u003d ne || cond \u003d\u003d eq before calling b(cond, ...).",
+      "parentUuid": "8667ae8e_809d0739",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3073237c_79a05cdc",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-12-13T18:50:13Z",
       "side": 1,
       "message": "maybe pass `scratch` instead of handle.",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53bdb35b_9d2ea956",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-16T21:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3073237c_79a05cdc",
       "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4499438_e97d0e79",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-16T21:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2d709cc_a1cd5d43",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf269a80_87a7d874",
@@ -69,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8700462_6d154046",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 5646,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-16T21:00:12Z",
+      "side": 1,
+      "message": "Yes, as before this was in the arm64 version at some point then got removed, but the original ppc64 port of that code stayed here through the rebases.  Removed.",
+      "parentUuid": "cf269a80_87a7d874",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b473bcfb_705d1ff4",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-12-13T18:50:13Z",
       "side": 1,
       "message": "nit, extra space.",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78648f41_697b3601",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-16T21:00:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b473bcfb_705d1ff4",
       "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
