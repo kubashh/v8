@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2fceca7_5f67c1a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-12-18T10:32:07Z",
+      "side": 1,
+      "message": "Please could you take a look?\n\nSame as the previous [CL I sent out for review a few minutes ago](https://crrev.com/c/5130968), with the difference that this is the merge to 12.0.",
+      "revId": "a42f3040f3ea931dc24f45ba3a0b43c99b7cfbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
