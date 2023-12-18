@@ -237,7 +237,7 @@ void FunctionBodyDisassembler::DecodeAsWat(MultiLineStringBuilder& out,
     out << indentation;
     if (opcode == kExprElse || opcode == kExprCatch ||
         opcode == kExprCatchAll || opcode == kExprBlock || opcode == kExprIf ||
-        opcode == kExprLoop || opcode == kExprTry) {
+        opcode == kExprLoop || opcode == kExprTry || opcode == kExprTryTable) {
       indentation.increase();
     }
 
@@ -259,12 +259,12 @@ void FunctionBodyDisassembler::DecodeAsWat(MultiLineStringBuilder& out,
     } else {
       out << WasmOpcodes::OpcodeName(opcode);
     }
+    uint32_t length = PrintImmediatesAndGetLength(out);
     if (opcode == kExprBlock || opcode == kExprIf || opcode == kExprLoop ||
-        opcode == kExprTry) {
+        opcode == kExprTry || opcode == kExprTryTable) {
       label_stack_.emplace_back(out.line_number(), out.length(),
                                 label_occurrence_index_++);
     }
-    uint32_t length = PrintImmediatesAndGetLength(out);
 
     pc_ += length;
     out.NextLine(pc_offset());
