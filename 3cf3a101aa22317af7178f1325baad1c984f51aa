@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e4b1ab3_c79a7d52",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-18T13:38:15Z",
+      "side": 1,
+      "message": "Which logic is this porting? On arm64 it doesn\u0027t seem to branch only on ne or eq:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/arm64/macro-assembler-arm64.cc;l\u003d3118\n\nEven then this seems to be a dead function on arm64 and doesn\u0027t even exist on x64, might not even needed?",
+      "parentUuid": "76226a76_742f71e9",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3073237c_79a05cdc",
