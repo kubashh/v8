@@ -16,6 +16,24 @@
       "message": "Spurious change",
       "revId": "1ca09ef70317acaa80e480d8f7c9c9ba2020a20b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5218699_498e6399",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-18T08:47:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01c488b8_97d73534",
+      "revId": "1ca09ef70317acaa80e480d8f7c9c9ba2020a20b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

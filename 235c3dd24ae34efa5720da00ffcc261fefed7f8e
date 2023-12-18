@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3940e864_ed4aa6b0",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-18T08:47:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ec5883ec_11a48467",
+      "range": {
+        "startLine": 264,
+        "startChar": 8,
+        "endLine": 264,
+        "endChar": 18
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6e5156b_426e0b36",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "ah, good catch!",
       "parentUuid": "d6e5156b_426e0b36",
+      "range": {
+        "startLine": 151,
+        "startChar": 42,
+        "endLine": 151,
+        "endChar": 49
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0c8ea69_cf231e19",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-18T08:47:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92820790_256cee70",
       "range": {
         "startLine": 151,
         "startChar": 42,
@@ -196,6 +244,30 @@
       "side": 1,
       "message": "I know but these are kind of two different things. MarkForOptimization is also used by test api\u0027s and I would like to let them decide what they want, regardles of the mode. Imho, this is already a good bottleneck here, for any heuristics based tiering request.",
       "parentUuid": "1bf5da6a_9f2feb0c",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 3
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc30fbfd_dddbccb5",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-18T08:47:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b4e5ef06_224143fd",
       "range": {
         "startLine": 337,
         "startChar": 0,
