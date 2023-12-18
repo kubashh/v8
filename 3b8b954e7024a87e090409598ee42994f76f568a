@@ -33,6 +33,24 @@
       "message": "Changing the order here broke some tests, I\u0027ll need to find another solution to handle the special case of try-table, I\u0027ll ping you back when it\u0027s ready.",
       "revId": "3b8b954e7024a87e090409598ee42994f76f568a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bfe4186_9bddcaac",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-12-18T16:47:05Z",
+      "side": 1,
+      "message": "Idea (haven\u0027t tried it):\nLeave the if-block (old lines 262-266) as it is, and replace old line 267-269 with:\n```\n  if (opcode \u003d\u003d kExprTryTable) {\n    // `try_table` is special in that its immediates should still see\n    // the unmodified `label_stack_`.\n    LabelInfo label(out.line_number(), out.length(), label_occurrence_index_++);\n    pc_ +\u003d PrintImmediatesAndGetLength(out);\n    label_stack_.push_back(label);\n  } else {\n    pc_ +\u003d PrintImmediatesAndGetLength(out);\n  }\n```\n\nAnd add a test case in `test/unittest/wasm/wasm-disassembler-unittest.cc` that checks that we get e.g.:\n```\n  block $label0\n    try_table $label1 catch $tag0 $label0\n      call $returns_i32\n      br_if $label1\n    end $label1\n  end $label0\n```",
+      "parentUuid": "57d48dfb_13aa8c6f",
+      "revId": "3b8b954e7024a87e090409598ee42994f76f568a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
