@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9ba1e4b_32b9444b",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-18T18:57:10Z",
+      "side": 1,
+      "message": "Indeed this is a dead function now after so much upstream churn.  Removed.",
+      "parentUuid": "5e4b1ab3_c79a7d52",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3073237c_79a05cdc",
