@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d62a03df_c40174bc",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-18T11:19:23Z",
+      "side": 1,
+      "message": "Still clobbered by the increment (line 3603)",
+      "parentUuid": "2590e482_23e609e8",
+      "range": {
+        "startLine": 3581,
+        "startChar": 2,
+        "endLine": 3581,
+        "endChar": 23
+      },
+      "revId": "a5949ba92164456553b215799a79eaf2f8c6fda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa210cf4_603684d6",
         "filename": "src/maglev/maglev-ir.h",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-15T14:30:46Z",
       "side": 1,
       "message": "is passing both of these in worth it vs. tagging the incoming length? Aside from code health, it also keeps both alive for longer, in particular meaning that we can\u0027t untag the length initially in-place.",
+      "range": {
+        "startLine": 6458,
+        "startChar": 0,
+        "endLine": 6459,
+        "endChar": 40
+      },
+      "revId": "a5949ba92164456553b215799a79eaf2f8c6fda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69a0a2a_1f17e6b0",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 6459,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-18T11:19:23Z",
+      "side": 1,
+      "message": "Yeah I think with untagging the length initially just retagging in this node is better.",
+      "parentUuid": "aa210cf4_603684d6",
       "range": {
         "startLine": 6458,
         "startChar": 0,
