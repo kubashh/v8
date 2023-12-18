@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5316c128_1ba5f7df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-12-18T14:25:22Z",
+      "side": 1,
+      "message": "+Nico for src/compiler.",
+      "revId": "bdf574bb0ffd8873fa69993e158f56fd76ca0e60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c683e50e_e2267f63",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 1
@@ -48,6 +65,30 @@
       "writtenOn": "2023-12-18T13:48:33Z",
       "side": 1,
       "message": "JS-to-JS wrappers may not have a wasm instance.",
+      "range": {
+        "startLine": 173,
+        "startChar": 26,
+        "endLine": 173,
+        "endChar": 44
+      },
+      "revId": "bdf574bb0ffd8873fa69993e158f56fd76ca0e60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa27807_1d3411f9",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-12-18T14:25:22Z",
+      "side": 1,
+      "message": "Ah, right. In fact, they *never* have an instance. I uploaded https://crrev.com/c/5131016 for some more refactoring.",
+      "parentUuid": "c83afef9_8131b1bd",
       "range": {
         "startLine": 173,
         "startChar": 26,
