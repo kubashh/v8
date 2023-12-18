@@ -34,6 +34,24 @@
       "parentUuid": "6bc7bffd_954555f5",
       "revId": "54a02928c3787f71ab22db6f9b0d22fbed7514ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0d13438_4cea9412",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-18T14:56:21Z",
+      "side": 1,
+      "message": "Yes, exactly. I\u0027d advise to use `OpIndex` when it\u0027s specialized for Turboshaft and `node_t` for generic coding.",
+      "parentUuid": "59ebae26_4ad93772",
+      "revId": "54a02928c3787f71ab22db6f9b0d22fbed7514ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
