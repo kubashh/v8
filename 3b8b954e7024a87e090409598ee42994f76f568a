@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "3b8b954e7024a87e090409598ee42994f76f568a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57d48dfb_13aa8c6f",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-18T14:52:53Z",
+      "side": 1,
+      "message": "Changing the order here broke some tests, I\u0027ll need to find another solution to handle the special case of try-table, I\u0027ll ping you back when it\u0027s ready.",
+      "revId": "3b8b954e7024a87e090409598ee42994f76f568a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
