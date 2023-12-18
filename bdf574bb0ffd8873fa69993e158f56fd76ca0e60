@@ -33,6 +33,29 @@
       "message": "FYI: This is the check that we can enable now.",
       "revId": "bdf574bb0ffd8873fa69993e158f56fd76ca0e60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c83afef9_8131b1bd",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-12-18T13:48:33Z",
+      "side": 1,
+      "message": "JS-to-JS wrappers may not have a wasm instance.",
+      "range": {
+        "startLine": 173,
+        "startChar": 26,
+        "endLine": 173,
+        "endChar": 44
+      },
+      "revId": "bdf574bb0ffd8873fa69993e158f56fd76ca0e60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
