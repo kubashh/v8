@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0d23764_eb0cc94b",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-18T13:34:12Z",
+      "side": 1,
+      "message": "+1 to separate CL (sorry wasn\u0027t explicit about this)",
+      "parentUuid": "0b030786_2de40599",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1003,
+        "endChar": 74
+      },
+      "revId": "33d16a291d56579ebda9ef816560ed245f793fc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "029aab4f_c0004291",
