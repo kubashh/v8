@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a084a4b1_73a1e0db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-19T14:36:46Z",
+      "side": 1,
+      "message": "ptal, this is the simplest change that lets me proceed with the Blink plumbing right away. wdyt?",
+      "revId": "2d9153435b08db85b9f790b8a40d872ea27b723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
