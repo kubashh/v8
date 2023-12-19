@@ -1291,6 +1291,52 @@ OpIndex GraphBuilder::Process(
         *bailout = BailoutReason::kTooManyArguments;
         return OpIndex::Invalid();
       }
+
+      FrameStateInfo info = frame_state.frame_state_info();
+      std::cout << "FrameState " << node->id() << "\n";
+      std::cout << " > bailout_id: " << info.bailout_id() << "\n";
+      std::cout << " > state_combine: " << info.state_combine() << "\n";
+      const FrameStateFunctionInfo* fn_info = info.function_info();
+      std::cout << " > fn_info:\n";
+      std::cout << " >> type: " << static_cast<uint8_t>(fn_info->type())
+                << "\n";
+      std::cout << " >> parameter_count: " << fn_info->parameter_count()
+                << "\n";
+      std::cout << " >> local_count: " << fn_info->local_count() << "\n";
+      std::cout << " >> shared_info: " << fn_info->shared_info() << "\n";
+
+      std::cout << " >> Instrs: \n";
+      for (FrameStateData::Instr i : builder.instructions_) {
+        switch (i) {
+          case FrameStateData::Instr::kInput:
+            std::cout << " >>> kInput\n";
+            break;
+          case FrameStateData::Instr::kUnusedRegister:
+            std::cout << " >>> kUnusedRegister\n";
+            break;
+          case FrameStateData::Instr::kDematerializedObject:
+            std::cout << " >>> kDematerializedObject\n";
+            break;
+          case FrameStateData::Instr::kDematerializedObjectReference:
+            std::cout << " >>> kDematerializedObjectReference\n";
+            break;
+          case FrameStateData::Instr::kArgumentsElements:
+            std::cout << " >>> kArgumentsElements\n";
+            break;
+          case FrameStateData::Instr::kArgumentsLength:
+            std::cout << " >>> kArgumentsLength\n";
+            break;
+        }
+      }
+      std::cout << " >> machine_types_:\n";
+      for (MachineType type : builder.machine_types_) {
+        std::cout << " >>> " << type << "\n";
+      }
+      std::cout << " >> int_operands_:\n";
+      for (unsigned int i : builder.int_operands_) {
+        std::cout << " >>> " << i << "\n";
+      }
+
       return __ FrameState(builder.Inputs(), builder.inlined(),
                            builder.AllocateFrameStateData(
                                frame_state.frame_state_info(), graph_zone));
