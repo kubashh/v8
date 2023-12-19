@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b972db5_1d60fbb3",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-19T16:54:30Z",
+      "side": 1,
+      "message": "Thanks, CL has landed. fyi since we don\u0027t support this feature yet, if there are new CLs related to this feature you will need to port them as well if you like to keep up with upstream, i.e https://chromium-review.googlesource.com/c/v8/v8/+/5132815\n\nSame applies to static roots.",
+      "parentUuid": "f9ba1e4b_32b9444b",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3073237c_79a05cdc",
