@@ -44,6 +44,29 @@ class V8_NODISCARD MaglevCompilationHandleScope final {
 
 }  // namespace
 
+
+MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
+                                             compiler::JSHeapBroker* broker,
+                                             Handle<JSFunction> function,
+                                             BytecodeOffset osr_offset)
+    : zone_(isolate->allocator(), kMaglevZoneName),
+      broker_(broker),
+      toplevel_function_(function),
+      osr_offset_(osr_offset),
+      is_turboshaft_frontend_(true)
+#define V(Name) , Name##_(v8_flags.Name)
+          MAGLEV_COMPILATION_FLAG_LIST(V)
+#undef V
+      ,
+      specialize_to_function_context_(
+          osr_offset == BytecodeOffset::None() &&
+          v8_flags.maglev_function_context_specialization &&
+          function->raw_feedback_cell()->map() ==
+              ReadOnlyRoots(isolate).one_closure_cell_map()) {
+  toplevel_compilation_unit_ =
+       MaglevCompilationUnit::New(zone(), this, function);
+}
+
 MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
                                              Handle<JSFunction> function,
                                              BytecodeOffset osr_offset)
@@ -66,7 +89,7 @@ MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
                  maglev::IsMaglevOsrEnabled());
   canonical_handles_ = std::make_unique<CanonicalHandlesMap>(
       isolate->heap(), ZoneAllocationPolicy(&zone_));
-  compiler::CurrentHeapBrokerScope current_broker(broker_.get());
+  compiler::CurrentHeapBrokerScope current_broker(broker_);
 
   collect_source_positions_ = isolate->NeedsDetailedOptimizedCodeLineInfo();
   if (collect_source_positions_) {
@@ -95,7 +118,11 @@ MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
       MaglevCompilationUnit::New(zone(), this, function);
 }
 
-MaglevCompilationInfo::~MaglevCompilationInfo() = default;
+MaglevCompilationInfo::~MaglevCompilationInfo() {
+  if (!is_turboshaft_frontend_) {
+    delete broker_;
+  }
+}
 
 void MaglevCompilationInfo::set_graph_labeller(
     MaglevGraphLabeller* graph_labeller) {

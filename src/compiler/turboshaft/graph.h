@@ -667,6 +667,7 @@ class Graph {
     OpIndex result = next_operation_index();
 #endif  // DEBUG
     Op& op = Op::New(this, args...);
+    std::cout << "Emitted: " << op << "\n";
     IncrementInputUses(op);
 
     if (op.IsRequiredWhenUnused()) {
@@ -737,6 +738,8 @@ class Graph {
     bound_blocks_.push_back(block);
     uint32_t depth = block->ComputeDominator();
     dominator_tree_depth_ = std::max<uint32_t>(dominator_tree_depth_, depth);
+
+    std::cout << "\nBound: " << block->index() << "\n";
 
     return true;
   }
