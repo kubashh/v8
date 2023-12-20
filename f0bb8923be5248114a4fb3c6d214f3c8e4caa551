@@ -22,6 +22,30 @@
       },
       "revId": "f0bb8923be5248114a4fb3c6d214f3c8e4caa551",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a85be3d_09c0c3c4",
+        "filename": "include/v8-snapshot.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-20T14:08:25Z",
+      "side": 1,
+      "message": "It\u0027s still used in V8 (tests) by now. I will do the cleanup after wiring up Blink.",
+      "parentUuid": "3c0a69b2_c574acff",
+      "range": {
+        "startLine": 123,
+        "startChar": 11,
+        "endLine": 123,
+        "endChar": 26
+      },
+      "revId": "f0bb8923be5248114a4fb3c6d214f3c8e4caa551",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
