@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "269042e0_af249cde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-21T18:22:30Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ae9ed1ca56417f3f0f7d749e024e9201e58c182a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8b7e1ae_d42fe606",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-21T18:22:30Z",
+      "side": 1,
+      "message": "Idea for a follow-up CL, here and in other similar places: we can replace the latter check with `proto.instance_type() \u003d\u003d JS_OBJECT_PROTOTYPE_TYPE` and if we introduce a dedicated instance type for the former (many prototypes already have unique instance types) then we can avoid iterating isolates at all.",
+      "revId": "ae9ed1ca56417f3f0f7d749e024e9201e58c182a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
