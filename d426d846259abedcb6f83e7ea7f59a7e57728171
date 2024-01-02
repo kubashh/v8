@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d2bcc95_b0de196d",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4993,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-02T12:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6da48d2_e11ece3c",
+      "range": {
+        "startLine": 4993,
+        "startChar": 12,
+        "endLine": 4993,
+        "endChar": 30
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "431f789f_659983ee",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-13T12:00:47Z",
       "side": 1,
       "message": "This seems wrong. We are converting to `Word32` and we already `MarkAsWord32` above",
+      "range": {
+        "startLine": 4996,
+        "startChar": 12,
+        "endLine": 4996,
+        "endChar": 77
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3635c89e_7e7d54b7",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4996,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-02T12:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "431f789f_659983ee",
       "range": {
         "startLine": 4996,
         "startChar": 12,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f64d1ac6_5726dbea",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5000,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-02T12:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d64af4f_82815c3a",
+      "range": {
+        "startLine": 5000,
+        "startChar": 44,
+        "endLine": 5000,
+        "endChar": 67
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7a863b1_b0215acb",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-12-13T12:00:47Z",
       "side": 1,
       "message": "?",
+      "range": {
+        "startLine": 5012,
+        "startChar": 45,
+        "endLine": 5012,
+        "endChar": 67
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fdaeb95_a35a2aee",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5012,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-02T12:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7a863b1_b0215acb",
       "range": {
         "startLine": 5012,
         "startChar": 45,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7e1e6ce_fd63c569",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-02T12:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d618d91_a5b72b25",
+      "range": {
+        "startLine": 11,
+        "startChar": 10,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f218cd18_68e52b34",
@@ -146,6 +266,30 @@
       "writtenOn": "2023-12-13T12:00:47Z",
       "side": 1,
       "message": "What\u0027s the advantage of this over `BitcastTaggedToWord()`?",
+      "range": {
+        "startLine": 878,
+        "startChar": 7,
+        "endLine": 878,
+        "endChar": 42
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "add99f72_9c18574c",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-02T12:13:10Z",
+      "side": 1,
+      "message": "TruncateInt64ToInt32 is better optimized by the instruction selector (see VisitTruncateInt64ToInt32 in instruction-selector-x64.cc).\n\nI\u0027m not sure that the same optimization can be done on TruncateInt64ToInt32, because this could change live-range of GC-tracked objects.",
+      "parentUuid": "f218cd18_68e52b34",
       "range": {
         "startLine": 878,
         "startChar": 7,
