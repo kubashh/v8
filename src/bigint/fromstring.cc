@@ -242,7 +242,7 @@ void ProcessorImpl::FromStringBasePowerOfTwo(
   const int num_parts = accumulator->ResultLength();
   DCHECK(num_parts >= 1);
   DCHECK(Z.len() >= num_parts);
-  Digits parts(accumulator->heap_parts_.size() > 0
+  Digits parts(accumulator->heap_parts_.empty()
                    ? accumulator->heap_parts_.data()
                    : accumulator->stack_parts_,
                num_parts);
