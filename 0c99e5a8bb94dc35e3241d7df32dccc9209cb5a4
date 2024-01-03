@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5da57ab_5faaf4f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2024-01-03T23:06:26Z",
+      "side": 1,
+      "message": "Hi Camillo, are you interested in this sort of change? If not, I\u0027ll happily abandon it; I don\u0027t feel strongly one way or another. Thanks!",
+      "revId": "0c99e5a8bb94dc35e3241d7df32dccc9209cb5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
