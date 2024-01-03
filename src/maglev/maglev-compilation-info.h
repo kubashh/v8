@@ -45,6 +45,13 @@ class MaglevCodeGenerator;
 
 class MaglevCompilationInfo final {
  public:
+  static std::unique_ptr<MaglevCompilationInfo> New(
+      Isolate* isolate, compiler::JSHeapBroker* broker,
+      Handle<JSFunction> function, BytecodeOffset osr_offset) {
+    // Doesn't use make_unique due to the private ctor.
+    return std::unique_ptr<MaglevCompilationInfo>(
+        new MaglevCompilationInfo(isolate, broker, function, osr_offset));
+  }
   static std::unique_ptr<MaglevCompilationInfo> New(Isolate* isolate,
                                                     Handle<JSFunction> function,
                                                     BytecodeOffset osr_offset) {
@@ -55,7 +62,7 @@ class MaglevCompilationInfo final {
   ~MaglevCompilationInfo();
 
   Zone* zone() { return &zone_; }
-  compiler::JSHeapBroker* broker() const { return broker_.get(); }
+  compiler::JSHeapBroker* broker() const { return broker_; }
   MaglevCompilationUnit* toplevel_compilation_unit() const {
     return toplevel_compilation_unit_;
   }
@@ -108,6 +115,8 @@ class MaglevCompilationInfo final {
  private:
   MaglevCompilationInfo(Isolate* isolate, Handle<JSFunction> function,
                         BytecodeOffset osr_offset);
+  MaglevCompilationInfo(Isolate* isolate, compiler::JSHeapBroker* broker,
+                        Handle<JSFunction> function, BytecodeOffset osr_offset);
 
   // Storing the raw pointer to the CanonicalHandlesMap is generally not safe.
   // Use DetachCanonicalHandles() to transfer ownership instead.
@@ -118,12 +127,14 @@ class MaglevCompilationInfo final {
   friend compiler::JSHeapBroker;
 
   Zone zone_;
-  const std::unique_ptr<compiler::JSHeapBroker> broker_;
+  compiler::JSHeapBroker* broker_;
   // Must be initialized late since it requires an initialized heap broker.
   MaglevCompilationUnit* toplevel_compilation_unit_ = nullptr;
   Handle<JSFunction> toplevel_function_;
   Handle<Code> code_;
   BytecodeOffset osr_offset_;
+
+  bool is_turboshaft_frontend_ = false;
 
   std::unique_ptr<MaglevGraphLabeller> graph_labeller_;
 

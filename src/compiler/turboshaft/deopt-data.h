@@ -72,11 +72,12 @@ struct FrameStateData {
     base::Vector<const OpIndex> Inputs() { return base::VectorOf(inputs_); }
     bool inlined() const { return inlined_; }
 
-   private:
     base::SmallVector<Instr, 32> instructions_;
     base::SmallVector<MachineType, 32> machine_types_;
     base::SmallVector<uint32_t, 16> int_operands_;
     base::SmallVector<OpIndex, 32> inputs_;
+
+   private:
     bool inlined_ = false;
   };
 
