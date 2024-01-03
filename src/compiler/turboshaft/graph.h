@@ -748,11 +748,9 @@ class Graph {
     uint32_t depth = block->ComputeDominator();
     dominator_tree_depth_ = std::max<uint32_t>(dominator_tree_depth_, depth);
 
-#ifdef DEBUG
     if (v8_flags.turboshaft_trace_emitted) {
       std::cout << "\nBound: " << block->index() << "\n";
     }
-#endif
 
     return true;
   }

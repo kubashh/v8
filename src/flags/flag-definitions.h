@@ -1282,10 +1282,14 @@ DEFINE_EXPERIMENTAL_FEATURE(
 DEFINE_BOOL(turboshaft_wasm_instruction_selection_staged, false,
             "run instruction selection on Turboshaft IR directly for wasm, on "
             "architectures where we are staging the feature")
-DEFINE_EXPERIMENTAL_FEATURE(turboshaft_csa,
-                            "run the CSA pipeline with turboshaft")
 DEFINE_BOOL(turboshaft_load_elimination, false,
             "enable Turboshaft's low-level load elimination for JS")
+
+DEFINE_EXPERIMENTAL_FEATURE(turboshaft_from_maglev,
+                            "build the Turboshaft graph from Maglev")
+DEFINE_IMPLICATION(turboshaft_from_maglev, turboshaft_frontend)
+DEFINE_EXPERIMENTAL_FEATURE(turboshaft_csa,
+                            "run the CSA pipeline with turboshaft")
 DEFINE_EXPERIMENTAL_FEATURE(turboshaft_machine_lowering_opt,
                             "enable MachineOptimization during MachineLowering")
 DEFINE_EXPERIMENTAL_FEATURE(turboshaft_loop_peeling,

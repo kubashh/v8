@@ -1292,6 +1292,7 @@ OpIndex GraphBuilder::Process(
         *bailout = BailoutReason::kTooManyArguments;
         return OpIndex::Invalid();
       }
+
       return __ FrameState(builder.Inputs(), builder.inlined(),
                            builder.AllocateFrameStateData(
                                frame_state.frame_state_info(), graph_zone));

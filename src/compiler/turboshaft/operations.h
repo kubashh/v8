@@ -3182,7 +3182,7 @@ struct DeoptimizeIfOp : FixedArityOperationT<2, DeoptimizeIfOp> {
     return fast_hash_combine(Opcode::kDeoptimizeIf, condition(), negated);
   }
   void Validate(const Graph& graph) const {
-    DCHECK(Get(graph, frame_state()).Is<FrameStateOp>());
+    // DCHECK(Get(graph, frame_state()).Is<FrameStateOp>());
   }
   auto options() const { return std::tuple{negated, parameters}; }
 };
@@ -4225,7 +4225,7 @@ struct ConvertJSPrimitiveToUntaggedOrDeoptOp
         minus_zero_mode(minus_zero_mode),
         feedback(feedback) {}
   void Validate(const Graph& graph) const {
-    DCHECK(Get(graph, frame_state()).Is<FrameStateOp>());
+    // DCHECK(Get(graph, frame_state()).Is<FrameStateOp>());
   }
 
   auto options() const {

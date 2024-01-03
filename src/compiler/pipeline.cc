@@ -90,6 +90,7 @@
 #include "src/compiler/turboshaft/loop-peeling-phase.h"
 #include "src/compiler/turboshaft/loop-unrolling-phase.h"
 #include "src/compiler/turboshaft/machine-lowering-phase.h"
+#include "src/compiler/turboshaft/maglev-graph-building-phase.h"
 #include "src/compiler/turboshaft/optimize-phase.h"
 #include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/recreate-schedule-phase.h"
@@ -3023,7 +3024,9 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
     data->node_origins()->RemoveDecorator();
   }
 
-  ComputeScheduledGraph();
+  if (!v8_flags.turboshaft_from_maglev) {
+    ComputeScheduledGraph();
+  }
 
   if (v8_flags.turboshaft) {
     UnparkedScopeIfNeeded scope(data->broker(),
@@ -3035,8 +3038,10 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
             turboshaft::TurboshaftPipelineKind::kJS));
     turboshaft::Tracing::Scope tracing_scope(data->info());
 
-    if (base::Optional<BailoutReason> bailout =
-            Run<turboshaft::BuildGraphPhase>(linkage)) {
+    if (v8_flags.turboshaft_from_maglev) {
+      Run<turboshaft::MaglevGraphBuildingPhase>();
+    } else if (base::Optional<BailoutReason> bailout =
+                   Run<turboshaft::BuildGraphPhase>(linkage)) {
       info()->AbortOptimization(*bailout);
       data->EndPhaseKind();
       return false;

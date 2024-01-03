@@ -3858,6 +3858,7 @@ class RepresentationSelector {
           ProcessInput<T>(node, 2, UseInfo::TruncatingFloat64());  // value
           if (lower<T>()) {
             MapRef double_map = DoubleMapParameterOf(node->op());
+            std::cout << "Obviously a NumberElement\n";
             ChangeOp(node,
                      simplified()->TransitionAndStoreNumberElement(double_map));
           }

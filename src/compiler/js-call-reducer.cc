@@ -1798,6 +1798,8 @@ TNode<JSArray> IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeMap(
 
   TNode<Number> original_length = LoadJSArrayLength(receiver, kind);
 
+  std::cout << "Kind = " << kind << "\n";
+
   // If the array length >= kMaxFastArrayLength, then CreateArray
   // will create a dictionary. We should deopt in this case, and make sure
   // not to attempt inlining again.
