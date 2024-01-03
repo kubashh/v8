@@ -40,14 +40,14 @@ MemoryAllocator::MemoryAllocator(Isolate* isolate,
       code_page_allocator_(code_page_allocator),
       trusted_page_allocator_(trusted_page_allocator),
       capacity_(RoundUp(capacity, Page::kPageSize)),
-      unmapper_(isolate->heap(), this) {
+      pool_(this) {
   DCHECK_NOT_NULL(data_page_allocator_);
   DCHECK_NOT_NULL(code_page_allocator_);
   DCHECK_NOT_NULL(trusted_page_allocator_);
 }
 
 void MemoryAllocator::TearDown() {
-  unmapper()->TearDown();
+  pool()->TearDown();
 
   // Check that spaces were torn down before MemoryAllocator.
   DCHECK_EQ(size_, 0u);
@@ -64,174 +64,45 @@ void MemoryAllocator::TearDown() {
   trusted_page_allocator_ = nullptr;
 }
 
-class MemoryAllocator::Unmapper::UnmapFreeMemoryJob : public JobTask {
- public:
-  explicit UnmapFreeMemoryJob(Isolate* isolate, Unmapper* unmapper)
-      : unmapper_(unmapper),
-        tracer_(isolate->heap()->tracer()),
-        trace_id_(reinterpret_cast<uint64_t>(this) ^
-                  tracer_->CurrentEpoch(GCTracer::Scope::BACKGROUND_UNMAPPER)) {
+void MemoryAllocator::Pool::DiscardPooledChunks() {
+  for (auto* chunk : pooled_chunks_) {
+    DCHECK_NOT_NULL(chunk);
+    allocator_->DiscardMemory(chunk->reserved_memory());
   }
 
-  UnmapFreeMemoryJob(const UnmapFreeMemoryJob&) = delete;
-  UnmapFreeMemoryJob& operator=(const UnmapFreeMemoryJob&) = delete;
-
-  void Run(JobDelegate* delegate) override {
-    if (delegate->IsJoiningThread()) {
-      TRACE_GC_WITH_FLOW(tracer_, GCTracer::Scope::UNMAPPER, trace_id_,
-                         TRACE_EVENT_FLAG_FLOW_IN);
-      RunImpl(delegate);
-
-    } else {
-      TRACE_GC1_WITH_FLOW(tracer_, GCTracer::Scope::BACKGROUND_UNMAPPER,
-                          ThreadKind::kBackground, trace_id_,
-                          TRACE_EVENT_FLAG_FLOW_IN);
-      RunImpl(delegate);
-    }
-  }
-
-  size_t GetMaxConcurrency(size_t worker_count) const override {
-    const size_t kTaskPerChunk = 8;
-    return std::min<size_t>(
-        kMaxUnmapperTasks,
-        worker_count +
-            (unmapper_->NumberOfCommittedChunks() + kTaskPerChunk - 1) /
-                kTaskPerChunk);
-  }
-
-  uint64_t trace_id() const { return trace_id_; }
-
- private:
-  void RunImpl(JobDelegate* delegate) {
-    unmapper_->PerformFreeMemoryOnQueuedChunks(FreeMode::kUncommitPooled,
-                                               delegate);
-    if (v8_flags.trace_unmapper) {
-      PrintIsolate(unmapper_->heap_->isolate(), "UnmapFreeMemoryTask Done\n");
-    }
-  }
-  Unmapper* const unmapper_;
-  GCTracer* const tracer_;
-  const uint64_t trace_id_;
-};
-
-void MemoryAllocator::Unmapper::FreeQueuedChunks() {
-  if (NumberOfChunks() == 0) return;
-
-  if (!heap_->IsTearingDown() && v8_flags.concurrent_sweeping) {
-    if (job_handle_ && job_handle_->IsValid()) {
-      job_handle_->NotifyConcurrencyIncrease();
-    } else {
-      auto job = std::make_unique<UnmapFreeMemoryJob>(heap_->isolate(), this);
-      TRACE_GC_NOTE_WITH_FLOW("MemoryAllocator::Unmapper started",
-                              job->trace_id(), TRACE_EVENT_FLAG_FLOW_OUT);
-      job_handle_ = V8::GetCurrentPlatform()->PostJob(
-          TaskPriority::kUserVisible, std::move(job));
-      if (v8_flags.trace_unmapper) {
-        PrintIsolate(heap_->isolate(), "Unmapper::FreeQueuedChunks: new Job\n");
-      }
-    }
-  } else {
-    PerformFreeMemoryOnQueuedChunks(FreeMode::kUncommitPooled);
-  }
+  discarded_chunks_.insert(discarded_chunks_.end(), pooled_chunks_.begin(),
+                           pooled_chunks_.end());
+  pooled_chunks_.clear();
 }
 
-void MemoryAllocator::Unmapper::CancelAndWaitForPendingTasks() {
-  if (job_handle_ && job_handle_->IsValid()) job_handle_->Join();
-
-  if (v8_flags.trace_unmapper) {
-    PrintIsolate(
-        heap_->isolate(),
-        "Unmapper::CancelAndWaitForPendingTasks: no tasks remaining\n");
+void MemoryAllocator::Pool::TearDown() {
+  for (auto* chunk : pooled_chunks_) {
+    DCHECK_NOT_NULL(chunk);
+    chunk->reserved_memory()->Free();
   }
+  for (auto* chunk : discarded_chunks_) {
+    DCHECK_NOT_NULL(chunk);
+    // The discarded pages are already empty and have no flags set. Uncommit
+    // them directly.
+    VirtualMemory reservation(allocator_->data_page_allocator(),
+                              reinterpret_cast<Address>(chunk),
+                              Page::kPageSize);
+    reservation.Free();
+  }
+  pooled_chunks_.clear();
+  discarded_chunks_.clear();
 }
 
-void MemoryAllocator::Unmapper::PrepareForGC() {
-  // Free non-regular chunks because they cannot be re-used.
-  PerformFreeMemoryOnQueuedNonRegularChunks();
+size_t MemoryAllocator::Pool::NumberOfCommittedChunks() const {
+  return pooled_chunks_.size();
 }
 
-void MemoryAllocator::Unmapper::EnsureUnmappingCompleted() {
-  CancelAndWaitForPendingTasks();
-  PerformFreeMemoryOnQueuedChunks(FreeMode::kFreePooled);
+int MemoryAllocator::Pool::NumberOfChunks() const {
+  return static_cast<int>(pooled_chunks_.size() + discarded_chunks_.size());
 }
 
-void MemoryAllocator::Unmapper::PerformFreeMemoryOnQueuedNonRegularChunks(
-    JobDelegate* delegate) {
-  MemoryChunk* chunk = nullptr;
-  while ((chunk = GetMemoryChunkSafe(ChunkQueueType::kNonRegular)) != nullptr) {
-    allocator_->PerformFreeMemory(chunk);
-    if (delegate && delegate->ShouldYield()) return;
-  }
-}
-
-void MemoryAllocator::Unmapper::PerformFreeMemoryOnQueuedChunks(
-    MemoryAllocator::Unmapper::FreeMode mode, JobDelegate* delegate) {
-  MemoryChunk* chunk = nullptr;
-  if (v8_flags.trace_unmapper) {
-    PrintIsolate(
-        heap_->isolate(),
-        "Unmapper::PerformFreeMemoryOnQueuedChunks: %d queued chunks\n",
-        NumberOfChunks());
-  }
-  // Regular chunks.
-  while ((chunk = GetMemoryChunkSafe(ChunkQueueType::kRegular)) != nullptr) {
-    bool pooled = chunk->IsFlagSet(MemoryChunk::POOLED);
-    allocator_->PerformFreeMemory(chunk);
-    if (pooled) AddMemoryChunkSafe(ChunkQueueType::kPooled, chunk);
-    if (delegate && delegate->ShouldYield()) return;
-  }
-  if (mode == MemoryAllocator::Unmapper::FreeMode::kFreePooled) {
-    // The previous loop uncommitted any pages marked as pooled and added them
-    // to the pooled list. In case of kFreePooled we need to free them though as
-    // well.
-    while ((chunk = GetMemoryChunkSafe(ChunkQueueType::kPooled)) != nullptr) {
-      allocator_->FreePooledChunk(chunk);
-      if (delegate && delegate->ShouldYield()) return;
-    }
-  }
-  PerformFreeMemoryOnQueuedNonRegularChunks();
-}
-
-void MemoryAllocator::Unmapper::TearDown() {
-  CHECK(!job_handle_ || !job_handle_->IsValid());
-  PerformFreeMemoryOnQueuedChunks(FreeMode::kFreePooled);
-  for (int i = 0; i < ChunkQueueType::kNumberOfChunkQueues; i++) {
-    DCHECK(chunks_[i].empty());
-  }
-}
-
-size_t MemoryAllocator::Unmapper::NumberOfCommittedChunks() {
-  base::MutexGuard guard(&mutex_);
-  return chunks_[ChunkQueueType::kRegular].size() +
-         chunks_[ChunkQueueType::kNonRegular].size();
-}
-
-int MemoryAllocator::Unmapper::NumberOfChunks() {
-  base::MutexGuard guard(&mutex_);
-  size_t result = 0;
-  for (int i = 0; i < ChunkQueueType::kNumberOfChunkQueues; i++) {
-    result += chunks_[i].size();
-  }
-  return static_cast<int>(result);
-}
-
-size_t MemoryAllocator::Unmapper::CommittedBufferedMemory() {
-  base::MutexGuard guard(&mutex_);
-
-  size_t sum = 0;
-  // kPooled chunks are already uncommited. We only have to account for
-  // kRegular and kNonRegular chunks.
-  for (auto& chunk : chunks_[ChunkQueueType::kRegular]) {
-    sum += chunk->size();
-  }
-  for (auto& chunk : chunks_[ChunkQueueType::kNonRegular]) {
-    sum += chunk->size();
-  }
-  return sum;
-}
-
-bool MemoryAllocator::Unmapper::IsRunning() const {
-  return job_handle_ && job_handle_->IsValid();
+size_t MemoryAllocator::Pool::CommittedBufferedMemory() const {
+  return NumberOfCommittedChunks() * Page::kPageSize;
 }
 
 bool MemoryAllocator::CommitMemory(VirtualMemory* reservation,
@@ -249,6 +120,14 @@ bool MemoryAllocator::UncommitMemory(VirtualMemory* reservation) {
   size_t size = reservation->size();
   if (!reservation->SetPermissions(reservation->address(), size,
                                    PageAllocator::kNoAccess)) {
+    return false;
+  }
+  return true;
+}
+
+bool MemoryAllocator::DiscardMemory(VirtualMemory* reservation) {
+  size_t size = reservation->size();
+  if (!reservation->DiscardSystemPages(reservation->address(), size)) {
     return false;
   }
   return true;
@@ -570,35 +449,28 @@ void MemoryAllocator::Free(MemoryAllocator::FreeMode mode, MemoryChunk* chunk) {
       PreFreeMemory(chunk);
       PerformFreeMemory(chunk);
       break;
-    case FreeMode::kConcurrentlyAndPool:
+    case FreeMode::kPostpone:
+      PreFreeMemory(chunk);
+      // Record page to be freed later.
+      queued_pages_to_be_freed_.push_back(chunk);
+      break;
+    case FreeMode::kPool:
       DCHECK_EQ(chunk->size(), static_cast<size_t>(MemoryChunk::kPageSize));
       DCHECK_EQ(chunk->executable(), NOT_EXECUTABLE);
       chunk->SetFlag(MemoryChunk::POOLED);
-      V8_FALLTHROUGH;
-    case FreeMode::kConcurrently:
       PreFreeMemory(chunk);
-      // The chunks added to this queue will be freed by a concurrent thread.
-      unmapper()->AddMemoryChunkSafe(chunk);
+      // The chunks added to this queue will be cached until memory reducing GC.
+      pool()->AddMemoryChunk(chunk);
       break;
   }
 }
 
-void MemoryAllocator::FreePooledChunk(MemoryChunk* chunk) {
-  // Pooled pages cannot be touched anymore as their memory is uncommitted.
-  // Pooled pages are not-executable.
-  FreeMemoryRegion(data_page_allocator(), chunk->address(),
-                   static_cast<size_t>(MemoryChunk::kPageSize));
-}
-
 Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
                                     Space* space, Executability executable) {
-  size_t size =
+  const size_t size =
       MemoryChunkLayout::AllocatableMemoryInMemoryChunk(space->identity());
   base::Optional<MemoryChunkAllocationResult> chunk_info;
   if (alloc_mode == AllocationMode::kUsePool) {
-    DCHECK_EQ(size, static_cast<size_t>(
-                        MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
-                            space->identity())));
     DCHECK_EQ(executable, NOT_EXECUTABLE);
     chunk_info = AllocateUninitializedPageFromPool(space);
   }
@@ -663,9 +535,10 @@ LargePage* MemoryAllocator::AllocateLargePage(LargeObjectSpace* space,
   return page;
 }
 
+// TODO(bikineev): Look at the allocation path.
 base::Optional<MemoryAllocator::MemoryChunkAllocationResult>
 MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
-  void* chunk = unmapper()->TryGetPooledMemoryChunkSafe();
+  void* chunk = pool()->TryGetPooledMemoryChunk();
   if (chunk == nullptr) return {};
   const int size = MemoryChunk::kPageSize;
   const Address start = reinterpret_cast<Address>(chunk);
@@ -677,7 +550,6 @@ MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
   DCHECK_NE(CODE_SPACE, space->identity());
   DCHECK_NE(TRUSTED_SPACE, space->identity());
   VirtualMemory reservation(data_page_allocator(), start, size);
-  if (!CommitMemory(&reservation, NOT_EXECUTABLE)) return {};
   if (heap::ShouldZapGarbage()) {
     heap::ZapBlock(start, size, kZapValue);
   }
@@ -874,6 +746,13 @@ void MemoryAllocator::RecordLargePageDestroyed(const LargePage& page) {
   USE(size);
   DCHECK_EQ(1u, size);
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+}
+
+void MemoryAllocator::ReleaseQueuedPages() {
+  for (auto* chunk : queued_pages_to_be_freed_) {
+    PerformFreeMemory(chunk);
+  }
+  queued_pages_to_be_freed_.clear();
 }
 
 }  // namespace internal
