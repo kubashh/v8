@@ -1200,7 +1200,7 @@ size_t GetTotalConservativeFrameSizeInBytes(FrameStateType type,
 
 FrameStateDescriptor::FrameStateDescriptor(
     Zone* zone, FrameStateType type, BytecodeOffset bailout_id,
-    OutputFrameStateCombine state_combine, size_t parameters_count,
+    OutputFrameStateCombine state_combine, ssize_t parameters_count,
     size_t locals_count, size_t stack_count,
     MaybeHandle<SharedFunctionInfo> shared_info,
     FrameStateDescriptor* outer_state)
@@ -1229,7 +1229,10 @@ size_t FrameStateDescriptor::GetHeight() const {
       // Custom, non-JS calling convention (that does not have a notion of
       // a receiver or context).
       return parameters_count();
-    case FrameStateType::kInlinedExtraArguments:
+    case FrameStateType::kInlinedExtraArguments: {
+      ssize_t param_count = parameters_count();
+      return param_count > 0 ? param_count : 0;
+    }
     case FrameStateType::kConstructCreateStub:
     case FrameStateType::kConstructInvokeStub:
     case FrameStateType::kJavaScriptBuiltinContinuation:
@@ -1245,8 +1248,9 @@ size_t FrameStateDescriptor::GetHeight() const {
 }
 
 size_t FrameStateDescriptor::GetSize() const {
-  return (HasClosure() ? 1 : 0) + parameters_count() + locals_count() +
-         stack_count() + (HasContext() ? 1 : 0);
+  ssize_t param_count = parameters_count();
+  return (HasClosure() ? 1 : 0) + (param_count > 0 ? param_count : 0) +
+         locals_count() + stack_count() + (HasContext() ? 1 : 0);
 }
 
 size_t FrameStateDescriptor::GetTotalSize() const {

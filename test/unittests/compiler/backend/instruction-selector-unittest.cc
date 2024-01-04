@@ -464,7 +464,7 @@ TARGET_TEST_F(InstructionSelectorTest, CallStubWithDeopt) {
   FrameStateDescriptor* desc_before =
       s.GetFrameStateDescriptor(deopt_id_before);
   EXPECT_EQ(bailout_id_before, desc_before->bailout_id());
-  EXPECT_EQ(1u, desc_before->parameters_count());
+  EXPECT_EQ(1, desc_before->parameters_count());
   EXPECT_EQ(1u, desc_before->locals_count());
   EXPECT_EQ(1u, desc_before->stack_count());
   EXPECT_EQ(43, s.ToInt32(call_instr->InputAt(3)));
@@ -572,7 +572,7 @@ TARGET_TEST_F(InstructionSelectorTest, CallStubWithDeoptRecursiveFrameState) {
       s.GetFrameStateDescriptor(deopt_id_before);
   FrameStateDescriptor* desc_before_outer = desc_before->outer_state();
   EXPECT_EQ(bailout_id_before, desc_before->bailout_id());
-  EXPECT_EQ(1u, desc_before_outer->parameters_count());
+  EXPECT_EQ(1, desc_before_outer->parameters_count());
   EXPECT_EQ(1u, desc_before_outer->locals_count());
   EXPECT_EQ(1u, desc_before_outer->stack_count());
   // Values from parent environment.
@@ -582,7 +582,7 @@ TARGET_TEST_F(InstructionSelectorTest, CallStubWithDeoptRecursiveFrameState) {
   EXPECT_EQ(64, s.ToInt32(call_instr->InputAt(5)));
   EXPECT_EQ(65, s.ToInt32(call_instr->InputAt(6)));
   // Values from the nested frame.
-  EXPECT_EQ(1u, desc_before->parameters_count());
+  EXPECT_EQ(1, desc_before->parameters_count());
   EXPECT_EQ(1u, desc_before->locals_count());
   EXPECT_EQ(1u, desc_before->stack_count());
   EXPECT_EQ(43, s.ToInt32(call_instr->InputAt(8)));
