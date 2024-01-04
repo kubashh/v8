@@ -33,6 +33,46 @@
       "message": "+Thibaud for compiler and wasm (main reviewer)",
       "revId": "151e20396b1356eb365fdb95436380f375db8300",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1bdb952_6fbdd8f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-01-04T13:51:48Z",
+      "side": 1,
+      "message": "LGTM with a nit",
+      "revId": "151e20396b1356eb365fdb95436380f375db8300",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3852543f_4f611f56",
+        "filename": "src/wasm/wasm-objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-01-04T13:51:48Z",
+      "side": 1,
+      "message": "Stale comment",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 184,
+        "endChar": 9
+      },
+      "revId": "151e20396b1356eb365fdb95436380f375db8300",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
