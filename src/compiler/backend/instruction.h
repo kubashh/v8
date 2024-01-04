@@ -1448,7 +1448,7 @@ class FrameStateDescriptor : public ZoneObject {
   FrameStateDescriptor(Zone* zone, FrameStateType type,
                        BytecodeOffset bailout_id,
                        OutputFrameStateCombine state_combine,
-                       size_t parameters_count, size_t locals_count,
+                       ssize_t parameters_count, size_t locals_count,
                        size_t stack_count,
                        MaybeHandle<SharedFunctionInfo> shared_info,
                        FrameStateDescriptor* outer_state = nullptr);
@@ -1456,14 +1456,16 @@ class FrameStateDescriptor : public ZoneObject {
   FrameStateType type() const { return type_; }
   BytecodeOffset bailout_id() const { return bailout_id_; }
   OutputFrameStateCombine state_combine() const { return frame_state_combine_; }
-  size_t parameters_count() const { return parameters_count_; }
+  ssize_t parameters_count() const { return parameters_count_; }
   size_t locals_count() const { return locals_count_; }
   size_t stack_count() const { return stack_count_; }
   MaybeHandle<SharedFunctionInfo> shared_info() const { return shared_info_; }
   FrameStateDescriptor* outer_state() const { return outer_state_; }
   bool HasClosure() const {
-    return type_ != FrameStateType::kConstructInvokeStub;
+    return type_ != FrameStateType::kConstructInvokeStub &&
+           type_ != FrameStateType::kInlinedExtraArguments;
   }
+
   bool HasContext() const {
     return FrameStateFunctionInfo::IsJSFunctionType(type_) ||
            type_ == FrameStateType::kBuiltinContinuation ||
@@ -1504,7 +1506,7 @@ class FrameStateDescriptor : public ZoneObject {
   FrameStateType type_;
   BytecodeOffset bailout_id_;
   OutputFrameStateCombine frame_state_combine_;
-  const size_t parameters_count_;
+  const ssize_t parameters_count_;
   const size_t locals_count_;
   const size_t stack_count_;
   const size_t total_conservative_frame_size_in_bytes_;
