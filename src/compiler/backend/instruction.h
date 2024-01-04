@@ -1462,8 +1462,10 @@ class FrameStateDescriptor : public ZoneObject {
   MaybeHandle<SharedFunctionInfo> shared_info() const { return shared_info_; }
   FrameStateDescriptor* outer_state() const { return outer_state_; }
   bool HasClosure() const {
-    return type_ != FrameStateType::kConstructInvokeStub;
+    return type_ != FrameStateType::kConstructInvokeStub &&
+           type_ != FrameStateType::kInlinedExtraArguments;
   }
+
   bool HasContext() const {
     return FrameStateFunctionInfo::IsJSFunctionType(type_) ||
            type_ == FrameStateType::kBuiltinContinuation ||
