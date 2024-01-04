@@ -1595,6 +1595,14 @@ class TurboshaftAssemblerOpInterface
     return ReduceIfReachableConvertJSPrimitiveToUntaggedOrDeopt(
         object, frame_state, from_kind, to_kind, minus_zero_mode, feedback);
   }
+  V<Word32> CheckedSmiUntag(V<Object> object, OpIndex frame_state,
+                            const FeedbackSource& feedback) {
+    return ConvertJSPrimitiveToUntaggedOrDeopt(
+        object, frame_state,
+        ConvertJSPrimitiveToUntaggedOrDeoptOp::JSPrimitiveKind::kSmi,
+        ConvertJSPrimitiveToUntaggedOrDeoptOp::UntaggedKind::kInt32,
+        CheckForMinusZeroMode::kDontCheckForMinusZero, feedback);
+  }
 
   OpIndex TruncateJSPrimitiveToUntagged(
       V<Object> object, TruncateJSPrimitiveToUntaggedOp::UntaggedKind kind,
@@ -1671,8 +1679,10 @@ class TurboshaftAssemblerOpInterface
     return ReduceIfReachableConstant(ConstantOp::Kind::kTaggedIndex,
                                      uint64_t{static_cast<uint32_t>(value)});
   }
-  template <typename T,
-            typename = std::enable_if_t<is_subtype_v<T, HeapObject>>>
+  // TODO(dmercadier): use HeapObject rather than Object in the enable_if_t.
+  // This is currently Object because Maglev has Object constants and Turboshaft
+  // has HeapObject constant, but we should unify this.
+  template <typename T, typename = std::enable_if_t<is_subtype_v<T, Object>>>
   V<T> HeapConstant(Handle<T> value) {
     return ReduceIfReachableConstant(ConstantOp::Kind::kHeapObject,
                                      ConstantOp::Storage{value});
