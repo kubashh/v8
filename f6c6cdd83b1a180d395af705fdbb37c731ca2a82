@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa9a2d6_5b504c80",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-05T09:15:49Z",
+      "side": 1,
+      "message": "should we DCHECK that this is never ASYNC_RETURN?",
+      "range": {
+        "startLine": 536,
+        "startChar": 19,
+        "endLine": 536,
+        "endChar": 29
+      },
+      "revId": "f6c6cdd83b1a180d395af705fdbb37c731ca2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1a91898_75447164",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1575,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-05T09:15:49Z",
+      "side": 1,
+      "message": "move into `else`",
+      "range": {
+        "startLine": 1575,
+        "startChar": 4,
+        "endLine": 1575,
+        "endChar": 37
+      },
+      "revId": "f6c6cdd83b1a180d395af705fdbb37c731ca2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73dbc99_2fa43bfd",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-05T09:15:49Z",
+      "side": 1,
+      "message": "what about the case where `check_return_value.empty()` but also `builder()-\u003eRemainderOfBlockIsDead()`? I think this can happen with `constructor() { throw 42; }`",
+      "range": {
+        "startLine": 1577,
+        "startChar": 8,
+        "endLine": 1577,
+        "endChar": 74
+      },
+      "revId": "f6c6cdd83b1a180d395af705fdbb37c731ca2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39e1c31e_29b97db3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-05T09:15:49Z",
+      "side": 1,
+      "message": "Rather than jumping to return, you can just return twice -- return bytecodes are cheap:\n```suggestion\n      builder()-\u003eJumpIfUndefined(load_this.New())\n               .BuildReturn(literal-\u003ereturn_position());\n\n      {\n        load_this.Bind(builder());\n        BuildThisVariableLoad();\n        BuildReturn(literal-\u003ereturn_position());\n      }\n```",
+      "range": {
+        "startLine": 1586,
+        "startChar": 0,
+        "endLine": 1596,
+        "endChar": 7
+      },
+      "revId": "f6c6cdd83b1a180d395af705fdbb37c731ca2a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
