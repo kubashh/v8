@@ -18,9 +18,11 @@
 #include "src/heap/local-heap.h"
 #include "src/heap/parked-scope.h"
 #include "src/interpreter/bytecode-flags.h"
+#ifdef V8_ENABLE_MAGLEV
 #include "src/maglev/maglev-assembler-inl.h"
 #include "src/maglev/maglev-assembler.h"
 #include "src/maglev/maglev-code-gen-state.h"
+#endif
 #include "src/maglev/maglev-compilation-unit.h"
 #include "src/maglev/maglev-graph-labeller.h"
 #include "src/maglev/maglev-graph-processor.h"
@@ -126,6 +128,23 @@ void Phi::RecordUseReprHint(UseRepresentationSet repr_mask,
     }
   }
 }
+
+void Phi::SetUseRequires31BitValue() {
+  if (uses_require_31_bit_value_) return;
+  uses_require_31_bit_value_ = true;
+  auto inputs =
+      is_loop_phi() ? merge_state_->predecessors_so_far() : input_count();
+  for (int i = 0; i < inputs; ++i) {
+    ValueNode* input_node = input(i).node();
+    DCHECK(input_node);
+    if (auto phi = input_node->TryCast<Phi>()) {
+      phi->SetUseRequires31BitValue();
+    }
+  }
+}
+
+InitialValue::InitialValue(uint64_t bitfield, interpreter::Register source)
+    : Base(bitfield), source_(source) {}
 
 namespace {
 
@@ -312,14 +331,6 @@ bool FromConstantToBool(LocalIsolate* local_isolate, ValueNode* node) {
     default:
       UNREACHABLE();
   }
-}
-
-bool FromConstantToBool(MaglevAssembler* masm, ValueNode* node) {
-  // TODO(leszeks): Getting the main thread local isolate is not what we
-  // actually want here, but it's all we have, and it happens to work because
-  // really all we're using it for is ReadOnlyRoots. We should change ToBoolean
-  // to be able to pass ReadOnlyRoots in directly.
-  return FromConstantToBool(masm->isolate()->AsLocalIsolate(), node);
 }
 
 DeoptInfo::DeoptInfo(Zone* zone, const DeoptFrame top_frame,
@@ -755,6 +766,16 @@ Handle<Object> RootConstant::DoReify(LocalIsolate* isolate) const {
   return isolate->root_handle(index());
 }
 
+#ifdef V8_ENABLE_MAGLEV
+
+bool FromConstantToBool(MaglevAssembler* masm, ValueNode* node) {
+  // TODO(leszeks): Getting the main thread local isolate is not what we
+  // actually want here, but it's all we have, and it happens to work because
+  // really all we're using it for is ReadOnlyRoots. We should change ToBoolean
+  // to be able to pass ReadOnlyRoots in directly.
+  return FromConstantToBool(masm->isolate()->AsLocalIsolate(), node);
+}
+
 // ---
 // Load node to registers
 // ---
@@ -882,9 +903,6 @@ void RootConstant::SetValueLocationConstraints() { DefineAsConstant(this); }
 void RootConstant::GenerateCode(MaglevAssembler* masm,
                                 const ProcessingState& state) {}
 
-InitialValue::InitialValue(uint64_t bitfield, interpreter::Register source)
-    : Base(bitfield), source_(source) {}
-
 void InitialValue::SetValueLocationConstraints() {
   result().SetUnallocated(compiler::UnallocatedOperand::FIXED_SLOT,
                           stack_slot(), kNoVreg);
@@ -1001,20 +1019,6 @@ void Phi::SetValueLocationConstraints() {
 }
 
 void Phi::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {}
-
-void Phi::SetUseRequires31BitValue() {
-  if (uses_require_31_bit_value_) return;
-  uses_require_31_bit_value_ = true;
-  auto inputs =
-      is_loop_phi() ? merge_state_->predecessors_so_far() : input_count();
-  for (int i = 0; i < inputs; ++i) {
-    ValueNode* input_node = input(i).node();
-    DCHECK(input_node);
-    if (auto phi = input_node->TryCast<Phi>()) {
-      phi->SetUseRequires31BitValue();
-    }
-  }
-}
 
 namespace {
 
@@ -6178,6 +6182,36 @@ void Switch::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
   }
 }
 
+void HandleNoHeapWritesInterrupt::GenerateCode(MaglevAssembler* masm,
+                                               const ProcessingState& state) {
+  ZoneLabelRef done(masm);
+  Label* deferred = __ MakeDeferredCode(
+      [](MaglevAssembler* masm, ZoneLabelRef done, Node* node) {
+        ASM_CODE_COMMENT_STRING(masm, "HandleNoHeapWritesInterrupt");
+        {
+          SaveRegisterStateForCall save_register_state(
+              masm, node->register_snapshot());
+          __ Move(kContextRegister, masm->native_context().object());
+          __ CallRuntime(Runtime::kHandleNoHeapWritesInterrupts, 0);
+          save_register_state.DefineSafepointWithLazyDeopt(
+              node->lazy_deopt_info());
+        }
+        __ Jump(*done);
+      },
+      done, this);
+
+  MaglevAssembler::ScratchRegisterScope temps(masm);
+  Register scratch = temps.GetDefaultScratchRegister();
+  MemOperand check = __ ExternalReferenceAsOperand(
+      ExternalReference::address_of_no_heap_write_interrupt_request(
+          masm->isolate()),
+      scratch);
+  __ CompareByteAndJumpIf(check, 0, kNotEqual, scratch, deferred, Label::kFar);
+  __ bind(*done);
+}
+
+#endif  // V8_ENABLE_MAGLEV
+
 // ---
 // Print params
 // ---
@@ -6638,34 +6672,6 @@ void BranchIfInt32Compare::PrintParams(
 void BranchIfTypeOf::PrintParams(std::ostream& os,
                                  MaglevGraphLabeller* graph_labeller) const {
   os << "(" << interpreter::TestTypeOfFlags::ToString(literal_) << ")";
-}
-
-void HandleNoHeapWritesInterrupt::GenerateCode(MaglevAssembler* masm,
-                                               const ProcessingState& state) {
-  ZoneLabelRef done(masm);
-  Label* deferred = __ MakeDeferredCode(
-      [](MaglevAssembler* masm, ZoneLabelRef done, Node* node) {
-        ASM_CODE_COMMENT_STRING(masm, "HandleNoHeapWritesInterrupt");
-        {
-          SaveRegisterStateForCall save_register_state(
-              masm, node->register_snapshot());
-          __ Move(kContextRegister, masm->native_context().object());
-          __ CallRuntime(Runtime::kHandleNoHeapWritesInterrupts, 0);
-          save_register_state.DefineSafepointWithLazyDeopt(
-              node->lazy_deopt_info());
-        }
-        __ Jump(*done);
-      },
-      done, this);
-
-  MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register scratch = temps.GetDefaultScratchRegister();
-  MemOperand check = __ ExternalReferenceAsOperand(
-      ExternalReference::address_of_no_heap_write_interrupt_request(
-          masm->isolate()),
-      scratch);
-  __ CompareByteAndJumpIf(check, 0, kNotEqual, scratch, deferred, Label::kFar);
-  __ bind(*done);
 }
 
 }  // namespace maglev

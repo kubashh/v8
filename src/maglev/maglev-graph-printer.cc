@@ -899,6 +899,7 @@ ProcessResult MaglevPrintingVisitor::Process(ControlNode* control_node,
         os_ << " " << phi->owner().ToString() << " " << phi->result().operand()
             << "\n";
       }
+#ifdef V8_ENABLE_MAGLEV
       if (target->state()->register_state().is_initialized()) {
         PrintVerticalArrows(os_, targets_);
         PrintPadding(os_, graph_labeller_, max_node_id_, -1);
@@ -920,6 +921,7 @@ ProcessResult MaglevPrintingVisitor::Process(ControlNode* control_node,
         target->state()->register_state().ForEachDoubleRegister(
             print_register_merges);
       }
+#endif
     }
   }
 
