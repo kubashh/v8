@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "771ba0b1_c3934ce1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-05T00:09:30Z",
+      "side": 1,
+      "message": "Please say what changed since the revert.",
+      "revId": "31e37ba34a828eac911543d3609850e7790da68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fb4d279_2d19097b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-05T00:09:30Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "31e37ba34a828eac911543d3609850e7790da68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
