@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40323ced_d9801edc",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1956,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-05T19:54:06Z",
+      "side": 0,
+      "message": "Down with rewrites!",
+      "parentUuid": "f8349aa4_7c69bdbc",
+      "range": {
+        "startLine": 1956,
+        "startChar": 20,
+        "endLine": 1956,
+        "endChar": 33
+      },
+      "revId": "90fd8c27e751ca18e3831afa4fb1846f0ec19e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "943a17d6_2dce8ef8",
