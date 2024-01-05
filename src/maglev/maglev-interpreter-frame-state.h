@@ -344,10 +344,51 @@ struct KnownNodeAspects {
 
   // Cached property loads.
 
-  // Maps name->object->value, so that stores to a name can invalidate all loads
-  // of that name (in case the objects are aliasing).
+  // Represents a key into the cache. This is either a NameRef, or an enum
+  // value.
+  class LoadedPropertyMapKey {
+   public:
+    enum Type {
+      // kName must be zero so that pointers are unaffected.
+      kName = 0,
+      kTypedArrayLength
+    };
+    static constexpr int kTypeMask = 0x3;
+
+    static LoadedPropertyMapKey TypedArrayLength() {
+      return LoadedPropertyMapKey(kTypedArrayLength);
+    }
+
+    // NOLINTNEXTLINE
+    LoadedPropertyMapKey(compiler::NameRef ref)
+        : data_(reinterpret_cast<Address>(ref.data())) {}
+
+    bool operator==(const LoadedPropertyMapKey& other) const {
+      return data_ == other.data_;
+    }
+    bool operator<(const LoadedPropertyMapKey& other) const {
+      return data_ < other.data_;
+    }
+
+    compiler::NameRef name() {
+      DCHECK_EQ(type(), kName);
+      return compiler::NameRef(reinterpret_cast<compiler::ObjectData*>(data_),
+                               false);
+    }
+
+    Type type() { return static_cast<Type>(data_ & kTypeMask); }
+
+   private:
+    explicit LoadedPropertyMapKey(Type type) : data_(type) {
+      DCHECK_NE(type, kName);
+    }
+
+    Address data_;
+  };
+  // Maps key->object->value, so that stores to a key can invalidate all loads
+  // of that key (in case the objects are aliasing).
   using LoadedPropertyMap =
-      ZoneMap<compiler::NameRef, ZoneMap<ValueNode*, ValueNode*>>;
+      ZoneMap<LoadedPropertyMapKey, ZoneMap<ValueNode*, ValueNode*>>;
 
   // Valid across side-effecting calls, as long as we install a dependency.
   LoadedPropertyMap loaded_constant_properties;
