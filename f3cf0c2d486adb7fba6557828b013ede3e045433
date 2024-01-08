@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "110dbbed_9768df48",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-08T16:36:46Z",
+      "side": 1,
+      "message": "This used to be in the MaglevCompilationInfo constructor, but MaglevCompilationInfo can now be instantiated when Maglev is disabled, so I moved these DCHECKs here (since the CodeGenerator should only be instantiated when Maglev is enabled).",
+      "range": {
+        "startLine": 1434,
+        "startChar": 0,
+        "endLine": 1436,
+        "endChar": 47
+      },
+      "revId": "f3cf0c2d486adb7fba6557828b013ede3e045433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85ff2fbb_f6943871",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-08T16:36:46Z",
+      "side": 1,
+      "message": "This used to be lower in this file, I moved it up so that it\u0027s before the `#if V8_ENABLE_MAGLEV`",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 40
+      },
+      "revId": "f3cf0c2d486adb7fba6557828b013ede3e045433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6e3e11f_b0190b56",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-08T16:36:46Z",
+      "side": 1,
+      "message": "I moved this down to be inside the V8_ENABLE_MAGLEV part.",
+      "range": {
+        "startLine": 772,
+        "startChar": 0,
+        "endLine": 778,
+        "endChar": 1
+      },
+      "revId": "f3cf0c2d486adb7fba6557828b013ede3e045433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "214e22a6_d8fd5d8e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 6212,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-08T16:36:46Z",
+      "side": 1,
+      "message": "I moved this up to be inside the V8_ENABLE_MAGLEV part.",
+      "range": {
+        "startLine": 6186,
+        "startChar": 0,
+        "endLine": 6212,
+        "endChar": 1
+      },
+      "revId": "f3cf0c2d486adb7fba6557828b013ede3e045433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
