@@ -526,16 +526,8 @@ void MaglevAssembler::TruncateDoubleToInt32(Register dst, DoubleRegister src) {
 
 void MaglevAssembler::TryTruncateDoubleToInt32(Register dst, DoubleRegister src,
                                                Label* fail) {
-  ScratchRegisterScope temps(this);
-  DoubleRegister converted_back = temps.AcquireDouble();
-
-  // Convert the input float64 value to int32.
-  Fcvtzs(dst.W(), src);
-  // Convert that int32 value back to float64.
-  Scvtf(converted_back, dst.W());
-  // Check that the result of the float64->int32->float64 is equal to the input
-  // (i.e. that the conversion didn't truncate.
-  Fcmp(src, converted_back);
+  // Checked conversion of the input float64 value to int32.
+  Fjcvtzs(dst.W(), src);
   JumpIf(ne, fail);
 
   // Check if {input} is -0.
@@ -543,6 +535,7 @@ void MaglevAssembler::TryTruncateDoubleToInt32(Register dst, DoubleRegister src,
   Cbnz(dst, &check_done);
 
   // In case of 0, we need to check for the IEEE 0 pattern (which is all zeros).
+  ScratchRegisterScope temps(this);
   Register input_bits = temps.Acquire();
   Fmov(input_bits, src);
   Cbnz(input_bits, fail);
@@ -580,15 +573,7 @@ void MaglevAssembler::TryTruncateDoubleToUint32(Register dst,
 void MaglevAssembler::TryChangeFloat64ToIndex(Register result,
                                               DoubleRegister value,
                                               Label* success, Label* fail) {
-  ScratchRegisterScope temps(this);
-  DoubleRegister converted_back = temps.AcquireDouble();
-  // Convert the input float64 value to int32.
-  Fcvtzs(result.W(), value);
-  // Convert that int32 value back to float64.
-  Scvtf(converted_back, result.W());
-  // Check that the result of the float64->int32->float64 is equal to
-  // the input (i.e. that the conversion didn't truncate).
-  Fcmp(value, converted_back);
+  Fjcvtzs(result.W(), value);
   JumpIf(kNotEqual, fail);
   Jump(success);
 }
