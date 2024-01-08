@@ -16,6 +16,29 @@
       "message": "Hi Camillo, are you interested in this sort of change? If not, I\u0027ll happily abandon it; I don\u0027t feel strongly one way or another. Thanks!",
       "revId": "0c99e5a8bb94dc35e3241d7df32dccc9209cb5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4587ea2_33c88665",
+        "filename": "tools/package.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-01-08T08:07:34Z",
+      "side": 1,
+      "message": "Is this potential downgrade intentional? We could probably bump this to 5.3.0.\n\nThis is currently only used by `tools/system-analyzer/local-server.sh`. Could you make sure that the script still works with that version?",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 32
+      },
+      "revId": "0c99e5a8bb94dc35e3241d7df32dccc9209cb5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
