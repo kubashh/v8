@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d63f0661_ad3cfea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-01-08T14:52:54Z",
+      "side": 1,
+      "message": "PTAL (this is the fixed second half of the reverted CL)",
+      "revId": "d249ab6a3a4c3a235804440b1f4d32fbabd75184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f03f96_d676fd5c",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-01-08T14:52:54Z",
+      "side": 1,
+      "message": "FYI: Moving this into the else branch was missing in the original CL and was causing issues. I added a regression test for this.",
+      "revId": "d249ab6a3a4c3a235804440b1f4d32fbabd75184",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
