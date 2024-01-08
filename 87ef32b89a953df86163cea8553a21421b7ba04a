@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "87ef32b89a953df86163cea8553a21421b7ba04a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24085703_42b2efdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-01-08T08:21:34Z",
+      "side": 1,
+      "message": "Nice, LGTM",
+      "revId": "87ef32b89a953df86163cea8553a21421b7ba04a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5db45e90_292e87c3",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4213,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-01-08T08:21:34Z",
+      "side": 1,
+      "message": "I think this call is unnecessary.\n`DoubleToUint32IfEqualToSelf` sets `uint32_value` for the positive case, and it is unused here in the negative case.",
+      "range": {
+        "startLine": 4213,
+        "startChar": 32,
+        "endLine": 4213,
+        "endChar": 40
+      },
+      "revId": "87ef32b89a953df86163cea8553a21421b7ba04a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
