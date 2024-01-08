@@ -33,6 +33,23 @@
       "message": "Clemens, PTAL src/base",
       "revId": "8636bb92722fbc6eec34711865e1b380f1d08f2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff599a2e_16b6d958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-01-08T16:02:23Z",
+      "side": 1,
+      "message": "src/base LGTM.",
+      "revId": "8636bb92722fbc6eec34711865e1b380f1d08f2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
