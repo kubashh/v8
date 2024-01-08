@@ -12,7 +12,9 @@
 #include "src/interpreter/bytecode-register.h"
 #include "src/maglev/maglev-compilation-unit.h"
 #include "src/maglev/maglev-ir.h"
+#ifdef V8_ENABLE_MAGLEV
 #include "src/maglev/maglev-regalloc-data.h"
+#endif
 #include "src/maglev/maglev-register-frame-array.h"
 #include "src/zone/zone.h"
 
@@ -583,6 +585,7 @@ class CompactInterpreterFrameState {
 };
 
 class MergePointRegisterState {
+#ifdef V8_ENABLE_MAGLEV
  public:
   bool is_initialized() const { return values_[0].GetPayload().is_initialized; }
 
@@ -608,6 +611,7 @@ class MergePointRegisterState {
  private:
   RegisterState values_[kAllocatableGeneralRegisterCount] = {{}};
   RegisterState double_values_[kAllocatableDoubleRegisterCount] = {{}};
+#endif  // V8_ENABLE_MAGLEV
 };
 
 class MergePointInterpreterFrameState {
