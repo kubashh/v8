@@ -16,6 +16,23 @@
       "message": "PTAL!",
       "revId": "001d64f8f92e96487ec0b595ab30666038234dab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6056690e_38a04a01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-09T08:39:19Z",
+      "side": 1,
+      "message": "Passing on to Nico, who knows a bit more about deopts.",
+      "revId": "001d64f8f92e96487ec0b595ab30666038234dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
