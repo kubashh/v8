@@ -6,6 +6,7 @@
 #define V8_INTERPRETER_INTERPRETER_ASSEMBLER_H_
 
 #include "src/codegen/code-stub-assembler.h"
+#include "src/codegen/tnode.h"
 #include "src/common/globals.h"
 #include "src/interpreter/bytecode-register.h"
 #include "src/interpreter/bytecodes.h"
@@ -73,7 +74,13 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // |operand_index| in the current bytecode.
   TNode<Uint32T> BytecodeOperandIntrinsicId(int operand_index);
   // Accumulator.
-  TNode<Object> GetAccumulator();
+  TNode<IgnitionRuntimeValue> GetAccumulator();
+  TNode<Object> UnsafeGetAccumulatorAsTaggedObject();
+  TNode<Object> GetAccumulatorAsTaggedObject();
+#ifdef V8_IGNITION_NAN_BOXING
+  void SetAccumulator(TNode<IgnitionRuntimeValue> value);
+  void ClobberAccumulator(TNode<IgnitionRuntimeValue> clobber_value);
+#endif
   void SetAccumulator(TNode<Object> value);
   void ClobberAccumulator(TNode<Object> clobber_value);
 
@@ -99,6 +106,8 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
     TNode<Word32T> reg_count_;
   };
 
+  void EnsureRegisterListAreTaggedValues(const RegListNodePair& registers);
+
   // Backup/restore register file to/from a fixed array of the correct length.
   // There is an asymmetry between suspend/export and resume/import.
   // - Suspend copies arguments and registers to the generator.
@@ -112,9 +121,15 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
                                        TNode<Int32T> formal_parameter_count);
 
   // Loads from and stores to the interpreter register file.
+#ifdef V8_IGNITION_NAN_BOXING
+  void StoreRegister(TNode<NanBoxed> value, TNode<IntPtrT> reg_index);
+  void StoreRegisterAtOperandIndex(TNode<NanBoxed> value, int operand_index);
+#endif  // V8_IGNITION_NAN_BOXING
   TNode<Object> LoadRegister(Register reg);
   TNode<IntPtrT> LoadAndUntagRegister(Register reg);
-  TNode<Object> LoadRegisterAtOperandIndex(int operand_index);
+  TNode<IgnitionRuntimeValue> LoadRegisterAtOperandIndex(int operand_index);
+  TNode<Object> LoadRegisterAtOperandIndexAsTaggedObject(int operand_index);
+  TNode<Object> LoadObjectRegisterAtOperandIndex(int operand_index);
   std::pair<TNode<Object>, TNode<Object>> LoadRegisterPairAtOperandIndex(
       int operand_index);
   void StoreRegister(TNode<Object> value, Register reg);
@@ -328,7 +343,8 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 
   void ToNumberOrNumeric(Object::Conversion mode);
 
-  void StoreRegisterForShortStar(TNode<Object> value, TNode<WordT> opcode);
+  void StoreRegisterForShortStar(TNode<IgnitionRuntimeValue> value,
+                                 TNode<WordT> opcode);
 
   // Load the bytecode at |bytecode_offset|.
   TNode<WordT> LoadBytecode(TNode<IntPtrT> bytecode_offset);
@@ -343,7 +359,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Returns the accumulator value without checking whether bytecode
   // uses it. This is intended to be used only in dispatch and in
   // tracing as these need to bypass accumulator use validity checks.
-  TNode<Object> GetAccumulatorUnchecked();
+  TNode<IgnitionRuntimeValue> GetAccumulatorUnchecked();
 
   // Returns the frame pointer for the interpreted frame of the function being
   // interpreted.
@@ -353,7 +369,8 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   TNode<IntPtrT> RegisterLocation(Register reg);
   TNode<IntPtrT> RegisterLocation(TNode<IntPtrT> reg_index);
   TNode<IntPtrT> NextRegister(TNode<IntPtrT> reg_index);
-  TNode<Object> LoadRegister(TNode<IntPtrT> reg_index);
+  TNode<IgnitionRuntimeValue> LoadRegister(TNode<IntPtrT> reg_index);
+  TNode<Object> LoadObjectAtRegister(TNode<IntPtrT> reg_index);
   void StoreRegister(TNode<Object> value, TNode<IntPtrT> reg_index);
 
   // Saves and restores interpreter bytecode offset to the interpreter stack
@@ -463,7 +480,7 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   CodeStubAssembler::TVariable<BytecodeArray> bytecode_array_;
   CodeStubAssembler::TVariable<IntPtrT> bytecode_offset_;
   CodeStubAssembler::TVariable<ExternalReference> dispatch_table_;
-  CodeStubAssembler::TVariable<Object> accumulator_;
+  CodeStubAssembler::TVariable<IgnitionRuntimeValue> accumulator_;
   ImplicitRegisterUse implicit_register_use_;
   bool made_call_;
   bool reloaded_frame_ptr_;

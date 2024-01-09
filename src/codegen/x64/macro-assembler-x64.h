@@ -96,7 +96,8 @@ class V8_EXPORT_PRIVATE MacroAssembler
   enum class PushArrayOrder { kNormal, kReverse };
   // `array` points to the first element (the lowest address).
   // `array` and `size` are not modified.
-  void PushArray(Register array, Register size, Register scratch,
+  void PushArray(Register array, Register size, Register scratch1,
+                 Register scratch2, Register scratch3,
                  PushArrayOrder order = PushArrayOrder::kNormal);
 
   // Before calling a C-function from generated code, align arguments on stack.

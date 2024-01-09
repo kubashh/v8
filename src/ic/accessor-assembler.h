@@ -7,6 +7,7 @@
 
 #include "src/base/optional.h"
 #include "src/codegen/code-stub-assembler.h"
+#include "src/codegen/tnode.h"
 #include "src/compiler/code-assembler.h"
 #include "src/objects/dictionary.h"
 
@@ -587,17 +588,35 @@ class ExitPoint {
 
  public:
   using IndirectReturnHandler = std::function<void(TNode<Object> result)>;
+  using IndirectReturnHandlerNanBoxed =
+      std::function<void(TNode<NanBoxed> result)>;
 
-  explicit ExitPoint(CodeStubAssembler* assembler)
-      : ExitPoint(assembler, nullptr) {}
+  explicit ExitPoint(CodeStubAssembler* assembler) : asm_(assembler) {}
 
   ExitPoint(CodeStubAssembler* assembler,
             const IndirectReturnHandler& indirect_return_handler)
-      : asm_(assembler), indirect_return_handler_(indirect_return_handler) {}
+      : asm_(assembler),
+        using_nan_boxed(false),
+        indirect_return_handler_(indirect_return_handler) {}
+
+  ExitPoint(CodeStubAssembler* assembler,
+            const IndirectReturnHandlerNanBoxed& indirect_return_handler)
+      : asm_(assembler),
+        using_nan_boxed(true),
+        nanboxed_indirect_return_handler_(indirect_return_handler) {}
 
   ExitPoint(CodeStubAssembler* assembler, CodeAssemblerLabel* out,
             compiler::CodeAssembler::TVariable<Object>* var_result)
       : ExitPoint(assembler, [=](TNode<Object> result) {
+          *var_result = result;
+          assembler->Goto(out);
+        }) {
+    DCHECK_EQ(out != nullptr, var_result != nullptr);
+  }
+
+  ExitPoint(CodeStubAssembler* assembler, CodeAssemblerLabel* out,
+            compiler::CodeAssembler::TVariable<NanBoxed>* var_result)
+      : ExitPoint(assembler, [=](TNode<NanBoxed> result) {
           *var_result = result;
           assembler->Goto(out);
         }) {
@@ -609,6 +628,9 @@ class ExitPoint {
                          TArgs... args) {
     if (IsDirect()) {
       asm_->TailCallRuntime(function, context, args...);
+    } else if (using_nan_boxed) {
+      nanboxed_indirect_return_handler_(
+          asm_->NanBox(asm_->CallRuntime(function, context, args...)));
     } else {
       indirect_return_handler_(asm_->CallRuntime(function, context, args...));
     }
@@ -619,6 +641,9 @@ class ExitPoint {
                          TArgs... args) {
     if (IsDirect()) {
       asm_->TailCallBuiltin(builtin, context, args...);
+    } else if (using_nan_boxed) {
+      nanboxed_indirect_return_handler_(
+          asm_->NanBox(asm_->CallBuiltin(builtin, context, args...)));
     } else {
       indirect_return_handler_(asm_->CallBuiltin(builtin, context, args...));
     }
@@ -630,6 +655,9 @@ class ExitPoint {
                       TArgs... args) {
     if (IsDirect()) {
       asm_->TailCallStub(descriptor, target, context, args...);
+    } else if (using_nan_boxed) {
+      nanboxed_indirect_return_handler_(
+          asm_->NanBox(asm_->CallStub(descriptor, target, context, args...)));
     } else {
       indirect_return_handler_(
           asm_->CallStub(descriptor, target, context, args...));
@@ -639,16 +667,33 @@ class ExitPoint {
   void Return(const TNode<Object> result) {
     if (IsDirect()) {
       asm_->Return(result);
+    } else if (using_nan_boxed) {
+      nanboxed_indirect_return_handler_(asm_->NanBox(result));
     } else {
       indirect_return_handler_(result);
     }
   }
 
-  bool IsDirect() const { return !indirect_return_handler_; }
+  void Return(const TNode<NanBoxed> result) {
+    if (IsDirect()) {
+      asm_->Return(result);
+    } else {
+      CHECK(using_nan_boxed);
+      nanboxed_indirect_return_handler_(result);
+    }
+  }
+
+  bool IsDirect() const {
+    return !indirect_return_handler_ && !nanboxed_indirect_return_handler_;
+  }
+
+  bool IsNanBoxedResult() const { return using_nan_boxed; }
 
  private:
   CodeStubAssembler* const asm_;
-  IndirectReturnHandler indirect_return_handler_;
+  bool using_nan_boxed = false;
+  IndirectReturnHandler indirect_return_handler_ = nullptr;
+  IndirectReturnHandlerNanBoxed nanboxed_indirect_return_handler_ = nullptr;
 };
 
 }  // namespace internal

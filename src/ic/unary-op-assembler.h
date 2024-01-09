@@ -6,6 +6,7 @@
 #define V8_IC_UNARY_OP_ASSEMBLER_H_
 
 #include "src/codegen/code-stub-assembler.h"
+#include "src/codegen/tnode.h"
 
 namespace v8 {
 namespace internal {
@@ -18,6 +19,26 @@ class UnaryOpAssembler final {
  public:
   explicit UnaryOpAssembler(compiler::CodeAssemblerState* state)
       : state_(state) {}
+
+  TNode<NanBoxed> Generate_BitwiseNotWithFeedback(
+      TNode<Context> context, TNode<NanBoxed> value, TNode<UintPtrT> slot,
+      TNode<HeapObject> maybe_feedback_vector,
+      UpdateFeedbackMode update_feedback_mode);
+
+  TNode<NanBoxed> Generate_DecrementWithFeedback(
+      TNode<Context> context, TNode<NanBoxed> value, TNode<UintPtrT> slot,
+      TNode<HeapObject> maybe_feedback_vector,
+      UpdateFeedbackMode update_feedback_mode);
+
+  TNode<NanBoxed> Generate_IncrementWithFeedback(
+      TNode<Context> context, TNode<NanBoxed> value, TNode<UintPtrT> slot,
+      TNode<HeapObject> maybe_feedback_vector,
+      UpdateFeedbackMode update_feedback_mode);
+
+  TNode<NanBoxed> Generate_NegateWithFeedback(
+      TNode<Context> context, TNode<NanBoxed> value, TNode<UintPtrT> slot,
+      TNode<HeapObject> maybe_feedback_vector,
+      UpdateFeedbackMode update_feedback_mode);
 
   TNode<Object> Generate_BitwiseNotWithFeedback(
       TNode<Context> context, TNode<Object> value, TNode<UintPtrT> slot,

@@ -114,6 +114,16 @@ struct Float64T : UntaggedT {
   static constexpr MachineType kMachineType = MachineType::Float64();
 };
 
+// TODO(victorgomes): Technically only on 64-bit archs.
+using EncodedFloat64 = IntPtrT;
+using NanBoxed = IntPtrT;  // A tagged value or an encoded Float64.
+
+#ifdef V8_IGNITION_NAN_BOXING
+using IgnitionRuntimeValue = NanBoxed;
+#else
+using IgnitionRuntimeValue = Object;
+#endif
+
 #ifdef V8_COMPRESS_POINTERS
 using TaggedT = Int32T;
 #else

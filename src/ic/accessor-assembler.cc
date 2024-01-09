@@ -863,7 +863,16 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
   }
 
   BIND(rebox_double);
+#ifdef V8_IGNITION_NAN_BOXING
+  // Nan box it instead.
+  if (exit_point->IsNanBoxedResult()) {
+    exit_point->Return(NanBox(var_double_value->value()));
+  } else {
+    exit_point->Return(AllocateHeapNumberWithValue(var_double_value->value()));
+  }
+#else
   exit_point->Return(AllocateHeapNumberWithValue(var_double_value->value()));
+#endif
 }
 
 void AccessorAssembler::HandleLoadICSmiHandlerHasNamedCase(
@@ -1114,7 +1123,8 @@ void AccessorAssembler::HandleLoadICProtoHandler(
     if (access_mode == LoadAccessMode::kHas) {
       exit_point->Return(TrueConstant());
     } else {
-      exit_point->Return(CAST(maybe_holder_or_constant));
+      TNode<Object> result = CAST(maybe_holder_or_constant);
+      exit_point->Return(result);
     }
   }
 
@@ -4598,7 +4608,7 @@ void AccessorAssembler::GenerateStoreIC() {
 
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   auto name = Parameter<Object>(Descriptor::kName);
-  auto value = Parameter<Object>(Descriptor::kValue);
+  auto value = Parameter<IgnitionRuntimeValue>(Descriptor::kValue);
   auto flags = base::nullopt;
   auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
   auto vector = Parameter<HeapObject>(Descriptor::kVector);

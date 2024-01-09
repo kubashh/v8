@@ -1029,7 +1029,7 @@ class StoreWithVectorDescriptor
   DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot, kVector)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
                          MachineType::AnyTagged(),     // kName
-                         MachineType::AnyTagged(),     // kValue
+                         MachineType::IntPtr(),        // kValue
                          MachineType::TaggedSigned(),  // kSlot
                          MachineType::AnyTagged())     // kVector
   DECLARE_DESCRIPTOR(StoreWithVectorDescriptor)
@@ -2029,7 +2029,7 @@ class V8_EXPORT_PRIVATE InterpreterDispatchDescriptor
  public:
   DEFINE_PARAMETERS(kAccumulator, kBytecodeOffset, kBytecodeArray,
                     kDispatchTable)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kAccumulator
+  DEFINE_PARAMETER_TYPES(MachineType::IntPtr(),     // kAccumulator
                          MachineType::IntPtr(),     // kBytecodeOffset
                          MachineType::AnyTagged(),  // kBytecodeArray
                          MachineType::IntPtr())     // kDispatchTable
