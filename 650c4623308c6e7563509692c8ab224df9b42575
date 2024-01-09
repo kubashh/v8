@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2f2fd501_60361eb7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-01-09T10:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "65689714_4bcca5a6",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 55
+      },
+      "revId": "650c4623308c6e7563509692c8ab224df9b42575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2d30fb8c_6cef6d70",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 20
@@ -37,6 +61,23 @@
       "writtenOn": "2024-01-08T11:36:02Z",
       "side": 1,
       "message": "lgtm",
+      "revId": "650c4623308c6e7563509692c8ab224df9b42575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "835131d2_0d85a45c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-01-09T10:31:50Z",
+      "side": 1,
+      "message": "Thanks!",
       "revId": "650c4623308c6e7563509692c8ab224df9b42575",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +95,30 @@
       "writtenOn": "2024-01-08T11:36:02Z",
       "side": 1,
       "message": "I think it can just be `Add()` and `TryGetPooled()` below. (It\u0027s clear from parameter and return value what we are talking about.)",
+      "range": {
+        "startLine": 54,
+        "startChar": 9,
+        "endLine": 54,
+        "endChar": 23
+      },
+      "revId": "650c4623308c6e7563509692c8ab224df9b42575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff9409e_294c280c",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-01-09T10:31:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87246741_8c83ff21",
       "range": {
         "startLine": 54,
         "startChar": 9,
