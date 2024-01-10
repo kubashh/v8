@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db6e3b9_2006108e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-10T13:52:33Z",
+      "side": 1,
+      "message": "Yea good point. With this skeleton, we can compile a simple function that contains a Smi addition (and it correctly deopts when a non-Smi is passed). I\u0027ll add this test somewhere.",
+      "parentUuid": "86de5ae6_aecc36a3",
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16edc65e_8507bb4a",
@@ -60,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a76dfbd_1fcfa10e",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-10T13:52:33Z",
+      "side": 1,
+      "message": "The `id` of `NodeBase` is set later in Maglev (when computing uses), so unfortunately, it\u0027s not usable here.",
+      "parentUuid": "16edc65e_8507bb4a",
+      "range": {
+        "startLine": 222,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 18
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dd13cb7e_727e3628",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 12
@@ -71,6 +113,30 @@
       "writtenOn": "2024-01-10T13:44:23Z",
       "side": 1,
       "message": "This supports barely anything right now. Are you sure we want this implication?",
+      "range": {
+        "startLine": 1291,
+        "startChar": 42,
+        "endLine": 1291,
+        "endChar": 62
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54f8d520_3f4b1a5e",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-10T13:52:33Z",
+      "side": 1,
+      "message": "I could remove it, but we\u0027ll need something to lower JS operations to Simplified operations then. I used `turboshaft_frontend` because it exists, but we could also add an additional temporary reducer so that adding more JS operations doesn\u0027t pollute SimplifiedLowering. For this CL, it\u0027s probably fine to remove the implication though, since the graph builder basically only supports Smi addition.",
+      "parentUuid": "dd13cb7e_727e3628",
       "range": {
         "startLine": 1291,
         "startChar": 42,
