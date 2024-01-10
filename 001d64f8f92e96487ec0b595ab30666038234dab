@@ -148,6 +148,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35d061dc_d7359a49",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-10T07:41:04Z",
+      "side": 1,
+      "message": "Mmmh, I think that you forgot to remove it :D",
+      "parentUuid": "60cb80c4_98996b31",
+      "range": {
+        "startLine": 965,
+        "startChar": 6,
+        "endLine": 965,
+        "endChar": 30
+      },
+      "revId": "001d64f8f92e96487ec0b595ab30666038234dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "38ac8a55_92b29eed",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 10
@@ -183,6 +207,30 @@
       "side": 1,
       "message": "Yes, we don\u0027t generate InlinedExtraArgumentsDeoptFrame in Maglev. \nOn TF we need to be able to materialize the arguments object, in Maglev we don\u0027t have escape analysis so we cannot do that. We need to allocate it explicitly. See src/compiler/js-create-lowering.cc.\n\nI want to do a follow-up later (TODO in js-inlining.h) where I pass the total arguments somehow to create-lowerings without creating the InlinedExtraFrameState.\n\nIt is the only usage of the real argument count (as far as I know).",
       "parentUuid": "38ac8a55_92b29eed",
+      "range": {
+        "startLine": 5539,
+        "startChar": 22,
+        "endLine": 5539,
+        "endChar": 23
+      },
+      "revId": "001d64f8f92e96487ec0b595ab30666038234dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95924f03_93771c6a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5539,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-10T07:41:04Z",
+      "side": 1,
+      "message": "Ok I see, thanks for the explanation :)",
+      "parentUuid": "460a82c8_dccaac07",
       "range": {
         "startLine": 5539,
         "startChar": 22,
