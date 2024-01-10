@@ -16,6 +16,92 @@
       "message": "Leszek, PTAL src/maglev. I\u0027ve put a bunch of codegen related things behind `#if V8_ENABLE_MAGLEV`. Maybe using an alias of this called `V8_ENABLE_BACKEND` might be clearer, not sure.\n\nNico, PTAL src/compiler.",
       "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86de5ae6_aecc36a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T13:44:23Z",
+      "side": 1,
+      "message": "Do we have any tests that work with this already?",
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16edc65e_8507bb4a",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T13:44:23Z",
+      "side": 1,
+      "message": "`NodeBase` seems to have an `id`? What about using this as an index into a sequential data structure rather than hash table?",
+      "range": {
+        "startLine": 222,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 18
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd13cb7e_727e3628",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T13:44:23Z",
+      "side": 1,
+      "message": "This supports barely anything right now. Are you sure we want this implication?",
+      "range": {
+        "startLine": 1291,
+        "startChar": 42,
+        "endLine": 1291,
+        "endChar": 62
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3678505b_998260f3",
+        "filename": "src/maglev/maglev-compilation-info.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T13:44:23Z",
+      "side": 1,
+      "message": "nit: `return {new MaglevCompilationInfo(...)};`",
+      "range": {
+        "startLine": 53,
+        "startChar": 11,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
