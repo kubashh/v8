@@ -39,6 +39,30 @@
       },
       "revId": "0c99e5a8bb94dc35e3241d7df32dccc9209cb5a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d48b2ee_e8ae843d",
+        "filename": "tools/package.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2024-01-10T22:28:39Z",
+      "side": 1,
+      "message": "Weird, I tried again and now npm decided to upgrade instead of downgrading. Maybe the package registry hadn\u0027t been updated yet when I first tried. I\u0027ve confirmed that I can use local-server.sh to examine a V8 log file with the updates from patchset 2. I had to first run `npm install -g local-web-server`, which installed version 5.3.1 of ws to /usr/bin.",
+      "parentUuid": "f4587ea2_33c88665",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 32
+      },
+      "revId": "0c99e5a8bb94dc35e3241d7df32dccc9209cb5a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
