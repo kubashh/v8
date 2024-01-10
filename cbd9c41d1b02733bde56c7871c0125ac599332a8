@@ -16,6 +16,23 @@
       "message": "PTAL. Word64 seems to have been unused before this 🤷",
       "revId": "cbd9c41d1b02733bde56c7871c0125ac599332a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d334c87_7dfe37c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-10T11:54:44Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "cbd9c41d1b02733bde56c7871c0125ac599332a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
