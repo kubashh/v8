@@ -1077,6 +1077,12 @@ inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, Register r2,
   CompareAndBranch(r1.W(), r2.W(), cond, target);
 }
 
+void MaglevAssembler::CompareIntPtrAndJumpIf(Register r1, Register r2,
+                                             Condition cond, Label* target,
+                                             Label::Distance distance) {
+  CompareAndBranch(r1.X(), r2.X(), cond, target);
+}
+
 inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, int32_t value,
                                                    Condition cond,
                                                    Label* target,

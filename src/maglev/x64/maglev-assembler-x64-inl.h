@@ -17,7 +17,6 @@
 #include "src/maglev/maglev-assembler.h"
 #include "src/maglev/maglev-basic-block.h"
 #include "src/maglev/maglev-code-gen-state.h"
-#include "v8-internal.h"
 
 namespace v8 {
 namespace internal {
@@ -953,6 +952,13 @@ void MaglevAssembler::CompareInt32AndJumpIf(Register r1, Register r2,
                                             Condition cond, Label* target,
                                             Label::Distance distance) {
   cmpl(r1, r2);
+  JumpIf(cond, target, distance);
+}
+
+void MaglevAssembler::CompareIntPtrAndJumpIf(Register r1, Register r2,
+                                             Condition cond, Label* target,
+                                             Label::Distance distance) {
+  cmpq(r1, r2);
   JumpIf(cond, target, distance);
 }
 
