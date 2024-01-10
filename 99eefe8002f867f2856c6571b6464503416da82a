@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d6b959b_ea7b94ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002681
+      },
+      "writtenOn": "2024-01-10T18:13:39Z",
+      "side": 1,
+      "message": "post holiday ping",
+      "revId": "99eefe8002f867f2856c6571b6464503416da82a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
