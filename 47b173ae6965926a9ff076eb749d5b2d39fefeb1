@@ -51,6 +51,24 @@
       "parentUuid": "e59e8123_bbe654b1",
       "revId": "47b173ae6965926a9ff076eb749d5b2d39fefeb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e94390e2_7db664c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-01-10T12:30:27Z",
+      "side": 1,
+      "message": "Ah I see. Ok then. Your call :) (but we\u0027ll anyway soon have code using this annotation, so that should make sure the annotation won\u0027t randomly stop working)",
+      "parentUuid": "dc3c9862_c15bf1ab",
+      "revId": "47b173ae6965926a9ff076eb749d5b2d39fefeb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
