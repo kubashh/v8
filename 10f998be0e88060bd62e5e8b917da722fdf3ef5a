@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4abf9be_da3c7ebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T14:00:44Z",
+      "side": 1,
+      "message": "maybe `turboshaft-frontend-test.js` can be reused",
+      "parentUuid": "1db6e3b9_2006108e",
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16edc65e_8507bb4a",
@@ -100,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "872cf875_867c379f",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T14:00:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0a76dfbd_1fcfa10e",
+      "range": {
+        "startLine": 222,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 18
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd13cb7e_727e3628",
@@ -137,6 +179,30 @@
       "side": 1,
       "message": "I could remove it, but we\u0027ll need something to lower JS operations to Simplified operations then. I used `turboshaft_frontend` because it exists, but we could also add an additional temporary reducer so that adding more JS operations doesn\u0027t pollute SimplifiedLowering. For this CL, it\u0027s probably fine to remove the implication though, since the graph builder basically only supports Smi addition.",
       "parentUuid": "dd13cb7e_727e3628",
+      "range": {
+        "startLine": 1291,
+        "startChar": 42,
+        "endLine": 1291,
+        "endChar": 62
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0a73f8a_9b358ff2",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-10T14:00:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "54f8d520_3f4b1a5e",
       "range": {
         "startLine": 1291,
         "startChar": 42,
