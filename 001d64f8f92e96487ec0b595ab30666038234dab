@@ -170,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ef8e6c4_a8a90404",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-10T08:16:02Z",
+      "side": 1,
+      "message": "I tried to do directly in gerrit, forgot to press \"Publish\". Done now.",
+      "parentUuid": "35d061dc_d7359a49",
+      "range": {
+        "startLine": 965,
+        "startChar": 6,
+        "endLine": 965,
+        "endChar": 30
+      },
+      "revId": "001d64f8f92e96487ec0b595ab30666038234dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38ac8a55_92b29eed",
