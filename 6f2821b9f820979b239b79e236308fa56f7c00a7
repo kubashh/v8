@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "83bcb9f7_d93e9171",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-01-10T09:04:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cc4aee70_952c4fe6",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "6f2821b9f820979b239b79e236308fa56f7c00a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ffe53160_5b4b1729",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2024-01-10T08:46:45Z",
       "side": 1,
       "message": "The flakes that caused the revert yesterday were triggered by moving this check.\nI don\u0027t think it\u0027s worth a thorough investigation.\nA simple fix is to just move only the crash.",
+      "range": {
+        "startLine": 3757,
+        "startChar": 7,
+        "endLine": 3757,
+        "endChar": 31
+      },
+      "revId": "6f2821b9f820979b239b79e236308fa56f7c00a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3207ee_b86f44d7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-01-10T09:04:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "40853703_2f21c063",
       "range": {
         "startLine": 3757,
         "startChar": 7,
