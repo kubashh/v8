@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5eee9a3_cd5473eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-10T11:50:42Z",
+      "side": 1,
+      "message": "PTAL. Word64 seems to have been unused before this 🤷",
+      "revId": "cbd9c41d1b02733bde56c7871c0125ac599332a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
