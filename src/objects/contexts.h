@@ -530,7 +530,7 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
     THROWN_OBJECT_INDEX = MIN_CONTEXT_SLOTS,
 
     // These slots hold values in debug evaluate contexts.
-    WRAPPED_CONTEXT_INDEX = MIN_CONTEXT_EXTENDED_SLOTS
+    WRAPPED_CONTEXT_INDEX = MIN_CONTEXT_EXTENDED_SLOTS,
   };
 
   static const int kExtensionSize =
