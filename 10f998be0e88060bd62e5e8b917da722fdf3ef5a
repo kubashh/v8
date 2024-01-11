@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9417ee1_d358dfd0",
+        "filename": "BUILD.bazel",
+        "patchSetId": 12
+      },
+      "lineNbr": 3197,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-11T14:54:39Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/5189446",
+      "parentUuid": "f26aa820_7a02388b",
+      "range": {
+        "startLine": 3178,
+        "startChar": 0,
+        "endLine": 3197,
+        "endChar": 51
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16edc65e_8507bb4a",
