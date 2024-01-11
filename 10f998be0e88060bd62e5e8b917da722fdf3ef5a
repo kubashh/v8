@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b677061a_46218ed7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-11T14:40:19Z",
+      "side": 1,
+      "message": "I used another one so that SimplifiedLowering and the maglev graph builder can have different states and are not blocked by one another.",
+      "parentUuid": "c4abf9be_da3c7ebe",
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49a5d633_de07bb37",
@@ -84,6 +102,30 @@
       "writtenOn": "2024-01-11T08:48:05Z",
       "side": 1,
       "message": "Maybe we should add Maglev to Bazel (since it is pretty stable now). I\u0027ll do that in a different CL.",
+      "range": {
+        "startLine": 3178,
+        "startChar": 0,
+        "endLine": 3197,
+        "endChar": 51
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f26aa820_7a02388b",
+        "filename": "BUILD.bazel",
+        "patchSetId": 12
+      },
+      "lineNbr": 3197,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-11T14:40:19Z",
+      "side": 1,
+      "message": "Sounds good, let me know once that\u0027s done and I\u0027ll rebase :)",
+      "parentUuid": "49a5d633_de07bb37",
       "range": {
         "startLine": 3178,
         "startChar": 0,
@@ -226,6 +268,30 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "54f8d520_3f4b1a5e",
+      "range": {
+        "startLine": 1291,
+        "startChar": 42,
+        "endLine": 1291,
+        "endChar": 62
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b5e9dd_b097fcbb",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-11T14:40:19Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "b0a73f8a_9b358ff2",
       "range": {
         "startLine": 1291,
         "startChar": 42,
