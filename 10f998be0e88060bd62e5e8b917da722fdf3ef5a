@@ -73,6 +73,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49a5d633_de07bb37",
+        "filename": "BUILD.bazel",
+        "patchSetId": 12
+      },
+      "lineNbr": 3197,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-11T08:48:05Z",
+      "side": 1,
+      "message": "Maybe we should add Maglev to Bazel (since it is pretty stable now). I\u0027ll do that in a different CL.",
+      "range": {
+        "startLine": 3178,
+        "startChar": 0,
+        "endLine": 3197,
+        "endChar": 51
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16edc65e_8507bb4a",
         "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
         "patchSetId": 12
