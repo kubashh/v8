@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72e997f3_2d832eba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-11T15:04:41Z",
+      "side": 1,
+      "message": "Overall +1 with the assumption that this will likely evolve.",
+      "revId": "d84599734f7226f202b8cd9c4314df52705178be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "977a1b32_c0ca1a18",
+        "filename": "src/maglev/maglev-compilation-info.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-11T15:04:41Z",
+      "side": 1,
+      "message": "could this be unconditionally not owned by the MaglevCompilationInfo, and we move this logic to MaglevCompilationJob?",
+      "range": {
+        "startLine": 79,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 18
+      },
+      "revId": "d84599734f7226f202b8cd9c4314df52705178be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
