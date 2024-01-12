@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a33c0fc7_553266fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-12T22:06:28Z",
+      "side": 1,
+      "message": "Igor, PTAL. A bug in the new Set ctor fast path.",
+      "revId": "dde1e3bbbf739bf855a08bc0c8765a9c7e17eb70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
