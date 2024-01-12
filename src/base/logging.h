@@ -82,6 +82,11 @@ V8_BASE_EXPORT void SetPrintStackTrace(void (*print_stack_trace_)());
 V8_BASE_EXPORT void SetDcheckFunction(void (*dcheck_Function)(const char*, int,
                                                               const char*));
 
+// A simpler version of V8::FatalProcessOutOfMemory that is available in
+// src/base. Will simply terminate the process with an OOM message that is
+// recognizes as such by fuzzers and other tooling.
+[[noreturn]] void FatalOOM(const char* msg);
+
 // In official builds, assume all check failures can be debugged given just the
 // stack trace.
 #if !defined(DEBUG) && defined(OFFICIAL_BUILD)
