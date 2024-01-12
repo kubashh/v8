@@ -10,6 +10,8 @@ extern runtime JSFinalizationRegistryRegisterWeakCellWithUnregisterToken(
     implicit context: Context)(JSFinalizationRegistry, WeakCell): void;
 }
 
+extern macro CodeStubAssembler::AsyncContextSwap(HeapObject): HeapObject;
+
 namespace weakref {
 extern transitioning macro RemoveFinalizationRegistryCellFromUnregisterTokenMap(
     JSFinalizationRegistry, WeakCell): void;
@@ -72,6 +74,9 @@ transitioning macro PushCell(
 transitioning macro FinalizationRegistryCleanupLoop(
     implicit context: Context)(finalizationRegistry: JSFinalizationRegistry,
     callback: Callable): void {
+  const previousAsyncContextStore =
+      AsyncContextSwap(finalizationRegistry.async_context_store);
+
   while (true) {
     const weakCellHead = PopClearedCell(finalizationRegistry);
     typeswitch (weakCellHead) {
@@ -89,6 +94,7 @@ transitioning macro FinalizationRegistryCleanupLoop(
       }
     }
   }
+  AsyncContextSwap(previousAsyncContextStore);
 
   runtime::ShrinkFinalizationRegistryUnregisterTokenMap(
       context, finalizationRegistry);
@@ -114,6 +120,7 @@ transitioning javascript builtin FinalizationRegistryConstructor(
   // 4. Let fn be the active function object.
   // 5. Set finalizationRegistry.[[Realm]] to fn.[[Realm]].
   finalizationRegistry.native_context = context;
+  finalizationRegistry.async_context_store = GetAsyncContextStore();
   // 6. Set finalizationRegistry.[[CleanupCallback]] to cleanupCallback.
   finalizationRegistry.cleanup = cleanupCallback;
   finalizationRegistry.flags =
