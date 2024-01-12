@@ -71,6 +71,12 @@ void SetDcheckFunction(void (*dcheck_function)(const char*, int, const char*)) {
   g_dcheck_function = dcheck_function ? dcheck_function : &DefaultDcheckHandler;
 }
 
+void FatalOOM(const char* msg) {
+  // This message should be the same as FatalProcessOutOfMemory so that fuzzers
+  // and chromecrash can categorize such crashes appropriately.
+  FATAL("Fatal process out of memory: %s", msg);
+}
+
 // Define specialization to pretty print characters (escaping non-printable
 // characters) and to print c strings as pointers instead of strings.
 #define DEFINE_PRINT_CHECK_OPERAND_CHAR(type)                    \
