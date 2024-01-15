@@ -16,6 +16,23 @@
       "message": "Hi Olivier! I always encounter a crash when I run `gen-staic-roots.py` if it didn\u0027t set job count.\n\nI saw you removed the support for it, I don\u0027t know whether it block anything else? If not, this CL enable this argument again, PTAL, thanks!",
       "revId": "08005791edc2d208c0d93447f06e8938f11041f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f400d57_35ad0e7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-01-15T09:39:30Z",
+      "side": 1,
+      "message": "Thanks for raising the issue. The problem is usually if you have lots of cores and not enough memory autoninja can be too aggressive in creating threads and you run out of memory.\n\nI think this cl is not needed as you can limit the number of threads using the `NINJA_CORE_LIMIT` environment variable.",
+      "revId": "08005791edc2d208c0d93447f06e8938f11041f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
