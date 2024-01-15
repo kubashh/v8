@@ -71,6 +71,23 @@ void SetDcheckFunction(void (*dcheck_function)(const char*, int, const char*)) {
   g_dcheck_function = dcheck_function ? dcheck_function : &DefaultDcheckHandler;
 }
 
+void FatalOOM(OOMType type, const char* msg) {
+  const char* type_str = type == OOMType::kProcess ? "process" : "JavaScript";
+  OS::PrintError("\n\n#\n# Fatal %s out of memory: %s\n#", type_str, msg);
+
+  if (g_print_stack_trace) v8::base::g_print_stack_trace();
+  fflush(stderr);
+
+#ifdef V8_FUZZILLI
+  // When fuzzing, we generally want to ignore OOM failures.
+  // It's important that we exit with a non-zero exit status here so that the
+  // fuzzer treats it as a failed execution.
+  _exit(1);
+#else
+  OS::Abort();
+#endif  // V8_FUZZILLI
+}
+
 // Define specialization to pretty print characters (escaping non-printable
 // characters) and to print c strings as pointers instead of strings.
 #define DEFINE_PRINT_CHECK_OPERAND_CHAR(type)                    \
