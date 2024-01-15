@@ -50,6 +50,13 @@ parser.add_argument(
     required=False,
     type=Path,
     help='target build directory')
+parser.add_argument(
+    '-j',
+    "--job",
+    default=-1,
+    required=False,
+    type=int,
+    help='the job count for generating static roots (postive integer required)')
 
 args = parser.parse_args()
 
@@ -90,6 +97,8 @@ for target in [args.configuration]:
   gn_args = (build_dir / "args.gn").open("r").read().splitlines()
   with (build_dir / "args.gn").open("w") as f:
     for line in gn_args:
+      if line == "":
+        continue
       result = re.search(r"^([^ ]+) = (.+)$", line)
       if len(result.groups()) != 2:
         print(f"Error parsing {build_dir / 'args.gn'} at line '{line}'")
@@ -102,7 +111,13 @@ for target in [args.configuration]:
       f.write(f"{extra} = {val}\n")
 
   # Build mksnapshot
-  run([f"{GM}", f"{machine_target()}.release.mksnapshot"], env=e)
+  if args.job > 0:
+    run([
+        f"{GM}", f"{machine_target()}.release.mksnapshot", "-j" + str(args.job)
+    ],
+        env=e)
+  else:
+    run([f"{GM}", f"{machine_target()}.release.mksnapshot"], env=e)
 
   # Generate static roots file and check if it changed
   out_file = Path(tempfile.gettempdir()) / f"static-roots-{target}.h"
