@@ -63,6 +63,30 @@
       },
       "revId": "d84599734f7226f202b8cd9c4314df52705178be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bacd648b_7fb8512c",
+        "filename": "src/maglev/maglev-compilation-info.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-15T10:49:06Z",
+      "side": 1,
+      "message": "Followup sgtm.",
+      "parentUuid": "d90d8599_c4e1d829",
+      "range": {
+        "startLine": 79,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 18
+      },
+      "revId": "d84599734f7226f202b8cd9c4314df52705178be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
