@@ -347,6 +347,30 @@
       },
       "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5157b59a_d992bee0",
+        "filename": "src/maglev/maglev-compilation-info.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-15T09:59:35Z",
+      "side": 1,
+      "message": "I\u0027ve just reused what Maglev already does a few lines below. I think that for consistency, it\u0027s better to keep it like that.",
+      "parentUuid": "3678505b_998260f3",
+      "range": {
+        "startLine": 53,
+        "startChar": 11,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "10f998be0e88060bd62e5e8b917da722fdf3ef5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

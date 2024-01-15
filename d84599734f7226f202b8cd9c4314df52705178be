@@ -39,6 +39,30 @@
       },
       "revId": "d84599734f7226f202b8cd9c4314df52705178be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d90d8599_c4e1d829",
+        "filename": "src/maglev/maglev-compilation-info.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-15T09:59:35Z",
+      "side": 1,
+      "message": "Maybe. Maglev::Compile doesn\u0027t go through MaglevCompilationJob though, but this shouldn\u0027t be a very big deal though. Mind if I take care of this in a follow up?",
+      "parentUuid": "977a1b32_c0ca1a18",
+      "range": {
+        "startLine": 79,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 18
+      },
+      "revId": "d84599734f7226f202b8cd9c4314df52705178be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
