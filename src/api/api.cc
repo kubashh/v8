@@ -222,9 +222,7 @@ void i::V8::FatalProcessOutOfMemory(i::Isolate* i_isolate, const char* location,
     // Give the embedder a chance to handle the condition. If it doesn't,
     // just crash.
     if (g_oom_error_callback) g_oom_error_callback(location, details);
-    // Note: The error message needs to be consistent with other OOM error
-    // messages (e.g. below) so that ClusterFuzz recognizes it.
-    FATAL("Fatal process out of memory: %s", location);
+    base::FatalOOM(location);
     UNREACHABLE();
   }
 
