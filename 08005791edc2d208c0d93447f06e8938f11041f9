@@ -33,6 +33,24 @@
       "message": "Thanks for raising the issue. The problem is usually if you have lots of cores and not enough memory autoninja can be too aggressive in creating threads and you run out of memory.\n\nI think this cl is not needed as you can limit the number of threads using the `NINJA_CORE_LIMIT` environment variable.",
       "revId": "08005791edc2d208c0d93447f06e8938f11041f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39813fe_de3a489a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2024-01-15T10:12:28Z",
+      "side": 1,
+      "message": "Thanks for your suggestion! I will have a try!",
+      "parentUuid": "3f400d57_35ad0e7e",
+      "revId": "08005791edc2d208c0d93447f06e8938f11041f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
