@@ -387,7 +387,7 @@ class RawConfig:
     self.tests.update(tests)
     self.clean |= clean
 
-  def build(self):
+  def build(self, job_count=-1):
     build_ninja = self.path / "build.ninja"
     if not build_ninja.exists():
       code = _call(f"gn gen {self.path}")
@@ -398,13 +398,15 @@ class RawConfig:
       if code != 0:
         return code
     targets = " ".join(self.targets)
+    build_cmd = f"autoninja -C {self.path} {targets}"
     # The implementation of mksnapshot failure detection relies on
     # the "pty" module and GDB presence, so skip it on non-Linux.
     if not USE_PTY:
-      return _call(f"autoninja -C {self.path} {targets}")
+      return _call(build_cmd)
 
-    return_code, output = _call_with_output(
-        f"autoninja -C {self.path} {targets}")
+    if job_count > 0:
+      build_cmd += " -j" + str(job_count)
+    return_code, output = _call_with_output(build_cmd)
     if return_code != 0 and "FAILED:" in output:
       if "snapshot_blob" in output:
         if "gen-static-roots.py" in output:
@@ -539,7 +541,7 @@ class ManagedConfig(RawConfig):
       print(f"# Updated gn args:\n{BUILD_DISTRIBUTION_LINE}")
       _write(args_gn, new_gn_args, log=False)
 
-  def build(self):
+  def build(self, job_count=-1):
     path = self.path
     args_gn = path / "args.gn"
     if not path.exists():
@@ -555,7 +557,7 @@ class ManagedConfig(RawConfig):
       self.targets.remove('gn_args')
     if len(self.targets) == 0:
       return 0
-    return super().build()
+    return super().build(job_count)
 
   def run_tests(self):
     # Special handling for "mkgrokdump": if it was built, run it.
@@ -578,6 +580,7 @@ class ArgumentParser(object):
     self.global_actions = set()
     self.configs = {}
     self.testrunner_args = []
+    self.job_count = -1
 
   def populate_configs(self, arches, modes, targets, tests, clean):
     for a in arches:
@@ -668,6 +671,15 @@ class ArgumentParser(object):
     # tests have names like "S15.4.4.7_A4_T1", don't split these.
     if argstring.startswith("unittests/") or argstring.startswith("test262/"):
       words = [argstring]
+    if argstring.startswith("-j"):
+      job_count_str = argstring[2:]
+      if job_count_str.isdigit():
+        self.job_count = int(job_count_str)
+      else:
+        print(
+            f"Argument error for job count (postive integer required): {argstring}"
+        )
+      return
     else:
       # Assume it's a word like "x64.release" -> split at the dot.
       words = argstring.split('.')
@@ -737,7 +749,7 @@ def main(argv):
     goma_ctl = GOMADIR / "goma_ctl.py"
     _call(f"{goma_ctl} ensure_start")
   for c in configs:
-    return_code += configs[c].build()
+    return_code += configs[c].build(parser.job_count)
   if return_code == 0:
     for c in configs:
       return_code += configs[c].run_tests()
