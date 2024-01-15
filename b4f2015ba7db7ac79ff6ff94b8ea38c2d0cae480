@@ -16,6 +16,46 @@
       "message": "WDYT?",
       "revId": "b4f2015ba7db7ac79ff6ff94b8ea38c2d0cae480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97bf8041_9ce24db1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-01-15T11:48:14Z",
+      "side": 1,
+      "message": "I think this lg as it\u0027s an improvement to the current state. I wonder if we should set up an OOM handler to also be able to yield to the embedder properly.\n\nWhy not generallize the `FatalOutOfMemoryHandler`? It solves this issue by delegating to the V8-specific callback.\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc/platform.h;l\u003d18;drc\u003d98a01e556dc3c775db2a129120504518b3e9b7e0;bpv\u003d1;bpt\u003d1\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc-js/cpp-heap.cc;drc\u003d98a01e556dc3c775db2a129120504518b3e9b7e0;bpv\u003d1;bpt\u003d1;l\u003d239",
+      "revId": "b4f2015ba7db7ac79ff6ff94b8ea38c2d0cae480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e6a813_0b910620",
+        "filename": "src/base/logging.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-01-15T11:48:14Z",
+      "side": 1,
+      "message": "fwiw, `v8::SourceLocation` can be used to propagate file/line information. Can this be useful here?",
+      "range": {
+        "startLine": 95,
+        "startChar": 33,
+        "endLine": 95,
+        "endChar": 41
+      },
+      "revId": "b4f2015ba7db7ac79ff6ff94b8ea38c2d0cae480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
