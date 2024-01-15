@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618943ea_9a8773de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2024-01-15T09:04:50Z",
+      "side": 1,
+      "message": "Hi Olivier! I always encounter a crash when I run `gen-staic-roots.py` if it didn\u0027t set job count.\n\nI saw you removed the support for it, I don\u0027t know whether it block anything else? If not, this CL enable this argument again, PTAL, thanks!",
+      "revId": "08005791edc2d208c0d93447f06e8938f11041f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
