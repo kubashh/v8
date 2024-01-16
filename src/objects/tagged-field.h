@@ -77,11 +77,15 @@ static_assert(sizeof(UnalignedDoubleMember) == sizeof(double));
 //      BigIntBase),
 //   c) The similar zero-length array extension _also_ doesn't allow subclasses
 //      on some compilers (specifically, MSVC).
+//
+// On compilers that do support zero length arrays (i.e. not MSVC), we use one
+// of these instead of `this` pointer fiddling. This gives us the warnings we'd
+// want to have (e.g. only allowing one FAM in a class, ensuring that
+// OFFSET_OF_DATA_START is only used on classes with a FAM) on clang, and MSVC
+// just promises to also have similar constraints.
+#if V8_CC_MSVC && !defined(__clang__)
+// MSVC doesn't support zero length arrays in base classes.
 #define FLEXIBLE_ARRAY_MEMBER(Type, name)                                   \
-  /* Some typedefs so that error messages are a bit more transparent */     \
-  using Only_one_FLEXIBLE_ARRAY_MEMBER_allowed_per_class = void;            \
-  using OFFSET_OF_DATA_START_needs_class_with_FLEXIBLE_ARRAY_MEMBER = void; \
-                                                                            \
   Type* name() {                                                            \
     static_assert(alignof(Type) <= alignof(decltype(*this)));               \
     return reinterpret_cast<Type*>(this + 1);                               \
@@ -91,17 +95,22 @@ static_assert(sizeof(UnalignedDoubleMember) == sizeof(double));
     return reinterpret_cast<const Type*>(this + 1);                         \
   }                                                                         \
   using FlexibleDataType = Type
+#else
+// GCC and clang allow zero length arrays in base classes.
+#define FLEXIBLE_ARRAY_MEMBER(Type, name)                          \
+  Type* name() { return flexible_array_member_data_; }             \
+  const Type* name() const { return flexible_array_member_data_; } \
+  using FlexibleDataType = Type;                                   \
+  Type flexible_array_member_data_[0]
+#endif
 
 // OFFSET_OF_DATA_START(T) returns the offset of the FLEXIBLE_ARRAY_MEMBER of
 // the class T.
-//
-// It forces an access of a dummy typedef in the class to make sure that it is
-// only used on classes with a FLEXIBLE_ARRAY_MEMBER.
-#define OFFSET_OF_DATA_START(Type)                                          \
-  (static_cast<                                                             \
-       typename Type::                                                      \
-           OFFSET_OF_DATA_START_needs_class_with_FLEXIBLE_ARRAY_MEMBER>(0), \
-   sizeof(Type))
+#if V8_CC_MSVC && !defined(__clang__)
+#define OFFSET_OF_DATA_START(Type) sizeof(Type)
+#else
+#define OFFSET_OF_DATA_START(Type) offsetof(Type, flexible_array_member_data_)
+#endif
 
 // This helper static class represents a tagged field of type T at offset
 // kFieldOffset inside some host HeapObject.
