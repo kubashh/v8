@@ -16,6 +16,52 @@
       "message": "PTAL!",
       "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09d4f9ea_407d8ca0",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-16T17:06:41Z",
+      "side": 1,
+      "message": "this is relying on an overload to not infinitely recurse?",
+      "range": {
+        "startLine": 1288,
+        "startChar": 9,
+        "endLine": 1288,
+        "endChar": 43
+      },
+      "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06169269_c218ef09",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-16T17:06:41Z",
+      "side": 1,
+      "message": "can you explain this change? It feels like it\u0027s semantically observable.",
+      "range": {
+        "startLine": 47,
+        "startChar": 46,
+        "endLine": 47,
+        "endChar": 68
+      },
+      "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
