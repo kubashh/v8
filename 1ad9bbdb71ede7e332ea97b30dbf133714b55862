@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "087b8bec_f5024d6b",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-16T18:17:28Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "09d4f9ea_407d8ca0",
+      "range": {
+        "startLine": 1288,
+        "startChar": 9,
+        "endLine": 1288,
+        "endChar": 43
+      },
+      "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06169269_c218ef09",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-01-16T17:06:41Z",
       "side": 1,
       "message": "can you explain this change? It feels like it\u0027s semantically observable.",
+      "range": {
+        "startLine": 47,
+        "startChar": 46,
+        "endLine": 47,
+        "endChar": 68
+      },
+      "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46798150_740bfb11",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-16T18:17:28Z",
+      "side": 1,
+      "message": "It is not quite observable, since no call site (except mine) is using the is_found boolean (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/runtime/runtime-object.cc;bpv\u003d1;bpt\u003d1?q\u003druntime%2Fruntime-object.cc\u0026ss\u003dchromium).\n\nIt was introduced by Igor here: https://codereview.chromium.org/2220203002 for the LoadGlobaIC_Slow runtime function. But later this function was changed, and is_found was not removed.\n\nAnwyways, the reason I need to be different than INTEGER_INDEXED_EXOTIC is due to OOB on TypedArrays. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/lookup.cc;drc\u003d429b7d0399367d6bd31daa39bdc3a9938757f3c5;l\u003d1311\n\nIt is a bit confusing the semantics of LookupIterator::IsFound, since the INTEGER_INDEXED_EXOTIC can be the state from a NotFound call: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/lookup.cc;drc\u003d429b7d0399367d6bd31daa39bdc3a9938757f3c5;l\u003d1217\n\nIn any case, I decided to check explicitly the two possible states. Maybe I should change is_found for is_oob_or_hole?\n\nI could also check that in GetHandlerInfo, this is morally what the code was doing before, since it would recheck IsOutOfBoundsAccess. In my case, I avoid this check whenever is_found is true.",
+      "parentUuid": "06169269_c218ef09",
       "range": {
         "startLine": 47,
         "startChar": 46,
