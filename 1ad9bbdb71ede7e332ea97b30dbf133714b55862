@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21140b9f_e198ceb1",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-17T12:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b82d4205_931bfbdc",
+      "range": {
+        "startLine": 1482,
+        "startChar": 45,
+        "endLine": 1482,
+        "endChar": 59
+      },
+      "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06169269_c218ef09",
@@ -149,6 +173,30 @@
       "side": 1,
       "message": "ok, this makes sense -- we might want to consider some renaming of the enum values but that can be a separate CL.",
       "parentUuid": "46798150_740bfb11",
+      "range": {
+        "startLine": 47,
+        "startChar": 46,
+        "endLine": 47,
+        "endChar": 68
+      },
+      "revId": "1ad9bbdb71ede7e332ea97b30dbf133714b55862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdff38c_2da33eb5",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-17T12:36:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "001a5fdd_b64f59e6",
       "range": {
         "startLine": 47,
         "startChar": 46,
