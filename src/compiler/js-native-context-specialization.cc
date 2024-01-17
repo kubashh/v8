@@ -3231,7 +3231,7 @@ JSNativeContextSpecialization::BuildElementAccess(
   if (keyed_mode.IsStore() && IsGrowStoreMode(keyed_mode.store_mode())) {
     // For growing stores we validate the {index} below.
   } else if (keyed_mode.IsLoad() &&
-             keyed_mode.load_mode() == LOAD_IGNORE_OUT_OF_BOUNDS &&
+             IsOOBHandlingLoadMode(keyed_mode.load_mode()) &&
              CanTreatHoleAsUndefined(receiver_maps)) {
     // Check that the {index} is a valid array index, we do the actual
     // bounds check below and just skip the store below if it's out of
@@ -3276,7 +3276,7 @@ JSNativeContextSpecialization::BuildElementAccess(
     }
 
     // Check if we can return undefined for out-of-bounds loads.
-    if (keyed_mode.load_mode() == LOAD_IGNORE_OUT_OF_BOUNDS &&
+    if (IsOOBHandlingLoadMode(keyed_mode.load_mode()) &&
         CanTreatHoleAsUndefined(receiver_maps)) {
       Node* check =
           graph()->NewNode(simplified()->NumberLessThan(), index, length);
@@ -3664,10 +3664,9 @@ JSNativeContextSpecialization::
   enum Situation { kBoundsCheckDone, kHandleOOB_SmiAndRangeCheckComputed };
   Situation situation;
   TNode<BoolT> check;
-  if ((keyed_mode.IsLoad() &&
-       keyed_mode.load_mode() == LOAD_IGNORE_OUT_OF_BOUNDS) ||
+  if ((keyed_mode.IsLoad() && IsOOBHandlingLoadMode(keyed_mode.load_mode())) ||
       (keyed_mode.IsStore() &&
-       keyed_mode.store_mode() == STORE_IGNORE_OUT_OF_BOUNDS)) {
+       IsOOBHandlingStoreMode(keyed_mode.store_mode()))) {
     // Only check that the {index} is in SignedSmall range. We do the actual
     // bounds check below and just skip the property access if it's out of
     // bounds for the {receiver}.
@@ -3864,7 +3863,7 @@ JSNativeContextSpecialization::
 Node* JSNativeContextSpecialization::BuildIndexedStringLoad(
     Node* receiver, Node* index, Node* length, Node** effect, Node** control,
     KeyedAccessLoadMode load_mode) {
-  if (load_mode == LOAD_IGNORE_OUT_OF_BOUNDS &&
+  if (IsOOBHandlingLoadMode(load_mode) &&
       dependencies()->DependOnNoElementsProtector()) {
     // Ensure that the {index} is a valid String length.
     index = *effect = graph()->NewNode(
