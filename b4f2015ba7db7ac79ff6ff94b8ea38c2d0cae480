@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d54a425_687e3d2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-01-17T13:19:16Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s go with this implementation for now, but I left a longer comment in FatalOOM about the drawbacks and how it could be improved.",
+      "parentUuid": "97bf8041_9ce24db1",
+      "revId": "b4f2015ba7db7ac79ff6ff94b8ea38c2d0cae480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64e6a813_0b910620",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-01-15T11:48:14Z",
       "side": 1,
       "message": "fwiw, `v8::SourceLocation` can be used to propagate file/line information. Can this be useful here?",
+      "range": {
+        "startLine": 95,
+        "startChar": 33,
+        "endLine": 95,
+        "endChar": 41
+      },
+      "revId": "b4f2015ba7db7ac79ff6ff94b8ea38c2d0cae480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "563f6a6c_0cb0c561",
+        "filename": "src/base/logging.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-01-17T13:19:16Z",
+      "side": 1,
+      "message": "Ah that\u0027s a neat trick! But I think I will go with Clemens\u0027 suggestion and just call `PrintError` + `Abort` directly from here since we already basically have source location information through the message. This also works nicely with the fuzzing case where we want to ignore OOMs completely and so just `_exit(1)` here, but it\u0027s still nice to print the error message first.",
+      "parentUuid": "64e6a813_0b910620",
       "range": {
         "startLine": 95,
         "startChar": 33,
