@@ -3976,12 +3976,8 @@ bool MacroAssembler::BranchShortHelper(int32_t offset, Label* L, Condition cond,
   BlockTrampolinePoolScope block_trampoline_pool(this);
   Register scratch = no_reg;
   if (!rt.is_reg()) {
-    if (rt.immediate() == 0) {
-      scratch = zero_reg;
-    } else {
-      scratch = temps.Acquire();
-      li(scratch, rt);
-    }
+    scratch = temps.Acquire();
+    li(scratch, rt);
   } else {
     scratch = rt.rm();
   }
