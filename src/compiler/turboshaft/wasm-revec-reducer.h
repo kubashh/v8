@@ -17,6 +17,75 @@
 namespace v8::internal::compiler::turboshaft {
 
 #include "src/compiler/turboshaft/define-assembler-macros.inc"
+// A PackNode consists of a fixed number of isomorphic simd128 nodes which can
+// execute in parallel and convert to a 256-bit simd node later. The nodes in a
+// PackNode must satisfy that they can be scheduled in the same basic block and
+// are mutually independent.
+class PackNode : public NON_EXPORTED_BASE(ZoneObject) {
+ public:
+  PackNode(Zone* zone, const ZoneVector<OpIndex>& node_group)
+      : nodes_(node_group.cbegin(), node_group.cend(), zone),
+        revectorized_node_() {}
+  const ZoneVector<OpIndex>& Nodes() const { return nodes_; }
+  bool IsSame(const ZoneVector<OpIndex>& node_group) const {
+    return nodes_ == node_group;
+  }
+  bool IsSame(const PackNode& other) const { return nodes_ == other.nodes_; }
+  OpIndex RevectorizedNode() const { return revectorized_node_; }
+  void SetRevectorizedNode(OpIndex node) { revectorized_node_ = node; }
+
+  void Print(Graph* graph) const;
+
+ private:
+  ZoneVector<OpIndex> nodes_;
+  OpIndex revectorized_node_;
+};
+
+class SLPTree : public NON_EXPORTED_BASE(ZoneObject) {
+ public:
+  explicit SLPTree(Graph& graph, Zone* zone)
+      : graph_(graph),
+        phase_zone_(zone),
+        root_(nullptr),
+        node_to_packnode_(zone) {}
+
+  PackNode* BuildTree(const ZoneVector<OpIndex>& roots);
+  void DeleteTree();
+
+  PackNode* GetPackNode(OpIndex node);
+  ZoneUnorderedMap<OpIndex, PackNode*>& GetNodeMapping() {
+    return node_to_packnode_;
+  }
+
+  void Print(const char* info);
+
+  template <typename FunctionType>
+  void ForEach(FunctionType callback);
+
+ private:
+  // This is the recursive part of BuildTree.
+  PackNode* BuildTreeRec(const ZoneVector<OpIndex>& node_group, unsigned depth);
+
+  // Baseline: create a new PackNode, and return.
+  PackNode* NewPackNode(const ZoneVector<OpIndex>& node_group);
+
+  // Recursion: create a new PackNode and call BuildTreeRec recursively
+  PackNode* NewPackNodeAndRecurs(const ZoneVector<OpIndex>& node_group,
+                                 int start_index, int count, unsigned depth);
+
+  bool MapToSamePackNodeEntry(const ZoneVector<OpIndex>& node_group);
+  bool CanBePacked(const ZoneVector<OpIndex>& node_group);
+
+  Graph& graph() const { return graph_; }
+  Zone* zone() const { return phase_zone_; }
+
+  Graph& graph_;
+  Zone* phase_zone_;
+  PackNode* root_;
+  // Maps a specific node to PackNode.
+  ZoneUnorderedMap<OpIndex, PackNode*> node_to_packnode_;
+  static constexpr size_t RecursionMaxDepth = 1000;
+};
 
 class WasmRevecAnalyzer {
  public:
@@ -24,12 +93,15 @@ class WasmRevecAnalyzer {
       : graph_(graph),
         phase_zone_(zone),
         store_seeds_(zone),
+        slp_tree_(nullptr),
+        revectorizable_node_(zone),
         should_reduce_(false) {
     Run();
   }
 
   void Run();
 
+  bool CanMergeSLPTrees();
   bool ShouldReduce() const { return should_reduce_; }
 
  private:
@@ -40,6 +112,8 @@ class WasmRevecAnalyzer {
   ZoneVector<std::pair<const StoreOp*, const StoreOp*>> store_seeds_;
   const wasm::WasmModule* module_ = PipelineData::Get().wasm_module();
   const wasm::FunctionSig* signature_ = PipelineData::Get().wasm_sig();
+  SLPTree* slp_tree_;
+  ZoneUnorderedMap<OpIndex, PackNode*> revectorizable_node_;
   bool should_reduce_;
 };
 
