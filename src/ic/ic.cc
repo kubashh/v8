@@ -1344,9 +1344,7 @@ Handle<Object> KeyedLoadIC::LoadElementHandler(Handle<Map> receiver_map,
          IsAnyNonextensibleElementsKind(elements_kind) ||
          IsTypedArrayOrRabGsabTypedArrayElementsKind(elements_kind));
   bool convert_hole_to_undefined =
-      info.convert_hole &&
-      (elements_kind == HOLEY_SMI_ELEMENTS ||
-       elements_kind == HOLEY_ELEMENTS) &&
+      info.convert_hole && IsHoleyElementsKind(elements_kind) &&
       AllowConvertHoleElementToUndefined(isolate(), receiver_map);
   TRACE_HANDLER_STATS(isolate(), KeyedLoadIC_LoadElementDH);
   return LoadHandler::LoadElement(isolate(), elements_kind,
