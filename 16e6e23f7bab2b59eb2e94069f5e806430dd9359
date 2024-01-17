@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f4f9351_aaca04ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2024-01-17T20:55:26Z",
+      "side": 1,
+      "message": "lgtm with comment",
+      "revId": "16e6e23f7bab2b59eb2e94069f5e806430dd9359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8267ba01_42569a62",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2024-01-17T20:55:26Z",
+      "side": 1,
+      "message": "Let\u0027s mark this one as `deprecated experimental` for now? Unless we can remove it altogether before marking the API stable.",
+      "revId": "16e6e23f7bab2b59eb2e94069f5e806430dd9359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
