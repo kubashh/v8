@@ -111,20 +111,18 @@ Handle<Smi> LoadHandler::LoadElement(Isolate* isolate,
                                      bool convert_hole_to_undefined,
                                      bool is_js_array,
                                      KeyedAccessLoadMode load_mode) {
-  int config =
-      KindBits::encode(Kind::kElement) |
-      AllowOutOfBoundsBits::encode(load_mode == LOAD_IGNORE_OUT_OF_BOUNDS) |
-      ElementsKindBits::encode(elements_kind) |
-      ConvertHoleBits::encode(convert_hole_to_undefined) |
-      IsJsArrayBits::encode(is_js_array);
+  int config = KindBits::encode(Kind::kElement) |
+               AllowOutOfBoundsBits::encode(IsOOBHandlingLoadMode(load_mode)) |
+               ElementsKindBits::encode(elements_kind) |
+               ConvertHoleBits::encode(convert_hole_to_undefined) |
+               IsJsArrayBits::encode(is_js_array);
   return handle(Smi::FromInt(config), isolate);
 }
 
 Handle<Smi> LoadHandler::LoadIndexedString(Isolate* isolate,
                                            KeyedAccessLoadMode load_mode) {
-  int config =
-      KindBits::encode(Kind::kIndexedString) |
-      AllowOutOfBoundsBits::encode(load_mode == LOAD_IGNORE_OUT_OF_BOUNDS);
+  int config = KindBits::encode(Kind::kIndexedString) |
+               AllowOutOfBoundsBits::encode(IsOOBHandlingLoadMode(load_mode));
   return handle(Smi::FromInt(config), isolate);
 }
 

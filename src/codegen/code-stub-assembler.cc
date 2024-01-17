@@ -12436,13 +12436,12 @@ void CodeStubAssembler::EmitElementStoreTypedArray(
   if (is_rab_gsab) {
     length = LoadVariableLengthJSTypedArrayLength(
         typed_array, buffer,
-        store_mode == STORE_IGNORE_OUT_OF_BOUNDS ? &done
-                                                 : &update_value_and_bailout);
+        IsOOBHandlingStoreMode(store_mode) ? &done : &update_value_and_bailout);
   } else {
     length = LoadJSTypedArrayLength(typed_array);
   }
 
-  if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
+  if (IsOOBHandlingStoreMode(store_mode)) {
     // Skip the store if we write beyond the length or
     // to a property with a negative integer index.
     GotoIfNot(UintPtrLessThan(key, length), &done);
@@ -12455,7 +12454,7 @@ void CodeStubAssembler::EmitElementStoreTypedArray(
   StoreElement(data_ptr, elements_kind, key, converted_value);
   Goto(&done);
 
-  if (!is_rab_gsab || store_mode != STORE_IGNORE_OUT_OF_BOUNDS) {
+  if (!is_rab_gsab || !IsOOBHandlingStoreMode(store_mode)) {
     BIND(&update_value_and_bailout);
     // We already prepared the incoming value for storing into a typed array.
     // This might involve calling ToNumber in some cases. We shouldn't call
