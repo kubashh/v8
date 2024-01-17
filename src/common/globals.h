@@ -2339,6 +2339,10 @@ enum KeyedAccessLoadMode {
   LOAD_IGNORE_OUT_OF_BOUNDS,
 };
 
+inline bool IsOOBHandlingLoadMode(KeyedAccessLoadMode load_mode) {
+  return load_mode == LOAD_IGNORE_OUT_OF_BOUNDS;
+}
+
 enum KeyedAccessStoreMode {
   STANDARD_STORE,
   STORE_AND_GROW_HANDLE_COW,
@@ -2351,6 +2355,10 @@ enum MutableMode { MUTABLE, IMMUTABLE };
 inline bool IsCOWHandlingStoreMode(KeyedAccessStoreMode store_mode) {
   return store_mode == STORE_HANDLE_COW ||
          store_mode == STORE_AND_GROW_HANDLE_COW;
+}
+
+inline bool IsOOBHandlingStoreMode(KeyedAccessStoreMode store_mode) {
+  return store_mode == STORE_IGNORE_OUT_OF_BOUNDS;
 }
 
 inline bool IsGrowStoreMode(KeyedAccessStoreMode store_mode) {

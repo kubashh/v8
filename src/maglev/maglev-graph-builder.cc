@@ -4235,8 +4235,8 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccessOnString(
     return ReduceResult::Fail();
   }
 
-  // TODO(victorgomes): Deal with LOAD_IGNORE_OUT_OF_BOUNDS.
-  if (keyed_mode.load_mode() == LOAD_IGNORE_OUT_OF_BOUNDS) {
+  // TODO(victorgomes): Deal with OOB access.
+  if (IsOOBHandlingLoadMode(keyed_mode.load_mode())) {
     return ReduceResult::Fail();
   }
 
@@ -4364,8 +4364,8 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccessOnTypedArray(
     return ReduceResult::Fail();
   }
   if (keyed_mode.access_mode() == compiler::AccessMode::kStore &&
-      keyed_mode.store_mode() == STORE_IGNORE_OUT_OF_BOUNDS) {
-    // TODO(victorgomes): Handle STORE_IGNORE_OUT_OF_BOUNDS mode.
+      IsOOBHandlingStoreMode(keyed_mode.store_mode())) {
+    // TODO(victorgomes): Handle OOB mode.
     return ReduceResult::Fail();
   }
   if (keyed_mode.access_mode() == compiler::AccessMode::kStore &&

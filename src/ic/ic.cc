@@ -1156,9 +1156,8 @@ KeyedLoadIC::HandlerInfo KeyedLoadIC::GeneralizeHandlerInfo(
       (old_info->load_mode == STANDARD_LOAD ? new_info.load_mode
                                             : LOAD_IGNORE_OUT_OF_BOUNDS);
   DCHECK_IMPLIES(
-      old_info->load_mode == LOAD_IGNORE_OUT_OF_BOUNDS ||
-          old_info->convert_hole,
-      new_info.load_mode == LOAD_IGNORE_OUT_OF_BOUNDS || new_info.convert_hole);
+      IsOOBHandlingLoadMode(old_info->load_mode) || old_info->convert_hole,
+      IsOOBHandlingLoadMode(new_info.load_mode) || new_info.convert_hole);
   bool convert_hole = old_info->convert_hole || new_info.convert_hole;
   return HandlerInfo{load_mode, convert_hole};
 }
