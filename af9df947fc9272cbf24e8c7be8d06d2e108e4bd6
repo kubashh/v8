@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53496fd5_65e67d61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-01-18T09:50:02Z",
+      "side": 1,
+      "message": "Removing this for review, let\u0027s wait until TF support reading holes in holey double arrays.",
+      "revId": "af9df947fc9272cbf24e8c7be8d06d2e108e4bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
