@@ -2125,7 +2125,7 @@ static const char* cross_script_source_c = R"(
     %NeverOptimizeFunction(action);
     function action(n) {
       var s = 0;
-      for (var i = 0; i < n; ++i) s += i*i*i;
+      for (var i = 0; i < n; ++i) s += i*i*i % (i + 1);
       return s;
     }
   )";
