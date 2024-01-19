@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd89f73_e3153ce0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-01-19T07:38:43Z",
+      "side": 1,
+      "message": "Hmm, I\u0027m now trying out with those fields added (although I\u0027m a bit confused why you didn\u0027t add them?)",
+      "revId": "b31133120eaa9fad28eddcdb28e953562fff1f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
