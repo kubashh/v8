@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "4e2515e2c8778533b494cf9bd3e18e14e8a86fe3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d8361a_c5512b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-19T17:29:32Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "4e2515e2c8778533b494cf9bd3e18e14e8a86fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afa377e7_f3ee05cf",
+        "filename": "test/cctest/wasm/test-run-wasm-atomics.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-19T17:29:32Z",
+      "side": 1,
+      "message": "Does this have a purpose?",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 14
+      },
+      "revId": "4e2515e2c8778533b494cf9bd3e18e14e8a86fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
