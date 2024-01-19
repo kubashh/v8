@@ -1688,6 +1688,19 @@ static const HANDLE kNoThread = INVALID_HANDLE_VALUE;
 // convention.
 static unsigned int __stdcall ThreadEntry(void* arg) {
   Thread* thread = reinterpret_cast<Thread*>(arg);
+  switch (thread->priority()) {
+    case Thread::Priority::kBestEffort:
+      ::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_LOWEST);
+      break;
+    case Thread::Priority::kUserVisible:
+      ::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
+      break;
+    case Thread::Priority::kUserBlocking:
+      ::SetThreadPriority(::GetCurrentThread(), THREAD_PRIORITY_NORMAL);
+      break;
+    case Thread::Priority::kDefault:
+      break;
+  }
   thread->NotifyStartedAndRun();
   return 0;
 }
@@ -1705,11 +1718,12 @@ class Thread::PlatformData {
 // handle until it is started.
 
 Thread::Thread(const Options& options)
-    : stack_size_(options.stack_size()), start_semaphore_(nullptr) {
+    : stack_size_(options.stack_size()),
+      priority_(options.priority()),
+      start_semaphore_(nullptr) {
   data_ = new PlatformData(kNoThread);
   set_name(options.name());
 }
-
 
 void Thread::set_name(const char* name) {
   OS::StrNCpy(name_, sizeof(name_), name, strlen(name));
