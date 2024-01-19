@@ -8,6 +8,7 @@ bitfield struct FinalizationRegistryFlags extends uint31 {
 
 extern class JSFinalizationRegistry extends JSObject {
   native_context: NativeContext;
+  async_context_store: HeapObject;
   cleanup: Callable;
   active_cells: Undefined|WeakCell;
   cleared_cells: Undefined|WeakCell;

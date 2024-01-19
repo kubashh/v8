@@ -63,6 +63,7 @@ FEATURE_FLAGS = {
     'promise-with-resolvers': '--js-promise-withresolvers',
     'Array.fromAsync': '--harmony-array-from-async',
     'import-attributes': '--harmony-import-attributes',
+    'AsyncContext': '--js-async-context',
 }
 
 SKIPPED_FEATURES = set([])
