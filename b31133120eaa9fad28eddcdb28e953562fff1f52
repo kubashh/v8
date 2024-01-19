@@ -16,6 +16,24 @@
       "message": "Hmm, I\u0027m now trying out with those fields added (although I\u0027m a bit confused why you didn\u0027t add them?)",
       "revId": "b31133120eaa9fad28eddcdb28e953562fff1f52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02a62fd_1a7171f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-01-19T19:42:30Z",
+      "side": 1,
+      "message": "Thanks for submitting it, I didn\u0027t add the fields because the CL isn\u0027t mine and gerrit didn\u0027t let me change the description",
+      "parentUuid": "1fd89f73_e3153ce0",
+      "revId": "b31133120eaa9fad28eddcdb28e953562fff1f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
