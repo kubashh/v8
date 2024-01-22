@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "608d2878bccc6c2359f6e899c665cba9861ec823",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c53e3d23_3f3c558c",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2128,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-01-22T09:50:15Z",
+      "side": 1,
+      "message": "would be nice to have a `%CollectSample();` to make this more stable... but we currently only install it in d8.",
+      "range": {
+        "startLine": 2128,
+        "startChar": 0,
+        "endLine": 2128,
+        "endChar": 55
+      },
+      "revId": "608d2878bccc6c2359f6e899c665cba9861ec823",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
