@@ -1746,10 +1746,23 @@ class MachineOptimizationReducer : public Next {
           UnparkedScopeIfNeeded scope(broker);
           AllowHandleDereference allow_handle_dereference;
 
+<<<<<<< HEAD   (71b6b5 Version 12.0.267.19)
           OptionalMapRef map = TryMakeRef(broker, base.handle()->map());
           if (map.has_value() && map->is_stable() && !map->is_deprecated()) {
             broker->dependencies()->DependOnStableMap(*map);
             return __ HeapConstant(map->object());
+=======
+          DCHECK_IMPLIES(PipelineData::Get().pipeline_kind() !=
+                             TurboshaftPipelineKind::kCSA,
+                         broker != nullptr);
+          if (broker != nullptr) {
+            UnparkedScopeIfNeeded scope(broker);
+            AllowHandleDereference allow_handle_dereference;
+            OptionalMapRef map = TryMakeRef(broker, base.handle()->map());
+            if (MapLoadCanBeConstantFolded(map)) {
+              return __ HeapConstant(map->object());
+            }
+>>>>>>> CHANGE (afc188 [turboshaft] Fix wrong constant folding of strings map loads)
           }
         }
         // TODO(dmercadier): consider constant-folding other accesses, in
@@ -2202,7 +2215,41 @@ class MachineOptimizationReducer : public Next {
     return base::nullopt;
   }
 
+<<<<<<< HEAD   (71b6b5 Version 12.0.267.19)
   uint16_t CountLeadingSignBits(int64_t c, WordRepresentation rep) {
+=======
+  // Returns true if loading the map of an object with map {map} can be constant
+  // folded and done at compile time or not. For instance, doing this for
+  // strings is not safe, since the map of a string could change during a GC,
+  // but doing this for a HeapNumber is always safe.
+  bool MapLoadCanBeConstantFolded(OptionalMapRef map) {
+    if (!map.has_value()) return false;
+
+    if (map->IsJSObjectMap() && map->is_stable()) {
+      broker->dependencies()->DependOnStableMap(*map);
+      // For JS objects, this is only safe is the map is stable.
+      return true;
+    }
+
+    if (map->instance_type() ==
+        any_of(BIG_INT_BASE_TYPE, HEAP_NUMBER_TYPE, ODDBALL_TYPE)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static constexpr bool IsNegativePowerOfTwo(int64_t x) {
+    if (x >= 0) return false;
+    if (x == std::numeric_limits<int64_t>::min()) return true;
+    int64_t x_abs = -x;   // This can't overflow after the check above.
+    DCHECK_GE(x_abs, 1);  // The subtraction below can't underflow.
+    return (x_abs & (x_abs - 1)) == 0;
+  }
+
+  static constexpr uint16_t CountLeadingSignBits(int64_t c,
+                                                 WordRepresentation rep) {
+>>>>>>> CHANGE (afc188 [turboshaft] Fix wrong constant folding of strings map loads)
     return base::bits::CountLeadingSignBits(c) - (64 - rep.bit_width());
   }
 
