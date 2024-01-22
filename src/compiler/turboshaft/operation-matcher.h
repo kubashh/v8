@@ -413,6 +413,18 @@ class OperationMatcher {
     return false;
   }
 
+  bool MatchWord32PowerOfTwo(OpIndex matched,
+                             int32_t* which_power_of_two) const {
+    int32_t cst;
+    if (MatchIntegralWord32Constant(matched, &cst)) {
+      if (base::bits::IsPowerOfTwo(cst)) {
+        *which_power_of_two = base::bits::WhichPowerOfTwo(cst);
+        return true;
+      }
+    }
+    return false;
+  }
+
  private:
   Graph& graph_;
 };
