@@ -227,6 +227,60 @@ def scheduled_builder_cleanup(ctx):
             if builder.name in scheduled_builders:
                 builder.repository = None
 
+def ensure_no_sheriff_emails_on_non_tree_closers(ctx):
+    """
+    This callback checks that no sheriff emails are sent on non-tree closers.
+    """
+    exceptions = [
+        "Branch Monitor",
+        "V8 Android GN (dbg)",
+        "V8 Blink Linux Debug",
+        "V8 Blink Linux Future",
+        "V8 Blink Mac",
+        "V8 Blink Win",
+        "V8 Linux GN",
+        "V8 Linux64 - node.js integration ng",
+        "V8 Linux64 - official",
+        "V8 Linux64 - official - builder",
+        "V8 Linux64 - predictable",
+        "V8 Linux64 - predictable - builder",
+        "V8 Linux64 gcc",
+        "V8 Linux64 gcc - builder",
+        "V8 Linux64 gcc - debug builder",
+        "V8 Mac64 - full debug builder",
+        # Add exceptions here.
+    ]
+    tree_closers = []
+    notifies_sheriff = []
+    notify = ctx.output["luci-notify.cfg"]
+    for notifier in notify.notifiers:
+        if notifier.tree_closers:
+            for builder in notifier.builders:
+                tree_closers.append(builder.name)
+        else:
+            builder_name = notifier.builders[0].name
+            if builder_name in exceptions:
+                continue
+            for notification in notifier.notifications:
+                for recipient in notification.email.recipients:
+                    if "sheriff" not in recipient:
+                        continue
+                    if builder_name in notifies_sheriff:
+                        continue
+                    notifies_sheriff.append(builder_name)
+    offending_builders = []
+    for builder_name in notifies_sheriff:
+        if builder_name not in tree_closers:
+            offending_builders.append(builder_name)
+    if offending_builders:
+        print("Found non tree closers with sheriff emails:")
+        for builder_name in offending_builders:
+            print(">", builder_name)
+        fail()
+
+#Uncomment this to enable the callback.
+lucicfg.generator(ensure_no_sheriff_emails_on_non_tree_closers)
+
 lucicfg.generator(aggregate_builder_tester_console)
 
 lucicfg.generator(separate_builder_tester_console)
