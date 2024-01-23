@@ -62,6 +62,10 @@
 #include "src/utils/ostreams.h"
 #include "src/utils/utils.h"
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/trap-handler/trap-handler-simulator.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 #if V8_TARGET_ARCH_RISCV64
 #define REGIx_FORMAT PRIx64
 #define REGId_FORMAT PRId64
@@ -2950,6 +2954,21 @@ void Simulator::TraceMemWrDouble(sreg_t addr, double value) {
 }
 // RISCV Memory Read/Write functions
 
+bool Simulator::ProbeMemory(uintptr_t address, uintptr_t access_size) {
+#if V8_ENABLE_WEBASSEMBLY && V8_TRAP_HANDLER_SUPPORTED
+  uintptr_t last_accessed_byte = address + access_size - 1;
+  uintptr_t current_pc = registers_[pc];
+  uintptr_t landing_pad =
+      trap_handler::ProbeMemory(last_accessed_byte, current_pc);
+  if (!landing_pad) return true;
+  set_pc(landing_pad);
+  set_register(kWasmTrapHandlerFaultAddressRegister.code(), current_pc);
+  return false;
+#else
+  return true;
+#endif
+}
+
 // TODO(RISCV): check whether the specific board supports unaligned load/store
 // (determined by EEI). For now, we assume the board does not support unaligned
 // load/store (e.g., trapping)
@@ -3977,21 +3996,25 @@ void Simulator::DecodeRVRAType() {
   // Memory address lock or other synchronizaiton behaviors.
   switch (instr_.InstructionBits() & kRATypeMask) {
     case RO_LR_W: {
-      base::MutexGuard lock_guard(&GlobalMonitor::Get()->mutex);
       sreg_t addr = rs1();
-      if ((addr & 0x3) != 0) {
-        DieOrDebug();
+      if (!ProbeMemory(addr, sizeof(int32_t))) return;
+      {
+        base::MutexGuard lock_guard(&GlobalMonitor::Get()->mutex);
+        if ((addr & 0x3) != 0) {
+          DieOrDebug();
+        }
+        auto val = ReadMem<int32_t>(addr, instr_.instr());
+        set_rd(sext32(val), false);
+        TraceMemRd(addr, val, get_register(rd_reg()));
+        local_monitor_.NotifyLoadLinked(addr, TransactionSize::Word);
+        GlobalMonitor::Get()->NotifyLoadLinked_Locked(addr,
+                                                      &global_monitor_thread_);
       }
-      auto val = ReadMem<int32_t>(addr, instr_.instr());
-      set_rd(sext32(val), false);
-      TraceMemRd(addr, val, get_register(rd_reg()));
-      local_monitor_.NotifyLoadLinked(addr, TransactionSize::Word);
-      GlobalMonitor::Get()->NotifyLoadLinked_Locked(addr,
-                                                    &global_monitor_thread_);
       break;
     }
     case RO_SC_W: {
       sreg_t addr = rs1();
+      if (!ProbeMemory(addr, sizeof(int32_t))) return;
       if ((addr & 0x3) != 0) {
         DieOrDebug();
       }
@@ -4091,18 +4114,22 @@ void Simulator::DecodeRVRAType() {
     }
 #ifdef V8_TARGET_ARCH_RISCV64
     case RO_LR_D: {
-      base::MutexGuard lock_guard(&GlobalMonitor::Get()->mutex);
       int64_t addr = rs1();
-      auto val = ReadMem<int64_t>(addr, instr_.instr());
-      set_rd(val, false);
-      TraceMemRd(addr, val, get_register(rd_reg()));
-      local_monitor_.NotifyLoadLinked(addr, TransactionSize::DoubleWord);
-      GlobalMonitor::Get()->NotifyLoadLinked_Locked(addr,
-                                                    &global_monitor_thread_);
-      break;
+      if (!ProbeMemory(addr, sizeof(int64_t))) return;
+      {
+        base::MutexGuard lock_guard(&GlobalMonitor::Get()->mutex);
+        auto val = ReadMem<int64_t>(addr, instr_.instr());
+        set_rd(val, false);
+        TraceMemRd(addr, val, get_register(rd_reg()));
+        local_monitor_.NotifyLoadLinked(addr, TransactionSize::DoubleWord);
+        GlobalMonitor::Get()->NotifyLoadLinked_Locked(addr,
+                                                      &global_monitor_thread_);
+        break;
+      }
     }
     case RO_SC_D: {
       int64_t addr = rs1();
+      if (!ProbeMemory(addr, sizeof(int64_t))) return;
       base::MutexGuard lock_guard(&GlobalMonitor::Get()->mutex);
       if (local_monitor_.NotifyStoreConditional(addr,
                                                 TransactionSize::DoubleWord) &&
@@ -4936,6 +4963,7 @@ void Simulator::DecodeRVIType() {
     case RO_LB: {
       sreg_t addr = rs1() + imm12();
       int8_t val = ReadMem<int8_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int8_t))) return;
       set_rd(sext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -4943,6 +4971,7 @@ void Simulator::DecodeRVIType() {
     case RO_LH: {
       sreg_t addr = rs1() + imm12();
       int16_t val = ReadMem<int16_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int16_t))) return;
       set_rd(sext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -4950,6 +4979,7 @@ void Simulator::DecodeRVIType() {
     case RO_LW: {
       sreg_t addr = rs1() + imm12();
       int32_t val = ReadMem<int32_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int32_t))) return;
       set_rd(sext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -4957,6 +4987,7 @@ void Simulator::DecodeRVIType() {
     case RO_LBU: {
       sreg_t addr = rs1() + imm12();
       uint8_t val = ReadMem<uint8_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int8_t))) return;
       set_rd(zext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -4964,6 +4995,7 @@ void Simulator::DecodeRVIType() {
     case RO_LHU: {
       sreg_t addr = rs1() + imm12();
       uint16_t val = ReadMem<uint16_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int16_t))) return;
       set_rd(zext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -4972,6 +5004,7 @@ void Simulator::DecodeRVIType() {
     case RO_LWU: {
       int64_t addr = rs1() + imm12();
       uint32_t val = ReadMem<uint32_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int32_t))) return;
       set_rd(zext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -4979,6 +5012,7 @@ void Simulator::DecodeRVIType() {
     case RO_LD: {
       int64_t addr = rs1() + imm12();
       int64_t val = ReadMem<int64_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(int64_t))) return;
       set_rd(sext_xlen(val), false);
       TraceMemRd(addr, val, get_register(rd_reg()));
       break;
@@ -5256,6 +5290,7 @@ void Simulator::DecodeRVIType() {
     case RO_FLW: {
       sreg_t addr = rs1() + imm12();
       uint32_t val = ReadMem<uint32_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(float))) return;
       set_frd(Float32::FromBits(val), false);
       TraceMemRdFloat(addr, Float32::FromBits(val),
                       get_fpu_register(frd_reg()));
@@ -5265,6 +5300,7 @@ void Simulator::DecodeRVIType() {
     case RO_FLD: {
       sreg_t addr = rs1() + imm12();
       uint64_t val = ReadMem<uint64_t>(addr, instr_.instr());
+      if (!ProbeMemory(addr, sizeof(double))) return;
       set_drd(Float64::FromBits(val), false);
       TraceMemRdDouble(addr, Float64::FromBits(val),
                        get_fpu_register(frd_reg()));
@@ -5286,21 +5322,26 @@ void Simulator::DecodeRVIType() {
 void Simulator::DecodeRVSType() {
   switch (instr_.InstructionBits() & kSTypeMask) {
     case RO_SB:
+      if (!ProbeMemory(rs1() + s_imm12(), sizeof(int8_t))) return;
       WriteMem<uint8_t>(rs1() + s_imm12(), (uint8_t)rs2(), instr_.instr());
       break;
     case RO_SH:
+      if (!ProbeMemory(rs1() + s_imm12(), sizeof(int16_t))) return;
       WriteMem<uint16_t>(rs1() + s_imm12(), (uint16_t)rs2(), instr_.instr());
       break;
     case RO_SW:
+      if (!ProbeMemory(rs1() + s_imm12(), sizeof(int32_t))) return;
       WriteMem<uint32_t>(rs1() + s_imm12(), (uint32_t)rs2(), instr_.instr());
       break;
 #ifdef V8_TARGET_ARCH_RISCV64
     case RO_SD:
+      if (!ProbeMemory(rs1() + s_imm12(), sizeof(int64_t))) return;
       WriteMem<uint64_t>(rs1() + s_imm12(), (uint64_t)rs2(), instr_.instr());
       break;
 #endif /*V8_TARGET_ARCH_RISCV64*/
     // TODO(riscv): use F Extension macro block
     case RO_FSW: {
+      if (!ProbeMemory(rs1() + s_imm12(), sizeof(float))) return;
       WriteMem<Float32>(rs1() + s_imm12(),
                         get_fpu_register_Float32(rs2_reg(), false),
                         instr_.instr());
@@ -5308,6 +5349,7 @@ void Simulator::DecodeRVSType() {
     }
     // TODO(riscv): use D Extension macro block
     case RO_FSD: {
+      if (!ProbeMemory(rs1() + s_imm12(), sizeof(double))) return;
       WriteMem<Float64>(rs1() + s_imm12(), get_fpu_register_Float64(rs2_reg()),
                         instr_.instr());
       break;
