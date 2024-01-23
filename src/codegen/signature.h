@@ -165,9 +165,13 @@ size_t hash_value(const Signature<T>& sig) {
 template <typename T, size_t kNumReturns = 0, size_t kNumParams = 0>
 class FixedSizeSignature : public Signature<T> {
  public:
+  // Allow copy construction.
+  constexpr FixedSizeSignature(
+      FixedSizeSignature<T, kNumReturns, kNumParams>& other) = default;
+
   // Add return types to this signature (only allowed if there are none yet).
   template <typename... ReturnTypes>
-  auto Returns(ReturnTypes... return_types) const {
+  constexpr auto Returns(ReturnTypes... return_types) const {
     static_assert(kNumReturns == 0, "Please specify all return types at once");
     return FixedSizeSignature<T, sizeof...(ReturnTypes), kNumParams>{
         std::initializer_list<T>{return_types...}.begin(), reps_};
@@ -175,7 +179,7 @@ class FixedSizeSignature : public Signature<T> {
 
   // Add parameters to this signature (only allowed if there are none yet).
   template <typename... ParamTypes>
-  auto Params(ParamTypes... param_types) const {
+  constexpr auto Params(ParamTypes... param_types) const {
     static_assert(kNumParams == 0, "Please specify all parameters at once");
     return FixedSizeSignature<T, kNumReturns, sizeof...(ParamTypes)>{
         reps_, std::initializer_list<T>{param_types...}.begin()};
@@ -186,10 +190,15 @@ class FixedSizeSignature : public Signature<T> {
   template <typename T2, size_t kNumReturns2, size_t kNumParams2>
   friend class FixedSizeSignature;
 
-  FixedSizeSignature(const T* returns, const T* params)
+  constexpr FixedSizeSignature(const T* returns, const T* params)
       : Signature<T>(kNumReturns, kNumParams, reps_) {
-    std::copy(returns, returns + kNumReturns, reps_);
-    std::copy(params, params + kNumParams, reps_ + kNumReturns);
+    // Avoid std::copy which is not constexpr until C++20.
+    for (size_t i = 0; i < kNumReturns; ++i) {
+      reps_[i] = returns[i];
+    }
+    for (size_t i = 0; i < kNumParams; ++i) {
+      reps_[i + kNumReturns] = params[i];
+    }
   }
 
   T reps_[kNumReturns + kNumParams];
@@ -199,18 +208,20 @@ class FixedSizeSignature : public Signature<T> {
 template <typename T>
 class FixedSizeSignature<T, 0, 0> : public Signature<T> {
  public:
+  // Allow default and copy construction.
   constexpr FixedSizeSignature() : Signature<T>(0, 0, nullptr) {}
+  constexpr FixedSizeSignature(FixedSizeSignature<T, 0, 0>& other) = default;
 
   // Add return types.
   template <typename... ReturnTypes>
-  static auto Returns(ReturnTypes... return_types) {
+  static constexpr auto Returns(ReturnTypes... return_types) {
     return FixedSizeSignature<T, sizeof...(ReturnTypes), 0>{
         std::initializer_list<T>{return_types...}.begin(), nullptr};
   }
 
   // Add parameters.
   template <typename... ParamTypes>
-  static auto Params(ParamTypes... param_types) {
+  static constexpr auto Params(ParamTypes... param_types) {
     return FixedSizeSignature<T, 0, sizeof...(ParamTypes)>{
         nullptr, std::initializer_list<T>{param_types...}.begin()};
   }

@@ -1552,22 +1552,18 @@ WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
   static constexpr ValueType kI32 = kWasmI32;
 
   // Shorthands: "r" = nullable "externref", "e" = non-nullable "ref extern".
-  static constexpr ValueType kReps_e_i[] = {kRefExtern, kI32};
-  static constexpr ValueType kReps_e_rr[] = {kRefExtern, kExternRef,
-                                             kExternRef};
-  static constexpr ValueType kReps_e_rii[] = {kRefExtern, kExternRef, kI32,
-                                              kI32};
-  static constexpr ValueType kReps_i_ri[] = {kI32, kExternRef, kI32};
-  static constexpr ValueType kReps_i_rr[] = {kI32, kExternRef, kExternRef};
+  using Sig = FixedSizeSignature<ValueType>;
+  static constexpr auto kSig_e_i = Sig::Returns(kRefExtern).Params(kI32);
+  static constexpr auto kSig_e_r = Sig::Returns(kRefExtern).Params(kExternRef);
+  static constexpr auto kSig_e_rr =
+      Sig::Returns(kRefExtern).Params(kExternRef, kExternRef);
+  static constexpr auto kSig_e_rii =
+      Sig::Returns(kRefExtern).Params(kExternRef, kI32, kI32);
 
-  static constexpr FunctionSig kSig_e_i(1, 1, kReps_e_i);
-  static constexpr FunctionSig kSig_e_r(1, 1, kReps_e_rr);
-  static constexpr FunctionSig kSig_e_rr(1, 2, kReps_e_rr);
-  static constexpr FunctionSig kSig_e_rii(1, 3, kReps_e_rii);
-
-  static constexpr FunctionSig kSig_i_r(1, 1, kReps_i_ri);
-  static constexpr FunctionSig kSig_i_ri(1, 2, kReps_i_ri);
-  static constexpr FunctionSig kSig_i_rr(1, 2, kReps_i_rr);
+  static constexpr auto kSig_i_r = Sig::Returns(kI32).Params(kExternRef);
+  static constexpr auto kSig_i_ri = Sig::Returns(kI32).Params(kExternRef, kI32);
+  static constexpr auto kSig_i_rr =
+      Sig::Returns(kI32).Params(kExternRef, kExternRef);
 
   std::vector<WellKnownImport> statuses;
   statuses.reserve(module->num_imported_functions);
