@@ -105,6 +105,9 @@ class TurboshaftGraphBuildingInterface {
  private:
   class InstanceCache;
 
+  // Used to construct fixed-size signatures: MakeSig::Returns(...).Params(...);
+  using MakeSig = FixedSizeSignature<MachineType>;
+
  public:
   enum Mode { kRegular, kInlinedUnhandled, kInlinedWithCatch };
   using ValidationTag = Decoder::FullValidationTag;
@@ -2427,9 +2430,10 @@ class TurboshaftGraphBuildingInterface {
     OpIndex effective_offset = __ WordPtrAdd(converted_index, imm.offset);
     OpIndex addr = __ WordPtrAdd(MemStart(imm.mem_index), effective_offset);
 
-    auto sig = FixedSizeSignature<MachineType>::Returns(MachineType::Int32())
-                   .Params(MachineType::Pointer(), MachineType::Uint32());
-    result->op = CallC(&sig, ExternalReference::wasm_atomic_notify(),
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32())
+            .Params(MachineType::Pointer(), MachineType::Uint32());
+    result->op = CallC(&kSig, ExternalReference::wasm_atomic_notify(),
                        {addr, num_waiters_to_wake});
   }
 
@@ -2654,12 +2658,13 @@ class TurboshaftGraphBuildingInterface {
     V<WordPtr> dst_uintptr =
         MemoryIndexToUintPtrOrOOBTrap(imm.memory.memory->is_memory64, dst.op);
     DCHECK_EQ(size.type, kWasmI32);
-    auto sig = FixedSizeSignature<MachineType>::Returns(MachineType::Int32())
-                   .Params(MachineType::Pointer(), MachineType::Uint32(),
-                           MachineType::UintPtr(), MachineType::Uint32(),
-                           MachineType::Uint32(), MachineType::Uint32());
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32())
+            .Params(MachineType::Pointer(), MachineType::Uint32(),
+                    MachineType::UintPtr(), MachineType::Uint32(),
+                    MachineType::Uint32(), MachineType::Uint32());
     V<Word32> result =
-        CallC(&sig, ExternalReference::wasm_memory_init(),
+        CallC(&kSig, ExternalReference::wasm_memory_init(),
               {__ BitcastHeapObjectToWordPtr(trusted_instance_data()),
                __ Word32Constant(imm.memory.index), dst_uintptr, src.op,
                __ Word32Constant(imm.data_segment.index), size.op});
@@ -2676,12 +2681,13 @@ class TurboshaftGraphBuildingInterface {
         MemoryIndexToUintPtrOrOOBTrap(is_memory_64, src.op);
     V<WordPtr> size_uintptr =
         MemoryIndexToUintPtrOrOOBTrap(is_memory_64, size.op);
-    auto sig = FixedSizeSignature<MachineType>::Returns(MachineType::Int32())
-                   .Params(MachineType::Pointer(), MachineType::Uint32(),
-                           MachineType::Uint32(), MachineType::UintPtr(),
-                           MachineType::UintPtr(), MachineType::UintPtr());
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32())
+            .Params(MachineType::Pointer(), MachineType::Uint32(),
+                    MachineType::Uint32(), MachineType::UintPtr(),
+                    MachineType::UintPtr(), MachineType::UintPtr());
     V<Word32> result =
-        CallC(&sig, ExternalReference::wasm_memory_copy(),
+        CallC(&kSig, ExternalReference::wasm_memory_copy(),
               {__ BitcastHeapObjectToWordPtr(trusted_instance_data()),
                __ Word32Constant(imm.memory_dst.index),
                __ Word32Constant(imm.memory_src.index), dst_uintptr,
@@ -2696,12 +2702,13 @@ class TurboshaftGraphBuildingInterface {
         MemoryIndexToUintPtrOrOOBTrap(is_memory_64, dst.op);
     V<WordPtr> size_uintptr =
         MemoryIndexToUintPtrOrOOBTrap(is_memory_64, size.op);
-    auto sig = FixedSizeSignature<MachineType>::Returns(MachineType::Int32())
-                   .Params(MachineType::Pointer(), MachineType::Uint32(),
-                           MachineType::UintPtr(), MachineType::Uint8(),
-                           MachineType::UintPtr());
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32())
+            .Params(MachineType::Pointer(), MachineType::Uint32(),
+                    MachineType::UintPtr(), MachineType::Uint8(),
+                    MachineType::UintPtr());
     V<Word32> result = CallC(
-        &sig, ExternalReference::wasm_memory_fill(),
+        &kSig, ExternalReference::wasm_memory_fill(),
         {__ BitcastHeapObjectToWordPtr(trusted_instance_data()),
          __ Word32Constant(imm.index), dst_uintptr, value.op, size_uintptr});
 
@@ -2995,13 +3002,12 @@ class TurboshaftGraphBuildingInterface {
 
     {
       BIND(builtin);
-      MachineType arg_types[]{
+      static constexpr auto kSig = MakeSig::Params(
           MachineType::TaggedPointer(), MachineType::TaggedPointer(),
-          MachineType::Uint32(),        MachineType::TaggedPointer(),
-          MachineType::Uint32(),        MachineType::Uint32()};
-      MachineSignature sig(0, 6, arg_types);
+          MachineType::Uint32(), MachineType::TaggedPointer(),
+          MachineType::Uint32(), MachineType::Uint32());
 
-      CallC(&sig, ExternalReference::wasm_array_copy(),
+      CallC(&kSig, ExternalReference::wasm_array_copy(),
             {trusted_instance_data(), dst.op, dst_index.op, src.op,
              src_index.op, length.op});
       GOTO(end);
@@ -4305,9 +4311,9 @@ class TurboshaftGraphBuildingInterface {
     V<WordPtr> stack_slot = __ StackSlot(slot_size, slot_size);
     __ Store(stack_slot, arg, StoreOp::Kind::RawAligned(), float_type,
              compiler::WriteBarrierKind::kNoWriteBarrier);
-    MachineType reps[]{MachineType::Int32(), MachineType::Pointer()};
-    MachineSignature sig(1, 1, reps);
-    V<Word32> overflow = CallC(&sig, ccall_ref, stack_slot);
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32()).Params(MachineType::Pointer());
+    V<Word32> overflow = CallC(&kSig, ccall_ref, stack_slot);
     return {stack_slot, overflow};
   }
 
@@ -4330,9 +4336,8 @@ class TurboshaftGraphBuildingInterface {
     V<WordPtr> stack_slot = __ StackSlot(slot_size, slot_size);
     __ Store(stack_slot, arg, StoreOp::Kind::RawAligned(), float_type,
              compiler::WriteBarrierKind::kNoWriteBarrier);
-    MachineType reps[]{MachineType::Pointer()};
-    MachineSignature sig(0, 1, reps);
-    CallC(&sig, ccall_ref, stack_slot);
+    static constexpr auto kSig = MakeSig::Params(MachineType::Pointer());
+    CallC(&kSig, ccall_ref, stack_slot);
     return __ Load(stack_slot, LoadOp::Kind::RawAligned(), int64);
   }
 
@@ -4345,9 +4350,8 @@ class TurboshaftGraphBuildingInterface {
     V<WordPtr> stack_slot = __ StackSlot(slot_size, slot_size);
     __ Store(stack_slot, input, StoreOp::Kind::RawAligned(),
              input_representation, compiler::WriteBarrierKind::kNoWriteBarrier);
-    MachineType reps[]{MachineType::Pointer()};
-    MachineSignature sig(0, 1, reps);
-    CallC(&sig, ccall_ref, stack_slot);
+    static constexpr auto kSig = MakeSig::Params(MachineType::Pointer());
+    CallC(&kSig, ccall_ref, stack_slot);
     return __ Load(stack_slot, LoadOp::Kind::RawAligned(),
                    result_representation);
   }
@@ -4363,9 +4367,9 @@ class TurboshaftGraphBuildingInterface {
              compiler::WriteBarrierKind::kNoWriteBarrier,
              int64_rep.SizeInBytes());
 
-    MachineType sig_types[] = {MachineType::Int32(), MachineType::Pointer()};
-    MachineSignature sig(1, 1, sig_types);
-    OpIndex rc = CallC(&sig, ccall_ref, stack_slot);
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32()).Params(MachineType::Pointer());
+    OpIndex rc = CallC(&kSig, ccall_ref, stack_slot);
     __ TrapIf(__ Word32Equal(rc, 0), OpIndex::Invalid(), trap_zero);
     __ TrapIf(__ Word32Equal(rc, -1), OpIndex::Invalid(),
               TrapId::kTrapDivUnrepresentable);
@@ -4800,19 +4804,17 @@ class TurboshaftGraphBuildingInterface {
           return __ Word32CountTrailingZeros(arg);
         } else {
           // TODO(14108): Use reverse_bits if supported.
-          auto sig =
-              FixedSizeSignature<MachineType>::Returns(MachineType::Uint32())
-                  .Params(MachineType::Uint32());
-          return CallC(&sig, ExternalReference::wasm_word32_ctz(), arg);
+          static constexpr auto kSig = MakeSig::Returns(MachineType::Uint32())
+                                           .Params(MachineType::Uint32());
+          return CallC(&kSig, ExternalReference::wasm_word32_ctz(), arg);
         }
       case kExprI32Popcnt:
         if (SupportedOperations::word32_popcnt()) {
           return __ Word32PopCount(arg);
         } else {
-          auto sig =
-              FixedSizeSignature<MachineType>::Returns(MachineType::Uint32())
-                  .Params(MachineType::Uint32());
-          return CallC(&sig, ExternalReference::wasm_word32_popcnt(), arg);
+          static constexpr auto kSig = MakeSig::Returns(MachineType::Uint32())
+                                           .Params(MachineType::Uint32());
+          return CallC(&kSig, ExternalReference::wasm_word32_popcnt(), arg);
         }
       case kExprF32Floor:
         if (SupportedOperations::float32_round_down()) {
@@ -4916,29 +4918,27 @@ class TurboshaftGraphBuildingInterface {
           return __ Word64CountTrailingZeros(arg);
         } else if (Is64()) {
           // TODO(14108): Use reverse_bits if supported.
-          auto sig =
-              FixedSizeSignature<MachineType>::Returns(MachineType::Uint32())
-                  .Params(MachineType::Uint64());
+          static constexpr auto kSig = MakeSig::Returns(MachineType::Uint32())
+                                           .Params(MachineType::Uint64());
           return __ ChangeUint32ToUint64(
-              CallC(&sig, ExternalReference::wasm_word64_ctz(), arg));
+              CallC(&kSig, ExternalReference::wasm_word64_ctz(), arg));
         } else {
           // lower_word == 0 ? 32 + CTZ32(upper_word) : CTZ32(lower_word);
           OpIndex upper_word =
               __ TruncateWord64ToWord32(__ Word64ShiftRightLogical(arg, 32));
           OpIndex lower_word = __ TruncateWord64ToWord32(arg);
-          auto sig =
-              FixedSizeSignature<MachineType>::Returns(MachineType::Uint32())
-                  .Params(MachineType::Uint32());
+          static constexpr auto kSig = MakeSig::Returns(MachineType::Uint32())
+                                           .Params(MachineType::Uint32());
           Label<Word32> done(&asm_);
           IF (__ Word32Equal(lower_word, 0)) {
             GOTO(done,
-                 __ Word32Add(CallC(&sig, ExternalReference::wasm_word32_ctz(),
+                 __ Word32Add(CallC(&kSig, ExternalReference::wasm_word32_ctz(),
                                     upper_word),
                               32));
           }
           ELSE {
-            GOTO(done,
-                 CallC(&sig, ExternalReference::wasm_word32_ctz(), lower_word));
+            GOTO(done, CallC(&kSig, ExternalReference::wasm_word32_ctz(),
+                             lower_word));
           }
           END_IF
           BIND(done, result);
@@ -4950,22 +4950,20 @@ class TurboshaftGraphBuildingInterface {
           return __ Word64PopCount(arg);
         } else if (Is64()) {
           // Call wasm_word64_popcnt.
-          auto sig =
-              FixedSizeSignature<MachineType>::Returns(MachineType::Uint32())
-                  .Params(MachineType::Uint64());
+          static constexpr auto kSig = MakeSig::Returns(MachineType::Uint32())
+                                           .Params(MachineType::Uint64());
           return __ ChangeUint32ToUint64(
-              CallC(&sig, ExternalReference::wasm_word64_popcnt(), arg));
+              CallC(&kSig, ExternalReference::wasm_word64_popcnt(), arg));
         } else {
           // Emit two calls to wasm_word32_popcnt.
           OpIndex upper_word =
               __ TruncateWord64ToWord32(__ Word64ShiftRightLogical(arg, 32));
           OpIndex lower_word = __ TruncateWord64ToWord32(arg);
-          auto sig =
-              FixedSizeSignature<MachineType>::Returns(MachineType::Uint32())
-                  .Params(MachineType::Uint32());
+          static constexpr auto kSig = MakeSig::Returns(MachineType::Uint32())
+                                           .Params(MachineType::Uint32());
           return __ ChangeUint32ToUint64(__ Word32Add(
-              CallC(&sig, ExternalReference::wasm_word32_popcnt(), lower_word),
-              CallC(&sig, ExternalReference::wasm_word32_popcnt(),
+              CallC(&kSig, ExternalReference::wasm_word32_popcnt(), lower_word),
+              CallC(&kSig, ExternalReference::wasm_word32_popcnt(),
                     upper_word)));
         }
       case kExprI64Eqz:
@@ -6182,9 +6180,9 @@ class TurboshaftGraphBuildingInterface {
         __ StackSlot(arg_type.SizeInBytes(), arg_type.SizeInBytes());
     __ Store(stack_slot_param, arg, StoreOp::Kind::RawAligned(), arg_type,
              compiler::WriteBarrierKind::kNoWriteBarrier);
-    MachineType reps[]{MachineType::Int32(), MachineType::Pointer()};
-    MachineSignature sig(1, 1, reps);
-    return CallC(&sig, ref, stack_slot_param);
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32()).Params(MachineType::Pointer());
+    return CallC(&kSig, ref, stack_slot_param);
   }
 
   V<Word32> CallCStackSlotToInt32(
@@ -6202,9 +6200,9 @@ class TurboshaftGraphBuildingInterface {
                compiler::WriteBarrierKind::kNoWriteBarrier, offset);
       offset += arg.second.SizeInBytes();
     }
-    MachineType reps[]{MachineType::Int32(), MachineType::Pointer()};
-    MachineSignature sig(1, 1, reps);
-    return CallC(&sig, ref, stack_slot_param);
+    static constexpr auto kSig =
+        MakeSig::Returns(MachineType::Int32()).Params(MachineType::Pointer());
+    return CallC(&kSig, ref, stack_slot_param);
   }
 
   OpIndex CallCStackSlotToStackSlot(OpIndex arg, ExternalReference ref,
@@ -6213,9 +6211,8 @@ class TurboshaftGraphBuildingInterface {
         __ StackSlot(arg_type.SizeInBytes(), arg_type.SizeInBytes());
     __ Store(stack_slot, arg, StoreOp::Kind::RawAligned(), arg_type,
              compiler::WriteBarrierKind::kNoWriteBarrier);
-    MachineType reps[]{MachineType::Pointer()};
-    MachineSignature sig(0, 1, reps);
-    CallC(&sig, ref, stack_slot);
+    static constexpr auto kSig = MakeSig::Params(MachineType::Pointer());
+    CallC(&kSig, ref, stack_slot);
     return __ Load(stack_slot, LoadOp::Kind::RawAligned(), arg_type);
   }
 
@@ -6229,9 +6226,8 @@ class TurboshaftGraphBuildingInterface {
     __ Store(stack_slot, arg1, StoreOp::Kind::RawAligned(), arg_type,
              compiler::WriteBarrierKind::kNoWriteBarrier,
              arg_type.SizeInBytes());
-    MachineType reps[]{MachineType::Pointer()};
-    MachineSignature sig(0, 1, reps);
-    CallC(&sig, ref, stack_slot);
+    static constexpr auto kSig = MakeSig::Params(MachineType::Pointer());
+    CallC(&kSig, ref, stack_slot);
     return __ Load(stack_slot, LoadOp::Kind::RawAligned(), arg_type);
   }
 
@@ -6563,13 +6559,12 @@ class TurboshaftGraphBuildingInterface {
                   length, __ Word32Constant(kArrayNewMinimumSizeForMemSet)),
               loop, index);
       OpIndex stack_slot = StoreInInt64StackSlot(value, element_type);
-      MachineType arg_types[]{
-          MachineType::TaggedPointer(), MachineType::Uint32(),
-          MachineType::Uint32(),        MachineType::Uint32(),
-          MachineType::Uint32(),        MachineType::Pointer()};
-      MachineSignature sig(0, 6, arg_types);
+      static constexpr auto kSig =
+          MakeSig::Params(MachineType::TaggedPointer(), MachineType::Uint32(),
+                          MachineType::Uint32(), MachineType::Uint32(),
+                          MachineType::Uint32(), MachineType::Pointer());
       CallC(
-          &sig, ExternalReference::wasm_array_fill(),
+          &kSig, ExternalReference::wasm_array_fill(),
           {array, index, length, __ Word32Constant(emit_write_barrier ? 1 : 0),
            __ Word32Constant(element_type.raw_bit_field()), stack_slot});
       GOTO(done);

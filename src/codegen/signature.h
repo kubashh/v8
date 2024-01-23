@@ -167,18 +167,20 @@ class FixedSizeSignature : public Signature<T> {
  public:
   // Add return types to this signature (only allowed if there are none yet).
   template <typename... ReturnTypes>
-  auto Returns(ReturnTypes... return_types) const {
+  constexpr auto Returns(ReturnTypes... return_types) const {
     static_assert(kNumReturns == 0, "Please specify all return types at once");
-    return FixedSizeSignature<T, sizeof...(ReturnTypes), kNumParams>{
-        std::initializer_list<T>{return_types...}.begin(), reps_};
+    T return_types_arr[]{return_types...};
+    auto reps = array_cat(return_types_arr, reps_);
+    return FixedSizeSignature<T, sizeof...(ReturnTypes), kNumParams>{reps};
   }
 
   // Add parameters to this signature (only allowed if there are none yet).
   template <typename... ParamTypes>
-  auto Params(ParamTypes... param_types) const {
+  constexpr auto Params(ParamTypes... param_types) const {
     static_assert(kNumParams == 0, "Please specify all parameters at once");
-    return FixedSizeSignature<T, kNumReturns, sizeof...(ParamTypes)>{
-        reps_, std::initializer_list<T>{param_types...}.begin()};
+    T param_types_arr[]{param_types...};
+    auto reps = array_cat(reps_, param_types_arr);
+    return FixedSizeSignature<T, kNumReturns, sizeof...(ParamTypes)>{reps};
   }
 
  private:
@@ -186,10 +188,18 @@ class FixedSizeSignature : public Signature<T> {
   template <typename T2, size_t kNumReturns2, size_t kNumParams2>
   friend class FixedSizeSignature;
 
-  FixedSizeSignature(const T* returns, const T* params)
+  constexpr FixedSizeSignature(
+      const std::array<T, kNumReturns + kNumParams>& reps)
       : Signature<T>(kNumReturns, kNumParams, reps_) {
-    std::copy(returns, returns + kNumReturns, reps_);
-    std::copy(params, params + kNumParams, reps_ + kNumReturns);
+    // Avoid use of std::copy which is not constexpr until C++20.
+    for (size_t i = 0; i < kNumReturns + kNumParams; ++i) reps_[i] = reps[i];
+  }
+
+  template <size_t kSize0, size_t kSize1>
+  static constexpr auto array_cat(const T (&arr1)[kSize0],
+                                  const T (&arr2)[kSize1]) {
+    return base::make_array<kSize0 + kSize1>(
+        [&](size_t i) { return i < kSize0 ? arr1[i] : arr2[i - kSize0]; });
   }
 
   T reps_[kNumReturns + kNumParams];
@@ -203,16 +213,14 @@ class FixedSizeSignature<T, 0, 0> : public Signature<T> {
 
   // Add return types.
   template <typename... ReturnTypes>
-  static auto Returns(ReturnTypes... return_types) {
-    return FixedSizeSignature<T, sizeof...(ReturnTypes), 0>{
-        std::initializer_list<T>{return_types...}.begin(), nullptr};
+  static constexpr auto Returns(ReturnTypes... return_types) {
+    return FixedSizeSignature<T, sizeof...(ReturnTypes), 0>{{return_types...}};
   }
 
   // Add parameters.
   template <typename... ParamTypes>
-  static auto Params(ParamTypes... param_types) {
-    return FixedSizeSignature<T, 0, sizeof...(ParamTypes)>{
-        nullptr, std::initializer_list<T>{param_types...}.begin()};
+  static constexpr auto Params(ParamTypes... param_types) {
+    return FixedSizeSignature<T, 0, sizeof...(ParamTypes)>{{param_types...}};
   }
 };
 
