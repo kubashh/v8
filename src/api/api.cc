@@ -10415,6 +10415,10 @@ CALLBACK_SETTER(WasmImportedStringsEnabledCallback,
 CALLBACK_SETTER(WasmJSPIEnabledCallback, WasmJSPIEnabledCallback,
                 wasm_jspi_enabled_callback)
 
+CALLBACK_SETTER(WasmTypeReflectionEnabledCallback,
+                WasmTypeReflectionEnabledCallback,
+                wasm_type_reflection_enabled_callback)
+
 CALLBACK_SETTER(SharedArrayBufferConstructorEnabledCallback,
                 SharedArrayBufferConstructorEnabledCallback,
                 sharedarraybuffer_constructor_enabled_callback)

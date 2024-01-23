@@ -262,4 +262,28 @@ TEST_F(ApiWasmTest, WasmEnableDisableJSPI) {
   EXPECT_FALSE(i_isolate()->IsWasmJSPIEnabled(context));
 }
 
+TEST_F(ApiWasmTest, WasmEnableDisableTypeReflection) {
+  Local<Context> context_local = Context::New(isolate());
+  Context::Scope context_scope(context_local);
+  i::Handle<i::NativeContext> context = v8::Utils::OpenHandle(*context_local);
+  // Test enabling/disabling via flag.
+  {
+    i::FlagScope<bool> flag_strings(
+        &i::v8_flags.experimental_wasm_type_reflection, true);
+    EXPECT_TRUE(i_isolate()->IsWasmTypeReflectionEnabled(context));
+  }
+  {
+    i::FlagScope<bool> flag_strings(
+        &i::v8_flags.experimental_wasm_type_reflection, false);
+    EXPECT_FALSE(i_isolate()->IsWasmTypeReflectionEnabled(context));
+    EXPECT_FALSE(i_isolate()->IsWasmJSPIEnabled(
+        context));  // JSPI depends on type reflection
+  }
+  // Test enabling/disabling via callback.
+  isolate()->SetWasmTypeReflectionEnabledCallback([](auto) { return true; });
+  EXPECT_TRUE(i_isolate()->IsWasmTypeReflectionEnabled(context));
+  isolate()->SetWasmTypeReflectionEnabledCallback([](auto) { return false; });
+  EXPECT_FALSE(i_isolate()->IsWasmTypeReflectionEnabled(context));
+}
+
 }  // namespace v8
