@@ -1269,7 +1269,7 @@ DEFINE_BOOL(turboshaft_wasm_load_elimination, false,
             "enable Turboshaft's WasmLoadElimination")
 DEFINE_WEAK_IMPLICATION(turboshaft_wasm, turboshaft_wasm_load_elimination)
 
-DEFINE_BOOL(turboshaft_instruction_selection, false,
+DEFINE_BOOL(turboshaft_instruction_selection, true,
             "run instruction selection on Turboshaft IR directly")
 DEFINE_BOOL(turboshaft_load_elimination, false,
             "enable Turboshaft's low-level load elimination for JS")
