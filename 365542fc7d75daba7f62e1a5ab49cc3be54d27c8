@@ -16,6 +16,23 @@
       "message": "lgtm :)",
       "revId": "365542fc7d75daba7f62e1a5ab49cc3be54d27c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f48869da_3a6c48a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1173914
+      },
+      "writtenOn": "2024-01-24T14:50:03Z",
+      "side": 1,
+      "message": "delta 1-\u003e4 lgtm",
+      "revId": "365542fc7d75daba7f62e1a5ab49cc3be54d27c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
