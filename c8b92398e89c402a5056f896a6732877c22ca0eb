@@ -16,6 +16,276 @@
       "message": "Hi Darius, PTAL, Thanks!",
       "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee44fa5b_fe125f26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "A few comments ;)",
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad90d367_a63444fa",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "```suggestion\ntemplate \u003cclass Op, class Info\u003e\n```\n(to be more consistent with templates arguments naming throughout V8)",
+      "range": {
+        "startLine": 109,
+        "startChar": 10,
+        "endLine": 109,
+        "endChar": 30
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd7eab9b_8016e4dc",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "If I understand correctly, this should be a .Cast without need a `if`.",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 47
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08c379aa_2d5ed1ae",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "`node_group` always contains only 2 items no? If so, then we don\u0027t need this loop and could instead write `return load_infos[1] - load_infos[0] \u003d\u003d stride`.",
+      "range": {
+        "startLine": 124,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee76e8a1_22a15058",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "Are you sure? In theory, you could have 2 loads to the same base, the 1st one with a trap handler and the 2nd one without, where the trap handler of the 1st one is supposed to protect both loads.",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 56
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ba0765_6fb67399",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "If I understand correctly, this happens when there is some kind of diamond that allows reaching the same inputs twice, right? Could you please add a comment?",
+      "range": {
+        "startLine": 242,
+        "startChar": 6,
+        "endLine": 243,
+        "endChar": 34
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "204af0de_88435f92",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "This could be written a `GetPackNode(node0) \u003d\u003d GetPackNode(node1)`, no?",
+      "range": {
+        "startLine": 237,
+        "startChar": 2,
+        "endLine": 245,
+        "endChar": 3
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3408c3_6b396019",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "```suggestion\n  TRACE(\"Map to different packnode, %d, %d\\n\", node0.id(), node1.id());\n```",
+      "range": {
+        "startLine": 247,
+        "startChar": 16,
+        "endLine": 247,
+        "endChar": 24
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75033cfd_a3797355",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "What about using a custom struct for `node_group` throughout this file? As far as I understand, this vector always has size 2, so it\u0027s a bit surprising that it\u0027s a ZoneVector. I\u0027m guessing that it\u0027s nice to have it be a ZoneVector because it allows to easily iterate both inputs, but you could either define an iterator on your custom structure or a Apply method that takes a lambda and applies it to both inputs.",
+      "range": {
+        "startLine": 284,
+        "startChar": 32,
+        "endLine": 284,
+        "endChar": 69
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f5facc2_c0954b36",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "Maybe move this down inside the next if.",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 304,
+        "endChar": 39
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a9f9f31_6f8a3a0c",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "You should use `.Cast` instead of `.TryCast` when you know it\u0027s going to succeed (which is the case here since it\u0027s within a switch on the opcode).",
+      "range": {
+        "startLine": 322,
+        "startChar": 10,
+        "endLine": 325,
+        "endChar": 46
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69977f94_4d01e4c9",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-24T10:00:24Z",
+      "side": 1,
+      "message": "Please add your name(s) (or the bug number, but name is better) after `TODO` (search for \"TODO\" in V8 for examples).",
+      "range": {
+        "startLine": 334,
+        "startChar": 9,
+        "endLine": 334,
+        "endChar": 13
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
