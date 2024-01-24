@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "467c9510_3a369403",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-24T00:42:59Z",
+      "side": 1,
+      "message": "This CL focuses on setting up wasm type reflection to be driven by chrome using callbacks. It also adds a small hook up so that if JSPI is enabled, then so is type reflection.",
+      "revId": "fe2292cc3e09169cf76d4bafff18c7403113e90b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
