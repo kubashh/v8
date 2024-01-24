@@ -1654,6 +1654,7 @@ void InstructionSelectorT<Adapter>::VisitLoad(node_t node) {
     }
   }
   EmitLoad(this, node, opcode, immediate_mode, rep);
+  UNREACHABLE();
 }
 
 template <typename Adapter>

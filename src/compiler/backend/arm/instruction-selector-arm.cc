@@ -1011,6 +1011,7 @@ void InstructionSelectorT<Adapter>::VisitLoad(node_t node) {
 
   InstructionOperand output = g.DefineAsRegister(node);
   EmitLoad(this, opcode, &output, base, index);
+  UNREACHABLE();
 }
 
 template <typename Adapter>

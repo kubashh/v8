@@ -1098,6 +1098,7 @@ void InstructionSelectorT<Adapter>::VisitLoad(node_t node, node_t value,
       g.GetEffectiveAddressMemoryOperand(value, inputs, &input_count);
   InstructionCode code = opcode | AddressingModeField::encode(mode);
   Emit(code, 1, outputs, input_count, inputs);
+  UNREACHABLE();
 }
 
 template <typename Adapter>
