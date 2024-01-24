@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "041195bc_f6a47b48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-01-24T09:14:55Z",
+      "side": 1,
+      "message": "PTAL. Trying to de-purple this builder:\nhttps://ci.chromium.org/ui/p/v8/builders/luci.v8.ci/V8%20Linux64%20-%20coverage%20-%20debug",
+      "revId": "bd80bcc3618cf2c01d014eeeee0a0e8da98aa8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
