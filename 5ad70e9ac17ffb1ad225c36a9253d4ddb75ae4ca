@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7314829d_a74fc13f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-01-24T09:58:02Z",
+      "side": 1,
+      "message": "PTAL. Updating spec tests is something we have to do regularly, see e.g. https://chromium-review.googlesource.com/c/v8/v8/+/5197676. It\u0027s not automated because it requires ocaml to be installed.",
+      "revId": "5ad70e9ac17ffb1ad225c36a9253d4ddb75ae4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
