@@ -34,6 +34,24 @@
       "parentUuid": "7314829d_a74fc13f",
       "revId": "5ad70e9ac17ffb1ad225c36a9253d4ddb75ae4ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f86fbe6e_e545e95f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-01-24T13:04:55Z",
+      "side": 1,
+      "message": "There is a script v8/tools/wasm/update-wasm-spec-tests.sh\n\nI have a reminder once a month to run the script. For some reason I ran it after I came back from my vacation, so running it today is a bit too eager.",
+      "parentUuid": "dbf5bf11_b48cc432",
+      "revId": "5ad70e9ac17ffb1ad225c36a9253d4ddb75ae4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
