@@ -16,6 +16,46 @@
       "message": "PTAL! :)",
       "revId": "f7502c8aa1fc395ad2367698dc7f2ec7fc4aa943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f91213_aa24bf47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-25T13:31:54Z",
+      "side": 1,
+      "message": "LGTM with a nit and two non-actionable comments:\n\n(1) `OffsetIsValid` looks strikingly similar to `ValueFitsIntoImmediate` in the ia32 and x64 instruction selectors, but the context and specifics are probably different enough that it\u0027s fine to keep them separate.\n\n(2) I would prefer a regression test that\u0027s a bit more cleaned up and understandable, but I understand that that\u0027s a time sink and I won\u0027t insist on it.",
+      "revId": "f7502c8aa1fc395ad2367698dc7f2ec7fc4aa943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91cff5a1_aaaaea10",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2506,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-25T13:31:54Z",
+      "side": 1,
+      "message": "nit: either drop `it`, or change it to `its`",
+      "range": {
+        "startLine": 2506,
+        "startChar": 61,
+        "endLine": 2506,
+        "endChar": 63
+      },
+      "revId": "f7502c8aa1fc395ad2367698dc7f2ec7fc4aa943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
