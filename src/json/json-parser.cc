@@ -735,6 +735,7 @@ class JSDataObjectBuilder {
       case TransitionResult::kFoundMapWithDescriptorLocation:
         // We will need to go to the slow path, without trying to create a map
         // for this case.
+        // TODO(leszeks): Consider switching to a dictionary map eagerly.
         return false;
 
       case TransitionResult::kNoMapFound: {
@@ -764,7 +765,7 @@ class JSDataObjectBuilder {
           return false;
         }
         if (next_map_->is_dictionary_map()) {
-          return false;
+          return BailoutWithDictionaryMap();
         }
         *is_mutable_double_field = representation.IsDouble();
         AdvanceToNextProperty();
@@ -784,12 +785,6 @@ class JSDataObjectBuilder {
       // hit this case given that we check for matching instance size?
       RewindExpectedFinalMapFastPathToCurrent();
     }
-    // It's only safe to emit a dictionary map when we've not set up any
-    // properties, as the caller assumes it can set up the first N properties
-    // as fast data properties.
-    DCHECK_IMPLIES(current_map_->is_dictionary_map(),
-                   current_property_index_ == 0);
-
     Handle<JSObject> object =
         current_map_->is_dictionary_map()
             ? isolate_->factory()->NewSlowJSObjectFromMap(
@@ -797,6 +792,18 @@ class JSDataObjectBuilder {
             : isolate_->factory()->NewJSObjectFromMap(current_map_);
     object->set_elements(*elements);
     return object;
+  }
+
+  bool IsDictionaryMap() const { return current_map_->is_dictionary_map(); }
+
+  Handle<DescriptorArray> descriptors_before_transition_to_dictionary() const {
+    DCHECK(IsDictionaryMap());
+    return descriptors_before_transition_to_dictionary_;
+  }
+
+  bool dictionary_may_have_interesting_properties() const {
+    DCHECK(IsDictionaryMap());
+    return dictionary_may_have_interesting_properties_;
   }
 
  private:
@@ -911,7 +918,9 @@ class JSDataObjectBuilder {
             FieldType::Any(isolate_));
 
         // We only want to stay on the fast path if we got a fast map.
-        if (next_map_->is_dictionary_map()) return false;
+        if (next_map_->is_dictionary_map()) {
+          return BailoutWithDictionaryMap();
+        }
         *is_mutable_double_field = true;
       } else {
         // Do the in-place reconfiguration.
@@ -946,6 +955,21 @@ class JSDataObjectBuilder {
   void AdvanceToNextProperty() {
     current_property_index_++;
     current_map_ = next_map_;
+  }
+
+  bool BailoutWithDictionaryMap() {
+    // If the next map will be a dictionary map, we can make object
+    // initialisation faster by immediately initialising with a
+    // dictionary, rather than first initialising a fast object and then
+    // immediately normalising. This requires keeping the old descriptor
+    // array around, to read off the original property names from it.
+    DCHECK(next_map_->is_dictionary_map());
+    descriptors_before_transition_to_dictionary_ =
+        handle(current_map_->instance_descriptors(), isolate_);
+    dictionary_may_have_interesting_properties_ =
+        current_map_->may_have_interesting_properties();
+    current_map_ = next_map_;
+    return false;
   }
 
   bool IsOnExpectedFinalMapFastPath() const {
@@ -986,6 +1010,11 @@ class JSDataObjectBuilder {
 
   Handle<Map> expected_final_map_ = {};
   int property_count_in_expected_final_map_ = 0;
+
+  // If current_map_ transitions to dictionary, we save these map properties
+  // for the initial object setup.
+  Handle<DescriptorArray> descriptors_before_transition_to_dictionary_;
+  bool dictionary_may_have_interesting_properties_;
 };
 
 class FoldedMutableHeapNumberAllocation {
@@ -1144,6 +1173,11 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
     }
   }
 
+  if (js_data_object_builder.IsDictionaryMap()) {
+    // Dictionaries don't have mutable heap numbers, so we don't need any.
+    extra_heap_numbers_needed = 0;
+  }
+
   // Create a folded mutable HeapNumber allocation area before allocating the
   // object -- this ensures that there is no allocation between the object
   // allocation and its initial fields being initialised, where the verifier
@@ -1157,7 +1191,38 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
   // all of them). Write these properties to the newly allocated object, before
   // continuing to the slow path.
   // TODO(leszeks): Wrap this logic up too.
-  {
+  if (object->map()->is_dictionary_map()) {
+    // Currently doesn't support swiss name dictionaries, for efficiency.
+    static_assert(!V8_ENABLE_SWISS_NAME_DICTIONARY_BOOL);
+    Handle<PropertyDictionary> dictionary =
+        handle(object->property_dictionary(), isolate_);
+
+    int current_field_number = 0;
+    for (int j = 0; j < i; j++) {
+      const JsonProperty& property = property_stack[start + j];
+      if (property.string.is_index()) continue;
+
+      InternalIndex descriptor_index(current_field_number);
+      Tagged<DescriptorArray> descriptors =
+          *js_data_object_builder.descriptors_before_transition_to_dictionary();
+
+      // TODO(leszeks): Share code with MigrateFastToSlow.
+      Handle<Name> key =
+          handle(descriptors->GetKey(descriptor_index), isolate_);
+      PropertyDetails details = descriptors->GetDetails(descriptor_index);
+      if (!V8_DICT_PROPERTY_CONST_TRACKING_BOOL) {
+        details = details.CopyWithConstness(PropertyConstness::kMutable);
+      }
+
+      dictionary = PropertyDictionary::Add(isolate(), dictionary, key,
+                                           property.value, details);
+      current_field_number++;
+    }
+    dictionary->set_may_have_interesting_properties(
+        js_data_object_builder.dictionary_may_have_interesting_properties());
+    object->SetProperties(*dictionary);
+
+  } else {
     DisallowGarbageCollection no_gc;
     Tagged<JSObject> raw_object = *object;
 
