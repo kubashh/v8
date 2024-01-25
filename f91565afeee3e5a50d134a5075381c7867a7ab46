@@ -16,6 +16,46 @@
       "message": "Creating a more JSPI-specific flag.",
       "revId": "f91565afeee3e5a50d134a5075381c7867a7ab46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08a0e186_05546162",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-25T15:46:25Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "f91565afeee3e5a50d134a5075381c7867a7ab46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3ba276_dcafb3e7",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-25T15:46:25Z",
+      "side": 1,
+      "message": "Keep in mind that Origin Trials don\u0027t take these flag implications into account. So if you want to enable JSPI via OT, you\u0027ll need to ensure via some other mechanism that type reflection also gets enabled (for example, check `Isolate::IsWasmJSPIEnabled()` and if so, toggle the type_reflection bit in some appropriate `enabled_features` list).",
+      "range": {
+        "startLine": 1519,
+        "startChar": 0,
+        "endLine": 1519,
+        "endChar": 77
+      },
+      "revId": "f91565afeee3e5a50d134a5075381c7867a7ab46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
