@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b75f9596_3e61de3e",
+        "filename": "src/compiler/backend/riscv/code-generator-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-01-25T14:03:36Z",
+      "side": 1,
+      "message": "The code here changed for the other platforms since you started the port I guess, see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/backend/arm64/code-generator-arm64.cc;l\u003d455;drc\u003d4202afccdd483dfe45804dc92b4f959be5e15826",
+      "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab14f670_a603dcfc",
+        "filename": "src/compiler/backend/riscv/code-generator-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3921,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-01-25T14:03:36Z",
+      "side": 1,
+      "message": "FYI, I think the change here is in principle not necessary. This is not trap handler code, this is code for WebAssembly Traps, e.g. for a WebAssembly division by zero.",
+      "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
