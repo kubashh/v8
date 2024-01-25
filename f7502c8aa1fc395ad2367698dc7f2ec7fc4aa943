@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e34e98c7_a8c3924d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-25T13:35:43Z",
+      "side": 1,
+      "message": "Regarding (1): yes :D\n\nRegarding (2): I know close to nothing about Wasm, so it\u0027s a bit hard for me to simplify it. If you think that you could reduce it in 2 minutes, then please do :)",
+      "parentUuid": "59f91213_aa24bf47",
+      "revId": "f7502c8aa1fc395ad2367698dc7f2ec7fc4aa943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91cff5a1_aaaaea10",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-01-25T13:31:54Z",
       "side": 1,
       "message": "nit: either drop `it`, or change it to `its`",
+      "range": {
+        "startLine": 2506,
+        "startChar": 61,
+        "endLine": 2506,
+        "endChar": 63
+      },
+      "revId": "f7502c8aa1fc395ad2367698dc7f2ec7fc4aa943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00ada8e9_20e1cbf1",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2506,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-25T13:35:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91cff5a1_aaaaea10",
       "range": {
         "startLine": 2506,
         "startChar": 61,
