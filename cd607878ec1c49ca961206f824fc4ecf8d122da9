@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "923efde2_2600ab5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-01-25T14:32:05Z",
+      "side": 1,
+      "message": "Here\u0027s a shorter regression test:\n```\n// Copyright 2024 the V8 project authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\nd8.file.execute(\u0027test/mjsunit/wasm/wasm-module-builder.js\u0027);\n\nconst builder \u003d new WasmModuleBuilder();\nlet array \u003d builder.addArray(kWasmI32, true);\n\nbuilder.addFunction(\"main\", kSig_v_v).exportFunc().addBody([\n  kExprRefNull, array,\n  ...wasmI32Const(0xbffffffa),\n  kExprI32Const, 1,\n  kExprI32ShrS,\n  kExprI32Const, 42,\n  kGCPrefix, kExprArraySet, array,\n]);\n\nconst instance \u003d builder.instantiate();\nassertThrows(() \u003d\u003e instance.exports.main(), WebAssembly.RuntimeError);\n```",
+      "revId": "cd607878ec1c49ca961206f824fc4ecf8d122da9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
