@@ -321,19 +321,76 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
   UNREACHABLE();
 }
 
+#if V8_ENABLE_WEBASSEMBLY
+class WasmOutOfLineTrap : public OutOfLineCode {
+ public:
+  WasmOutOfLineTrap(CodeGenerator* gen, Instruction* instr)
+      : OutOfLineCode(gen), gen_(gen), instr_(instr) {}
+  void Generate() override {
+    RiscvOperandConverter i(gen_, instr_);
+    TrapId trap_id =
+        static_cast<TrapId>(i.InputInt32(instr_->InputCount() - 1));
+    GenerateCallToTrap(trap_id);
+  }
+
+ protected:
+  CodeGenerator* gen_;
+
+  void GenerateWithTrapId(TrapId trap_id) { GenerateCallToTrap(trap_id); }
+
+ private:
+  void GenerateCallToTrap(TrapId trap_id) {
+    gen_->AssembleSourcePosition(instr_);
+    // A direct call to a wasm runtime stub defined in this module.
+    // Just encode the stub index. This will be patched when the code
+    // is added to the native module and copied into wasm code space.
+    __ Call(static_cast<Address>(trap_id), RelocInfo::WASM_STUB_CALL);
+    ReferenceMap* reference_map = gen_->zone()->New<ReferenceMap>(gen_->zone());
+    gen_->RecordSafepoint(reference_map);
+    __ AssertUnreachable(AbortReason::kUnexpectedReturnFromWasmTrap);
+  }
+
+  Instruction* instr_;
+};
+
+void RecordTrapInfoIfNeeded(Zone* zone, CodeGenerator* codegen,
+                            InstructionCode opcode, Instruction* instr,
+                            int pc) {
+  const MemoryAccessMode access_mode = AccessModeField::decode(opcode);
+  if (access_mode == kMemoryAccessProtectedMemOutOfBounds ||
+      access_mode == kMemoryAccessProtectedNullDereference) {
+    ReferenceMap* reference_map =
+        codegen->zone()->New<ReferenceMap>(codegen->zone());
+    // The safepoint has to be recorded at the return address of a call. Address
+    // we use as the fake return address in the case of the trap handler is the
+    // fault address (here `pc`) + 1. Therefore the safepoint here has to be
+    // recorded at pc + 1;
+    codegen->RecordSafepoint(reference_map, pc + 1);
+    codegen->RecordProtectedInstruction(pc);
+  }
+}
+#else
+void RecordTrapInfoIfNeeded(Zone* zone, CodeGenerator* codegen,
+                            InstructionCode opcode, Instruction* instr,
+                            int pc) {
+  DCHECK_EQ(kMemoryAccessDirect, AccessModeField::decode(opcode));
+}
+#endif  // V8_ENABLE_WEBASSEMBLY
 }  // namespace
 
-#define ASSEMBLE_ATOMIC_LOAD_INTEGER(asm_instr)          \
-  do {                                                   \
-    __ asm_instr(i.OutputRegister(), i.MemoryOperand()); \
-    __ sync();                                           \
+#define ASSEMBLE_ATOMIC_LOAD_INTEGER(asm_instr)                          \
+  do {                                                                   \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset()); \
+    __ asm_instr(i.OutputRegister(), i.MemoryOperand());                 \
+    __ sync();                                                           \
   } while (0)
 
-#define ASSEMBLE_ATOMIC_STORE_INTEGER(asm_instr)                \
-  do {                                                          \
-    __ sync();                                                  \
-    __ asm_instr(i.InputOrZeroRegister(0), i.MemoryOperand(1)); \
-    __ sync();                                                  \
+#define ASSEMBLE_ATOMIC_STORE_INTEGER(asm_instr)                         \
+  do {                                                                   \
+    __ sync();                                                           \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset()); \
+    __ asm_instr(i.InputOrZeroRegister(0), i.MemoryOperand(1));          \
+    __ sync();                                                           \
   } while (0)
 
 #define ASSEMBLE_ATOMIC_BINOP(load_linked, store_conditional, bin_instr)       \
@@ -342,6 +399,7 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
     __ AddWord(i.TempRegister(0), i.InputRegister(0), i.InputRegister(1));     \
     __ sync();                                                                 \
     __ bind(&binop);                                                           \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());       \
     __ load_linked(i.OutputRegister(0), MemOperand(i.TempRegister(0), 0));     \
     __ bin_instr(i.TempRegister(1), i.OutputRegister(0),                       \
                  Operand(i.InputRegister(2)));                                 \
@@ -386,6 +444,7 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
     __ Sll32(i.TempRegister(3), i.TempRegister(3), 3);                         \
     __ sync();                                                                 \
     __ bind(&binop);                                                           \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());       \
     __ load_linked(i.TempRegister(1), MemOperand(i.TempRegister(0), 0));       \
     __ ExtractBits(i.OutputRegister(0), i.TempRegister(1), i.TempRegister(3),  \
                    size, sign_extend);                                         \
@@ -404,6 +463,7 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
     __ sync();                                                                 \
     __ bind(&exchange);                                                        \
     __ AddWord(i.TempRegister(0), i.InputRegister(0), i.InputRegister(1));     \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());       \
     __ load_linked(i.OutputRegister(0), MemOperand(i.TempRegister(0), 0));     \
     __ Move(i.TempRegister(1), i.InputRegister(2));                            \
     __ store_conditional(i.TempRegister(1), MemOperand(i.TempRegister(0), 0)); \
@@ -427,6 +487,7 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
     __ Sll32(i.TempRegister(1), i.TempRegister(1), 3);                         \
     __ sync();                                                                 \
     __ bind(&exchange);                                                        \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());       \
     __ load_linked(i.TempRegister(2), MemOperand(i.TempRegister(0), 0));       \
     __ ExtractBits(i.OutputRegister(0), i.TempRegister(2), i.TempRegister(1),  \
                    size, sign_extend);                                         \
@@ -445,6 +506,7 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
     __ AddWord(i.TempRegister(0), i.InputRegister(0), i.InputRegister(1));     \
     __ sync();                                                                 \
     __ bind(&compareExchange);                                                 \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());       \
     __ load_linked(i.OutputRegister(0), MemOperand(i.TempRegister(0), 0));     \
     __ BranchShort(&exit, ne, i.InputRegister(2),                              \
                    Operand(i.OutputRegister(0)));                              \
@@ -473,6 +535,7 @@ FPUCondition FlagsConditionToConditionCmpFPU(bool* predicate,
     __ Sll32(i.TempRegister(1), i.TempRegister(1), 3);                         \
     __ sync();                                                                 \
     __ bind(&compareExchange);                                                 \
+    RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());       \
     __ load_linked(i.TempRegister(2), MemOperand(i.TempRegister(0), 0));       \
     __ ExtractBits(i.OutputRegister(0), i.TempRegister(2), i.TempRegister(1),  \
                    size, sign_extend);                                         \
@@ -1840,30 +1903,36 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ Lbu(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvLb:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Lb(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvSb:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Sb(i.InputOrZeroRegister(0), i.MemoryOperand(1));
       break;
     case kRiscvLhu:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Lhu(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvUlhu:
       __ Ulhu(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvLh:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Lh(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvUlh:
       __ Ulh(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvSh:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Sh(i.InputOrZeroRegister(0), i.MemoryOperand(1));
       break;
     case kRiscvUsh:
       __ Ush(i.InputOrZeroRegister(2), i.MemoryOperand());
       break;
     case kRiscvLw:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Lw(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvUlw:
@@ -1871,18 +1940,21 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
 #if V8_TARGET_ARCH_RISCV64
     case kRiscvLwu:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Lwu(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvUlwu:
       __ Ulwu(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvLd:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Ld(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvUld:
       __ Uld(i.OutputRegister(), i.MemoryOperand());
       break;
     case kRiscvSd:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Sd(i.InputOrZeroRegister(0), i.MemoryOperand(1));
       break;
     case kRiscvUsd:
@@ -1890,12 +1962,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
 #endif
     case kRiscvSw:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Sw(i.InputOrZeroRegister(0), i.MemoryOperand(1));
       break;
     case kRiscvUsw:
       __ Usw(i.InputOrZeroRegister(2), i.MemoryOperand());
       break;
     case kRiscvLoadFloat: {
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ LoadFloat(i.OutputSingleRegister(), i.MemoryOperand());
       break;
     }
@@ -1909,6 +1983,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       if (ft == kSingleRegZero && !__ IsSingleZeroRegSet()) {
         __ LoadFPRImmediate(kSingleRegZero, 0.0f);
       }
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ StoreFloat(ft, operand);
       break;
     }
@@ -1923,6 +1998,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kRiscvLoadDouble:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ LoadDouble(i.OutputDoubleRegister(), i.MemoryOperand());
       break;
     case kRiscvULoadDouble:
@@ -1933,6 +2009,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       if (ft == kDoubleRegZero && !__ IsDoubleZeroRegSet()) {
         __ LoadFPRImmediate(kDoubleRegZero, 0.0);
       }
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ StoreDouble(ft, i.MemoryOperand(1));
       break;
     }
@@ -2356,6 +2433,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       if (memOperand.offset() != 0) {
         __ AddWord(dst, memOperand.rm(), memOperand.offset());
       }
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ vs(i.InputSimd128Register(0), dst, 0, VSew::E8);
       break;
     }
@@ -2366,6 +2444,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       if (i.MemoryOperand().offset() != 0) {
         __ AddWord(src, i.MemoryOperand().rm(), i.MemoryOperand().offset());
       }
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ vl(i.OutputSimd128Register(), src, 0, VSew::E8);
       break;
     }
@@ -2378,6 +2457,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kRiscvS128Load32Zero: {
       Simd128Register dst = i.OutputSimd128Register();
       __ VU.set(kScratchReg, E32, m1);
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ Load32U(kScratchReg, i.MemoryOperand());
       __ vmv_sx(dst, kScratchReg);
       break;
@@ -2385,6 +2465,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kRiscvS128Load64Zero: {
       Simd128Register dst = i.OutputSimd128Register();
       __ VU.set(kScratchReg, E64, m1);
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
 #if V8_TARGET_ARCH_RISCV64
       __ LoadWord(kScratchReg, i.MemoryOperand());
       __ vmv_sx(dst, kScratchReg);
@@ -2397,19 +2478,22 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kRiscvS128LoadLane: {
       Simd128Register dst = i.OutputSimd128Register();
       DCHECK_EQ(dst, i.InputSimd128Register(0));
-      auto sz = static_cast<int>(MiscField::decode(instr->opcode()));
+      auto sz = LaneSizeField::decode(opcode);
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ LoadLane(sz, dst, i.InputUint8(1), i.MemoryOperand(2));
       break;
     }
     case kRiscvS128StoreLane: {
       Simd128Register src = i.InputSimd128Register(0);
       DCHECK_EQ(src, i.InputSimd128Register(0));
-      auto sz = static_cast<int>(MiscField::decode(instr->opcode()));
+      auto sz = LaneSizeField::decode(opcode);
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
       __ StoreLane(sz, src, i.InputUint8(1), i.MemoryOperand(2));
       break;
     }
     case kRiscvS128Load64ExtendS: {
       __ VU.set(kScratchReg, E64, m1);
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
 #if V8_TARGET_ARCH_RISCV64
       __ LoadWord(kScratchReg, i.MemoryOperand());
       __ vmv_vx(kSimd128ScratchReg, kScratchReg);
@@ -2423,6 +2507,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
     case kRiscvS128Load64ExtendU: {
       __ VU.set(kScratchReg, E64, m1);
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
 #if V8_TARGET_ARCH_RISCV64
       __ LoadWord(kScratchReg, i.MemoryOperand());
       __ vmv_vx(kSimd128ScratchReg, kScratchReg);
@@ -2438,18 +2523,22 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ VU.set(kScratchReg, i.InputInt8(2), i.InputInt8(3));
       switch (i.InputInt8(2)) {
         case E8:
+          RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
           __ Lb(kScratchReg, i.MemoryOperand());
           __ vmv_vx(i.OutputSimd128Register(), kScratchReg);
           break;
         case E16:
+          RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
           __ Lh(kScratchReg, i.MemoryOperand());
           __ vmv_vx(i.OutputSimd128Register(), kScratchReg);
           break;
         case E32:
+          RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
           __ Lw(kScratchReg, i.MemoryOperand());
           __ vmv_vx(i.OutputSimd128Register(), kScratchReg);
           break;
         case E64:
+          RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
 #if V8_TARGET_ARCH_RISCV64
           __ LoadWord(kScratchReg, i.MemoryOperand());
           __ vmv_vx(i.OutputSimd128Register(), kScratchReg);
@@ -3792,40 +3881,14 @@ void CodeGenerator::AssembleArchJumpRegardlessOfAssemblyOrder(
   __ Branch(GetLabel(target));
 }
 
+#if V8_ENABLE_WEBASSEMBLY
 void CodeGenerator::AssembleArchTrap(Instruction* instr,
                                      FlagsCondition condition) {
-  class OutOfLineTrap final : public OutOfLineCode {
-   public:
-    OutOfLineTrap(CodeGenerator* gen, Instruction* instr)
-        : OutOfLineCode(gen), instr_(instr), gen_(gen) {}
-    void Generate() override {
-      RiscvOperandConverter i(gen_, instr_);
-      TrapId trap_id =
-          static_cast<TrapId>(i.InputInt32(instr_->InputCount() - 1));
-      GenerateCallToTrap(trap_id);
-    }
-
-   private:
-    void GenerateCallToTrap(TrapId trap_id) {
-      gen_->AssembleSourcePosition(instr_);
-      // A direct call to a wasm runtime stub defined in this module.
-      // Just encode the stub index. This will be patched when the code
-      // is added to the native module and copied into wasm code space.
-      __ Call(static_cast<Address>(trap_id), RelocInfo::WASM_STUB_CALL);
-      ReferenceMap* reference_map =
-          gen_->zone()->New<ReferenceMap>(gen_->zone());
-      gen_->RecordSafepoint(reference_map);
-      if (v8_flags.debug_code) {
-        __ stop();
-      }
-    }
-    Instruction* instr_;
-    CodeGenerator* gen_;
-  };
-  auto ool = zone()->New<OutOfLineTrap>(this, instr);
+  auto ool = zone()->New<WasmOutOfLineTrap>(this, instr);
   Label* tlabel = ool->entry();
   AssembleBranchToLabels(this, masm(), instr, condition, tlabel, nullptr, true);
 }
+#endif  // V8_ENABLE_WEBASSEMBLY
 
 // Assembles boolean materializations after an instruction.
 void CodeGenerator::AssembleArchBoolean(Instruction* instr,

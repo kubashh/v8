@@ -1527,10 +1527,10 @@ void LiftoffAssembler::LoadTransform(LiftoffRegister dst, Register src_addr,
   Register scratch = temps.Acquire();
   MemOperand src_op = liftoff::GetMemOp(this, src_addr, offset_reg, offset_imm);
   VRegister dst_v = dst.fp().toV();
-  *protected_load_pc = pc_offset();
 
   MachineType memtype = type.mem_type();
   if (transform == LoadTransformationKind::kExtend) {
+    *protected_load_pc = pc_offset();
     Ld(scratch, src_op);
     if (memtype == MachineType::Int8()) {
       VU.set(kScratchReg, E64, m1);
@@ -1565,11 +1565,13 @@ void LiftoffAssembler::LoadTransform(LiftoffRegister dst, Register src_addr,
     vxor_vv(dst_v, dst_v, dst_v);
     if (memtype == MachineType::Int32()) {
       VU.set(kScratchReg, E32, m1);
+      *protected_load_pc = pc_offset();
       Lwu(scratch, src_op);
       vmv_sx(dst_v, scratch);
     } else {
       DCHECK_EQ(MachineType::Int64(), memtype);
       VU.set(kScratchReg, E64, m1);
+      *protected_load_pc = pc_offset();
       Ld(scratch, src_op);
       vmv_sx(dst_v, scratch);
     }
@@ -1577,18 +1579,22 @@ void LiftoffAssembler::LoadTransform(LiftoffRegister dst, Register src_addr,
     DCHECK_EQ(LoadTransformationKind::kSplat, transform);
     if (memtype == MachineType::Int8()) {
       VU.set(kScratchReg, E8, m1);
+      *protected_load_pc = pc_offset();
       Lb(scratch, src_op);
       vmv_vx(dst_v, scratch);
     } else if (memtype == MachineType::Int16()) {
       VU.set(kScratchReg, E16, m1);
+      *protected_load_pc = pc_offset();
       Lh(scratch, src_op);
       vmv_vx(dst_v, scratch);
     } else if (memtype == MachineType::Int32()) {
       VU.set(kScratchReg, E32, m1);
+      *protected_load_pc = pc_offset();
       Lw(scratch, src_op);
       vmv_vx(dst_v, scratch);
     } else if (memtype == MachineType::Int64()) {
       VU.set(kScratchReg, E64, m1);
+      *protected_load_pc = pc_offset();
       Ld(scratch, src_op);
       vmv_vx(dst_v, scratch);
     }
@@ -1643,28 +1649,31 @@ void LiftoffAssembler::StoreLane(Register dst, Register offset,
                                  bool i64_offset) {
   MemOperand dst_op =
       liftoff::GetMemOp(this, dst, offset, offset_imm, i64_offset);
-  if (protected_store_pc) *protected_store_pc = pc_offset();
   MachineRepresentation rep = type.mem_rep();
   if (rep == MachineRepresentation::kWord8) {
     VU.set(kScratchReg, E8, m1);
     vslidedown_vi(kSimd128ScratchReg, src.fp().toV(), lane);
     vmv_xs(kScratchReg, kSimd128ScratchReg);
+    if (protected_store_pc) *protected_store_pc = pc_offset();
     Sb(kScratchReg, dst_op);
   } else if (rep == MachineRepresentation::kWord16) {
     VU.set(kScratchReg, E16, m1);
     vslidedown_vi(kSimd128ScratchReg, src.fp().toV(), lane);
     vmv_xs(kScratchReg, kSimd128ScratchReg);
+    if (protected_store_pc) *protected_store_pc = pc_offset();
     Sh(kScratchReg, dst_op);
   } else if (rep == MachineRepresentation::kWord32) {
     VU.set(kScratchReg, E32, m1);
     vslidedown_vi(kSimd128ScratchReg, src.fp().toV(), lane);
     vmv_xs(kScratchReg, kSimd128ScratchReg);
+    if (protected_store_pc) *protected_store_pc = pc_offset();
     Sw(kScratchReg, dst_op);
   } else {
     DCHECK_EQ(MachineRepresentation::kWord64, rep);
     VU.set(kScratchReg, E64, m1);
     vslidedown_vi(kSimd128ScratchReg, src.fp().toV(), lane);
     vmv_xs(kScratchReg, kSimd128ScratchReg);
+    if (protected_store_pc) *protected_store_pc = pc_offset();
     Sd(kScratchReg, dst_op);
   }
 }
