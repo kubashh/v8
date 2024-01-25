@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fbe120d_64ea1730",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-25T23:24:10Z",
+      "side": 1,
+      "message": "We don\u0027t tag [js] in this way. We choose a different tag per proposal, e.g. [set-methods] or whatever.\n\nAlso is [wasm] a used tag?",
+      "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e20a424_d157b66f",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-25T23:24:10Z",
+      "side": 1,
+      "message": "What happened to `kFeature_jspi`?",
+      "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bec1fdd_6c0404cd",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-01-25T23:24:10Z",
+      "side": 1,
+      "message": "Is an independent OT for type reflection actually needed, or is it only needed as a requirement for the JSPI OT?\n\nThat is, can you avoid most of this CL and have the JSPI OT hook also enable the type reflection feature?",
+      "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
