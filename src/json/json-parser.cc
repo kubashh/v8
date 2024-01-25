@@ -645,6 +645,77 @@ JsonString JsonParser<Char>::ScanJsonPropertyKey(JsonContinuation* cont) {
   return ScanJsonString(true);
 }
 
+class FoldedMutableHeapNumberAllocation {
+ public:
+  // TODO(leszeks): If allocation alignment is ever enabled, we'll need to add
+  // padding fillers between heap numbers.
+  static_assert(!USE_ALLOCATION_ALIGNMENT_BOOL);
+
+  FoldedMutableHeapNumberAllocation() = default;
+
+  FoldedMutableHeapNumberAllocation(Isolate* isolate, int count) {
+    if (count == 0) return;
+    int size = count * sizeof(HeapNumber);
+    raw_bytes_ = isolate->factory()->NewByteArray(size);
+  }
+
+  Handle<ByteArray> raw_bytes() const { return raw_bytes_; }
+
+ private:
+  Handle<ByteArray> raw_bytes_ = {};
+};
+
+class FoldedMutableHeapNumberAllocator {
+ public:
+  FoldedMutableHeapNumberAllocator() = default;
+
+  FoldedMutableHeapNumberAllocator(
+      Isolate* isolate, FoldedMutableHeapNumberAllocation* allocation,
+      DisallowGarbageCollection& no_gc)
+      : isolate_(isolate) {
+    if (allocation->raw_bytes().is_null()) return;
+
+    raw_bytes_ = allocation->raw_bytes();
+    mutable_double_address_ =
+        reinterpret_cast<Address>(allocation->raw_bytes()->begin());
+  }
+
+  ~FoldedMutableHeapNumberAllocator() {
+    // Make all mutable HeapNumbers alive.
+    if (mutable_double_address_ == 0) {
+      DCHECK(raw_bytes_.is_null());
+      return;
+    }
+
+    DCHECK_EQ(mutable_double_address_,
+              reinterpret_cast<Address>(raw_bytes_->end()));
+    // Before setting the length of mutable_double_buffer back to zero, we
+    // must ensure that the sweeper is not running or has already swept the
+    // object's page. Otherwise the GC can add the contents of
+    // mutable_double_buffer to the free list.
+    isolate_->heap()->EnsureSweepingCompletedForObject(*raw_bytes_);
+    raw_bytes_->set_length(0);
+  }
+
+  Tagged<HeapNumber> AllocateNext(ReadOnlyRoots roots, Float64 value) {
+    DCHECK_GE(mutable_double_address_,
+              reinterpret_cast<Address>(raw_bytes_->begin()));
+    Tagged<HeapObject> hn = HeapObject::FromAddress(mutable_double_address_);
+    hn->set_map_after_allocation(roots.heap_number_map());
+    HeapNumber::cast(hn)->set_value_as_bits(value.get_bits());
+    mutable_double_address_ +=
+        ALIGN_TO_ALLOCATION_ALIGNMENT(sizeof(HeapNumber));
+    DCHECK_LE(mutable_double_address_,
+              reinterpret_cast<Address>(raw_bytes_->end()));
+    return HeapNumber::cast(hn);
+  }
+
+ private:
+  Isolate* isolate_ = nullptr;
+  Handle<ByteArray> raw_bytes_ = {};
+  Address mutable_double_address_ = 0;
+};
+
 // JSDataObjectBuilder is a helper for efficiently building a data object,
 // similar (in semantics and efficiency) to a JS object literal, based on
 // key/value pairs.
@@ -678,8 +749,11 @@ JsonString JsonParser<Char>::ScanJsonPropertyKey(JsonContinuation* cont) {
 //      bailing out if this fails.
 class JSDataObjectBuilder {
  public:
-  JSDataObjectBuilder(Isolate* isolate, int expected_named_properties)
-      : isolate_(isolate), expected_property_count_(expected_named_properties) {
+  JSDataObjectBuilder(Isolate* isolate, int expected_named_properties,
+                      bool heap_number_values_are_fresh)
+      : isolate_(isolate),
+        expected_property_count_(expected_named_properties),
+        heap_number_values_are_fresh_(heap_number_values_are_fresh) {
     current_map_ = isolate->factory()->ObjectLiteralMapFromCache(
         isolate->native_context(), expected_named_properties);
   }
@@ -713,24 +787,28 @@ class JSDataObjectBuilder {
 
   template <typename GetKeyFunction, typename GetValueFunction>
   bool TryAddPropertyForValue(GetKeyFunction&& get_key,
-                              GetValueFunction&& get_value,
-                              bool* is_mutable_double_field) {
+                              GetValueFunction&& get_value) {
     Handle<String> key;
     TransitionResult transition_result =
         TryFastTransitionToPropertyKey(get_key, &key);
     // Unconditionally get the value after getting the transition result.
     Handle<Object> value = get_value();
     switch (transition_result) {
-      case TransitionResult::kFoundMapWithFieldLocation:
+      case TransitionResult::kFoundMapWithFieldLocation: {
         // We found a map with a field for our value -- now make sure that field
         // is compatible with our value.
-        if (!TryGeneralizeFieldToValue(value, is_mutable_double_field)) {
+        bool is_mutable_double_field = false;
+        if (!TryGeneralizeFieldToValue(value, &is_mutable_double_field)) {
           // TODO(leszeks): Try to stay on the fast path if we just deprecate
           // here.
           return false;
         }
+        if (is_mutable_double_field) {
+          MightNeedMutableHeapNumber(value);
+        }
         AdvanceToNextProperty();
         return true;
+      }
 
       case TransitionResult::kFoundMapWithDescriptorLocation:
         // We will need to go to the slow path, without trying to create a map
@@ -767,14 +845,103 @@ class JSDataObjectBuilder {
         if (next_map_->is_dictionary_map()) {
           return BailoutWithDictionaryMap();
         }
-        *is_mutable_double_field = representation.IsDouble();
+        if (representation.IsDouble()) {
+          MightNeedMutableHeapNumber(value);
+        }
         AdvanceToNextProperty();
         return true;
       }
     }
   }
 
-  Handle<JSObject> CreateObject(Handle<FixedArrayBase> elements) {
+  class FastPropertySetter {
+   public:
+    explicit FastPropertySetter(JSDataObjectBuilder& builder,
+                                Handle<FixedArrayBase> elements)
+        :  // ---
+           // The order of field initialisation here is important!
+           // ---
+          roots_(builder.isolate_),
+          // This is a folded mutable HeapNumber allocation area, which allows
+          // allocating heap numbers during setting without causing an actual
+          // allocation.
+          hn_allocation_(builder.isolate_, builder.extra_heap_numbers_needed_),
+          // Te JSObject allocation must be immediately followed by a no_gc
+          // scope. This ensures that there is no allocation between the object
+          // allocation and its initial fields being initialised, where the
+          // verifier would see invalid double field state.
+          object_(builder.isolate_->factory()->NewJSObjectFromMap(
+              builder.current_map_)),
+          no_gc_(),
+          // The raw Tagged pointers and heap number allocator (which holds a
+          // raw inner address) have to be after the no_gc scope.
+          raw_object_(*object_),
+          descriptors_(builder.current_map_->instance_descriptors()),
+          hn_allocator_(builder.isolate_, &hn_allocation_, no_gc_),
+          mode_(raw_object_->GetWriteBarrierMode(no_gc_)),
+          current_field_number_(0),
+          current_property_offset_(raw_object_->GetInObjectPropertyOffset(0)),
+          heap_number_values_are_fresh_(builder.heap_number_values_are_fresh_) {
+      raw_object_->set_elements(*elements);
+    }
+
+    void SetNextProperty(Tagged<Object> value) {
+      InternalIndex descriptor_index(current_field_number_);
+
+      // As noted in MightNeedMutableHeapNumber, we might need to allocate a new
+      // HeapNumber double representation fields, if the value is either a
+      // non-freshly allocated HeapNumber, or a Smi.
+      if (!heap_number_values_are_fresh_ || IsSmi(value)) {
+        PropertyDetails details = descriptors_->GetDetails(descriptor_index);
+        if (details.representation().IsDouble()) {
+          value = hn_allocator_.AllocateNext(roots_,
+                                             Float64(Object::Number(value)));
+        }
+      }
+
+      DCHECK_EQ(
+          current_property_offset_,
+          object_->map()->GetInObjectPropertyOffset(current_field_number_));
+      DCHECK_LT(current_field_number_, object_->map()->GetInObjectProperties());
+
+      FieldIndex index = FieldIndex::ForInObjectOffset(current_property_offset_,
+                                                       FieldIndex::kTagged);
+      raw_object_->RawFastInobjectPropertyAtPut(index, value, mode_);
+
+      current_field_number_++;
+      current_property_offset_ += kTaggedSize;
+    }
+
+    Handle<JSObject> GetObject() {
+      // Only legal to call once we've initialized all properties.
+      DCHECK_EQ(current_field_number_,
+                object_->map()->GetInObjectProperties() -
+                    object_->map()->UnusedInObjectProperties());
+      DCHECK_EQ(
+          current_property_offset_,
+          object_->map()->GetInObjectPropertyOffset(current_field_number_));
+
+      return object_;
+    }
+
+    ReadOnlyRoots roots_;
+
+    FoldedMutableHeapNumberAllocation hn_allocation_;
+    Handle<JSObject> object_;
+    DisallowGarbageCollection no_gc_;
+    Tagged<JSObject> raw_object_;
+    Tagged<DescriptorArray> descriptors_;
+    FoldedMutableHeapNumberAllocator hn_allocator_;
+
+    WriteBarrierMode mode_;
+    int current_field_number_;
+    int current_property_offset_;
+    bool heap_number_values_are_fresh_;
+  };
+
+  FastPropertySetter StartInitializingFastObject(
+      Handle<FixedArrayBase> elements) {
+    DCHECK(!IsDictionaryMap());
     if (current_property_index_ < property_count_in_expected_final_map_) {
       // If we were on the expected map fast path all the way, but never reached
       // the expected final map itself, then finalize the map by rewinding to
@@ -785,26 +952,72 @@ class JSDataObjectBuilder {
       // hit this case given that we check for matching instance size?
       RewindExpectedFinalMapFastPathToCurrent();
     }
-    Handle<JSObject> object =
-        current_map_->is_dictionary_map()
-            ? isolate_->factory()->NewSlowJSObjectFromMap(
-                  current_map_, expected_property_count_)
-            : isolate_->factory()->NewJSObjectFromMap(current_map_);
-    object->set_elements(*elements);
-    return object;
+    DCHECK(!IsDictionaryMap());
+    return FastPropertySetter(*this, elements);
+  }
+
+  class DictionaryPropertySetter {
+   public:
+    explicit DictionaryPropertySetter(JSDataObjectBuilder& builder,
+                                      Handle<FixedArrayBase> elements)
+        : isolate_(builder.isolate_),
+          object_(isolate_->factory()->NewSlowJSObjectFromMap(
+              builder.current_map_, builder.expected_property_count_)),
+          dictionary_(object_->property_dictionary(), isolate_),
+          descriptors_before_transition_to_dictionary_(
+              builder.descriptors_before_transition_to_dictionary_),
+          dictionary_may_have_interesting_properties_(
+              builder.dictionary_may_have_interesting_properties_),
+          current_field_number_(0) {
+      object_->set_elements(*elements);
+    }
+
+    void SetNextProperty(Handle<Object> value) {
+      InternalIndex descriptor_index(current_field_number_);
+      Tagged<DescriptorArray> descriptors =
+          *descriptors_before_transition_to_dictionary_;
+
+      // TODO(leszeks): Share code with MigrateFastToSlow.
+      Handle<Name> key =
+          handle(descriptors->GetKey(descriptor_index), isolate_);
+      PropertyDetails details = descriptors->GetDetails(descriptor_index);
+      if (!V8_DICT_PROPERTY_CONST_TRACKING_BOOL) {
+        details = details.CopyWithConstness(PropertyConstness::kMutable);
+      }
+
+      dictionary_ =
+          PropertyDictionary::Add(isolate_, dictionary_, key, value, details);
+      current_field_number_++;
+    }
+
+    Handle<JSObject> GetObject() {
+      // Only legal to call once we've initialized all properties.
+      // TODO(leszeks): DCHECK this.
+
+      dictionary_->set_may_have_interesting_properties(
+          dictionary_may_have_interesting_properties_);
+      object_->SetProperties(*dictionary_);
+      return object_;
+    }
+
+   private:
+    Isolate* isolate_;
+    Handle<JSObject> object_;
+    Handle<PropertyDictionary> dictionary_;
+    Handle<DescriptorArray> descriptors_before_transition_to_dictionary_;
+    bool dictionary_may_have_interesting_properties_;
+
+    int current_field_number_;
+  };
+
+  DictionaryPropertySetter StartInitializingDictionaryObject(
+      Handle<FixedArrayBase> elements) {
+    DCHECK(IsDictionaryMap());
+    DCHECK_EQ(current_property_index_, property_count_in_expected_final_map_);
+    return DictionaryPropertySetter(*this, elements);
   }
 
   bool IsDictionaryMap() const { return current_map_->is_dictionary_map(); }
-
-  Handle<DescriptorArray> descriptors_before_transition_to_dictionary() const {
-    DCHECK(IsDictionaryMap());
-    return descriptors_before_transition_to_dictionary_;
-  }
-
-  bool dictionary_may_have_interesting_properties() const {
-    DCHECK(IsDictionaryMap());
-    return dictionary_may_have_interesting_properties_;
-  }
 
  private:
   enum class TransitionResult {
@@ -968,6 +1181,9 @@ class JSDataObjectBuilder {
         handle(current_map_->instance_descriptors(), isolate_);
     dictionary_may_have_interesting_properties_ =
         current_map_->may_have_interesting_properties();
+
+    extra_heap_numbers_needed_ = 0;
+
     current_map_ = next_map_;
     return false;
   }
@@ -1001,12 +1217,29 @@ class JSDataObjectBuilder {
     current_map_ = handle(Map::cast(next_map_->GetBackPointer()), isolate_);
   }
 
+  // If a field is a mutable double, we will need unique HeapNumber box for the
+  // value.
+  void MightNeedMutableHeapNumber(Handle<Object> value) {
+    // We might anyway be creating new objects, so it can be the case that
+    // HeapNumber will be guaranteed freshly allocated and unique. In this
+    // case, we can assume that we can use them as-is as mutable double
+    // fields (Smi values will need a new HeapNumber allocation).
+    // Otherwise, all mutable double fields will need a new heap number.
+    if (heap_number_values_are_fresh_ && !IsSmi(*value)) {
+      DCHECK(IsHeapNumber(*value));
+      return;
+    }
+    extra_heap_numbers_needed_++;
+  }
+
   Isolate* isolate_;
   int expected_property_count_;
+  bool heap_number_values_are_fresh_;
 
   Handle<Map> current_map_;
   Handle<Map> next_map_;
   int current_property_index_ = 0;
+  int extra_heap_numbers_needed_ = 0;
 
   Handle<Map> expected_final_map_ = {};
   int property_count_in_expected_final_map_ = 0;
@@ -1015,74 +1248,6 @@ class JSDataObjectBuilder {
   // for the initial object setup.
   Handle<DescriptorArray> descriptors_before_transition_to_dictionary_;
   bool dictionary_may_have_interesting_properties_;
-};
-
-class FoldedMutableHeapNumberAllocation {
- public:
-  // TODO(leszeks): If allocation alignment is ever enabled, we'll need to add
-  // padding fillers between heap numbers.
-  static_assert(!USE_ALLOCATION_ALIGNMENT_BOOL);
-
-  FoldedMutableHeapNumberAllocation(Isolate* isolate, int count) {
-    if (count == 0) return;
-    int size = count * sizeof(HeapNumber);
-    raw_bytes_ = isolate->factory()->NewByteArray(size);
-  }
-
-  Handle<ByteArray> raw_bytes() const { return raw_bytes_; }
-
- private:
-  Handle<ByteArray> raw_bytes_ = {};
-};
-
-class FoldedMutableHeapNumberAllocator {
- public:
-  FoldedMutableHeapNumberAllocator(
-      Isolate* isolate, FoldedMutableHeapNumberAllocation* allocation,
-      DisallowGarbageCollection& no_gc)
-      : isolate_(isolate), roots_(isolate) {
-    if (allocation->raw_bytes().is_null()) return;
-
-    raw_bytes_ = allocation->raw_bytes();
-    mutable_double_address_ =
-        reinterpret_cast<Address>(allocation->raw_bytes()->begin());
-  }
-
-  ~FoldedMutableHeapNumberAllocator() {
-    // Make all mutable HeapNumbers alive.
-    if (mutable_double_address_ == 0) {
-      DCHECK(raw_bytes_.is_null());
-      return;
-    }
-
-    DCHECK_EQ(mutable_double_address_,
-              reinterpret_cast<Address>(raw_bytes_->end()));
-    // Before setting the length of mutable_double_buffer back to zero, we
-    // must ensure that the sweeper is not running or has already swept the
-    // object's page. Otherwise the GC can add the contents of
-    // mutable_double_buffer to the free list.
-    isolate_->heap()->EnsureSweepingCompletedForObject(*raw_bytes_);
-    raw_bytes_->set_length(0);
-  }
-
-  Tagged<HeapNumber> AllocateNext(ReadOnlyRoots roots, Float64 value) {
-    DCHECK_GE(mutable_double_address_,
-              reinterpret_cast<Address>(raw_bytes_->begin()));
-    Tagged<HeapObject> hn = HeapObject::FromAddress(mutable_double_address_);
-    hn->set_map_after_allocation(roots.heap_number_map());
-    HeapNumber::cast(hn)->set_value_as_bits(value.get_bits());
-    mutable_double_address_ +=
-        ALIGN_TO_ALLOCATION_ALIGNMENT(sizeof(HeapNumber));
-    DCHECK_LE(mutable_double_address_,
-              reinterpret_cast<Address>(raw_bytes_->end()));
-    return HeapNumber::cast(hn);
-  }
-
- private:
-  Isolate* isolate_;
-  ReadOnlyRoots roots_;
-  Handle<ByteArray> raw_bytes_;
-  Address mutable_double_address_ = 0;
 };
 
 template <typename Char>
@@ -1095,7 +1260,7 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
   int named_length = length - cont.elements;
   DCHECK_LE(0, named_length);
 
-  JSDataObjectBuilder js_data_object_builder(isolate_, named_length);
+  JSDataObjectBuilder js_data_object_builder(isolate_, named_length, true);
 
   Handle<FixedArrayBase> elements;
 
@@ -1141,14 +1306,10 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
     js_data_object_builder.SetExpectedFinalMap(feedback);
   }
 
-  int extra_heap_numbers_needed = 0;
-
   int i;
   for (i = 0; i < length; i++) {
     const JsonProperty& property = property_stack[start + i];
     if (property.string.is_index()) continue;
-
-    bool is_mutable_double_field;
 
     if (!js_data_object_builder.TryAddPropertyForValue(
             [&](Handle<String> expected_key) {
@@ -1156,120 +1317,41 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
               // in the slow path -- maybe cache it somewhere.
               return MakeString(property.string, expected_key);
             },
-            [&]() { return property.value; }, &is_mutable_double_field)) {
+            [&]() { return property.value; })) {
       break;
     }
-
-    // If the field is a mutable double, we need a unique HeapNumber box for the
-    // value. Since we are anyway creating new objects, any HeapNumber values
-    // will be guaranteed freshly allocated and unique, so we can make them
-    // mutable -- Smi values will need a new HeapNumber allocation.
-    if (is_mutable_double_field) {
-      if (IsSmi(*property.value)) {
-        extra_heap_numbers_needed++;
-      } else {
-        DCHECK(IsHeapNumber(*property.value));
-      }
-    }
   }
 
-  if (js_data_object_builder.IsDictionaryMap()) {
-    // Dictionaries don't have mutable heap numbers, so we don't need any.
-    extra_heap_numbers_needed = 0;
-  }
-
-  // Create a folded mutable HeapNumber allocation area before allocating the
-  // object -- this ensures that there is no allocation between the object
-  // allocation and its initial fields being initialised, where the verifier
-  // would see invalid double field state.
-  FoldedMutableHeapNumberAllocation hn_allocation(isolate_,
-                                                  extra_heap_numbers_needed);
-
-  Handle<JSObject> object = js_data_object_builder.CreateObject(elements);
+  Handle<JSObject> object;
 
   // We've created a map for the first `i` property stack values (which might be
   // all of them). Write these properties to the newly allocated object, before
   // continuing to the slow path.
-  // TODO(leszeks): Wrap this logic up too.
-  if (object->map()->is_dictionary_map()) {
-    // Currently doesn't support swiss name dictionaries, for efficiency.
-    static_assert(!V8_ENABLE_SWISS_NAME_DICTIONARY_BOOL);
-    Handle<PropertyDictionary> dictionary =
-        handle(object->property_dictionary(), isolate_);
-
-    int current_field_number = 0;
+  // TODO(leszeks): Consider wrapping up the loop here too.
+  if (js_data_object_builder.IsDictionaryMap()) {
+    auto property_setter =
+        js_data_object_builder.StartInitializingDictionaryObject(elements);
     for (int j = 0; j < i; j++) {
       const JsonProperty& property = property_stack[start + j];
       if (property.string.is_index()) continue;
 
-      InternalIndex descriptor_index(current_field_number);
-      Tagged<DescriptorArray> descriptors =
-          *js_data_object_builder.descriptors_before_transition_to_dictionary();
-
-      // TODO(leszeks): Share code with MigrateFastToSlow.
-      Handle<Name> key =
-          handle(descriptors->GetKey(descriptor_index), isolate_);
-      PropertyDetails details = descriptors->GetDetails(descriptor_index);
-      if (!V8_DICT_PROPERTY_CONST_TRACKING_BOOL) {
-        details = details.CopyWithConstness(PropertyConstness::kMutable);
-      }
-
-      dictionary = PropertyDictionary::Add(isolate(), dictionary, key,
-                                           property.value, details);
-      current_field_number++;
+      property_setter.SetNextProperty(property.value);
     }
-    dictionary->set_may_have_interesting_properties(
-        js_data_object_builder.dictionary_may_have_interesting_properties());
-    object->SetProperties(*dictionary);
-
+    object = property_setter.GetObject();
   } else {
-    DisallowGarbageCollection no_gc;
-    Tagged<JSObject> raw_object = *object;
-
-    Tagged<DescriptorArray> descriptors =
-        raw_object->map()->instance_descriptors();
-
-    WriteBarrierMode mode = raw_object->GetWriteBarrierMode(no_gc);
-    FoldedMutableHeapNumberAllocator hn_allocator(isolate_, &hn_allocation,
-                                                  no_gc);
-
-    int current_field_number = 0;
-    int current_property_offset = raw_object->GetInObjectPropertyOffset(0);
-    DCHECK_IMPLIES(i > 0, !object->map()->is_dictionary_map());
+    auto property_setter =
+        js_data_object_builder.StartInitializingFastObject(elements);
     for (int j = 0; j < i; j++) {
       const JsonProperty& property = property_stack[start + j];
       if (property.string.is_index()) continue;
 
-      InternalIndex descriptor_index(current_field_number);
-      Tagged<Object> value = *property.value;
-
-      // As noted in the comment above, we need to allocate a new HeapNumber for
-      // any Smis in double representation fields.
-      if (IsSmi(value)) {
-        PropertyDetails details = descriptors->GetDetails(descriptor_index);
-        if (details.representation().IsDouble()) {
-          value = hn_allocator.AllocateNext(
-              roots(), Float64(static_cast<double>(Smi::cast(value).value())));
-        }
-      }
-
-      DCHECK_EQ(current_property_offset,
-                object->map()->GetInObjectPropertyOffset(current_field_number));
-      FieldIndex index = FieldIndex::ForInObjectOffset(current_property_offset,
-                                                       FieldIndex::kTagged);
-      raw_object->RawFastInobjectPropertyAtPut(index, value, mode);
-
-      current_field_number++;
-      current_property_offset += kTaggedSize;
+      property_setter.SetNextProperty(*property.value);
     }
-    DCHECK_EQ(current_field_number,
-              object->map()->GetInObjectProperties() -
-                  object->map()->UnusedInObjectProperties());
-    DCHECK_EQ(current_property_offset,
-              object->map()->GetInObjectPropertyOffset(current_field_number));
+    object = property_setter.GetObject();
   }
 
   // Slow path: define remaining named properties.
+  // TODO(leszeks): Wrap this logic up as well.
   for (; i < length; i++) {
     HandleScope scope(isolate_);
     const JsonProperty& property = property_stack[start + i];
