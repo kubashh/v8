@@ -259,5 +259,4 @@ TEST_F(ApiWasmTest, WasmEnableDisableJSPI) {
   isolate()->SetWasmJSPIEnabledCallback([](auto) { return false; });
   EXPECT_FALSE(i_isolate()->IsWasmJSPIEnabled(context));
 }
-
 }  // namespace v8
