@@ -3098,6 +3098,22 @@ bool Isolate::IsWasmJSPIEnabled(Handle<NativeContext> context) {
 #endif
 }
 
+bool Isolate::IsWasmTypeReflectionEnabled(Handle<NativeContext> context) {
+#ifdef V8_ENABLE_WEBASSEMBLY
+  v8::WasmTypeReflectionEnabledCallback reflection_callback =
+      wasm_type_reflection_enabled_callback();
+  if (reflection_callback) {
+    v8::Local<v8::Context> api_context = v8::Utils::ToLocal(context);
+    if (reflection_callback(api_context)) return true;
+  }
+
+  // Otherwise use the runtime flag.
+  return v8_flags.experimental_wasm_type_reflection;
+#else
+  return false;
+#endif
+}
+
 bool Isolate::IsWasmInliningEnabled(Handle<NativeContext> context) {
   // If Wasm GC is explicitly enabled via a callback, also enable inlining.
 #ifdef V8_ENABLE_WEBASSEMBLY
