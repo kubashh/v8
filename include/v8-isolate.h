@@ -1594,6 +1594,9 @@ class V8_EXPORT Isolate {
 
   void SetWasmJSPIEnabledCallback(WasmJSPIEnabledCallback callback);
 
+  void SetWasmTypeReflectionEnabledCallback(
+      WasmTypeReflectionEnabledCallback callback);
+
   /**
    * Register callback to control whether compile hints magic comments are
    * enabled.
