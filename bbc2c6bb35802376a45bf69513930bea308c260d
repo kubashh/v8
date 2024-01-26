@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c296f37_03483871",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-26T22:25:08Z",
+      "side": 1,
+      "message": "wasm is a used tag. I can remove the [js] tag. \nSo far, I don\u0027t think there is a tag for type reflection.",
+      "parentUuid": "6fbe120d_64ea1730",
+      "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e20a424_d157b66f",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04725eb_91b451af",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-26T22:25:08Z",
+      "side": 1,
+      "message": "You are right, it should be kFeature_jspi. That change was actually in a separate CL.",
+      "parentUuid": "4e20a424_d157b66f",
+      "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bec1fdd_6c0404cd",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-01-25T23:24:10Z",
       "side": 1,
       "message": "Is an independent OT for type reflection actually needed, or is it only needed as a requirement for the JSPI OT?\n\nThat is, can you avoid most of this CL and have the JSPI OT hook also enable the type reflection feature?",
+      "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "215dcf84_ac6320e9",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-26T22:25:08Z",
+      "side": 1,
+      "message": "I have taken out the callback mechanism for type reflection.",
+      "parentUuid": "9bec1fdd_6c0404cd",
       "revId": "bbc2c6bb35802376a45bf69513930bea308c260d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

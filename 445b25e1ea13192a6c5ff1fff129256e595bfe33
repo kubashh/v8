@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95eea9b8_d7583752",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-26T22:25:08Z",
+      "side": 1,
+      "message": "Removed the callback mechanism for type reflection.",
+      "revId": "445b25e1ea13192a6c5ff1fff129256e595bfe33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
