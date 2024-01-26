@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb7e390_c4dc6255",
+        "filename": "src/compiler/backend/riscv/code-generator-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-01-26T11:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b75f9596_3e61de3e",
+      "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab14f670_a603dcfc",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-25T14:03:36Z",
       "side": 1,
       "message": "FYI, I think the change here is in principle not necessary. This is not trap handler code, this is code for WebAssembly Traps, e.g. for a WebAssembly division by zero.",
+      "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dbccbfb_8522e0ee",
+        "filename": "src/compiler/backend/riscv/code-generator-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3921,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-01-26T11:49:01Z",
+      "side": 1,
+      "message": "Hi, I find the same change in arm64 oob patchest(https://chromium-review.googlesource.com/c/v8/v8/+/2637223/6/src/compiler/backend/arm64/code-generator-arm64.cc). So I port it.",
+      "parentUuid": "ab14f670_a603dcfc",
       "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
