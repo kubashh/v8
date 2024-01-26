@@ -514,6 +514,8 @@ using DebugObjectCache = std::vector<Handle<HeapObject>>;
   V(JavaScriptCompileHintsMagicEnabledCallback,                               \
     compile_hints_magic_enabled_callback, nullptr)                            \
   V(WasmJSPIEnabledCallback, wasm_jspi_enabled_callback, nullptr)             \
+  V(WasmTypeReflectionEnabledCallback, wasm_type_reflection_enabled_callback, \
+    nullptr)                                                                  \
   /* State for Relocatable. */                                                \
   V(Relocatable*, relocatable_top, nullptr)                                   \
   V(DebugObjectCache*, string_stream_debug_object_cache, nullptr)             \
@@ -812,6 +814,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   bool IsWasmInliningIntoJSEnabled(Handle<NativeContext> context);
   bool IsWasmImportedStringsEnabled(Handle<NativeContext> context);
   bool IsWasmJSPIEnabled(Handle<NativeContext> context);
+  bool IsWasmTypeReflectionEnabled(Handle<NativeContext> context);
   bool IsCompileHintsMagicEnabled(Handle<NativeContext> context);
 
   THREAD_LOCAL_TOP_ADDRESS(Tagged<Context>, pending_handler_context)
