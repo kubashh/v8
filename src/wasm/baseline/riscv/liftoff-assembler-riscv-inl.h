@@ -978,7 +978,14 @@ void LiftoffAssembler::emit_f64x2_le(LiftoffRegister dst, LiftoffRegister lhs,
 
 void LiftoffAssembler::emit_s128_const(LiftoffRegister dst,
                                        const uint8_t imms[16]) {
+  RecordComment("[ emit_s128_const");
+  char imm[512];
+  uint64_t vals[2];
+  memcpy(vals, imms, sizeof(vals));
+  snprintf(imm, 512, "%lx %lx", vals[0], vals[1]);
+  RecordComment(imm);
   WasmRvvS128const(dst.fp().toV(), imms);
+  RecordComment("]");
 }
 
 void LiftoffAssembler::emit_s128_not(LiftoffRegister dst, LiftoffRegister src) {
