@@ -50,6 +50,24 @@
       "message": "Just making sure `features.Add` is idempotent in case type reflection both get added as part of the JSPI OT and `v8_flags.experimental_wasm_type_reflection`, right?",
       "revId": "445b25e1ea13192a6c5ff1fff129256e595bfe33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc5ff6b9_c062ae88",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-26T22:50:16Z",
+      "side": 1,
+      "message": "WasmFeatures is an EnumSet; so, I believe adding is idempotent.",
+      "parentUuid": "24f70d12_bc3665e1",
+      "revId": "445b25e1ea13192a6c5ff1fff129256e595bfe33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -16,6 +16,24 @@
       "message": "Nit: stray removal of newline in otherwise unmodified file.",
       "revId": "50630dd93d723e292b38f9d3d278875012d7824e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea0cffb_5b5967d8",
+        "filename": "test/unittests/api/api-wasm-unittest.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-01-26T22:50:16Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "9821b053_453f65e6",
+      "revId": "50630dd93d723e292b38f9d3d278875012d7824e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
