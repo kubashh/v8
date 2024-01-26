@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c52038_0c2df0ce",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad90d367_a63444fa",
+      "range": {
+        "startLine": 109,
+        "startChar": 10,
+        "endLine": 109,
+        "endChar": 30
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd7eab9b_8016e4dc",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-01-24T10:00:24Z",
       "side": 1,
       "message": "If I understand correctly, this should be a .Cast without need a `if`.",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 47
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19b868e2_71dc7618",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd7eab9b_8016e4dc",
       "range": {
         "startLine": 115,
         "startChar": 4,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e31cf44_1072b325",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done, when design revec, we plan to support AVX/AVX2 and AVX512, so in the source code, we assume it may contains 2 or 4 items, but now we lower the priority of AVX512, drop AVX512 support can simplify the implementation.",
+      "parentUuid": "08c379aa_2d5ed1ae",
+      "range": {
+        "startLine": 124,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee76e8a1_22a15058",
@@ -117,6 +189,30 @@
       "writtenOn": "2024-01-24T10:00:24Z",
       "side": 1,
       "message": "Are you sure? In theory, you could have 2 loads to the same base, the 1st one with a trap handler and the 2nd one without, where the trap handler of the 1st one is supposed to protect both loads.",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 56
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af75d181_2d336c6d",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "We are trying to swap two loads that both have trap handlers here. I\u0027ve renamed this function to `CannotSwapProtectedLoads` and add a check of whether the trap handlers exist.",
+      "parentUuid": "ee76e8a1_22a15058",
       "range": {
         "startLine": 205,
         "startChar": 0,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a686714a_a3825c38",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76ba0765_6fb67399",
+      "range": {
+        "startLine": 242,
+        "startChar": 6,
+        "endLine": 243,
+        "endChar": 34
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "204af0de_88435f92",
@@ -163,6 +283,30 @@
       "writtenOn": "2024-01-24T10:00:24Z",
       "side": 1,
       "message": "This could be written a `GetPackNode(node0) \u003d\u003d GetPackNode(node1)`, no?",
+      "range": {
+        "startLine": 237,
+        "startChar": 2,
+        "endLine": 245,
+        "endChar": 3
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b47229f9_82cc7417",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done, remove this function as the function body is not long after change.",
+      "parentUuid": "204af0de_88435f92",
       "range": {
         "startLine": 237,
         "startChar": 2,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "401ee20a_f3181ea4",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d3408c3_6b396019",
+      "range": {
+        "startLine": 247,
+        "startChar": 16,
+        "endLine": 247,
+        "endChar": 24
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75033cfd_a3797355",
@@ -209,6 +377,30 @@
       "writtenOn": "2024-01-24T10:00:24Z",
       "side": 1,
       "message": "What about using a custom struct for `node_group` throughout this file? As far as I understand, this vector always has size 2, so it\u0027s a bit surprising that it\u0027s a ZoneVector. I\u0027m guessing that it\u0027s nice to have it be a ZoneVector because it allows to easily iterate both inputs, but you could either define an iterator on your custom structure or a Apply method that takes a lambda and applies it to both inputs.",
+      "range": {
+        "startLine": 284,
+        "startChar": 32,
+        "endLine": 284,
+        "endChar": 69
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ea2eda9_d9abb8c7",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75033cfd_a3797355",
       "range": {
         "startLine": 284,
         "startChar": 32,
@@ -242,6 +434,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad198e2f_4d5a77c3",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f5facc2_c0954b36",
+      "range": {
+        "startLine": 304,
+        "startChar": 4,
+        "endLine": 304,
+        "endChar": 39
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a9f9f31_6f8a3a0c",
@@ -265,6 +481,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c0785a_56806e8a",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a9f9f31_6f8a3a0c",
+      "range": {
+        "startLine": 322,
+        "startChar": 10,
+        "endLine": 325,
+        "endChar": 46
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69977f94_4d01e4c9",
@@ -278,6 +518,30 @@
       "writtenOn": "2024-01-24T10:00:24Z",
       "side": 1,
       "message": "Please add your name(s) (or the bug number, but name is better) after `TODO` (search for \"TODO\" in V8 for examples).",
+      "range": {
+        "startLine": 334,
+        "startChar": 9,
+        "endLine": 334,
+        "endChar": 13
+      },
+      "revId": "c8b92398e89c402a5056f896a6732877c22ca0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c868ac5_4faa4e47",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-01-26T08:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69977f94_4d01e4c9",
       "range": {
         "startLine": 334,
         "startChar": 9,
