@@ -122,6 +122,30 @@
       },
       "revId": "f91565afeee3e5a50d134a5075381c7867a7ab46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4276892_61710461",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-01-26T09:19:54Z",
+      "side": 1,
+      "message": "Experimental features aren\u0027t covered by our bug bounty program and we assume that \"stability and security will suffer\" when enabling them, so we never want to enable any such code for users. There\u0027ve been a couple of instances in the past where we failed to do this (e.g. WasmGC) and this has caused quite a bit of trouble (to the point where Chrome Security folks are questioning the whole --experimental VRP opt-out), so please get Chrome Security/VRP teams involved if you\u0027re planning to launch anything that\u0027s not covered by the bug bounty via OTs or similar.",
+      "parentUuid": "0a64f20e_6af5c370",
+      "range": {
+        "startLine": 1519,
+        "startChar": 0,
+        "endLine": 1519,
+        "endChar": 77
+      },
+      "revId": "f91565afeee3e5a50d134a5075381c7867a7ab46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
