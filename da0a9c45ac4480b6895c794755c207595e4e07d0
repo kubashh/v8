@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8967c3f4_b61f3255",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-01-26T19:04:38Z",
+      "side": 1,
+      "message": "Hi Anton,\n\nWe are seeing an intermittent test failure on PowerPc on this cctest:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/test/cctest/test-cpu-profiler.cc;l\u003d4770\n\nIt only fails when pointer compression is enabled. Test passes if `--single-threaded` flag is used.\n\nIssue gets resolve if I comment out this line:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/memory-allocator.cc;l\u003d432\n\nI\u0027m not sure if this is related to PPC having a different page size compared to other platforms, or this is a bug which happens to show up on PPC by chance?",
+      "revId": "da0a9c45ac4480b6895c794755c207595e4e07d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
