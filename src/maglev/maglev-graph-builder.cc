@@ -39,6 +39,7 @@
 #include "src/maglev/maglev-interpreter-frame-state.h"
 #include "src/maglev/maglev-ir.h"
 #include "src/numbers/conversions.h"
+#include "src/objects/code-kind.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/feedback-vector.h"
 #include "src/objects/fixed-array.h"
@@ -5744,7 +5745,7 @@ ReduceResult MaglevGraphBuilder::BuildInlined(ValueNode* context,
   TRACE_INLINING("  cannot inline " << shared << ": " << __VA_ARGS__)
 
 bool MaglevGraphBuilder::ShouldInlineCall(
-    compiler::SharedFunctionInfoRef shared,
+    ValueNode* function, compiler::SharedFunctionInfoRef shared,
     compiler::OptionalFeedbackVectorRef feedback_vector, float call_frequency) {
   if (graph()->total_inlined_bytecode_size() >
       v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
@@ -5830,6 +5831,29 @@ bool MaglevGraphBuilder::ShouldInlineCall(
                         << v8_flags.max_maglev_inline_depth << ")");
     return false;
   }
+  if (compiler::OptionalCodeRef code_ref =
+          feedback_vector->GetOptimizedCode(broker())) {
+    if (code_ref.has_value() &&
+        code_ref->object()->kind() == CodeKind::TURBOFAN) {
+      TRACE_CANNOT_INLINE("function already optimized by TurboFan");
+      return false;
+    }
+  }
+  // Check the JSFunction (if availalbe) for optimized code, in case it was
+  // compiled with function context specialization and therefore isn't on the
+  // feedback vector.
+  if (compiler::OptionalHeapObjectRef function_ref = TryGetConstant(function)) {
+    if (function_ref.has_value() && function_ref->IsJSFunction()) {
+      if (compiler::OptionalCodeRef code_ref =
+              function_ref->AsJSFunction().code(broker())) {
+        if (code_ref.has_value() &&
+            code_ref->object()->kind() == CodeKind::TURBOFAN)
+          TRACE_CANNOT_INLINE("function already optimized by TurboFan");
+        return false;
+      }
+    }
+  }
+
   TRACE_INLINING("  inlining " << shared);
   if (v8_flags.trace_maglev_inlining_verbose) {
     BytecodeArray::Disassemble(bytecode.object(), std::cout);
@@ -5853,7 +5877,7 @@ ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
         feedback.IsInsufficient() ? 0.0f : feedback.AsCall().frequency();
   }
   float call_frequency = feedback_frequency * call_frequency_;
-  if (!ShouldInlineCall(shared, feedback_vector, call_frequency)) {
+  if (!ShouldInlineCall(function, shared, feedback_vector, call_frequency)) {
     return ReduceResult::Fail();
   }
 

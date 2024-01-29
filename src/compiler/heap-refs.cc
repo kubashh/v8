@@ -1215,6 +1215,15 @@ OddballType MapRef::oddball_type(JSHeapBroker* broker) const {
   UNREACHABLE();
 }
 
+OptionalCodeRef FeedbackVectorRef::GetOptimizedCode(
+    JSHeapBroker* broker) const {
+  Tagged<Code> code = object()->optimized_code(broker->isolate());
+  if (code.is_null()) {
+    return {};
+  }
+  return MakeRefAssumeMemoryFence(broker, code);
+}
+
 FeedbackCellRef FeedbackVectorRef::GetClosureFeedbackCell(JSHeapBroker* broker,
                                                           int index) const {
   return MakeRefAssumeMemoryFence(broker,
