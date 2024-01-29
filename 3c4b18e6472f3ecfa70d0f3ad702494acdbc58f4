@@ -16,6 +16,24 @@
       "message": "Why these unaligned memory access (ulhu,ulh,ush,ulw,ulwu,usw,uld,usd,uld-float,ust-float,uld-double and ust-double) need not to be guarded with RecordTrapInfoIfNeeded?",
       "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cedb58aa_8c5d6b41",
+        "filename": "src/compiler/backend/riscv/code-generator-riscv.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-01-29T06:01:59Z",
+      "side": 1,
+      "message": "https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/wasm-compiler.cc;l\u003d3990\nwasm complier don\u0027t protect Unaligned.",
+      "parentUuid": "e4f68a6e_8d3f244a",
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
