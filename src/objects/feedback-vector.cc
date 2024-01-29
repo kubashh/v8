@@ -702,8 +702,10 @@ bool FeedbackNexus::ConfigureMegamorphic(IcCheckType property_type) {
       MaybeObject::FromSmi(Smi::FromInt(static_cast<int>(property_type)));
 
   auto feedback = GetFeedbackPair();
-  bool update_required =
-      feedback.first != sentinel || feedback.second != maybe_extra;
+  bool update_required = feedback.first != sentinel;
+  if (property_type != IcCheckType::kStoreTransition) {
+    update_required = update_required || feedback.second != maybe_extra;
+  }
   if (update_required) {
     SetFeedback(sentinel, SKIP_WRITE_BARRIER, maybe_extra, SKIP_WRITE_BARRIER);
   }
@@ -1204,7 +1206,11 @@ KeyedAccessLoadMode FeedbackNexus::GetKeyedAccessLoadMode() const {
   DCHECK(IsKeyedLoadICKind(kind()) || IsKeyedHasICKind(kind()));
   // TODO(victorgomes): The KeyedAccessLoadMode::kInBounds is doing double duty
   // here. It shouldn't be used for property loads.
+<<<<<<< HEAD
   if (GetKeyType() == IcCheckType::kProperty) {
+=======
+  if (GetKeyType() != IcCheckType::kElement)
+>>>>>>> tmp save
     return KeyedAccessLoadMode::kInBounds;
   }
   std::vector<MapAndHandler> maps_and_handlers;
@@ -1273,7 +1279,7 @@ KeyedAccessStoreMode FeedbackNexus::GetKeyedAccessStoreMode() const {
          IsDefineKeyedOwnICKind(kind()));
   KeyedAccessStoreMode mode = KeyedAccessStoreMode::kInBounds;
 
-  if (GetKeyType() == IcCheckType::kProperty) return mode;
+  if (GetKeyType() != IcCheckType::kElement) return mode;
 
   std::vector<MapAndHandler> maps_and_handlers;
   ExtractMapsAndHandlers(&maps_and_handlers);
