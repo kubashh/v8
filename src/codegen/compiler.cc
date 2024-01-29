@@ -1297,6 +1297,7 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
     CHECK_EQ(status, CompilationJob::SUCCEEDED);
 
     Compiler::FinalizeMaglevCompilationJob(job.get(), isolate);
+    function->SetInterruptBudget(isolate, CodeKind::MAGLEV);
 
     return job->code();
   }

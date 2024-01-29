@@ -1914,6 +1914,7 @@ void JSFunction::JSFunctionPrint(std::ostream& os) {
 #endif  // V8_ENABLE_WEBASSEMBLY
   shared()->PrintSourceCode(os);
   JSObjectPrintBody(os, *this);
+  os << " - feedback cell: " << Brief(raw_feedback_cell()) << "\n";
   os << " - feedback vector: ";
   if (!shared()->HasFeedbackMetadata()) {
     os << "feedback metadata is not available in SFI\n";

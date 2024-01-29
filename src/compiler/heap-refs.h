@@ -780,6 +780,8 @@ class FeedbackVectorRef : public HeapObjectRef {
 
   SharedFunctionInfoRef shared_function_info(JSHeapBroker* broker) const;
 
+  OptionalCodeRef GetOptimizedCode(JSHeapBroker* broker) const;
+
   FeedbackCellRef GetClosureFeedbackCell(JSHeapBroker* broker, int index) const;
 };
 
