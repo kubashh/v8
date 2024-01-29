@@ -2089,6 +2089,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   }
 
   ExternalPointerHandle GetOrCreateWaiterQueueNodeExternalPointer();
+
+  ExternalPointerHandle CreateWaiterQueueNodeExternalPointer();
 #endif  // V8_COMPRESS_POINTERS
 
 #ifdef V8_ENABLE_SANDBOX

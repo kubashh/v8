@@ -22,6 +22,9 @@ namespace internal {
 
 namespace detail {
 class WaiterQueueNode;
+class SyncWaiterQueueNode;
+class AsyncLockWaiterQueueNode;
+class AsyncWaitWaiterQueueNode;
 }  // namespace detail
 
 // Base class for JSAtomicsMutex and JSAtomicsCondition
@@ -120,6 +123,30 @@ class JSAtomicsMutex
       base::Optional<base::TimeDelta> timeout = base::nullopt);
 
   V8_WARN_UNUSED_RESULT inline bool TryLock();
+  static inline bool AsyncLock(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      Handle<JSPromise> promise, MaybeHandle<JSPromise> unlock_promise,
+      base::Optional<base::TimeDelta> timeout = base::nullopt);
+  static void AsyncLockWithoutCallback(Isolate* requester,
+                                       Handle<JSAtomicsMutex> mutex,
+                                       Handle<JSPromise> promise);
+  static Handle<JSPromise> LockOrQueuePromise(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+      Handle<JSObject> run_under_lock, base::Optional<base::TimeDelta> timeout);
+  inline bool TryLockExplicitAndSetOwner();
+  static bool TryLockExplicit(std::atomic<StateT>* state, StateT& expected);
+  static bool AsyncLockSlowPath(Handle<JSAtomicsMutex> mutex, Isolate* isolate,
+                                Handle<JSPromise> promise,
+                                MaybeHandle<JSPromise> unlock_promise,
+                                std::atomic<StateT>* state,
+                                base::Optional<base::TimeDelta> timeout);
+  static bool LockOrQueueAsyncNode(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+      std::shared_ptr<detail::AsyncLockWaiterQueueNode>& node);
+  static void HandleAsyncNotify(
+      std::shared_ptr<detail::AsyncLockWaiterQueueNode>& node);
+  static void HandleAsyncTimeout(
+      std::shared_ptr<detail::AsyncLockWaiterQueueNode>& node);
 
   inline void Unlock(Isolate* requester);
 
@@ -131,6 +158,7 @@ class JSAtomicsMutex
  private:
   friend class Factory;
   friend class detail::WaiterQueueNode;
+  friend class detail::AsyncLockWaiterQueueNode;
 
   // There are 2 lock bits: whether the lock itself is locked, and whether the
   // associated waiter queue is locked.
@@ -150,7 +178,6 @@ class JSAtomicsMutex
 
   inline std::atomic<int32_t>* AtomicOwnerThreadIdPtr();
 
-  static bool TryLockExplicit(std::atomic<StateT>* state, StateT& expected);
   static bool TryLockWaiterQueueExplicit(std::atomic<StateT>* state,
                                          StateT& expected);
   static void UnlockWaiterQueueWithNewState(std::atomic<StateT>* state,
@@ -166,6 +193,21 @@ class JSAtomicsMutex
   static bool LockJSMutexOrDequeueTimedOutWaiter(
       Isolate* requester, std::atomic<StateT>* state,
       detail::WaiterQueueNode* timed_out_waiter);
+  V8_EXPORT_PRIVATE static bool BackoffTryLock(Isolate* requester,
+                                               Handle<JSAtomicsMutex> mutex,
+                                               std::atomic<StateT>* state);
+  static bool DequeueTimedOutAsyncWaiter(
+      Isolate* requester, std::atomic<StateT>* state,
+      detail::WaiterQueueNode* timed_out_waiter);
+
+  V8_EXPORT_PRIVATE static bool MaybeEnqueueNode(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      std::atomic<StateT>* state, detail::WaiterQueueNode* this_waiter);
+
+  static void SetAsyncUnlockHandlers(Isolate* isolate,
+                                     Handle<JSAtomicsMutex> mutex,
+                                     Handle<JSPromise> lock_promise,
+                                     Handle<JSPromise> lock_async_promise);
 
   using TorqueGeneratedJSAtomicsMutex<
       JSAtomicsMutex, JSSynchronizationPrimitive>::owner_thread_id;
@@ -197,6 +239,17 @@ class JSAtomicsCondition
       Isolate* requester, Handle<JSAtomicsCondition> cv,
       Handle<JSAtomicsMutex> mutex, base::Optional<base::TimeDelta> timeout);
 
+  V8_EXPORT_PRIVATE static Handle<JSPromise> WaitAsync(
+      Isolate* requester, Handle<JSAtomicsCondition> cv,
+      Handle<JSAtomicsMutex> mutex, base::Optional<base::TimeDelta> timeout);
+
+  static void HandleAsyncNotify(
+      std::shared_ptr<detail::AsyncWaitWaiterQueueNode>& node);
+  static void HandleAsyncTimeout(
+      std::shared_ptr<detail::AsyncWaitWaiterQueueNode>& node);
+  static detail::WaiterQueueNode* RemoveTimedOutWaiter(
+      Handle<JSAtomicsCondition> cv, detail::AsyncWaitWaiterQueueNode* waiter);
+
   static constexpr uint32_t kAllWaiters = UINT32_MAX;
 
   // Notify {count} waiters. Returns the number of waiters woken up.
@@ -209,6 +262,7 @@ class JSAtomicsCondition
  private:
   friend class Factory;
   friend class detail::WaiterQueueNode;
+  friend class detail::AsyncWaitWaiterQueueNode;
 
   // There is 1 lock bit: whether the waiter queue is locked.
   static constexpr int kIsWaiterQueueLockedBit = 1 << 0;
@@ -220,6 +274,9 @@ class JSAtomicsCondition
 
   static bool TryLockWaiterQueueExplicit(std::atomic<StateT>* state,
                                          StateT& expected);
+
+  static void QueueWaiter(Isolate* requester, Handle<JSAtomicsCondition> cv,
+                          detail::WaiterQueueNode* waiter);
 
   using DequeueAction =
       std::function<detail::WaiterQueueNode*(detail::WaiterQueueNode**)>;
