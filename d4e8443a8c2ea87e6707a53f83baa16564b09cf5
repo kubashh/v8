@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4d68d62_6b79d1af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-01-29T10:28:44Z",
+      "side": 1,
+      "message": "PTAL, thank you!\n\nThis is a common case in React-TodoMVC, and this CL can improve the performance of the loop by ~20% when enabling Maglev and Turbofan:\n\n```\nconst props \u003d {};\nfor (propName in config) {\n  if (hasOwnProperty.call(config, propName) \u0026\u0026\n      !RESERVED_PROPS.hasOwnProperty(propName)) {\n        props[propName] \u003d config[propName];\n  }\n}\n```\n\nI\u0027m also wandering if we can further optimize this loop by allocating `props` with larger number of in-object properties (like \u003d\u003d config\u0027s in-object properties count). If so, we might also be able to reuse the transition array of `config` rather than to build a new one.",
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

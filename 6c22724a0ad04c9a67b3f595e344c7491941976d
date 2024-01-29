@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "066447cb_acb85e67",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-01-29T10:28:44Z",
+      "side": 1,
+      "message": "Do we need a deoptimization in this runtime call? If so, can we just use `Code::SetMarkedForDeoptimization`?",
+      "revId": "6c22724a0ad04c9a67b3f595e344c7491941976d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
