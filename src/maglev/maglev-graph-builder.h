@@ -540,6 +540,10 @@ class MaglevGraphBuilder {
 
     // Copy state.
     current_interpreter_frame_.CopyFrom(*compilation_unit_, merge_state);
+    // Expressions would have to be explicitly preserved across exceptions.
+    // However, at this point we do not know which ones might be used.
+    current_interpreter_frame_.known_node_aspects()
+        ->ClearAvailableExpressions();
 
     // Merges aren't simple fallthroughs, so we should reset the checkpoint
     // validity.
@@ -915,8 +919,8 @@ class MaglevGraphBuilder {
           StaticPropertiesForOpcode(op).is_pure() ||
           known_node_aspects().effect_epoch() <= exists->second.effect_epoch;
       if (sanity_check && epoch_check) {
-        if (static_cast<NodeT*>(candidate)->options() ==
-            std::tuple{std::forward<Args>(args)...}) {
+        if (gvn_equals(static_cast<NodeT*>(candidate)->options(),
+                       std::tuple{std::forward<Args>(args)...})) {
           int i = 0;
           for (const auto& inp : inputs) {
             if (inp != candidate->input(i).node()) {
@@ -935,7 +939,8 @@ class MaglevGraphBuilder {
     }
     NodeT* node =
         NodeBase::New<NodeT>(zone(), inputs, std::forward<Args>(args)...);
-    DCHECK_EQ(node->options(), std::tuple{std::forward<Args>(args)...});
+    DCHECK(
+        gvn_equals(node->options(), std::tuple{std::forward<Args>(args)...}));
     node->value_number = value_number;
     known_node_aspects().available_expressions[value_number] = {
         node, !node->properties().is_pure()
@@ -2422,6 +2427,35 @@ class MaglevGraphBuilder {
       hash = fast_hash_combine(hash, gvn_hash_value(e));
     }
     return hash;
+  }
+
+  // For the sake of CSE we want to equate some objects which are not equal
+  // accoring to operator==. Most prominently nan's.
+  template <typename T>
+  static bool gvn_equals(const T& a, const T& b) {
+    return a == b;
+  }
+  template <typename T, std::size_t... index>
+  static bool gvn_tuple_equals_impl(const T& a, const T& b,
+                                    std::index_sequence<index...>) {
+    bool equal = true;
+    auto check = [&equal](const auto& a, const auto& b) {
+      if (equal && !gvn_equals(a, b)) equal = false;
+    };
+    (check(std::get<index>(a), std::get<index>(b)), ...);
+    return equal;
+  }
+  template <typename T, std::size_t size = std::tuple_size_v<T>>
+  static bool gvn_tuple_equals(const T& a, const T& b) {
+    return gvn_tuple_equals_impl(a, b, std::make_index_sequence<size>{});
+  }
+  template <typename... Args>
+  static bool gvn_equals(const std::tuple<Args...> a,
+                         const std::tuple<Args...> b) {
+    return gvn_tuple_equals(a, b);
+  }
+  static bool gvn_equals(const double a, const double b) {
+    return base::bit_cast<uint64_t>(a) == base::bit_cast<uint64_t>(b);
   }
 };
 
