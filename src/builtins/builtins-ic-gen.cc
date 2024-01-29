@@ -147,6 +147,11 @@ void Builtins::Generate_KeyedStoreICTrampoline_Megamorphic(
   AccessorAssembler assembler(state);
   assembler.GenerateKeyedStoreICTrampoline_Megamorphic();
 }
+void Builtins::Generate_KeyedStoreICTrampoline_Transition(
+    compiler::CodeAssemblerState* state) {
+  AccessorAssembler assembler(state);
+  assembler.GenerateKeyedStoreICTrampoline_Transition();
+}
 void Builtins::Generate_KeyedStoreICBaseline(
     compiler::CodeAssemblerState* state) {
   AccessorAssembler assembler(state);
