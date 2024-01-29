@@ -2990,7 +2990,6 @@ IGNITION_HANDLER(ForInNext, InterpreterAssembler) {
   std::tie(cache_type, cache_array) = LoadRegisterPairAtOperandIndex(2);
   TNode<UintPtrT> vector_index = BytecodeOperandIdx(3);
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
-
   // Load the next key from the enumeration array.
   TNode<Object> key = LoadFixedArrayElement(CAST(cache_array), index, 0);
 

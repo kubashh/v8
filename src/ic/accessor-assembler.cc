@@ -74,7 +74,8 @@ TNode<MaybeObject> AccessorAssembler::LoadHandlerDataField(
 TNode<HeapObjectReference> AccessorAssembler::TryMonomorphicCase(
     TNode<TaggedIndex> slot, TNode<FeedbackVector> vector,
     TNode<HeapObjectReference> weak_lookup_start_object_map, Label* if_handler,
-    TVariable<MaybeObject>* var_handler, Label* if_miss) {
+    TVariable<MaybeObject>* var_handler, Label* if_miss,
+    TVariable<MaybeObject>* maybe_megamorphic_handler) {
   Comment("TryMonomorphicCase");
   DCHECK_EQ(MachineRepresentation::kTagged, var_handler->rep());
 
@@ -93,11 +94,21 @@ TNode<HeapObjectReference> AccessorAssembler::TryMonomorphicCase(
   // if we have a weak reference in feedback.
   CSA_DCHECK(this,
              IsMap(GetHeapObjectAssumeWeak(weak_lookup_start_object_map)));
-  GotoIfNot(TaggedEqual(feedback, weak_lookup_start_object_map), if_miss);
+  TNode<MaybeObject> handler;
+  if (maybe_megamorphic_handler != nullptr) {
+    handler = UncheckedCast<MaybeObject>(
+        Load(MachineType::AnyTagged(), vector,
+             IntPtrAdd(offset, IntPtrConstant(header_size + kTaggedSize))));
+    *maybe_megamorphic_handler = handler;
 
-  TNode<MaybeObject> handler = UncheckedCast<MaybeObject>(
-      Load(MachineType::AnyTagged(), vector,
-           IntPtrAdd(offset, IntPtrConstant(header_size + kTaggedSize))));
+    GotoIfNot(TaggedEqual(feedback, weak_lookup_start_object_map), if_miss);
+  } else {
+    GotoIfNot(TaggedEqual(feedback, weak_lookup_start_object_map), if_miss);
+
+    handler = UncheckedCast<MaybeObject>(
+        Load(MachineType::AnyTagged(), vector,
+             IntPtrAdd(offset, IntPtrConstant(header_size + kTaggedSize))));
+  }
 
   *var_handler = handler;
   Goto(if_handler);
@@ -3883,10 +3894,12 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
   Label miss(this, Label::kDeferred);
   {
     TVARIABLE(MaybeObject, var_handler);
+    TVARIABLE(MaybeObject, maybe_megamorphic_handler);
 
     Label if_handler(this, &var_handler),
         try_polymorphic(this, Label::kDeferred),
         try_megamorphic(this, Label::kDeferred),
+        try_transition(this, Label::kDeferred),
         no_feedback(this, Label::kDeferred),
         try_polymorphic_name(this, Label::kDeferred);
 
@@ -3897,9 +3910,9 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
 
     // Check monomorphic case.
     TNode<HeapObjectReference> weak_receiver_map = MakeWeak(receiver_map);
-    TNode<HeapObjectReference> feedback =
-        TryMonomorphicCase(p->slot(), CAST(p->vector()), weak_receiver_map,
-                           &if_handler, &var_handler, &try_polymorphic);
+    TNode<HeapObjectReference> feedback = TryMonomorphicCase(
+        p->slot(), CAST(p->vector()), weak_receiver_map, &if_handler,
+        &var_handler, &try_polymorphic, &maybe_megamorphic_handler);
     BIND(&if_handler);
     {
       Comment("KeyedStoreIC_if_handler");
@@ -3923,7 +3936,17 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
       // Check megamorphic case.
       Comment("KeyedStoreIC_try_megamorphic");
       Branch(TaggedEqual(strong_feedback, MegamorphicSymbolConstant()),
-             &no_feedback, &try_polymorphic_name);
+             &try_transition, &try_polymorphic_name);
+    }
+
+    BIND(&try_transition);
+    {
+      GotoIfNot(TaggedEqual(maybe_megamorphic_handler.value(),
+                            SmiConstant(IcCheckType::kStoreTransition)),
+                &no_feedback);
+      TailCallBuiltin(Builtin::kKeyedStoreIC_Transition, p->context(),
+                      p->receiver(), p->name(), p->value(), p->slot(),
+                      p->vector());
     }
 
     BIND(&no_feedback);
@@ -4769,6 +4792,20 @@ void AccessorAssembler::GenerateKeyedStoreICTrampoline_Megamorphic() {
   TNode<FeedbackVector> vector = LoadFeedbackVectorForStub();
 
   TailCallBuiltin(Builtin::kKeyedStoreIC_Megamorphic, context, receiver, name,
+                  value, slot, vector);
+}
+
+void AccessorAssembler::GenerateKeyedStoreICTrampoline_Transition() {
+  using Descriptor = StoreDescriptor;
+
+  auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  auto name = Parameter<Object>(Descriptor::kName);
+  auto value = Parameter<Object>(Descriptor::kValue);
+  auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<FeedbackVector> vector = LoadFeedbackVectorForStub();
+
+  TailCallBuiltin(Builtin::kKeyedStoreIC_Transition, context, receiver, name,
                   value, slot, vector);
 }
 
