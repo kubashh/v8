@@ -160,15 +160,23 @@ class ElementAccessFeedback : public ProcessedFeedback {
 
 class NamedAccessFeedback : public ProcessedFeedback {
  public:
-  NamedAccessFeedback(NameRef name, ZoneVector<MapRef> const& maps,
-                      FeedbackSlotKind slot_kind);
+  NamedAccessFeedback(OptionalNameRef name, ZoneVector<MapRef> const& maps,
+                      FeedbackSlotKind slot_kind,
+                      IcCheckType property_type = IcCheckType::kProperty);
 
-  NameRef name() const { return name_; }
+  NameRef name() const {
+    DCHECK(name_.has_value());
+    return *name_;
+  }
   ZoneVector<MapRef> const& maps() const { return maps_; }
+  bool IsKeyedStoreTransition() const {
+    return property_type_ == IcCheckType::kStoreTransition;
+  }
 
  private:
-  NameRef const name_;
+  OptionalNameRef const name_;
   ZoneVector<MapRef> const maps_;
+  IcCheckType property_type_;
 };
 
 class MegaDOMPropertyAccessFeedback : public ProcessedFeedback {

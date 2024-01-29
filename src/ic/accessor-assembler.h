@@ -71,6 +71,7 @@ class V8_EXPORT_PRIVATE AccessorAssembler : public CodeStubAssembler {
   void GenerateKeyedStoreIC();
   void GenerateKeyedStoreICTrampoline();
   void GenerateKeyedStoreICTrampoline_Megamorphic();
+  void GenerateKeyedStoreICTrampoline_Transition();
   void GenerateKeyedStoreICBaseline();
 
   void GenerateDefineKeyedOwnIC();
@@ -379,7 +380,8 @@ class V8_EXPORT_PRIVATE AccessorAssembler : public CodeStubAssembler {
   TNode<HeapObjectReference> TryMonomorphicCase(
       TNode<TaggedIndex> slot, TNode<FeedbackVector> vector,
       TNode<HeapObjectReference> weak_lookup_start_object_map,
-      Label* if_handler, TVariable<MaybeObject>* var_handler, Label* if_miss);
+      Label* if_handler, TVariable<MaybeObject>* var_handler, Label* if_miss,
+      TVariable<MaybeObject>* maybe_megamorphic_handler = nullptr);
   void HandlePolymorphicCase(
       TNode<HeapObjectReference> weak_lookup_start_object_map,
       TNode<WeakFixedArray> feedback, Label* if_handler,

@@ -344,15 +344,19 @@ bool MigrateDeprecated(Isolate* isolate, Handle<Object> object) {
 
 }  // namespace
 
-bool IC::ConfigureVectorState(IC::State new_state, Handle<Object> key) {
-  DCHECK_EQ(MEGAMORPHIC, new_state);
-  DCHECK_IMPLIES(!is_keyed(), IsName(*key));
-  bool changed = nexus()->ConfigureMegamorphic(
-      IsName(*key) ? IcCheckType::kProperty : IcCheckType::kElement);
+bool IC::ConfigureVectorState(Handle<Object> key, IcCheckType property_type) {
+  bool changed = nexus()->ConfigureMegamorphic(property_type);
   if (changed) {
     OnFeedbackChanged("Megamorphic");
   }
   return changed;
+}
+
+bool IC::ConfigureVectorState(IC::State new_state, Handle<Object> key) {
+  DCHECK_EQ(MEGAMORPHIC, new_state);
+  DCHECK_IMPLIES(!is_keyed(), IsName(*key));
+  return ConfigureVectorState(
+      key, IsName(*key) ? IcCheckType::kProperty : IcCheckType::kElement);
 }
 
 void IC::ConfigureVectorState(Handle<Name> name, Handle<Map> map,
@@ -776,7 +780,11 @@ void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
       }
       V8_FALLTHROUGH;
     case MEGADOM:
-      ConfigureVectorState(MEGAMORPHIC, name);
+      if (IsStoreTransitionHandler(*handler)) {
+        ConfigureVectorState(name, IcCheckType::kStoreTransition);
+      } else {
+        ConfigureVectorState(MEGAMORPHIC, name);
+      }
       V8_FALLTHROUGH;
     case MEGAMORPHIC:
       UpdateMegamorphicCache(lookup_start_object_map(), name, handler);

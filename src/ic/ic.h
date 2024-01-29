@@ -62,6 +62,7 @@ class IC {
   }
 
   static inline bool IsHandler(MaybeObject object);
+  static inline bool IsStoreTransitionHandler(MaybeObject object);
 
   // Nofity the IC system that a feedback has changed.
   static void OnFeedbackChanged(Isolate* isolate, Tagged<FeedbackVector> vector,
@@ -91,6 +92,8 @@ class IC {
                             MaybeObjectHandles* handlers);
   void ConfigureVectorState(
       Handle<Name> name, std::vector<MapAndHandler> const& maps_and_handlers);
+  // Configure the vector for MEGAMORPHIC.
+  bool ConfigureVectorState(Handle<Object> key, IcCheckType property_type);
 
   char TransitionMarkFromState(IC::State state);
   void TraceIC(const char* type, Handle<Object> name);

@@ -2414,7 +2414,7 @@ inline bool StoreModeCanGrow(KeyedAccessStoreMode store_mode) {
   return store_mode == KeyedAccessStoreMode::kGrowAndHandleCOW;
 }
 
-enum class IcCheckType { kElement, kProperty };
+enum class IcCheckType { kElement, kProperty, kStoreTransition };
 
 // Helper stubs can be called in different ways depending on where the target
 // code is located and how the call sequence is expected to look like:
