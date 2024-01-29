@@ -16,6 +16,115 @@
       "message": "PTAL! :)\n\nFYI, a few lowerings of the graph builder where moved to the machine lowering reducer, hence the fairly large CL, but it doesn\u0027t actually introduce that much new code.",
       "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a625c85_5e38be9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-29T13:45:17Z",
+      "side": 1,
+      "message": "Mostly good. A few smaller comments",
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37bbf449_3b54f330",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1727,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-29T13:45:17Z",
+      "side": 1,
+      "message": "I guess this entire block is just moved from `graph-builder.cc`?",
+      "range": {
+        "startLine": 1727,
+        "startChar": 2,
+        "endLine": 1727,
+        "endChar": 43
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d667961_8b32530b",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-29T13:45:17Z",
+      "side": 1,
+      "message": "nit: I think this name is not great for what it does. What about `MatchPowerOfTwoWord32Constant`?",
+      "range": {
+        "startLine": 416,
+        "startChar": 7,
+        "endLine": 416,
+        "endChar": 28
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a3ae9e_410bebf2",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-29T13:45:17Z",
+      "side": 1,
+      "message": "what about the rest?",
+      "range": {
+        "startLine": 1444,
+        "startChar": 43,
+        "endLine": 1444,
+        "endChar": 47
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2141e1e4_ef962326",
+        "filename": "src/compiler/turboshaft/reduce-args-helper.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-01-29T13:45:17Z",
+      "side": 1,
+      "message": "I hate this file.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 60
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
