@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1b2b97_c9ac558a",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-30T09:00:29Z",
+      "side": 0,
+      "message": "FYI, this was causing the DCHECK failures when creating handles; it\u0027s now fixed :)",
+      "range": {
+        "startLine": 237,
+        "startChar": 6,
+        "endLine": 237,
+        "endChar": 39
+      },
+      "revId": "6ea41078b625da4b13a4bb6279360a8a2ed9d31e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
