@@ -315,6 +315,35 @@ ImportedFunctionEntry::ImportedFunctionEntry(
     : ImportedFunctionEntry(handle(instance_data->instance_object(), isolate),
                             index) {}
 
+// WasmDispatchTable
+CAST_ACCESSOR(WasmDispatchTable)
+OBJECT_CONSTRUCTORS_IMPL(WasmDispatchTable, TrustedObject)
+
+int WasmDispatchTable::length() const { return ReadField<int>(kLengthOffset); }
+
+int WasmDispatchTable::capacity() const {
+  return ReadField<int>(kCapacityOffset);
+}
+
+inline Tagged<Object> WasmDispatchTable::ref(int index) const {
+  DCHECK_LT(index, length());
+  int offset = OffsetOf(index) + kRefBias;
+  Tagged<Object> ref = TaggedField<Object>::load(*this, offset);
+  DCHECK(IsWasmInstanceObject(ref) || IsWasmApiFunctionRef(ref) ||
+         ref == Smi::zero());
+  return HeapObject::cast(ref);
+}
+
+inline Address WasmDispatchTable::target(int index) const {
+  DCHECK_LT(index, length());
+  return ReadField<Address>(OffsetOf(index) + kTargetBias);
+}
+
+inline int WasmDispatchTable::sig(int index) const {
+  DCHECK_LT(index, length());
+  return ReadField<int>(OffsetOf(index) + kSigBias);
+}
+
 // WasmExceptionPackage
 OBJECT_CONSTRUCTORS_IMPL(WasmExceptionPackage, JSObject)
 CAST_ACCESSOR(WasmExceptionPackage)
