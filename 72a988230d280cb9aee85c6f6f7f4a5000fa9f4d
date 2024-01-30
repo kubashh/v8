@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2dbc9ba4_27aa55f8",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1727,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-30T09:43:37Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "37bbf449_3b54f330",
+      "range": {
+        "startLine": 1727,
+        "startChar": 2,
+        "endLine": 1727,
+        "endChar": 43
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d667961_8b32530b",
         "filename": "src/compiler/turboshaft/operation-matcher.h",
         "patchSetId": 5
@@ -71,6 +95,30 @@
       "writtenOn": "2024-01-29T13:45:17Z",
       "side": 1,
       "message": "nit: I think this name is not great for what it does. What about `MatchPowerOfTwoWord32Constant`?",
+      "range": {
+        "startLine": 416,
+        "startChar": 7,
+        "endLine": 416,
+        "endChar": 28
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fc60fc7_9066b4ab",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-30T09:43:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d667961_8b32530b",
       "range": {
         "startLine": 416,
         "startChar": 7,
@@ -94,6 +142,30 @@
       "writtenOn": "2024-01-29T13:45:17Z",
       "side": 1,
       "message": "what about the rest?",
+      "range": {
+        "startLine": 1444,
+        "startChar": 43,
+        "endLine": 1444,
+        "endChar": 47
+      },
+      "revId": "72a988230d280cb9aee85c6f6f7f4a5000fa9f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dd1ff99_7bc99f32",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-30T09:43:37Z",
+      "side": 1,
+      "message": "Whups, good catch :)",
+      "parentUuid": "11a3ae9e_410bebf2",
       "range": {
         "startLine": 1444,
         "startChar": 43,
