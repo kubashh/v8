@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/codegen/compiler.h"
+#include "src/codegen/optimized-compilation-info.h"
+#include "src/compiler/turboshaft/graph.h"
 #if !V8_ENABLE_WEBASSEMBLY
 #error This header should only be included if WebAssembly is enabled.
 #endif  // !V8_ENABLE_WEBASSEMBLY
@@ -24,7 +27,23 @@ wasm::WasmCompilationResult ExecuteTurboshaftWasmCompilation(
     wasm::CompilationEnv* env, WasmCompilationData& data,
     wasm::WasmFeatures* detected);
 
-}
+class TurboshaftCompilationJob : public OptimizedCompilationJob {
+ public:
+  TurboshaftCompilationJob(OptimizedCompilationInfo* compilation_info,
+                           State initial_state)
+      : OptimizedCompilationJob("Turboshaft", initial_state),
+        compilation_info_(compilation_info) {}
+
+  OptimizedCompilationInfo* compilation_info() const {
+    return compilation_info_;
+  }
+
+ private:
+  OptimizedCompilationInfo* const compilation_info_;
+};
+
+}  // namespace turboshaft
+
 }  // namespace v8::internal::compiler
 
 #endif  // V8_COMPILER_TURBOSHAFT_WASM_TURBOSHAFT_COMPILER_H_

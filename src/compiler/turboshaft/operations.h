@@ -1008,8 +1008,11 @@ struct OperationT : Operation {
     size_t end = std::min<size_t>(expected.size(), result->input_count);
     for (size_t i = 0; i < end; ++i) {
       if (expected[i] == MaybeRegisterRepresentation::None()) continue;
-      DCHECK(ValidOpInputRep(*graph, result->inputs()[i],
-                             RegisterRepresentation(expected[i])));
+      if (!ValidOpInputRep(*graph, result->inputs()[i],
+                           RegisterRepresentation(expected[i]))) {
+        DCHECK(ValidOpInputRep(*graph, result->inputs()[i],
+                               RegisterRepresentation(expected[i])));
+      }
     }
 #endif
     // If this DCHECK fails, then the number of inputs specified in the
