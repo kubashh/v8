@@ -496,7 +496,7 @@ class MaglevGraphBuilder {
   bool EnsureType(ValueNode* node, NodeType type, Function ensure_new_type);
   void SetKnownValue(ValueNode* node, compiler::ObjectRef constant);
   bool ShouldEmitInterruptBudgetChecks() {
-    if (is_inline()) return false;
+    if (is_inline() && !v8_flags.always_osr_from_maglev) return false;
     return v8_flags.force_emit_interrupt_budget_checks || v8_flags.turbofan;
   }
   bool ShouldEmitOsrInterruptBudgetChecks() {
