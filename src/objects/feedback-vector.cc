@@ -43,7 +43,8 @@ static bool IsPropertyNameFeedback(MaybeObject feedback) {
   ReadOnlyRoots roots = symbol->GetReadOnlyRoots();
   return symbol != roots.uninitialized_symbol() &&
          symbol != roots.mega_dom_symbol() &&
-         symbol != roots.megamorphic_symbol();
+         symbol != roots.megamorphic_symbol() &&
+         symbol != roots.mega_transition_symbol();
 }
 
 std::ostream& operator<<(std::ostream& os, FeedbackSlotKind kind) {
@@ -461,6 +462,14 @@ void FeedbackVector::EvictOptimizedCodeMarkedForDeoptimization(
   }
 }
 
+void FeedbackVector::SetMarkedForDeoptimization(Isolate* isolate,
+                                                const char* reason) {
+  DCHECK(has_optimized_code());
+  MaybeObject slot = maybe_optimized_code();
+  Tagged<Code> code = CodeWrapper::cast(slot.GetHeapObject())->code(isolate);
+  code->SetMarkedForDeoptimization(isolate, reason);
+}
+
 bool FeedbackVector::ClearSlots(Isolate* isolate, ClearBehavior behavior) {
   if (!shared_function_info()->HasFeedbackMetadata()) return false;
   MaybeObject uninitialized_sentinel = MaybeObject::FromObject(
@@ -710,6 +719,20 @@ bool FeedbackNexus::ConfigureMegamorphic(IcCheckType property_type) {
   return update_required;
 }
 
+bool FeedbackNexus::ConfigureMegaTransition() {
+  DisallowGarbageCollection no_gc;
+  Isolate* isolate = GetIsolate();
+  MaybeObject sentinel = MegaTransitionSentinel();
+
+  auto feedback = GetFeedbackPair();
+  if (feedback.first != sentinel && feedback.first != MegamorphicSentinel()) {
+    SetFeedback(sentinel, SKIP_WRITE_BARRIER,
+                HeapObjectReference::ClearedValue(isolate));
+    return true;
+  }
+  return false;
+}
+
 Tagged<Map> FeedbackNexus::GetFirstMap() const {
   FeedbackIterator it(this);
   if (!it.done()) {
@@ -761,6 +784,10 @@ InlineCacheState FeedbackNexus::ic_state() const {
       if (feedback == MegaDOMSentinel()) {
         DCHECK(IsLoadICKind(kind()));
         return InlineCacheState::MEGADOM;
+      }
+      if (feedback == MegaTransitionSentinel()) {
+        DCHECK(IsKeyedStoreICKind(kind()));
+        return InlineCacheState::MEGATRANSITION;
       }
       if (feedback->IsWeakOrCleared()) {
         // Don't check if the map is cleared.

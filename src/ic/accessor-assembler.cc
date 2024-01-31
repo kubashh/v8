@@ -3887,6 +3887,7 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     Label if_handler(this, &var_handler),
         try_polymorphic(this, Label::kDeferred),
         try_megamorphic(this, Label::kDeferred),
+        try_transition(this, Label::kDeferred),
         no_feedback(this, Label::kDeferred),
         try_polymorphic_name(this, Label::kDeferred);
 
@@ -3912,10 +3913,19 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     {
       // CheckPolymorphic case.
       Comment("KeyedStoreIC_try_polymorphic");
-      GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)),
-                &try_megamorphic);
+      GotoIfNot(IsWeakFixedArrayMap(LoadMap(strong_feedback)), &try_transition);
       HandlePolymorphicCase(weak_receiver_map, CAST(strong_feedback),
                             &if_handler, &var_handler, &miss);
+    }
+
+    BIND(&try_transition);
+    {
+      Comment("KeyedStoreIC_try_transition");
+      GotoIfNot(TaggedEqual(strong_feedback, MegaTransitionSymbolConstant()),
+                &try_megamorphic);
+      TailCallBuiltin(Builtin::kKeyedStoreIC_Transition, p->context(),
+                      p->receiver(), p->name(), p->value(), p->slot(),
+                      p->vector());
     }
 
     BIND(&try_megamorphic);
@@ -4769,6 +4779,20 @@ void AccessorAssembler::GenerateKeyedStoreICTrampoline_Megamorphic() {
   TNode<FeedbackVector> vector = LoadFeedbackVectorForStub();
 
   TailCallBuiltin(Builtin::kKeyedStoreIC_Megamorphic, context, receiver, name,
+                  value, slot, vector);
+}
+
+void AccessorAssembler::GenerateKeyedStoreICTrampoline_Transition() {
+  using Descriptor = StoreDescriptor;
+
+  auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  auto name = Parameter<Object>(Descriptor::kName);
+  auto value = Parameter<Object>(Descriptor::kValue);
+  auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<FeedbackVector> vector = LoadFeedbackVectorForStub();
+
+  TailCallBuiltin(Builtin::kKeyedStoreIC_Transition, context, receiver, name,
                   value, slot, vector);
 }
 

@@ -35,10 +35,15 @@ bool IC::IsHandler(MaybeObject object) {
           (IsDataHandler(heap_object) || IsCode(heap_object)));
 }
 
+bool IC::IsStoreTransitionHandler(MaybeObject object) {
+  Tagged<HeapObject> heap_object;
+  return object.GetHeapObjectIfWeak(&heap_object) && IsMap(heap_object);
+}
+
 bool IC::vector_needs_update() {
   if (state() == InlineCacheState::NO_FEEDBACK) return false;
   return (!vector_set_ && (state() != InlineCacheState::MEGAMORPHIC ||
-                           nexus()->GetKeyType() != IcCheckType::kElement));
+                           nexus()->GetKeyType() == IcCheckType::kProperty));
 }
 
 }  // namespace internal
