@@ -54,6 +54,7 @@ class KeyedStoreGenericAssembler : public AccessorAssembler {
 
   void KeyedStoreGeneric();
   void KeyedStoreMegamorphic();
+  void KeyedStoreTransition();
 
   void StoreIC_NoFeedback();
 
@@ -201,6 +202,12 @@ void KeyedStoreMegamorphicGenerator::Generate(
     compiler::CodeAssemblerState* state) {
   KeyedStoreGenericAssembler assembler(state, StoreMode::kSet);
   assembler.KeyedStoreMegamorphic();
+}
+
+void KeyedStoreTransitionGenerator::Generate(
+    compiler::CodeAssemblerState* state) {
+  KeyedStoreGenericAssembler assembler(state, StoreMode::kSet);
+  assembler.KeyedStoreTransition();
 }
 
 // static
@@ -1253,6 +1260,52 @@ void KeyedStoreGenericAssembler::KeyedStoreMegamorphic() {
 
   KeyedStoreGeneric(context, receiver, name, value, Nothing<LanguageMode>(),
                     kUseStubCache, slot, maybe_vector);
+}
+
+void KeyedStoreGenericAssembler::KeyedStoreTransition() {
+  DCHECK(IsSet());  // Only [[Set]] handlers are stored in the stub cache.
+  using Descriptor = StoreWithVectorDescriptor;
+
+  auto receiver_maybe_smi = Parameter<Object>(Descriptor::kReceiver);
+  auto name_maybe_smi = Parameter<Object>(Descriptor::kName);
+  auto value = Parameter<Object>(Descriptor::kValue);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
+  auto maybe_vector = Parameter<HeapObject>(Descriptor::kVector);
+
+  Label slow(this);
+  GotoIf(TaggedIsSmi(receiver_maybe_smi), &slow);
+  TNode<HeapObject> receiver = CAST(receiver_maybe_smi);
+  TNode<Map> receiver_map = LoadMap(receiver);
+  TNode<Uint16T> instance_type = LoadMapInstanceType(receiver_map);
+  // Receivers requiring non-standard element accesses (interceptors, access
+  // checks, strings and string wrappers, proxies) are handled in the runtime.
+  GotoIf(IsCustomElementsReceiverInstanceType(instance_type), &slow);
+  // Check if parameter name is a unique name.
+  GotoIf(TaggedIsSmi(name_maybe_smi), &slow);
+  GotoIfNot(IsUniqueName(CAST(name_maybe_smi)), &slow);
+  TNode<Name> name = CAST(name_maybe_smi);
+
+  Comment("lookup transition");
+  CheckForAssociatedProtector(name, &slow);
+
+  TNode<Map> transition_map =
+      FindCandidateStoreICTransitionMapHandler(receiver_map, name, &slow);
+
+  // Validate the transition handler candidate and apply the transition.
+  StoreTransitionMapFlags flags = kStoreTransitionMapFlagsMask;
+  StoreICParameters p(context, receiver, name, value, base::nullopt, slot,
+                      maybe_vector, StoreICMode::kDefault);
+  HandleStoreICTransitionMapHandlerCase(&p, transition_map, &slow, flags);
+  ExitPoint direct_exit(this);
+  direct_exit.Return(value);
+
+  BIND(&slow);
+  {
+    Comment("KeyedStoreTransition_miss");
+    TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context, value, slot,
+                    maybe_vector, receiver, name);
+  }
 }
 
 void KeyedStoreGenericAssembler::StoreProperty(TNode<Context> context,

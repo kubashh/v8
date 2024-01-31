@@ -56,6 +56,7 @@ constexpr InlineCacheState RECOMPUTE_HANDLER =
 constexpr InlineCacheState POLYMORPHIC = InlineCacheState::POLYMORPHIC;
 constexpr InlineCacheState MEGAMORPHIC = InlineCacheState::MEGAMORPHIC;
 constexpr InlineCacheState MEGADOM = InlineCacheState::MEGADOM;
+constexpr InlineCacheState MEGATRANSITION = InlineCacheState::MEGATRANSITION;
 constexpr InlineCacheState GENERIC = InlineCacheState::GENERIC;
 
 char IC::TransitionMarkFromState(IC::State state) {
@@ -74,6 +75,8 @@ char IC::TransitionMarkFromState(IC::State state) {
       return 'N';
     case MEGADOM:
       return 'D';
+    case MEGATRANSITION:
+      return 'T';
     case GENERIC:
       return 'G';
   }
@@ -392,6 +395,15 @@ void IC::ConfigureVectorState(
   nexus()->ConfigurePolymorphic(name, maps_and_handlers);
 
   OnFeedbackChanged("Polymorphic");
+}
+
+bool IC::ConfigureVectorState(IC::State new_state) {
+  DCHECK_EQ(MEGATRANSITION, new_state);
+  bool changed = nexus()->ConfigureMegaTransition();
+  if (changed) {
+    OnFeedbackChanged("MegaTransition");
+  }
+  return changed;
 }
 
 MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
@@ -773,6 +785,20 @@ void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
       if (UpdateMegaDOMIC(handler, name)) break;
       if (!is_keyed() || state() == RECOMPUTE_HANDLER) {
         CopyICToMegamorphicCache(name);
+      }
+      V8_FALLTHROUGH;
+    case MEGATRANSITION:
+      if (IsKeyedStoreIC()) {
+        if (IsStoreTransitionHandler(*handler)) {
+          ConfigureVectorState(MEGATRANSITION);
+          vector_set_ = true;
+          break;
+        } else if (state() == MEGATRANSITION) {
+          if (nexus()->vector()->has_optimized_code()) {
+            nexus()->vector()->SetMarkedForDeoptimization(
+                isolate(), "not transitioning store");
+          }
+        }
       }
       V8_FALLTHROUGH;
     case MEGADOM:
