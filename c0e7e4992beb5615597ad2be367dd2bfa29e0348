@@ -51,6 +51,24 @@
       "message": "LGTM, thanks!",
       "revId": "c0e7e4992beb5615597ad2be367dd2bfa29e0348",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db221556_216bb295",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-01-31T14:21:46Z",
+      "side": 1,
+      "message": "I think that we can have them in Javascript, but not currently because the Stack check is always expanded in the frontend (\u003d before we reach Turboshaft), so by the time we reach Turboshaft, even the smallest loops will have at least 4 blocks (header, stack check branch + if \u0026 else, and final merge with the backedge).\n\nOnce we stop lowering stack checks that early, we should be able to have 1-block loops in JS.",
+      "parentUuid": "876b7802_386af703",
+      "revId": "c0e7e4992beb5615597ad2be367dd2bfa29e0348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
