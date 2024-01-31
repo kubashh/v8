@@ -426,6 +426,10 @@ Handle<Symbol> FeedbackVector::MegaDOMSentinel(Isolate* isolate) {
   return ReadOnlyRoots(isolate).mega_dom_symbol_handle();
 }
 
+Handle<Symbol> FeedbackVector::MegaTransitionSentinel(Isolate* isolate) {
+  return ReadOnlyRoots(isolate).mega_transition_symbol_handle();
+}
+
 Tagged<Symbol> FeedbackVector::RawUninitializedSentinel(Isolate* isolate) {
   return ReadOnlyRoots(isolate).uninitialized_symbol();
 }
@@ -471,6 +475,11 @@ MaybeObject FeedbackNexus::MegamorphicSentinel() const {
 MaybeObject FeedbackNexus::MegaDOMSentinel() const {
   return MaybeObject::FromObject(
       *FeedbackVector::MegaDOMSentinel(GetIsolate()));
+}
+
+MaybeObject FeedbackNexus::MegaTransitionSentinel() const {
+  return MaybeObject::FromObject(
+      *FeedbackVector::MegaTransitionSentinel(GetIsolate()));
 }
 
 MaybeObject FeedbackNexus::FromHandle(MaybeObjectHandle slot) const {

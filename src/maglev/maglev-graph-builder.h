@@ -2000,6 +2000,9 @@ class MaglevGraphBuilder {
       compiler::NamedAccessFeedback const& feedback,
       compiler::FeedbackSource const& feedback_source,
       compiler::AccessMode access_mode);
+  ReduceResult TryBuildKeyedStoreTransition(
+      ValueNode* receiver, ValueNode* lookup_start_object, ValueNode* name,
+      compiler::FeedbackSource const& feedback_source);
 
   ReduceResult BuildLoadTypedArrayLength(ValueNode* object,
                                          ElementsKind elements_kind);
