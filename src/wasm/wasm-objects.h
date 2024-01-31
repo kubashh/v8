@@ -615,6 +615,73 @@ class WasmTagObject
   TQ_OBJECT_CONSTRUCTORS(WasmTagObject)
 };
 
+// The dispatch table is referenced from a WasmTableObject and from every
+// WasmTrustedInstanceData which uses the table. It is used from generated code
+// for executing indirect calls.
+// The WasmDispatchTable lives in trusted space and holds tuples of
+// <ref, target, sig>.
+class WasmDispatchTable : public TrustedObject {
+ public:
+  class BodyDescriptor;
+
+  static constexpr size_t kLengthOffset = kHeaderSize;
+  static constexpr size_t kCapacityOffset = kLengthOffset + kUInt32Size;
+  static constexpr size_t kEntriesOffset = kCapacityOffset + kUInt32Size;
+
+  // Entries consist of
+  // - ref (tagged)
+  // - target (pointer)
+  // - sig (int32_t)
+  // TODO(14564): Make "ref" a protected pointer by moving WasmApiFunctionRef to
+  // the trusted space and linking either that or WasmTrustedInstanceData.
+  static constexpr size_t kRefBias = 0;
+  static constexpr size_t kTargetBias = kRefBias + kTaggedSize;
+  static constexpr size_t kSigBias = kTargetBias + kSystemPointerSize;
+  static constexpr size_t kEntrySize = kSigBias + kInt32Size;
+
+  // The total byte size must still fit in an integer.
+  static constexpr int kMaxLength = (kMaxInt - kEntriesOffset) / kEntrySize;
+
+  static constexpr int SizeFor(int length) {
+    DCHECK_LE(length, kMaxLength);
+    return kEntriesOffset + length * kEntrySize;
+  }
+
+  static constexpr int OffsetOf(int index) {
+    DCHECK_LT(index, kMaxLength);
+    return SizeFor(index);
+  }
+
+  // The current length of this dispatch table. This is always <= the capacity.
+  inline int length() const;
+  // The current capacity. Can be bigger than the current length to allow for
+  // more efficient growing.
+  inline int capacity() const;
+
+  // Accessors.
+  // {ref} will be a WasmApiFunctionRef, a WasmInstanceObject, or Smi::zero()
+  // (if the entry was cleared).
+  inline Tagged<Object> ref(int index) const;
+  inline Address target(int index) const;
+  inline int sig(int index) const;
+
+  // {ref} has to be a WasmApiFunctionRef, a WasmInstanceObject, or Smi::zero().
+  void V8_EXPORT_PRIVATE Set(int index, Tagged<Object> ref, Address call_target,
+                             int sig_id);
+  void Clear(int index);
+  void SetTarget(int index, Address call_target);
+
+  static V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT Handle<WasmDispatchTable> New(
+      Isolate* isolate, int length);
+  static V8_WARN_UNUSED_RESULT Handle<WasmDispatchTable> Grow(
+      Isolate*, Handle<WasmDispatchTable>, int new_length);
+
+  DECL_CAST(WasmDispatchTable)
+  DECL_PRINTER(WasmDispatchTable)
+  DECL_VERIFIER(WasmDispatchTable)
+  OBJECT_CONSTRUCTORS(WasmDispatchTable, TrustedObject);
+};
+
 // A Wasm exception that has been thrown out of Wasm code.
 class V8_EXPORT_PRIVATE WasmExceptionPackage : public JSObject {
  public:
