@@ -519,6 +519,11 @@ constexpr Register OnStackReplacementDescriptor::MaybeTargetCodeRegister() {
 constexpr auto VoidDescriptor::registers() { return RegisterArray(); }
 
 // static
+constexpr auto ContinueToBuiltinDescriptor::registers() {
+  return RegisterArray();
+}
+
+// static
 constexpr auto AllocateDescriptor::registers() {
   return RegisterArray(kAllocateSizeRegister);
 }

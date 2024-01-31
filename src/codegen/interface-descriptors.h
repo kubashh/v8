@@ -75,6 +75,7 @@ namespace internal {
   V(ConstructWithSpread_Baseline)                    \
   V(ConstructWithSpread_WithFeedback)                \
   V(ContextOnly)                                     \
+  V(ContinueToBuiltin)                               \
   V(CopyDataPropertiesWithExcludedProperties)        \
   V(CopyDataPropertiesWithExcludedPropertiesOnStack) \
   V(CppBuiltinAdaptor)                               \
@@ -784,9 +785,19 @@ using JSEntryDescriptor = VoidDescriptor;
 // make too much sense as long as the descriptor isn't used or verified.
 using CEntryDummyDescriptor = VoidDescriptor;
 
-// TODO(jgruber): Consider filling in the details here; however, this doesn't
-// make too much sense as long as the descriptor isn't used or verified.
-using ContinueToBuiltinDescriptor = VoidDescriptor;
+// This descriptor is currently only needed to have a unique entrypoint tag for
+// these builtins.
+class V8_EXPORT_PRIVATE ContinueToBuiltinDescriptor
+    : public StaticCallInterfaceDescriptor<ContinueToBuiltinDescriptor> {
+ public:
+  static const CodeEntrypointTag kEntrypointTag =
+      kContinueToBuiltinEntrypointTag;
+  DEFINE_PARAMETERS_NO_CONTEXT()
+  DEFINE_PARAMETER_TYPES()
+  DECLARE_DESCRIPTOR(ContinueToBuiltinDescriptor)
+
+  static constexpr auto registers();
+};
 
 // TODO(wasm): Consider filling in details / defining real descriptors for all
 // builtins still using this placeholder descriptor.

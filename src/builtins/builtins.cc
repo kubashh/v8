@@ -475,6 +475,9 @@ CodeEntrypointTag Builtins::TagFor(Builtin builtin) {
       return kBytecodeHandlerEntrypointTag;
     case TFH:
       return kICHandlerEntrypointTag;
+    case ASM:
+      // TODO(saelo) consider using this approach for the other kinds as well.
+      return CallInterfaceDescriptorFor(builtin).tag();
     default:
       // TODO(saelo): use more fine-grained tags here.
       return kDefaultCodeEntrypointTag;
