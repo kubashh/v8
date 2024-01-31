@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63860450_004165a1",
+        "filename": "src/common/globals.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-01-31T09:34:06Z",
+      "side": 1,
+      "message": "Thanks for your comments! I\u0027ve introduced a new state called `MegaTransition`, and now the feedback slot looks like:\n\n```\n- slot #0 StoreKeyedSloppy MEGATRANSITION {\n  [0] \u003cSymbol: (mega_transition_symbol)\u003e\n  [1] [cleared]\n}\n```",
+      "parentUuid": "c9bdf17e_78485668",
+      "range": {
+        "startLine": 2417,
+        "startChar": 46,
+        "endLine": 2417,
+        "endChar": 62
+      },
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "471fc15c_f698c46d",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 4
@@ -54,6 +78,30 @@
       "writtenOn": "2024-01-29T13:00:20Z",
       "side": 1,
       "message": "why use `maybe_megamorphic_handler` here instead of `strong_feedback`?",
+      "range": {
+        "startLine": 3944,
+        "startChar": 28,
+        "endLine": 3944,
+        "endChar": 53
+      },
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc26a6dc_ab7d011b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3944,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-01-31T09:34:06Z",
+      "side": 1,
+      "message": "Previously the state is recorded in `FeedbackExtra` of megamorphic symbol. I\u0027ve used a new state instead.",
+      "parentUuid": "471fc15c_f698c46d",
       "range": {
         "startLine": 3944,
         "startChar": 28,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a8dcb13_dae1bf36",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-01-31T09:34:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1684886_d007d9ef",
+      "range": {
+        "startLine": 3945,
+        "startChar": 27,
+        "endLine": 3945,
+        "endChar": 71
+      },
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bde3db35_7718a0a9",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-01-29T13:00:20Z",
       "side": 1,
       "message": "this shouldn\u0027t be in MEGADOM",
+      "range": {
+        "startLine": 783,
+        "startChar": 10,
+        "endLine": 783,
+        "endChar": 34
+      },
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d92c34e_1f701275",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-01-31T09:34:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bde3db35_7718a0a9",
       "range": {
         "startLine": 783,
         "startChar": 10,
