@@ -1399,10 +1399,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ Call(code, RelocInfo::CODE_TARGET);
       } else {
         Register reg = i.InputRegister(0);
+        int tag_input_offset =
+            instr->HasCallDescriptorFlag(CallDescriptor::kHasExceptionHandler)
+                ? 2
+                : 1;
+        CodeEntrypointTag tag =
+            i.InputCodeEntrypointTag(instr->InputCount() - tag_input_offset);
         DCHECK_IMPLIES(
             instr->HasCallDescriptorFlag(CallDescriptor::kFixedTargetRegister),
             reg == kJavaScriptCallCodeStartRegister);
-        __ LoadCodeInstructionStart(reg, reg);
+        __ LoadCodeInstructionStart(reg, reg, tag);
         __ call(reg);
       }
       RecordCallPosition(instr);
@@ -1459,10 +1465,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ Jump(code, RelocInfo::CODE_TARGET);
       } else {
         Register reg = i.InputRegister(0);
+        CodeEntrypointTag tag =
+            i.InputCodeEntrypointTag(instr->InputCount() - 3);
         DCHECK_IMPLIES(
             instr->HasCallDescriptorFlag(CallDescriptor::kFixedTargetRegister),
             reg == kJavaScriptCallCodeStartRegister);
-        __ LoadCodeInstructionStart(reg, reg);
+        __ LoadCodeInstructionStart(reg, reg, tag);
         __ jmp(reg);
       }
       unwinding_info_writer_.MarkBlockWillExit();

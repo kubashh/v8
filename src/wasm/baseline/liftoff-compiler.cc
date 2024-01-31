@@ -8215,7 +8215,7 @@ class LiftoffCompiler {
       __ LoadTaggedPointer(
           target.gp(), internal_func.gp(), no_reg,
           wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCodeOffset));
-      __ LoadCodeInstructionStart(target.gp(), target.gp());
+      __ LoadCodeInstructionStart(target.gp(), target.gp(), kWasmEntrypointTag);
 #endif
       // Fall through to {perform_call}.
 

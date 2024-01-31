@@ -2367,6 +2367,11 @@ void InstructionSelectorT<Adapter>::VisitCall(node_t node, block_t handler) {
   EmitPrepareArguments(&buffer.pushed_nodes, call_descriptor, node);
   UpdateMaxPushedArgumentCount(buffer.pushed_nodes.size());
 
+  if (call_descriptor->RequiresEntrypointTagForCall()) {
+    buffer.instruction_args.push_back(
+        g.TempImmediate(call_descriptor->shifted_tag()));
+  }
+
   // Pass label of exception handler block.
   if (handler) {
     if constexpr (Adapter::IsTurbofan) {
@@ -2477,6 +2482,10 @@ void InstructionSelectorT<Adapter>::VisitTailCall(node_t node) {
   opcode = EncodeCallDescriptorFlags(opcode, callee->flags());
 
   Emit(kArchPrepareTailCall, g.NoOutput());
+
+  if (callee->RequiresEntrypointTagForCall()) {
+    buffer.instruction_args.push_back(g.TempImmediate(callee->shifted_tag()));
+  }
 
   // Add an immediate operand that represents the offset to the first slot
   // that is unused with respect to the stack pointer that has been updated
