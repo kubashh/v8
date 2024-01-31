@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b44edc3_577d3336",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-31T16:35:32Z",
+      "side": 1,
+      "message": "Do you have a performance improvement estimate or measurement here? We\u0027re wondering how much this can actually help given that we have to do a lot of the checks anyway.",
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fbfd47f_1c606785",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-31T16:35:32Z",
+      "side": 1,
+      "message": "this is not how we would do this. Instead, in the polymorphic case, we would allow a transition to MEGATRANSITION  (similar to UpdateMegaDOMIC), and the handling in the MEGATRANSITION case would assume that if we are in the runtime, we must have missed, and therefore we need to go megamorphic.",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 16
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "149f4da5_4547f89c",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-01-31T16:35:32Z",
+      "side": 1,
+      "message": "This is not strong enough, because of inlining. Do you actually need to deopt here at all though? The miss path will still work.",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
