@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa9c0d4_7ced25ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-02-01T09:14:11Z",
+      "side": 1,
+      "message": "For the code I picked from React-TodoMVC, I saw a +20% performance gain when enabling Maglev and Turbofan:\n```\nconst props \u003d {};\nfor (propName in config) {\n  if (hasOwnProperty.call(config, propName) \u0026\u0026\n      !RESERVED_PROPS.hasOwnProperty(propName)) {\n        props[propName] \u003d config[propName];\n  }\n}\n```\nI will try it in pinpoint to see the performance impact in the benchmark.\n\nFor the checks introduced by this CL, I think we only have overhead at runtime because we allow ic state transition from `MegaTransition` to `Megamorphic`. The checks in Builtin_KeyedStoreIC_Transition is still simpler than the `CodeStubAssembler::TryToName` heuristic in Megamorphic state. We can also further optimize them in Maglev/Turbofan because we know that the key is guaranteed to be a unique name. Avoiding these checks bring +8% more gain to the microbench.",
+      "parentUuid": "5b44edc3_577d3336",
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fbfd47f_1c606785",
@@ -54,6 +72,30 @@
       "writtenOn": "2024-01-31T16:35:32Z",
       "side": 1,
       "message": "This is not strong enough, because of inlining. Do you actually need to deopt here at all though? The miss path will still work.",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e95e945a_9294e5bb",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-02-01T09:14:11Z",
+      "side": 1,
+      "message": "No, it is not necessary to deopt because the miss path still work. Recompiling the code with megamorphic ic can avoid calling to runtime for performance purpose. Actually we have the following methods to deal with the ic miss in optimized code:\n1. Just call runtime.\n2. Mark this function as deopt and lazily deoptimize it.\n3. In Builtin_KeyedStoreIC_Transition , try descriptor array lookup after transition array lookup miss.\n\nWDYT of the solutions?",
+      "parentUuid": "149f4da5_4547f89c",
       "range": {
         "startLine": 797,
         "startChar": 10,
