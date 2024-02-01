@@ -50,6 +50,29 @@
       "message": "src/heap LGTM",
       "revId": "d5562eabf1ab4ff0d7550746251ae3c85e2a6967",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320c17a8_66d6afbb",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-01T15:03:04Z",
+      "side": 1,
+      "message": "nit: Why not use `DCHECK_LT` here, and skip the `\u003d\u003d` case? I assume that we will always call this when we already know that the table is strictly too small.",
+      "range": {
+        "startLine": 1923,
+        "startChar": 0,
+        "endLine": 1925,
+        "endChar": 0
+      },
+      "revId": "d5562eabf1ab4ff0d7550746251ae3c85e2a6967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
