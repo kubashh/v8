@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2efb2c23_67448924",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-01T11:49:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is correct given that there might be non-enumerable properties or symbols in the descriptor array. See `FastKeyAccumulator::InitializeFastPropertyEnumCache`.",
+      "range": {
+        "startLine": 1196,
+        "startChar": 54,
+        "endLine": 1196,
+        "endChar": 73
+      },
+      "revId": "a05a3a8f8bcfb1e718b4e051be68a868520c2734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
