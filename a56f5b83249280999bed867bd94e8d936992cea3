@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c387db4_bfdb7e36",
+        "filename": "src/compiler/turboshaft/copying-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-01T09:50:11Z",
+      "side": 1,
+      "message": "FYI, there was a missing `current_input_block_ \u003d input_block;` here, but I\u0027ve now moved this to VisitBlockBody so that we don\u0027t forget anymore of these :)\n\n(leaving this comment in case someone ever reads this CL in the future, who knows...)",
+      "range": {
+        "startLine": 562,
+        "startChar": 4,
+        "endLine": 562,
+        "endChar": 6
+      },
+      "revId": "a56f5b83249280999bed867bd94e8d936992cea3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
