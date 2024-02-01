@@ -550,6 +550,18 @@ struct IsWeak<internal::BasicMember<T, WeakMemberTag, WriteBarrierPolicy,
                                     CheckingPolicy, StorageType>>
     : std::true_type {};
 
+template <typename T, typename WriteBarrierPolicy, typename CheckingPolicy,
+          typename StorageType>
+struct IsTraceable<internal::BasicMember<T, StrongMemberTag, WriteBarrierPolicy,
+                                         CheckingPolicy, StorageType>>
+    : std::true_type {};
+
+template <typename T, typename WriteBarrierPolicy, typename CheckingPolicy,
+          typename StorageType>
+struct IsTraceable<internal::BasicMember<T, WeakMemberTag, WriteBarrierPolicy,
+                                         CheckingPolicy, StorageType>>
+    : std::true_type {};
+
 }  // namespace internal
 
 /**

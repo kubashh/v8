@@ -240,6 +240,11 @@ struct TraceTrait<v8::TracedReference<T>> {
   }
 };
 
+namespace internal {
+template <typename T>
+struct IsTraceable<v8::TracedReference<T>> : std::true_type {};
+}  // namespace internal
+
 }  // namespace cppgc
 
 #endif  // INCLUDE_V8_CPPGC_H_
