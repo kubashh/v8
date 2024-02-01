@@ -8,6 +8,7 @@
 #include <limits>
 
 #include "src/base/bounds.h"
+#include "src/base/container-utils.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/base/v8-fallthrough.h"
@@ -43,6 +44,7 @@
 #include "src/objects/feedback-vector.h"
 #include "src/objects/fixed-array.h"
 #include "src/objects/heap-number-inl.h"
+#include "src/objects/instance-type.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/name-inl.h"
 #include "src/objects/property-cell.h"
@@ -1208,9 +1210,12 @@ ValueNode* MaglevGraphBuilder::GetTaggedValue(
       return alternative.set_tagged(AddNewNode<HoleyFloat64ToTagged>(
           {value}, HoleyFloat64ToTagged::ConversionMode::kForceHeapNumber));
     }
+    case ValueRepresentation::kTypedArrayLength: {
+      return alternative.set_tagged(
+          AddNewNode<TypedArrayLengthToNumber>({value}));
+    }
 
     case ValueRepresentation::kTagged:
-    case ValueRepresentation::kIntPtr:
       UNREACHABLE();
   }
   UNREACHABLE();
@@ -1265,7 +1270,7 @@ ReduceResult MaglevGraphBuilder::GetSmiValue(
     }
 
     case ValueRepresentation::kTagged:
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
   }
   UNREACHABLE();
@@ -1413,7 +1418,7 @@ ValueNode* MaglevGraphBuilder::GetTruncatedInt32ForToNumber(ValueNode* value,
 
     case ValueRepresentation::kInt32:
     case ValueRepresentation::kUint32:
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
   }
   UNREACHABLE();
@@ -1436,6 +1441,16 @@ ValueNode* MaglevGraphBuilder::GetInt32(ValueNode* value) {
       if (!IsSmiDouble(double_value)) break;
       return GetInt32Constant(
           FastD2I(value->Cast<Float64Constant>()->value().get_scalar()));
+    }
+    case Opcode::kUint32Constant: {
+      uint32_t constant_value = value->Cast<Uint32Constant>()->value();
+      if (constant_value > kMaxInt) break;
+      return GetInt32Constant(static_cast<int32_t>(constant_value));
+    }
+    case Opcode::kTypedArrayLengthConstant: {
+      size_t constant_value = value->Cast<TypedArrayLengthConstant>()->value();
+      if (constant_value > kMaxInt) break;
+      return GetInt32Constant(static_cast<int32_t>(constant_value));
     }
 
     // We could emit unconditional eager deopts for other kinds of constant, but
@@ -1471,8 +1486,11 @@ ValueNode* MaglevGraphBuilder::GetInt32(ValueNode* value) {
           AddNewNode<CheckedTruncateFloat64ToInt32>({value}));
     }
 
+    case ValueRepresentation::kTypedArrayLength: {
+      return alternative.set_int32(
+          AddNewNode<CheckedTypedArrayLengthToInt32>({value}));
+    }
     case ValueRepresentation::kInt32:
-    case ValueRepresentation::kIntPtr:
       UNREACHABLE();
   }
   UNREACHABLE();
@@ -1505,6 +1523,11 @@ ValueNode* MaglevGraphBuilder::GetFloat64ForToNumber(ValueNode* value,
       return GetFloat64Constant(value->Cast<SmiConstant>()->value().value());
     case Opcode::kInt32Constant:
       return GetFloat64Constant(value->Cast<Int32Constant>()->value());
+    case Opcode::kUint32Constant:
+      return GetFloat64Constant(value->Cast<Uint32Constant>()->value());
+    case Opcode::kTypedArrayLengthConstant:
+      return GetFloat64Constant(
+          value->Cast<TypedArrayLengthConstant>()->value());
     case Opcode::kRootConstant: {
       Tagged<Object> root_object =
           local_isolate_->root(value->Cast<RootConstant>()->index());
@@ -1561,6 +1584,9 @@ ValueNode* MaglevGraphBuilder::GetFloat64ForToNumber(ValueNode* value,
     case ValueRepresentation::kUint32:
       return alternative.set_float64(
           AddNewNode<ChangeUint32ToFloat64>({value}));
+    case ValueRepresentation::kTypedArrayLength:
+      return alternative.set_float64(
+          AddNewNode<ChangeTypedArrayLengthToFloat64>({value}));
     case ValueRepresentation::kHoleyFloat64: {
       switch (hint) {
         case ToNumberHint::kAssumeSmi:
@@ -1578,7 +1604,6 @@ ValueNode* MaglevGraphBuilder::GetFloat64ForToNumber(ValueNode* value,
       }
     }
     case ValueRepresentation::kFloat64:
-    case ValueRepresentation::kIntPtr:
       UNREACHABLE();
   }
   UNREACHABLE();
@@ -1606,7 +1631,7 @@ int32_t ClampToUint8(int32_t value) {
 ValueNode* MaglevGraphBuilder::GetUint8ClampedForToNumber(ValueNode* value,
                                                           ToNumberHint hint) {
   switch (value->properties().value_representation()) {
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
     case ValueRepresentation::kTagged: {
       if (SmiConstant* constant = value->TryCast<SmiConstant>()) {
@@ -2152,6 +2177,17 @@ compiler::OptionalHeapObjectRef MaglevGraphBuilder::TryGetConstant(
     }
   }
   return {};
+}
+
+compiler::OptionalJSTypedArrayRef MaglevGraphBuilder::TryGetTypedArrayConstant(
+    ValueNode* object, ValueNode** constant_node) {
+  compiler::OptionalHeapObjectRef maybe_constant =
+      TryGetConstant(object, constant_node);
+  if (!maybe_constant) return {};
+  if (!maybe_constant->IsJSTypedArray()) return {};
+  compiler::JSTypedArrayRef typed_array = maybe_constant->AsJSTypedArray();
+  if (typed_array.is_on_heap()) return {};
+  return typed_array;
 }
 
 template <Operation kOperation>
@@ -2972,7 +3008,7 @@ NodeType StaticTypeForNode(compiler::JSHeapBroker* broker,
       return NodeType::kNumber;
     case ValueRepresentation::kHoleyFloat64:
       return NodeType::kNumberOrOddball;
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
     case ValueRepresentation::kTagged:
       break;
@@ -4207,8 +4243,6 @@ ValueNode* MaglevGraphBuilder::GetInt32ElementIndex(ValueNode* object) {
   RecordUseReprHintIfPhi(object, UseRepresentation::kInt32);
 
   switch (object->properties().value_representation()) {
-    case ValueRepresentation::kIntPtr:
-      UNREACHABLE();
     case ValueRepresentation::kTagged:
       NodeType old_type;
       if (SmiConstant* constant = object->TryCast<SmiConstant>()) {
@@ -4228,6 +4262,7 @@ ValueNode* MaglevGraphBuilder::GetInt32ElementIndex(ValueNode* object) {
       // Already good.
       return object;
     case ValueRepresentation::kUint32:
+    case ValueRepresentation::kTypedArrayLength:
     case ValueRepresentation::kFloat64:
     case ValueRepresentation::kHoleyFloat64:
       return GetInt32(object);
@@ -4241,8 +4276,6 @@ ReduceResult MaglevGraphBuilder::GetUint32ElementIndex(ValueNode* object) {
   // GetInt32ElementIndex, making this an Int32 Phi use.
 
   switch (object->properties().value_representation()) {
-    case ValueRepresentation::kIntPtr:
-      UNREACHABLE();
     case ValueRepresentation::kTagged:
       // TODO(victorgomes): Consider creating a CheckedObjectToUnsignedIndex.
       if (SmiConstant* constant = object->TryCast<SmiConstant>()) {
@@ -4278,6 +4311,16 @@ ReduceResult MaglevGraphBuilder::GetUint32ElementIndex(ValueNode* object) {
       // CheckedTruncateFloat64ToUint32 will gracefully deopt on holes.
       return AddNewNode<CheckedTruncateFloat64ToUint32>({object});
     }
+    case ValueRepresentation::kTypedArrayLength:
+      if (TypedArrayLengthConstant* constant =
+              object->TryCast<TypedArrayLengthConstant>()) {
+        size_t value = constant->value();
+        if (value > kMaxUInt32) {
+          return EmitUnconditionalDeopt(DeoptimizeReason::kNotUint32);
+        }
+        return GetUint32Constant(static_cast<uint32_t>(value));
+      }
+      return AddNewNode<CheckedInt32ToUint32>({object});
   }
 }
 
@@ -4310,6 +4353,7 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccessOnString(
 }
 
 namespace {
+
 ReduceResult TryFindLoadedProperty(
     const KnownNodeAspects::LoadedPropertyMap& loaded_properties,
     ValueNode* lookup_start_object,
@@ -4326,24 +4370,42 @@ ReduceResult TryFindLoadedProperty(
 }  // namespace
 
 ReduceResult MaglevGraphBuilder::BuildLoadTypedArrayLength(
-    ValueNode* object, ElementsKind elements_kind) {
+    ValueNode* receiver, ElementsKind elements_kind) {
   DCHECK(IsTypedArrayOrRabGsabTypedArrayElementsKind(elements_kind));
-  bool is_variable_length = IsRabGsabTypedArrayElementsKind(elements_kind);
 
-  if (!is_variable_length) {
-    // Note: We can't use broker()->length_string() here, because it could
-    // conflict with redefinitions of the TypedArray length property.
-    RETURN_IF_DONE(TryFindLoadedProperty(
-        known_node_aspects().loaded_constant_properties, object,
-        KnownNodeAspects::LoadedPropertyMapKey::TypedArrayLength()));
+  // Skip RAB/GSAB typed arrays -- these might not be length tracking, so we
+  // don't know if we can read their length directly off the array.
+  // TODO(leszeks): Add support for reading the length tracking bit in
+  // a LoadTypedArrayLength-like node.
+  if (IsRabGsabTypedArrayElementsKind(elements_kind)) {
+    return ReduceResult::Fail();
   }
 
-  ValueNode* result = AddNewNode<LoadTypedArrayLength>({object}, elements_kind);
-  if (!is_variable_length) {
-    RecordKnownProperty(
-        object, KnownNodeAspects::LoadedPropertyMapKey::TypedArrayLength(),
-        result, true, compiler::AccessMode::kLoad);
+  // Try to get the constant length, if any.
+  if (compiler::OptionalJSTypedArrayRef maybe_constant =
+          TryGetTypedArrayConstant(receiver)) {
+    compiler::JSTypedArrayRef receiver_constant = maybe_constant.value();
+    DCHECK_EQ(receiver_constant.map(broker()).elements_kind(), elements_kind);
+    return GetTypedArrayLengthConstant(receiver_constant.length());
   }
+
+  // Note: We can't use broker()->length_string() here, because it could
+  // conflict with redefinitions of the TypedArray length property.
+  RETURN_IF_DONE(TryFindLoadedProperty(
+      known_node_aspects().loaded_constant_properties, receiver,
+      KnownNodeAspects::LoadedPropertyMapKey::TypedArrayLength()));
+
+  if (!broker()->dependencies()->DependOnArrayBufferDetachingProtector()) {
+    // TODO(leszeks): Eliminate this check.
+    AddNewNode<CheckTypedArrayNotDetached>({receiver});
+  }
+  ValueNode* result =
+      AddNewNode<LoadTypedArrayLength>({receiver}, elements_kind);
+
+  RecordKnownProperty(
+      receiver, KnownNodeAspects::LoadedPropertyMapKey::TypedArrayLength(),
+      result, true, compiler::AccessMode::kLoad);
+
   return result;
 }
 
@@ -4435,10 +4497,6 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccessOnTypedArray(
     // accumulator) is of type int32. It would be nice to have a roll back
     // mechanism instead, so that we do not need to check this early.
     return ReduceResult::Fail();
-  }
-  if (!broker()->dependencies()->DependOnArrayBufferDetachingProtector()) {
-    // TODO(leszeks): Eliminate this check.
-    AddNewNode<CheckTypedArrayNotDetached>({object});
   }
   ValueNode* index;
   ValueNode* length;
@@ -6960,7 +7018,7 @@ ReduceResult MaglevGraphBuilder::DoTryReduceMathRound(CallArguments& args,
             {conversion}, TaggedToFloat64ConversionType::kOnlyNumber);
       }
       break;
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
     case ValueRepresentation::kFloat64:
     case ValueRepresentation::kHoleyFloat64:
@@ -6983,6 +7041,52 @@ ReduceResult MaglevGraphBuilder::TryReduceStringConstructor(
   }
 
   return BuildToString(args[0], ToString::kConvertSymbol);
+}
+
+ReduceResult MaglevGraphBuilder::TryReduceTypedArrayPrototypeLength(
+    compiler::JSFunctionRef target, CallArguments& args) {
+  if (args.count() != 0) {
+    return ReduceResult::Fail();
+  }
+
+  ValueNode* receiver = args.receiver();
+
+  if (compiler::OptionalJSTypedArrayRef maybe_constant =
+          TryGetTypedArrayConstant(receiver)) {
+    compiler::JSTypedArrayRef receiver_constant = maybe_constant.value();
+    ElementsKind kind = receiver_constant.map(broker()).elements_kind();
+    if (!IsTypedArrayElementsKind(kind)) {
+      return ReduceResult::Fail();
+    }
+    return GetTypedArrayLengthConstant(
+        static_cast<int32_t>(receiver_constant.AsJSTypedArray().length()));
+  }
+
+  auto receiver_info = known_node_aspects().TryGetInfoFor(receiver);
+  if (!receiver_info || !receiver_info->possible_maps_are_known()) {
+    // No info about receiver.
+    return ReduceResult::Fail();
+  }
+  if (receiver_info->possible_maps().is_empty()) {
+    // No possible maps.
+    return ReduceResult::Fail();
+  }
+  if (receiver_info->possible_maps().size() != 1) {
+    // Only one map supported.
+    // TODO(leszeks): Support multiple maps.
+    return ReduceResult::Fail();
+  }
+  const compiler::MapRef& map = receiver_info->possible_maps().at(0);
+  if (map.instance_type() != JS_TYPED_ARRAY_TYPE) {
+    // Receiver must be a typed array.
+    return ReduceResult::Fail();
+  }
+  ElementsKind kind = map.elements_kind();
+  if (!IsTypedArrayElementsKind(kind)) {
+    // Receiver must be a non RAB/GSAB typed array.
+    return ReduceResult::Fail();
+  }
+  return BuildLoadTypedArrayLength(receiver, map.elements_kind());
 }
 
 ReduceResult MaglevGraphBuilder::TryReduceMathPow(
@@ -8533,7 +8637,7 @@ ValueNode* MaglevGraphBuilder::BuildToBoolean(ValueNode* value) {
     case ValueRepresentation::kInt32:
       return AddNewNode<Int32ToBoolean>({value}, flip);
 
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
 
     case ValueRepresentation::kTagged:
@@ -8671,7 +8775,7 @@ void MaglevGraphBuilder::BuildToNumberOrToNumeric(Object::Conversion mode) {
       // We'll insert the required checks depending on the feedback.
       break;
 
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
   }
 
@@ -9810,7 +9914,7 @@ BasicBlock* MaglevGraphBuilder::BuildSpecializedBranchIfCompareNode(
       return FinishBlock<BranchIfInt32ToBooleanTrue>({node}, true_target,
                                                      false_target);
 
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
 
     case ValueRepresentation::kTagged:
@@ -10221,7 +10325,7 @@ void MaglevGraphBuilder::VisitThrowReferenceErrorIfHole() {
       // Could be the hole.
       break;
 
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
       UNREACHABLE();
   }
 

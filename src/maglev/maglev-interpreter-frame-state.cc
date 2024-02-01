@@ -456,7 +456,7 @@ ValueNode* FromHoleyFloat64ToTagged(MaglevGraphBuilder* builder,
 ValueNode* NonTaggedToTagged(MaglevGraphBuilder* builder, NodeType node_type,
                              ValueNode* value, BasicBlock* predecessor) {
   switch (value->properties().value_representation()) {
-    case ValueRepresentation::kIntPtr:
+    case ValueRepresentation::kTypedArrayLength:
     case ValueRepresentation::kTagged:
       UNREACHABLE();
     case ValueRepresentation::kInt32:
