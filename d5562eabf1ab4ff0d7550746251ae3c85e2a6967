@@ -73,6 +73,30 @@
       },
       "revId": "d5562eabf1ab4ff0d7550746251ae3c85e2a6967",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c767dd2_9c898115",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-01T16:32:06Z",
+      "side": 1,
+      "message": "Ack, that\u0027s probably the better design. Done.",
+      "parentUuid": "320c17a8_66d6afbb",
+      "range": {
+        "startLine": 1923,
+        "startChar": 0,
+        "endLine": 1925,
+        "endChar": 0
+      },
+      "revId": "d5562eabf1ab4ff0d7550746251ae3c85e2a6967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
