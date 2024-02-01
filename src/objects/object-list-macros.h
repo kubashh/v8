@@ -92,6 +92,7 @@ namespace internal {
   V(WeakArrayList)                            \
   V(WeakFixedArray)                           \
   IF_WASM(V, WasmArray)                       \
+  IF_WASM(V, WasmDispatchTable)               \
   IF_WASM(V, WasmStruct)
 
 // TODO(jgruber): Move more types to SIMPLE_HEAP_OBJECT_LIST_GENERATOR.
@@ -283,25 +284,25 @@ namespace internal {
   IF_WASM(V, WasmApiFunctionRef)                \
   IF_WASM(V, WasmArray)                         \
   IF_WASM(V, WasmCapiFunctionData)              \
-  IF_WASM(V, WasmTagObject)                     \
+  IF_WASM(V, WasmContinuationObject)            \
   IF_WASM(V, WasmExceptionPackage)              \
   IF_WASM(V, WasmExportedFunctionData)          \
   IF_WASM(V, WasmFunctionData)                  \
   IF_WASM(V, WasmGlobalObject)                  \
-  IF_WASM(V, WasmInternalFunction)              \
   IF_WASM(V, WasmInstanceObject)                \
+  IF_WASM(V, WasmInternalFunction)              \
   IF_WASM(V, WasmJSFunctionData)                \
   IF_WASM(V, WasmMemoryObject)                  \
   IF_WASM(V, WasmModuleObject)                  \
+  IF_WASM(V, WasmNull)                          \
   IF_WASM(V, WasmObject)                        \
   IF_WASM(V, WasmResumeData)                    \
   IF_WASM(V, WasmStruct)                        \
-  IF_WASM(V, WasmTypeInfo)                      \
-  IF_WASM(V, WasmTableObject)                   \
-  IF_WASM(V, WasmValueObject)                   \
   IF_WASM(V, WasmSuspenderObject)               \
-  IF_WASM(V, WasmContinuationObject)            \
-  IF_WASM(V, WasmNull)                          \
+  IF_WASM(V, WasmTableObject)                   \
+  IF_WASM(V, WasmTagObject)                     \
+  IF_WASM(V, WasmTypeInfo)                      \
+  IF_WASM(V, WasmValueObject)                   \
   V(WeakArrayList)                              \
   V(WeakCell)                                   \
   TORQUE_DEFINED_CLASS_LIST(V)                  \
@@ -342,13 +343,14 @@ namespace internal {
 // - (Transitively) inherit from TrustedObject
 // - Have a unique instance type
 // - Define a custom body descriptor
-#define CONCRETE_TRUSTED_OBJECT_LIST_GENERATOR(APPLY, V) \
-  APPLY(V, TrustedByteArray, TRUSTED_BYTE_ARRAY)         \
-  APPLY(V, TrustedFixedArray, TRUSTED_FIXED_ARRAY)       \
-  APPLY(V, BytecodeArray, BYTECODE_ARRAY)                \
-  APPLY(V, Code, CODE)                                   \
-  APPLY(V, InstructionStream, INSTRUCTION_STREAM)        \
-  APPLY(V, InterpreterData, INTERPRETER_DATA)            \
+#define CONCRETE_TRUSTED_OBJECT_LIST_GENERATOR(APPLY, V)    \
+  APPLY(V, TrustedByteArray, TRUSTED_BYTE_ARRAY)            \
+  APPLY(V, TrustedFixedArray, TRUSTED_FIXED_ARRAY)          \
+  APPLY(V, BytecodeArray, BYTECODE_ARRAY)                   \
+  APPLY(V, Code, CODE)                                      \
+  APPLY(V, InstructionStream, INSTRUCTION_STREAM)           \
+  APPLY(V, InterpreterData, INTERPRETER_DATA)               \
+  IF_WASM(APPLY, V, WasmDispatchTable, WASM_DISPATCH_TABLE) \
   IF_WASM(APPLY, V, WasmTrustedInstanceData, WASM_TRUSTED_INSTANCE_DATA)
 
 #define TRUSTED_OBJECT_LIST1_ADAPTER(V, Name, NAME) V(Name)
