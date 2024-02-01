@@ -16,6 +16,23 @@
       "message": "PTAL! :)",
       "revId": "4214dcb6435013355b2135171f75147aaa3f9a07",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "894576ee_96f3ce30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-01T09:44:40Z",
+      "side": 1,
+      "message": "LGTM, seems like some symbol needs to be exported for the linker for the unit test. 😊",
+      "revId": "4214dcb6435013355b2135171f75147aaa3f9a07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
