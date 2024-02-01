@@ -104,6 +104,30 @@
       },
       "revId": "7265151e77a251bec644447062df712a44c5e5cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4edb155b_efc0d739",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-02-01T09:48:37Z",
+      "side": 1,
+      "message": "We discussed this a bit internally -- we\u0027re wondering how much benefit we could get from \"simply\" changing the order of the generic megamorphic builtin to e.g. check for transitions first, or at least check for a single transition (which is a cheap check).\n\nDeopting otherwise sounds like the right choice, so that we don\u0027t get \"stuck\" in a medium efficiency path, though we\u0027d need to figure out exactly how to do it (we\u0027re considering a stack walk to find the calling optimized code). We could also consider tightening the fast path to simple transitioning fast data stores, make the builtin return just the map (or 0 on a miss), and emit the actual field store in the optimized code. Something like this would have the big advantage that we can guarantee that the store has no side effects, which could help with optimising the surrounding code.\n\nThere\u0027s a couple of different options here and they\u0027re all worth exploring and benchmarking against each other.",
+      "parentUuid": "e95e945a_9294e5bb",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
