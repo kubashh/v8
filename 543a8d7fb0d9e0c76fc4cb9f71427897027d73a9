@@ -33,6 +33,24 @@
       "message": "nit: extra newline (also at the end of the file).",
       "revId": "543a8d7fb0d9e0c76fc4cb9f71427897027d73a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cefa064_33bb70c8",
+        "filename": "test/mjsunit/regress/wasm/regress-1523414.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-02-01T11:16:02Z",
+      "side": 1,
+      "message": "I missed this, I will address it in a future CL.",
+      "parentUuid": "fc82093d_2e434870",
+      "revId": "543a8d7fb0d9e0c76fc4cb9f71427897027d73a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
