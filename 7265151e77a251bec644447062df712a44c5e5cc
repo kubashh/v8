@@ -128,6 +128,30 @@
       },
       "revId": "7265151e77a251bec644447062df712a44c5e5cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81cbaeb3_ee29644a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-02-01T11:05:30Z",
+      "side": 1,
+      "message": "Thanks for your suggestion!\n\nI will try the solutions like changing the order of the generic megamorphic builtin and evaluate their performance impacts. I will also prepare for a design doc for discussion.",
+      "parentUuid": "4edb155b_efc0d739",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
