@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5610c5b1_f832057c",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-02T11:24:14Z",
+      "side": 1,
+      "message": "I change it now to only guarantee tagged-size alignment. This is enough to be able to use `ReadField\u003cAddress\u003e` to read the target.\nI also left a TODO and a `static_assert(!USE_ALLOCATION_ALIGNMENT_BOOL)`.",
+      "parentUuid": "53d905ce_2e3ead43",
+      "range": {
+        "startLine": 627,
+        "startChar": 23,
+        "endLine": 627,
+        "endChar": 36
+      },
+      "revId": "6fd14e64e9528a6507367b9078c603c61a8a0d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41634d7f_c3b1a7f6",
