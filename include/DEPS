@@ -7,4 +7,6 @@ include_rules = [
   "+cppgc/heap-statistics.h",
   "+cppgc/internal/write-barrier.h",
   "+cppgc/visitor.h",
+  # Used by v8-traced-handle.h to specialize IsTraceable
+  "+cppgc/type-traits.h",
 ]

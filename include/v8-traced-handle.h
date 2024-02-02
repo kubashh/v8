@@ -14,6 +14,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "cppgc/type-traits.h"
 #include "v8-internal.h"            // NOLINT(build/include_directory)
 #include "v8-local-handle.h"        // NOLINT(build/include_directory)
 #include "v8-weak-callback-info.h"  // NOLINT(build/include_directory)
@@ -428,5 +429,10 @@ TracedReference<T>& TracedReference<T>::operator=(const TracedReference& rhs) {
 }
 
 }  // namespace v8
+
+namespace cppgc::internal {
+template <typename T>
+struct IsTraceable<v8::TracedReference<T>> : std::true_type {};
+}  // namespace cppgc::internal
 
 #endif  // INCLUDE_V8_TRACED_HANDLE_H_
