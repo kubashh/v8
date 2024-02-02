@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "619c476a_994d58ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-02T08:42:04Z",
+      "side": 1,
+      "message": "I think this is somewhat different. It\u0027s not a question of providing a new trait, but making sure the trait we already provide works as we expect it to out-of-the-box with the types we already provide. Right now we rely on embedders to do that and `IsTraceable` would be wrong if they didn\u0027t provide these specializations. I see it as guaranteeing correctness of the trait we already have on the API.\n\nI also think it\u0027s not the same as the `IsTraceableInCollectionTrait` case, because the trait and all types are already provided by V8. Removing any of them would anyway require a V8 change.\n\nWe can delay adding the specializations, but imo this CL can be independent from whether or not we move forward with the additional bytes tracing idea.",
+      "parentUuid": "44b6300c_aa0815a5",
+      "revId": "ee11dd88cfd0d66a9d3b5cd025fc020f754c69ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b63fae0b_ed8912dc",
