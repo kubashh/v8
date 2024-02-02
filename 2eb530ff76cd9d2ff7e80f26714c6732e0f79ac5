@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "476a3acd_77af3beb",
+        "filename": "src/compiler/turboshaft/load-store-simplification-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-02T15:29:49Z",
+      "side": 0,
+      "message": "For these two `WordPtrAdd(..., offset)`, it was possible for `offset` to be 0. My CL fixes this.",
+      "range": {
+        "startLine": 148,
+        "startChar": 7,
+        "endLine": 151,
+        "endChar": 53
+      },
+      "revId": "2eb530ff76cd9d2ff7e80f26714c6732e0f79ac5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
