@@ -33,6 +33,23 @@
       "message": "src/heap still LGTM",
       "revId": "9227a7f5282a5127d07480c41531b621d328a99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b45e6f6c_b8622ffe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-02T11:41:01Z",
+      "side": 1,
+      "message": "Thanks, landing then!",
+      "revId": "9227a7f5282a5127d07480c41531b621d328a99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
