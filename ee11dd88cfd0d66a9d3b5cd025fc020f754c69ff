@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0591f5ca_9eb588aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-02T07:58:08Z",
+      "side": 1,
+      "message": "I\u0027m doing it as preparation for the additional bytes thing, but I actually think we should do it regardless.\nI think it\u0027s weird that Blink needs to specialize a cppgc trait for cppgc types, where the specialization is the normal behavior you would expect for these types. If this is the default behavior an embedder should expect, then imo it makes sense for the cppgc library to provide it.\n\nDid we have a reason not to provide these specializations here and add them in Blink instead?",
+      "parentUuid": "ede093b3_3d6d916d",
+      "revId": "ee11dd88cfd0d66a9d3b5cd025fc020f754c69ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b63fae0b_ed8912dc",
