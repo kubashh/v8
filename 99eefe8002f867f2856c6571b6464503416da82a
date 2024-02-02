@@ -16,6 +16,23 @@
       "message": "post holiday ping",
       "revId": "99eefe8002f867f2856c6571b6464503416da82a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb34ef53_4c1582f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002681
+      },
+      "writtenOn": "2024-02-02T15:30:22Z",
+      "side": 1,
+      "message": "+bikineev@ PTAL",
+      "revId": "99eefe8002f867f2856c6571b6464503416da82a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
