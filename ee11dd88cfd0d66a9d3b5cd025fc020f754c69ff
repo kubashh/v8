@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "44b6300c_aa0815a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-02T08:22:01Z",
+      "side": 1,
+      "message": "\u003e I\u0027m doing it as preparation for the additional bytes thing, but I actually think we should do it regardless.\n\u003e I think it\u0027s weird that Blink needs to specialize a cppgc trait for cppgc types, where the specialization is the normal behavior you would expect for these types. If this is the default behavior an embedder should expect, then imo it makes sense for the cppgc library to provide it.\n\u003e \n\u003e Did we have a reason not to provide these specializations here and add them in Blink instead?\n\nWe do not provide traits that Blink needs right now but rather what we need on the V8 API, to separate concerns and only keep things on our stable API that we really need.\n\nYou removed a trait now that is not needed in Blink anymore. If we would have just added all such traits to V8 because Blink needs them we would be stuck with a useless trait at this point.\n\nIf the trait specialization is necessary in V8 for additonal bytes tracing, can we add it in that CL?",
+      "parentUuid": "0591f5ca_9eb588aa",
+      "revId": "ee11dd88cfd0d66a9d3b5cd025fc020f754c69ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b63fae0b_ed8912dc",
