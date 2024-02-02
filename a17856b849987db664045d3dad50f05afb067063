@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d85c01_416140a2",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-02-02T17:31:41Z",
+      "side": 1,
+      "message": "Thanks for explaining this to me on the call. To recap the issue is that an interleaving of tasks could cause an unrelated task\u0027s call to asyncLock to throw, which would be very surprising. \n\nI\u0027m convinced we should remove this throw.",
+      "parentUuid": "8641b478_86a91d8d",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 3
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d36cd2a_bfe78f94",
