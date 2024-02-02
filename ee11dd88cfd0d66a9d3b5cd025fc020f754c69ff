@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ede093b3_3d6d916d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-02T07:42:26Z",
+      "side": 1,
+      "message": "I think the description needs to state why they are needed on the V8 side. Is that for the work on tracing the additional bytes?",
+      "revId": "ee11dd88cfd0d66a9d3b5cd025fc020f754c69ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b63fae0b_ed8912dc",
