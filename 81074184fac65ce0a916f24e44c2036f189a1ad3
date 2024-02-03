@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d729998_e21da198",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-02-03T00:40:09Z",
+      "side": 1,
+      "message": "In the future would you briefly describe what was changed in the reland? This speeds up bug triage in other (non-V8) bug components. Thanks in advance.",
+      "revId": "81074184fac65ce0a916f24e44c2036f189a1ad3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
