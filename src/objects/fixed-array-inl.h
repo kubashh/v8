@@ -818,23 +818,25 @@ Handle<WeakFixedArray> WeakFixedArray::New(IsolateT* isolate, int capacity,
   return result;
 }
 
-MaybeObject WeakArrayList::Get(int index) const {
+Tagged<MaybeObject> WeakArrayList::Get(int index) const {
   PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
   return Get(cage_base, index);
 }
-MaybeObject WeakArrayList::get(int index) const { return Get(index); }
+Tagged<MaybeObject> WeakArrayList::get(int index) const { return Get(index); }
 
-MaybeObject WeakArrayList::Get(PtrComprCageBase cage_base, int index) const {
+Tagged<MaybeObject> WeakArrayList::Get(PtrComprCageBase cage_base,
+                                       int index) const {
   DCHECK_LT(static_cast<unsigned>(index), static_cast<unsigned>(capacity()));
   return objects(cage_base, index, kRelaxedLoad);
 }
 
-void WeakArrayList::Set(int index, MaybeObject value, WriteBarrierMode mode) {
+void WeakArrayList::Set(int index, Tagged<MaybeObject> value,
+                        WriteBarrierMode mode) {
   set_objects(index, value, mode);
 }
 
 void WeakArrayList::Set(int index, Tagged<Smi> value) {
-  Set(index, MaybeObject::FromSmi(value), SKIP_WRITE_BARRIER);
+  Set(index, value, SKIP_WRITE_BARRIER);
 }
 
 MaybeObjectSlot WeakArrayList::data_start() {
@@ -857,9 +859,9 @@ void WeakArrayList::CopyElements(Isolate* isolate, int dst_index,
 Tagged<HeapObject> WeakArrayList::Iterator::Next() {
   if (!array_.is_null()) {
     while (index_ < array_->length()) {
-      MaybeObject item = array_->Get(index_++);
-      DCHECK(item->IsWeakOrCleared());
-      if (!item->IsCleared()) return item.GetHeapObjectAssumeWeak();
+      Tagged<MaybeObject> item = array_->Get(index_++);
+      DCHECK(item.IsWeakOrCleared());
+      if (!item.IsCleared()) return item.GetHeapObjectAssumeWeak();
     }
     array_ = WeakArrayList();
   }

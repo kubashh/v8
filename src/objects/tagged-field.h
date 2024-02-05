@@ -121,8 +121,7 @@ template <typename T, int kFieldOffset = 0,
           typename CompressionScheme = V8HeapCompressionScheme>
 class TaggedField : public AllStatic {
  public:
-  static_assert(is_taggable_v<T> || std::is_same<MapWord, T>::value ||
-                    std::is_same<MaybeObject, T>::value,
+  static_assert(is_taggable_v<T> || std::is_same<MapWord, T>::value,
                 "T must be strong or weak tagged type or MapWord");
 
   // True for Smi fields.
@@ -204,6 +203,13 @@ class TaggedField : public AllStatic {
 
   static inline Tagged_t full_to_tagged(Address value);
 };
+
+template <typename T>
+class TaggedField<Tagged<T>> : public TaggedField<T> {};
+
+template <typename T, int kFieldOffset>
+class TaggedField<Tagged<T>, kFieldOffset>
+    : public TaggedField<T, kFieldOffset> {};
 
 template <typename T, int kFieldOffset, typename CompressionScheme>
 class TaggedField<Tagged<T>, kFieldOffset, CompressionScheme>
