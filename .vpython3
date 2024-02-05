@@ -1,0 +1,4 @@
+wheel: <
+  name: "infra/python/wheels/protobuf-py3"
+  version: "version:4.25.1"
+>
