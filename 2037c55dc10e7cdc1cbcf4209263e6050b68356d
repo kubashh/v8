@@ -16,6 +16,23 @@
       "message": "Omer, is this the right fix for the data race?",
       "revId": "2037c55dc10e7cdc1cbcf4209263e6050b68356d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e2493d1_ddc61767",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-05T15:00:18Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "2037c55dc10e7cdc1cbcf4209263e6050b68356d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
