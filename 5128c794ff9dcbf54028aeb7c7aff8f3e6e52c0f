@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8be44a0_38b061af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291363
+      },
+      "writtenOn": "2024-02-05T16:00:00Z",
+      "side": 1,
+      "message": "This relation chain is cherry-picked from\nhttps://github.com/youtube/cobalt.",
+      "revId": "5128c794ff9dcbf54028aeb7c7aff8f3e6e52c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
