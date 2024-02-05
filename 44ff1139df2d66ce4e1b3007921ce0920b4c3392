@@ -51,6 +51,58 @@
       "parentUuid": "0d82597c_2fc76db3",
       "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31fd748b_0a566fcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-05T16:05:18Z",
+      "side": 1,
+      "message": "I particularly like the second change. One nit, otherwise LGTM. This has a chance of *negatively* shaking up the fuzzer by making it close unfixed issues or making crashes bisect to this CL.\nBut I think it\u0027s worth it in the end.",
+      "parentUuid": "0d82597c_2fc76db3",
+      "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47022ea7_fa95ae66",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-05T16:05:18Z",
+      "side": 1,
+      "message": "nit: It\u0027s maybe simpler to use `rng_` directly: `int size \u003d 1 + rng_-\u003eNextInt(32);`.",
+      "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9045e8_ee5b41e1",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-05T16:05:18Z",
+      "side": 1,
+      "message": "Is this simpler: `uint32_t mask \u003d kMaxUint \u003e\u003e ((32 - size) \u0026 31)`?",
+      "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
