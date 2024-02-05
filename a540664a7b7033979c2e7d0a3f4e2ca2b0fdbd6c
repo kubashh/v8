@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "a540664a7b7033979c2e7d0a3f4e2ca2b0fdbd6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c2c6d81_49e81533",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-05T13:30:47Z",
+      "side": 1,
+      "message": "LGTM with one clarification question.",
+      "revId": "a540664a7b7033979c2e7d0a3f4e2ca2b0fdbd6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251e826d_07b46e38",
+        "filename": "test/mjsunit/regress/regress-41497374.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-05T13:30:47Z",
+      "side": 1,
+      "message": "Looking at the reproducer, is the check related to int64 handling where the int64 crossed the `Number.MAX_SAFE_INTEGER` range?\nSo do we have some understanding on what causes the check to fail?",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 33
+      },
+      "revId": "a540664a7b7033979c2e7d0a3f4e2ca2b0fdbd6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
