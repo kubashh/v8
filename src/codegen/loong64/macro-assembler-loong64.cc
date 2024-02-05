@@ -3276,8 +3276,7 @@ void MacroAssembler::TestCodeIsMarkedForDeoptimizationAndJump(
 }
 
 Operand MacroAssembler::ClearedValue() const {
-  return Operand(
-      static_cast<int32_t>(HeapObjectReference::ClearedValue(isolate()).ptr()));
+  return Operand(static_cast<int32_t>(ClearedValue(isolate()).ptr()));
 }
 
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,

@@ -1749,7 +1749,7 @@ void CompilationCacheRegeneration(bool retain_root_sfi, bool flush_root_sfi,
     // Script.
     Handle<Script> script(Script::cast(lazy_sfi->script()), isolate);
     bool root_sfi_still_exists = false;
-    MaybeObject maybe_root_sfi =
+    Tagged<MaybeObject> maybe_root_sfi =
         script->shared_function_infos()->get(kFunctionLiteralIdTopLevel);
     if (Tagged<HeapObject> sfi_or_undefined;
         maybe_root_sfi.GetHeapObject(&sfi_or_undefined)) {
@@ -3466,14 +3466,14 @@ TEST(IncrementalMarkingPreservesMonomorphicCallIC) {
   CHECK_EQ(expected_slots, feedback_helper.slot_count());
   int slot1 = 0;
   int slot2 = 1;
-  CHECK(feedback_vector->Get(feedback_helper.slot(slot1))->IsWeak());
-  CHECK(feedback_vector->Get(feedback_helper.slot(slot2))->IsWeak());
+  CHECK(feedback_vector->Get(feedback_helper.slot(slot1)).IsWeak());
+  CHECK(feedback_vector->Get(feedback_helper.slot(slot2)).IsWeak());
 
   heap::SimulateIncrementalMarking(CcTest::heap());
   heap::InvokeMajorGC(CcTest::heap());
 
-  CHECK(feedback_vector->Get(feedback_helper.slot(slot1))->IsWeak());
-  CHECK(feedback_vector->Get(feedback_helper.slot(slot2))->IsWeak());
+  CHECK(feedback_vector->Get(feedback_helper.slot(slot1)).IsWeak());
+  CHECK(feedback_vector->Get(feedback_helper.slot(slot2)).IsWeak());
 }
 
 
@@ -3506,12 +3506,12 @@ TEST(IncrementalMarkingPreservesMonomorphicConstructor) {
           CcTest::global()->Get(ctx, v8_str("f")).ToLocalChecked())));
 
   Handle<FeedbackVector> vector(f->feedback_vector(), f->GetIsolate());
-  CHECK(vector->Get(FeedbackSlot(0))->IsWeakOrCleared());
+  CHECK(vector->Get(FeedbackSlot(0)).IsWeakOrCleared());
 
   heap::SimulateIncrementalMarking(CcTest::heap());
   heap::InvokeMajorGC(CcTest::heap());
 
-  CHECK(vector->Get(FeedbackSlot(0))->IsWeakOrCleared());
+  CHECK(vector->Get(FeedbackSlot(0)).IsWeakOrCleared());
 }
 
 TEST(IncrementalMarkingPreservesMonomorphicIC) {
@@ -4211,8 +4211,9 @@ TEST(EnsureAllocationSiteDependentCodesProcessed) {
     CHECK_NE(dependency,
              DependentCode::empty_dependent_code(ReadOnlyRoots(isolate)));
     CHECK_EQ(dependency->length(), DependentCode::kSlotsPerEntry);
-    MaybeObject code = dependency->Get(0 + DependentCode::kCodeSlotOffset);
-    CHECK(code->IsWeak());
+    Tagged<MaybeObject> code =
+        dependency->Get(0 + DependentCode::kCodeSlotOffset);
+    CHECK(code.IsWeak());
     CHECK_EQ(bar_handle->code(isolate),
              CodeWrapper::cast(code.GetHeapObjectAssumeWeak())->code(isolate));
     Tagged<Smi> groups =
@@ -4230,7 +4231,7 @@ TEST(EnsureAllocationSiteDependentCodesProcessed) {
 
   // The site still exists because of our global handle, but the code is no
   // longer referred to by dependent_code().
-  CHECK(site->dependent_code()->Get(0)->IsCleared());
+  CHECK(site->dependent_code()->Get(0).IsCleared());
 }
 
 void CheckNumberOfAllocations(Heap* heap, const char* source,
@@ -4628,19 +4629,19 @@ TEST(WeakFunctionInConstructor) {
   Handle<FeedbackVector> feedback_vector =
       Handle<FeedbackVector>(createObj->feedback_vector(), CcTest::i_isolate());
   for (int i = 0; i < 20; i++) {
-    MaybeObject slot_value = feedback_vector->Get(FeedbackSlot(0));
-    CHECK(slot_value->IsWeakOrCleared());
-    if (slot_value->IsCleared()) break;
+    Tagged<MaybeObject> slot_value = feedback_vector->Get(FeedbackSlot(0));
+    CHECK(slot_value.IsWeakOrCleared());
+    if (slot_value.IsCleared()) break;
     heap::InvokeMajorGC(CcTest::heap());
   }
 
-  MaybeObject slot_value = feedback_vector->Get(FeedbackSlot(0));
-  CHECK(slot_value->IsCleared());
+  Tagged<MaybeObject> slot_value = feedback_vector->Get(FeedbackSlot(0));
+  CHECK(slot_value.IsCleared());
   CompileRun(
       "function coat() { this.x = 6; }"
       "createObj(coat);");
   slot_value = feedback_vector->Get(FeedbackSlot(0));
-  CHECK(slot_value->IsWeak());
+  CHECK(slot_value.IsWeak());
 }
 
 
@@ -5220,9 +5221,9 @@ TEST(Regress3877) {
     v8::Local<v8::Value> result = CompileRun("cls.prototype");
     Handle<JSReceiver> proto =
         v8::Utils::OpenHandle(*v8::Local<v8::Object>::Cast(result));
-    weak_prototype_holder->set(0, HeapObjectReference::Weak(*proto));
+    weak_prototype_holder->set(0, MakeWeak(*proto));
   }
-  CHECK(!weak_prototype_holder->get(0)->IsCleared());
+  CHECK(!weak_prototype_holder->get(0).IsCleared());
   CompileRun(
       "var a = { };"
       "a.x = new cls();"
@@ -5231,13 +5232,13 @@ TEST(Regress3877) {
     heap::InvokeMajorGC(CcTest::heap());
   }
   // The map of a.x keeps prototype alive
-  CHECK(!weak_prototype_holder->get(0)->IsCleared());
+  CHECK(!weak_prototype_holder->get(0).IsCleared());
   // Change the map of a.x and make the previous map garbage collectable.
   CompileRun("a.x.__proto__ = {};");
   for (int i = 0; i < 4; i++) {
     heap::InvokeMajorGC(CcTest::heap());
   }
-  CHECK(weak_prototype_holder->get(0)->IsCleared());
+  CHECK(weak_prototype_holder->get(0).IsCleared());
 }
 
 Handle<WeakFixedArray> AddRetainedMap(Isolate* isolate,
@@ -5253,7 +5254,7 @@ Handle<WeakFixedArray> AddRetainedMap(Isolate* isolate,
   maps.Push(*map);
   isolate->heap()->AddRetainedMaps(context, std::move(maps));
   Handle<WeakFixedArray> array = isolate->factory()->NewWeakFixedArray(1);
-  array->set(0, HeapObjectReference::Weak(*map));
+  array->set(0, MakeWeak(*map));
   return inner_scope.CloseAndEscape(array);
 }
 
@@ -5274,15 +5275,15 @@ void CheckMapRetainingFor(int n) {
   ctx->Enter();
   Handle<WeakFixedArray> array_with_map =
       AddRetainedMap(isolate, native_context);
-  CHECK(array_with_map->get(0)->IsWeak());
+  CHECK(array_with_map->get(0).IsWeak());
   for (int i = 0; i < n; i++) {
     heap::SimulateIncrementalMarking(heap);
     heap::InvokeMajorGC(heap);
   }
-  CHECK(array_with_map->get(0)->IsWeak());
+  CHECK(array_with_map->get(0).IsWeak());
   heap::SimulateIncrementalMarking(heap);
   heap::InvokeMajorGC(heap);
-  CHECK(array_with_map->get(0)->IsCleared());
+  CHECK(array_with_map->get(0).IsCleared());
 
   ctx->Exit();
 }
@@ -5314,7 +5315,7 @@ TEST(RetainedMapsCleanup) {
   ctx->Enter();
   Handle<WeakFixedArray> array_with_map =
       AddRetainedMap(isolate, native_context);
-  CHECK(array_with_map->get(0)->IsWeak());
+  CHECK(array_with_map->get(0).IsWeak());
   heap->NotifyContextDisposed(true);
   heap::InvokeMajorGC(heap);
   ctx->Exit();
