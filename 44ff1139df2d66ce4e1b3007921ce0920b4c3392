@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb894c7_3c7c66b0",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-05T16:50:15Z",
+      "side": 1,
+      "message": "`data-\u003erng_` is private, that\u0027s not exactly simpler.",
+      "parentUuid": "47022ea7_fa95ae66",
+      "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b9045e8_ee5b41e1",
@@ -101,6 +119,24 @@
       "writtenOn": "2024-02-05T16:05:18Z",
       "side": 1,
       "message": "Is this simpler: `uint32_t mask \u003d kMaxUint \u003e\u003e ((32 - size) \u0026 31)`?",
+      "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bcf8871_173ecce5",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-05T16:50:15Z",
+      "side": 1,
+      "message": "Done. (Doesn\u0027t even need the `\u0026 31` mask: `size` is in range 1..32, so `32 - size` is in range `0..31`.)",
+      "parentUuid": "1b9045e8_ee5b41e1",
       "revId": "44ff1139df2d66ce4e1b3007921ce0920b4c3392",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
