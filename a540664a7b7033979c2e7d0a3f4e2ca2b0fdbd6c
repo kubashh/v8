@@ -80,6 +80,30 @@
       },
       "revId": "a540664a7b7033979c2e7d0a3f4e2ca2b0fdbd6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "564e6467_cce9a0ac",
+        "filename": "test/mjsunit/regress/regress-41497374.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-05T13:33:41Z",
+      "side": 1,
+      "message": "Ack, fine to land this and re-evaluate the assumptions in a follow-up.\nIt is a bit unclear if this failing DCHECK could indicate that we optimize for some scenario that might lead to different results with the optimization?",
+      "parentUuid": "3ae11b08_b5ef0343",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 14,
+        "endChar": 33
+      },
+      "revId": "a540664a7b7033979c2e7d0a3f4e2ca2b0fdbd6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
