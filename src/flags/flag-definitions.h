@@ -1540,6 +1540,8 @@ DEFINE_SIZE_T(
 DEFINE_SIZE_T(wasm_inlining_min_budget, 50,
               "minimum graph size budget (in TF nodes) for which the "
               "wasm_inlinining_factor does not apply")
+// TODO(mliedtke): Remove again. Just for local testing.
+DEFINE_BOOL(wasm_speculative_inlining, true, "speculative call_ref inlining")
 DEFINE_BOOL(trace_wasm_inlining, false, "trace wasm inlining")
 DEFINE_BOOL(trace_wasm_typer, false, "trace wasm typer")
 

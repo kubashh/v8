@@ -843,6 +843,10 @@ class ModuleDecoderImpl : public Decoder {
     for (uint32_t func_index = module_->num_imported_functions;
          func_index < total_function_count; ++func_index) {
       WasmFunction* function = &module_->functions[func_index];
+      // TODO(mliedtke): Choose good threshold for what is a small function.
+      if (function->code.length() < 50) {
+        ++module_->num_small_functions;
+      }
       function->func_index = func_index;
       if (tracer_) tracer_->FunctionName(func_index);
       function->sig_index = consume_sig_index(module_.get(), &function->sig);
