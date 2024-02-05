@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b370e8a4_b2c61293",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-05T14:29:06Z",
+      "side": 1,
+      "message": "For some reason I can no longer find the original bug... Can you help?",
+      "parentUuid": "7c0b6f0a_ff76908a",
+      "revId": "6c812f6107dd4ae3ac26ac8db7b315a77a31ae05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a8e02588_482e209e",
         "filename": "generators.star",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2024-01-22T13:14:26Z",
       "side": 1,
       "message": "What\u0027s the benefit of this? It seems to create a duplication. We already have https://chromium.googlesource.com/v8/v8/+/refs/heads/infra/config/builders/experiments.star#180 \"sheriffs on new failure\". Which is opt-in already. Now additionally we need to add the builder name once more here to avoid an error.",
+      "revId": "6c812f6107dd4ae3ac26ac8db7b315a77a31ae05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c458f1df_53f5ad18",
+        "filename": "generators.star",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-05T14:29:06Z",
+      "side": 1,
+      "message": "Reworked as agreed offline.",
+      "parentUuid": "a8e02588_482e209e",
       "revId": "6c812f6107dd4ae3ac26ac8db7b315a77a31ae05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
