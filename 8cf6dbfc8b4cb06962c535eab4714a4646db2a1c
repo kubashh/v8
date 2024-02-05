@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84dc7de4_89ea5912",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-02-05T12:23:00Z",
+      "side": 1,
+      "message": "Here\u0027s another large, nominally no-op refactoring (MaybeObject -\u003e Tagged\u003cMaybeObject\u003e, where MaybeObject \u003d\u003d MaybeWeak\u003cObject\u003e, as discussed on V8 chat as probably the most consistent option). It doesn\u0027t take advantage of the additional type safety this offers, but is a step in that direction.",
+      "revId": "8cf6dbfc8b4cb06962c535eab4714a4646db2a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
