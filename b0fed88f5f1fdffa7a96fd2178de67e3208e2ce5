@@ -33,6 +33,24 @@
       "message": "LGTM. I assume our tests or fuzzers would find potential typos, so I did not check for that. The idea of the change is good, I like it.",
       "revId": "b0fed88f5f1fdffa7a96fd2178de67e3208e2ce5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5272421_4ebe9f72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-05T15:02:44Z",
+      "side": 1,
+      "message": "Oh, I forgot to mention: I just ran the preprocessor on the original lines to get the expanded versions (`clang -E`).",
+      "parentUuid": "2c8caa9d_188dfc98",
+      "revId": "b0fed88f5f1fdffa7a96fd2178de67e3208e2ce5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
