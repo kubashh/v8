@@ -10,6 +10,7 @@
 #define V8_WASM_TURBOSHAFT_GRAPH_INTERFACE_H_
 
 #include "src/base/macros.h"
+#include "src/heap/factory.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8::internal {
@@ -36,6 +37,11 @@ V8_EXPORT_PRIVATE bool BuildTSGraph(
     compiler::turboshaft::Graph& graph, const FunctionBody& func_body,
     const WireBytesStorage* wire_bytes, AssumptionsJournal* assumptions,
     ZoneVector<WasmInliningPosition>* inlining_positions, int func_index);
+
+void BuildWasmHeapStub(AccountingAllocator* allocator,
+                       compiler::turboshaft::Graph& graph, CodeKind code_kind,
+                       const wasm::FunctionSig* sig, bool is_import,
+                       const WasmModule* module);
 }  // namespace wasm
 }  // namespace v8::internal
 
