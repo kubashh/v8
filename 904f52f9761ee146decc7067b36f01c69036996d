@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef76b9ea_01798bbf",
+        "filename": "generators.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-05T15:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0087fc5_a0ab0eae",
+      "range": {
+        "startLine": 250,
+        "startChar": 4,
+        "endLine": 250,
+        "endChar": 22
+      },
+      "revId": "904f52f9761ee146decc7067b36f01c69036996d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3af994b_a7b7e4e1",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93c886d6_3e29ee88",
+        "filename": "generators.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-05T15:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3af994b_a7b7e4e1",
+      "range": {
+        "startLine": 255,
+        "startChar": 16,
+        "endLine": 255,
+        "endChar": 25
+      },
+      "revId": "904f52f9761ee146decc7067b36f01c69036996d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a4803aa_12fb4f74",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-02-05T14:35:36Z",
       "side": 1,
       "message": "nit: sheriffed",
+      "range": {
+        "startLine": 44,
+        "startChar": 68,
+        "endLine": 44,
+        "endChar": 77
+      },
+      "revId": "904f52f9761ee146decc7067b36f01c69036996d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ab86a6_cb44c40c",
+        "filename": "main.star",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-05T15:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a4803aa_12fb4f74",
       "range": {
         "startLine": 44,
         "startChar": 68,
