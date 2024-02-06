@@ -69,6 +69,24 @@
       "parentUuid": "ab14f670_a603dcfc",
       "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "732d5b14_6949d425",
+        "filename": "src/compiler/backend/riscv/code-generator-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 3921,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-06T10:44:33Z",
+      "side": 1,
+      "message": "The change was needed at the time to generate the out-of-line traps for protected instructions. But since Andreas\u0027s single landing pad changes [1], this does not seem needed anymore.\n\n[1] https://chromium-review.googlesource.com/c/v8/v8/+/4983668",
+      "parentUuid": "1dbccbfb_8522e0ee",
+      "revId": "23c39170050aaf4600c546abf3efe32f9e18fd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
