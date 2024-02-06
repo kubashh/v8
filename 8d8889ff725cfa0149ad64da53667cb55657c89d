@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a98b846_f9ed8843",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-02-06T19:38:02Z",
+      "side": 1,
+      "message": "Hi Leszek,\n\nThis CL doesn\u0027t seem to compile with gcc (tired gcc-10 on x64), getting the following error:\n\n```\nerror: writing 8 bytes into a region of size 0\n```",
+      "revId": "8d8889ff725cfa0149ad64da53667cb55657c89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
