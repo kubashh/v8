@@ -231,10 +231,17 @@ bool InliningTree::SmallEnoughToInline(size_t initial_graph_size,
   size_t budget =
       std::max<size_t>(v8_flags.wasm_inlining_min_budget,
                        v8_flags.wasm_inlining_factor * initial_graph_size);
+  // TODO(mliedtke): There should be some linearity here and not a sharp cutoff.
+  size_t upper_budget = v8_flags.wasm_inlining_budget;
+  // If there are few small functions, it indicates that the toolchain already
+  // performed significant inlining. Reduce the budget significantly as inlining
+  // has a diminishing ROI.
+  if (module_->num_small_functions * 2 < module_->num_declared_functions) {
+    upper_budget /= 10;
+  }
   // Independent of the wasm_inlining_budget, for large functions we should
   // still allow some inlining.
-  size_t full_budget =
-      std::max<size_t>(v8_flags.wasm_inlining_budget, initial_graph_size * 1.1);
+  size_t full_budget = std::max<size_t>(upper_budget, initial_graph_size * 1.1);
   size_t total_size = initial_graph_size + inlined_wire_byte_count +
                       static_cast<size_t>(wire_byte_size_);
   return total_size < std::min<size_t>(budget, full_budget);
