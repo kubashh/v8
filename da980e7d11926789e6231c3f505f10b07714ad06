@@ -16,6 +16,29 @@
       "message": "PTAL! :)",
       "revId": "da980e7d11926789e6231c3f505f10b07714ad06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "148f455a_3466aaff",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-02-06T10:52:40Z",
+      "side": 1,
+      "message": "What\u0027s the plan in general? Do we want to lower here already? If we plan to run JS specific optimizations and have a SimplifiedLowering handle the lowering and representation selection, we would need to have a JSBranch with js boolean object as input.",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 69
+      },
+      "revId": "da980e7d11926789e6231c3f505f10b07714ad06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
