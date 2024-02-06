@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37aeda89_ee67e05a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "I\u0027ve only looked at files that don\u0027t have \"riscv\" in the name.",
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de34df21_6f687e85",
+        "filename": "BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "This is surprising. Other parts of this CL use `V8_HOST_ARCH_RISCV64`, so I guess you meant `\"riscv64\"` here? (Please also update the comment two lines above.)",
+      "range": {
+        "startLine": 4657,
+        "startChar": 27,
+        "endLine": 4657,
+        "endChar": 34
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3a728ee_abf52d09",
+        "filename": "BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 5972,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "Same here. This sounds as if executing generated riscv64 code was possible on loong64 hardware without a simulator? Did you mean `riscv64` here and in the condition below?",
+      "range": {
+        "startLine": 5971,
+        "startChar": 36,
+        "endLine": 5972,
+        "endChar": 20
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4f68a6e_8d3f244a",
@@ -49,6 +112,190 @@
       "side": 1,
       "message": "https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/wasm-compiler.cc;l\u003d3990\nwasm complier don\u0027t protect Unaligned.",
       "parentUuid": "e4f68a6e_8d3f244a",
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f152f0da_59a69ffa",
+        "filename": "src/trap-handler/trap-handler.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "Surely you mean `RISCV64` here?",
+      "range": {
+        "startLine": 50,
+        "startChar": 3,
+        "endLine": 50,
+        "endChar": 10
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdb43bb3_34cfd37c",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "outdated comment. Just drop this word, so it reads \"...only on simulator builds...\".",
+      "range": {
+        "startLine": 753,
+        "startChar": 32,
+        "endLine": 753,
+        "endChar": 37
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c07a3538_cd818451",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "`RISCV64`, I assume?\n\nDid you actually compile this test on riscv64 hardware? If so, why didn\u0027t it run into the `#error Unsupported platform` below?",
+      "range": {
+        "startLine": 160,
+        "startChar": 19,
+        "endLine": 160,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284617a0_50c44daa",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "`V8_HOST_ARCH_RISCV64` here too, I assume",
+      "range": {
+        "startLine": 473,
+        "startChar": 6,
+        "endLine": 473,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da48dc85_8ef38bc8",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "and once more",
+      "range": {
+        "startLine": 529,
+        "startChar": 6,
+        "endLine": 529,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54bf984d_207ff1e1",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "again",
+      "range": {
+        "startLine": 578,
+        "startChar": 6,
+        "endLine": 578,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2ac096_e0bbc0c8",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "again",
+      "range": {
+        "startLine": 625,
+        "startChar": 6,
+        "endLine": 625,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "478147fb_92d0d65c",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:16:06Z",
+      "side": 1,
+      "message": "again",
+      "range": {
+        "startLine": 704,
+        "startChar": 6,
+        "endLine": 704,
+        "endChar": 26
+      },
       "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
