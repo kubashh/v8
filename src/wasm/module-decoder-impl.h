@@ -1195,6 +1195,10 @@ class ModuleDecoderImpl : public Decoder {
                           uint32_t offset) {
     WasmFunction* function = &module_->functions[func_index];
     function->code = {offset, length};
+    // TODO(mliedtke): Choose good threshold for what is a small function.
+    if (length < 50) {
+      ++module_->num_small_functions;
+    }
     if (tracer_) {
       tracer_->FunctionBody(function, pc_ - (pc_offset() - offset));
     }

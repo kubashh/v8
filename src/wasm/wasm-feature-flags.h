@@ -82,11 +82,6 @@
   /* V8 side owner: jkummerow */                                               \
   V(imported_strings, "imported strings", false)                               \
                                                                                \
-  /* Not user-visible, defined here so an Origin Trial can control it. */      \
-  /* V8 side owner: manoskouk, clemensb */                                     \
-  /* Staged in v11.3 */                                                        \
-  /* Launch bug: https://crbug.com/1424350 */                                  \
-  V(inlining, "wasm-into-wasm inlining", false)                                \
                                                                                \
   /* Exnref */                                                                 \
   /* This flag enables the new exception handling proposal */                  \
@@ -104,7 +99,13 @@
   /* Shipped in v12.0. */                                                      \
   /* ITS: */                                                                   \
   /* https://groups.google.com/a/chromium.org/g/blink-dev/c/WSrXwhKeSas */     \
-  V(multi_memory, "multi-memory", true)
+  V(multi_memory, "multi-memory", true)                                        \
+                                                                               \
+  /* Not user-visible, defined here so an Origin Trial can control it. */      \
+  /* V8 side owner: manoskouk, clemensb */                                     \
+  /* Staged in v11.3 */                                                        \
+  /* Launch bug: https://crbug.com/1424350 */                                  \
+  V(inlining, "wasm-into-wasm inlining", true)
 
 // Combination of all available wasm feature flags.
 #define FOREACH_WASM_FEATURE_FLAG(V)        \
