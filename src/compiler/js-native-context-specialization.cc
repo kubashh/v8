@@ -1479,6 +1479,8 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
                 JSDefineKeyedOwnPropertyNode::ObjectIndex() == 0);
   static_assert(JSLoadNamedFromSuperNode::ReceiverIndex() == 0);
 
+  if (feedback.IsStoreTransition()) return NoChange();
+
   Node* context = NodeProperties::GetContextInput(node);
   FrameState frame_state{NodeProperties::GetFrameStateInput(node)};
   Effect effect{NodeProperties::GetEffectInput(node)};
