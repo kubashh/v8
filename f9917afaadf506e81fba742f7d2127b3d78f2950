@@ -16,6 +16,29 @@
       "message": "PTAL :)",
       "revId": "f9917afaadf506e81fba742f7d2127b3d78f2950",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b0ac64d_ac3923ee",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-02-06T10:45:53Z",
+      "side": 1,
+      "message": "Whats the semantics of this operation? It sounds like it does more than just reinterpretation.",
+      "range": {
+        "startLine": 289,
+        "startChar": 40,
+        "endLine": 289,
+        "endChar": 61
+      },
+      "revId": "f9917afaadf506e81fba742f7d2127b3d78f2950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
