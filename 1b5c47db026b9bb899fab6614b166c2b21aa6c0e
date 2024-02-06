@@ -16,6 +16,23 @@
       "message": "PTAL, thanks!",
       "revId": "1b5c47db026b9bb899fab6614b166c2b21aa6c0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d5bdb98_063923fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-06T11:25:06Z",
+      "side": 1,
+      "message": "rubberstamp LGTM (I don\u0027t have the time or expertise to do in-depth reviews for loong/mips; if you need someone to actually verify that this code makes sense then please find someone who understands these platforms).",
+      "revId": "1b5c47db026b9bb899fab6614b166c2b21aa6c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
