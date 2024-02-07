@@ -215,6 +215,9 @@ void InliningTree::FullyExpand(const size_t initial_graph_size) {
   }
 }
 
+// This is a mess. TODO(mliedtke): Document the reasoning for the different
+// budgets, limits etc. Also comment on the fuzziness and missing precision of
+// it.
 bool InliningTree::SmallEnoughToInline(size_t initial_graph_size,
                                        size_t inlined_wire_byte_count) {
   if (wire_byte_size_ > static_cast<int>(v8_flags.wasm_inlining_max_size)) {
@@ -228,16 +231,34 @@ bool InliningTree::SmallEnoughToInline(size_t initial_graph_size,
       inlined_wire_byte_count = 0;
     }
   }
-  size_t budget =
+  size_t budget_small_function =
       std::max<size_t>(v8_flags.wasm_inlining_min_budget,
                        v8_flags.wasm_inlining_factor * initial_graph_size);
+  size_t upper_budget = v8_flags.wasm_inlining_budget;
+  double small_function_percentage =
+      module_->num_small_functions * 100.0 / module_->num_declared_functions;
+  if (small_function_percentage < 50) {
+    // If there are few small functions, it indicates that the toolchain already
+    // performed significant inlining. Reduce the budget significantly as
+    // inlining has a diminishing ROI.
+
+    // We also apply a linear progression of the budget in the interval [25, 50]
+    // for the small_function_percentage. This progression is just added to
+    // prevent performance cliffs (e.g. when just performing a sharp cutoff at
+    // the 50% point) and not based on actual data.
+    double smalishness = std::max(25.0, small_function_percentage) - 25.0;
+    size_t lower_budget = upper_budget / 10;
+    double step = (upper_budget - lower_budget) / 25.0;
+    upper_budget = lower_budget + smalishness * step;
+  }
   // Independent of the wasm_inlining_budget, for large functions we should
   // still allow some inlining.
-  size_t full_budget =
-      std::max<size_t>(v8_flags.wasm_inlining_budget, initial_graph_size * 1.1);
+  size_t budget_large_function =
+      std::max<size_t>(upper_budget, initial_graph_size * 1.1);
   size_t total_size = initial_graph_size + inlined_wire_byte_count +
                       static_cast<size_t>(wire_byte_size_);
-  return total_size < std::min<size_t>(budget, full_budget);
+  return total_size <
+         std::min<size_t>(budget_small_function, budget_large_function);
 }
 
 }  // namespace v8::internal::wasm
