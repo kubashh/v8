@@ -39,6 +39,30 @@
       },
       "revId": "da980e7d11926789e6231c3f505f10b07714ad06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d28824df_b862f39c",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-07T08:46:49Z",
+      "side": 1,
+      "message": "As discussed offline, Maglev branches tend to have machine semantics, so we don\u0027t want to \"unlower\" them to JS-semantics branches. BranchIfToBooleanTrue might be the only exception, since BranchIfToBooleanTrue(x) might just mean \"JSBranch(x)\", but it\u0027s also fairly easy to emit instead in Turboshaft \"MachineBranch(TruncateJSPrimitiveToUntagged(x))\" which means that we don\u0027t need JSBranches at all anymore.",
+      "parentUuid": "148f455a_3466aaff",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 123,
+        "endChar": 69
+      },
+      "revId": "da980e7d11926789e6231c3f505f10b07714ad06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
