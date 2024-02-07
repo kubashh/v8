@@ -52,6 +52,24 @@
       "parentUuid": "32b147eb_13848a99",
       "revId": "8d8889ff725cfa0149ad64da53667cb55657c89d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94fc8db9_7a484ae3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-02-07T22:50:26Z",
+      "side": 1,
+      "message": "the less efficient form also produces the same error, seems like it\u0027s related to `-Wno-stringop-overflow` which is already skipped on bazel, i\u0027ve made this cl on chromium to attempt to skip it: https://chromium-review.googlesource.com/c/chromium/src/+/5274410",
+      "parentUuid": "271c8d56_8312391c",
+      "revId": "8d8889ff725cfa0149ad64da53667cb55657c89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
