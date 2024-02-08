@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d65fc1cf_a83b034e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-08T08:40:25Z",
+      "side": 1,
+      "message": "LGTM :)",
+      "revId": "d8a1892b68eea0f6b545d1a2f636c29f936deed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae9dc6d2_f78c33aa",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-08T08:40:25Z",
+      "side": 1,
+      "message": "Can\u0027t you take `Rep` as a WordRepresentation template parameter directly?",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 36
+      },
+      "revId": "d8a1892b68eea0f6b545d1a2f636c29f936deed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b84871_5bfeeaaf",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-08T08:40:25Z",
+      "side": 1,
+      "message": "`matcher.MatchBitwiseAnd` if often followed by `matcher.MatchIntegralWordConstant` throughout this file. Maybe add a `MatchBitwiseAndWordConstantRhs` helper or something like that? (it can also be done in a follow up)",
+      "range": {
+        "startLine": 130,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 29
+      },
+      "revId": "d8a1892b68eea0f6b545d1a2f636c29f936deed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
