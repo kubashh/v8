@@ -50,7 +50,7 @@ class WasmJSLoweringReducer : public Next {
       __ Call(call_target, new_frame_state, {}, ts_descriptor);
       __ Unreachable();  // The trap builtin never returns.
     }
-    END_IF
+
     return OpIndex::Invalid();
   }
 
