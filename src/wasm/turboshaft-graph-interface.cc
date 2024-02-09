@@ -269,7 +269,6 @@ class TurboshaftGraphBuildingInterface {
         CallRuntime(decoder, Runtime::kAbort, {message_id});
         __ Unreachable();
       }
-      END_IF
     }
 
     if (mode_ == kRegular) {
@@ -405,7 +404,6 @@ class TurboshaftGraphBuildingInterface {
       IF ({cond.op, hint}) {
         DoReturn(decoder, 0);
       }
-      END_IF
     } else {
       Control* target = decoder->control_at(depth);
       SetupControlFlowEdge(decoder, target->merge_block);
@@ -1029,11 +1027,9 @@ class TurboshaftGraphBuildingInterface {
                                          BuiltinCallDescriptor::WasmMemoryGrow>(
                        decoder, {__ Word32Constant(imm.index),
                                  __ TruncateWord64ToWord32(value.op)})));
-      }
-      ELSE {
+      } ELSE {
         GOTO(done, __ Word64Constant(int64_t{-1}));
       }
-      END_IF
 
       BIND(done, result_64);
 
@@ -1103,7 +1099,6 @@ class TurboshaftGraphBuildingInterface {
         CallRuntime(decoder, Runtime::kAbort, {message_id});
         __ Unreachable();
       }
-      END_IF
     }
 
     __ Store(thread_in_wasm_flag_address, __ Word32Constant(new_value),
@@ -1168,7 +1163,6 @@ class TurboshaftGraphBuildingInterface {
     IF (UNLIKELY(__ IntPtrLessThan(left, right))) {
       ThrowDataViewOutOfBoundsError(decoder, op_type);
     }
-    END_IF
   }
 
   void DataViewBoundsCheck(FullDecoder* decoder, V<WordPtr> left,
@@ -1176,7 +1170,6 @@ class TurboshaftGraphBuildingInterface {
     IF (UNLIKELY(__ IntPtrLessThan(left, right))) {
       ThrowDataViewDetachedError(decoder, op_type);
     }
-    END_IF
   }
 
   V<Word32> IsDetached(V<Tagged> dataview) {
@@ -1193,7 +1186,6 @@ class TurboshaftGraphBuildingInterface {
     IF (UNLIKELY(IsDetached(dataview))) {
       ThrowDataViewDetachedError(decoder, op_type);
     }
-    END_IF
   }
 
   V<WordPtr> GetDataViewByteLength(FullDecoder* decoder, V<Tagged> dataview,
@@ -1305,8 +1297,7 @@ class TurboshaftGraphBuildingInterface {
         DataViewBoundsCheck(decoder, buffer_byte_length, view_byte_offset,
                             op_type);
         GOTO(done_label, final_length);
-      }
-      ELSE {
+      } ELSE {
         V<WordPtr> view_byte_length = __ LoadField<WordPtr>(
             dataview, AccessBuilder::ForJSArrayBufferViewByteLength());
         DataViewBoundsCheck(decoder, buffer_byte_length,
@@ -1315,7 +1306,6 @@ class TurboshaftGraphBuildingInterface {
 
         GOTO(done_label, view_byte_length);
       }
-      END_IF
     }
     // Case: growable SharedArrayBuffers, LT.
     ELSE {
@@ -1325,7 +1315,6 @@ class TurboshaftGraphBuildingInterface {
           ChangeTaggedNumberToIntPtr(gsab_length_tagged), view_byte_offset);
       GOTO(done_label, gsab_buffer_byte_length);
     }
-    END_IF
     __ Unreachable();
 
     BIND(type_error_label);
@@ -1583,7 +1572,6 @@ class TurboshaftGraphBuildingInterface {
                 BuiltinCallDescriptor::ThrowIndexOfCalledOnNull>(decoder, {});
             __ Unreachable();
           }
-          END_IF
         }
 
         // If search is null, replace it with "null".
@@ -1628,7 +1616,6 @@ class TurboshaftGraphBuildingInterface {
                                                                      {});
             __ Unreachable();
           }
-          END_IF
         }
         result = CallStringToLowercase(decoder, string);
         decoder->detected_->Add(kFeature_stringref);
@@ -1907,7 +1894,6 @@ class TurboshaftGraphBuildingInterface {
       int drop_values = pass_null_along_branch ? 0 : 1;
       BrOrRet(decoder, depth, drop_values);
     }
-    END_IF
   }
 
   void BrOnNonNull(FullDecoder* decoder, const Value& ref_object, Value* result,
@@ -1916,7 +1902,6 @@ class TurboshaftGraphBuildingInterface {
     IF_NOT (UNLIKELY(__ IsNull(ref_object.op, ref_object.type))) {
       BrOrRet(decoder, depth);
     }
-    END_IF
   }
 
   void SimdOp(FullDecoder* decoder, WasmOpcode opcode, const Value* args,
@@ -2273,16 +2258,13 @@ class TurboshaftGraphBuildingInterface {
         GOTO_IF(__ TaggedEqual(expected_tag, js_tag), if_catch,
                 block->exception);
         GOTO(no_catch_merge);
-      }
-      ELSE {
+      } ELSE {
         IF (__ TaggedEqual(caught_tag, expected_tag)) {
           UnpackWasmException(decoder, block->exception, values);
           GOTO(if_catch, values[0].op);
         }
-        END_IF
         GOTO(no_catch_merge);
       }
-      END_IF
 
       BIND(no_catch_merge);
       __ Goto(if_no_catch);
@@ -2964,7 +2946,6 @@ class TurboshaftGraphBuildingInterface {
           GOTO(loop_label, __ Word32Add(src_index_loop, 1),
                __ Word32Add(dst_index_loop, 1));
         }
-        END_IF
 
         GOTO(end);
       }
@@ -2986,7 +2967,6 @@ class TurboshaftGraphBuildingInterface {
           GOTO(loop_label, __ Word32Sub(src_index_loop, 1),
                __ Word32Sub(dst_index_loop, 1));
         }
-        END_IF
 
         GOTO(end);
       }
@@ -4463,8 +4443,7 @@ class TurboshaftGraphBuildingInterface {
 
         IF (LIKELY(__ Float32Equal(truncated, converted_back))) {
           GOTO(done, converted);
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float32Equal(arg, arg)) {
             // Not NaN.
@@ -4472,21 +4451,16 @@ class TurboshaftGraphBuildingInterface {
               // Negative arg.
               GOTO(done,
                    __ Word32Constant(std::numeric_limits<int32_t>::min()));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word32Constant(std::numeric_limits<int32_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word32Constant(0));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4501,29 +4475,23 @@ class TurboshaftGraphBuildingInterface {
 
         IF (LIKELY(__ Float32Equal(truncated, converted_back))) {
           GOTO(done, converted);
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float32Equal(arg, arg)) {
             // Not NaN.
             IF (__ Float32LessThan(arg, 0)) {
               // Negative arg.
               GOTO(done, __ Word32Constant(0));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word32Constant(std::numeric_limits<uint32_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word32Constant(0));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4538,8 +4506,7 @@ class TurboshaftGraphBuildingInterface {
 
         IF (LIKELY(__ Float64Equal(truncated, converted_back))) {
           GOTO(done, converted);
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float64Equal(arg, arg)) {
             // Not NaN.
@@ -4547,21 +4514,16 @@ class TurboshaftGraphBuildingInterface {
               // Negative arg.
               GOTO(done,
                    __ Word32Constant(std::numeric_limits<int32_t>::min()));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word32Constant(std::numeric_limits<int32_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word32Constant(0));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4576,29 +4538,23 @@ class TurboshaftGraphBuildingInterface {
 
         IF (LIKELY(__ Float64Equal(truncated, converted_back))) {
           GOTO(done, converted);
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float64Equal(arg, arg)) {
             // Not NaN.
             IF (__ Float64LessThan(arg, 0)) {
               // Negative arg.
               GOTO(done, __ Word32Constant(0));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word32Constant(std::numeric_limits<uint32_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word32Constant(0));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4620,8 +4576,7 @@ class TurboshaftGraphBuildingInterface {
                                  RegisterRepresentation::Word32()))) {
           GOTO(done,
                __ Projection(converted, 0, RegisterRepresentation::Word64()));
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float32Equal(arg, arg)) {
             // Not NaN.
@@ -4629,21 +4584,16 @@ class TurboshaftGraphBuildingInterface {
               // Negative arg.
               GOTO(done,
                    __ Word64Constant(std::numeric_limits<int64_t>::min()));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word64Constant(std::numeric_limits<int64_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word64Constant(int64_t{0}));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4666,29 +4616,23 @@ class TurboshaftGraphBuildingInterface {
                                  RegisterRepresentation::Word32()))) {
           GOTO(done,
                __ Projection(converted, 0, RegisterRepresentation::Word64()));
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float32Equal(arg, arg)) {
             // Not NaN.
             IF (__ Float32LessThan(arg, 0)) {
               // Negative arg.
               GOTO(done, __ Word64Constant(int64_t{0}));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word64Constant(std::numeric_limits<uint64_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word64Constant(int64_t{0}));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4711,8 +4655,7 @@ class TurboshaftGraphBuildingInterface {
                                  RegisterRepresentation::Word32()))) {
           GOTO(done,
                __ Projection(converted, 0, RegisterRepresentation::Word64()));
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float64Equal(arg, arg)) {
             // Not NaN.
@@ -4720,21 +4663,16 @@ class TurboshaftGraphBuildingInterface {
               // Negative arg.
               GOTO(done,
                    __ Word64Constant(std::numeric_limits<int64_t>::min()));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word64Constant(std::numeric_limits<int64_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word64Constant(int64_t{0}));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4757,29 +4695,23 @@ class TurboshaftGraphBuildingInterface {
                                  RegisterRepresentation::Word32()))) {
           GOTO(done,
                __ Projection(converted, 0, RegisterRepresentation::Word64()));
-        }
-        ELSE {
+        } ELSE {
           // Overflow.
           IF (__ Float64Equal(arg, arg)) {
             // Not NaN.
             IF (__ Float64LessThan(arg, 0)) {
               // Negative arg.
               GOTO(done, __ Word64Constant(int64_t{0}));
-            }
-            ELSE {
+            } ELSE {
               // Positive arg.
               GOTO(done,
                    __ Word64Constant(std::numeric_limits<uint64_t>::max()));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             // NaN.
             GOTO(done, __ Word64Constant(int64_t{0}));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
 
         return result;
@@ -4934,12 +4866,10 @@ class TurboshaftGraphBuildingInterface {
                  __ Word32Add(CallC(&sig, ExternalReference::wasm_word32_ctz(),
                                     upper_word),
                               32));
-          }
-          ELSE {
+          } ELSE {
             GOTO(done,
                  CallC(&sig, ExternalReference::wasm_word32_ctz(), lower_word));
           }
-          END_IF
           BIND(done, result);
           return __ ChangeUint32ToUint64(result);
         }
@@ -5069,11 +4999,9 @@ class TurboshaftGraphBuildingInterface {
         Label<Word32> done(&asm_);
         IF (UNLIKELY(__ Word32Equal(rhs, -1))) {
           GOTO(done, __ Word32Constant(0));
-        }
-        ELSE {
+        } ELSE {
           GOTO(done, __ Int32Mod(lhs, rhs));
-        }
-        END_IF;
+        };
 
         BIND(done, result);
         return result;
@@ -5163,11 +5091,9 @@ class TurboshaftGraphBuildingInterface {
         Label<Word64> done(&asm_);
         IF (UNLIKELY(__ Word64Equal(rhs, -1))) {
           GOTO(done, __ Word64Constant(int64_t{0}));
-        }
-        ELSE {
+        } ELSE {
           GOTO(done, __ Int64Mod(lhs, rhs));
-        }
-        END_IF;
+        };
 
         BIND(done, result);
         return result;
@@ -5310,17 +5236,13 @@ class TurboshaftGraphBuildingInterface {
         Label<Word32> done(&asm_);
         IF (UNLIKELY(__ Word32Equal(rhs, 0))) {
           GOTO(done, __ Word32Constant(0));
-        }
-        ELSE {
+        } ELSE {
           IF (UNLIKELY(__ Word32Equal(rhs, -1))) {
             GOTO(done, __ Word32Sub(0, lhs));
-          }
-          ELSE {
+          } ELSE {
             GOTO(done, __ Int32Div(lhs, rhs));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
         return result;
       }
@@ -5332,11 +5254,9 @@ class TurboshaftGraphBuildingInterface {
         Label<Word32> done(&asm_);
         IF (UNLIKELY(__ Word32Equal(rhs, 0))) {
           GOTO(done, __ Word32Constant(0));
-        }
-        ELSE {
+        } ELSE {
           GOTO(done, __ Uint32Div(lhs, rhs));
         }
-        END_IF
         BIND(done, result);
         return result;
       }
@@ -5366,27 +5286,19 @@ class TurboshaftGraphBuildingInterface {
               V<Word32> neg_lhs = __ Word32Sub(0, lhs);
               V<Word32> combined = __ Word32BitwiseAnd(neg_lhs, mask);
               GOTO(done, __ Word32Sub(0, combined));
-            }
-            ELSE {
+            } ELSE {
               GOTO(done, __ Word32BitwiseAnd(lhs, mask));
             }
-            END_IF
-          }
-          ELSE {
+          } ELSE {
             GOTO(done, __ Int32Mod(lhs, rhs));
           }
-          END_IF
-        }
-        ELSE {
+        } ELSE {
           IF (__ Int32LessThan(rhs, -1)) {
             GOTO(done, __ Int32Mod(lhs, rhs));
-          }
-          ELSE {
+          } ELSE {
             GOTO(done, __ Word32Constant(0));
           }
-          END_IF
         }
-        END_IF
         BIND(done, result);
         return result;
       }
@@ -5395,11 +5307,9 @@ class TurboshaftGraphBuildingInterface {
         Label<Word32> done(&asm_);
         IF (UNLIKELY(__ Word32Equal(rhs, 0))) {
           GOTO(done, __ Word32Constant(0));
-        }
-        ELSE {
+        } ELSE {
           GOTO(done, __ Uint32Mod(lhs, rhs));
         }
-        END_IF
         BIND(done, result);
         return result;
       }
@@ -5844,11 +5754,9 @@ class TurboshaftGraphBuildingInterface {
                                        Code::kInstructionStartOffset);
 #endif
       GOTO(done, call_target);
-    }
-    ELSE {
+    } ELSE {
       GOTO(done, target);
     }
-    END_IF
 
     BIND(done, final_target);
 
@@ -6394,7 +6302,6 @@ class TurboshaftGraphBuildingInterface {
       __ Store(MemStart(0), index_ptr, value, StoreOp::Kind::RawAligned(), repr,
                compiler::kNoWriteBarrier, 0);
     }
-    END_IF
   }
 
   OpIndex AsmjsLoadMem(V<Word32> index, MemoryRepresentation repr) {
@@ -6410,8 +6317,7 @@ class TurboshaftGraphBuildingInterface {
     IF (LIKELY(__ UintPtrLessThan(index_ptr, MemSize(0)))) {
       __ SetVariable(result, __ Load(MemStart(0), index_ptr,
                                      LoadOp::Kind::RawAligned(), repr));
-    }
-    ELSE {
+    } ELSE {
       switch (repr) {
         case MemoryRepresentation::Int8():
         case MemoryRepresentation::Int16():
@@ -6433,7 +6339,6 @@ class TurboshaftGraphBuildingInterface {
           UNREACHABLE();
       }
     }
-    END_IF
 
     OpIndex result_op = __ GetVariable(result);
     __ SetVariable(result, OpIndex::Invalid());
@@ -6480,7 +6385,6 @@ class TurboshaftGraphBuildingInterface {
       Forward(decoder, object, value_on_branch);
       BrOrRet(decoder, br_depth);
     }
-    END_IF
     // Note: Differently to below for br_on_cast_fail, we do not Forward
     // the value here to perform a TypeGuard. It can't be done here due to
     // asymmetric decoder code. A Forward here would be popped from the stack
@@ -6500,7 +6404,6 @@ class TurboshaftGraphBuildingInterface {
       Forward(decoder, object, decoder->stack_value(1));
       BrOrRet(decoder, br_depth);
     }
-    END_IF
     // Narrow type for the successful cast fallthrough branch.
     Forward(decoder, object, value_on_fallthrough);
   }
