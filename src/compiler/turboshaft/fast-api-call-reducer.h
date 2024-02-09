@@ -616,7 +616,6 @@ class FastApiCallReducer : public Next {
         // We expect that JS execution is enabled, otherwise assert.
         __ Unreachable();
       }
-      END_IF
     }
     __ StoreOffHeap(js_execution_assert, __ Word32Constant(0),
                     MemoryRepresentation::Int8());
