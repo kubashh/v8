@@ -1801,7 +1801,7 @@ class TurboshaftGraphBuildingInterface {
     } else {
       // Locally defined function.
       if (inlining_enabled(decoder) &&
-          should_inline(feedback_slot_,
+          should_inline(decoder, feedback_slot_,
                         decoder->module_->functions[imm.index].code.length())) {
         if (v8_flags.trace_wasm_inlining) {
           PrintF("[function %d%s: inlining direct call #%d to function %d]\n",
@@ -1827,7 +1827,7 @@ class TurboshaftGraphBuildingInterface {
     } else {
       // Locally defined function.
       if (inlining_enabled(decoder) &&
-          should_inline(feedback_slot_,
+          should_inline(decoder, feedback_slot_,
                         decoder->module_->functions[imm.index].code.length())) {
         if (v8_flags.trace_wasm_inlining) {
           PrintF(
@@ -1863,7 +1863,8 @@ class TurboshaftGraphBuildingInterface {
                const FunctionSig* sig, const Value args[], Value returns[]) {
     feedback_slot_++;
     if (inlining_enabled(decoder) &&
-        should_inline(feedback_slot_, std::numeric_limits<int>::max())) {
+        should_inline(decoder, feedback_slot_,
+                      std::numeric_limits<int>::max())) {
       V<FixedArray> internal_functions = LOAD_IMMUTABLE_INSTANCE_FIELD(
           trusted_instance_data(), WasmInternalFunctions,
           MemoryRepresentation::TaggedPointer());
@@ -1962,7 +1963,8 @@ class TurboshaftGraphBuildingInterface {
                      const FunctionSig* sig, const Value args[]) {
     feedback_slot_++;
     if (inlining_enabled(decoder) &&
-        should_inline(feedback_slot_, std::numeric_limits<int>::max())) {
+        should_inline(decoder, feedback_slot_,
+                      std::numeric_limits<int>::max())) {
       V<FixedArray> internal_functions = LOAD_IMMUTABLE_INSTANCE_FIELD(
           trusted_instance_data(), WasmInternalFunctions,
           MemoryRepresentation::TaggedPointer());
@@ -7033,7 +7035,7 @@ class TurboshaftGraphBuildingInterface {
     return decoder->enabled_.has_inlining() || decoder->module_->is_wasm_gc;
   }
 
-  bool should_inline(int feedback_slot, int size) {
+  bool should_inline(FullDecoder* decoder, int feedback_slot, int size) {
     if (v8_flags.liftoff) {
       if (inlining_decisions_ && inlining_decisions_->feedback_found()) {
         DCHECK_GT(inlining_decisions_->function_calls().size(), feedback_slot);
@@ -7048,10 +7050,10 @@ class TurboshaftGraphBuildingInterface {
         return false;
       }
     } else {
-      // We check the flag here because we want the ability to force inlining
-      // off in unit tests, whereas {inlining_enabled()} turns it on for all
-      // WasmGC modules.
-      return v8_flags.experimental_wasm_inlining &&
+      // We check the wasm feature here because we want the ability to force
+      // inlining off in unit tests, whereas {inlining_enabled()} turns it on
+      // for all WasmGC modules.
+      return decoder->enabled_.has_inlining() &&
              size < no_liftoff_inlining_budget_ &&
              inlining_positions_->size() < InliningTree::kMaxInlinedCount;
     }
