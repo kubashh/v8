@@ -15,6 +15,8 @@
 #include "src/compiler/phase.h"
 #include "src/compiler/turboshaft/graph.h"
 #include "src/compiler/turboshaft/sidetable.h"
+#include "src/execution/frames.h"
+#include "src/wasm/wasm-engine.h"
 
 #define DECL_TURBOSHAFT_PHASE_CONSTANTS(Name)                  \
   DECL_PIPELINE_PHASE_CONSTANTS_HELPER(Turboshaft##Name,       \
@@ -95,6 +97,7 @@ class V8_EXPORT_PRIVATE PipelineData
     return address_of_max_pushed_argument_count_;
   }
   Zone* instruction_zone() const { return instruction_zone_; }
+  CodeTracer* GetCodeTracer() const { return isolate_->GetCodeTracer(); }
 
 #if V8_ENABLE_WEBASSEMBLY
   const wasm::FunctionSig* wasm_sig() const {
