@@ -3,7 +3,8 @@
 // found in the LICENSE file.
 
 #include "src/flags/flags.h"
-
+#include <chrono>
+#include <algorithm>
 #include <cctype>
 #include <cerrno>
 #include <cinttypes>
@@ -12,8 +13,10 @@
 #include <iomanip>
 #include <set>
 #include <sstream>
+#include <vector>
 
 #include "src/base/functional.h"
+#include "src/base/lazy-instance.h"
 #include "src/base/logging.h"
 #include "src/base/platform/platform.h"
 #include "src/codegen/cpu-features.h"
@@ -54,6 +57,7 @@ char NormalizeChar(char ch) { return ch == '_' ? '-' : ch; }
 struct Flag;
 Flag* FindFlagByPointer(const void* ptr);
 Flag* FindFlagByName(const char* name);
+Flag* FindImplicationFlagByName(const char* name);
 
 // Helper struct for printing normalized flag names.
 struct FlagName {
@@ -356,7 +360,7 @@ struct Flag {
       // checks in DEBUG mode, we will just ignore the more complex conditions
       // for now - that will just lead to a nullptr which won't be followed.
       implied_by_ptr_ = static_cast<Flag*>(
-          FindFlagByName(implied_by[0] == '!' ? implied_by + 1 : implied_by));
+          FindImplicationFlagByName(implied_by[0] == '!' ? implied_by + 1 : implied_by));
       DCHECK_NE(implied_by_ptr_, this);
 #endif
     }
@@ -469,7 +473,117 @@ bool EqualNames(const char* a, const char* b) {
   return false;
 }
 
+/*
+int FlagNamesCmp(const char* a, const char* b) {
+  int i = 0;
+  char ac;
+  do {
+    ac = NormalizeChar(a[i]);
+    char bc = NormalizeChar(b[i]);
+    if (ac < bc) return -1;
+    if (ac > bc) return 1;
+    i++;
+  } while (ac != '\0');
+  return 0;
+}
+*/
+
+bool FlagNameLess(const char* a, const char* b) {
+  return strcmp(a, b) < 0;
+}
+
+/*
+bool FlagNameLess(const char* a, const char* b) {
+  for (int i = 0; NormalizeChar(a[i]) <= NormalizeChar(b[i]); i++) {
+    if (a[i] == '\0') {
+      return true;
+    }
+    if (b[i] == '\0') {
+      return false;
+    }
+  }
+  return false;
+}
+
+*/
+struct less
+{
+    bool operator()(const Flag* a, const Flag* b) const { return FlagNameLess(a->name(), b->name()); }
+};
+
+struct pred
+{
+    bool operator()(const Flag* a, const char* b) const { return FlagNameLess(a->name(), b); }
+};
+
+class FlagMapByName {
+ public:
+  FlagMapByName() {
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    for (size_t i = 0; i < kNumFlags; ++i) {
+      flags_.push_back(&flags[i]);
+    }
+    sort(flags_.begin(), flags_.end(), less());
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Init = " << std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count() << "[µs]" << std::endl;
+
+    //for (size_t i = 0; i < kNumFlags; ++i) {
+    //  std::cout << flags_[i]->name() << " ";
+    //}
+    //std::cout << std::endl;
+  }
+
+  Flag* GetFlag(const char* name) {
+    auto it = lower_bound(flags_.begin(), flags_.end(),
+                          name, pred());
+    //std::cout <<  (*it)->name() << " =?= " << name <<  std::endl;
+    if (it == flags_.end() || strcmp((*it)->name(), name) != 0) return nullptr;
+    return *it;
+  }
+
+/*
+  Flag* GetFlag(const char* name) {
+    long start = 0; 
+    long end = flags_.size();
+    
+    while (start <= end) { 
+      long mid = start + (end - start) / 2;
+      int result = FlagNamesCmp(name, flags_[mid]->name());
+      if (result == 0) {
+        return flags_[mid];
+      }
+
+      if (result < 0) { 
+        end = mid - 1;
+      }
+      else {
+        start = mid + 1;
+      }
+    }
+   
+    return nullptr;
+  }*/
+
+ private:
+  std::vector<Flag*> flags_;
+};
+
+DEFINE_LAZY_LEAKY_OBJECT_GETTER(FlagMapByName, GetFlagMap)
+
+
+Flag* FindImplicationFlagByName(const char* name) {
+  Flag* flag = GetFlagMap()->GetFlag(name);
+  if (flag != nullptr) return flag;
+  std::cout << name << std::endl;
+  FATAL("Didn't find a flag!");
+}
+
 Flag* FindFlagByName(const char* name) {
+  std::cout << "finding " << name << std::endl;
+  //Flag* flag = GetFlagMap()->GetFlag(name);
+  //if (flag != nullptr) return flag;
+  std::cout << "meh " << std::endl;
+  // TODO: Ensure we couldn't have found it.
   for (size_t i = 0; i < kNumFlags; ++i) {
     if (EqualNames(name, flags[i].name())) return &flags[i];
   }
@@ -980,7 +1094,7 @@ class ImplicationProcessor {
                           const char* conclusion_name, T value,
                           bool weak_implication) {
     if (!premise) return false;
-    Flag* conclusion_flag = FindFlagByName(conclusion_name);
+    Flag* conclusion_flag = FindImplicationFlagByName(conclusion_name);
     if (!conclusion_flag->CheckFlagChange(
             weak_implication ? Flag::SetBy::kWeakImplication
                              : Flag::SetBy::kImplication,
@@ -1008,7 +1122,7 @@ class ImplicationProcessor {
                           const char* conclusion_name, T value,
                           bool weak_implication) {
     if (!premise) return false;
-    Flag* conclusion_flag = FindFlagByName(conclusion_name);
+    Flag* conclusion_flag = FindImplicationFlagByName(conclusion_name);
     // Because this is the `const FlagValue*` overload:
     DCHECK(conclusion_flag->IsReadOnly());
     if (!conclusion_flag->CheckFlagChange(
@@ -1057,12 +1171,23 @@ class ImplicationProcessor {
 
 }  // namespace
 
+int duration = 0;
+
 // static
 void FlagList::EnforceFlagImplications() {
+  std::cout << "Impl" << std::endl;
+  std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
   for (ImplicationProcessor proc; proc.EnforceImplications();) {
     // Continue processing (recursive) implications. The processor has an
     // internal limit to avoid endless recursion.
   }
+  std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+  duration += std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();
+
+  std::cout << "Duration = " << duration << "[µs]" << std::endl;
+
 }
 
 // static
