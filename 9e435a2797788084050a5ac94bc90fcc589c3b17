@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "117f6908_41a87d22",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4301,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-02-12T15:40:59Z",
+      "side": 0,
+      "message": "maybe remove the unused BranchIfInt32InBounds? Or do you plan to use it again later?",
+      "revId": "9e435a2797788084050a5ac94bc90fcc589c3b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
