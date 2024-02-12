@@ -50,6 +50,23 @@
       "message": "cbruni, could you OWNERS-review interpreter/ ? nothing changed there since the previous reland, but now leszeks@ is not here to review this...",
       "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee9bd1a2_1ae4640d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-02-12T12:30:35Z",
+      "side": 1,
+      "message": "and one more OWNERS reviewer for ic/ ; nothing changed there after the previous reland, leszeks@ not here to review this week...",
+      "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
