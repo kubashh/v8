@@ -11,6 +11,7 @@
 // Do not include anything from src/compiler here!
 #include "src/common/globals.h"
 #include "src/objects/code.h"
+#include "src/wasm/value-type.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8 {
@@ -28,7 +29,13 @@ struct CompilationEnv;
 struct FunctionBody;
 struct WasmCompilationResult;
 class WasmFeatures;
+struct WasmModule;
 }  // namespace wasm
+
+namespace compiler::turboshaft {
+class TurboshaftCompilationJob;
+class Graph;
+}  // namespace compiler::turboshaft
 
 namespace compiler {
 
@@ -82,6 +89,12 @@ class Pipeline : public AllStatic {
   static std::unique_ptr<TurbofanCompilationJob> NewWasmHeapStubCompilationJob(
       Isolate* isolate, CallDescriptor* call_descriptor,
       std::unique_ptr<Zone> zone, Graph* graph, CodeKind kind,
+      std::unique_ptr<char[]> debug_name, const AssemblerOptions& options);
+
+  static std::unique_ptr<compiler::turboshaft::TurboshaftCompilationJob>
+  NewWasmTurboshaftWrapperCompilationJob(
+      Isolate* isolate, const wasm::FunctionSig* sig, bool is_import,
+      const wasm::WasmModule* module, CodeKind kind,
       std::unique_ptr<char[]> debug_name, const AssemblerOptions& options);
 
   // Run the pipeline on a machine graph and generate code.
