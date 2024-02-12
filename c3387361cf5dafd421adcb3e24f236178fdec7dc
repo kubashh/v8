@@ -16,6 +16,40 @@
       "message": "The maglev fix LGTM! The rest, I am relying on Leszek\u0027s previous review. 😊",
       "revId": "c3387361cf5dafd421adcb3e24f236178fdec7dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5cd9954_cda5a462",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-12T14:04:21Z",
+      "side": 1,
+      "message": "lgtm once comments are addressed",
+      "revId": "c3387361cf5dafd421adcb3e24f236178fdec7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c7bb31_c656ca05",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-12T14:04:21Z",
+      "side": 1,
+      "message": "This should also be added to `Runtime_StoreGlobalIC_Slow`.",
+      "revId": "c3387361cf5dafd421adcb3e24f236178fdec7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
