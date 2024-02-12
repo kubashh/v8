@@ -1560,11 +1560,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                          set_isolate_data_slots);
       }
       __ bind(&return_location);
-#if V8_ENABLE_WEBASSEMBLY
-      if (linkage()->GetIncomingDescriptor()->IsWasmCapiFunction()) {
-        RecordSafepoint(instr->reference_map());
-      }
-#endif  // V8_ENABLE_WEBASSEMBLY
+      RecordSafepoint(instr->reference_map());
       frame_access_state()->SetFrameAccessToDefault();
       // Ideally, we should decrement SP delta to match the change of stack
       // pointer in CallCFunction. However, for certain architectures (e.g.

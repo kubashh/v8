@@ -805,7 +805,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         // instruction: see https://bit.ly/3CD80OA. To line up the safepoint
         // address with the stored pc, we add a nop here.
         __ nop();
-        RecordSafepoint(instr->reference_map());
         set_isolate_data_slots = SetIsolateDataSlots::kNo;
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -816,6 +815,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         Register func = i.InputRegister(0);
         __ CallCFunction(func, num_parameters, set_isolate_data_slots);
       }
+      RecordSafepoint(instr->reference_map());
       frame_access_state()->SetFrameAccessToDefault();
       // Ideally, we should decrement SP delta to match the change of stack
       // pointer in CallCFunction. However, for certain architectures (e.g.
