@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "152ef9a9_15765ac0",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2730,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4520a51e_265580a3",
+      "range": {
+        "startLine": 2730,
+        "startChar": 48,
+        "endLine": 2730,
+        "endChar": 55
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d1a4a96_8c05cc62",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-02-12T13:52:16Z",
       "side": 1,
       "message": "Could the type of `zone_` change from `unique_ptr` to `Zone`? Currently it seems like only the `MachineGraph gets allocated in it outside of `WasmTurboshaftHeapStubCompilationJob`.",
+      "range": {
+        "startLine": 2744,
+        "startChar": 8,
+        "endLine": 2744,
+        "endChar": 13
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99e6c2f8_d42b69f9",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "The call descriptor also used it, but it can also be created inside the compilation job, which removes one more param.",
+      "parentUuid": "8d1a4a96_8c05cc62",
       "range": {
         "startLine": 2744,
         "startChar": 8,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc2e987e_2d3a0044",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2913,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "Ack, we even have the `info_` field already.",
+      "parentUuid": "05407b34_eef2ecbd",
+      "range": {
+        "startLine": 2913,
+        "startChar": 6,
+        "endLine": 2913,
+        "endChar": 37
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ecd09d5d_966f2895",
         "filename": "src/compiler/pipeline.h",
         "patchSetId": 4
@@ -123,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cb12044_179838bd",
+        "filename": "src/compiler/pipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "For `wasm::FunctionSig`.",
+      "parentUuid": "ecd09d5d_966f2895",
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca7eceea_2d3fb829",
         "filename": "src/compiler/pipeline.h",
         "patchSetId": 4
@@ -134,6 +224,30 @@
       "writtenOn": "2024-02-12T13:52:16Z",
       "side": 1,
       "message": "Do you think there is a chance that this function will be used for something that is not a wrapper? If not, maybe we should just call it `NewWasmTurboshaftWrapperCompilationJob`.",
+      "range": {
+        "startLine": 95,
+        "startChar": 2,
+        "endLine": 95,
+        "endChar": 41
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3590cd0b_e7eddabf",
+        "filename": "src/compiler/pipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca7eceea_2d3fb829",
       "range": {
         "startLine": 95,
         "startChar": 2,
@@ -169,6 +283,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25dbf62b_0e477677",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7062,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the plan. But I renamed it to BuildWasmWrapper now to match the new compilation job\u0027s name.",
+      "parentUuid": "4fc0b396_1f7308f7",
+      "range": {
+        "startLine": 7062,
+        "startChar": 5,
+        "endLine": 7062,
+        "endChar": 22
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3db64f3d_b698828a",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 4
@@ -180,6 +318,30 @@
       "writtenOn": "2024-02-12T13:52:16Z",
       "side": 1,
       "message": "Do you think the graph could be passed to the WasmWrapperTSGraphBuilder instead of the assembler? If the assembler moved inside the WasmWrapperTSGraphBuilder, then also the Zone could move into it.",
+      "range": {
+        "startLine": 7069,
+        "startChar": 45,
+        "endLine": 7069,
+        "endChar": 54
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b641a266_23519f6f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7069,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-12T16:24:55Z",
+      "side": 1,
+      "message": "I don\u0027t think so because the parent class, TurboshaftGraphBuildingInterface, also expects a zone and assembler parameters. If we make them fields of the derived class, they will be initialized too late.",
+      "parentUuid": "3db64f3d_b698828a",
       "range": {
         "startLine": 7069,
         "startChar": 45,
