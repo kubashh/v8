@@ -84,6 +84,46 @@
       "message": "ishell pointed out he can review interpreter too",
       "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aac3b50e_dca40214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-12T13:11:41Z",
+      "side": 1,
+      "message": "LGTM. I have to admit that I didn\u0027t understand all the details, but it has also been already reviewed before, so that shouldn\u0027t be much of a concern. 😊",
+      "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d12ea3f_bf7a5a85",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-12T13:11:41Z",
+      "side": 1,
+      "message": "Nit (I might be missing context about the `JSGraphAssembler`): If we moved this up, could we replace the hard to read `NewNode` calls like\n```\nNode* scope_type \u003d graph()-\u003eNewNode(\n    simplified()-\u003eNumberBitwiseAnd(), scope_info_flags,\n    jsgraph()-\u003eSmiConstant(ScopeInfo::ScopeTypeBits::kMask));\n```\nwith\n```\nNode* scope_type \u003d gasm.NumberBitwiseAnd(scope_info_flags,\n    gasm.SmiConstant(ScopeInfo::ScopeTypeBits::kMask));\n```\n?\nThis might need some casting to have typed nodes, not sure if that makes it overall more readable or less...\nIf it simplifies it, it\u0027s probably still better to do it as a follow-up CL.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 4,
+        "endLine": 1448,
+        "endChar": 25
+      },
+      "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
