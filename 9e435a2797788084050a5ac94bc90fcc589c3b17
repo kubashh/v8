@@ -52,6 +52,24 @@
       "parentUuid": "2f4296e0_ace7232f",
       "revId": "9e435a2797788084050a5ac94bc90fcc589c3b17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b606ac6_6dda163c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4301,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-02-12T17:17:36Z",
+      "side": 0,
+      "message": "I did though. I changed to BranchIfUint32Compare.",
+      "parentUuid": "da26467d_c88ef032",
+      "revId": "9e435a2797788084050a5ac94bc90fcc589c3b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
