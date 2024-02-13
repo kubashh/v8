@@ -1141,6 +1141,7 @@ void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
                                  const MaybeObjectHandle& new_wrapped_type) {
   DCHECK(new_wrapped_type->IsSmi() || new_wrapped_type->IsWeak());
   // We store raw pointers in the queue, so no allocations are allowed.
+  DisallowGarbageCollection no_gc;
   PropertyDetails details =
       map->instance_descriptors(isolate)->GetDetails(descriptor);
   if (details.location() != PropertyLocation::kField) return;
@@ -1158,11 +1159,35 @@ void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
     backlog.pop();
 
     TransitionsAccessor transitions(isolate, current);
-    int num_transitions = transitions.NumberOfTransitions();
-    for (int i = 0; i < num_transitions; ++i) {
-      Tagged<Map> target = transitions.GetTarget(i);
-      backlog.push(target);
-    }
+    transitions.ForEachTransition(
+        &no_gc, [&backlog](Tagged<Map> target) { backlog.push(target); },
+        [&](Tagged<Map> proto_target) {
+          // Since generalizations are not back-propagated across
+          // proto-transitions it is possible that the target already is in a
+          // more general state. Thus we must again compute the generalization
+          // over each part of the descriptor.
+          // TODO(olivf): Evaluate if we should generalize back over proto
+          // transitions.
+          Tagged<DescriptorArray> descriptors =
+              proto_target->instance_descriptors(isolate);
+          PropertyDetails details = descriptors->GetDetails(descriptor);
+          PropertyConstness new_target_constness =
+              new_constness < details.constness() ? new_constness
+                                                  : details.constness();
+          Representation new_target_representation =
+              new_representation.is_more_general_than(details.representation())
+                  ? new_representation
+                  : details.representation();
+          auto new_target_wrapped_type =
+              FieldType::NowIs(descriptors->GetFieldType(descriptor),
+                               Map::UnwrapFieldType(*new_wrapped_type))
+                  ? new_wrapped_type
+                  : Map::WrapFieldType(handle(FieldType::Any(), isolate));
+
+          UpdateFieldType(isolate, handle(proto_target, isolate), descriptor,
+                          name, new_target_constness, new_target_representation,
+                          new_target_wrapped_type);
+        });
     Tagged<DescriptorArray> descriptors =
         current->instance_descriptors(isolate);
     details = descriptors->GetDetails(descriptor);
