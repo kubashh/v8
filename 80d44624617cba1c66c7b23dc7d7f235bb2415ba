@@ -16,6 +16,23 @@
       "message": "ptal\n\n(this follow-up CL doesn\u0027t need to be reverted even if the const tracking let CL gets reverted again, so this should be fine...)",
       "revId": "80d44624617cba1c66c7b23dc7d7f235bb2415ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7d50804_bc53450a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-13T14:41:43Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "80d44624617cba1c66c7b23dc7d7f235bb2415ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
