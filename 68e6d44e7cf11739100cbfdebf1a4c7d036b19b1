@@ -161,6 +161,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae02169_bf51c1a2",
+        "filename": "src/compiler/bytecode-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-02-13T12:33:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2ec6f50_56938788",
+      "range": {
+        "startLine": 1833,
+        "startChar": 4,
+        "endLine": 1833,
+        "endChar": 10
+      },
+      "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d12ea3f_bf7a5a85",
@@ -174,6 +198,30 @@
       "writtenOn": "2024-02-12T13:11:41Z",
       "side": 1,
       "message": "Nit (I might be missing context about the `JSGraphAssembler`): If we moved this up, could we replace the hard to read `NewNode` calls like\n```\nNode* scope_type \u003d graph()-\u003eNewNode(\n    simplified()-\u003eNumberBitwiseAnd(), scope_info_flags,\n    jsgraph()-\u003eSmiConstant(ScopeInfo::ScopeTypeBits::kMask));\n```\nwith\n```\nNode* scope_type \u003d gasm.NumberBitwiseAnd(scope_info_flags,\n    gasm.SmiConstant(ScopeInfo::ScopeTypeBits::kMask));\n```\n?\nThis might need some casting to have typed nodes, not sure if that makes it overall more readable or less...\nIf it simplifies it, it\u0027s probably still better to do it as a follow-up CL.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 4,
+        "endLine": 1448,
+        "endChar": 25
+      },
+      "revId": "68e6d44e7cf11739100cbfdebf1a4c7d036b19b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a662e14_43dff09b",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-02-13T12:33:07Z",
+      "side": 1,
+      "message": "I\u0027ll leave this for a follow up; this is debug code anyway, it doesn\u0027t matter super much.",
+      "parentUuid": "6d12ea3f_bf7a5a85",
       "range": {
         "startLine": 1448,
         "startChar": 4,

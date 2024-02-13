@@ -50,6 +50,24 @@
       "message": "This should also be added to `Runtime_StoreGlobalIC_Slow`.",
       "revId": "c3387361cf5dafd421adcb3e24f236178fdec7dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02eccf55_52c16b3f",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-02-13T12:33:07Z",
+      "side": 1,
+      "message": "Very cool, thanks for pointing that out, this is indeed a bug. Sadly, the test for that bug runs so slow that it\u0027s impractical to add it to the code base. We don\u0027t even have any tests which end up in the \"lexical var\" branch of Runtime_StoreGlobalIC_Slow at the moment.",
+      "parentUuid": "c2c7bb31_c656ca05",
+      "revId": "c3387361cf5dafd421adcb3e24f236178fdec7dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
