@@ -219,6 +219,7 @@ bool Runtime::IsAllowListedForFuzzing(FunctionId id) {
     case Runtime::kNotifyIsolateForeground:
     case Runtime::kNotifyIsolateBackground:
     case Runtime::kIsEfficiencyModeEnabled:
+    case Runtime::kRuntimeEvaluateREPL:
       return true;
     // Runtime functions only permitted for non-differential fuzzers.
     // This list may contain functions performing extra checks or returning
