@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd47d5b8_2e8870ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-02-13T10:50:33Z",
+      "side": 1,
+      "message": "I had this feeling I was absolutely crazy reading this code until I realized that the ShouldEagerlyProcessPromotionList was returning the opposite of what its name suggests; this is just a drive-by to make the name match usage (if I understand it correctly!).",
+      "revId": "81b1ae99397dd2f6a3bd36707d3d5ce334b39789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
