@@ -86,6 +86,15 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   inline Handle<String> ExpectedTransitionKey();
   inline Handle<Map> ExpectedTransitionTarget();
 
+  template <typename Callback, typename ProtoCallback>
+  void ForEachTransition(DisallowGarbageCollection* no_gc, Callback callback,
+                         ProtoCallback proto_transition_callback);
+
+  template <typename Callback>
+  void ForEachTransition(DisallowGarbageCollection* no_gc, Callback callback) {
+    ForEachTransition(no_gc, callback, callback);
+  }
+
   int NumberOfTransitions();
   // The size of transition arrays are limited so they do not end up in large
   // object space. Otherwise ClearNonLiveReferences would leak memory while
