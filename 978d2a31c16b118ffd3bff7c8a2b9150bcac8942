@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c724ff3_8f38d008",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-02-13T16:42:30Z",
+      "side": 1,
+      "message": "PTAL. First patch set is the same as previous version of cl. Second patch set has changes to fix the compile error we were seeing on some bots.",
+      "revId": "978d2a31c16b118ffd3bff7c8a2b9150bcac8942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
