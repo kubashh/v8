@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a495b6_7d347b15",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-13T11:47:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "99e6c2f8_d42b69f9",
+      "range": {
+        "startLine": 2744,
+        "startChar": 8,
+        "endLine": 2744,
+        "endChar": 13
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05407b34_eef2ecbd",
@@ -176,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03e15eec_8c35f875",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2913,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-13T11:47:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cc2e987e_2d3a0044",
+      "range": {
+        "startLine": 2913,
+        "startChar": 6,
+        "endLine": 2913,
+        "endChar": 37
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecd09d5d_966f2895",
@@ -207,6 +255,24 @@
       "side": 1,
       "message": "For `wasm::FunctionSig`.",
       "parentUuid": "ecd09d5d_966f2895",
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e0da753_14ba3164",
+        "filename": "src/compiler/pipeline.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-13T11:47:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0cb12044_179838bd",
       "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -305,6 +371,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7883c6_4546daaa",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7062,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-13T11:47:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "25dbf62b_0e477677",
+      "range": {
+        "startLine": 7062,
+        "startChar": 5,
+        "endLine": 7062,
+        "endChar": 22
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3db64f3d_b698828a",
@@ -342,6 +432,30 @@
       "side": 1,
       "message": "I don\u0027t think so because the parent class, TurboshaftGraphBuildingInterface, also expects a zone and assembler parameters. If we make them fields of the derived class, they will be initialized too late.",
       "parentUuid": "3db64f3d_b698828a",
+      "range": {
+        "startLine": 7069,
+        "startChar": 45,
+        "endLine": 7069,
+        "endChar": 54
+      },
+      "revId": "6e66f1f428e0886d1167e76e2bf0e5609a4eef49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "307ec716_0ad85b40",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7069,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-13T11:47:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b641a266_23519f6f",
       "range": {
         "startLine": 7069,
         "startChar": 45,
