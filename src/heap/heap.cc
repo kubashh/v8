@@ -7426,6 +7426,7 @@ void Heap::FinishSweepingIfOutOfWork() {
     // At this point we know that all concurrent sweeping tasks have run
     // out of work and quit: all pages are swept. The main thread still needs
     // to complete sweeping though.
+    DCHECK(!sweeper()->HasUnsweptPagesForMajorSweeping());
     EnsureSweepingCompleted(SweepingForcedFinalizationMode::kV8Only);
   }
   if (cpp_heap()) {
@@ -7511,11 +7512,6 @@ void Heap::EnsureYoungSweepingCompleted() {
   old_space()->RefillFreeList();
 
   tracer()->NotifyYoungSweepingCompleted();
-}
-
-void Heap::DrainSweepingWorklistForSpace(AllocationSpace space) {
-  if (!sweeper()->sweeping_in_progress_for_space(space)) return;
-  sweeper()->DrainSweepingWorklistForSpace(space);
 }
 
 EmbedderStackStateScope::EmbedderStackStateScope(Heap* heap, Origin origin,

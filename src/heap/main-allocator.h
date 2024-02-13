@@ -77,7 +77,8 @@ class PagedSpaceAllocatorPolicy final : public AllocatorPolicy {
  private:
   bool RefillLab(int size_in_bytes, AllocationOrigin origin);
 
-  void ContributeToSweeping(int max_pages);
+  // Returns true if allocation may be possible after sweeping.
+  bool ContributeToSweeping(uint max_pages = std::numeric_limits<uint>::max());
 
   bool TryAllocationFromFreeList(size_t size_in_bytes, AllocationOrigin origin);
 
