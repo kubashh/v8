@@ -143,6 +143,7 @@ class Sweeper {
 
   bool AreMinorSweeperTasksRunning();
   bool AreMajorSweeperTasksRunning();
+  bool AreSweeperTasksRunning();
 
   Page* GetSweptPageSafe(PagedSpaceBase* space);
   SweptList GetAllSweptPagesSafe(PagedSpaceBase* space);

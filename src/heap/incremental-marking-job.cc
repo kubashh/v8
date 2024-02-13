@@ -46,7 +46,8 @@ IncrementalMarkingJob::IncrementalMarkingJob(Heap* heap)
   CHECK(v8_flags.incremental_marking_task);
 }
 
-void IncrementalMarkingJob::ScheduleTask(TaskType task_type) {
+void IncrementalMarkingJob::ScheduleTask(TaskType task_type,
+                                         base::TimeDelta pending_task_delay) {
   base::MutexGuard guard(&mutex_);
 
   if (pending_task_.has_value() || heap_->IsTearingDown()) {
@@ -64,18 +65,14 @@ void IncrementalMarkingJob::ScheduleTask(TaskType task_type) {
       foreground_task_runner_->PostNonNestableTask(std::move(task));
     } else {
       foreground_task_runner_->PostNonNestableDelayedTask(
-          std::move(task), v8::base::TimeDelta::FromMilliseconds(
-                               v8_flags.incremental_marking_task_delay_ms)
-                               .InSecondsF());
+          std::move(task), pending_task_delay.InSecondsF());
     }
   } else {
     if (task_type == TaskType::kNormal) {
       foreground_task_runner_->PostTask(std::move(task));
     } else {
-      foreground_task_runner_->PostDelayedTask(
-          std::move(task), v8::base::TimeDelta::FromMilliseconds(
-                               v8_flags.incremental_marking_task_delay_ms)
-                               .InSecondsF());
+      foreground_task_runner_->PostDelayedTask(std::move(task),
+                                               pending_task_delay.InSecondsF());
     }
   }
 
@@ -113,9 +110,18 @@ void IncrementalMarkingJob::Task::RunInternal() {
   if (incremental_marking->IsStopped()) {
     if (heap->IncrementalMarkingLimitReached() !=
         Heap::IncrementalMarkingLimit::kNoLimit) {
-      heap->StartIncrementalMarking(heap->GCFlagsForIncrementalMarking(),
-                                    GarbageCollectionReason::kTask,
-                                    kGCCallbackScheduleIdleGarbageCollection);
+      if (!heap->StartIncrementalMarking(
+              heap->GCFlagsForIncrementalMarking(),
+              GarbageCollectionReason::kTask,
+              kGCCallbackScheduleIdleGarbageCollection,
+              Heap::IncrementalMarkingSweepingHandling::kWait)) {
+        // Could not start incremental marking. Try again later.
+        job_->pending_task_.reset();
+        static constexpr base::TimeDelta kDelay =
+            v8::base::TimeDelta::FromMilliseconds(100);
+        job_->ScheduleTask(TaskType::kPending, kDelay);
+        return;
+      }
     } else if (v8_flags.minor_ms && v8_flags.concurrent_minor_ms_marking) {
       heap->StartMinorMSIncrementalMarkingIfNeeded();
     }
