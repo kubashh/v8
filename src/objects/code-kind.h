@@ -99,6 +99,18 @@ inline constexpr bool CodeKindIsStoredInOptimizedCodeCache(CodeKind kind) {
   return kind == CodeKind::MAGLEV || kind == CodeKind::TURBOFAN;
 }
 
+inline constexpr bool CodeKindUsesBytecodeOrInterpreterData(CodeKind kind) {
+  return CodeKindIsBaselinedJSFunction(kind);
+}
+
+inline constexpr bool CodeKindUsesDeoptimizationData(CodeKind kind) {
+  return CodeKindCanDeoptimize(kind);
+}
+
+inline constexpr bool CodeKindUsesBytecodeOffsetTable(CodeKind kind) {
+  return kind == CodeKind::BASELINE;
+}
+
 inline CodeKind CodeKindForTopTier() { return CodeKind::TURBOFAN; }
 
 // The dedicated CodeKindFlag enum represents all code kinds in a format

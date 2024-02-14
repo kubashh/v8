@@ -100,6 +100,7 @@ class Code : public ExposedTrustedObject {
   inline void ClearInstructionStartForSerialization(IsolateForSandbox isolate);
   inline void UpdateInstructionStart(IsolateForSandbox isolate,
                                      Tagged<InstructionStream> istream);
+  inline void ClearSourcePositionTableForSerialization();
 
   inline void initialize_flags(CodeKind kind, bool is_turbofanned,
                                int stack_slots);
@@ -340,6 +341,13 @@ class Code : public ExposedTrustedObject {
   V(kDeoptimizationDataOrInterpreterDataOffset, kTaggedSize)                  \
   /* Strong pointer fields. */                                                \
   V(kStartOfStrongFieldsOffset, 0)                                            \
+  /* This field contains: */                                                  \
+  /*  - A bytecode offset table (byte array) for baseline code */             \
+  /*  - A (possibly empty) source position table (byte array) for most */     \
+  /*    other types of code */                                                \
+  /*  - Smi::zero() for builtin code in RO space */                           \
+  /*    TODO(saelo) once we have a  trusted RO space, we could use the */     \
+  /*    empty_trusted_byte_array instead. */                                  \
   V(kPositionTableOffset, kTaggedSize)                                        \
   V(kWrapperOffset, kTaggedSize)                                              \
   V(kEndOfStrongFieldsWithMainCageBaseOffset, 0)                              \

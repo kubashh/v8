@@ -77,6 +77,8 @@ class ObjectPreProcessor final {
   }
   void PreProcessCode(Tagged<Code> o) {
     o->ClearInstructionStartForSerialization(isolate_);
+    DCHECK_EQ(o->source_position_table()->length(), 0);
+    o->ClearSourcePositionTableForSerialization();
   }
 
   Isolate* const isolate_;

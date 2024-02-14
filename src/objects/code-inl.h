@@ -109,7 +109,7 @@ inline void Code::set_deoptimization_data(Tagged<TrustedFixedArray> value,
 }
 
 inline bool Code::uses_deoptimization_data() const {
-  return kind() == CodeKind::MAGLEV || kind() == CodeKind::TURBOFAN;
+  return CodeKindUsesDeoptimizationData(kind());
 }
 
 inline void Code::clear_deoptimization_data_and_interpreter_data() {
@@ -686,6 +686,10 @@ void Code::UpdateInstructionStart(IsolateForSandbox isolate,
 void Code::clear_padding() {
   memset(reinterpret_cast<void*>(address() + kUnalignedSize), 0,
          kSize - kUnalignedSize);
+}
+
+void Code::ClearSourcePositionTableForSerialization() {
+  TaggedField<Object, kPositionTableOffset>::store(*this, Smi::zero());
 }
 
 RELAXED_UINT32_ACCESSORS(Code, flags, kFlagsOffset)
