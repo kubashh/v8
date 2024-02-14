@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40836ece_f7ec0c87",
+        "filename": "builders/tools.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-14T09:47:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50beaa3f_80654910",
+      "range": {
+        "startLine": 87,
+        "startChar": 14,
+        "endLine": 87,
+        "endChar": 16
+      },
+      "revId": "f8a6437dd766462b1fc74c0d7a849145f74404a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9110b45b_1dccfeb1",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-14T08:31:19Z",
       "side": 1,
       "message": "nit: Is this stuff needed on these bots? Maybe the config could be taught to only get activated on actual V8 test bots.",
+      "range": {
+        "startLine": 10368,
+        "startChar": 8,
+        "endLine": 10368,
+        "endChar": 18
+      },
+      "revId": "f8a6437dd766462b1fc74c0d7a849145f74404a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09578bfc_1e3e4189",
+        "filename": "generated/cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 10368,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-14T09:47:54Z",
+      "side": 1,
+      "message": "Created a bug to clean all configs. b/325186346",
+      "parentUuid": "9110b45b_1dccfeb1",
       "range": {
         "startLine": 10368,
         "startChar": 8,
