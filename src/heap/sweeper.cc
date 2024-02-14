@@ -785,12 +785,6 @@ void Sweeper::EnsureMinorCompleted() {
   iterated_promoted_pages_count_ = 0;
 }
 
-void Sweeper::DrainSweepingWorklistForSpace(AllocationSpace space) {
-  if (!sweeping_in_progress_for_space(space)) return;
-  main_thread_local_sweeper_.ParallelSweepSpace(
-      space, SweepingMode::kLazyOrConcurrent, 0);
-}
-
 bool Sweeper::AreMinorSweeperTasksRunning() {
   return minor_sweeping_state_.HasActiveJob();
 }
