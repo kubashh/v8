@@ -137,16 +137,17 @@ TEST_F(WasmSubtypingTest, Subtyping) {
   constexpr ValueType numeric_types[] = {kWasmI32, kWasmI64, kWasmF32, kWasmF64,
                                          kWasmS128};
   constexpr ValueType ref_types[] = {
-      kWasmFuncRef,   kWasmEqRef,           // --
-      kWasmStructRef, kWasmArrayRef,        // --
-      kWasmI31Ref,    kWasmAnyRef,          // --
-      kWasmExternRef, kWasmNullExternRef,   // --
-      kWasmNullRef,   kWasmNullFuncRef,     // --
-      kWasmStringRef, kWasmStringViewIter,  // --
-      kWasmExnRef,    kWasmNullExnRef,      // --
-      refNull(0),     ref(0),               // struct
-      refNull(2),     ref(2),               // array
-      refNull(11),    ref(11)               // signature
+      kWasmFuncRef,     kWasmEqRef,         kWasmStructRef,
+      kWasmArrayRef,    kWasmI31Ref,        kWasmAnyRef,
+      kWasmExternRef,   kWasmNullExternRef, kWasmNullRef,
+      kWasmNullFuncRef, kWasmStringRef,     kWasmStringViewIter,
+      kWasmExnRef,      kWasmNullExnRef,    kWasmImportedStringRef,
+      refNull(0),   // struct
+      ref(0),       // struct
+      refNull(2),   // array
+      ref(2),       // array
+      refNull(11),  // signature
+      ref(11)       // signature
   };
 
 // Some macros to help managing types and modules.
@@ -202,8 +203,9 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     }
 
     for (ValueType ref_type : ref_types) {
-      const bool is_extern =
-          ref_type == kWasmExternRef || ref_type == kWasmNullExternRef;
+      const bool is_extern = ref_type == kWasmExternRef ||
+                             ref_type == kWasmNullExternRef ||
+                             ref_type == kWasmImportedStringRef;
       const bool is_any_func = ref_type == kWasmFuncRef ||
                                ref_type == kWasmNullFuncRef ||
                                ref_type == refNull(11) || ref_type == ref(11);
@@ -373,6 +375,9 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     // Reference type vs. itself and anyref.
     for (ValueType type : ref_types) {
       SCOPED_TRACE(type.name());
+      if (type.name() == "<imported_string>ref") {
+        std::cerr << "O.O\n";
+      }
       UNION(type, type, type);
       INTERSECTION(type, type, type);
       if (type == kWasmStringViewIter || type == kWasmStringViewWtf8 ||
@@ -384,7 +389,7 @@ TEST_F(WasmSubtypingTest, Subtyping) {
       }
       if (type == kWasmFuncRef || type == kWasmNullFuncRef || type == ref(11) ||
           type == refNull(11) || type == kWasmExternRef ||
-          type == kWasmNullExternRef) {
+          type == kWasmNullExternRef || type == kWasmImportedStringRef) {
         // func and extern types don't share the same type hierarchy as anyref.
         INTERSECTION(type, kWasmAnyRef, kWasmBottom);
         continue;
@@ -419,6 +424,20 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     UNION(kWasmI31Ref.AsNonNull(), kWasmArrayRef, kWasmEqRef);
     UNION(kWasmAnyRef, kWasmNullRef, kWasmAnyRef);
     UNION(kWasmExternRef, kWasmNullExternRef, kWasmExternRef);
+    UNION(kWasmImportedStringRef, kWasmNullExternRef, kWasmImportedStringRef);
+    UNION(kWasmImportedStringRef.AsNonNull(), kWasmNullExternRef,
+          kWasmImportedStringRef);
+    UNION(kWasmImportedStringRef, kWasmExternRef, kWasmExternRef);
+    UNION(kWasmImportedStringRef, kWasmAnyRef, kWasmBottom);
+    UNION(kWasmImportedStringRef, kWasmFuncRef, kWasmBottom);
+    // Imported strings and stringref represent the same values. Still, they are
+    // in different type hierarchies and therefore incompatible (e.g. due to
+    // different null representation).
+    // (There is no interoperability between stringref and imported strings as
+    // they are competing proposals.)
+    UNION(kWasmImportedStringRef, kWasmStringRef, kWasmBottom);
+    UNION(kWasmImportedStringRef.AsNonNull(), kWasmStringRef.AsNonNull(),
+          kWasmBottom);
     UNION(kWasmFuncRef, kWasmNullFuncRef, kWasmFuncRef);
     UNION(kWasmFuncRef, kWasmStructRef, kWasmBottom);
     UNION(kWasmFuncRef, kWasmArrayRef, kWasmBottom);
@@ -449,6 +468,18 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     INTERSECTION(kWasmNullExternRef, kWasmNullRef, kWasmBottom);
     INTERSECTION(kWasmNullExternRef, kWasmExternRef, kWasmNullExternRef);
     INTERSECTION(kWasmNullExternRef, kWasmExternRef.AsNonNull(), kWasmBottom);
+    INTERSECTION(kWasmImportedStringRef, kWasmEqRef, kWasmBottom);
+    INTERSECTION(kWasmImportedStringRef, kWasmAnyRef, kWasmBottom);
+    INTERSECTION(kWasmImportedStringRef, kWasmFuncRef.AsNonNull(), kWasmBottom);
+    INTERSECTION(kWasmImportedStringRef, kWasmNullRef, kWasmBottom);
+    INTERSECTION(kWasmImportedStringRef, kWasmNullExternRef,
+                 kWasmNullExternRef);
+    INTERSECTION(kWasmImportedStringRef.AsNonNull(), kWasmNullExternRef,
+                 kWasmBottom);
+    INTERSECTION(kWasmImportedStringRef, kWasmExternRef,
+                 kWasmImportedStringRef);
+    INTERSECTION(kWasmImportedStringRef, kWasmExternRef.AsNonNull(),
+                 kWasmImportedStringRef.AsNonNull());
 
     INTERSECTION(kWasmFuncRef, kWasmEqRef, kWasmBottom);
     INTERSECTION(kWasmFuncRef, kWasmStructRef, kWasmBottom);
@@ -539,10 +570,17 @@ TEST_F(WasmSubtypingTest, Subtyping) {
     INTERSECTION(kWasmNullRef, struct_type, kWasmBottom);
     INTERSECTION(kWasmNullRef, array_type, kWasmBottom);
     INTERSECTION(kWasmNullRef, function_type, kWasmBottom);
+    INTERSECTION(kWasmNullRef, struct_type.AsNullable(), kWasmNullRef);
+    INTERSECTION(kWasmNullRef, array_type.AsNullable(), kWasmNullRef);
+    INTERSECTION(kWasmNullRef, function_type.AsNullable(), kWasmBottom);
 
     UNION(struct_type, kWasmStringRef, kWasmAnyRef);
     UNION(array_type, kWasmStringRef, kWasmAnyRef);
     UNION(function_type, kWasmStringRef, kWasmBottom);
+
+    UNION(struct_type, kWasmImportedStringRef, kWasmBottom);
+    UNION(array_type, kWasmImportedStringRef, kWasmBottom);
+    UNION(function_type, kWasmImportedStringRef, kWasmBottom);
 
     // Indexed types of different kinds.
     UNION(struct_type, array_type, kWasmEqRef.AsNonNull());
