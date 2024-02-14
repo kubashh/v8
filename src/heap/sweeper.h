@@ -139,8 +139,6 @@ class Sweeper {
   // progress.
   void EnsureMinorCompleted();
 
-  void DrainSweepingWorklistForSpace(AllocationSpace space);
-
   bool AreMinorSweeperTasksRunning();
   bool AreMajorSweeperTasksRunning();
 
@@ -160,6 +158,21 @@ class Sweeper {
   void SweepEmptyNewSpacePage(Page* page);
 
   uint64_t GetTraceIdForFlowEvent(GCTracer::Scope::ScopeId scope_id) const;
+
+#if DEBUG
+  // Can only be called on the main thread when no tasks are running.
+  bool HasUnsweptPagesForMajorSweeping() const {
+    bool has_unswept_pages = false;
+    ForAllSweepingSpaces([this, &has_unswept_pages](AllocationSpace space) {
+      DCHECK_EQ(IsSweepingDoneForSpace(space),
+                sweeping_list_[GetSweepSpaceIndex(space)].empty());
+      if (space == NEW_SPACE) return;
+      if (!sweeping_list_[GetSweepSpaceIndex(space)].empty())
+        has_unswept_pages = true;
+    });
+    return has_unswept_pages;
+  }
+#endif  // DEBUG
 
  private:
   NonAtomicMarkingState* marking_state() const { return marking_state_; }
@@ -214,17 +227,6 @@ class Sweeper {
   // Helper function for RawSweep. Clears the mark bits and ensures consistency
   // of live bytes.
   void ClearMarkBitsAndHandleLivenessStatistics(Page* page, size_t live_bytes);
-
-  // Can only be called on the main thread when no tasks are running.
-  bool IsDoneSweeping() const {
-    bool is_done = true;
-    ForAllSweepingSpaces([this, &is_done](AllocationSpace space) {
-      DCHECK_EQ(IsSweepingDoneForSpace(space),
-                sweeping_list_[GetSweepSpaceIndex(space)].empty());
-      if (!sweeping_list_[GetSweepSpaceIndex(space)].empty()) is_done = false;
-    });
-    return is_done;
-  }
 
   size_t ConcurrentMinorSweepingPageCount();
   size_t ConcurrentMajorSweepingPageCount();
