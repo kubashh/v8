@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14f0a804_2f95f5a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-14T13:41:28Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "b2faa827fb9b5856ff084bbf982ebf774f585f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f960ec_73fd5156",
+        "filename": "src/compiler/turboshaft/wasm-gc-type-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-14T13:41:28Z",
+      "side": 1,
+      "message": "In this CL I only change the typing for Turboshaft. Turbofan doesn\u0027t have an issue with these different type hierarchies thanks to all the special casing. (And its knowledge about static types in its type reducer.)\nGiven that Turbofan will be around for another handful of months, should we change the logic there as well, so the implementations are more similar?",
+      "revId": "b2faa827fb9b5856ff084bbf982ebf774f585f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "425ca206_6cbb0435",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-14T13:41:28Z",
+      "side": 1,
+      "message": "Annotation moved to the 2 callers.",
+      "revId": "b2faa827fb9b5856ff084bbf982ebf774f585f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07549048_e957b634",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-14T13:41:28Z",
+      "side": 1,
+      "message": "Just for debugging. Otherwise, nobody should ever \"see\" this type.",
+      "revId": "b2faa827fb9b5856ff084bbf982ebf774f585f0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
