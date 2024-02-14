@@ -28,7 +28,11 @@ PROTECTED_POINTER_ACCESSORS(BytecodeArray, constant_pool, TrustedFixedArray,
                             kConstantPoolOffset)
 ACCESSORS(BytecodeArray, wrapper, Tagged<BytecodeWrapper>, kWrapperOffset)
 RELEASE_ACQUIRE_ACCESSORS(BytecodeArray, source_position_table,
-                          Tagged<HeapObject>, kSourcePositionTableOffset)
+                          Tagged<ByteArray>, kSourcePositionTableOffset)
+void BytecodeArray::clear_source_position_table() {
+  TaggedField<Object, kSourcePositionTableOffset>::Release_Store(*this,
+                                                                 Smi::zero());
+}
 
 uint8_t BytecodeArray::get(int index) const {
   DCHECK(index >= 0 && index < length());
@@ -103,16 +107,13 @@ Address BytecodeArray::GetFirstBytecodeAddress() {
 }
 
 bool BytecodeArray::HasSourcePositionTable() const {
-  Tagged<Object> maybe_table = source_position_table(kAcquireLoad);
-  return !(IsUndefined(maybe_table) || DidSourcePositionGenerationFail());
-}
-
-bool BytecodeArray::DidSourcePositionGenerationFail() const {
-  return IsException(source_position_table(kAcquireLoad));
+  Tagged<Object> maybe_table = raw_source_position_table();
+  return maybe_table != Smi::zero();
 }
 
 void BytecodeArray::SetSourcePositionsFailedToCollect() {
-  set_source_position_table(GetReadOnlyRoots().exception(), kReleaseStore);
+  TaggedField<Object>::Release_Store(*this, kSourcePositionTableOffset,
+                                     Smi::zero());
 }
 
 DEF_GETTER(BytecodeArray, SourcePositionTable, Tagged<ByteArray>) {
@@ -120,9 +121,8 @@ DEF_GETTER(BytecodeArray, SourcePositionTable, Tagged<ByteArray>) {
   // changes to how it accesses the heap can easily lead to bugs.
   Tagged<Object> maybe_table = source_position_table(cage_base, kAcquireLoad);
   if (IsByteArray(maybe_table, cage_base)) return ByteArray::cast(maybe_table);
-  ReadOnlyRoots roots = GetReadOnlyRoots();
-  DCHECK(IsUndefined(maybe_table, roots) || IsException(maybe_table, roots));
-  return roots.empty_byte_array();
+  DCHECK(maybe_table == Smi::zero());
+  return GetReadOnlyRoots().empty_byte_array();
 }
 
 DEF_GETTER(BytecodeArray, raw_constant_pool, Tagged<Object>) {
@@ -142,9 +142,9 @@ DEF_GETTER(BytecodeArray, raw_handler_table, Tagged<Object>) {
 DEF_GETTER(BytecodeArray, raw_source_position_table, Tagged<Object>) {
   Tagged<Object> value =
       TaggedField<Object>::load(cage_base, *this, kSourcePositionTableOffset);
-  // This field might be 0 during deserialization.
-  DCHECK(value == Smi::zero() || IsByteArray(value) || IsUndefined(value) ||
-         IsException(value));
+  // This field might be 0 during deserialization or if source positions have
+  // not been (successfully) collected.
+  DCHECK(value == Smi::zero() || IsByteArray(value));
   return value;
 }
 

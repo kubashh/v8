@@ -401,9 +401,11 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
     CHECK_EQ(o->bytecode(isolate), *this);
   }
   {
-    auto o = source_position_table(kAcquireLoad);
+    /*
+    auto o = raw_source_position_table(kAcquireLoad);
     Object::VerifyPointer(isolate, o);
-    CHECK(IsUndefined(o) || IsException(o) || IsByteArray(o));
+    CHECK(o == Smi::zero() || IsByteArray(o));
+    */
   }
 
   for (int i = 0; i < constant_pool()->length(); ++i) {

@@ -47,13 +47,14 @@ class BytecodeArray : public ExposedTrustedObject {
   DECL_ACCESSORS(wrapper, Tagged<BytecodeWrapper>)
 
   // Source position table. Can contain:
-  // * undefined (initial value)
+  // * Smi::zero() (initial value, or if an error occurred while explicitly
+  // collecting source positions for pre-existing bytecode).
   // * empty_byte_array (for bytecode generated for functions that will never
   // have source positions, e.g. native functions).
   // * ByteArray (when source positions have been collected for the bytecode)
-  // * exception (when an error occurred while explicitly collecting source
-  // positions for pre-existing bytecode).
-  DECL_RELEASE_ACQUIRE_ACCESSORS(source_position_table, Tagged<HeapObject>)
+  DECL_RELEASE_ACQUIRE_ACCESSORS(source_position_table, Tagged<ByteArray>)
+  inline void clear_source_position_table();
+
   DECL_INT32_ACCESSORS(frame_size)
 
   static constexpr int SizeFor(int length) {
@@ -78,7 +79,6 @@ class BytecodeArray : public ExposedTrustedObject {
       interpreter::Register incoming_new_target_or_generator_register);
 
   inline bool HasSourcePositionTable() const;
-  inline bool DidSourcePositionGenerationFail() const;
 
   // If source positions have not been collected or an exception has been thrown
   // this will return empty_byte_array.
@@ -90,9 +90,8 @@ class BytecodeArray : public ExposedTrustedObject {
   DECL_GETTER(raw_source_position_table, Tagged<Object>)
 
   // Indicates that an attempt was made to collect source positions, but that it
-  // failed most likely due to stack exhaustion. When in this state
-  // |SourcePositionTable| will return an empty byte array rather than crashing
-  // as it would if no attempt was ever made to collect source positions.
+  // failed, most likely due to stack exhaustion. When in this state
+  // |SourcePositionTable| will return an empty byte array.
   inline void SetSourcePositionsFailedToCollect();
 
   inline int BytecodeArraySize() const;
