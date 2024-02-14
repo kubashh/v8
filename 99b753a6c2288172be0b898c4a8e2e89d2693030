@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "307fc8fe_fe21c2f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-14T13:34:18Z",
+      "side": 1,
+      "message": "I think currently these references work better *without* the `chromium:` prefix. New-style bug IDs are a single namespace, so project prefixes are no longer necessary (and certain tools that have already been migrated no longer expect/support them).\nAlso, `b/41497140` is the same as `chromium:41497140`.",
+      "range": {
+        "startLine": 11,
+        "startChar": 23,
+        "endLine": 11,
+        "endChar": 40
+      },
+      "revId": "99b753a6c2288172be0b898c4a8e2e89d2693030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "87829cac_6d1cce82",
@@ -31,6 +54,23 @@
       "writtenOn": "2024-02-14T13:03:31Z",
       "side": 1,
       "message": "Jakob, PTAL (Michael is OOO)",
+      "revId": "99b753a6c2288172be0b898c4a8e2e89d2693030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "351fe4b3_29cffd79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-14T13:34:18Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
       "revId": "99b753a6c2288172be0b898c4a8e2e89d2693030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
