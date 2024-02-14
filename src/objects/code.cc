@@ -168,7 +168,7 @@ void Disassemble(const char* name, std::ostream& os, Isolate* isolate,
   if ((name != nullptr) && (name[0] != '\0')) {
     os << "name = " << name << "\n";
   }
-  if (CodeKindIsOptimizedJSFunction(kind) && kind != CodeKind::BASELINE) {
+  if (CodeKindIsOptimizedJSFunction(kind)) {
     os << "stack_slots = " << code->stack_slots() << "\n";
   }
   os << "compiler = "
@@ -199,7 +199,8 @@ void Disassemble(const char* name, std::ostream& os, Isolate* isolate,
   os << "\n";
 
   // TODO(cbruni): add support for baseline code.
-  if (kind != CodeKind::BASELINE) {
+  if (!CodeKindUsesBytecodeOffsetTable(kind) &&
+      code->has_source_position_table()) {
     {
       SourcePositionTableIterator it(
           code->source_position_table(),
