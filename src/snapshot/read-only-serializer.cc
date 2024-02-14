@@ -77,6 +77,8 @@ class ObjectPreProcessor final {
   }
   void PreProcessCode(Tagged<Code> o) {
     o->ClearInstructionStartForSerialization(isolate_);
+    // Source position table should have been cleared for embedded code.
+    DCHECK(!o->has_source_position_table());
   }
 
   Isolate* const isolate_;
