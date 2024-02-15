@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed4f62b_3acc1573",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-15T11:42:52Z",
+      "side": 1,
+      "message": "LGTM with nits you may choose to ignore.",
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fbdeb53_1f03f26d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3376,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-15T11:42:52Z",
+      "side": 1,
+      "message": "nit: to express the local requirements here, `DCHECK_IMPLIES` would be more accurate, right? In other words, there might not be a reason to call this with nullable result type and another variant than kUtf8NoTrap, but no bad things would happen if someone added such a case in the future, right?",
+      "range": {
+        "startLine": 3376,
+        "startChar": 11,
+        "endLine": 3376,
+        "endChar": 13
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0137f383_c1c8c0ee",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-15T11:42:52Z",
+      "side": 1,
+      "message": "Naming nit: I probably would have called this `kExternString`, so that:\n(1) the prefix of the name hints at the subtyping relationship,\n(2) the name conveys the mental model \"it\u0027s a kExtern that\u0027s additionally annotated as being a string\", and\n(3) the scheme easily extends to e.g. a future `kExternDataView`;\nbut ultimately I don\u0027t care about the color of the bikeshed, so feel free to leave as is if you prefer 😊",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 19
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fbc7782_b81a3b06",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-15T11:42:52Z",
+      "side": 1,
+      "message": "another naming nit: since in this case there is no spec-side shorthand we\u0027re expressing in code (contrary to e.g. \"externref\"), how about calling this `kWasmRefNullImportedString` for perhaps slightly more understandable expressiveness?",
+      "range": {
+        "startLine": 753,
+        "startChar": 20,
+        "endLine": 753,
+        "endChar": 42
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46aa27af_2aea14e6",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-15T11:42:52Z",
+      "side": 1,
+      "message": "Imagine the fun we\u0027ll have when eventually both proposals get standardized 😊",
+      "range": {
+        "startLine": 433,
+        "startChar": 7,
+        "endLine": 434,
+        "endChar": 37
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0fc5e01_483718a5",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-15T11:42:52Z",
+      "side": 1,
+      "message": "This is still a potential bug farm. We should probably introduce a `kWasmAbstractTop` or something.",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 60
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
