@@ -799,6 +799,10 @@ bool Sweeper::AreMajorSweeperTasksRunning() {
   return major_sweeping_state_.HasActiveJob();
 }
 
+bool Sweeper::AreSweeperTasksRunning() {
+  return AreMinorSweeperTasksRunning() || AreMajorSweeperTasksRunning();
+}
+
 namespace {
 // Atomically zap the specified area.
 V8_INLINE void AtomicZapBlock(Address addr, size_t size_in_bytes) {
