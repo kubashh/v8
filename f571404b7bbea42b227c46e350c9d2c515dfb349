@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6332d437_cf12a897",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-02-15T11:38:29Z",
+      "side": 1,
+      "message": "Ok, thanks!",
+      "parentUuid": "65106c1c_b4aab1c8",
+      "range": {
+        "startLine": 344,
+        "startChar": 24,
+        "endLine": 344,
+        "endChar": 26
+      },
+      "revId": "f571404b7bbea42b227c46e350c9d2c515dfb349",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c5939cf_5b5ed6b5",
@@ -119,6 +143,24 @@
       "writtenOn": "2024-02-15T09:51:18Z",
       "side": 1,
       "message": "We only generate interesting / random stuff inside the `kExprIf` below (for the param types).\nI\u0027d propose to add a\n`Generate(kWasmVoid, data);`\nhere to have unconditional \"stuff\" in the loop body as well.",
+      "revId": "f571404b7bbea42b227c46e350c9d2c515dfb349",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c4d671a_645bc879",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-02-15T11:38:29Z",
+      "side": 1,
+      "message": "Good idea, thanks!",
+      "parentUuid": "1c5939cf_5b5ed6b5",
       "revId": "f571404b7bbea42b227c46e350c9d2c515dfb349",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
