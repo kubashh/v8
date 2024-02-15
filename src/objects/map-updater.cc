@@ -1141,6 +1141,7 @@ void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
                                  const MaybeObjectHandle& new_wrapped_type) {
   DCHECK(new_wrapped_type->IsSmi() || new_wrapped_type->IsWeak());
   // We store raw pointers in the queue, so no allocations are allowed.
+  DisallowGarbageCollection no_gc;
   PropertyDetails details =
       map->instance_descriptors(isolate)->GetDetails(descriptor);
   if (details.location() != PropertyLocation::kField) return;
@@ -1150,35 +1151,79 @@ void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
     JSObject::InvalidatePrototypeChains(*map);
   }
 
+  std::queue<std::tuple<Tagged<Map>, PropertyConstness, Representation,
+                        MaybeObjectHandle>>
+      subtree_backlog;
   std::queue<Tagged<Map>> backlog;
   backlog.push(*map);
 
-  while (!backlog.empty()) {
-    Tagged<Map> current = backlog.front();
-    backlog.pop();
+  PropertyConstness cur_new_constness = new_constness;
+  Representation cur_new_representation = new_representation;
+  MaybeObjectHandle cur_new_wrapped_type = new_wrapped_type;
+
+  while (!backlog.empty() || !subtree_backlog.empty()) {
+    Tagged<Map> current;
+    if (!backlog.empty()) {
+      current = backlog.front();
+      backlog.pop();
+    } else {
+      auto work = subtree_backlog.front();
+      subtree_backlog.pop();
+      current = std::get<Tagged<Map>>(work);
+      cur_new_constness = std::get<PropertyConstness>(work);
+      cur_new_representation = std::get<Representation>(work);
+      cur_new_wrapped_type = std::get<MaybeObjectHandle>(work);
+    }
 
     TransitionsAccessor transitions(isolate, current);
-    int num_transitions = transitions.NumberOfTransitions();
-    for (int i = 0; i < num_transitions; ++i) {
-      Tagged<Map> target = transitions.GetTarget(i);
-      backlog.push(target);
-    }
+    transitions.ForEachTransition(
+        &no_gc, [&backlog](Tagged<Map> target) { backlog.push(target); },
+        [&](Tagged<Map> proto_target) {
+          // Since generalizations are not back-propagated across
+          // proto transitions it is possible that the target already is in a
+          // more general state. Thus we must again compute the generalization
+          // over each part of the descriptor and use this updated variant to
+          // update the sub-tree reachable through a proto transition.
+          // TODO(olivf): Evaluate if we should generalize back over proto
+          // transitions which among others would avoid this particular issue.
+          Tagged<DescriptorArray> descriptors =
+              proto_target->instance_descriptors(isolate);
+          PropertyDetails details = descriptors->GetDetails(descriptor);
+          PropertyConstness new_target_constness =
+              new_constness < details.constness() ? new_constness
+                                                  : details.constness();
+          Representation new_target_representation =
+              new_representation.is_more_general_than(details.representation())
+                  ? new_representation
+                  : details.representation();
+          auto new_target_wrapped_type =
+              FieldType::NowIs(descriptors->GetFieldType(descriptor),
+                               Map::UnwrapFieldType(*new_wrapped_type))
+                  ? new_wrapped_type
+                  : Map::WrapFieldType(handle(FieldType::Any(), isolate));
+
+          subtree_backlog.push({proto_target, new_target_constness,
+                                new_target_representation,
+                                new_target_wrapped_type});
+        });
     Tagged<DescriptorArray> descriptors =
         current->instance_descriptors(isolate);
     details = descriptors->GetDetails(descriptor);
 
     // It is allowed to change representation here only from None
     // to something or from Smi or HeapObject to Tagged.
-    DCHECK(details.representation().Equals(new_representation) ||
-           details.representation().CanBeInPlaceChangedTo(new_representation));
+    DCHECK(
+        details.representation().Equals(cur_new_representation) ||
+        details.representation().CanBeInPlaceChangedTo(cur_new_representation));
 
     // Skip if already updated the shared descriptor.
-    if (new_constness != details.constness() ||
-        !new_representation.Equals(details.representation()) ||
-        descriptors->GetFieldType(descriptor) != *new_wrapped_type.object()) {
+    if (cur_new_constness != details.constness() ||
+        !cur_new_representation.Equals(details.representation()) ||
+        descriptors->GetFieldType(descriptor) !=
+            *cur_new_wrapped_type.object()) {
       Descriptor d = Descriptor::DataField(
           name, descriptors->GetFieldIndex(descriptor), details.attributes(),
-          new_constness, new_representation, new_wrapped_type);
+          cur_new_constness, cur_new_representation, cur_new_wrapped_type);
       descriptors->Replace(descriptor, &d);
     }
   }
