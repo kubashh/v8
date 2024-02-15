@@ -4815,13 +4815,13 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions) {
   Handle<SharedFunctionInfo> sfi = handle(function->shared(), i_isolate());
   Handle<BytecodeArray> bytecode_array =
       handle(sfi->GetBytecodeArray(i_isolate()), i_isolate());
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 
   Compiler::CollectSourcePositions(i_isolate(), sfi);
 
   Tagged<ByteArray> source_position_table =
       bytecode_array->SourcePositionTable();
-  CHECK(bytecode_array->HasSourcePositionTable());
+  CHECK(bytecode_array->has_source_position_table());
   CHECK_GT(source_position_table->length(), 0);
 }
 
@@ -4840,7 +4840,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_StackOverflow) {
   Handle<SharedFunctionInfo> sfi = handle(function->shared(), i_isolate());
   Handle<BytecodeArray> bytecode_array =
       handle(sfi->GetBytecodeArray(i_isolate()), i_isolate());
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 
   // Make the stack limit the same as the current position so recompilation
   // overflows.
@@ -4850,14 +4850,14 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_StackOverflow) {
   // Stack overflowed so source position table can be returned but is empty.
   Tagged<ByteArray> source_position_table =
       bytecode_array->SourcePositionTable();
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
   CHECK_EQ(source_position_table->length(), 0);
 
   // Reset the stack limit and try again.
   i_isolate()->stack_guard()->SetStackLimit(previous_limit);
   Compiler::CollectSourcePositions(i_isolate(), sfi);
   source_position_table = bytecode_array->SourcePositionTable();
-  CHECK(bytecode_array->HasSourcePositionTable());
+  CHECK(bytecode_array->has_source_position_table());
   CHECK_GT(source_position_table->length(), 0);
 }
 
@@ -4879,7 +4879,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_ThrowFrom1stFrame) {
   // This is the bytecode for the top-level iife.
   Handle<BytecodeArray> bytecode_array =
       handle(sfi->GetBytecodeArray(i_isolate()), i_isolate());
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 
   {
     v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(i_isolate()));
@@ -4892,7 +4892,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_ThrowFrom1stFrame) {
 
   // The exception was caught but source positions were not retrieved from it so
   // there should be no source position table.
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 }
 
 TEST_F(InterpreterTest, InterpreterCollectSourcePositions_ThrowFrom2ndFrame) {
@@ -4915,7 +4915,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_ThrowFrom2ndFrame) {
   // This is the bytecode for the top-level iife.
   Handle<BytecodeArray> bytecode_array =
       handle(sfi->GetBytecodeArray(i_isolate()), i_isolate());
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 
   {
     v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(i_isolate()));
@@ -4928,7 +4928,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_ThrowFrom2ndFrame) {
 
   // The exception was caught but source positions were not retrieved from it so
   // there should be no source position table.
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 }
 
 namespace {
@@ -4971,7 +4971,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_GenerateStackTrace) {
   Handle<SharedFunctionInfo> sfi = handle(function->shared(), i_isolate());
   Handle<BytecodeArray> bytecode_array =
       handle(sfi->GetBytecodeArray(i_isolate()), i_isolate());
-  CHECK(!bytecode_array->HasSourcePositionTable());
+  CHECK(!bytecode_array->has_source_position_table());
 
   {
     Handle<Object> result =
@@ -4982,7 +4982,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_GenerateStackTrace) {
     CheckStringEqual("Error\n    at <anonymous>:4:17", result);
   }
 
-  CHECK(bytecode_array->HasSourcePositionTable());
+  CHECK(bytecode_array->has_source_position_table());
   Tagged<ByteArray> source_position_table =
       bytecode_array->SourcePositionTable();
   CHECK_GT(source_position_table->length(), 0);

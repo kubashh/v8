@@ -583,7 +583,7 @@ bool CallSiteInfo::ComputeLocation(Handle<CallSiteInfo> info,
   if (IsUndefined(script->source())) return false;
   if (info->flags() & kIsSourcePositionComputed ||
       (shared->HasBytecodeArray() &&
-       shared->GetBytecodeArray(isolate)->HasSourcePositionTable())) {
+       shared->GetBytecodeArray(isolate)->has_source_position_table())) {
     int pos = GetSourcePosition(info);
     *location = MessageLocation(script, pos, pos + 1, shared);
   } else {

@@ -1766,7 +1766,7 @@ TEST(CodeSerializerWithProfiler) {
       isolate, orig_source, default_script_details, &cache,
       v8::ScriptCompiler::kNoCompileOptions);
 
-  CHECK(!orig->GetBytecodeArray(isolate)->HasSourcePositionTable());
+  CHECK(!orig->GetBytecodeArray(isolate)->has_source_position_table());
 
   isolate->SetIsProfiling(true);
 
@@ -1778,7 +1778,7 @@ TEST(CodeSerializerWithProfiler) {
 
   // Since the profiler is now enabled, source positions should be collected
   // after deserialization.
-  CHECK(copy->GetBytecodeArray(isolate)->HasSourcePositionTable());
+  CHECK(copy->GetBytecodeArray(isolate)->has_source_position_table());
 
   delete cache;
 }

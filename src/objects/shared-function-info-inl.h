@@ -324,7 +324,7 @@ template <typename IsolateT>
 bool SharedFunctionInfo::AreSourcePositionsAvailable(IsolateT* isolate) const {
   if (v8_flags.enable_lazy_source_positions) {
     return !HasBytecodeArray() ||
-           GetBytecodeArray(isolate)->HasSourcePositionTable();
+           GetBytecodeArray(isolate)->has_source_position_table();
   }
   return true;
 }
@@ -677,7 +677,7 @@ bool SharedFunctionInfo::has_simple_parameters() {
 
 bool SharedFunctionInfo::CanCollectSourcePosition(Isolate* isolate) {
   return v8_flags.enable_lazy_source_positions && HasBytecodeArray() &&
-         !GetBytecodeArray(isolate)->HasSourcePositionTable();
+         !GetBytecodeArray(isolate)->has_source_position_table();
 }
 
 bool SharedFunctionInfo::IsApiFunction() const {

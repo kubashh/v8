@@ -2367,7 +2367,7 @@ bool FrameSummary::JavaScriptFrameSummary::AreSourcePositionsAvailable() const {
          function()
              ->shared()
              ->GetBytecodeArray(isolate())
-             ->HasSourcePositionTable();
+             ->has_source_position_table();
 }
 
 bool FrameSummary::JavaScriptFrameSummary::is_subject_to_debugging() const {

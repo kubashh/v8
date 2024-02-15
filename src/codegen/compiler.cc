@@ -2474,7 +2474,7 @@ bool Compiler::CollectSourcePositions(Isolate* isolate,
                                       Handle<SharedFunctionInfo> shared_info) {
   DCHECK(shared_info->is_compiled());
   DCHECK(shared_info->HasBytecodeArray());
-  DCHECK(!shared_info->GetBytecodeArray(isolate)->HasSourcePositionTable());
+  DCHECK(!shared_info->GetBytecodeArray(isolate)->has_source_position_table());
 
   // Source position collection should be context independent.
   NullContextScope null_context_scope(isolate);

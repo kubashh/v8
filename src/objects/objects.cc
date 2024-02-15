@@ -6290,7 +6290,7 @@ int JSGeneratorObject::source_position() const {
   DCHECK(function()
              ->shared()
              ->GetBytecodeArray(isolate)
-             ->HasSourcePositionTable());
+             ->has_source_position_table());
   Tagged<AbstractCode> code =
       AbstractCode::cast(function()->shared()->GetBytecodeArray(isolate));
   return code->SourcePosition(isolate, code_offset());

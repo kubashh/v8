@@ -704,7 +704,7 @@ void JSGeneratorObject::JSGeneratorObjectPrint(std::ostream& os) {
       // allocate memory.
       Isolate* isolate = GetIsolate();
       if (fun_info->HasBytecodeArray() &&
-          fun_info->GetBytecodeArray(isolate)->HasSourcePositionTable()) {
+          fun_info->GetBytecodeArray(isolate)->has_source_position_table()) {
         os << source_position();
         os << " (";
         script_name->PrintUC16(os);
