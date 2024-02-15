@@ -2622,15 +2622,20 @@ static bool CheckOneBackPointer(Tagged<Map> current_map, Tagged<Map> target) {
 }
 
 bool TransitionsAccessor::IsConsistentWithBackPointers() {
-  int num_transitions = NumberOfTransitions();
-  for (int i = 0; i < num_transitions; i++) {
-    Tagged<Map> target = GetTarget(i);
-    // Ensure maps belong to the same NativeContext (i.e. have the same
-    // meta map).
-    DCHECK_EQ(map_->map(), target->map());
-    if (!CheckOneBackPointer(map_, target)) return false;
-  }
-  return true;
+  DisallowGarbageCollection no_gc;
+  bool success = true;
+  ForEachTransition(
+      &no_gc,
+      [&](Tagged<Map> target) {
+        // Ensure maps belong to the same NativeContext (i.e. have
+        // the same meta map).
+        DCHECK_EQ(map_->map(), target->map());
+        if (!CheckOneBackPointer(map_, target)) {
+          success = false;
+        }
+      },
+      nullptr);
+  return success;
 }
 
 #undef USE_TORQUE_VERIFIER
