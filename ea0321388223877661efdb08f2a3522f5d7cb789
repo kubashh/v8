@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "04e66b95_d7017dae",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3376,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-15T13:45:56Z",
+      "side": 1,
+      "message": "Yes, your observations are correct. The `EQ` is more restrictive but technically these additional restricted cases are fine. I\u0027m changing it to `IMPLIES`.",
+      "parentUuid": "5fbdeb53_1f03f26d",
+      "range": {
+        "startLine": 3376,
+        "startChar": 11,
+        "endLine": 3376,
+        "endChar": 13
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0137f383_c1c8c0ee",
         "filename": "src/wasm/value-type.h",
         "patchSetId": 6
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-15T11:42:52Z",
       "side": 1,
       "message": "Naming nit: I probably would have called this `kExternString`, so that:\n(1) the prefix of the name hints at the subtyping relationship,\n(2) the name conveys the mental model \"it\u0027s a kExtern that\u0027s additionally annotated as being a string\", and\n(3) the scheme easily extends to e.g. a future `kExternDataView`;\nbut ultimately I don\u0027t care about the color of the bikeshed, so feel free to leave as is if you prefer 😊",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 19
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "507db3ee_a2506fdb",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-15T13:45:56Z",
+      "side": 1,
+      "message": "Agreed, thanks!",
+      "parentUuid": "0137f383_c1c8c0ee",
       "range": {
         "startLine": 69,
         "startChar": 4,
@@ -89,6 +137,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f7a758eb_531b7b1c",
+        "filename": "src/wasm/value-type.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-15T13:45:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fbc7782_b81a3b06",
+      "range": {
+        "startLine": 753,
+        "startChar": 20,
+        "endLine": 753,
+        "endChar": 42
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "46aa27af_2aea14e6",
         "filename": "test/unittests/wasm/subtyping-unittest.cc",
         "patchSetId": 6
@@ -112,6 +184,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4d643729_bbe04c17",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-15T13:45:56Z",
+      "side": 1,
+      "message": "I guess, at that point we\u0027ll get implicit conversions in wasm.\nBetween type hierarchies.\nIt\u0027ll be great! 😂",
+      "parentUuid": "46aa27af_2aea14e6",
+      "range": {
+        "startLine": 433,
+        "startChar": 7,
+        "endLine": 434,
+        "endChar": 37
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a0fc5e01_483718a5",
         "filename": "test/unittests/wasm/subtyping-unittest.cc",
         "patchSetId": 6
@@ -123,6 +219,30 @@
       "writtenOn": "2024-02-15T11:42:52Z",
       "side": 1,
       "message": "This is still a potential bug farm. We should probably introduce a `kWasmAbstractTop` or something.",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 60
+      },
+      "revId": "ea0321388223877661efdb08f2a3522f5d7cb789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43c5f391_bd25ef50",
+        "filename": "test/unittests/wasm/subtyping-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-15T13:45:56Z",
+      "side": 1,
+      "message": "Yes, I agree.",
+      "parentUuid": "a0fc5e01_483718a5",
       "range": {
         "startLine": 578,
         "startChar": 4,
