@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "717a5bef_125311af",
+        "filename": "src/roots/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-02-15T17:42:37Z",
+      "side": 1,
+      "message": "I assume that just adding them to this list is enough to actually stop the GC from moving them?",
+      "revId": "cc963c88812b6de660dc7274cd98ea2c857b386d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
