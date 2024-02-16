@@ -128,6 +128,30 @@
       },
       "revId": "32273a68670ba7362ef527ec112d5f3be3a2a3a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41734ce_6f27a3c7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3315,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T11:38:59Z",
+      "side": 1,
+      "message": "Oh, maybe we can reach the issue described by @dmercadier@chromium.org with inlining as the code in question only triggers if `check_for_exception \u003d\u003d CheckForException::kCatchInParentFrame`.",
+      "parentUuid": "6e2b4b74_26055f2b",
+      "range": {
+        "startLine": 3315,
+        "startChar": 4,
+        "endLine": 3315,
+        "endChar": 70
+      },
+      "revId": "32273a68670ba7362ef527ec112d5f3be3a2a3a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
