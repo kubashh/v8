@@ -145,3 +145,16 @@ function load_double_arr(arr, idx) {
   assertEquals(load_double_arr(double_arr, '1'), 5.951);
   assertOptimized(load_double_arr);
 }
+
+{
+  function h(x) { return x; }
+  function g(x) { return h(x); }
+  function f(x) { return g(x); }
+
+  %PrepareFunctionForOptimization(g);
+  %PrepareFunctionForOptimization(f);
+  assertEquals(f(42), 42);
+  %OptimizeFunctionOnNextCall(f);
+  assertEquals(f(42), 42);
+  assertOptimized(f);
+}
