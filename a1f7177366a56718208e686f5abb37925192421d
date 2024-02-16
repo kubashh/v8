@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b746749f_54d27a1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-16T17:46:06Z",
+      "side": 1,
+      "message": "PTAL. Tentative CL. We talked about this in a previous CL. Not sure about file naming and if this pattern is common in V8. This would allow moving a few more things into the new header, to test it in the unit test.",
+      "revId": "a1f7177366a56718208e686f5abb37925192421d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
