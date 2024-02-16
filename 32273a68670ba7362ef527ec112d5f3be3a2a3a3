@@ -80,6 +80,30 @@
       },
       "revId": "32273a68670ba7362ef527ec112d5f3be3a2a3a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45f3fb1a_5fa03741",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3315,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T11:01:10Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with what can happen exactly or not, but the following call stack looks possible:\n\nStringNewWtf8ArrayImpl \u003eCallBuiltinThroughJumptable \u003e CallAndMaybeCatchException \u003e MaybeSetPositionToParent\n\nAnd then MaybeSetPositionToParent does `__ output_graph().operation_origins()[call]`, where `call` will be OpIndex::Invalid in unreachable code, leading to an out-of-bound access into operation_origins (or a segfault).\n\n(also, I\u0027m assuming that \"unreachable code\" means, as your comment suggests, \"generating_unreachable_operations\"; but if that\u0027s not the case, then CallAndMaybeCatchException can also generate a Call with Invalid inputs, which is wrong, so +1 for your DCHECK_IMPLIES)",
+      "parentUuid": "97a6a433_f90051cf",
+      "range": {
+        "startLine": 3315,
+        "startChar": 4,
+        "endLine": 3315,
+        "endChar": 70
+      },
+      "revId": "32273a68670ba7362ef527ec112d5f3be3a2a3a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
