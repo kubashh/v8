@@ -1496,9 +1496,10 @@ void Heap::StartMinorMSIncrementalMarkingIfNeeded() {
            MB) &&
       new_space()->Size() >= MinorMSConcurrentMarkingTrigger(this) &&
       ShouldUseBackgroundThreads()) {
-    StartIncrementalMarking(GCFlag::kNoFlags, GarbageCollectionReason::kTask,
-                            kNoGCCallbackFlags,
-                            GarbageCollector::MINOR_MARK_SWEEPER);
+    StartIncrementalMarking(
+        GCFlag::kNoFlags, GarbageCollectionReason::kTask, kNoGCCallbackFlags,
+        IncrementalMarkingMemoryReducingSweepingHandling::kFinalize,
+        GarbageCollector::MINOR_MARK_SWEEPER);
     // Schedule a task for finalizing the GC if needed.
     ScheduleMinorGCTaskIfNeeded();
   }
@@ -1971,10 +1972,11 @@ int Heap::NotifyContextDisposed(bool has_dependent_context) {
   return ++contexts_disposed_;
 }
 
-void Heap::StartIncrementalMarking(GCFlags gc_flags,
-                                   GarbageCollectionReason gc_reason,
-                                   GCCallbackFlags gc_callback_flags,
-                                   GarbageCollector collector) {
+void Heap::StartIncrementalMarking(
+    GCFlags gc_flags, GarbageCollectionReason gc_reason,
+    GCCallbackFlags gc_callback_flags,
+    IncrementalMarkingMemoryReducingSweepingHandling sweeping_handling,
+    GarbageCollector collector) {
   DCHECK(incremental_marking()->IsStopped());
   CHECK(!isolate()->InFastCCall());
 
@@ -1982,6 +1984,13 @@ void Heap::StartIncrementalMarking(GCFlags gc_flags,
   // This helps avoid large CompleteSweep blocks on the main thread when major
   // incremental marking should be scheduled following a minor GC.
   if (sweeper()->AreMinorSweeperTasksRunning()) return;
+
+  if (sweeping_handling ==
+      IncrementalMarkingMemoryReducingSweepingHandling::kWait) {
+    if (sweeper()->IsMemoryReducingMajorSweeping() &&
+        sweeper()->AreMajorSweeperTasksRunning())
+      return;
+  }
 
   if (v8_flags.separate_gc_phases && gc_callbacks_depth_ > 0) {
     // Do not start incremental marking while invoking GC callbacks.

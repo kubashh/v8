@@ -113,9 +113,10 @@ void IncrementalMarkingJob::Task::RunInternal() {
   if (incremental_marking->IsStopped()) {
     if (heap->IncrementalMarkingLimitReached() !=
         Heap::IncrementalMarkingLimit::kNoLimit) {
-      heap->StartIncrementalMarking(heap->GCFlagsForIncrementalMarking(),
-                                    GarbageCollectionReason::kTask,
-                                    kGCCallbackScheduleIdleGarbageCollection);
+      heap->StartIncrementalMarking(
+          heap->GCFlagsForIncrementalMarking(), GarbageCollectionReason::kTask,
+          kGCCallbackScheduleIdleGarbageCollection,
+          Heap::IncrementalMarkingMemoryReducingSweepingHandling::kWait);
     } else if (v8_flags.minor_ms && v8_flags.concurrent_minor_ms_marking) {
       heap->StartMinorMSIncrementalMarkingIfNeeded();
     }

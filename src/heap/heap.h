@@ -1021,11 +1021,17 @@ class Heap final {
                                           : GCFlag::kNoFlags;
   }
 
+  enum class IncrementalMarkingMemoryReducingSweepingHandling {
+    kWait,
+    kFinalize
+  };
   // Starts incremental marking assuming incremental marking is currently
   // stopped.
   V8_EXPORT_PRIVATE void StartIncrementalMarking(
       GCFlags gc_flags, GarbageCollectionReason gc_reason,
       GCCallbackFlags gc_callback_flags = GCCallbackFlags::kNoGCCallbackFlags,
+      IncrementalMarkingMemoryReducingSweepingHandling sweeping_handling =
+          IncrementalMarkingMemoryReducingSweepingHandling::kFinalize,
       GarbageCollector collector = GarbageCollector::MARK_COMPACTOR);
 
   V8_EXPORT_PRIVATE void StartIncrementalMarkingOnInterrupt();
