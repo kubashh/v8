@@ -117,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8284f3f1_2f3c7994",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T16:47:59Z",
+      "side": 1,
+      "message": "\u003e And also, if we forgot to call SetMap on a node, I think that node_mapping_ returns Invalid by default, for which this DCHECK here is useful.\n\nRight, I missed that one. Makes sense! 😊",
+      "parentUuid": "ef9bc301_22f49f54",
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf9035b9_06b2e724",
