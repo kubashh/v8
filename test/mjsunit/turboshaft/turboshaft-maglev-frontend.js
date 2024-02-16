@@ -145,3 +145,72 @@ function load_double_arr(arr, idx) {
   assertEquals(load_double_arr(double_arr, '1'), 5.951);
   assertOptimized(load_double_arr);
 }
+
+// Simple JS function call
+{
+  function h(x) { return x; }
+  function g(x) { return h(x); }
+  function f(x) { return g(x); }
+
+  %PrepareFunctionForOptimization(g);
+  %PrepareFunctionForOptimization(f);
+  assertEquals(f(42), 42);
+  %OptimizeFunctionOnNextCall(f);
+  assertEquals(f(42), 42);
+  assertOptimized(f);
+}
+
+// Simple JS call with receiver
+{
+  function f(o) { return o.x(17); }
+
+  let o = { y : 42, x : function(a) { return a + this.y; } };
+
+  %PrepareFunctionForOptimization(f);
+  assertEquals(f(o), 59);
+  %OptimizeFunctionOnNextCall(f);
+  assertEquals(f(o), 59);
+  assertOptimized(f);
+}
+
+// Lazy deopt during JS function call
+{
+  let c = 0;
+
+  function h(x) {
+    c++;
+    if (c == 1) {
+      return f(x);
+    } else if (c == 2) {
+      // Calling `f` with a string as input will trigger an eager deopt of `f`,
+      // which will also trigger a lazy deopt of all instances `f` on the caller
+      // stack.
+      return f("str");
+    } else {
+      return x;
+    }
+  }
+
+  function g(x) {
+    let tmp = x * 12;
+    let v = h(x);
+    return tmp + v;
+  }
+
+  function f(x) {
+    let a = x + 2;
+    return g(a);
+  }
+
+  %PrepareFunctionForOptimization(f);
+  %PrepareFunctionForOptimization(g);
+  c = 3;
+  assertEquals(f(42), 572);
+
+  %OptimizeFunctionOnNextCall(f);
+  assertEquals(f(42), 572);
+  assertOptimized(f);
+  c = 0;
+  assertEquals(f(42), "NaNstr2");
+  assertUnoptimized(f);
+}
