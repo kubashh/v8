@@ -16,6 +16,24 @@
       "message": "Seems like the bots are unhappy with this.\nSuper-minor nit: It\u0027s `assertEquals(expected, actual)`, so the error reporting is a bit confusing with swapped arguments. 😊",
       "revId": "72a3d97f366e72fca8d0a26dd8abd10f36244135",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0004fd9_24148181",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T17:45:55Z",
+      "side": 1,
+      "message": "Meh, what do the bots know? 😄 Well, turns out that I wasn\u0027t properly setting the type of the frame state inputs (I assumed that everything was tagged but we can have raw floats/ints in the frame state), so this time the bots got it right, but it\u0027s just luck.\n\nPTAL at the latest patchsets please :)\n\n(and I rewrote all of the assertEquals, as I also got confused by the error for a little bit)",
+      "parentUuid": "7c0430ee_63c6230e",
+      "revId": "72a3d97f366e72fca8d0a26dd8abd10f36244135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
