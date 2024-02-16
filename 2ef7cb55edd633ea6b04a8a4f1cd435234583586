@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32eeaed4_ccaf4175",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-16T08:17:36Z",
+      "side": 1,
+      "message": "nit: Can you move this comment (here and in following tests) such that it\u0027s right before the first DisableConservativeStackScanningScopeForTesting in the test?\nAs it is, the comment feels to me detached from the scopes below.",
+      "range": {
+        "startLine": 1092,
+        "startChar": 5,
+        "endLine": 1092,
+        "endChar": 7
+      },
+      "revId": "2ef7cb55edd633ea6b04a8a4f1cd435234583586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "819a8edd_858f8f8f",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-16T08:17:36Z",
+      "side": 1,
+      "message": "nit: You could have one scope for all 3 GCs here.",
+      "range": {
+        "startLine": 1749,
+        "startChar": 4,
+        "endLine": 1749,
+        "endChar": 51
+      },
+      "revId": "2ef7cb55edd633ea6b04a8a4f1cd435234583586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5af8ff9_c9c7fddc",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-16T08:17:36Z",
+      "side": 1,
+      "message": "nit: Could we have a single HandleScope for the whole test?",
+      "range": {
+        "startLine": 1924,
+        "startChar": 6,
+        "endLine": 1924,
+        "endChar": 17
+      },
+      "revId": "2ef7cb55edd633ea6b04a8a4f1cd435234583586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ccc401b_f6932447",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3478,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-16T08:17:36Z",
+      "side": 1,
+      "message": "nit: In this case, a single scope from here to the end of the test should also suffice.",
+      "range": {
+        "startLine": 3478,
+        "startChar": 4,
+        "endLine": 3478,
+        "endChar": 51
+      },
+      "revId": "2ef7cb55edd633ea6b04a8a4f1cd435234583586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
