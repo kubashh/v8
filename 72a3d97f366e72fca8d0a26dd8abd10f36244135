@@ -52,6 +52,24 @@
       "parentUuid": "f0004fd9_24148181",
       "revId": "72a3d97f366e72fca8d0a26dd8abd10f36244135",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "648b1352_4ac1a65e",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T18:01:12Z",
+      "side": 1,
+      "message": "It looks like some functions in the js files were compiled too aggressively, but they contained things not currently supported by the graph builder; should be fixed :)",
+      "parentUuid": "bd60d4e5_1a43a9e2",
+      "revId": "72a3d97f366e72fca8d0a26dd8abd10f36244135",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
