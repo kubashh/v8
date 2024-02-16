@@ -142,6 +142,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39a8110_5db7dbf3",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-16T10:19:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "34ba8284_ba0da4ef",
+      "range": {
+        "startLine": 1924,
+        "startChar": 6,
+        "endLine": 1924,
+        "endChar": 17
+      },
+      "revId": "2ef7cb55edd633ea6b04a8a4f1cd435234583586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ccc401b_f6932447",

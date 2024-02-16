@@ -16,6 +16,23 @@
       "message": "Thanks Omer!\nPTAL",
       "revId": "cd65917e2f7a225683abe54346856148e5889208",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48c5b68b_76cc0c03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-16T10:19:22Z",
+      "side": 1,
+      "message": "Thanks. lgtm",
+      "revId": "cd65917e2f7a225683abe54346856148e5889208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
