@@ -50,6 +50,24 @@
       "message": "LGTM.\n\nI hope this runs quick enough to be worth including in every execution of the test suite, but (1) you\u0027re probably the best judge of that, and (2) presumably that\u0027s precisely the problem that the fuzztest framework solves.",
       "revId": "8a1532d2019277f3657ea026795fcc01e1194fc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf03bf6c_d6416af0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-16T17:00:41Z",
+      "side": 1,
+      "message": "When executed as unit test it just has one deterministic run, which is super fast.",
+      "parentUuid": "a0ad480a_127773d8",
+      "revId": "8a1532d2019277f3657ea026795fcc01e1194fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
