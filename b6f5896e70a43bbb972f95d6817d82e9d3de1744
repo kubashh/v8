@@ -56,6 +56,30 @@
       },
       "revId": "b6f5896e70a43bbb972f95d6817d82e9d3de1744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8beb609c_a901710f",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-02-16T13:28:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13aeace9_7dc2ee7c",
+      "range": {
+        "startLine": 841,
+        "startChar": 70,
+        "endLine": 842,
+        "endChar": 22
+      },
+      "revId": "b6f5896e70a43bbb972f95d6817d82e9d3de1744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
