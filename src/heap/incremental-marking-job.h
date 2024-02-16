@@ -9,6 +9,7 @@
 #include "src/base/optional.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/time.h"
+#include "src/flags/flags.h"
 
 namespace v8::internal {
 
@@ -32,7 +33,11 @@ class IncrementalMarkingJob final {
 
   // Schedules a task with a given `task_type`. Safe to be called from any
   // thread.
-  void ScheduleTask(TaskType task_type = TaskType::kNormal);
+  void ScheduleTask(TaskType task_type = TaskType::kNormal,
+                    double pending_task_delay_s =
+                        v8::base::TimeDelta::FromMilliseconds(
+                            v8_flags.incremental_marking_task_delay_ms)
+                            .InSecondsF());
 
   // Returns a weighted average of time to task. For delayed tasks the time to
   // task is only recorded after the initial delay. In case a task is currently
