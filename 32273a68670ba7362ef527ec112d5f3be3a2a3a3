@@ -16,6 +16,29 @@
       "message": "Matthias: PTAL.\n\nDarius: FYI.",
       "revId": "32273a68670ba7362ef527ec112d5f3be3a2a3a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46982036_dabec21e",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3315,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T10:27:11Z",
+      "side": 1,
+      "message": "As far as I can see, IsArrayNewSegment is only called from a StringNewWtf8ArrayImpl, and the case where `array` is Invalid is not well handled on all paths. Maybe consider moving this `if (!array.valid())` check over there, and DCHECK here that `array` is valid?",
+      "range": {
+        "startLine": 3315,
+        "startChar": 4,
+        "endLine": 3315,
+        "endChar": 70
+      },
+      "revId": "32273a68670ba7362ef527ec112d5f3be3a2a3a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
