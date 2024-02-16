@@ -78,9 +78,17 @@ void MemoryReducer::NotifyTimer(const Event& event) {
       heap()->isolate()->PrintWithTimestamp("Memory reducer: started GC #%d\n",
                                             state_.started_gcs());
     }
-    heap()->StartIncrementalMarking(GCFlag::kReduceMemoryFootprint,
-                                    GarbageCollectionReason::kMemoryReducer,
-                                    kGCCallbackFlagCollectAllExternalMemory);
+    if (!heap()->StartIncrementalMarking(
+            GCFlag::kReduceMemoryFootprint,
+            GarbageCollectionReason::kMemoryReducer,
+            kGCCallbackFlagCollectAllExternalMemory,
+            Heap::IncrementalMarkingMemoryReducingSweepingHandling::kWait)) {
+      // Could not start incremental marking. Try again later.
+      state_ =
+          State::CreateWait(state_.started_gcs(), event.time_ms + kShortDelayMs,
+                            state_.last_gc_time_ms());
+      ScheduleTimer(kShortDelayMs);
+    }
   } else if (state_.id() == kWait) {
     // Re-schedule the timer.
     ScheduleTimer(state_.next_gc_start_ms() - event.time_ms);

@@ -161,6 +161,11 @@ class Sweeper {
 
   uint64_t GetTraceIdForFlowEvent(GCTracer::Scope::ScopeId scope_id) const;
 
+  bool IsMemoryReducingMajorSweeping() const {
+    return major_sweeping_in_progress() &&
+           major_sweeping_state_.should_reduce_memory();
+  }
+
  private:
   NonAtomicMarkingState* marking_state() const { return marking_state_; }
 
