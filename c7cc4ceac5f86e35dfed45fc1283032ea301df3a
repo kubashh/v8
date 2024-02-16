@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0f8860_ff7a8214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T15:23:17Z",
+      "side": 1,
+      "message": "Thanks for the review, very good idea to suggest that I test the lazy deopt: this revealed that it was broken :D (in particular because ForEachLocal skips dead registers, but they still need to be accounted for when building the Turboshaft frame state).\n\nPlease have a look at patchset 2 ;)\n\nTesting the fancy thing: @mliedtke@chromium.org",
+      "revId": "c7cc4ceac5f86e35dfed45fc1283032ea301df3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

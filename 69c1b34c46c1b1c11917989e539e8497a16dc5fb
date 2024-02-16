@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ea492e_a9ed04bd",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T15:23:17Z",
+      "side": 1,
+      "message": "The accumulator of the Maglev FrameState isn\u0027t set when \"combine\" is PokeAt(0). See for instance https://source.chromium.org/chromium/chromium/src/+/main:v8/src/maglev/maglev-code-generator.cc;l\u003d1387-1398.\n\n(\"combine !\u003d PokeAt(0)\" is similar to InReturnValues, except in the rare cases where the return value is not in the accumulator or when there are multiple return values)\n\nI added a comment explaining why the Accumulator doesn\u0027t matter when PokeAt is 0 ;)",
+      "parentUuid": "03f2bf97_b6e7aeb3",
+      "range": {
+        "startLine": 546,
+        "startChar": 8,
+        "endLine": 546,
+        "endChar": 53
+      },
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adc8c1f0_36dba501",
@@ -71,6 +95,24 @@
       "writtenOn": "2024-02-16T13:18:31Z",
       "side": 1,
       "message": "While the `DCHECK` is reasonable, maybe it\u0027d be better to already check in the `SetMap` that the provided `OpIndex` is valid, so this won\u0027t ever happen?\n(Or are there cases where we end up inserting an invalid index but we should just never end up trying to map it?)",
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef9bc301_22f49f54",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T15:23:17Z",
+      "side": 1,
+      "message": "SetMap should never have Invalid input, but you\u0027re right that it might be better to DCHECK in SetMap to have early warnings that something is wrong. I\u0027ll add a DCHECK in SetMap but I\u0027ll keep this one here as well I think.\nAnd also, if we forgot to call SetMap on a node, I think that node_mapping_ returns Invalid by default, for which this DCHECK here is useful.",
+      "parentUuid": "adc8c1f0_36dba501",
       "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c8f3229_4f722a18",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T15:23:17Z",
+      "side": 1,
+      "message": "Very good idea, this test was indeed not triggering any lazy deopt. I added a more complex test, which revealed that my implementation was broken; it is now fixed :D",
+      "parentUuid": "bf9035b9_06b2e724",
+      "range": {
+        "startLine": 150,
+        "startChar": 25,
+        "endLine": 150,
+        "endChar": 26
+      },
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52049665_532ca3f8",
@@ -111,6 +177,24 @@
       "writtenOn": "2024-02-16T13:18:31Z",
       "side": 1,
       "message": "As you added coding for handling the receiver among other things, it\u0027d be nice to have test cases using the receiver, maybe the context, etc.\n(Doesn\u0027t have to be this CL, I\u0027m not sure if there might be other things missing yet.)",
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f3d002a_9d514450",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-16T15:23:17Z",
+      "side": 1,
+      "message": "Good idea. I added a test with a receiver. For the context, I\u0027ll do this in a follow up because I think that I need more things first.",
+      "parentUuid": "52049665_532ca3f8",
       "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
