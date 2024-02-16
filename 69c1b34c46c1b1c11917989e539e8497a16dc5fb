@@ -16,6 +16,103 @@
       "message": "PTAL! :)",
       "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "319e8336_41db1f58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T13:18:31Z",
+      "side": 1,
+      "message": "LGTM with nits!",
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f2bf97_b6e7aeb3",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T13:18:31Z",
+      "side": 1,
+      "message": "Even with the todo I\u0027m not sure what we try to achieve with this condition.",
+      "range": {
+        "startLine": 546,
+        "startChar": 8,
+        "endLine": 546,
+        "endChar": 53
+      },
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adc8c1f0_36dba501",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T13:18:31Z",
+      "side": 1,
+      "message": "While the `DCHECK` is reasonable, maybe it\u0027d be better to already check in the `SetMap` that the provided `OpIndex` is valid, so this won\u0027t ever happen?\n(Or are there cases where we end up inserting an invalid index but we should just never end up trying to map it?)",
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf9035b9_06b2e724",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T13:18:31Z",
+      "side": 1,
+      "message": "I\u0027m not sure how much should work already, but if we threw an exception, would we assume that the added `FrameState` handling already accounts for the inlined stack frames?",
+      "range": {
+        "startLine": 150,
+        "startChar": 25,
+        "endLine": 150,
+        "endChar": 26
+      },
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52049665_532ca3f8",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-16T13:18:31Z",
+      "side": 1,
+      "message": "As you added coding for handling the receiver among other things, it\u0027d be nice to have test cases using the receiver, maybe the context, etc.\n(Doesn\u0027t have to be this CL, I\u0027m not sure if there might be other things missing yet.)",
+      "revId": "69c1b34c46c1b1c11917989e539e8497a16dc5fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
