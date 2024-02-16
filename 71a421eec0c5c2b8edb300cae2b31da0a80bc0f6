@@ -16,6 +16,23 @@
       "message": "LGTM for the tentative fix, but let\u0027s investigate this further after the branch cut.",
       "revId": "71a421eec0c5c2b8edb300cae2b31da0a80bc0f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2c65630_d22ae2dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-16T13:47:14Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "71a421eec0c5c2b8edb300cae2b31da0a80bc0f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
