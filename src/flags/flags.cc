@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include "src/flags/flags.h"
+#include "src/flags/flags-impl.h"
 
 #include <algorithm>
 #include <array>
