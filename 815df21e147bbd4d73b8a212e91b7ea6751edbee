@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72beba13_92af7774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-02-18T17:00:29Z",
+      "side": 1,
+      "message": "Hi Andreas,\n\nThis is essentially reverting some of the changes of https://crrev.com/c/5279382,\nwe had to apply similar fixes before in these cls:\nhttps://crrev.com/c/3314302\nhttps://crrev.com/c/2057355",
+      "revId": "815df21e147bbd4d73b8a212e91b7ea6751edbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
