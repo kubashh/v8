@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "build/",
+    "allowJs": false,
+    "target": "es2021",
+    "module": "es2020",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "lib": ["es2020", "es2021", "dom", "dom.iterable", "scripthost"]
+  },
+  "files": [
+    "src/turbolizer2.ts",
+    "src/content.ts",
+    "src/hierarchical-graph.ts",
+    "src/json-parser.ts",
+    "src/movable-view.ts",
+    "src/phase-view.ts",
+    "src/turboshaft-view.ts",
+    "src/util.ts"
+  ]
+}
