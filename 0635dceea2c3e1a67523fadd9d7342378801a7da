@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a9efde2_d4214ce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-19T09:18:21Z",
+      "side": 1,
+      "message": "PTAL, PS1 is the original CL, PS3 then contains fixes because the DispatchTable was introduced in the meantime.",
+      "revId": "0635dceea2c3e1a67523fadd9d7342378801a7da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
