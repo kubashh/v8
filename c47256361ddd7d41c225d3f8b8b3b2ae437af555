@@ -85,6 +85,24 @@
       "parentUuid": "0fd2c897_5f25c78b",
       "revId": "c47256361ddd7d41c225d3f8b8b3b2ae437af555",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "447146ea_b1a53d5c",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-19T11:21:10Z",
+      "side": 1,
+      "message": "Thanks for the extra info! 😊",
+      "parentUuid": "6f108257_8f9ed7c7",
+      "revId": "c47256361ddd7d41c225d3f8b8b3b2ae437af555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
