@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "76d931fc_a56befa7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-19T11:14:18Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "revId": "c47256361ddd7d41c225d3f8b8b3b2ae437af555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0fd2c897_5f25c78b",
         "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
         "patchSetId": 2
@@ -48,6 +65,24 @@
       "writtenOn": "2024-02-19T11:11:10Z",
       "side": 1,
       "message": "Maybe `--no-lazy-feedback-allocation` could also do the trick. (just guessing)",
+      "revId": "c47256361ddd7d41c225d3f8b8b3b2ae437af555",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f108257_8f9ed7c7",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-19T11:14:18Z",
+      "side": 1,
+      "message": "Unfortunately, no. %PrepareFunctionForOptimization should more or less bypass --no-lazy-feedback-allocation.\n\nIn the failing num_fuzz case, --invocation-count-for-feedback-allocation\u003d0 is used (which sounds a lot like something that should be equivalent to --no-lazy-feedback-allocation), but still feedback is not allocated right after calling PrepareFunctionForOptimization.\n\nThis is an issue that we\u0027ve had before; we should fix it, but for now we have quite a bunch of test that repeat the \"feedback collection\" part twice :/",
+      "parentUuid": "0fd2c897_5f25c78b",
       "revId": "c47256361ddd7d41c225d3f8b8b3b2ae437af555",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
