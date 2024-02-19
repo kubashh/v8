@@ -20,6 +20,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e557f385_750c3149",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-19T14:35:35Z",
+      "side": 1,
+      "message": "This branch should have a comment.",
+      "range": {
+        "startLine": 1988,
+        "startChar": 6,
+        "endLine": 1988,
+        "endChar": 23
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d034001a_8b040838",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-19T14:35:35Z",
+      "side": 1,
+      "message": "This comment should be rephrased in that \"assumes\" here means that if it\u0027s stopped then it\u0027s started, otherwise it may just bail out.",
+      "range": {
+        "startLine": 1028,
+        "startChar": 5,
+        "endLine": 1028,
+        "endChar": 11
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51f2d091_8b4c3fb6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-19T14:35:35Z",
+      "side": 1,
+      "message": "Since you are already touching the signature: `TryStartIncrementalMarking()`?",
+      "range": {
+        "startLine": 1030,
+        "startChar": 25,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f94a5943_5d3726e3",
         "filename": "src/heap/memory-reducer.cc",
         "patchSetId": 6
