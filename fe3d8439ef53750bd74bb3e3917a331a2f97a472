@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e81f408_9c0f1496",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-19T11:58:18Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "fe3d8439ef53750bd74bb3e3917a331a2f97a472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7f36f47_c0e85703",
@@ -83,6 +100,24 @@
       "side": 1,
       "message": "I just added\n```\n      case IrOpcode::kFloat32Constant:\n      case IrOpcode::kFloat64Constant:\n        UNREACHABLE();\n```\nin `is_constant` (in instruction-selector-adapter.h), and it triggered while running JetStream2. \n\nSo I guess that we do get them in JS, although I\u0027m not sure how/when exactly. Well, it crashed during float-mm, which might be using asm.js?\n\nAlso, I would expect that Wasm can run into this, but I haven\u0027t ran any tests to confirm this.\n\n(and we have unittests that rely on this, although this would be a poor reason to keep those without before able to generate them from JS and Wasm)",
       "parentUuid": "f7f36f47_c0e85703",
+      "revId": "fe3d8439ef53750bd74bb3e3917a331a2f97a472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4fe04e1_d0c2530f",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-19T11:58:18Z",
+      "side": 1,
+      "message": "Ah, I think I might be mixing things up here.\nWe do have e.g. `GetFloatConstantValue` in the arm64 instruction selector, so it makes clearly sense to also align this properly in the `ConstantView`.",
+      "parentUuid": "17704d6f_476273ad",
       "revId": "fe3d8439ef53750bd74bb3e3917a331a2f97a472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
