@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "710785cc_96393b99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-19T12:15:35Z",
+      "side": 1,
+      "message": "ptal.\nBenchmarks seems unaffected.",
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f94a5943_5d3726e3",
+        "filename": "src/heap/memory-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-19T12:15:35Z",
+      "side": 1,
+      "message": "This might not be necessary.",
+      "range": {
+        "startLine": 84,
+        "startChar": 64,
+        "endLine": 84,
+        "endChar": 69
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
