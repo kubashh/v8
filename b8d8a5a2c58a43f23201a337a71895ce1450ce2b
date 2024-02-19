@@ -16,6 +16,46 @@
       "message": "Hi Matthias, would be please help review the turboshaft changes, thank you.",
       "revId": "b8d8a5a2c58a43f23201a337a71895ce1450ce2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4c9285_a6e71911",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-19T15:03:27Z",
+      "side": 1,
+      "message": "LGTM with a nit. Thanks!",
+      "revId": "b8d8a5a2c58a43f23201a337a71895ce1450ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fe4a0de_7b7bdba7",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 932,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-19T15:03:27Z",
+      "side": 1,
+      "message": "I think this statement is a bit harsh. We do have graph validation and it cares about types, it\u0027s just that it allows \"too many\" implicit conversions.\nIf you pass in a tagged into a double, it\u0027ll fail.\nThis is the code that handles it (`RegisterRepresentation::AllowImplicitRepresentationChangeTo`):\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/representations.h;l\u003d312\n\nMaybe change it to\n\u003e However, the graph validation currently allows implicit representation changes from `WordPtr` to `Tagged`.",
+      "range": {
+        "startLine": 931,
+        "startChar": 45,
+        "endLine": 932,
+        "endChar": 38
+      },
+      "revId": "b8d8a5a2c58a43f23201a337a71895ce1450ce2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
