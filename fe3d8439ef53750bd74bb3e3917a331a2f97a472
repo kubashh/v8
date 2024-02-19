@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf000ea_0717bf86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-19T11:55:18Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "revId": "fe3d8439ef53750bd74bb3e3917a331a2f97a472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7f36f47_c0e85703",
@@ -48,6 +65,24 @@
       "writtenOn": "2024-02-19T11:36:53Z",
       "side": 1,
       "message": "When do we get them? I think I raised the question to Nico \"what about floats?\" and IIRC all JS floats end up as `NumberConstant`? Is this different when coming from Maglev instead of Turbofan?",
+      "revId": "fe3d8439ef53750bd74bb3e3917a331a2f97a472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17704d6f_476273ad",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-19T11:55:18Z",
+      "side": 1,
+      "message": "I just added\n```\n      case IrOpcode::kFloat32Constant:\n      case IrOpcode::kFloat64Constant:\n        UNREACHABLE();\n```\nin `is_constant` (in instruction-selector-adapter.h), and it triggered while running JetStream2. \n\nSo I guess that we do get them in JS, although I\u0027m not sure how/when exactly. Well, it crashed during float-mm, which might be using asm.js?\n\nAlso, I would expect that Wasm can run into this, but I haven\u0027t ran any tests to confirm this.\n\n(and we have unittests that rely on this, although this would be a poor reason to keep those without before able to generate them from JS and Wasm)",
+      "parentUuid": "f7f36f47_c0e85703",
       "revId": "fe3d8439ef53750bd74bb3e3917a331a2f97a472",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
