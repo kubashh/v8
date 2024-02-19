@@ -1420,24 +1420,11 @@ WasmTrustedInstanceData::GetOrCreateWasmInternalFunction(
   // tiers behave more consistently, which can prevent surprising bugs.
   auto result = isolate->factory()->NewWasmInternalFunction(
       IsWasmApiFunctionRef(*ref)
-          ? 0
+          ? trusted_instance_data->imported_function_targets()->get(
+                function_index)
           : trusted_instance_data->GetCallTarget(function_index),
       ref, rtt, function_index);
 
-  if (IsWasmApiFunctionRef(*ref)) {
-    Handle<WasmApiFunctionRef> wafr = Handle<WasmApiFunctionRef>::cast(ref);
-    const wasm::FunctionSig* sig =
-        module->signature(module->functions[function_index].sig_index);
-    if (wasm::IsJSCompatibleSignature(sig)) {
-      DCHECK(UseGenericWasmToJSWrapper(wasm::kDefaultImportCallKind, sig,
-                                       wasm::Suspend::kNoSuspend));
-      WasmApiFunctionRef::SetInternalFunctionAsCallOrigin(wafr, result);
-      result->set_code(isolate->builtins()->code(Builtin::kWasmToJsWrapperAsm));
-    } else {
-      result->set_code(
-          isolate->builtins()->code(Builtin::kWasmToJsWrapperInvalidSig));
-    }
-  }
   WasmTrustedInstanceData::SetWasmInternalFunction(trusted_instance_data,
                                                    function_index, result);
   return result;
