@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1961a5_897ab1e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-19T11:17:05Z",
+      "side": 1,
+      "message": "I would prefer `Bug: 41497291`. `b/` is a Google-internal shortcut, and we should keep it out of open-source commits unless it\u0027s really necessary to mention it. If any tools don\u0027t work without the `b/` prefix, we should fix those tools, not pollute our commit messages.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "8470a00f5a51505fda1448021d267c1fb6a3effc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e492e5db_664c82ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-19T11:17:05Z",
+      "side": 1,
+      "message": "LGTM.\n\nNow please do this several hundred times more to meaningfully improve compile times 😊\n\nWhich is to say: if someone had time on their hands, we should conduct some research into what would be a good way to organize our code such that (1) it\u0027s maintainable and the what-goes-where rules make sense to humans, (2) the compiler can inline what it needs to for performance, and (3) it\u0027s fast to compile (think: the benefits of jumbo-builds, but without needing the jumbo magic).",
+      "revId": "8470a00f5a51505fda1448021d267c1fb6a3effc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
