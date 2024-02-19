@@ -16,6 +16,23 @@
       "message": "Hi Andreas,\n\nThis is essentially reverting some of the changes of https://crrev.com/c/5279382,\nwe had to apply similar fixes before in these cls:\nhttps://crrev.com/c/3314302\nhttps://crrev.com/c/2057355",
       "revId": "815df21e147bbd4d73b8a212e91b7ea6751edbee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85392d00_f735b2be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-19T10:25:43Z",
+      "side": 1,
+      "message": "Sorry, I did not realize that with the TaggedPointer we only load 32 bits. On the other hand, with this CL you re-introduce a typing error in the Turboshaft graph. The solution could be to add a bitcast-wordptr-to-tagged, which would fix the typing in this particular case. However, the typing in the graph is anyways broken, so adding the bitcast operation would not really improve the current situation, but it would add the overhead of having one more operation.\n\nCould you add a comment that explains why we load wasm-null as a pointer and not as a tagged pointer, and why we don\u0027t do the bitcast?\n\n```\n// We load WasmNull as a pointer here and not as a TaggedPointer because WasmNull\n// is stored uncompressed in the IsolateData, and a load of a TaggedPointer loads\n// compressed pointers.\n// We do not bitcast the WasmNull to Tagged at the moment because it would\n// increase graph size, which may affect optimizations negatively. These\n// regressions would be worth it if there was any benefit of the bitcast.\n// However, graph validation based on types does not exist currently.",
+      "revId": "815df21e147bbd4d73b8a212e91b7ea6751edbee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
