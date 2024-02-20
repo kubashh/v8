@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf00ccd8_130f1f46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-02-20T19:26:31Z",
+      "side": 1,
+      "message": "Fix was applied in this CL: https://chromium-review.googlesource.com/c/v8/v8/+/5309903",
+      "revId": "a241d05a6aca21e3f630692176634474bb4d25a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
