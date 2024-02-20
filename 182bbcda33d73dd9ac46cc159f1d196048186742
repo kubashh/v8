@@ -16,6 +16,24 @@
       "message": "LGTM, thanks! So IIUC we can now read arbitrary many input files, which we won\u0027t really need (e.g. 2 or more files), but which also doesn\u0027t hurt.",
       "revId": "182bbcda33d73dd9ac46cc159f1d196048186742",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb23c11_7bc5ddd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-20T15:19:54Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure if we need it. If fuzzers want to invoke the binary similarly to d8, then they might want to pass multiple files.",
+      "parentUuid": "c3d64135_eee3cd45",
+      "revId": "182bbcda33d73dd9ac46cc159f1d196048186742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
