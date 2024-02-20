@@ -63,6 +63,30 @@
       },
       "revId": "b637c38917999acb14f7ffd6a2ac217cb212ee5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d99e8c5c_dd3fc3c6",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-20T10:26:15Z",
+      "side": 1,
+      "message": "Thanks, the additional context helps a lot.\nIt is still not completely clear to me why using the \"call_target\" initially and then switching to the \"code\" field on tier-up is a problem.\nBut it looks like there is a bit more background in the CL where you added the original comment, could you add a reference to the bug ID in the comment?",
+      "parentUuid": "ed8f2e56_ae05019e",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1425,
+        "endChar": 0
+      },
+      "revId": "b637c38917999acb14f7ffd6a2ac217cb212ee5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

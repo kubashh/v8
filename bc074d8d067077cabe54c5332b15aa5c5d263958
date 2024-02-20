@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6db061e_3a056af6",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-20T10:26:15Z",
+      "side": 1,
+      "message": "nit: fields",
+      "range": {
+        "startLine": 1424,
+        "startChar": 50,
+        "endLine": 1424,
+        "endChar": 55
+      },
+      "revId": "bc074d8d067077cabe54c5332b15aa5c5d263958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5208982a_ac6fb09c",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-20T10:26:15Z",
+      "side": 1,
+      "message": "nit: table",
+      "range": {
+        "startLine": 1429,
+        "startChar": 23,
+        "endLine": 1429,
+        "endChar": 28
+      },
+      "revId": "bc074d8d067077cabe54c5332b15aa5c5d263958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
