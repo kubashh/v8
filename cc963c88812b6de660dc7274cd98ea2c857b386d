@@ -16,6 +16,24 @@
       "message": "I assume that just adding them to this list is enough to actually stop the GC from moving them?",
       "revId": "cc963c88812b6de660dc7274cd98ea2c857b386d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f41d6fe7_ece15c17",
+        "filename": "src/roots/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-20T12:52:14Z",
+      "side": 1,
+      "message": "IIUC the immovability is achieved by allocating these objects in the first pages and always keeping them (and all the objects in front of them) alive.\nWe seem to use the same \"technique\" for these trusted objects, so we should be fine.",
+      "parentUuid": "717a5bef_125311af",
+      "revId": "cc963c88812b6de660dc7274cd98ea2c857b386d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
