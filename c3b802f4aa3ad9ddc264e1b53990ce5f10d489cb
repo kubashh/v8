@@ -16,6 +16,29 @@
       "message": "There is one more cctest failure on s390x which is fixed by this cl.\nThe only remaining spot was changed back to UintPtr by this cl https://crrev.com/c/5300796:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/turboshaft-graph-interface.cc;l\u003d109",
       "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b682584_b5558246",
+        "filename": "src/compiler/turboshaft/wasm-assembler-helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-20T14:19:00Z",
+      "side": 1,
+      "message": "Given that this is called `LOAD_TAGGED_ROOT`, the type in the load is confusing.\nCan we add a comment `// Root pointers do not get compressed, load the full pointer and return it as tagged.` to make sure we don\u0027t break it again? 😊\nLet\u0027s also wrap the `__ Load` in a `__ BitcastWordPtrToTagged(...)`. This makes sure if anything we load here is movable during GC (not 100 % sure if that can happen), that we track (and update) this tagged value correctly.",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
