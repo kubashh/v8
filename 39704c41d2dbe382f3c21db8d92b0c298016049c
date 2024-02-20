@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d38dd889_57282ee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-20T14:22:22Z",
+      "side": 1,
+      "message": "+1 was reset due to removing a file from the CL :(",
+      "revId": "39704c41d2dbe382f3c21db8d92b0c298016049c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
