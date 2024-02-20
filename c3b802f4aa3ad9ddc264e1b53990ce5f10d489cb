@@ -39,6 +39,30 @@
       },
       "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eed450d_67df7c83",
+        "filename": "src/compiler/turboshaft/wasm-assembler-helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-20T14:33:01Z",
+      "side": 1,
+      "message": "I wonder if we should actually get rid of `LOAD_TAGGED_ROOT`, as apparently we never load a tagged from root.\n\nI think the `__ BitcastWordPtrToTagged(...)` within a `LOAD_TAGGED_ROOT` would only be useful if it prevented us in the future from using a `LOAD_ROOT` with a `MemoryRepresentation::TaggedPointer()`, but since `LOAD_ROOT` does not have a `type` parameter, this may be unlikely to happen. Maybe there could be a comment in `LOAD_ROOT` that a `LOAD_TAGGED_ROOT` should not exist, but I\u0027m not sure anyone would see this comment when they want to introduce a `LOAD_TAGGED_ROOT`.",
+      "parentUuid": "8b682584_b5558246",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
