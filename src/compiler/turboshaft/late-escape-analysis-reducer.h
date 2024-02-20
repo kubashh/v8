@@ -7,7 +7,6 @@
 
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/graph.h"
-#include "src/compiler/turboshaft/utils.h"
 #include "src/zone/zone-containers.h"
 #include "src/zone/zone.h"
 

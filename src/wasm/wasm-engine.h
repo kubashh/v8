@@ -9,11 +9,9 @@
 #ifndef V8_WASM_WASM_ENGINE_H_
 #define V8_WASM_WASM_ENGINE_H_
 
-#include <algorithm>
 #include <map>
 #include <memory>
 #include <unordered_map>
-#include <unordered_set>
 
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
@@ -21,7 +19,8 @@
 #include "src/tasks/cancelable-task.h"
 #include "src/tasks/operations-barrier.h"
 #include "src/wasm/canonical-types.h"
-#include "src/wasm/wasm-code-manager.h"
+#include "src/wasm/wasm-features.h"
+#include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-tier.h"
 #include "src/zone/accounting-allocator.h"
 
@@ -30,6 +29,7 @@ namespace internal {
 
 class AsmWasmData;
 class CodeTracer;
+class Counters;
 class CompilationStatistics;
 class HeapNumber;
 class WasmInstanceObject;
@@ -48,7 +48,9 @@ class AsyncCompileJob;
 class ErrorThrower;
 struct ModuleWireBytes;
 class StreamingDecoder;
-class WasmFeatures;
+class NativeModule;
+class WasmCode;
+class WasmCodeManager;
 
 class V8_EXPORT_PRIVATE CompilationResultResolver {
  public:

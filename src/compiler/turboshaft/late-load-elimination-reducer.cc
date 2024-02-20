@@ -4,9 +4,9 @@
 
 #include "src/compiler/turboshaft/late-load-elimination-reducer.h"
 
-#include "src/compiler/js-heap-broker.h"
+#include "src/compiler/turboshaft/analyzer-iterator.h"
+#include "src/compiler/turboshaft/loop-finder.h"
 #include "src/compiler/turboshaft/opmasks.h"
-#include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/objects/code-inl.h"
 

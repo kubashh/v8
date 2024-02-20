@@ -11,6 +11,73 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
+struct TypeCanonicalizer::CanonicalType {
+  TypeDefinition type_def;
+  bool is_relative_supertype;
+
+  bool operator==(const CanonicalType& other) const {
+    return type_def == other.type_def &&
+           is_relative_supertype == other.is_relative_supertype;
+  }
+
+  bool operator!=(const CanonicalType& other) const {
+    return !operator==(other);
+  }
+
+  size_t hash_value() const {
+    uint32_t metadata = (type_def.supertype << 2) |
+                        (type_def.is_final ? 2 : 0) |
+                        (is_relative_supertype ? 1 : 0);
+    base::Hasher hasher;
+    hasher.Add(metadata);
+    if (type_def.kind == TypeDefinition::kFunction) {
+      hasher.Add(*type_def.function_sig);
+    } else if (type_def.kind == TypeDefinition::kStruct) {
+      hasher.Add(*type_def.struct_type);
+    } else {
+      DCHECK_EQ(TypeDefinition::kArray, type_def.kind);
+      hasher.Add(*type_def.array_type);
+    }
+    return hasher.hash();
+  }
+};
+
+struct TypeCanonicalizer::CanonicalGroup {
+  CanonicalGroup(Zone* zone, size_t size)
+      : types(zone->AllocateVector<CanonicalType>(size)) {}
+
+  bool operator==(const CanonicalGroup& other) const {
+    return types == other.types;
+  }
+
+  bool operator!=(const CanonicalGroup& other) const {
+    return types != other.types;
+  }
+
+  size_t hash_value() const {
+    return base::Hasher{}.AddRange(types.begin(), types.end()).hash();
+  }
+
+  // The storage of this vector is the TypeCanonicalizer's zone_.
+  base::Vector<CanonicalType> types;
+};
+
+struct TypeCanonicalizer::CanonicalSingletonGroup {
+  struct hash {
+    size_t operator()(const CanonicalSingletonGroup& group) const {
+      return group.hash_value();
+    }
+  };
+
+  bool operator==(const CanonicalSingletonGroup& other) const {
+    return type == other.type;
+  }
+
+  size_t hash_value() const { return type.hash_value(); }
+
+  CanonicalType type;
+};
+
 TypeCanonicalizer* GetTypeCanonicalizer() {
   return GetWasmEngine()->type_canonicalizer();
 }
@@ -19,6 +86,8 @@ TypeCanonicalizer::TypeCanonicalizer() {
   AddPredefinedArrayType(kPredefinedArrayI8Index, kWasmI8);
   AddPredefinedArrayType(kPredefinedArrayI16Index, kWasmI16);
 }
+
+TypeCanonicalizer::~TypeCanonicalizer() {}
 
 void TypeCanonicalizer::AddRecursiveGroup(WasmModule* module, uint32_t size) {
   AddRecursiveGroup(module, size,

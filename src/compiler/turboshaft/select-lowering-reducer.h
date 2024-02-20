@@ -5,8 +5,6 @@
 #ifndef V8_COMPILER_TURBOSHAFT_SELECT_LOWERING_REDUCER_H_
 #define V8_COMPILER_TURBOSHAFT_SELECT_LOWERING_REDUCER_H_
 
-#include "src/base/vector.h"
-#include "src/compiler/common-operator.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/operations.h"
 

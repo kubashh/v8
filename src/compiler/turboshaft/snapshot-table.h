@@ -5,12 +5,9 @@
 #ifndef V8_COMPILER_TURBOSHAFT_SNAPSHOT_TABLE_H_
 #define V8_COMPILER_TURBOSHAFT_SNAPSHOT_TABLE_H_
 
-#include <iostream>
 #include <limits>
 
 #include "src/base/iterator.h"
-#include "src/base/small-vector.h"
-#include "src/compiler/turboshaft/fast-hash.h"
 #include "src/zone/zone-containers.h"
 
 // A `SnapshotTable` stores a mapping from keys to values and creates snapshots,

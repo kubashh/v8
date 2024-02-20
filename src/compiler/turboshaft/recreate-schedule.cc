@@ -7,15 +7,12 @@
 #include "src/base/logging.h"
 #include "src/base/safe_conversions.h"
 #include "src/base/small-vector.h"
-#include "src/base/template-utils.h"
 #include "src/base/vector.h"
-#include "src/codegen/callable.h"
 #include "src/codegen/machine-type.h"
 #include "src/common/globals.h"
 #include "src/compiler/backend/instruction-selector.h"
 #include "src/compiler/common-operator.h"
 #include "src/compiler/compiler-source-position-table.h"
-#include "src/compiler/feedback-source.h"
 #include "src/compiler/graph.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/linkage.h"
@@ -31,7 +28,6 @@
 #include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/write-barrier-kind.h"
-#include "src/utils/utils.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8::internal::compiler::turboshaft {

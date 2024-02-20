@@ -15,7 +15,6 @@
 
 #include "src/wasm/compilation-environment.h"
 #include "src/wasm/wasm-module.h"
-#include "src/zone/zone-containers.h"
 
 namespace v8::internal::wasm {
 

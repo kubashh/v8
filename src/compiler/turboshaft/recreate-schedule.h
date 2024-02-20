@@ -5,10 +5,6 @@
 #ifndef V8_COMPILER_TURBOSHAFT_RECREATE_SCHEDULE_H_
 #define V8_COMPILER_TURBOSHAFT_RECREATE_SCHEDULE_H_
 
-#include "src/compiler/compiler-source-position-table.h"
-#include "src/compiler/js-heap-broker.h"
-#include "src/compiler/node-origin-table.h"
-
 namespace v8::internal {
 class Zone;
 }

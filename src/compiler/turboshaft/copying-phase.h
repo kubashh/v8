@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <utility>
 
 #include "src/base/iterator.h"
 #include "src/base/logging.h"
@@ -21,9 +20,7 @@
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
-#include "src/compiler/turboshaft/reducer-traits.h"
 #include "src/compiler/turboshaft/representations.h"
-#include "src/compiler/turboshaft/snapshot-table.h"
 #include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/zone/zone-containers.h"
 

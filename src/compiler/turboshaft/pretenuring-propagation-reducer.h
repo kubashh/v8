@@ -6,10 +6,8 @@
 #define V8_COMPILER_TURBOSHAFT_PRETENURING_PROPAGATION_REDUCER_H_
 
 #include "src/compiler/turboshaft/assembler.h"
-#include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/reducer-traits.h"
 #include "src/compiler/turboshaft/utils.h"
-#include "src/zone/zone-allocator.h"
 #include "src/zone/zone-containers.h"
 #include "src/zone/zone.h"
 

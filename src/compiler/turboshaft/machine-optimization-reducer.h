@@ -7,25 +7,18 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstring>
 #include <limits>
-#include <type_traits>
 
 #include "src/base/bits.h"
 #include "src/base/division-by-constant.h"
-#include "src/base/functional.h"
 #include "src/base/ieee754.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
-#include "src/base/overflowing-math.h"
-#include "src/base/template-utils.h"
+#include "src/base/numbers/double.h"
 #include "src/base/vector.h"
 #include "src/builtins/builtins.h"
-#include "src/codegen/machine-type.h"
-#include "src/compiler/backend/instruction.h"
 #include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/js-heap-broker.h"
-#include "src/compiler/machine-operator-reducer.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/opmasks.h"

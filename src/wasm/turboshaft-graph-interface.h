@@ -16,7 +16,6 @@
 #include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/objects/code-kind.h"
 #include "src/wasm/decoder.h"
-#include "src/wasm/function-body-decoder-impl.h"
 #include "src/wasm/value-type.h"
 #include "src/zone/zone-containers.h"
 
@@ -73,10 +72,6 @@ class V8_EXPORT_PRIVATE WasmGraphBuilderBase {
 
   template <typename T>
   using V = compiler::turboshaft::V<T>;
-
-  using ValidationTag = Decoder::FullValidationTag;
-  using FullDecoder =
-      WasmFullDecoder<ValidationTag, TurboshaftGraphBuildingInterface>;
 
   OpIndex CallRuntime(Zone* zone, Runtime::FunctionId f,
                       std::initializer_list<const OpIndex> args,

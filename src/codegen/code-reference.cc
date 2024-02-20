@@ -9,10 +9,6 @@
 #include "src/handles/handles-inl.h"
 #include "src/objects/objects-inl.h"
 
-#if V8_ENABLE_WEBASSEMBLY
-#include "src/wasm/wasm-code-manager.h"
-#endif  // V8_ENABLE_WEBASSEMBLY
-
 namespace v8 {
 namespace internal {
 

@@ -5,7 +5,7 @@
 #ifndef V8_TORQUE_SOURCE_POSITIONS_H_
 #define V8_TORQUE_SOURCE_POSITIONS_H_
 
-#include <iostream>
+#include <iosfwd>
 
 #include "src/base/contextual.h"
 
@@ -109,12 +109,7 @@ inline std::string PositionAsString(SourcePosition pos) {
          std::to_string(pos.start.column + 1);
 }
 
-inline std::ostream& operator<<(std::ostream& out, SourcePosition pos) {
-  return out << "https://source.chromium.org/chromium/chromium/src/+/main:v8/"
-             << SourceFileMap::PathFromV8Root(pos.source)
-             << "?l=" << (pos.start.line + 1)
-             << "&c=" << (pos.start.column + 1);
-}
+std::ostream& operator<<(std::ostream& out, SourcePosition pos);
 
 }  // namespace torque
 }  // namespace internal

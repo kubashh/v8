@@ -6,15 +6,11 @@
 #define V8_COMPILER_TURBOSHAFT_ASSEMBLER_H_
 
 #include <cstring>
-#include <iterator>
-#include <limits>
-#include <memory>
 #include <type_traits>
 
 #include "src/base/logging.h"
 #include "src/base/macros.h"
 #include "src/base/small-vector.h"
-#include "src/base/string-format.h"
 #include "src/base/template-utils.h"
 #include "src/base/vector.h"
 #include "src/codegen/callable.h"
@@ -33,14 +29,11 @@
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/turboshaft/runtime-call-descriptors.h"
 #include "src/compiler/turboshaft/sidetable.h"
-#include "src/compiler/turboshaft/snapshot-table.h"
 #include "src/compiler/turboshaft/uniform-reducer-adapter.h"
 #include "src/compiler/turboshaft/utils.h"
 #include "src/flags/flags.h"
-#include "src/logging/runtime-call-stats.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/fixed-array.h"
-#include "src/objects/heap-number.h"
 #include "src/objects/oddball.h"
 #include "src/objects/tagged.h"
 #include "src/objects/turbofan-types.h"

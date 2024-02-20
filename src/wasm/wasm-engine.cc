@@ -18,7 +18,6 @@
 #include "src/logging/counters.h"
 #include "src/logging/metrics.h"
 #include "src/objects/heap-number.h"
-#include "src/objects/managed-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/objects.h"
 #include "src/objects/primitive-heap-object.h"

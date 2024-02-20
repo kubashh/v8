@@ -11,7 +11,6 @@
 
 #include <cinttypes>
 #include <cstdarg>
-#include <memory>
 
 #include "src/base/compiler-specific.h"
 #include "src/base/memory.h"

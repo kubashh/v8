@@ -6,7 +6,6 @@
 #define V8_COMPILER_TURBOSHAFT_LAYERED_HASH_MAP_H_
 
 #include <cstddef>
-#include <iostream>
 #include <limits>
 
 #include "src/base/bits.h"

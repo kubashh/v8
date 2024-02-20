@@ -5,7 +5,6 @@
 #ifndef V8_COMPILER_TURBOSHAFT_BRANCH_ELIMINATION_REDUCER_H_
 #define V8_COMPILER_TURBOSHAFT_BRANCH_ELIMINATION_REDUCER_H_
 
-#include "src/base/bits.h"
 #include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/compiler/turboshaft/assembler.h"

@@ -9,8 +9,6 @@
 #ifndef V8_WASM_MODULE_COMPILER_H_
 #define V8_WASM_MODULE_COMPILER_H_
 
-#include <atomic>
-#include <functional>
 #include <memory>
 
 #include "include/v8-metrics.h"

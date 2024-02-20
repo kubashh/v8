@@ -7,7 +7,6 @@
 
 #include <cstdint>
 
-#include "src/base/functional.h"
 #include "src/base/logging.h"
 #include "src/codegen/machine-type.h"
 #include "src/compiler/turboshaft/utils.h"

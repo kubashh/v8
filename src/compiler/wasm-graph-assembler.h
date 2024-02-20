@@ -10,7 +10,7 @@
 #define V8_COMPILER_WASM_GRAPH_ASSEMBLER_H_
 
 #include "src/compiler/graph-assembler.h"
-#include "src/wasm/wasm-code-manager.h"
+#include "src/wasm/wasm-module.h"
 
 namespace v8 {
 namespace internal {

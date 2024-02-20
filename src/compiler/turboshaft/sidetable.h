@@ -6,14 +6,8 @@
 #define V8_COMPILER_TURBOSHAFT_SIDETABLE_H_
 
 #include <algorithm>
-#include <iterator>
-#include <limits>
-#include <memory>
 #include <type_traits>
 
-#include "src/base/iterator.h"
-#include "src/base/small-vector.h"
-#include "src/base/vector.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/zone/zone-containers.h"
 

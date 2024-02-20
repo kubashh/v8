@@ -15,7 +15,7 @@
 #include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/wasm-compiler.h"
 #include "src/compiler/wasm-graph-assembler.h"
-#include "src/wasm/wasm-engine.h"
+#include "src/wasm/wasm-module.h"
 
 namespace v8::internal::compiler::turboshaft {
 

@@ -10,10 +10,10 @@
 #define V8_WASM_STRING_BUILDER_MULTILINE_H_
 
 #include <cstring>
-#include <iostream>
-#include <string>
+#include <iosfwd>
 #include <vector>
 
+#include "src/base/logging.h"
 #include "src/wasm/string-builder.h"
 
 namespace v8 {
