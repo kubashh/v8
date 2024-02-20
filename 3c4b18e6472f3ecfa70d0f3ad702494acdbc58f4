@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac624d1b_e023091e",
+        "filename": "BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 4657,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de34df21_6f687e85",
+      "range": {
+        "startLine": 4657,
+        "startChar": 27,
+        "endLine": 4657,
+        "endChar": 34
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3a728ee_abf52d09",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-02-06T11:16:06Z",
       "side": 1,
       "message": "Same here. This sounds as if executing generated riscv64 code was possible on loong64 hardware without a simulator? Did you mean `riscv64` here and in the condition below?",
+      "range": {
+        "startLine": 5971,
+        "startChar": 36,
+        "endLine": 5972,
+        "endChar": 20
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c19a09a_f1530572",
+        "filename": "BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 5972,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3a728ee_abf52d09",
       "range": {
         "startLine": 5971,
         "startChar": 36,
@@ -139,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "714f0efb_9ccf667a",
+        "filename": "src/trap-handler/trap-handler.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f152f0da_59a69ffa",
+      "range": {
+        "startLine": 50,
+        "startChar": 3,
+        "endLine": 50,
+        "endChar": 10
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdb43bb3_34cfd37c",
@@ -152,6 +224,30 @@
       "writtenOn": "2024-02-06T11:16:06Z",
       "side": 1,
       "message": "outdated comment. Just drop this word, so it reads \"...only on simulator builds...\".",
+      "range": {
+        "startLine": 753,
+        "startChar": 32,
+        "endLine": 753,
+        "endChar": 37
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a146f330_3cc1137e",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 15
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdb43bb3_34cfd37c",
       "range": {
         "startLine": 753,
         "startChar": 32,
@@ -185,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e59743a_488fd313",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c07a3538_cd818451",
+      "range": {
+        "startLine": 160,
+        "startChar": 19,
+        "endLine": 160,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "284617a0_50c44daa",
@@ -198,6 +318,30 @@
       "writtenOn": "2024-02-06T11:16:06Z",
       "side": 1,
       "message": "`V8_HOST_ARCH_RISCV64` here too, I assume",
+      "range": {
+        "startLine": 473,
+        "startChar": 6,
+        "endLine": 473,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50f12746_9bfe3f35",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "284617a0_50c44daa",
       "range": {
         "startLine": 473,
         "startChar": 6,
@@ -231,6 +375,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5877880e_c5bc6db0",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da48dc85_8ef38bc8",
+      "range": {
+        "startLine": 529,
+        "startChar": 6,
+        "endLine": 529,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54bf984d_207ff1e1",
@@ -244,6 +412,30 @@
       "writtenOn": "2024-02-06T11:16:06Z",
       "side": 1,
       "message": "again",
+      "range": {
+        "startLine": 578,
+        "startChar": 6,
+        "endLine": 578,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "797cc3d5_4fc0d373",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54bf984d_207ff1e1",
       "range": {
         "startLine": 578,
         "startChar": 6,
@@ -277,6 +469,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "907d5c70_f91c6746",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa2ac096_e0bbc0c8",
+      "range": {
+        "startLine": 625,
+        "startChar": 6,
+        "endLine": 625,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "478147fb_92d0d65c",
@@ -290,6 +506,30 @@
       "writtenOn": "2024-02-06T11:16:06Z",
       "side": 1,
       "message": "again",
+      "range": {
+        "startLine": 704,
+        "startChar": 6,
+        "endLine": 704,
+        "endChar": 26
+      },
+      "revId": "3c4b18e6472f3ecfa70d0f3ad702494acdbc58f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7524f519_61380458",
+        "filename": "test/unittests/wasm/trap-handler-native-unittest.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-02-20T06:08:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "478147fb_92d0d65c",
       "range": {
         "startLine": 704,
         "startChar": 6,
