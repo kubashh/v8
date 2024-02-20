@@ -7606,6 +7606,11 @@ class CallBuiltin : public ValueNodeT<CallBuiltin> {
   }
 
   Builtin builtin() const { return builtin_; }
+  Input& context_input() {
+    DCHECK(
+        Builtins::CallInterfaceDescriptorFor(builtin()).HasContextParameter());
+    return input(input_count() - 1);
+  }
 
   int InputCountWithoutContext() const {
     auto descriptor = Builtins::CallInterfaceDescriptorFor(builtin_);

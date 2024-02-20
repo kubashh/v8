@@ -198,6 +198,38 @@ class GraphBuilder {
 
     return maglev::ProcessResult::kContinue;
   }
+  maglev::ProcessResult Process(maglev::CallBuiltin* node,
+                                const maglev::ProcessingState& state) {
+    OpIndex frame_state = BuildFrameState(node->lazy_deopt_info());
+    Callable callable =
+        Builtins::CallableFor(isolate_->AsIsolate(), node->builtin());
+    const CallInterfaceDescriptor& descriptor = callable.descriptor();
+    CallDescriptor* call_descriptor = Linkage::GetStubCallDescriptor(
+        graph_zone(), descriptor, descriptor.GetStackParameterCount(),
+        CallDescriptor::kNeedsFrameState);
+    OpIndex stub_code = __ HeapConstant(callable.code());
+    base::SmallVector<OpIndex, 16> arguments;
+
+    for (int i = 0; i < node->InputCountWithoutContext(); i++) {
+      arguments.push_back(Map(node->input(i)));
+    }
+
+    if (node->has_feedback()) {
+      arguments.push_back(__ TaggedIndexConstant(node->feedback().index()));
+      arguments.push_back(__ HeapConstant(node->feedback().vector));
+    }
+
+    if (Builtins::CallInterfaceDescriptorFor(node->builtin())
+            .HasContextParameter()) {
+      arguments.push_back(Map(node->context_input()));
+    }
+
+    SetMap(node, __ Call(stub_code, frame_state, base::VectorOf(arguments),
+                         TSCallDescriptor::Create(
+                             call_descriptor, CanThrow::kYes, graph_zone())));
+
+    return maglev::ProcessResult::kContinue;
+  }
 
   maglev::ProcessResult Process(maglev::CheckMaps* node,
                                 const maglev::ProcessingState& state) {
@@ -229,6 +261,19 @@ class GraphBuilder {
     __ DeoptimizeIfNot(__ TaggedEqual(Map(node->target_input()),
                                       __ HeapConstant(node->value().object())),
                        frame_state, DeoptimizeReason::kWrongValue,
+                       node->eager_deopt_info()->feedback_to_update());
+    return maglev::ProcessResult::kContinue;
+  }
+  maglev::ProcessResult Process(maglev::CheckString* node,
+                                const maglev::ProcessingState& state) {
+    OpIndex frame_state = BuildFrameState(node->eager_deopt_info());
+    ObjectIsOp::InputAssumptions input_assumptions =
+        node->check_type() == maglev::CheckType::kCheckHeapObject
+            ? ObjectIsOp::InputAssumptions::kNone
+            : ObjectIsOp::InputAssumptions::kHeapObject;
+    V<Word32> check = __ ObjectIs(Map(node->receiver_input()),
+                                  ObjectIsOp::Kind::kString, input_assumptions);
+    __ DeoptimizeIfNot(check, frame_state, DeoptimizeReason::kNotAString,
                        node->eager_deopt_info()->feedback_to_update());
     return maglev::ProcessResult::kContinue;
   }
