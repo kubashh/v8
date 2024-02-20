@@ -63,6 +63,30 @@
       },
       "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcd86763_d3f26475",
+        "filename": "src/compiler/turboshaft/wasm-assembler-helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-20T14:46:25Z",
+      "side": 1,
+      "message": "@ahaas@chromium.org: Then maybe it shouldn\u0027t be called `LOAD_TAGGED_ROOT` but `LOAD_ROOT_AS_TAGGED`.\n\nThe only use case so far is:\n```\nV\u003cWeakArrayList\u003e rtts \u003d LOAD_TAGGED_ROOT(WasmCanonicalRtts);\nV\u003cTagged\u003e weak_rtt \u003d __ Load(\n    rtts, __ ChangeInt32ToIntPtr(loaded_sig),\n    LoadOp::Kind::TaggedBase(), MemoryRepresentation::TaggedPointer(),\n    WeakArrayList::kHeaderSize, kTaggedSizeLog2);\n```\nSo here we clearly expect a tagged value. (Or we\u0027d need to also adapt the load there to not use `TaggedBase()`.",
+      "parentUuid": "7eed450d_67df7c83",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
