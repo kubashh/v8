@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b25ed50_2e8ffeb5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-02-20T20:58:44Z",
+      "side": 1,
+      "message": "For readability of the commit history I would suggest including the commit message subjects for these too, e.g.\n\n```\nPort to riscv64:\n\nCommit 5154f22c8cdf24c3054a620e989024610b479a27\n\"Reland \"[wasm] Single landing pad for trap handlers\"\"\n...\n```",
+      "revId": "ab5d2ba606200e8cebd50ae18763617da609982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a78db8ec_cd5a5ff5",
@@ -14,6 +31,23 @@
       "writtenOn": "2024-02-20T09:22:06Z",
       "side": 1,
       "message": "non-RISCV-specific files LGTM.",
+      "revId": "ab5d2ba606200e8cebd50ae18763617da609982a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bbe407f_e9784de0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-02-20T20:58:44Z",
+      "side": 1,
+      "message": "LGTM for src/trap-handler/",
       "revId": "ab5d2ba606200e8cebd50ae18763617da609982a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
