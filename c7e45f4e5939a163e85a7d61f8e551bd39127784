@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7aeaf74_e546565b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-20T18:23:18Z",
+      "side": 1,
+      "message": "@ahaas@chromium.org: PTAL.\n@mfarazma@redhat.com: FYI. This should also fix the big endian platforms as the load type should now be consistent.",
+      "revId": "c7e45f4e5939a163e85a7d61f8e551bd39127784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
