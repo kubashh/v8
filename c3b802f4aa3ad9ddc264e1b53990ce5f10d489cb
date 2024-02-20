@@ -87,6 +87,30 @@
       },
       "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feb13494_abab49ad",
+        "filename": "src/compiler/turboshaft/wasm-assembler-helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-20T15:08:57Z",
+      "side": 1,
+      "message": "I think it should be as follows, where the caller uses LOAD_ROOT and then bitcasts by themselves:\n\n```\nV\u003cWeakArrayList\u003e rtts \u003d __ BitcastWordPtrToTagged(LOAD_ROOT(WasmCanonicalRtts));\nV\u003cTagged\u003e weak_rtt \u003d __ Load(\n    rtts, __ ChangeInt32ToIntPtr(loaded_sig),\n    LoadOp::Kind::TaggedBase(), MemoryRepresentation::TaggedPointer(),\n    WeakArrayList::kHeaderSize, kTaggedSizeLog2);\n```",
+      "parentUuid": "fcd86763_d3f26475",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
