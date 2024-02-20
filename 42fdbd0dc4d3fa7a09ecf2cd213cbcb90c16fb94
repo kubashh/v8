@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23561be8_836a5849",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e557f385_750c3149",
+      "range": {
+        "startLine": 1988,
+        "startChar": 6,
+        "endLine": 1988,
+        "endChar": 23
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d034001a_8b040838",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-19T14:35:35Z",
       "side": 1,
       "message": "This comment should be rephrased in that \"assumes\" here means that if it\u0027s stopped then it\u0027s started, otherwise it may just bail out.",
+      "range": {
+        "startLine": 1028,
+        "startChar": 5,
+        "endLine": 1028,
+        "endChar": 11
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9473a4d_cc4ee361",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d034001a_8b040838",
       "range": {
         "startLine": 1028,
         "startChar": 5,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd1dd7db_c1518fde",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51f2d091_8b4c3fb6",
+      "range": {
+        "startLine": 1030,
+        "startChar": 25,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f94a5943_5d3726e3",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-02-19T12:15:35Z",
       "side": 1,
       "message": "This might not be necessary.",
+      "range": {
+        "startLine": 84,
+        "startChar": 64,
+        "endLine": 84,
+        "endChar": 69
+      },
+      "revId": "42fdbd0dc4d3fa7a09ecf2cd213cbcb90c16fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6124520_8d4b480a",
+        "filename": "src/heap/memory-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-20T09:23:15Z",
+      "side": 1,
+      "message": "I decided to revert this one.\nThe hangs I saw on chrome crash generally don\u0027t come from here.",
+      "parentUuid": "f94a5943_5d3726e3",
       "range": {
         "startLine": 84,
         "startChar": 64,
