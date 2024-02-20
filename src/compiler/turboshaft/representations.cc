@@ -12,6 +12,8 @@ std::ostream& operator<<(std::ostream& os, MaybeRegisterRepresentation rep) {
       return os << "Word32";
     case MaybeRegisterRepresentation::Word64():
       return os << "Word64";
+    case MaybeRegisterRepresentation::Float16():
+      return os << "Float16";
     case MaybeRegisterRepresentation::Float32():
       return os << "Float32";
     case MaybeRegisterRepresentation::Float64():
@@ -45,6 +47,8 @@ std::ostream& operator<<(std::ostream& os, MemoryRepresentation rep) {
       return os << "Int64";
     case MemoryRepresentation::Uint64():
       return os << "Uint64";
+    case MemoryRepresentation::Float16():
+      return os << "Float16";
     case MemoryRepresentation::Float32():
       return os << "Float32";
     case MemoryRepresentation::Float64():

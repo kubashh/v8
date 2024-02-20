@@ -1053,6 +1053,11 @@ std::tuple<InstructionCode, ImmediateMode> GetStoreOpcodeAndImmediate(
   InstructionCode opcode = kArchNop;
   ImmediateMode immediate_mode = kNoImmediate;
   switch (rep) {
+    case MachineRepresentation::kFloat16:
+      CHECK(!paired);
+      opcode = kArm64StrH;
+      immediate_mode = kLoadStoreImm16;
+      break;
     case MachineRepresentation::kFloat32:
       CHECK(!paired);
       opcode = kArm64StrS;
@@ -1578,6 +1583,10 @@ void InstructionSelectorT<Adapter>::VisitLoad(node_t node) {
   LoadRepresentation load_rep = load.loaded_rep();
   MachineRepresentation rep = load_rep.representation();
   switch (rep) {
+    case MachineRepresentation::kFloat16:
+      opcode = kArm64LdrH;
+      immediate_mode = kLoadStoreImm16;
+      break;
     case MachineRepresentation::kFloat32:
       opcode = kArm64LdrS;
       immediate_mode = kLoadStoreImm32;

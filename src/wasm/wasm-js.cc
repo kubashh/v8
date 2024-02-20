@@ -1604,6 +1604,18 @@ bool ToI64(Local<v8::Value> value, Local<Context> context, int64_t* i64_value) {
   return true;
 }
 
+bool ToF16(Local<v8::Value> value, Local<Context> context,
+           _Float16* f16_value) {
+  if (!value->IsUndefined()) {
+    double f64_value = 0;
+    v8::Local<v8::Number> number_value;
+    if (!value->ToNumber(context).ToLocal(&number_value)) return false;
+    if (!number_value->NumberValue(context).To(&f64_value)) return false;
+    *f16_value = i::DoubleToFloat16(f64_value);
+  }
+  return true;
+}
+
 bool ToF32(Local<v8::Value> value, Local<Context> context, float* f32_value) {
   if (!value->IsUndefined()) {
     double f64_value = 0;
@@ -1711,6 +1723,12 @@ void WebAssemblyGlobalImpl(const v8::FunctionCallbackInfo<v8::Value>& info) {
       int64_t i64_value = 0;
       if (!ToI64(value, context, &i64_value)) return;
       global_obj->SetI64(i64_value);
+      break;
+    }
+    case i::wasm::kF16: {
+      _Float16 f16_value = 0;
+      if (!ToF16(value, context, &f16_value)) return;
+      global_obj->SetF16(f16_value);
       break;
     }
     case i::wasm::kF32: {
@@ -1963,6 +1981,7 @@ void EncodeExceptionValues(v8::Isolate* isolate,
       case i::wasm::kVoid:
       case i::wasm::kBottom:
       case i::wasm::kS128:
+      case i::wasm::kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
   }
@@ -2718,6 +2737,7 @@ void WebAssemblyExceptionGetArgImpl(
       case i::wasm::kVoid:
       case i::wasm::kBottom:
       case i::wasm::kS128:
+      case i::wasm::kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
   }
@@ -2766,6 +2786,7 @@ void WebAssemblyExceptionGetArgImpl(
     case i::wasm::kVoid:
     case i::wasm::kBottom:
     case i::wasm::kS128:
+    case i::wasm::kF16:  // TODO(irezvov): FP16
       UNREACHABLE();
   }
   info.GetReturnValue().Set(result);
@@ -2813,6 +2834,9 @@ void WebAssemblyGlobalGetValueCommon(
       return_value.Set(value);
       break;
     }
+    case i::wasm::kF16:
+      return_value.Set(receiver->GetF16());
+      break;
     case i::wasm::kF32:
       return_value.Set(receiver->GetF32());
       break;
@@ -2883,6 +2907,12 @@ void WebAssemblyGlobalSetValueImpl(
       v8::Local<v8::BigInt> bigint_value;
       if (!info[0]->ToBigInt(context).ToLocal(&bigint_value)) return;
       receiver->SetI64(bigint_value->Int64Value());
+      break;
+    }
+    case i::wasm::kF16: {
+      double f64_value = 0;
+      if (!info[0]->NumberValue(context).To(&f64_value)) return;
+      receiver->SetF16(i::DoubleToFloat16(f64_value));
       break;
     }
     case i::wasm::kF32: {

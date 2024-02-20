@@ -434,6 +434,7 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       if (code_type != kWasm) CheckTypeIs(node, Type::Machine());
       break;
     }
+    case IrOpcode::kFloat16Constant:
     case IrOpcode::kFloat32Constant:
     case IrOpcode::kFloat64Constant: {
       // Constants have no inputs.

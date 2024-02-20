@@ -3131,6 +3131,8 @@ void InstructionSelectorT<TurbofanAdapter>::VisitNode(Node* node) {
     case IrOpcode::kRelocatableInt32Constant:
     case IrOpcode::kRelocatableInt64Constant:
       return VisitConstant(node);
+    case IrOpcode::kFloat16Constant:
+      return MarkAsFloat16(node), VisitConstant(node);
     case IrOpcode::kFloat32Constant:
       return MarkAsFloat32(node), VisitConstant(node);
     case IrOpcode::kFloat64Constant:
@@ -4591,6 +4593,9 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
         case ConstantOp::Kind::kSmi:
         case ConstantOp::Kind::kTaggedIndex:
         case ConstantOp::Kind::kExternal:
+          break;
+        case ConstantOp::Kind::kFloat16:
+          MarkAsFloat16(node);
           break;
         case ConstantOp::Kind::kFloat32:
           MarkAsFloat32(node);

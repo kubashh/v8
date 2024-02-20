@@ -1294,6 +1294,14 @@ const Operator* CommonOperatorBuilder::TaggedIndexConstant(int32_t value) {
       value);                                           // parameter
 }
 
+const Operator* CommonOperatorBuilder::Float16Constant(_Float16 value) {
+  return zone()->New<Operator1<_Float16>>(          // --
+      IrOpcode::kFloat16Constant, Operator::kPure,  // opcode
+      "Float16Constant",                            // name
+      0, 0, 0, 1, 0, 0,                             // counts
+      value);                                       // parameter
+}
+
 const Operator* CommonOperatorBuilder::Float32Constant(float value) {
   return zone()->New<Operator1<float>>(             // --
       IrOpcode::kFloat32Constant, Operator::kPure,  // opcode

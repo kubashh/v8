@@ -1730,6 +1730,9 @@ class TurboshaftAssemblerOpInterface
     return V<Smi>::Cast(
         ReduceIfReachableConstant(ConstantOp::Kind::kSmi, value));
   }
+  V<Float32> Float16Constant(_Float16 value) {
+    return ReduceIfReachableConstant(ConstantOp::Kind::kFloat16, value);
+  }
   V<Float32> Float32Constant(float value) {
     return ReduceIfReachableConstant(ConstantOp::Kind::kFloat32, value);
   }
@@ -1738,6 +1741,8 @@ class TurboshaftAssemblerOpInterface
   }
   OpIndex FloatConstant(double value, FloatRepresentation rep) {
     switch (rep.value()) {
+      case FloatRepresentation::Float16():
+        return Float32Constant(static_cast<_Float16>(value));
       case FloatRepresentation::Float32():
         return Float32Constant(static_cast<float>(value));
       case FloatRepresentation::Float64():

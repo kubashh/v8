@@ -6372,6 +6372,22 @@ TNode<Smi> CodeStubAssembler::TryFloat64ToSmi(TNode<Float64T> value,
   }
 }
 
+TNode<Number> CodeStubAssembler::ChangeFloat16ToTagged(TNode<Float16T> value) {
+  Label not_smi(this), done(this);
+  TVARIABLE(Number, var_result);
+  // var_result = TryFloat16ToSmi(value, &not_smi);
+  // Goto(&done);
+
+  // BIND(&not_smi);
+  // {
+  //   var_result = AllocateHeapNumberWithValue(ChangeFloat16ToFloat64(value));
+  //   Goto(&done);
+  // }
+
+  BIND(&done);
+  return var_result.value();
+}
+
 TNode<Number> CodeStubAssembler::ChangeFloat32ToTagged(TNode<Float32T> value) {
   Label not_smi(this), done(this);
   TVARIABLE(Number, var_result);

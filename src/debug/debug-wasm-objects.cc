@@ -906,6 +906,11 @@ Handle<WasmValueObject> WasmValueObject::New(
       v = BigInt::FromInt64(isolate, value.to_i64_unchecked());
       break;
     }
+    case wasm::kF16: {
+      t = isolate->factory()->InternalizeString(base::StaticCharVector("f16"));
+      v = isolate->factory()->NewNumber(value.to_f16_unchecked());
+      break;
+    }
     case wasm::kF32: {
       t = isolate->factory()->InternalizeString(base::StaticCharVector("f32"));
       v = isolate->factory()->NewNumber(value.to_f32_unchecked());

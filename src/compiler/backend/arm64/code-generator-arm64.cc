@@ -44,6 +44,15 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
     return InputDoubleRegister(index).Q();
   }
 
+  CPURegister InputFloat16OrZeroRegister(size_t index) {
+    if (instr_->InputAt(index)->IsImmediate()) {
+      DCHECK_EQ(0, base::bit_cast<int16_t>(InputFloat16(index)));
+      return wzr;
+    }
+    DCHECK(instr_->InputAt(index)->IsFPRegister());
+    return InputDoubleRegister(index).H();
+  }
+
   CPURegister InputFloat32OrZeroRegister(size_t index) {
     if (instr_->InputAt(index)->IsImmediate()) {
       DCHECK_EQ(0, base::bit_cast<int32_t>(InputFloat32(index)));
@@ -229,6 +238,8 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
         }
 #endif  // V8_ENABLE_WEBASSEMBLY
         return Operand(constant.ToInt64());
+      case Constant::kFloat16:
+        return Operand::EmbeddedNumber(constant.ToFloat16());
       case Constant::kFloat32:
         return Operand::EmbeddedNumber(constant.ToFloat32());
       case Constant::kFloat64:
@@ -2085,6 +2096,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArm64StrEncodeSandboxedPointer:
       __ StoreSandboxedPointerField(i.InputOrZeroRegister64(0),
                                     i.MemoryOperand(1));
+      break;
+    case kArm64LdrH:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Ldr(i.OutputDoubleRegister().H(), i.MemoryOperand());
+      break;
+    case kArm64StrH:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Str(i.InputFloat16OrZeroRegister(0), i.MemoryOperand(1));
       break;
     case kArm64LdrS:
       RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());

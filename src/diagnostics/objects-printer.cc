@@ -424,7 +424,7 @@ void DoPrintElements(std::ostream& os, Tagged<Object> object, int length) {
   }
 }
 
-template <typename ElementType>
+template <typename ElementType, typename PrintType = ElementType>
 void PrintTypedArrayElements(std::ostream& os, const ElementType* data_ptr,
                              size_t length, bool is_on_heap) {
   if (length == 0) return;
@@ -448,7 +448,8 @@ void PrintTypedArrayElements(std::ostream& os, const ElementType* data_ptr,
     if (previous_index != i - 1) {
       ss << '-' << (i - 1);
     }
-    os << std::setw(12) << ss.str() << ": " << +previous_value;
+    os << std::setw(12) << ss.str() << ": "
+       << +static_cast<PrintType>(previous_value);
     previous_index = i;
     previous_value = value;
   }
@@ -2200,6 +2201,10 @@ void WasmStruct::WasmStructPrint(std::ostream& os) {
       case wasm::kI64:
         os << base::ReadUnalignedValue<int64_t>(field_address);
         break;
+      case wasm::kF16:
+        os << static_cast<float>(
+            base::ReadUnalignedValue<_Float16>(field_address));
+        break;
       case wasm::kF32:
         os << base::ReadUnalignedValue<float>(field_address);
         break;
@@ -2259,6 +2264,10 @@ void WasmArray::WasmArrayPrint(std::ostream& os) {
     case wasm::kI64:
       PrintTypedArrayElements(os, reinterpret_cast<int64_t*>(data_ptr), len,
                               true);
+      break;
+    case wasm::kF16:
+      PrintTypedArrayElements<_Float16, float>(
+          os, reinterpret_cast<_Float16*>(data_ptr), len, true);
       break;
     case wasm::kF32:
       PrintTypedArrayElements(os, reinterpret_cast<float*>(data_ptr), len,

@@ -150,6 +150,8 @@ UseInfo TruncatingUseInfoFromRepresentation(MachineRepresentation rep) {
       return UseInfo::AnyTagged();
     case MachineRepresentation::kFloat64:
       return UseInfo::TruncatingFloat64();
+    case MachineRepresentation::kFloat16:
+      return UseInfo::Float16();
     case MachineRepresentation::kFloat32:
       return UseInfo::Float32();
     case MachineRepresentation::kWord8:

@@ -2759,6 +2759,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Smi> TryHeapNumberToSmi(TNode<HeapNumber> number, Label* not_smi);
   TNode<Smi> TryFloat32ToSmi(TNode<Float32T> number, Label* not_smi);
   TNode<Smi> TryFloat64ToSmi(TNode<Float64T> number, Label* not_smi);
+  TNode<Number> ChangeFloat16ToTagged(TNode<Float16T> value);
   TNode<Number> ChangeFloat32ToTagged(TNode<Float32T> value);
   TNode<Number> ChangeFloat64ToTagged(TNode<Float64T> value);
   TNode<Number> ChangeInt32ToTagged(TNode<Int32T> value);

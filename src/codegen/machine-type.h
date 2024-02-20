@@ -47,6 +47,7 @@ enum class MachineRepresentation : uint8_t {
   // point into the sandbox.
   kSandboxedPointer,
   // FP and SIMD representations must be last, and in order of increasing size.
+  kFloat16,
   kFloat32,
   kFloat64,
   kSimd128,
@@ -203,6 +204,10 @@ class MachineType {
     return MachineType(MachineRepresentation::kWord64,
                        MachineSemantic::kUnsignedBigInt64);
   }
+  constexpr static MachineType Float16() {
+    return MachineType(MachineRepresentation::kFloat16,
+                       MachineSemantic::kNumber);
+  }
   constexpr static MachineType Float32() {
     return MachineType(MachineRepresentation::kFloat32,
                        MachineSemantic::kNumber);
@@ -272,6 +277,8 @@ class MachineType {
         return isSigned ? MachineType::Int32() : MachineType::Uint32();
       case MachineRepresentation::kWord64:
         return isSigned ? MachineType::Int64() : MachineType::Uint64();
+      case MachineRepresentation::kFloat16:
+        return MachineType::Float16();
       case MachineRepresentation::kFloat32:
         return MachineType::Float32();
       case MachineRepresentation::kFloat64:
@@ -419,6 +426,7 @@ V8_EXPORT_PRIVATE inline constexpr int ElementSizeLog2Of(
     case MachineRepresentation::kBit:
     case MachineRepresentation::kWord8:
       return 0;
+    case MachineRepresentation::kFloat16:
     case MachineRepresentation::kWord16:
       return 1;
     case MachineRepresentation::kWord32:

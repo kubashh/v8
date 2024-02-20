@@ -303,6 +303,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64CompareAndBranch:
       return kNoOpcodeFlags;
 
+    case kArm64LdrH:
     case kArm64LdrS:
     case kArm64LdrD:
     case kArm64LdrQ:
@@ -336,6 +337,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64Claim:
     case kArm64Poke:
     case kArm64PokePair:
+    case kArm64StrH:
     case kArm64StrS:
     case kArm64StrD:
     case kArm64StrQ:

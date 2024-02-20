@@ -925,6 +925,7 @@ Node* ScheduleBuilder::ProcessOperation(const SelectOp& op) {
     case RegisterRepresentation::Enum::kTagged:
     case RegisterRepresentation::Enum::kCompressed:
     case RegisterRepresentation::Enum::kSimd128:
+    case RegisterRepresentation::Enum::kFloat16:  // TODO(irezvov): FP16
       UNREACHABLE();
   }
 
@@ -1064,6 +1065,8 @@ Node* ScheduleBuilder::ProcessOperation(const ConstantOp& op) {
       return AddNode(common.Float64Constant(op.float64()), {});
     case ConstantOp::Kind::kFloat32:
       return AddNode(common.Float32Constant(op.float32()), {});
+    case ConstantOp::Kind::kFloat16:
+      return AddNode(common.Float16Constant(op.float16()), {});
     case ConstantOp::Kind::kRelocatableWasmCall:
       return RelocatableIntPtrConstant(op.integral(), RelocInfo::WASM_CALL);
     case ConstantOp::Kind::kRelocatableWasmStubCall:

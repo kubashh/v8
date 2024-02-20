@@ -473,6 +473,10 @@ class WasmGraphBuildingInterface {
     SetAndTypeNode(result, builder_->Int64Constant(value));
   }
 
+  void F16Const(FullDecoder* decoder, Value* result, _Float16 value) {
+    SetAndTypeNode(result, builder_->Float16Constant(value));
+  }
+
   void F32Const(FullDecoder* decoder, Value* result, float value) {
     SetAndTypeNode(result, builder_->Float32Constant(value));
   }

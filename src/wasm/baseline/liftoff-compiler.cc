@@ -2494,6 +2494,12 @@ class LiftoffCompiler {
     }
   }
 
+  void F16Const(FullDecoder* decoder, Value* result, _Float16 value) {
+    LiftoffRegister reg = __ GetUnusedRegister(kFpReg, {});
+    __ LoadConstant(reg, WasmValue(value));
+    __ PushRegister(kF16, reg);
+  }
+
   void F32Const(FullDecoder* decoder, Value* result, float value) {
     LiftoffRegister reg = __ GetUnusedRegister(kFpReg, {});
     __ LoadConstant(reg, WasmValue(value));
@@ -4905,6 +4911,7 @@ class LiftoffCompiler {
       case wasm::kI16:
       case wasm::kVoid:
       case wasm::kBottom:
+      case wasm::kF16:
         UNREACHABLE();
     }
   }
@@ -4961,6 +4968,7 @@ class LiftoffCompiler {
       case wasm::kI16:
       case wasm::kVoid:
       case wasm::kBottom:
+      case wasm::kF16:
         UNREACHABLE();
     }
     __ PushRegister(kind, value);
@@ -8396,6 +8404,8 @@ class LiftoffCompiler {
         return __ LoadConstant(reg, WasmValue(int32_t{0}));
       case kI64:
         return __ LoadConstant(reg, WasmValue(int64_t{0}));
+      case kF16:
+        return __ LoadConstant(reg, WasmValue(_Float16{0.0}));
       case kF32:
         return __ LoadConstant(reg, WasmValue(float{0.0}));
       case kF64:

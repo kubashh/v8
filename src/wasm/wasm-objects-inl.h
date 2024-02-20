@@ -137,6 +137,10 @@ int64_t WasmGlobalObject::GetI64() {
   return base::ReadUnalignedValue<int64_t>(address());
 }
 
+float WasmGlobalObject::GetF16() {
+  return base::ReadUnalignedValue<_Float16>(address());
+}
+
 float WasmGlobalObject::GetF32() {
   return base::ReadUnalignedValue<float>(address());
 }
@@ -160,6 +164,10 @@ void WasmGlobalObject::SetI32(int32_t value) {
 }
 
 void WasmGlobalObject::SetI64(int64_t value) {
+  base::WriteUnalignedValue(address(), value);
+}
+
+void WasmGlobalObject::SetF16(_Float16 value) {
   base::WriteUnalignedValue(address(), value);
 }
 
@@ -446,6 +454,10 @@ Handle<Object> WasmObject::ReadValueAt(Isolate* isolate, Handle<HeapObject> obj,
     case wasm::kI64: {
       int64_t value = base::ReadUnalignedValue<int64_t>(field_address);
       return BigInt::FromInt64(isolate, value);
+    }
+    case wasm::kF16: {
+      _Float16 value = base::Memory<_Float16>(field_address);
+      return isolate->factory()->NewNumber(value);
     }
     case wasm::kF32: {
       float value = base::Memory<float>(field_address);

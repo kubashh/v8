@@ -388,6 +388,8 @@ class InputsRepFactory {
       MaybeRegisterRepresentation::Word32(),
       MaybeRegisterRepresentation::Word64(),
       MaybeRegisterRepresentation::Word64(),
+      MaybeRegisterRepresentation::Float16(),
+      MaybeRegisterRepresentation::Float16(),
       MaybeRegisterRepresentation::Float32(),
       MaybeRegisterRepresentation::Float32(),
       MaybeRegisterRepresentation::Float64(),
@@ -2200,6 +2202,7 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
   enum class Kind : uint8_t {
     kWord32,
     kWord64,
+    kFloat16,
     kFloat32,
     kFloat64,
     kSmi,
@@ -2216,6 +2219,7 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
   RegisterRepresentation rep = Representation(kind);
   union Storage {
     uint64_t integral;
+    _Float16 float16;
     float float32;
     double float64;
     ExternalReference external;
@@ -2225,6 +2229,7 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
     Storage(i::Tagged<Smi> smi) : integral(smi.ptr()) {}
     Storage(double constant) : float64(constant) {}
     Storage(float constant) : float32(constant) {}
+    Storage(_Float16 constant) : float16(constant) {}
     Storage(ExternalReference constant) : external(constant) {}
     Storage(Handle<HeapObject> constant) : handle(constant) {}
 
@@ -2251,6 +2256,8 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
         return RegisterRepresentation::Word32();
       case Kind::kWord64:
         return RegisterRepresentation::Word64();
+      case Kind::kFloat16:
+        return RegisterRepresentation::Float16();
       case Kind::kFloat32:
         return RegisterRepresentation::Float32();
       case Kind::kFloat64:
@@ -2315,6 +2322,11 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
     return storage.float64;
   }
 
+  _Float16 float16() const {
+    DCHECK_EQ(kind, Kind::kFloat16);
+    return storage.float16;
+  }
+
   float float32() const {
     DCHECK_EQ(kind, Kind::kFloat32);
     return storage.float32;
@@ -2369,6 +2381,8 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
       case Kind::kRelocatableWasmCall:
       case Kind::kRelocatableWasmStubCall:
         return fast_hash_combine(opcode, kind, storage.integral);
+      case Kind::kFloat16:
+        return fast_hash_combine(opcode, kind, storage.float16);
       case Kind::kFloat32:
         return fast_hash_combine(opcode, kind, storage.float32);
       case Kind::kFloat64:
@@ -2391,6 +2405,13 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
       case Kind::kRelocatableWasmCall:
       case Kind::kRelocatableWasmStubCall:
         return storage.integral == other.storage.integral;
+      case Kind::kFloat16:
+        // Using a bit_cast to uint16_t in order to return false when comparing
+        // +0 and -0.
+        return base::bit_cast<uint16_t>(storage.float16) ==
+                   base::bit_cast<uint16_t>(other.storage.float16) ||
+               (std::isnan(storage.float16) &&
+                std::isnan(other.storage.float16));
       case Kind::kFloat32:
         // Using a bit_cast to uint32_t in order to return false when comparing
         // +0 and -0.

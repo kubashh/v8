@@ -261,6 +261,9 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
         case MachineRepresentation::kWord64:
           os << "|w64";
           break;
+        case MachineRepresentation::kFloat16:
+          os << "|f16";
+          break;
         case MachineRepresentation::kFloat32:
           os << "|f32";
           break;
@@ -614,6 +617,8 @@ std::ostream& operator<<(std::ostream& os, const Constant& constant) {
       return os << constant.ToInt32();
     case Constant::kInt64:
       return os << constant.ToInt64() << "l";
+    case Constant::kFloat16:
+      return os << static_cast<float>(constant.ToFloat16()) << "h";
     case Constant::kFloat32:
       return os << constant.ToFloat32() << "f";
     case Constant::kFloat64:
@@ -1035,6 +1040,7 @@ static MachineRepresentation FilterRepresentation(MachineRepresentation rep) {
     case MachineRepresentation::kTaggedSigned:
     case MachineRepresentation::kTaggedPointer:
     case MachineRepresentation::kTagged:
+    case MachineRepresentation::kFloat16:
     case MachineRepresentation::kFloat32:
     case MachineRepresentation::kFloat64:
     case MachineRepresentation::kSimd128:

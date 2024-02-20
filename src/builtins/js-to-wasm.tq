@@ -53,6 +53,8 @@ const kWasmI32Type:
     constexpr int32 generates 'wasm::kWasmI32.raw_bit_field()';
 const kWasmI64Type:
     constexpr int32 generates 'wasm::kWasmI64.raw_bit_field()';
+const kWasmF16Type:
+    constexpr int32 generates 'wasm::kWasmF16.raw_bit_field()';
 const kWasmF32Type:
     constexpr int32 generates 'wasm::kWasmF32.raw_bit_field()';
 const kWasmF64Type:
@@ -768,6 +770,10 @@ builtin JSToWasmHandleReturns(
           wrapperBuffer, kWrapperBufferGPReturnRegister1);
       const result = Convert<Number>(ret);
       return result;
+    } else if (retType == kWasmF16Type) {
+      const resultRef =
+          GetRefAt<float16>(wrapperBuffer, kWrapperBufferFPReturnRegister1);
+      return Convert<Number>(*resultRef);
     } else if (retType == kWasmF32Type) {
       const resultRef =
           GetRefAt<float32>(wrapperBuffer, kWrapperBufferFPReturnRegister1);

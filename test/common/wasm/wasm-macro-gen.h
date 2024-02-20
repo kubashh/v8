@@ -483,6 +483,12 @@ inline uint16_t ExtractPrefixedOpcodeBytes(WasmOpcode opcode) {
                            0x80),                                         \
       static_cast<uint8_t>((static_cast<int64_t>(val) >> 63) & MASK_7)
 
+#define WASM_F16(val)                                            \
+  kNumericPrefix, static_cast<uint8_t>(kExprF16Const),           \
+      static_cast<uint8_t>(                                      \
+          base::bit_cast<uint16_t>(static_cast<_Float16>(val))), \
+      static_cast<uint8_t>(                                      \
+          base::bit_cast<uint16_t>(static_cast<_Float16>(val)) >> 8)
 #define WASM_F32(val)                                                         \
   kExprF32Const,                                                              \
       static_cast<uint8_t>(base::bit_cast<int32_t>(static_cast<float>(val))), \

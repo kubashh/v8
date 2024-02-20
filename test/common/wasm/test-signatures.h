@@ -52,10 +52,12 @@ class TestSignatures {
         sig_s_s(1, 1, kSimd128Types4),
         sig_s_ss(1, 2, kSimd128Types4),
         sig_ii_v(2, 0, kIntTypes4),
-        sig_iii_v(3, 0, kIntTypes4) {
+        sig_iii_v(3, 0, kIntTypes4),
+        sig_h_v(1, 0, kHalfTypes4) {
     // I used C++ and you won't believe what happened next....
     for (int i = 0; i < 4; i++) kIntTypes4[i] = kWasmI32;
     for (int i = 0; i < 4; i++) kLongTypes4[i] = kWasmI64;
+    for (int i = 0; i < 4; i++) kHalfTypes4[i] = kWasmF16;
     for (int i = 0; i < 4; i++) kFloatTypes4[i] = kWasmF32;
     for (int i = 0; i < 4; i++) kDoubleTypes4[i] = kWasmF64;
     for (int i = 0; i < 4; i++) kExternRefTypes4[i] = kWasmExternRef;
@@ -120,6 +122,8 @@ class TestSignatures {
   FunctionSig* ii_v() { return &sig_ii_v; }
   FunctionSig* iii_v() { return &sig_iii_v; }
 
+  FunctionSig* h_v() { return &sig_h_v; }
+
   FunctionSig* many(Zone* zone, ValueType ret, ValueType param, int count) {
     FunctionSig::Builder builder(zone, ret == kWasmVoid ? 0 : 1, count);
     if (ret != kWasmVoid) builder.AddReturn(ret);
@@ -132,6 +136,7 @@ class TestSignatures {
  private:
   ValueType kIntTypes4[4];
   ValueType kLongTypes4[4];
+  ValueType kHalfTypes4[4];
   ValueType kFloatTypes4[4];
   ValueType kDoubleTypes4[4];
   ValueType kExternRefTypes4[4];
@@ -187,6 +192,8 @@ class TestSignatures {
 
   FunctionSig sig_ii_v;
   FunctionSig sig_iii_v;
+
+  FunctionSig sig_h_v;
 };
 }  // namespace wasm
 }  // namespace internal

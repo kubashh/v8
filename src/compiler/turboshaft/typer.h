@@ -1148,6 +1148,8 @@ class Typer {
         return Word32Type::Any();
       case RegisterRepresentation::Word64():
         return Word64Type::Any();
+      case RegisterRepresentation::Float16():
+        return Float16Type::Any();
       case RegisterRepresentation::Float32():
         return Float32Type::Any();
       case RegisterRepresentation::Float64():
@@ -1419,6 +1421,7 @@ class Typer {
       case RegisterRepresentation::Tagged():
       case RegisterRepresentation::Compressed():
       case RegisterRepresentation::Simd128():
+      case RegisterRepresentation::Float16():  // TODO(irezvov): FP16
         if (lhs.IsNone() || rhs.IsNone()) return Type::None();
         // TODO(nicohartmann@): Support those cases.
         return Word32Type::Set({0, 1}, zone);

@@ -2062,6 +2062,10 @@ uint32_t WasmExceptionPackage::GetEncodedSize(const wasm::WasmTagSig* sig) {
   uint32_t encoded_size = 0;
   for (size_t i = 0; i < sig->parameter_count(); ++i) {
     switch (sig->GetParam(i).kind()) {
+      case wasm::kF16:
+        DCHECK_EQ(1, ComputeEncodedElementSize(sig->GetParam(i)));
+        encoded_size += 1;  // ??
+        break;
       case wasm::kI32:
       case wasm::kF32:
         DCHECK_EQ(2, ComputeEncodedElementSize(sig->GetParam(i)));
