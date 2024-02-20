@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ea19484_9fe0d99b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-20T12:32:55Z",
+      "side": 1,
+      "message": "... and we should not be finishing sweeping.",
+      "range": {
+        "startLine": 1030,
+        "startChar": 53,
+        "endLine": 1030,
+        "endChar": 74
+      },
+      "revId": "ddd1f118a645ad51830b88f68e3f565f9a1b9a27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45dd35ed_f07a5a2c",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/custom_analyzer/data_race_5.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-02-20T12:32:55Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to update those. W also never update them with parameter changes.",
+      "range": {
+        "startLine": 9,
+        "startChar": 27,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "ddd1f118a645ad51830b88f68e3f565f9a1b9a27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
