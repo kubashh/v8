@@ -135,6 +135,30 @@
       },
       "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4fec263_806e5488",
+        "filename": "src/compiler/turboshaft/wasm-assembler-helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-20T15:37:43Z",
+      "side": 1,
+      "message": "After an offline discussion with Andreas, we figured out that we indeed need the bitcast to be safe as the `WasmCanonicalRtts` are movable. So this macro should always do the bitcast for safety reasons.\n\nProposal:\nLet\u0027s merge `LOAD_IMMUTABLE_ROOT` and `LOAD_TAGGED_ROOT` and `LOAD_ROOT` into:\n```\n#define LOAD_ROOT(name)                                          \\\n  V\u003ccompiler::turboshaft::RootTypes::k##name##Type\u003e::Cast(       \\\n      LoadRootHelper(Asm(), RootIndex::k##name))\n```\nand then add the following helper to this file:\n```\ntemplate \u003ctypename AssemblerT\u003e\nOpIndex LoadRootHelper(AssemblerT* asm, RootIndex index) {\n  if (RootsTable::IsImmortalImmovable(index)) {\n    return asm-\u003eLoad(asm-\u003eLoadRootRegister(), \n              LoadOp::Kind::RawAligned().Immutable(),\n              MemoryRepresentation::UintPtr(),\n              IsolateData::root_slot_offset(index)));\n  } else {\n    return asm-\u003eBitcastWordPtrToTagged(asm-\u003eLoad(asm-\u003eLoadRootRegister(), \n              LoadOp::Kind::RawAligned(),\n              MemoryRepresentation::UintPtr(),\n              IsolateData::root_slot_offset(index)));\n  }\n}\n```\n@mfarazma@redhat.com: Could you try this out? I can also take this over if you prefer (or if my proposal above doesn\u0027t work).",
+      "parentUuid": "feb13494_abab49ad",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
