@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aee1a75_ad8dfb76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-20T15:44:47Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "ce3102668dd51c260611ecf5fef3ae5d6099072d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb9dc92c_e1cd8443",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-02-20T15:44:47Z",
+      "side": 1,
+      "message": "This is the one of the sources of crashes in the wild.",
+      "range": {
+        "startLine": 2169,
+        "startChar": 9,
+        "endLine": 2169,
+        "endChar": 51
+      },
+      "revId": "ce3102668dd51c260611ecf5fef3ae5d6099072d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
