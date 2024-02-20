@@ -37,11 +37,12 @@ struct RootTypes {
               MemoryRepresentation::UintPtr(),                   \
               IsolateData::root_slot_offset(RootIndex::k##name)))
 
-#define LOAD_TAGGED_ROOT(name)                                   \
-  V<compiler::turboshaft::RootTypes::k##name##Type>::Cast(       \
-      __ Load(__ LoadRootRegister(), LoadOp::Kind::RawAligned(), \
-              MemoryRepresentation::TaggedPointer(),             \
-              IsolateData::root_slot_offset(RootIndex::k##name)))
+#define LOAD_ROOT_AS_TAGGED(name)                                    \
+  V<compiler::turboshaft::RootTypes::k##name##Type>::Cast(           \
+      __ BitcastWordPtrToTagged(                                     \
+          __ Load(__ LoadRootRegister(), LoadOp::Kind::RawAligned(), \
+                  MemoryRepresentation::UintPtr(),                   \
+                  IsolateData::root_slot_offset(RootIndex::k##name))))
 
 #define LOAD_IMMUTABLE_ROOT(name)                                            \
   V<compiler::turboshaft::RootTypes::k##name##Type>::Cast(                   \
