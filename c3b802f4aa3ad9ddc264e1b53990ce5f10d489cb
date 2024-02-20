@@ -111,6 +111,30 @@
       },
       "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18898b0b_efa66172",
+        "filename": "src/compiler/turboshaft/wasm-assembler-helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-02-20T15:21:34Z",
+      "side": 1,
+      "message": "I\u0027ve updated it to LOAD_ROOT_AS_TAGGED and added a bitcast, let me know if you like it done differently.",
+      "parentUuid": "feb13494_abab49ad",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 24
+      },
+      "revId": "c3b802f4aa3ad9ddc264e1b53990ce5f10d489cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
