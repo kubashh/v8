@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3d64135_eee3cd45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-20T15:17:56Z",
+      "side": 1,
+      "message": "LGTM, thanks! So IIUC we can now read arbitrary many input files, which we won\u0027t really need (e.g. 2 or more files), but which also doesn\u0027t hurt.",
+      "revId": "182bbcda33d73dd9ac46cc159f1d196048186742",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
