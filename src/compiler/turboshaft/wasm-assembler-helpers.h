@@ -40,7 +40,7 @@ struct RootTypes {
 #define LOAD_TAGGED_ROOT(name)                                   \
   V<compiler::turboshaft::RootTypes::k##name##Type>::Cast(       \
       __ Load(__ LoadRootRegister(), LoadOp::Kind::RawAligned(), \
-              MemoryRepresentation::TaggedPointer(),             \
+              MemoryRepresentation::UintPtr(),                   \
               IsolateData::root_slot_offset(RootIndex::k##name)))
 
 #define LOAD_IMMUTABLE_ROOT(name)                                            \
