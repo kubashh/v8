@@ -39,6 +39,30 @@
       },
       "revId": "b637c38917999acb14f7ffd6a2ac217cb212ee5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed8f2e56_ae05019e",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-20T08:42:43Z",
+      "side": 1,
+      "message": "I can see that I made effort writing this comment, but I still struggled a lot now to understand the issue.\n\nI extended the comment now to describe the problem. Let\u0027s see if we can understand it better now.",
+      "parentUuid": "6ca210ae_44ccbc2f",
+      "range": {
+        "startLine": 1423,
+        "startChar": 0,
+        "endLine": 1425,
+        "endChar": 0
+      },
+      "revId": "b637c38917999acb14f7ffd6a2ac217cb212ee5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
