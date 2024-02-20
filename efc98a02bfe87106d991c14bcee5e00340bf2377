@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17156279_40eb9696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-20T13:51:59Z",
+      "side": 1,
+      "message": "FYI, this added ~236kB to the V8 binary: https://chromeperf.appspot.com/report?sid\u003d7729274d24c8f295c74495ef929e06a356d5737a9efe18fb3762a78e29d3c879\u0026num_points\u003d500\n\nMight be worth looking into.",
+      "revId": "efc98a02bfe87106d991c14bcee5e00340bf2377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
