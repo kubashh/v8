@@ -4085,7 +4085,8 @@ void SwitchToTheCentralStackIfNeeded(MacroAssembler* masm, int edi_slot_index) {
             Immediate(ER::isolate_address(masm->isolate())));
     __ mov(Operand(esp, 1 * kSystemPointerSize), kOldSPRegister);
 
-    __ CallCFunction(ER::wasm_switch_to_the_central_stack(), 2);
+    __ CallCFunction(ER::wasm_switch_to_the_central_stack(), 2,
+                     SetIsolateDataSlots::kNo);
     __ mov(central_stack_sp, kReturnRegister0);
 
     __ pop(kRuntimeCallFunctionRegister);
@@ -4277,7 +4278,7 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
     __ mov(Operand(esp, 1 * kSystemPointerSize), Immediate(0));  // argv.
     __ Move(esi, Immediate(ER::isolate_address(masm->isolate())));
     __ mov(Operand(esp, 2 * kSystemPointerSize), esi);
-    __ CallCFunction(find_handler, 3);
+    __ CallCFunction(find_handler, 3, SetIsolateDataSlots::kNo);
   }
 
   // Retrieve the handler context, SP and FP.
