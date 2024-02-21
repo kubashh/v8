@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2503f171_2ac7f233",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-21T16:42:29Z",
+      "side": 1,
+      "message": "PTAL! :)",
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e30ec3_aabd682b",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2260,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-21T16:42:29Z",
+      "side": 1,
+      "message": "These 2 functions used to be later in this file, behind a `#ifdef WASM`; I moved them here so that they can be used from JS as well.",
+      "range": {
+        "startLine": 2247,
+        "startChar": 0,
+        "endLine": 2260,
+        "endChar": 3
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
