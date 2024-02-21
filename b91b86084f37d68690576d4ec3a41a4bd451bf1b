@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc20c38d_40def562",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-02-21T12:04:08Z",
+      "side": 1,
+      "message": "PTAL! We\u0027ll need this for a new Clusterfuzz job. I\u0027ll prepare a CL for the infra/config branch afterwards, I guess it\u0027ll be very similar to https://chromium-review.googlesource.com/c/v8/v8/+/3695582 ?",
+      "revId": "b91b86084f37d68690576d4ec3a41a4bd451bf1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
