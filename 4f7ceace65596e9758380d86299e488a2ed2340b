@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d256a3_da200206",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-21T09:13:26Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04c6aca2_d2f626d5",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-21T09:13:26Z",
+      "side": 1,
+      "message": "Nit: So tables have a `shared` and element segments an `is_shared`?",
+      "range": {
+        "startLine": 1958,
+        "startChar": 60,
+        "endLine": 1958,
+        "endChar": 66
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a07a7d6d_d9d33394",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-21T09:13:26Z",
+      "side": 1,
+      "message": "Nit: This is outdated.\nMaybe just remove the comment as `Static representation of a wasm table` is already implied by the name.",
+      "range": {
+        "startLine": 603,
+        "startChar": 35,
+        "endLine": 603,
+        "endChar": 54
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a0db43b_1751592b",
+        "filename": "test/mjsunit/wasm/shared-everything/basic.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-21T09:13:26Z",
+      "side": 1,
+      "message": "Do we have a test case for trying to inherit from a non-shared signature in a shared signature and the other way around?\n(Independent of this CL.)",
+      "range": {
+        "startLine": 228,
+        "startChar": 2,
+        "endLine": 229,
+        "endChar": 66
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54064946_a5aae669",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-21T09:13:26Z",
+      "side": 1,
+      "message": "Can you add this to `wasm-fuzzer-common.cc`? What about the disassembler?",
+      "range": {
+        "startLine": 1219,
+        "startChar": 63,
+        "endLine": 1219,
+        "endChar": 72
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
