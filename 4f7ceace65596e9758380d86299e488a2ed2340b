@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a320851_b586b18b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-02-21T15:17:37Z",
+      "side": 1,
+      "message": "We are generally not consistent with naming boolean fields. I will change this one for now.",
+      "parentUuid": "04c6aca2_d2f626d5",
+      "range": {
+        "startLine": 1958,
+        "startChar": 60,
+        "endLine": 1958,
+        "endChar": 66
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a07a7d6d_d9d33394",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-21T09:13:26Z",
       "side": 1,
       "message": "Nit: This is outdated.\nMaybe just remove the comment as `Static representation of a wasm table` is already implied by the name.",
+      "range": {
+        "startLine": 603,
+        "startChar": 35,
+        "endLine": 603,
+        "endChar": 54
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e5bf186_c5a1826c",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-02-21T15:17:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a07a7d6d_d9d33394",
       "range": {
         "startLine": 603,
         "startChar": 35,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0487d45_4f776bde",
+        "filename": "test/mjsunit/wasm/shared-everything/basic.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-02-21T15:17:37Z",
+      "side": 1,
+      "message": "I will add one in a later CL.",
+      "parentUuid": "6a0db43b_1751592b",
+      "range": {
+        "startLine": 228,
+        "startChar": 2,
+        "endLine": 229,
+        "endChar": 66
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54064946_a5aae669",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-02-21T09:13:26Z",
       "side": 1,
       "message": "Can you add this to `wasm-fuzzer-common.cc`? What about the disassembler?",
+      "range": {
+        "startLine": 1219,
+        "startChar": 63,
+        "endLine": 1219,
+        "endChar": 72
+      },
+      "revId": "4f7ceace65596e9758380d86299e488a2ed2340b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "048e0588_b5703cf2",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-02-21T15:17:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54064946_a5aae669",
       "range": {
         "startLine": 1219,
         "startChar": 63,
