@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "407f98d4_92b450b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-02-21T11:52:20Z",
+      "side": 1,
+      "message": "PTAL, and thanks for pointing out the missing opcode!",
+      "revId": "76d6437487b88560d3ee4dd74fa3d510d995ff7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
