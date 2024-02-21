@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "f1eed38b881d9660ea1ef6b13efbae65ab2ef328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ebbfa0_69020adb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-21T13:58:28Z",
+      "side": 1,
+      "message": "Ah, nice observation! `expected_arity` was actually used, but only implicitly with the assumption that `expected_arity \u003d wasm_count - suspend`.",
+      "revId": "f1eed38b881d9660ea1ef6b13efbae65ab2ef328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
