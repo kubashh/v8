@@ -546,7 +546,6 @@ GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
   }
 
   if (incremental_marking()->IsMajorMarking() &&
-      incremental_marking()->IsMajorMarkingComplete() &&
       AllocationLimitOvershotByLargeMargin()) {
     *reason = "Incremental marking needs finalization";
     return GarbageCollector::MARK_COMPACTOR;
