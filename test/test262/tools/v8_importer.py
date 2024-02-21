@@ -17,6 +17,7 @@ from blinkpy.w3c.test_importer import TestImporter
 TEST_FILE_REFERENCE_IN_STATUS_FILE = re.compile("^\s*'(.*)':.*,$")
 TEST262_FAILURE_LINE = re.compile("=== test262/(.*) ===")
 TEST262_PATTERN = re.compile('^test/(.*)\.js$')
+TEST262_RENAME_PATTERN = re.compile('^R[^\s]*\s*([^\s]*)\s*([^\s]*)$')
 TEST262_REPO_URL = 'https://chromium.googlesource.com/external/github.com/tc39/test262'
 V8_TEST262_ROLLS_META_BUG = 'v8:7834'
 
@@ -216,8 +217,8 @@ class V8TestImporter(TestImporter):
   def update_status_file(self, v8_test262_revision, test262_revision,
                          failure_lines):
     _log.info(f'Updating status file')
-    updated_status = self.remove_deleted_tests(v8_test262_revision,
-                                               test262_revision)
+    updated_status = self.remove_and_rename(v8_test262_revision,
+                                            test262_revision)
 
     added_lines = self.failed_tests_to_status_lines(failure_lines)
     if added_lines:
@@ -228,24 +229,28 @@ class V8TestImporter(TestImporter):
     with open(self.test262_status_file, 'w') as w_file:
       w_file.writelines(updated_status)
 
-  def remove_deleted_tests(self, v8_test262_revision, test262_revision):
-    # Remove deleted tests from the status file.
-    _log.info(f'Remove deleted tests references from status file')
-    updated_status = []
-    deleted_tests = self.get_updated_tests(
-        v8_test262_revision, test262_revision, update_kind='D')
+  def remove_and_rename(self, v8_test262_revision, test262_revision):
+    remover = DeletedTestsRemover(self, v8_test262_revision, test262_revision)
+    renamer = RenamedTestsUpdater(self, v8_test262_revision, test262_revision)
+
+    updated_status = [
+        self.updated_line(line, remover, renamer)
+        for line in self.status_file_content()
+    ]
+    return [line for line in updated_status if not line is None]
+
+  def updated_line(self, line, remover, renamer):
+    return remover.updated_line(renamer.updated_line(line))
+
+  def status_file_content(self):
     with open(self.test262_status_file, 'r') as r_file:
-      for line in r_file.readlines():
-        result = TEST_FILE_REFERENCE_IN_STATUS_FILE.match(line)
-        if result and (result.group(1) in deleted_tests):
-          _log.info(f'... removing {result.group(1)}')
-          continue
-        updated_status.append(line)
-    return updated_status
+      return r_file.readlines()
+
 
   def failed_tests_to_status_lines(self, failed_tests):
     # Transform the list of failed tests into a list of status file lines.
     return [f"  '{test}': [FAIL],\n" for test in failed_tests]
+
 
   def rewrite_status_file_content(self, updated_status, added_lines,
                                   v8_test262_revision, test262_revision):
@@ -265,20 +270,6 @@ class V8TestImporter(TestImporter):
     ]
     return (status_lines_before_eof + import_header_lines +
             new_failing_tests_lines + eof_status_lines)
-
-  def get_updated_tests(self,
-                        v8_test262_revision,
-                        test262_revision,
-                        update_kind='D'):
-    lines = self.test262_git.run([
-        'diff', '--name-only', f'--diff-filter={update_kind}',
-        v8_test262_revision, test262_revision, '--', 'test'
-    ]).splitlines()
-    return [
-        re.sub(TEST262_PATTERN, r'\1', line)
-        for line in lines
-        if line.strip() and TEST262_PATTERN.match(line)
-    ]
 
 
   def commit_and_upload_changes(self, v8_test262_revision, test262_revision):
@@ -309,3 +300,84 @@ def uniq(lst):
 
 def testing_error_handler(error):
   pass
+
+
+class StatusFileUpdater:
+
+  def __init__(self, importer, v8_test262_revision, test262_revision,
+               diff_args):
+    self.importer = importer
+    self.diff_args = diff_args
+    self.to_update = self.collect_updateable_tests(v8_test262_revision,
+                                                   test262_revision)
+
+  def updated_line(self, line):
+    test_name_result = TEST_FILE_REFERENCE_IN_STATUS_FILE.match(line)
+    if test_name_result:
+      return self.update_test_line(line, test_name_result)
+    return line
+
+  def collect_updateable_tests(self, v8_test262_revision, test262_revision):
+    lines = self.importer.test262_git.run([
+        'diff', *self.diff_args, v8_test262_revision, test262_revision, '--',
+        'test'
+    ]).splitlines()
+    return self.process_git_output(lines)
+
+  def process_git_output(self, lines):
+    pass
+
+  def update_test_line(self, line, test_name_result):
+    pass
+
+  def relative_name(self, name):
+    """Remove the test262 prefix from the test name."""
+    return re.sub(TEST262_PATTERN, r'\1', name)
+
+
+class DeletedTestsRemover(StatusFileUpdater):
+
+  def __init__(self, importer, v8_test262_revision, test262_revision):
+    super().__init__(importer, v8_test262_revision, test262_revision,
+                     ['--name-only', '--diff-filter=D'])
+
+  def process_git_output(self, lines):
+    return [
+        self.relative_name(line)
+        for line in lines
+        if line.strip() and TEST262_PATTERN.match(line)
+    ]
+
+  def update_test_line(self, line, test_name_result):
+    test_name = test_name_result.group(1)
+    if test_name not in self.to_update:
+      return line
+    _log.info(f'... removing {test_name}')
+    return None
+
+
+class RenamedTestsUpdater(StatusFileUpdater):
+
+  def __init__(self, importer, v8_test262_revision, test262_revision):
+    super().__init__(importer, v8_test262_revision, test262_revision,
+                     ['--name-status', '--diff-filter=R'])
+
+  def process_git_output(self, lines):
+    search_renames = [re.search(TEST262_RENAME_PATTERN, line) for line in lines]
+    renames = {
+        rename.group(1): rename.group(2) for rename in search_renames if rename
+    }
+    return {
+        self.relative_name(key): self.relative_name(value)
+        for key, value in renames.items()
+        if key.strip() and TEST262_PATTERN.match(key) and value.strip() and
+        TEST262_PATTERN.match(value)
+    }
+
+  def update_test_line(self, line, test_name_result):
+    old_name = test_name_result.group(1)
+    new_name = self.to_update.get(old_name, None)
+    if new_name is None :
+      return line
+    _log.info(f'... updating {old_name} to {new_name}')
+    return line.replace(old_name, new_name)
