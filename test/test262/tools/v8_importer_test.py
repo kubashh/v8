@@ -108,6 +108,37 @@ class Test_TestV8Importer(fake_filesystem_unittest.TestCase):
                 ...
                 """), ''.join(tests))
 
+  def test_update_renamed_tests(self):
+    self.setUpPyfakefs(allow_root_user=True)
+    self.fs.create_file(
+        'test/test262/test262.status',
+        contents=textwrap.dedent("""\
+                n'importe quoi
+                ...
+                  'folder1/sometest1': [FAIL],
+                  'renamed_testname': [FAIL],
+                  'folder2/sometest1': [FAIL],
+                  'folder2/sometest2': [FAIL],
+                ...
+                """))
+
+    importer = V8TestImporter('X', fake_host)
+    importer.test262_git = to_object({
+        'run': lambda *args: 'R001   test/renamed_testname.js    test/updated_testname.js\n',
+    })
+
+    tests = importer.update_renamed_tests(V8_REVISION, TEST262_REVISION)
+
+    self.assertEquals(textwrap.dedent("""\
+                n'importe quoi
+                ...
+                  'folder1/sometest1': [FAIL],
+                  'updated_testname': [FAIL],
+                  'folder2/sometest1': [FAIL],
+                  'folder2/sometest2': [FAIL],
+                ...
+                """), ''.join(tests))
+
   def test_failed_tests_to_status_lines(self):
     importer = V8TestImporter('X', fake_host)
     result = importer.failed_tests_to_status_lines(['test1', 'test2'])
@@ -157,7 +188,7 @@ class Test_TestV8Importer(fake_filesystem_unittest.TestCase):
                         """),
     })
 
-    tests = importer.get_updated_tests('a', 'b')
+    tests = importer.get_removed_tests('a', 'b')
     self.assertEquals(['some_testname'], tests)
 
 
