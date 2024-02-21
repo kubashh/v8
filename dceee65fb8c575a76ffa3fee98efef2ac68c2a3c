@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc9dcd9_e04cd136",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-02-21T16:57:29Z",
+      "side": 1,
+      "message": "PTAL! I\u0027ve just added EnsureWritableFastElements to the list of nodes that can write/modify the elements array.\nI\u0027ve also made sure that the bot responsible for the revert is working now (dawn-linux-x64-deps-rel).",
+      "revId": "dceee65fb8c575a76ffa3fee98efef2ac68c2a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
