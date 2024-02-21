@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e3a2ab5_96a3d0f0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-21T17:59:54Z",
+      "side": 1,
+      "message": "nit: adding `No-Try: true` (somewhere in the last paragraph, i.e. not separated from the `Change-Id` line by any empty lines) saves some try bot resources.\n(I\u0027d fix it for you, but then I\u0027d count as author of the CL and my +1 would become meaningless.)",
+      "revId": "4bc417c7032e844540c23c3404ecbd6c85413b2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "434661c7_68584ad3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-21T17:59:54Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "4bc417c7032e844540c23c3404ecbd6c85413b2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
