@@ -241,6 +241,7 @@ std::pair<HeapType, uint32_t> read_heap_type(Decoder* decoder,
       case kExternRefCode:
       case kFuncRefCode:
         return {HeapType::from_code(code), length};
+      case kNoExnCode:
       case kExnRefCode:
         if (!VALIDATE(enabled.has_exnref())) {
           DecodeError<ValidationTag>(decoder, pc,
@@ -302,6 +303,7 @@ std::pair<ValueType, uint32_t> read_value_type(Decoder* decoder,
     case kExternRefCode:
     case kFuncRefCode:
       return {ValueType::RefNull(HeapType::from_code(code)), 1};
+    case kNoExnCode:
     case kExnRefCode:
       if (!VALIDATE(enabled.has_exnref())) {
         DecodeError<ValidationTag>(decoder, pc,
