@@ -51,6 +51,24 @@
       "parentUuid": "a89625f0_55636916",
       "revId": "5c3201e8db07103131a3b8134dff9f51d11a82e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a941e0c_9da775d8",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3999,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-02-21T13:51:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76834ba6_0abc4b62",
+      "revId": "5c3201e8db07103131a3b8134dff9f51d11a82e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
