@@ -17,6 +17,7 @@ from blinkpy.w3c.test_importer import TestImporter
 TEST_FILE_REFERENCE_IN_STATUS_FILE = re.compile("^\s*'(.*)':.*,$")
 TEST262_FAILURE_LINE = re.compile("=== test262/(.*) ===")
 TEST262_PATTERN = re.compile('^test/(.*)\.js$')
+TEST262_RENAME_PATTERN = re.compile('^R[^\s]*\s*([^\s]*)\s*([^\s]*)$')
 TEST262_REPO_URL = 'https://chromium.googlesource.com/external/github.com/tc39/test262'
 V8_TEST262_ROLLS_META_BUG = 'v8:7834'
 
@@ -218,6 +219,8 @@ class V8TestImporter(TestImporter):
     _log.info(f'Updating status file')
     updated_status = self.remove_deleted_tests(v8_test262_revision,
                                                test262_revision)
+    updated_status = self.update_renamed_tests(v8_test262_revision,
+                                               test262_revision)
 
     added_lines = self.failed_tests_to_status_lines(failure_lines)
     if added_lines:
@@ -232,16 +235,40 @@ class V8TestImporter(TestImporter):
     # Remove deleted tests from the status file.
     _log.info(f'Remove deleted tests references from status file')
     updated_status = []
-    deleted_tests = self.get_updated_tests(
-        v8_test262_revision, test262_revision, update_kind='D')
+    deleted_tests = self.get_removed_tests(
+        v8_test262_revision, test262_revision)
     with open(self.test262_status_file, 'r') as r_file:
       for line in r_file.readlines():
-        result = TEST_FILE_REFERENCE_IN_STATUS_FILE.match(line)
-        if result and (result.group(1) in deleted_tests):
-          _log.info(f'... removing {result.group(1)}')
+        test_name_result = TEST_FILE_REFERENCE_IN_STATUS_FILE.match(line)
+        if self.was_deleted(test_name_result, deleted_tests):
+          _log.info(f'... removing {test_name_result.group(1)}')
           continue
         updated_status.append(line)
     return updated_status
+
+  def was_deleted(self, test_name_result, deleted_tests):
+    return test_name_result and (test_name_result.group(1) in deleted_tests)
+
+  def update_renamed_tests(self, v8_test262_revision, test262_revision):
+    # Update renamed tests in the status file.
+    _log.info(f'Update renamed tests references in status file')
+    updated_status = []
+    renamed_tests = self.get_renamed_tests(
+        v8_test262_revision, test262_revision)
+    with open(self.test262_status_file, 'r') as r_file:
+      for line in r_file.readlines():
+        test_name_result = TEST_FILE_REFERENCE_IN_STATUS_FILE.match(line)
+        if self.was_renamed(test_name_result, renamed_tests):
+          old_name = test_name_result.group(1)
+          new_name = renamed_tests[old_name]
+          _log.info(f'... updating {old_name} to {new_name}')
+          line = line.replace(old_name, new_name)
+        updated_status.append(line)
+    return updated_status
+
+  def was_renamed(self, test_name_result, renamed_tests):
+    return test_name_result and (
+        test_name_result.group(1) in renamed_tests.keys())
 
   def failed_tests_to_status_lines(self, failed_tests):
     # Transform the list of failed tests into a list of status file lines.
@@ -266,16 +293,37 @@ class V8TestImporter(TestImporter):
     return (status_lines_before_eof + import_header_lines +
             new_failing_tests_lines + eof_status_lines)
 
-  def get_updated_tests(self,
+  def get_renamed_tests(self,
                         v8_test262_revision,
-                        test262_revision,
-                        update_kind='D'):
+                        test262_revision):
     lines = self.test262_git.run([
-        'diff', '--name-only', f'--diff-filter={update_kind}',
+        'diff', '--name-only', f'--diff-filter=D',
+        v8_test262_revision, test262_revision, '--', 'test'
+    ]).splitlines()
+    search_renames = [re.search(TEST262_RENAME_PATTERN, line) for line in lines]
+    renames = { rename.group(1):rename.group(2)
+               for rename in search_renames if rename}
+
+    return {
+        self.relative_name(key) : self.relative_name(value)
+        for key, value in renames.items()
+        if key.strip() and TEST262_PATTERN.match(key)
+        and value.strip() and TEST262_PATTERN.match(value)
+    }
+
+  def relative_name(self, name):
+    """Remove the test262 prefix from the test name."""
+    return re.sub(TEST262_PATTERN, r'\1', name)
+
+  def get_removed_tests(self,
+                        v8_test262_revision,
+                        test262_revision):
+    lines = self.test262_git.run([
+        'diff', '--name-status', f'--diff-filter=R',
         v8_test262_revision, test262_revision, '--', 'test'
     ]).splitlines()
     return [
-        re.sub(TEST262_PATTERN, r'\1', line)
+        self.relative_name(line)
         for line in lines
         if line.strip() and TEST262_PATTERN.match(line)
     ]
