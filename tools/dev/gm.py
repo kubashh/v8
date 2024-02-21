@@ -308,6 +308,7 @@ def print_help_and_exit():
   sys.exit(0)
 
 
+# Used by `tools/bash-completion.sh`
 def print_completions_and_exit():
   for a in ARCHES:
     print(str(a))
@@ -316,7 +317,7 @@ def print_completions_and_exit():
       print(f"{a}.{m}")
       for t in TARGETS:
         print(str(t))
-        print("{a}.{m}.{t}")
+        print(f"{a}.{m}.{t}")
   sys.exit(0)
 
 
