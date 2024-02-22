@@ -6,13 +6,10 @@
 #define V8_COMPILER_TURBOSHAFT_LATE_LOAD_ELIMINATION_REDUCER_H_
 
 #include "src/base/doubly-threaded-list.h"
-#include "src/compiler/turboshaft/analyzer-iterator.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/graph.h"
 #include "src/compiler/turboshaft/index.h"
-#include "src/compiler/turboshaft/loop-finder.h"
 #include "src/compiler/turboshaft/operations.h"
-#include "src/compiler/turboshaft/opmasks.h"
 #include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/turboshaft/sidetable.h"

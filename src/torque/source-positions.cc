@@ -5,6 +5,8 @@
 #include "src/torque/source-positions.h"
 
 #include <fstream>
+#include <iostream>
+
 #include "src/torque/utils.h"
 
 EXPORT_CONTEXTUAL_VARIABLE(v8::internal::torque::CurrentSourceFile)
@@ -69,6 +71,13 @@ bool SourceFileMap::FileRelativeToV8RootExists(const std::string& path) {
   const std::string file = Get().v8_root_ + "/" + path;
   std::ifstream stream(file);
   return stream.good();
+}
+
+std::ostream& operator<<(std::ostream& out, SourcePosition pos) {
+  return out << "https://source.chromium.org/chromium/chromium/src/+/main:v8/"
+             << SourceFileMap::PathFromV8Root(pos.source)
+             << "?l=" << (pos.start.line + 1)
+             << "&c=" << (pos.start.column + 1);
 }
 
 }  // namespace torque

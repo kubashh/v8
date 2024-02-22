@@ -8,8 +8,6 @@
 #include <algorithm>
 #include <iterator>
 #include <limits>
-#include <memory>
-#include <tuple>
 #include <type_traits>
 
 #include "src/base/iterator.h"

@@ -10,14 +10,12 @@
 #define V8_WASM_MODULE_DECODER_IMPL_H_
 
 #include "src/base/platform/wrappers.h"
-#include "src/logging/counters.h"
 #include "src/strings/unicode.h"
 #include "src/utils/ostreams.h"
 #include "src/wasm/canonical-types.h"
 #include "src/wasm/constant-expression-interface.h"
 #include "src/wasm/function-body-decoder-impl.h"
 #include "src/wasm/module-decoder.h"
-#include "src/wasm/wasm-engine.h"
 #include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-subtyping.h"
 #include "src/wasm/well-known-imports.h"

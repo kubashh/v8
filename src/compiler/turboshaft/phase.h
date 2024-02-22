@@ -9,12 +9,8 @@
 
 #include "src/base/contextual.h"
 #include "src/codegen/assembler.h"
-#include "src/compiler/backend/instruction.h"
-#include "src/compiler/compiler-source-position-table.h"
-#include "src/compiler/node-origin-table.h"
 #include "src/compiler/phase.h"
 #include "src/compiler/turboshaft/graph.h"
-#include "src/compiler/turboshaft/sidetable.h"
 
 #define DECL_TURBOSHAFT_PHASE_CONSTANTS(Name)                  \
   DECL_PIPELINE_PHASE_CONSTANTS_HELPER(Turboshaft##Name,       \
@@ -22,7 +18,10 @@
                                        RuntimeCallStats::kThreadSpecific)
 
 namespace v8::internal::compiler {
+class InstructionSequence;
+class NodeOriginTable;
 class Schedule;
+class SourcePositionTable;
 }  // namespace v8::internal::compiler
 
 namespace v8::internal::compiler::turboshaft {
@@ -132,18 +131,7 @@ class V8_EXPORT_PRIVATE PipelineData
 
   void reset_schedule() { schedule_ = nullptr; }
 
-  void InitializeInstructionSequence(const CallDescriptor* call_descriptor) {
-    DCHECK_NULL(sequence_);
-    InstructionBlocks* instruction_blocks =
-        InstructionSequence::InstructionBlocksFor(instruction_zone(), *graph_);
-    sequence_ = instruction_zone()->New<InstructionSequence>(
-        isolate(), instruction_zone(), instruction_blocks);
-    if (call_descriptor && call_descriptor->RequiresFrameAsIncoming()) {
-      sequence_->instruction_blocks()[0]->mark_needs_frame();
-    } else {
-      DCHECK(call_descriptor->CalleeSavedFPRegisters().is_empty());
-    }
-  }
+  void InitializeInstructionSequence(const CallDescriptor* call_descriptor);
 
   void set_loop_unrolling_analyzer(
       LoopUnrollingAnalyzer* loop_unrolling_analyzer) {

@@ -5,6 +5,7 @@
 #include "src/compiler/turboshaft/phase.h"
 
 #include "src/codegen/optimized-compilation-info.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/compiler/graph-visualizer.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/turboshaft/graph-visualizer.h"
@@ -86,6 +87,20 @@ void PrintTurboshaftGraphForTurbolizer(std::ofstream& stream,
         return true;
       });
 #endif  // DEBUG
+}
+
+void PipelineData::InitializeInstructionSequence(
+    const CallDescriptor* call_descriptor) {
+  DCHECK_NULL(sequence_);
+  InstructionBlocks* instruction_blocks =
+      InstructionSequence::InstructionBlocksFor(instruction_zone(), *graph_);
+  sequence_ = instruction_zone()->New<InstructionSequence>(
+      isolate(), instruction_zone(), instruction_blocks);
+  if (call_descriptor && call_descriptor->RequiresFrameAsIncoming()) {
+    sequence_->instruction_blocks()[0]->mark_needs_frame();
+  } else {
+    DCHECK(call_descriptor->CalleeSavedFPRegisters().is_empty());
+  }
 }
 
 }  // namespace v8::internal::compiler::turboshaft

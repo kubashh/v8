@@ -17,7 +17,6 @@
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/stacks.h"
-#include "src/wasm/wasm-code-manager.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 //
@@ -62,6 +61,7 @@ namespace wasm {
 class WasmCode;
 struct JumpBuffer;
 class StackMemory;
+class NativeModule;
 }  // namespace wasm
 
 class AbstractCode;

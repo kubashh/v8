@@ -19,7 +19,6 @@
 #include "src/compiler/operator.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/turboshaft/assembler.h"
-#include "src/compiler/turboshaft/copying-phase.h"
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
@@ -34,7 +33,6 @@
 #include "src/objects/instance-type-inl.h"
 #include "src/objects/instance-type.h"
 #include "src/objects/oddball.h"
-#include "src/runtime/runtime.h"
 #include "src/utils/utils.h"
 
 namespace v8::internal::compiler::turboshaft {

@@ -6,12 +6,10 @@
 #define V8_COMPILER_TURBOSHAFT_BUILTIN_CALL_DESCRIPTORS_H_
 
 #include "src/builtins/builtins.h"
-#include "src/codegen/callable.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/compiler/frame.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/representations.h"
-#include "src/compiler/write-barrier-kind.h"
 
 namespace v8::internal::compiler::turboshaft {
 

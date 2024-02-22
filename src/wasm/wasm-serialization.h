@@ -16,6 +16,8 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
+class NativeModule;
+
 // Support for serializing WebAssembly {NativeModule} objects. This class takes
 // a snapshot of the module state at instantiation, and other code that modifies
 // the module after that won't affect the serialized result.

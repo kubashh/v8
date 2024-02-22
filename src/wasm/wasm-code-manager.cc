@@ -6,27 +6,21 @@
 
 #include <algorithm>
 #include <iomanip>
-#include <numeric>
 
-#include "src/base/atomicops.h"
 #include "src/base/build_config.h"
 #include "src/base/iterator.h"
 #include "src/base/macros.h"
-#include "src/base/platform/platform.h"
-#include "src/base/platform/wrappers.h"
 #include "src/base/small-vector.h"
 #include "src/base/string-format.h"
 #include "src/base/vector.h"
-#include "src/codegen/assembler-inl.h"
-#include "src/codegen/macro-assembler-inl.h"
-#include "src/codegen/macro-assembler.h"
+#include "src/codegen/reloc-info-inl.h"
+#include "src/codegen/reloc-info.h"
 #include "src/common/code-memory-access.h"
 #include "src/common/globals.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
 #include "src/objects/objects-inl.h"
-#include "src/snapshot/embedded/embedded-data-inl.h"
 #include "src/utils/ostreams.h"
 #include "src/wasm/code-space-access.h"
 #include "src/wasm/compilation-environment.h"

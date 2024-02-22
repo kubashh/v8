@@ -22,7 +22,6 @@
 #include "src/base/vector.h"
 #include "src/codegen/external-reference.h"
 #include "src/common/globals.h"
-#include "src/compiler/common-operator.h"
 #include "src/compiler/fast-api-calls.h"
 #include "src/compiler/globals.h"
 #include "src/compiler/simplified-operator.h"

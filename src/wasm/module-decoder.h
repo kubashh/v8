@@ -11,7 +11,6 @@
 
 #include <memory>
 
-#include "src/common/globals.h"
 #include "src/logging/metrics.h"
 #include "src/wasm/function-body-decoder.h"
 #include "src/wasm/wasm-constants.h"

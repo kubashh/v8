@@ -8,7 +8,6 @@
 #include "src/common/globals.h"
 #include "src/compiler/node-origin-table.h"
 #include "src/compiler/turboshaft/graph.h"
-#include "src/handles/handles.h"
 
 namespace v8::internal::compiler::turboshaft {
 

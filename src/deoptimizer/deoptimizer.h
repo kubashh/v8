@@ -15,10 +15,6 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/objects/js-function.h"
 
-#if V8_ENABLE_WEBASSEMBLY
-#include "src/wasm/value-type.h"
-#endif  // V8_ENABLE_WEBASSEMBLY
-
 namespace v8 {
 namespace internal {
 

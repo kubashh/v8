@@ -14,8 +14,6 @@
 
 #include <inttypes.h>
 
-#include <optional>
-
 #include "src/base/bounds.h"
 #include "src/base/small-vector.h"
 #include "src/base/strings.h"

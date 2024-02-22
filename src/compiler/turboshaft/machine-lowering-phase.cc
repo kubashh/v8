@@ -9,9 +9,7 @@
 #include "src/compiler/turboshaft/fast-api-call-lowering-reducer.h"
 #include "src/compiler/turboshaft/machine-lowering-reducer-inl.h"
 #include "src/compiler/turboshaft/machine-optimization-reducer.h"
-#include "src/compiler/turboshaft/required-optimization-reducer.h"
 #include "src/compiler/turboshaft/select-lowering-reducer.h"
-#include "src/compiler/turboshaft/variable-reducer.h"
 
 namespace v8::internal::compiler::turboshaft {
 

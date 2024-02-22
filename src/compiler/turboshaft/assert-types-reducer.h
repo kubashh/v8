@@ -5,22 +5,15 @@
 #ifndef V8_COMPILER_TURBOSHAFT_ASSERT_TYPES_REDUCER_H_
 #define V8_COMPILER_TURBOSHAFT_ASSERT_TYPES_REDUCER_H_
 
-#include <limits>
-
 #include "src/base/logging.h"
-#include "src/base/template-utils.h"
-#include "src/base/vector.h"
-#include "src/compiler/common-operator.h"
-#include "src/compiler/frame.h"
+#include "src/base/small-vector.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/representations.h"
-#include "src/compiler/turboshaft/sidetable.h"
 #include "src/compiler/turboshaft/type-inference-reducer.h"
 #include "src/compiler/turboshaft/types.h"
 #include "src/compiler/turboshaft/uniform-reducer-adapter.h"
-#include "src/heap/parked-scope.h"
 
 namespace v8::internal::compiler::turboshaft {
 

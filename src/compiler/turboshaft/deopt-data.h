@@ -9,7 +9,6 @@
 #include "src/common/globals.h"
 #include "src/compiler/frame-states.h"
 #include "src/compiler/turboshaft/index.h"
-#include "src/compiler/turboshaft/representations.h"
 
 namespace v8::internal::compiler::turboshaft {
 

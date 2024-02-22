@@ -13,7 +13,7 @@
 #include <string>
 #include <vector>
 
-#include "src/common/globals.h"
+#include "include/v8-internal.h"
 
 namespace v8 {
 namespace internal {

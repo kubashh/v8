@@ -8,15 +8,12 @@
 #include <memory>
 
 #include "include/v8-callbacks.h"
-#include "src/base/atomic-utils.h"
-#include "src/base/optional.h"
 #include "src/base/platform/elapsed-timer.h"
 #include "src/base/platform/time.h"
 #include "src/common/globals.h"
 #include "src/logging/counters-definitions.h"
 #include "src/logging/runtime-call-stats.h"
 #include "src/objects/code-kind.h"
-#include "src/objects/fixed-array.h"
 #include "src/objects/objects.h"
 #include "src/utils/allocation.h"
 

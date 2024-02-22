@@ -6,7 +6,6 @@
 #define V8_COMPILER_TURBOSHAFT_GRAPH_BUILDER_H_
 
 #include "src/codegen/bailout-reason.h"
-#include "src/compiler/node-origin-table.h"
 #include "src/compiler/turboshaft/graph.h"
 
 namespace v8::internal::compiler {

@@ -8,7 +8,6 @@
 #include <iomanip>
 
 #include "src/common/globals.h"
-#include "src/compiler/backend/instruction-codes.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/graph.h"
 #include "src/compiler/turboshaft/index.h"
