@@ -20,6 +20,46 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c1923188_b7d27f00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:55:42Z",
+      "side": 1,
+      "message": "LGTM with comments",
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a85d294_a8fed7de",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:55:42Z",
+      "side": 1,
+      "message": "If this returns true, if the float64 is an integer within smi range, correct?\nThe naming is fine, let\u0027s still add that as a comment to the function as my first thought \"it\u0027s either float64 or smi, can\u0027t be both\".\n\nEdit: `machine-lowering-reducer` confirms my assumption. :)",
+      "range": {
+        "startLine": 1512,
+        "startChar": 12,
+        "endLine": 1512,
+        "endChar": 24
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "51e30ec3_aabd682b",
         "filename": "src/compiler/turboshaft/assembler.h",
         "patchSetId": 2
@@ -36,6 +76,52 @@
         "startChar": 0,
         "endLine": 2260,
         "endChar": 3
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cffd4348_18202e59",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:55:42Z",
+      "side": 1,
+      "message": "In all cases `v32` would be the result of such a conversion if `result \u003d\u003d 1`, correct?\nI\u0027m wondering if this is just the better implementation vs. the code we have in https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/wasm-lowering-reducer.h;l\u003d151\n(Note that we do conversion to 31 bit only as that\u0027s what\u0027s needed for wasm\u0027s `ref.i31`.)",
+      "range": {
+        "startLine": 506,
+        "startChar": 19,
+        "endLine": 506,
+        "endChar": 25
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1edd679e_491142ed",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:55:42Z",
+      "side": 1,
+      "message": "What about dynamic non-array stores, like `myObj[someString]`?\nThat isn\u0027t part of this CL yet, correct?",
+      "range": {
+        "startLine": 411,
+        "startChar": 0,
+        "endLine": 411,
+        "endChar": 1
       },
       "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
