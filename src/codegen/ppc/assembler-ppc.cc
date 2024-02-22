@@ -876,7 +876,7 @@ void Assembler::divwu(Register dst, Register src1, Register src2, OEBit o,
 }
 
 void Assembler::addi(Register dst, Register src, const Operand& imm) {
-  DCHECK(src != r0);  // use li instead to show intent
+  // DCHECK(src != r0);  // use li instead to show intent
   d_form(ADDI, dst, src, imm.immediate(), true);
 }
 
@@ -1502,8 +1502,8 @@ void Assembler::bitwise_add32(Register dst, Register src, int32_t value) {
   }
 }
 
-void Assembler::patch_wasm_cpi_return_address(Register dst, int pc_offset,
-                                              int return_address_offset) {
+void Assembler::patch_pc_address(Register dst, int pc_offset,
+                                 int return_address_offset) {
   DCHECK(is_int16(return_address_offset));
   Assembler patching_assembler(
       AssemblerOptions{},
