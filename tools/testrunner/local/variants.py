@@ -104,7 +104,8 @@ INCOMPATIBLE_FLAGS_PER_VARIANT = {
             "--no-regexp-interpret-all", "--interpreted-frames-native-stack"
         ],
     "nooptimization": [
-        "--turbofan", "--always-turbofan", "--stress-concurrent-inlining"
+        "--turbofan", "--always-turbofan", "--stress-concurrent-inlining",
+        "--validate-asm"
     ],
     "slow_path": ["--no-force-slow-path"],
     "stress_concurrent_allocation": [
