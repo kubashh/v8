@@ -60,6 +60,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6eec4ebd_5e034f8e",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-22T12:29:49Z",
+      "side": 1,
+      "message": "Right, I see what you mean and I\u0027ve been confused by such things before as well; I added a comment :)",
+      "parentUuid": "4a85d294_a8fed7de",
+      "range": {
+        "startLine": 1512,
+        "startChar": 12,
+        "endLine": 1512,
+        "endChar": 24
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "51e30ec3_aabd682b",
         "filename": "src/compiler/turboshaft/assembler.h",
         "patchSetId": 2
@@ -106,6 +130,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35254e8e_92d42616",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-22T12:29:49Z",
+      "side": 1,
+      "message": "It\u0027s a bit hard to know, and it depends on what the inputs are expected to be. \"my\" approach (copied from Maglev, which probably copied it from Turbofan) first converts to an integer, which is expensive (probably around 4/5 cycles latency on modern x64 CPUs). Then, tests are cheap because we do them on an integer.\nThe wasm lowering approach is to do as much tests as possible first (but they are more expensive because on doubles rather than integers), and only then perform the expensive conversion.\n\nIf we expect the conversion to succeed, my approach is faster, if we expect it to fail, your approach is probably faster.\n\nWe would have to benchmark it though to know for a fact.",
+      "parentUuid": "cffd4348_18202e59",
+      "range": {
+        "startLine": 506,
+        "startChar": 19,
+        "endLine": 506,
+        "endChar": 25
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1edd679e_491142ed",
         "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
         "patchSetId": 2
@@ -117,6 +165,30 @@
       "writtenOn": "2024-02-22T10:55:42Z",
       "side": 1,
       "message": "What about dynamic non-array stores, like `myObj[someString]`?\nThat isn\u0027t part of this CL yet, correct?",
+      "range": {
+        "startLine": 411,
+        "startChar": 0,
+        "endLine": 411,
+        "endChar": 1
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbde7740_121ed7fd",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-22T12:29:49Z",
+      "side": 1,
+      "message": "If `someString` is a variable, then this will lead to SetKeyedGeneric and GetKeyedGeneric, which aren\u0027t part of this CL, right.",
+      "parentUuid": "1edd679e_491142ed",
       "range": {
         "startLine": 411,
         "startChar": 0,
