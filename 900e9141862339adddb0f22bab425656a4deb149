@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "900e9141862339adddb0f22bab425656a4deb149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd57c7c_c414507c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-22T22:02:41Z",
+      "side": 1,
+      "message": "LGTM, but would it not be better to fix the torque-generated code?",
+      "revId": "900e9141862339adddb0f22bab425656a4deb149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
