@@ -152,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c34043_00c223f4",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T12:36:12Z",
+      "side": 1,
+      "message": "Oh, thanks, that makes a lot of sense. Yeah, we don\u0027t really expect them to succeed in our case. Many heap numbers are heap numbers because they are not representable as smis and this is at the boundary of `externref` to `anyref` (the crossing from JS semantics to wasm semantics).",
+      "parentUuid": "35254e8e_92d42616",
+      "range": {
+        "startLine": 506,
+        "startChar": 19,
+        "endLine": 506,
+        "endChar": 25
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1edd679e_491142ed",
@@ -189,6 +213,30 @@
       "side": 1,
       "message": "If `someString` is a variable, then this will lead to SetKeyedGeneric and GetKeyedGeneric, which aren\u0027t part of this CL, right.",
       "parentUuid": "1edd679e_491142ed",
+      "range": {
+        "startLine": 411,
+        "startChar": 0,
+        "endLine": 411,
+        "endChar": 1
+      },
+      "revId": "bf0eb07130400563dd10286fb7d4d7711a467150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b690b6ef_6cca9119",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T12:36:12Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dbde7740_121ed7fd",
       "range": {
         "startLine": 411,
         "startChar": 0,
