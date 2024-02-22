@@ -546,7 +546,7 @@ GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
   }
 
   if (incremental_marking()->IsMajorMarking() &&
-      incremental_marking()->IsMajorMarkingComplete() &&
+      (v8_flags.minor_ms || incremental_marking()->IsMajorMarkingComplete()) &&
       AllocationLimitOvershotByLargeMargin()) {
     *reason = "Incremental marking needs finalization";
     return GarbageCollector::MARK_COMPACTOR;
@@ -5311,19 +5311,6 @@ bool Heap::IsRetryOfFailedAllocation(LocalHeap* local_heap) {
 bool Heap::IsMainThreadParked(LocalHeap* local_heap) {
   if (!local_heap) return false;
   return local_heap->main_thread_parked_;
-}
-
-bool Heap::IsMajorMarkingComplete(LocalHeap* local_heap) {
-  // Only check this on the main thread.
-  if (!local_heap || !local_heap->is_main_thread()) return false;
-
-  // But also ignore main threads of client isolates.
-  if (local_heap->heap() != this) {
-    DCHECK(isolate()->is_shared_space_isolate());
-    return false;
-  }
-
-  return incremental_marking()->IsMajorMarkingComplete();
 }
 
 Heap::HeapGrowingMode Heap::CurrentHeapGrowingMode() {
