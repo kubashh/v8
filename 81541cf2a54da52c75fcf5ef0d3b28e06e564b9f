@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "878f1c26_63cd532c",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T12:32:17Z",
+      "side": 1,
+      "message": "Nah, fine, I saw it later in the review that this seems to be happening throughout the file.",
+      "parentUuid": "34a3ad07_69e3369b",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 8
+      },
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d729c8a_803a03b3",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "`isolate_` is a LocalIsolate, not an Isolate, but CallableFor expects an Isolate. The function this is calling is here https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/local-isolate.h;l\u003d137-142.\nBut as you can see from the DCHECKs in the function, this will break in the background. So, I\u0027ve replaced this call with `GetMainThreadIsolateUnsafe` instead :)",
       "parentUuid": "9d729c8a_803a03b3",
+      "range": {
+        "startLine": 201,
+        "startChar": 40,
+        "endLine": 201,
+        "endChar": 49
+      },
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df73e9af_540e359a",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T12:32:17Z",
+      "side": 1,
+      "message": "Ack, thanks for the explanation.",
+      "parentUuid": "72e82f3e_30b2a0c0",
       "range": {
         "startLine": 201,
         "startChar": 40,
