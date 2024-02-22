@@ -597,6 +597,30 @@
       },
       "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2512b61_ca741a02",
+        "filename": "test/test262/tools/v8_importer_test.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-02-22T11:21:33Z",
+      "side": 1,
+      "message": "We grab the whole path relative to the test folder. Added a new line in this test case to illustrate that.\n\n\u003e Is it possible to rename A-\u003eB and in the same commit create a new A?\n\nGit cannot track this in the same commit. It would look like a modification and an addition to it. And even in a commit chain `git diff` would still solve this as a modification and an additions. Anyway this is not relevant to our tool here since we aim to just stop the status file from having invalid test references. A rename followed by an addition with the old name will not break the status file.",
+      "parentUuid": "071919fa_f3d453a9",
+      "range": {
+        "startLine": 168,
+        "startChar": 6,
+        "endLine": 168,
+        "endChar": 25
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
