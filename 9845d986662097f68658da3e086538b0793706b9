@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e5b64939_c685eb5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-02-22T00:31:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2d4f774_27e4a092",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9937acbd_982b21d7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2024-02-22T00:04:18Z",
       "side": 1,
       "message": "Let\u0027s remove this test. I don\u0027t think this test is needed since the fuzz test needs to be run with v8_mock.js also loaded to make sense.",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bf5b9bf_60c256bb",
+        "filename": "test/mjsunit/regress/regress-325992260.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-02-22T00:31:45Z",
+      "side": 1,
+      "message": "Okay. Done.",
+      "parentUuid": "ddf9ba19_079a2edd",
       "revId": "9845d986662097f68658da3e086538b0793706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +118,42 @@
       "writtenOn": "2024-02-22T00:04:18Z",
       "side": 1,
       "message": "Nit: `applyOrigArrayMap`?",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1cc663d_484093bf",
+        "filename": "tools/clusterfuzz/foozzie/v8_mock.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-02-22T00:31:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "734884ba_5776f3fa",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618d128f_1c56c52a",
+        "filename": "tools/clusterfuzz/foozzie/v8_mock.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-02-22T00:31:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8406e754_f3ff17f2",
       "revId": "9845d986662097f68658da3e086538b0793706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
