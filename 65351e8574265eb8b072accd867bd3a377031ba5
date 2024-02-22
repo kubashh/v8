@@ -1,0 +1,320 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "334dd5dc_98b1bc2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: Moderately complex CL deserves some description.",
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "769ff96d_5b11c8b3",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "Fly-by: Seeing this hardcoded. Do we need to deal with that here? What if we just leave this with (.*) (which would include the .js). Could there e.g. be valid files with .mjs?",
+      "range": {
+        "startLine": 19,
+        "startChar": 42,
+        "endLine": 19,
+        "endChar": 44
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e87a9fa_b6b123d7",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: If you want a separate function \"updated_line\" I\u0027d define it as an inner function just below defining remover and renamer. Then you don\u0027t need self and also don\u0027t need separate remover/renamer args to the function. Also, this functionality is practically private to this outer function.\n\nAfter this you could then also just map updated_line.",
+      "range": {
+        "startLine": 237,
+        "startChar": 13,
+        "endLine": 237,
+        "endChar": 25
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d7b0ea4_b5642181",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: I prefer \"line is not None\". Having the not first sounds like\n!(line \u003d\u003d None) instead of (line !\u003d None)\n```suggestion\n    return [line for line in updated_status if line is not None]\n```",
+      "range": {
+        "startLine": 240,
+        "startChar": 47,
+        "endLine": 240,
+        "endChar": 59
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc19db07_bcf9c0f6",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: status_file_lines to clarify that intent that it calls readlines not read.",
+      "range": {
+        "startLine": 245,
+        "startChar": 6,
+        "endLine": 245,
+        "endChar": 25
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aad953b7_307bd31f",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "Optional suggestion: I looked a bit at the git diff output and wondered if this class could be more generic. One way would be:\n\nYou could uniformly use --name-status also for delete. Then e.g. the delete output is like:\nD       content\nwhile the rename output is:\nR123    content\n\nThe only subclass difference would be the other parameter to diff.\n\nThen the superclass could preprocess a bit more and grab the content from the line with the same uniform regexp. In case of rename, the content is two file names and in case of delete, the content is one file name.",
+      "range": {
+        "startLine": 305,
+        "startChar": 6,
+        "endLine": 305,
+        "endChar": 23
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7de7b92a_a65207c0",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "Moderate OO confusion: So this is a set in one subclass and a dict in the other?",
+      "range": {
+        "startLine": 311,
+        "startChar": 9,
+        "endLine": 311,
+        "endChar": 18
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35311806_d9de1696",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit - optional: here my fit-in-one-line fetish kicks in. Maybe you can rename revision in vars to just rev?",
+      "range": {
+        "startLine": 322,
+        "startChar": 33,
+        "endLine": 322,
+        "endChar": 70
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0a8c61b_dab9190e",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: pass is not a great filler for a function that\u0027s supposed to return something. Either return the default or make it fully abstract.",
+      "range": {
+        "startLine": 328,
+        "startChar": 4,
+        "endLine": 328,
+        "endChar": 8
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ab10cda_6c499fed",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: Move this to top-level utilities out of class.",
+      "range": {
+        "startLine": 333,
+        "startChar": 6,
+        "endLine": 333,
+        "endChar": 19
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dd772f5_cb77a7ea",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: Checking also for line.strip() is redundant. The pattern can\u0027t match empty lines. You also don\u0027t pass the stripped line down to get processed further.",
+      "range": {
+        "startLine": 348,
+        "startChar": 16,
+        "endLine": 348,
+        "endChar": 21
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65165875_3e5ded9a",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: same as above. Maybe strip can be stripped?",
+      "range": {
+        "startLine": 373,
+        "startChar": 11,
+        "endLine": 373,
+        "endChar": 23
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "140c17a2_73c092e2",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "nit: None is the default of get. You could also safely below just pythonic write:\nif not new_name:\n\n(because you can\u0027t have empty strings here - and even if there were any, they wouldn\u0027t make sense and you wouldn\u0027t update)",
+      "range": {
+        "startLine": 379,
+        "startChar": 42,
+        "endLine": 379,
+        "endChar": 49
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "071919fa_f3d453a9",
+        "filename": "test/test262/tools/v8_importer_test.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T08:30:55Z",
+      "side": 1,
+      "message": "Maybe you could spice up the tests a bit and also add some paths? There could be a combination of the same file name appearing in different paths, sometimes the file name being updated (while a file with the same name exists in a neighboring path), sometimes the same file being moved to a different path.\n\nHow do each of these look in git?\n\nIs it possible to rename A-\u003eB and in the same commit create a new A?",
+      "range": {
+        "startLine": 168,
+        "startChar": 6,
+        "endLine": 168,
+        "endChar": 25
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
