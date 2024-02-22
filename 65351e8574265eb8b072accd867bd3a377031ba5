@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e5e9403_d0befada",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T11:34:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "aa9c43d0_bb723eb0",
+      "range": {
+        "startLine": 19,
+        "startChar": 42,
+        "endLine": 19,
+        "endChar": 44
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e87a9fa_b6b123d7",
@@ -271,6 +295,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "043c27c7_a8007e5e",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T11:34:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "db06fe03_157267ed",
+      "range": {
+        "startLine": 305,
+        "startChar": 6,
+        "endLine": 305,
+        "endChar": 23
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7de7b92a_a65207c0",
@@ -284,6 +332,30 @@
       "writtenOn": "2024-02-22T08:30:55Z",
       "side": 1,
       "message": "Moderate OO confusion: So this is a set in one subclass and a dict in the other?",
+      "range": {
+        "startLine": 311,
+        "startChar": 9,
+        "endLine": 311,
+        "endChar": 18
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9cf70d7_bb0874b8",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T11:34:26Z",
+      "side": 1,
+      "message": "Haven\u0027t found a much better way now (other than moving more code into subclasses). With the analogy that to_update could be of template type T, which is just different in each subclasses, I think it might even be ok OO-wise.",
+      "parentUuid": "7de7b92a_a65207c0",
       "range": {
         "startLine": 311,
         "startChar": 9,
@@ -331,6 +403,30 @@
       "side": 1,
       "message": "Renamed everywhere.",
       "parentUuid": "35311806_d9de1696",
+      "range": {
+        "startLine": 322,
+        "startChar": 33,
+        "endLine": 322,
+        "endChar": 70
+      },
+      "revId": "65351e8574265eb8b072accd867bd3a377031ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3206e9ac_9ce38169",
+        "filename": "test/test262/tools/v8_importer.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-22T11:34:26Z",
+      "side": 1,
+      "message": "Ah nice! Looks like this created several more one-liners now in other places.",
+      "parentUuid": "1a88cac6_977e01b7",
       "range": {
         "startLine": 322,
         "startChar": 33,
