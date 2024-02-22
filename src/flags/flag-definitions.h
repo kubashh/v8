@@ -1069,6 +1069,14 @@ DEFINE_BOOL_READONLY(turbofan, false, "use the Turbofan optimizing compiler")
 DEFINE_BOOL_READONLY(opt, false, "use the Turbofan optimizing compiler")
 #endif  // V8_ENABLE_TURBOFAN
 
+// --no-turbofan implies --no-validate-asm, because asm.js code translated to
+// Wasm is not supported by Liftoff, hence we would always need to fall back to
+// Turbofan.
+DEFINE_NEG_NEG_IMPLICATION(turbofan, validate_asm)
+// --no-turbofan disable Wasm tiering.
+DEFINE_NEG_NEG_IMPLICATION(turbofan, wasm_tier_up)
+DEFINE_NEG_NEG_IMPLICATION(turbofan, wasm_dynamic_tiering)
+
 DEFINE_BOOL(
     stress_turbo_late_spilling, false,
     "optimize placement of all spill instructions, not just loop-top phis")
