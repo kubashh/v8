@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2d4f774_27e4a092",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-02-22T00:04:18Z",
+      "side": 1,
+      "message": "Nit: missing space before \"static\"",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9937acbd_982b21d7",
@@ -14,6 +31,57 @@
       "writtenOn": "2024-02-21T23:39:29Z",
       "side": 1,
       "message": "Shu, Please take a look. Thanks!",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddf9ba19_079a2edd",
+        "filename": "test/mjsunit/regress/regress-325992260.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-02-22T00:04:18Z",
+      "side": 1,
+      "message": "Let\u0027s remove this test. I don\u0027t think this test is needed since the fuzz test needs to be run with v8_mock.js also loaded to make sense.",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "734884ba_5776f3fa",
+        "filename": "tools/clusterfuzz/foozzie/v8_mock.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-02-22T00:04:18Z",
+      "side": 1,
+      "message": "These two variables need to be bound outside of this `function`, along with the other `origFoo` variables, because by the time this function runs, the user might have already modified `Array.prototype.map`.",
+      "revId": "9845d986662097f68658da3e086538b0793706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8406e754_f3ff17f2",
+        "filename": "tools/clusterfuzz/foozzie/v8_mock.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-02-22T00:04:18Z",
+      "side": 1,
+      "message": "Nit: `applyOrigArrayMap`?",
       "revId": "9845d986662097f68658da3e086538b0793706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
