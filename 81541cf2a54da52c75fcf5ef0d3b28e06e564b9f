@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0f9c0f_09720ad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:09:21Z",
+      "side": 1,
+      "message": "LGTM with super minor nits 😊",
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e061fbcd_95d7a01b",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:09:21Z",
+      "side": 1,
+      "message": "Nit: missing newline",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 195,
+        "endChar": 8
+      },
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d729c8a_803a03b3",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:09:21Z",
+      "side": 1,
+      "message": "What does this do?\n`Isolate* AsIsolate() { return this; }`\nOr is it a marker vs. `AsLocalIsolate()`?",
+      "range": {
+        "startLine": 201,
+        "startChar": 40,
+        "endLine": 201,
+        "endChar": 49
+      },
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9feddde8_eda56e4e",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:09:21Z",
+      "side": 1,
+      "message": "Nit: `V\u003cCode\u003e`",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 11
+      },
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "806d67a6_f4d16dbe",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-22T10:09:21Z",
+      "side": 1,
+      "message": "`is no`",
+      "range": {
+        "startLine": 858,
+        "startChar": 69,
+        "endLine": 858,
+        "endChar": 76
+      },
+      "revId": "81541cf2a54da52c75fcf5ef0d3b28e06e564b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
