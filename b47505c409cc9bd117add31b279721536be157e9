@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b06f5db2_cb37b4bd",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3719,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T14:47:17Z",
+      "side": 1,
+      "message": "Oh, good point. Done, and I was surprised that this didn\u0027t need more test skips :D",
+      "parentUuid": "81a3dc30_a797ba30",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50df8449_b57b84cd",
@@ -82,6 +100,24 @@
       "writtenOn": "2024-02-23T14:41:22Z",
       "side": 1,
       "message": "Wouldn\u0027t eager tier-up trigger TurboFan compilation as well?",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36737777_b028561e",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3730,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T14:47:17Z",
+      "side": 1,
+      "message": "That\u0027s covered by `v8_flags.wasm_tier_up`.",
+      "parentUuid": "50df8449_b57b84cd",
       "revId": "b47505c409cc9bd117add31b279721536be157e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d4ee67_56ee3225",
+        "filename": "src/runtime/runtime-test-wasm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T14:47:17Z",
+      "side": 1,
+      "message": "This will probably be hit by future (regression) tests as well, and the error message produced by `FATAL` makes it much easier to see why this failed.\nNote that this is in a test-only method.",
+      "parentUuid": "9751fe5d_8a098b22",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d250f73d_1b3522e5",
@@ -116,6 +170,24 @@
       "writtenOn": "2024-02-23T14:41:22Z",
       "side": 1,
       "message": "Can you add a comment why this test does not work without TurboFan?",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf5265b_f8514a6b",
+        "filename": "test/cctest/wasm/test-wasm-shared-engine.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T14:47:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d250f73d_1b3522e5",
       "revId": "b47505c409cc9bd117add31b279721536be157e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
