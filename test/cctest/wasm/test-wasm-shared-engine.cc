@@ -275,6 +275,7 @@ TEST(SharedEngineRunThreadedExecution) {
 }
 
 TEST(SharedEngineRunThreadedTierUp) {
+  if (!v8_flags.turbofan) return;
   SharedModule module;
   {
     SharedEngineIsolate isolate;
