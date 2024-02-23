@@ -67,6 +67,57 @@
       "message": "We also need it in `GenerateWasmCodeFromTurboshaftGraph` that will hopefully soon-ish replace this.",
       "revId": "b47505c409cc9bd117add31b279721536be157e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50df8449_b57b84cd",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3730,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-23T14:41:22Z",
+      "side": 1,
+      "message": "Wouldn\u0027t eager tier-up trigger TurboFan compilation as well?",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9751fe5d_8a098b22",
+        "filename": "src/runtime/runtime-test-wasm.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-23T14:41:22Z",
+      "side": 1,
+      "message": "Is the `FATAL` better than a CHECK with a comment?",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d250f73d_1b3522e5",
+        "filename": "test/cctest/wasm/test-wasm-shared-engine.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-02-23T14:41:22Z",
+      "side": 1,
+      "message": "Can you add a comment why this test does not work without TurboFan?",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
