@@ -22,8 +22,11 @@ class V8_EXPORT_PRIVATE FlagHelpers {
 
 struct Flag;
 Flag* FindFlagByPointer(const void* ptr);
-Flag* FindFlagByName(const char* name);
-Flag* FindImplicationFlagByName(const char* name);
+V8_EXPORT_PRIVATE Flag* FindFlagByName(const char* name);
+V8_EXPORT_PRIVATE Flag* FindImplicationFlagByName(const char* name);
+
+V8_EXPORT_PRIVATE const Flag* FlagsBegin();
+V8_EXPORT_PRIVATE const Flag* FlagsEnd();
 
 // Helper struct for printing normalized flag names.
 struct FlagName {

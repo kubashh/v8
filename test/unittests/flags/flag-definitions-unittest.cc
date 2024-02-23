@@ -334,4 +334,22 @@ void CheckFlagInvariants(const std::string& s1, const std::string& s2) {
 V8_FUZZ_TEST(FlagHelpersFuzzTest, CheckFlagInvariants)
     .WithDomains(fuzztest::AsciiString(), fuzztest::AsciiString());
 
+TEST(FlagInternalsTest, LookupFlagByName) {
+  CHECK_EQ(0, strcmp("trace_opt", FindFlagByName("trace_opt")->name()));
+  CHECK_EQ(0, strcmp("trace_opt", FindFlagByName("trace-opt")->name()));
+  CHECK_EQ(nullptr, FindFlagByName("trace?opt"));
+}
+
+TEST(FlagInternalsTest, LookupAllFlagsByName) {
+  for (auto it = FlagsBegin(); it != FlagsEnd(); ++it) {
+    CHECK_EQ(it, FindFlagByName(it->name()));
+  }
+}
+
+TEST(FlagInternalsTest, LookupAllImplicationFlagsByName) {
+  for (auto it = FlagsBegin(); it != FlagsEnd(); ++it) {
+    CHECK_EQ(it, FindImplicationFlagByName(it->name()));
+  }
+}
+
 }  // namespace v8::internal

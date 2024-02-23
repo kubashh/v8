@@ -285,6 +285,10 @@ Flag flags[] = {
 
 constexpr size_t kNumFlags = arraysize(flags);
 
+const Flag* FlagsBegin() { return std::cbegin(flags); }
+
+const Flag* FlagsEnd() { return std::cend(flags); }
+
 struct FlagLess {
   bool operator()(const Flag* a, const Flag* b) const {
     return FlagHelpers::FlagNamesCmp(a->name(), b->name()) < 0;
