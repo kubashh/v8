@@ -1035,6 +1035,51 @@ class GenericAssemblerOpInterface : public Next {
     label.GotoIfNot(Asm(), condition.condition(), condition.hint(),
                     resolved_values);
   }
+
+  struct ControlFlowHelper_IfState {
+    block_t* then_block;
+    block_t* else_block;
+    block_t* end_block;
+    bool explicit_else = false;
+  };
+
+  ControlFlowHelper_IfState ControlFlowHelper_If(ConditionWithHint condition) {
+    ControlFlowHelper_IfState state = {Asm().NewBlock(), Asm().NewBlock(),
+                                       Asm().NewBlock()};
+    Asm().Branch(condition, state.then_block, state.else_block);
+    return state;
+  }
+
+  ControlFlowHelper_IfState ControlFlowHelper_IfNot(
+      ConditionWithHint condition) {
+    ControlFlowHelper_IfState state = {Asm().NewBlock(), Asm().NewBlock(),
+                                       Asm().NewBlock()};
+    Asm().Branch(condition, state.else_block, state.then_block);
+    return state;
+  }
+
+  bool ControlFlowHelper_BindThen(ControlFlowHelper_IfState* state) {
+    return Asm().Bind(state->then_block);
+  }
+
+  bool ControlFlowHelper_BindElse(ControlFlowHelper_IfState* state) {
+    state->explicit_else = true;
+    return Asm().Bind(state->else_block);
+  }
+
+  void ControlFlowHelper_FinishIfBlock(ControlFlowHelper_IfState* state) {
+    if (Asm().current_block() == nullptr) return;
+    Asm().Goto(state->end_block);
+  }
+
+  void ControlFlowHelper_EndIf(ControlFlowHelper_IfState* state) {
+    if (!state->explicit_else) {
+      if (Asm().Bind(state->else_block)) {
+        Asm().Goto(state->end_block);
+      }
+    }
+    Asm().Bind(state->end_block);
+  }
 };
 
 template <class Next>
