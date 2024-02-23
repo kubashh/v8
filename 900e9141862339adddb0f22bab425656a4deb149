@@ -33,6 +33,24 @@
       "message": "LGTM, but would it not be better to fix the torque-generated code?",
       "revId": "900e9141862339adddb0f22bab425656a4deb149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eea1e27_c835e6f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T07:13:44Z",
+      "side": 1,
+      "message": "Probably, but this requires a lot more work. Torque currently does not know the indirect pointer tag used, so it can\u0027t load the trusted_data field from the instance. That\u0027s also why the accessors have to be defined in C++. If we decide to stick with torque we should fix this eventually, but for now this is the much easier fix.",
+      "parentUuid": "4fd57c7c_c414507c",
+      "revId": "900e9141862339adddb0f22bab425656a4deb149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
