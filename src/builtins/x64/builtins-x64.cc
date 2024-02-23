@@ -2501,65 +2501,19 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   // context in case of conversion.
   __ LoadTaggedField(rsi, FieldOperand(rdi, JSFunction::kContextOffset));
   // We need to convert the receiver for non-native sloppy mode functions.
-  Label done_convert;
-  __ testl(FieldOperand(rdx, SharedFunctionInfo::kFlagsOffset),
-           Immediate(SharedFunctionInfo::IsNativeBit::kMask |
-                     SharedFunctionInfo::IsStrictBit::kMask));
-  __ j(not_zero, &done_convert);
-  {
-    // ----------- S t a t e -------------
-    //  -- rax : the number of arguments
-    //  -- rdx : the shared function info.
-    //  -- rdi : the function to call (checked to be a JSFunction)
-    //  -- rsi : the function context.
-    // -----------------------------------
-
-    if (mode == ConvertReceiverMode::kNullOrUndefined) {
-      // Patch receiver to global proxy.
-      __ LoadGlobalProxy(rcx);
-    } else {
-      Label convert_to_object, convert_receiver;
-      __ movq(rcx, args.GetReceiverOperand());
-      __ JumpIfSmi(rcx, &convert_to_object,
-                   DEBUG_BOOL ? Label::kFar : Label::kNear);
-      __ JumpIfJSAnyIsNotPrimitive(rcx, rbx, &done_convert,
-                                   DEBUG_BOOL ? Label::kFar : Label::kNear);
-      if (mode != ConvertReceiverMode::kNotNullOrUndefined) {
-        Label convert_global_proxy;
-        __ JumpIfRoot(rcx, RootIndex::kUndefinedValue, &convert_global_proxy,
-                      DEBUG_BOOL ? Label::kFar : Label::kNear);
-        __ JumpIfNotRoot(rcx, RootIndex::kNullValue, &convert_to_object,
-                         DEBUG_BOOL ? Label::kFar : Label::kNear);
-        __ bind(&convert_global_proxy);
-        {
-          // Patch receiver to global proxy.
-          __ LoadGlobalProxy(rcx);
-        }
-        __ jmp(&convert_receiver);
-      }
-      __ bind(&convert_to_object);
-      {
-        // Convert receiver using ToObject.
-        // TODO(bmeurer): Inline the allocation here to avoid building the frame
-        // in the fast case? (fall back to AllocateInNewSpace?)
-        FrameScope scope(masm, StackFrame::INTERNAL);
-        __ SmiTag(rax);
-        __ Push(rax);
-        __ Push(rdi);
-        __ movq(rax, rcx);
-        __ Push(rsi);
-        __ CallBuiltin(Builtin::kToObject);
-        __ Pop(rsi);
-        __ movq(rcx, rax);
-        __ Pop(rdi);
-        __ Pop(rax);
-        __ SmiUntagUnsigned(rax);
-      }
-      __ LoadTaggedField(
-          rdx, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
-      __ bind(&convert_receiver);
-    }
+  Label done_convert, convert;
+  if (mode == ConvertReceiverMode::kNullOrUndefined) {
+    __ testl(FieldOperand(rdx, SharedFunctionInfo::kFlagsOffset),
+             Immediate(SharedFunctionInfo::IsNativeBit::kMask |
+                       SharedFunctionInfo::IsStrictBit::kMask));
+    __ j(not_zero, &done_convert);
+    // Patch receiver to global proxy.
+    __ LoadGlobalProxy(rcx);
     __ movq(args.GetReceiverOperand(), rcx);
+  } else {
+    __ movq(rcx, args.GetReceiverOperand());
+    __ JumpIfSmi(rcx, &convert);
+    __ JumpIfJSAnyIsPrimitive(rcx, rbx, &convert);
   }
   __ bind(&done_convert);
 
@@ -2573,6 +2527,49 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   __ movzxwq(
       rbx, FieldOperand(rdx, SharedFunctionInfo::kFormalParameterCountOffset));
   __ InvokeFunctionCode(rdi, no_reg, rbx, rax, InvokeType::kJump);
+
+  if (mode == ConvertReceiverMode::kNullOrUndefined) return;
+
+  __ bind(&convert);
+  __ testl(FieldOperand(rdx, SharedFunctionInfo::kFlagsOffset),
+           Immediate(SharedFunctionInfo::IsNativeBit::kMask |
+                     SharedFunctionInfo::IsStrictBit::kMask));
+  __ j(not_zero, &done_convert);
+  if (mode != ConvertReceiverMode::kNotNullOrUndefined) {
+    Label convert_global_proxy, convert_to_object;
+    __ JumpIfRoot(rcx, RootIndex::kUndefinedValue, &convert_global_proxy,
+                  DEBUG_BOOL ? Label::kFar : Label::kNear);
+    __ JumpIfNotRoot(rcx, RootIndex::kNullValue, &convert_to_object,
+                  DEBUG_BOOL ? Label::kFar : Label::kNear);
+
+    // Patch receiver to global proxy.
+    __ bind(&convert_global_proxy);
+    __ LoadGlobalProxy(rcx);
+    __ movq(args.GetReceiverOperand(), rcx);
+
+    __ bind(&convert_to_object);
+  }
+  {
+    // Convert receiver using ToObject.
+    // TODO(bmeurer): Inline the allocation here to avoid building the frame
+    // in the fast case? (fall back to AllocateInNewSpace?)
+    FrameScope scope(masm, StackFrame::INTERNAL);
+    __ SmiTag(rax);
+    __ Push(rax);
+    __ Push(rdi);
+    __ movq(rax, rcx);
+    __ Push(rsi);
+    __ CallBuiltin(Builtin::kToObject);
+    __ Pop(rsi);
+    __ movq(rcx, rax);
+    __ Pop(rdi);
+    __ Pop(rax);
+    __ SmiUntagUnsigned(rax);
+  }
+  __ LoadTaggedField(rdx,
+                     FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
+  __ movq(args.GetReceiverOperand(), rcx);
+  __ jmp(&done_convert);
 }
 
 namespace {
@@ -2691,13 +2688,15 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
 
   StackArgumentsAccessor args(argc);
 
-  Label non_callable, class_constructor;
+  Label non_callable, class_constructor, non_function;
   __ JumpIfSmi(target, &non_callable);
   __ LoadMap(map, target);
   __ CmpInstanceTypeRange(map, instance_type, FIRST_CALLABLE_JS_FUNCTION_TYPE,
                           LAST_CALLABLE_JS_FUNCTION_TYPE);
-  __ TailCallBuiltin(Builtins::CallFunction(mode), below_equal);
+  __ j(above, &non_function);
+  Generate_CallFunction(masm, mode);
 
+  __ bind(&non_function);
   __ cmpw(instance_type, Immediate(JS_BOUND_FUNCTION_TYPE));
   __ TailCallBuiltin(Builtin::kCallBoundFunction, equal);
 
