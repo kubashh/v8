@@ -3753,9 +3753,13 @@ TEST_F(FunctionBodyDecoderTest, RefEq) {
       ValueType reps[] = {kWasmI32, type1, type2};
       FunctionSig sig(1, 2, reps);
       ExpectFailure(&sig, {WASM_REF_EQ(WASM_LOCAL_GET(0), WASM_LOCAL_GET(1))},
-                    kAppendEnd, "expected type eqref, found local.get of type");
+                    kAppendEnd,
+                    "expected either eqref or (ref null shared eq), found "
+                    "local.get of type");
       ExpectFailure(&sig, {WASM_REF_EQ(WASM_LOCAL_GET(1), WASM_LOCAL_GET(0))},
-                    kAppendEnd, "expected type eqref, found local.get of type");
+                    kAppendEnd,
+                    "expected either eqref or (ref null shared eq), found "
+                    "local.get of type");
     }
   }
 }
