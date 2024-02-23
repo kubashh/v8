@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "07bd1c0a_63349390",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-02-23T14:48:12Z",
+      "side": 1,
+      "message": "I don\u0027t, and honestly I\u0027m not sure if any followup work is needed. I\u0027ll file a bug just in case.",
+      "parentUuid": "6e75b0d7_5ad7bca7",
+      "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c353ac65_998c9462",
@@ -83,6 +101,30 @@
       "writtenOn": "2024-02-23T14:12:15Z",
       "side": 1,
       "message": "Note, this is also executed on the bots:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8755295473682284961/+/u/initialization/gclient_runhooks/stdout",
+      "range": {
+        "startLine": 762,
+        "startChar": 2,
+        "endLine": 762,
+        "endChar": 40
+      },
+      "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e49df6_f9a1b541",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-02-23T14:48:12Z",
+      "side": 1,
+      "message": "I was just cargo-culting https://chromium-review.googlesource.com/c/angle/angle/+/4683452, should I update the comment?",
+      "parentUuid": "4fed94f7_6040a65e",
       "range": {
         "startLine": 762,
         "startChar": 2,
