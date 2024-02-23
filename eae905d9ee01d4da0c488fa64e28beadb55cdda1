@@ -169,6 +169,30 @@
       },
       "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef248243_5d7a4695",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-23T15:32:38Z",
+      "side": 1,
+      "message": "Nah, it\u0027s fine... this comment got copied around everywhere. Also in Chrome.",
+      "parentUuid": "19e49df6_f9a1b541",
+      "range": {
+        "startLine": 762,
+        "startChar": 2,
+        "endLine": 762,
+        "endChar": 40
+      },
+      "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
