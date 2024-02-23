@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4e916ee5_a5c5c299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T14:35:25Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "a050a63924402211b32ea56c77f8a031258083b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "043326e1_b8067700",
         "filename": "test/unittests/flags/flag-definitions-unittest.cc",
         "patchSetId": 4

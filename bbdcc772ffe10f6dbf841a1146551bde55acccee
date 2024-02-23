@@ -22,6 +22,30 @@
       },
       "revId": "bbdcc772ffe10f6dbf841a1146551bde55acccee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae128cc7_4b3c7523",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T14:35:25Z",
+      "side": 0,
+      "message": "Ack, it\u0027s a pretty private function anyway.",
+      "parentUuid": "5e06c05d_61962e84",
+      "range": {
+        "startLine": 288,
+        "startChar": 13,
+        "endLine": 288,
+        "endChar": 18
+      },
+      "revId": "bbdcc772ffe10f6dbf841a1146551bde55acccee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
