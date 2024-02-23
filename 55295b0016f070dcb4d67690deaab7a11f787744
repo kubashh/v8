@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "908479ce_b2f2e1d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T18:56:03Z",
+      "side": 1,
+      "message": "PTAL. (I know I\u0027ll also need a bunch of OWNERS.)\n\nHappy to iterate on things, but for today I\u0027m running out of time, so I\u0027m uploading what I have.",
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea18e0f0_c101cf7b",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T18:56:03Z",
+      "side": 1,
+      "message": "For whatever reason, `DCHECK_NOT_NULL(zone)` was not enough here. (It did the trick in `zone-list.h`.)",
+      "range": {
+        "startLine": 394,
+        "startChar": 6,
+        "endLine": 394,
+        "endChar": 50
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef13317_e6662c68",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T18:56:03Z",
+      "side": 1,
+      "message": "Followed the example above (line 29ff).",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 73
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24863a85_c3f153c0",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T18:56:03Z",
+      "side": 1,
+      "message": "I could move this to some global header file and use it everywhere... or inline it here instead of having a macro. I don\u0027t feel strongly about it either way.",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 21
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

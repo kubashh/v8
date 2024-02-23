@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3ced95b_2eaedb40",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T18:56:03Z",
+      "side": 0,
+      "message": "GCC claimed that this was \"used uninitialized\", but it is in fact not used at all.",
+      "range": {
+        "startLine": 83,
+        "startChar": 16,
+        "endLine": 83,
+        "endChar": 30
+      },
+      "revId": "971f457081003ca968e358eea20586f31a459915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
