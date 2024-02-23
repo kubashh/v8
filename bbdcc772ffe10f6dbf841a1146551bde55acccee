@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e06c05d_61962e84",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-23T14:30:13Z",
+      "side": 0,
+      "message": "Need to drop constness here in order to call Reset. Since this function isn\u0027t exposed via flags.h I guess it shouldn\u0027t matter.",
+      "range": {
+        "startLine": 288,
+        "startChar": 13,
+        "endLine": 288,
+        "endChar": 18
+      },
+      "revId": "bbdcc772ffe10f6dbf841a1146551bde55acccee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
