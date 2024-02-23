@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30174a2f_552b2643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T14:00:11Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "5af52c9e29e9791d30d532a58faa89fa0605ea90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f3d2d6_eb9f3312",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T14:00:11Z",
+      "side": 1,
+      "message": "We had an additional validation error here: not enough values on the stack.",
+      "range": {
+        "startLine": 1927,
+        "startChar": 63,
+        "endLine": 1927,
+        "endChar": 78
+      },
+      "revId": "5af52c9e29e9791d30d532a58faa89fa0605ea90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
