@@ -500,6 +500,7 @@
 # TODO(v8:7777): Change this once wasm is supported in jitless mode.
 ['not has_webassembly or variant == jitless', {
   'test-api/TurboAsmDisablesDetach': [SKIP],
+  'test-api/RunWasm*': [SKIP],
   'test-api/Wasm*': [SKIP],
   'test-api-array-buffer/ArrayBuffer_NonDetachableWasDetached': [SKIP],
   'test-backing-store/Run_WasmModule_Buffer_Externalized_Regression_UseAfterFree': [SKIP],

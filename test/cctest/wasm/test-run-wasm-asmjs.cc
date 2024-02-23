@@ -19,6 +19,7 @@ namespace internal {
 namespace wasm {
 
 TEST(RunAsmJs_Int32AsmjsDivS) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, int32_t, int32_t> r(TestExecutionTier::kTurbofan,
                                           kAsmJsSloppyOrigin);
   r.Build(
@@ -32,6 +33,7 @@ TEST(RunAsmJs_Int32AsmjsDivS) {
 }
 
 TEST(RunAsmJs_Int32AsmjsRemS) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, int32_t, int32_t> r(TestExecutionTier::kTurbofan,
                                           kAsmJsSloppyOrigin);
   r.Build(
@@ -45,6 +47,7 @@ TEST(RunAsmJs_Int32AsmjsRemS) {
 }
 
 TEST(RunAsmJs_Int32AsmjsDivU) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, int32_t, int32_t> r(TestExecutionTier::kTurbofan,
                                           kAsmJsSloppyOrigin);
   r.Build(
@@ -58,6 +61,7 @@ TEST(RunAsmJs_Int32AsmjsDivU) {
 }
 
 TEST(RunAsmJs_Int32AsmjsRemU) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, int32_t, int32_t> r(TestExecutionTier::kTurbofan,
                                           kAsmJsSloppyOrigin);
   r.Build(
@@ -71,6 +75,7 @@ TEST(RunAsmJs_Int32AsmjsRemU) {
 }
 
 TEST(RunAsmJs_I32AsmjsSConvertF32) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, float> r(TestExecutionTier::kTurbofan,
                                kAsmJsSloppyOrigin);
   r.Build({WASM_UNOP(kExprI32AsmjsSConvertF32, WASM_LOCAL_GET(0))});
@@ -82,6 +87,7 @@ TEST(RunAsmJs_I32AsmjsSConvertF32) {
 }
 
 TEST(RunAsmJs_I32AsmjsSConvertF64) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, double> r(TestExecutionTier::kTurbofan,
                                 kAsmJsSloppyOrigin);
   r.Build({WASM_UNOP(kExprI32AsmjsSConvertF64, WASM_LOCAL_GET(0))});
@@ -93,6 +99,7 @@ TEST(RunAsmJs_I32AsmjsSConvertF64) {
 }
 
 TEST(RunAsmJs_I32AsmjsUConvertF32) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<uint32_t, float> r(TestExecutionTier::kTurbofan,
                                 kAsmJsSloppyOrigin);
   r.Build({WASM_UNOP(kExprI32AsmjsUConvertF32, WASM_LOCAL_GET(0))});
@@ -104,6 +111,7 @@ TEST(RunAsmJs_I32AsmjsUConvertF32) {
 }
 
 TEST(RunAsmJs_I32AsmjsUConvertF64) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<uint32_t, double> r(TestExecutionTier::kTurbofan,
                                  kAsmJsSloppyOrigin);
   r.Build({WASM_UNOP(kExprI32AsmjsUConvertF64, WASM_LOCAL_GET(0))});
@@ -115,6 +123,7 @@ TEST(RunAsmJs_I32AsmjsUConvertF64) {
 }
 
 TEST(RunAsmJs_LoadMemI32_oob_asm) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, uint32_t> r(TestExecutionTier::kTurbofan,
                                   kAsmJsSloppyOrigin);
   int32_t* memory = r.builder().AddMemoryElems<int32_t>(8);
@@ -135,6 +144,7 @@ TEST(RunAsmJs_LoadMemI32_oob_asm) {
 }
 
 TEST(RunAsmJs_LoadMemF32_oob_asm) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<float, uint32_t> r(TestExecutionTier::kTurbofan,
                                 kAsmJsSloppyOrigin);
   float* memory = r.builder().AddMemoryElems<float>(8);
@@ -155,6 +165,7 @@ TEST(RunAsmJs_LoadMemF32_oob_asm) {
 }
 
 TEST(RunAsmJs_LoadMemF64_oob_asm) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<double, uint32_t> r(TestExecutionTier::kTurbofan,
                                  kAsmJsSloppyOrigin);
   double* memory = r.builder().AddMemoryElems<double>(8);
@@ -177,6 +188,7 @@ TEST(RunAsmJs_LoadMemF64_oob_asm) {
 }
 
 TEST(RunAsmJs_StoreMemI32_oob_asm) {
+  if (!v8_flags.turbofan) return;
   WasmRunner<int32_t, uint32_t, uint32_t> r(TestExecutionTier::kTurbofan,
                                             kAsmJsSloppyOrigin);
   int32_t* memory = r.builder().AddMemoryElems<int32_t>(8);
@@ -199,6 +211,7 @@ TEST(RunAsmJs_StoreMemI32_oob_asm) {
 }
 
 TEST(RunAsmJs_Int32AsmjsDivS_byzero_const) {
+  if (!v8_flags.turbofan) return;
   for (int8_t denom = -2; denom < 8; ++denom) {
     WasmRunner<int32_t, int32_t> r(TestExecutionTier::kTurbofan,
                                    kAsmJsSloppyOrigin);
@@ -216,6 +229,7 @@ TEST(RunAsmJs_Int32AsmjsDivS_byzero_const) {
 }
 
 TEST(RunAsmJs_Int32AsmjsRemS_byzero_const) {
+  if (!v8_flags.turbofan) return;
   for (int8_t denom = -2; denom < 8; ++denom) {
     WasmRunner<int32_t, int32_t> r(TestExecutionTier::kTurbofan,
                                    kAsmJsSloppyOrigin);

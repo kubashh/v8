@@ -3722,6 +3722,8 @@ void Pipeline::GenerateCodeForWasmFunction(
     CallDescriptor* call_descriptor,
     ZoneVector<WasmInliningPosition>* inlining_positions,
     wasm::WasmFeatures* detected) {
+  CHECK(v8_flags.turbofan);
+  CHECK(!v8_flags.liftoff_only);
   auto* wasm_engine = wasm::GetWasmEngine();
   const wasm::WasmModule* module = env->module;
   wasm::WasmFeatures enabled = env->enabled_features;
