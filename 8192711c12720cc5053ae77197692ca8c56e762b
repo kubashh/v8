@@ -16,6 +16,46 @@
       "message": "A short one, PTAL! :)",
       "revId": "8192711c12720cc5053ae77197692ca8c56e762b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a1550df_3632c5ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-23T12:40:00Z",
+      "side": 1,
+      "message": "LGTM with a nit question.",
+      "revId": "8192711c12720cc5053ae77197692ca8c56e762b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b02e690_47d38e5b",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-23T12:40:00Z",
+      "side": 1,
+      "message": "Due to the nesting, does this test case also cover the folded allocation case?",
+      "range": {
+        "startLine": 528,
+        "startChar": 15,
+        "endLine": 528,
+        "endChar": 26
+      },
+      "revId": "8192711c12720cc5053ae77197692ca8c56e762b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
