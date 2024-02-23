@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f43cd406_b958a2eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-23T14:12:15Z",
+      "side": 1,
+      "message": "Patch looks ok (compared to Chromium). No idea why there\u0027s this not so obvious redness everywhere now?",
+      "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fed94f7_6040a65e",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-23T14:12:15Z",
+      "side": 1,
+      "message": "Note, this is also executed on the bots:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8755295473682284961/+/u/initialization/gclient_runhooks/stdout",
+      "range": {
+        "startLine": 762,
+        "startChar": 2,
+        "endLine": 762,
+        "endChar": 40
+      },
+      "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
