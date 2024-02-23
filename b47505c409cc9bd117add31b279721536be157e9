@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "984c4f27_ed607643",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3719,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-23T14:51:48Z",
+      "side": 1,
+      "message": "Turboshaft tests either use `--turboshaft-wasm` or don\u0027t do anything different to turbofan (they rely on the existence of the turboshaft variant to actually cover turboshaft).",
+      "parentUuid": "b06f5db2_cb37b4bd",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50df8449_b57b84cd",
