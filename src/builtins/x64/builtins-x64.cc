@@ -2691,13 +2691,15 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
 
   StackArgumentsAccessor args(argc);
 
-  Label non_callable, class_constructor;
+  Label non_callable, class_constructor, non_function;
   __ JumpIfSmi(target, &non_callable);
   __ LoadMap(map, target);
   __ CmpInstanceTypeRange(map, instance_type, FIRST_CALLABLE_JS_FUNCTION_TYPE,
                           LAST_CALLABLE_JS_FUNCTION_TYPE);
-  __ TailCallBuiltin(Builtins::CallFunction(mode), below_equal);
+  __ j(above, &non_function);
+  Generate_CallFunction(masm, mode);
 
+  __ bind(&non_function);
   __ cmpw(instance_type, Immediate(JS_BOUND_FUNCTION_TYPE));
   __ TailCallBuiltin(Builtin::kCallBoundFunction, equal);
 
