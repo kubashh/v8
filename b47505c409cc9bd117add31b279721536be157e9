@@ -33,6 +33,40 @@
       "message": "+mliedtke for src/compiler.",
       "revId": "b47505c409cc9bd117add31b279721536be157e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cb6ffbe_cc8ad70c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-23T14:35:17Z",
+      "side": 1,
+      "message": "LGTM with a comment.",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81a3dc30_a797ba30",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3719,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-23T14:35:17Z",
+      "side": 1,
+      "message": "We also need it in `GenerateWasmCodeFromTurboshaftGraph` that will hopefully soon-ish replace this.",
+      "revId": "b47505c409cc9bd117add31b279721536be157e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
