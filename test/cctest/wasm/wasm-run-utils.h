@@ -590,6 +590,7 @@ class WasmRunner : public WasmRunnerBase {
 #define WASM_EXEC_TEST(name)                                                   \
   void RunWasm_##name(TestExecutionTier execution_tier);                       \
   TEST(RunWasmTurbofan_##name) {                                               \
+    if (!v8_flags.turbofan) return;                                            \
     RunWasm_##name(TestExecutionTier::kTurbofan);                              \
   }                                                                            \
   TEST(RunWasmLiftoff_##name) { RunWasm_##name(TestExecutionTier::kLiftoff); } \
@@ -598,6 +599,7 @@ class WasmRunner : public WasmRunnerBase {
 #define UNINITIALIZED_WASM_EXEC_TEST(name)               \
   void RunWasm_##name(TestExecutionTier execution_tier); \
   UNINITIALIZED_TEST(RunWasmTurbofan_##name) {           \
+    if (!v8_flags.turbofan) return;                      \
     RunWasm_##name(TestExecutionTier::kTurbofan);        \
   }                                                      \
   UNINITIALIZED_TEST(RunWasmLiftoff_##name) {            \
@@ -608,6 +610,7 @@ class WasmRunner : public WasmRunnerBase {
 #define WASM_COMPILED_EXEC_TEST(name)                                          \
   void RunWasm_##name(TestExecutionTier execution_tier);                       \
   TEST(RunWasmTurbofan_##name) {                                               \
+    if (!v8_flags.turbofan) return;                                            \
     RunWasm_##name(TestExecutionTier::kTurbofan);                              \
   }                                                                            \
   TEST(RunWasmLiftoff_##name) { RunWasm_##name(TestExecutionTier::kLiftoff); } \
