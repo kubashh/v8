@@ -9123,11 +9123,15 @@ base::Optional<FastObject> MaglevGraphBuilder::TryReadBoilerplateForFastLiteral(
   FastObject fast_literal(boilerplate_map, zone(), {});
 
   // Compute the in-object properties to store first.
+  //
+  // Make sure to iterate based on the fast literal in-object property count,
+  // rather than the map's descriptor or in-object property count, in case there
+  // is heap corruption.
   int index = 0;
-  for (InternalIndex i :
-       InternalIndex::Range(boilerplate_map.NumberOfOwnDescriptors())) {
+  for (InternalIndex descriptor_index(0);
+       index < fast_literal.inobject_properties; ++descriptor_index) {
     PropertyDetails const property_details =
-        boilerplate_map.GetPropertyDetails(broker(), i);
+        boilerplate_map.GetPropertyDetails(broker(), descriptor_index);
     if (property_details.location() != PropertyLocation::kField) continue;
     DCHECK_EQ(PropertyKind::kData, property_details.kind());
     if ((*max_properties)-- == 0) return {};
@@ -9179,7 +9183,6 @@ base::Optional<FastObject> MaglevGraphBuilder::TryReadBoilerplateForFastLiteral(
       value = FastField(boilerplate_value);
     }
 
-    DCHECK_LT(index, boilerplate_map.GetInObjectProperties());
     fast_literal.fields[index] = value;
     index++;
   }
