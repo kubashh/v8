@@ -56,6 +56,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6bfa5d2b_e95891e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-02-23T15:44:03Z",
+      "side": 1,
+      "message": "I just found https://crbug.com/40269288 which I had parked at some point, because I probably looked slightly too early.\n\nI\u0027m not sure if all the siso configs seamlessly work in V8 stand-alone. I assume to test this we also need the use_siso gn arg?",
+      "parentUuid": "4acaa794_204ab262",
+      "revId": "eae905d9ee01d4da0c488fa64e28beadb55cdda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c353ac65_998c9462",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
