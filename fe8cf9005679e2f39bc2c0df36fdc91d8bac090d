@@ -20,6 +20,46 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e2c146c0_94749130",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T10:16:16Z",
+      "side": 1,
+      "message": "Nice, LGTM with one suggestion.",
+      "revId": "fe8cf9005679e2f39bc2c0df36fdc91d8bac090d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a07b67c9_a32b3519",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-23T10:16:16Z",
+      "side": 1,
+      "message": "A bit nicer: `base::Vector\u003cconst Flag\u003e Flags() { return base::ArrayVector(flags); }`, and then use `Flags().begin()` and `Flags().end()` in the tests.",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 290,
+        "endChar": 51
+      },
+      "revId": "fe8cf9005679e2f39bc2c0df36fdc91d8bac090d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f3d222a4_2e732af8",
         "filename": "test/unittests/flags/flag-definitions-unittest.cc",
         "patchSetId": 3
