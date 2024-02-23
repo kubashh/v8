@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a16435fe_00245bfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T14:15:32Z",
+      "side": 1,
+      "message": "Awesome, thanks! LGTM.",
+      "revId": "88e121d94c9790181f4a91afda7154647303d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02985cd5_5c8768e7",
+        "filename": "test/mjsunit/regress/wasm/regress-326273468.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-23T14:15:32Z",
+      "side": 1,
+      "message": "nit: leftover. Oh well.",
+      "range": {
+        "startLine": 30,
+        "startChar": 23,
+        "endLine": 30,
+        "endChar": 35
+      },
+      "revId": "88e121d94c9790181f4a91afda7154647303d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
