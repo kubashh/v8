@@ -669,6 +669,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 
   // These operators reinterpret the bits of a floating point number as an
   // integer and vice versa.
+  const Operator* BitcastFloat16ToInt32();
   const Operator* BitcastFloat32ToInt32();
   const Operator* BitcastFloat64ToInt64();
   const Operator* BitcastInt32ToFloat32();

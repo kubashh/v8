@@ -222,6 +222,7 @@ class WasmGraphBuilder {
   Node* TraceInstruction(uint32_t mark_id);
   Node* Int32Constant(int32_t value);
   Node* Int64Constant(int64_t value);
+  Node* Float16Constant(_Float16 value);
   Node* Float32Constant(float value);
   Node* Float64Constant(double value);
   Node* Simd128Constant(const uint8_t value[16]);

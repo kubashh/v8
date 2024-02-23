@@ -322,6 +322,7 @@ class WasmGlobalObject
 
   inline int32_t GetI32();
   inline int64_t GetI64();
+  inline float GetF16();
   inline float GetF32();
   inline double GetF64();
   inline uint8_t* GetS128RawBytes();
@@ -329,6 +330,7 @@ class WasmGlobalObject
 
   inline void SetI32(int32_t value);
   inline void SetI64(int64_t value);
+  inline void SetF16(_Float16 value);
   inline void SetF32(float value);
   inline void SetF64(double value);
   // {value} must be an object in Wasm representation.

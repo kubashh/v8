@@ -46,6 +46,10 @@ class InstructionOperandConverter {
 
   float InputFloat32(size_t index) { return ToFloat32(instr_->InputAt(index)); }
 
+  _Float16 InputFloat16(size_t index) {
+    return ToFloat16(instr_->InputAt(index));
+  }
+
   int32_t InputInt32(size_t index) {
     return ToConstant(instr_->InputAt(index)).ToInt32();
   }
@@ -194,6 +198,10 @@ class InstructionOperandConverter {
   }
 
   float ToFloat32(InstructionOperand* op) { return ToConstant(op).ToFloat32(); }
+
+  _Float16 ToFloat16(InstructionOperand* op) {
+    return ToConstant(op).ToFloat16();
+  }
 
   ExternalReference ToExternalReference(InstructionOperand* op) {
     return ToConstant(op).ToExternalReference();

@@ -74,6 +74,13 @@ inline bool is_float_special_value(T value) {
 template <size_t Bits>
 struct TypeForBits;
 template <>
+struct TypeForBits<16> {
+  using uint_type = uint16_t;
+  using float_type = _Float16;
+  static constexpr float_type nan =
+      std::numeric_limits<float_type>::quiet_NaN();
+};
+template <>
 struct TypeForBits<32> {
   using uint_type = uint32_t;
   using float_type = float;
@@ -159,6 +166,7 @@ class TupleType;
 
 using Word32Type = WordType<32>;
 using Word64Type = WordType<64>;
+using Float16Type = FloatType<16>;
 using Float32Type = FloatType<32>;
 using Float64Type = FloatType<64>;
 
@@ -496,7 +504,7 @@ extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) WordType<64>;
 
 template <size_t Bits>
 class FloatType : public Type {
-  static_assert(Bits == 32 || Bits == 64);
+  static_assert(Bits == 32 || Bits == 64 || Bits == 16);
   friend class Type;
   static constexpr int kMaxInlineSetSize = 2;
 

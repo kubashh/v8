@@ -327,6 +327,8 @@ std::pair<ValueType, uint32_t> read_value_type(Decoder* decoder,
       return {kWasmI32, 1};
     case kI64Code:
       return {kWasmI64, 1};
+    case kF16Code:
+      return {kWasmF16, 1};
     case kF32Code:
       return {kWasmF32, 1};
     case kF64Code:
@@ -412,6 +414,20 @@ struct ImmI64Immediate {
   template <typename ValidationTag>
   ImmI64Immediate(Decoder* decoder, const uint8_t* pc, ValidationTag = {}) {
     std::tie(value, length) = decoder->read_i64v<ValidationTag>(pc, "immi64");
+  }
+};
+
+struct ImmF16Immediate {
+  _Float16 value;
+  uint32_t length = 2;
+
+  template <typename ValidationTag>
+  ImmF16Immediate(Decoder* decoder, const uint8_t* pc, ValidationTag = {}) {
+    // We can't use base::bit_cast here because calling any helper function
+    // that returns a float would potentially flip NaN bits per C++ semantics,
+    // so we have to inline the memcpy call directly.
+    uint16_t tmp = decoder->read_u16<ValidationTag>(pc, "immf16");
+    memcpy(&value, &tmp, sizeof(value));
   }
 };
 
@@ -1105,6 +1121,7 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
 #define INTERFACE_CONSTANT_FUNCTIONS(F) /*       force 80 columns           */ \
   F(I32Const, Value* result, int32_t value)                                    \
   F(I64Const, Value* result, int64_t value)                                    \
+  F(F16Const, Value* result, _Float16 value)                                   \
   F(F32Const, Value* result, float value)                                      \
   F(F64Const, Value* result, double value)                                     \
   F(S128Const, const Simd128Immediate& imm, Value* result)                     \
@@ -2247,6 +2264,11 @@ class WasmDecoder : public Decoder {
           case kExprTableFill: {
             IndexImmediate imm(decoder, pc + length, "table index", validate);
             (ios.TableIndex(imm), ...);
+            return length + imm.length;
+          }
+          case kExprF16Const: {
+            ImmF16Immediate imm(decoder, pc + 1, validate);
+            (ios.F16Const(imm), ...);
             return length + imm.length;
           }
           default:
@@ -5969,6 +5991,12 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         auto [start, value, count] =
             Pop(kWasmI32, this->module_->tables[imm.index].type, kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(TableFill, imm, start, value, count);
+        return opcode_length + imm.length;
+      }
+      case kExprF16Const: {
+        ImmF16Immediate imm(this, this->pc_ + opcode_length, validate);
+        Value* value = Push(kWasmF16);
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(F16Const, value, imm.value);
         return opcode_length + imm.length;
       }
       default:

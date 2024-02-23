@@ -18,6 +18,7 @@ class CommonNodeCache final {
       : int32_constants_(zone),
         int64_constants_(zone),
         tagged_index_constants_(zone),
+        float16_constants_(zone),
         float32_constants_(zone),
         float64_constants_(zone),
         external_constants_(zone),
@@ -41,6 +42,11 @@ class CommonNodeCache final {
 
   Node** FindTaggedIndexConstant(int32_t value) {
     return tagged_index_constants_.Find(value);
+  }
+
+  Node** FindFloat16Constant(_Float16 value) {
+    // We canonicalize float constants at the bit representation level.
+    return float16_constants_.Find(base::bit_cast<int16_t>(value));
   }
 
   Node** FindFloat32Constant(float value) {
@@ -81,6 +87,7 @@ class CommonNodeCache final {
   Int32NodeCache int32_constants_;
   Int64NodeCache int64_constants_;
   Int32NodeCache tagged_index_constants_;
+  Int16NodeCache float16_constants_;
   Int32NodeCache float32_constants_;
   Int64NodeCache float64_constants_;
   IntPtrNodeCache external_constants_;

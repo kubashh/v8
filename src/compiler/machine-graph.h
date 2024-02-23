@@ -65,6 +65,9 @@ class V8_EXPORT_PRIVATE MachineGraph : public NON_EXPORTED_BASE(ZoneObject) {
   Node* RelocatableIntPtrConstant(intptr_t value, RelocInfo::Mode rmode);
   Node* RelocatableWasmBuiltinCallTarget(Builtin builtin);
 
+  // Creates a Float16Constant node, usually canonicalized.
+  Node* Float16Constant(_Float16 value);
+
   // Creates a Float32Constant node, usually canonicalized.
   Node* Float32Constant(float value);
 

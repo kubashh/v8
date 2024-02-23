@@ -214,6 +214,9 @@ class UseInfo {
   static UseInfo Bool() {
     return UseInfo(MachineRepresentation::kBit, Truncation::Bool());
   }
+  static UseInfo Float16() {
+    return UseInfo(MachineRepresentation::kFloat16, Truncation::Any());
+  }
   static UseInfo Float32() {
     return UseInfo(MachineRepresentation::kFloat32, Truncation::Any());
   }

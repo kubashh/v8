@@ -1015,6 +1015,7 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // signalling NaNs to quiet NaNs when converting between float and double.
   inline void Fmov(VRegister fd, double imm);
   inline void Fmov(VRegister fd, float imm);
+  inline void Fmov(VRegister fd, _Float16 imm);
   // Provide a template to allow other types to be converted automatically.
   template <typename T>
   void Fmov(VRegister fd, T imm) {
@@ -2429,6 +2430,7 @@ class V8_NODISCARD UseScratchRegisterScope {
   // automatically when the scope ends.
   Register AcquireW() { return AcquireNextAvailable(available_).W(); }
   Register AcquireX() { return AcquireNextAvailable(available_).X(); }
+  VRegister AcquireH() { return AcquireNextAvailable(availablefp_).H(); }
   VRegister AcquireS() { return AcquireNextAvailable(availablefp_).S(); }
   VRegister AcquireD() { return AcquireNextAvailable(availablefp_).D(); }
   VRegister AcquireQ() { return AcquireNextAvailable(availablefp_).Q(); }

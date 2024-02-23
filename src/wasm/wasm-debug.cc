@@ -653,6 +653,8 @@ class DebugInfoImpl {
         return WasmValue(ReadUnalignedValue<int32_t>(stack_address));
       case kI64:
         return WasmValue(ReadUnalignedValue<int64_t>(stack_address));
+      case kF16:
+        return WasmValue(ReadUnalignedValue<_Float16>(stack_address));
       case kF32:
         return WasmValue(ReadUnalignedValue<float>(stack_address));
       case kF64:

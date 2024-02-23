@@ -55,6 +55,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) NodeCache final {
 };
 
 // Various default cache types.
+using Int16NodeCache = NodeCache<int16_t>;
 using Int32NodeCache = NodeCache<int32_t>;
 using Int64NodeCache = NodeCache<int64_t>;
 

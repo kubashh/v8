@@ -160,6 +160,9 @@ struct OpEqualTo : public std::equal_to<T> {};
 template <typename T>
 struct OpHash : public base::hash<T> {};
 
+inline std::ostream& operator<<(std::ostream& out, _Float16 value) {
+  return out << static_cast<float>(value);
+}
 
 // A templatized implementation of Operator that has one static parameter of
 // type {T} with the proper default equality and hashing functions.

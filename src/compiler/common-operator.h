@@ -605,6 +605,7 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
   const Operator* Int32Constant(int32_t);
   const Operator* Int64Constant(int64_t);
   const Operator* TaggedIndexConstant(int32_t value);
+  const Operator* Float16Constant(_Float16);
   const Operator* Float32Constant(float);
   const Operator* Float64Constant(double);
   const Operator* ExternalConstant(const ExternalReference&);

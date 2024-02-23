@@ -30,6 +30,7 @@ class WasmInitExpr : public ZoneObject {
     kGlobalGet,
     kI32Const,
     kI64Const,
+    kF16Const,
     kF32Const,
     kF64Const,
     kS128Const,
@@ -55,6 +56,7 @@ class WasmInitExpr : public ZoneObject {
   union Immediate {
     int32_t i32_const;
     int64_t i64_const;
+    _Float16 f16_const;
     float f32_const;
     double f64_const;
     std::array<uint8_t, kSimd128Size> s128_const;
@@ -67,6 +69,9 @@ class WasmInitExpr : public ZoneObject {
   }
   explicit WasmInitExpr(int64_t v) : kind_(kI64Const), operands_(nullptr) {
     immediate_.i64_const = v;
+  }
+  explicit WasmInitExpr(_Float16 v) : kind_(kF16Const), operands_(nullptr) {
+    immediate_.f16_const = v;
   }
   explicit WasmInitExpr(float v) : kind_(kF32Const), operands_(nullptr) {
     immediate_.f32_const = v;
@@ -172,6 +177,8 @@ class WasmInitExpr : public ZoneObject {
         return immediate().i32_const == other.immediate().i32_const;
       case kI64Const:
         return immediate().i64_const == other.immediate().i64_const;
+      case kF16Const:
+        return immediate().f16_const == other.immediate().f16_const;
       case kF32Const:
         return immediate().f32_const == other.immediate().f32_const;
       case kF64Const:
@@ -225,6 +232,8 @@ class WasmInitExpr : public ZoneObject {
         return WasmInitExpr(int32_t{0});
       case kI64:
         return WasmInitExpr(int64_t{0});
+      case kF16:
+        return WasmInitExpr(0.0f16);
       case kF32:
         return WasmInitExpr(0.0f);
       case kF64:

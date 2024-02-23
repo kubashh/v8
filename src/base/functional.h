@@ -225,6 +225,11 @@ V8_BASE_HASH_VALUE_SIGNED(long)       // NOLINT(runtime/int)
 V8_BASE_HASH_VALUE_SIGNED(long long)  // NOLINT(runtime/int)
 #undef V8_BASE_HASH_VALUE_SIGNED
 
+V8_INLINE size_t hash_value(_Float16 v) {
+  // 0 and -0 both hash to zero.
+  return v != 0.0f16 ? hash_value(base::bit_cast<uint16_t>(v)) : 0;
+}
+
 V8_INLINE size_t hash_value(float v) {
   // 0 and -0 both hash to zero.
   return v != 0.0f ? hash_value(base::bit_cast<uint32_t>(v)) : 0;

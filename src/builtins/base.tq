@@ -123,6 +123,7 @@ type int64 generates 'TNode<Int64T>' constexpr 'int64_t';
 type uint64 generates 'TNode<Uint64T>' constexpr 'uint64_t';
 type intptr generates 'TNode<IntPtrT>' constexpr 'intptr_t';
 type uintptr generates 'TNode<UintPtrT>' constexpr 'uintptr_t';
+type float16 generates 'TNode<Float16T>' constexpr '_Float16';
 type float32 generates 'TNode<Float32T>' constexpr 'float';
 type float64 generates 'TNode<Float64T>' constexpr 'double';
 type bool generates 'TNode<BoolT>' constexpr 'bool';
@@ -1297,6 +1298,7 @@ extern macro ChangeNumberToFloat64(Number): float64;
 extern macro ChangeNumberToUint32(Number): uint32;
 extern macro ChangeTaggedNonSmiToInt32(
     implicit context: Context)(HeapObject): int32;
+extern macro ChangeFloat16ToTagged(float16): Number;
 extern macro ChangeFloat32ToTagged(float32): Number;
 extern macro ChangeTaggedToFloat64(implicit context: Context)(JSAny): float64;
 extern macro ChangeFloat64ToTagged(float64): Number;

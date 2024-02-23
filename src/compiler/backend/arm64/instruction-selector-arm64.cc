@@ -1053,6 +1053,11 @@ std::tuple<InstructionCode, ImmediateMode> GetStoreOpcodeAndImmediate(
   InstructionCode opcode = kArchNop;
   ImmediateMode immediate_mode = kNoImmediate;
   switch (rep) {
+    case MachineRepresentation::kFloat16:
+      CHECK(!paired);
+      opcode = kArm64StrH;
+      immediate_mode = kLoadStoreImm16;
+      break;
     case MachineRepresentation::kFloat32:
       CHECK(!paired);
       opcode = kArm64StrS;
@@ -1578,6 +1583,10 @@ void InstructionSelectorT<Adapter>::VisitLoad(node_t node) {
   LoadRepresentation load_rep = load.loaded_rep();
   MachineRepresentation rep = load_rep.representation();
   switch (rep) {
+    case MachineRepresentation::kFloat16:
+      opcode = kArm64LdrH;
+      immediate_mode = kLoadStoreImm16;
+      break;
     case MachineRepresentation::kFloat32:
       opcode = kArm64LdrS;
       immediate_mode = kLoadStoreImm32;
@@ -2872,6 +2881,7 @@ void InstructionSelectorT<Adapter>::VisitWord64Ror(node_t node) {
   V(RoundInt64ToFloat64, kArm64Int64ToFloat64)                \
   V(RoundUint64ToFloat32, kArm64Uint64ToFloat32)              \
   V(RoundUint64ToFloat64, kArm64Uint64ToFloat64)              \
+  V(BitcastFloat16ToInt32, kArm64Float64ExtractLowWord32)     \
   V(BitcastFloat32ToInt32, kArm64Float64ExtractLowWord32)     \
   V(BitcastFloat64ToInt64, kArm64U64MoveFloat64)              \
   V(BitcastInt32ToFloat32, kArm64Float64MoveU64)              \

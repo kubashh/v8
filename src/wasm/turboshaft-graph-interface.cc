@@ -648,6 +648,10 @@ class TurboshaftGraphBuildingInterface {
     result->op = __ Word64Constant(value);
   }
 
+  void F16Const(FullDecoder* decoder, Value* result, _Float16 value) {
+    result->op = __ Float16Constant(value);
+  }
+
   void F32Const(FullDecoder* decoder, Value* result, float value) {
     result->op = __ Float32Constant(value);
   }
@@ -750,6 +754,7 @@ class TurboshaftGraphBuildingInterface {
       case kRtt:
       case kVoid:
       case kBottom:
+      case kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
     result->op = __ Select(
@@ -2292,6 +2297,7 @@ class TurboshaftGraphBuildingInterface {
         case kI16:
         case kVoid:
         case kBottom:
+        case kF16:  // TODO(irezvov): FP16
           UNREACHABLE();
       }
     }
@@ -3017,6 +3023,7 @@ class TurboshaftGraphBuildingInterface {
       case wasm::kI16:
         array_copy_max_loop_length = 20;
         break;
+      case wasm::kF16:
       case wasm::kF32:
       case wasm::kF64:
         array_copy_max_loop_length = 35;
@@ -4333,6 +4340,8 @@ class TurboshaftGraphBuildingInterface {
         return __ Word32Constant(int32_t{0});
       case kI64:
         return __ Word64Constant(int64_t{0});
+      case kF16:
+        return __ Float16Constant(0.0f16);
       case kF32:
         return __ Float32Constant(0.0f);
       case kF64:
@@ -4359,6 +4368,8 @@ class TurboshaftGraphBuildingInterface {
         return RegisterRepresentation::Word32();
       case kI64:
         return RegisterRepresentation::Word64();
+      case kF16:
+        return RegisterRepresentation::Float16();
       case kF32:
         return RegisterRepresentation::Float32();
       case kF64:
@@ -6434,6 +6445,7 @@ class TurboshaftGraphBuildingInterface {
         case kI16:
         case kVoid:
         case kBottom:
+        case kF16:  // TODO(irezvov): FP16
           UNREACHABLE();
       }
     }
@@ -6484,6 +6496,11 @@ class TurboshaftGraphBuildingInterface {
         case MemoryRepresentation::Uint16():
         case MemoryRepresentation::Uint32():
           __ SetVariable(result, __ Word32Constant(0));
+          break;
+        case MemoryRepresentation::Float16():
+          __ SetVariable(
+              result,
+              __ Float16Constant(std::numeric_limits<_Float16>::quiet_NaN()));
           break;
         case MemoryRepresentation::Float32():
           __ SetVariable(result, __ Float32Constant(
@@ -6676,6 +6693,7 @@ class TurboshaftGraphBuildingInterface {
       case wasm::kRtt:
       case wasm::kVoid:
       case wasm::kBottom:
+      case wasm::kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
 

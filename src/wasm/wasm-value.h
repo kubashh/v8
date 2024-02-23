@@ -81,6 +81,8 @@ FOREACH_SIMD_TYPE(DECLARE_CAST)
   V(u32, kWasmI32, uint32_t)              \
   V(i64, kWasmI64, int64_t)               \
   V(u64, kWasmI64, uint64_t)              \
+  V(f16, kWasmF16, _Float16)              \
+  V(f16_boxed, kWasmF16, Float16)         \
   V(f32, kWasmF32, float)                 \
   V(f32_boxed, kWasmF32, Float32)         \
   V(f64, kWasmF64, double)                \
@@ -186,6 +188,8 @@ class WasmValue {
         return std::to_string(to_i32());
       case kI64:
         return std::to_string(to_i64());
+      case kF16:
+        return std::to_string(static_cast<float>(to_f16()));
       case kF32:
         return std::to_string(to_f32());
       case kF64:

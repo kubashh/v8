@@ -237,6 +237,8 @@ std::ostream& operator<<(std::ostream& os, FloatUnaryOp::Kind kind) {
 // static
 bool FloatUnaryOp::IsSupported(Kind kind, FloatRepresentation rep) {
   switch (rep.value()) {
+    case FloatRepresentation::Float16():
+      return true;  // TODO(irezvov): FP16
     case FloatRepresentation::Float32():
       switch (kind) {
         case Kind::kRoundDown:
@@ -506,6 +508,9 @@ void ConstantOp::PrintOptions(std::ostream& os) const {
       break;
     case Kind::kFloat32:
       os << "float32: " << float32();
+      break;
+    case Kind::kFloat16:
+      os << "float16: " << static_cast<float>(float16());
       break;
     case Kind::kExternal:
       os << "external: " << external_reference();
@@ -1408,6 +1413,8 @@ const RegisterRepresentation& RepresentationFor(wasm::ValueType type) {
       RegisterRepresentation::Word32();
   static const RegisterRepresentation kWord64 =
       RegisterRepresentation::Word64();
+  static const RegisterRepresentation kFloat16 =
+      RegisterRepresentation::Float16();
   static const RegisterRepresentation kFloat32 =
       RegisterRepresentation::Float32();
   static const RegisterRepresentation kFloat64 =
@@ -1424,6 +1431,8 @@ const RegisterRepresentation& RepresentationFor(wasm::ValueType type) {
       return kWord32;
     case wasm::kI64:
       return kWord64;
+    case wasm::kF16:
+      return kFloat16;
     case wasm::kF32:
       return kFloat32;
     case wasm::kF64:

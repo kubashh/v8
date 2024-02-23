@@ -38,6 +38,7 @@
   V(Int32Constant)                        \
   V(Int64Constant)                        \
   V(TaggedIndexConstant)                  \
+  V(Float16Constant)                      \
   V(Float32Constant)                      \
   V(Float64Constant)                      \
   V(CompressedHeapConstant)               \
@@ -811,6 +812,7 @@
   V(RoundUint32ToFloat32)                \
   V(RoundUint64ToFloat32)                \
   V(RoundUint64ToFloat64)                \
+  V(BitcastFloat16ToInt32)               \
   V(BitcastFloat32ToInt32)               \
   V(BitcastFloat64ToInt64)               \
   V(BitcastInt32ToFloat32)               \

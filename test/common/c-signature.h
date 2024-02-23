@@ -26,6 +26,7 @@ namespace compiler {
   V(uint32_t, MachineType::Uint32())          \
   V(int64_t, MachineType::Int64())            \
   V(uint64_t, MachineType::Uint64())          \
+  V(_Float16, MachineType::Float16())         \
   V(float, MachineType::Float32())            \
   V(double, MachineType::Float64())           \
   V(void*, MachineType::Pointer())            \

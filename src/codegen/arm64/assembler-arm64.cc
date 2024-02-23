@@ -2813,7 +2813,8 @@ void Assembler::fmov(const Register& rd, const VRegister& fn) {
 }
 
 void Assembler::fmov(const VRegister& vd, const Register& rn) {
-  DCHECK_EQ(vd.SizeInBits(), rn.SizeInBits());
+  DCHECK(vd.SizeInBits() == rn.SizeInBits() ||
+         (vd.SizeInBits() == 16 && rn.SizeInBits() == 32));
   FPIntegerConvertOp op = vd.Is32Bits() ? FMOV_sw : FMOV_dx;
   Emit(op | Rd(vd) | Rn(rn));
 }
