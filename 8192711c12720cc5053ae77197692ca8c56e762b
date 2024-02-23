@@ -56,6 +56,30 @@
       },
       "revId": "8192711c12720cc5053ae77197692ca8c56e762b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94dd70a8_8e73ab06",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-23T12:48:42Z",
+      "side": 1,
+      "message": "Yes exactly! 😊\n\nWell, actually, just doing `[...]` requires 2 allocations: one for the object and one for its backing store, which already covers the folded allocation. The `{x: 42.27}` serves 3 purpose: 1) having one more allocation because why not, 2) making sure that object allocation works, and 3) testing StoreFloat64 (which is only used when initializing freshly allocated objects).",
+      "parentUuid": "5b02e690_47d38e5b",
+      "range": {
+        "startLine": 528,
+        "startChar": 15,
+        "endLine": 528,
+        "endChar": 26
+      },
+      "revId": "8192711c12720cc5053ae77197692ca8c56e762b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
