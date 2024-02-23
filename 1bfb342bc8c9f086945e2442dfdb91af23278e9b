@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e53e3e5_f278f80c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-02-23T12:04:41Z",
+      "side": 1,
+      "message": "Darius, PTAL, for me locally this drops binary size by ~500kB",
+      "revId": "1bfb342bc8c9f086945e2442dfdb91af23278e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
