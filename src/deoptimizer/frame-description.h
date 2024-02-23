@@ -40,7 +40,15 @@ class RegisterValues {
   Float32 GetFloatRegister(unsigned n) const;
 
   Float64 GetDoubleRegister(unsigned n) const {
-    DCHECK(n < arraysize(double_registers_));
+#if DEBUG
+    // This convoluted DCHECK is needed to work around a gcc problem that
+    // improperly detects an array bounds overflow in optimized debug builds
+    // when using a plain DCHECK.
+    if (n >= arraysize(double_registers_)) {
+      DCHECK(false);
+      return {};
+    }
+#endif
     return double_registers_[n];
   }
 

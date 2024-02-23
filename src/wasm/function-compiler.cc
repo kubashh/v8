@@ -39,7 +39,6 @@ WasmCompilationResult WasmCompilationUnit::ExecuteCompilation(
   }
 
   result.func_index = func_index_;
-  result.requested_tier = tier_;
 
   return result;
 }
@@ -109,6 +108,7 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
   }
 
   WasmCompilationResult result;
+  result.result_tier = tier_;
   int declared_index = declared_function_index(env->module, func_index_);
 
   switch (tier_) {
@@ -149,6 +149,7 @@ WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
       // If Liftoff failed, fall back to TurboFan.
       // TODO(wasm): We could actually stop or remove the tiering unit for this
       // function to avoid compiling it twice with TurboFan.
+      result.result_tier = ExecutionTier::kTurbofan;
       V8_FALLTHROUGH;
 
     case ExecutionTier::kTurbofan:

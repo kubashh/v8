@@ -80,7 +80,6 @@ struct WasmCompilationResult {
   base::OwnedVector<uint8_t> protected_instructions_data;
   std::unique_ptr<AssumptionsJournal> assumptions;
   int func_index = kAnonymousFuncIndex;
-  ExecutionTier requested_tier;
   ExecutionTier result_tier;
   Kind kind = kFunction;
   ForDebugging for_debugging = kNotForDebugging;
