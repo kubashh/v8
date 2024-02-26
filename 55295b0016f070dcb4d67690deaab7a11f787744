@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4b9beb79_f1b8a723",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-26T14:42:32Z",
+      "side": 1,
+      "message": "Most of the changes don\u0027t seem to make the code any better. If we can work with `V8_ASSUME` at some places to silence warnings that would be great, otherwise I am not convinced that we should add code just to work around false positive compiler warnings. What if any of this introduces a bug which can only be found in a GCC-build?",
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ea18e0f0_c101cf7b",
         "filename": "src/compiler/turboshaft/types.h",
         "patchSetId": 1
@@ -31,6 +48,30 @@
       "writtenOn": "2024-02-23T18:56:03Z",
       "side": 1,
       "message": "For whatever reason, `DCHECK_NOT_NULL(zone)` was not enough here. (It did the trick in `zone-list.h`.)",
+      "range": {
+        "startLine": 394,
+        "startChar": 6,
+        "endLine": 394,
+        "endChar": 50
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b39c85d9_d2d205c8",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-26T14:42:32Z",
+      "side": 1,
+      "message": "Would it work to turn some `DCHECK`s into `V8_ASSUME`s to make the compiler aware of the implication?\nOr just additionally add a `V8_ASSUME(zone !\u003d nullptr);` here.",
+      "parentUuid": "ea18e0f0_c101cf7b",
       "range": {
         "startLine": 394,
         "startChar": 6,
@@ -66,6 +107,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fdf7e56d_0fad2e07",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-26T14:42:32Z",
+      "side": 1,
+      "message": "Another candidate for `static constexpr unsigned kMaxNumRegs \u003d arraysize(double_registers_); V8_ASSUME(n \u003c kMaxNumRegs);`.",
+      "parentUuid": "4ef13317_e6662c68",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 73
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "24863a85_c3f153c0",
         "filename": "src/interpreter/bytecodes.h",
         "patchSetId": 1
@@ -83,6 +148,47 @@
         "endLine": 855,
         "endChar": 21
       },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b18bc58_4eaa7cee",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-26T14:42:32Z",
+      "side": 1,
+      "message": "This looks pretty identical to `V8_ASSUME`, which should use `__builtin_unreachable()`, and compile to `if (!(condition)) __ builin_unreachable();`. Can you check if this is the case for you locally?",
+      "parentUuid": "24863a85_c3f153c0",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 21
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acfbcf42_cdbca6f2",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-26T14:42:32Z",
+      "side": 1,
+      "message": "`result` will be overwritten in both switch cases below, so setting this field here seems pointless.\n\nBoth Liftoff and TurboFan seem to set it already (in `liftoff-compiler.cc` / `pipeline.cc`). If it\u0027s missing somewhere, we should add it there.",
       "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
