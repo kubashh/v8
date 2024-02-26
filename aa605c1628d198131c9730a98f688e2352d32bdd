@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e50f66f0_c1dc8696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-02-26T21:54:20Z",
+      "side": 1,
+      "message": "PTAL. It\u0027d be good to record what back compat actually means. Marja, is this interpretation correct? We don\u0027t care about older serialized values that are invalid, right?",
+      "revId": "aa605c1628d198131c9730a98f688e2352d32bdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
