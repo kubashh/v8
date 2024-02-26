@@ -813,6 +813,38 @@ void MacroAssembler::Fmov(VRegister vd, float imm) {
   }
 }
 
+void MacroAssembler::Fmov(VRegister vd, _Float16 imm) {
+  DCHECK(allow_macro_instructions());
+  uint16_t bits = base::bit_cast<uint16_t>(imm);
+
+  if (bits == 0) {
+    Movi(vd.D(), 0);
+    return;
+  }
+
+  if (vd.Is1D() || vd.Is2D()) {
+    Fmov(vd, static_cast<double>(imm));
+    return;
+  }
+
+  if (vd.Is1S() || vd.Is2S() || vd.Is4S()) {
+    Fmov(vd, static_cast<float>(imm));
+    return;
+  }
+
+  DCHECK(vd.Is1H());
+  if (IsImmFP32(bits)) {
+    fmov(vd, static_cast<float>(imm));
+  } else if (vd.IsScalar()) {
+    UseScratchRegisterScope temps(this);
+    Register tmp = temps.AcquireW();
+    Mov(tmp, bits);
+    Fmov(vd, tmp);
+  } else {
+    Movi(vd, bits);
+  }
+}
+
 void MacroAssembler::Fmov(Register rd, VRegister fn) {
   DCHECK(allow_macro_instructions());
   DCHECK(!rd.IsZero());

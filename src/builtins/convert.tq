@@ -361,6 +361,9 @@ Convert<float32, int32>(n: int32): float32 {
 Convert<float32, HeapNumber>(h: HeapNumber): float32 {
   return Convert<float32>(LoadHeapNumberValue(h));
 }
+Convert<Number, float16>(d: float16): Number {
+  return ChangeFloat16ToTagged(d);
+}
 Convert<Number, float32>(d: float32): Number {
   return ChangeFloat32ToTagged(d);
 }

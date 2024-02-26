@@ -254,6 +254,12 @@ class RegisterAllocationData final : public ZoneObject {
   ZoneVector<TopLevelLiveRange*>& fixed_live_ranges() {
     return fixed_live_ranges_;
   }
+  ZoneVector<TopLevelLiveRange*>& fixed_half_live_ranges() {
+    return fixed_half_live_ranges_;
+  }
+  const ZoneVector<TopLevelLiveRange*>& fixed_half_live_ranges() const {
+    return fixed_half_live_ranges_;
+  }
   ZoneVector<TopLevelLiveRange*>& fixed_float_live_ranges() {
     return fixed_float_live_ranges_;
   }
@@ -351,6 +357,7 @@ class RegisterAllocationData final : public ZoneObject {
   ZoneVector<SparseBitVector*> live_out_sets_;
   ZoneVector<TopLevelLiveRange*> live_ranges_;
   ZoneVector<TopLevelLiveRange*> fixed_live_ranges_;
+  ZoneVector<TopLevelLiveRange*> fixed_half_live_ranges_;
   ZoneVector<TopLevelLiveRange*> fixed_float_live_ranges_;
   ZoneVector<TopLevelLiveRange*> fixed_double_live_ranges_;
   ZoneVector<TopLevelLiveRange*> fixed_simd128_live_ranges_;

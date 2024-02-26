@@ -518,6 +518,33 @@ class ImmediatesPrinter {
     }
   }
 
+  void F16Const(ImmF16Immediate& imm) {
+    _Float16 f = imm.value;
+    if (f == 0) {
+      out_ << (1 / f < 0 ? " -0.0" : " 0.0");
+    } else if (std::isinf(f)) {
+      out_ << (f > 0 ? " inf" : " -inf");
+    } else if (std::isnan(f)) {
+      uint16_t bits = base::bit_cast<uint16_t>(f);
+      uint16_t payload = bits & 0x3FFu;
+      uint16_t signbit = bits >> 15;
+      if (payload == 0x2'00u) {
+        out_ << (signbit == 1 ? " -nan" : " nan");
+      } else {
+        out_ << (signbit == 1 ? " -nan:" : " +nan:");
+        owner_->PrintHexNumber(out_, payload);
+      }
+    } else {
+      std::ostringstream o;
+      // TODO(dlehmann): Change to `std::format` (C++20) or to `std::to_chars`
+      // (C++17) once available, so that `0.1` isn't printed as `0.100000001`
+      // any more.
+      o << std::setprecision(std::numeric_limits<float>::max_digits10)
+        << static_cast<float>(f);
+      out_ << " " << o.str();
+    }
+  }
+
   void F32Const(ImmF32Immediate& imm) {
     float f = imm.value;
     if (f == 0) {

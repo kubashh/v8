@@ -393,6 +393,8 @@ class OperandGeneratorT : public Adapter {
             return Constant(constant->external_reference());
           case Kind::kNumber:
             return Constant(constant->number());
+          case Kind::kFloat16:
+            return Constant(constant->float16());
           case Kind::kFloat32:
             return Constant(constant->float32());
           case Kind::kFloat64:
@@ -445,6 +447,8 @@ class OperandGeneratorT : public Adapter {
             return Constant(static_cast<int64_t>(tagged_index));
           }
         }
+        case IrOpcode::kFloat16Constant:
+          return Constant(OpParameter<_Float16>(node->op()));
         case IrOpcode::kFloat32Constant:
           return Constant(OpParameter<float>(node->op()));
         case IrOpcode::kRelocatableInt32Constant:

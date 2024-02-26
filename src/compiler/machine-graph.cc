@@ -90,6 +90,14 @@ Node* MachineGraph::RelocatableWasmBuiltinCallTarget(Builtin builtin) {
                                    RelocInfo::WASM_STUB_CALL);
 }
 
+Node* MachineGraph::Float16Constant(_Float16 value) {
+  Node** loc = cache_.FindFloat16Constant(value);
+  if (*loc == nullptr) {
+    *loc = graph()->NewNode(common()->Float16Constant(value));
+  }
+  return *loc;
+}
+
 Node* MachineGraph::Float32Constant(float value) {
   Node** loc = cache_.FindFloat32Constant(value);
   if (*loc == nullptr) {

@@ -819,6 +819,9 @@ Node* WasmGraphBuilder::Binop(wasm::WasmOpcode opcode, Node* left, Node* right,
       break;
     case wasm::kExprF64Mod:
       return BuildF64Mod(left, right);
+    case wasm::kExprF16Add:
+      op = m->Float16Add();
+      break;
     case wasm::kExprRefEq:
       return gasm_->TaggedEqual(left, right);
     case wasm::kExprI32AsmjsDivS:
@@ -1136,6 +1139,10 @@ Node* WasmGraphBuilder::Unop(wasm::WasmOpcode opcode, Node* input,
       FATAL_UNSUPPORTED_OPCODE(opcode);
   }
   return graph()->NewNode(op, input);
+}
+
+Node* WasmGraphBuilder::Float16Constant(_Float16 value) {
+  return mcgraph()->Float16Constant(value);
 }
 
 Node* WasmGraphBuilder::Float32Constant(float value) {
@@ -2312,6 +2319,7 @@ Node* WasmGraphBuilder::Throw(uint32_t tag_index, const wasm::WasmTag* tag,
       case wasm::kI16:
       case wasm::kVoid:
       case wasm::kBottom:
+      case wasm::kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
   }
@@ -2457,6 +2465,7 @@ Node* WasmGraphBuilder::GetExceptionValues(Node* except_obj,
       case wasm::kI16:
       case wasm::kVoid:
       case wasm::kBottom:
+      case wasm::kF16:
         UNREACHABLE();
     }
     values[i] = value;
@@ -5470,6 +5479,8 @@ Node* WasmGraphBuilder::DefaultValue(wasm::ValueType type) {
       return Int32Constant(0);
     case wasm::kI64:
       return Int64Constant(0);
+    case wasm::kF16:
+      return Float16Constant(0);
     case wasm::kF32:
       return Float32Constant(0);
     case wasm::kF64:
@@ -5976,6 +5987,7 @@ void WasmGraphBuilder::ArrayCopy(Node* dst_array, Node* dst_index,
     case wasm::kI16:
       array_copy_max_loop_length = 20;
       break;
+    case wasm::kF16:
     case wasm::kF32:
     case wasm::kF64:
       array_copy_max_loop_length = 35;
@@ -6094,6 +6106,7 @@ Node* WasmGraphBuilder::StoreInInt64StackSlot(Node* value,
     case wasm::kRtt:
     case wasm::kVoid:
     case wasm::kBottom:
+    case wasm::kF16:  // TODO(irezvov): FP16
       UNREACHABLE();
   }
 
@@ -7274,6 +7287,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::kS128:
       case wasm::kVoid:
       case wasm::kBottom:
+      case wasm::kF16:  // TODO(irezvov): FP16
         // If this is reached, then IsJSCompatibleSignature() is too permissive.
         UNREACHABLE();
     }
@@ -7404,6 +7418,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::kI16:
       case wasm::kBottom:
       case wasm::kVoid:
+      case wasm::kF16:  // TODO(irezvov): FP16
         // If this is reached, then IsJSCompatibleSignature() is too permissive.
         UNREACHABLE();
     }
@@ -7459,6 +7474,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::kI16:
       case wasm::kBottom:
       case wasm::kVoid:
+      case wasm::kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
   }
@@ -7592,6 +7608,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         case wasm::kI16:
         case wasm::kBottom:
         case wasm::kVoid:
+        case wasm::kF16:  // TODO(irezvov): FP16
           return false;
         case wasm::kI32:
         case wasm::kF32:
@@ -7642,6 +7659,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::kI16:
       case wasm::kBottom:
       case wasm::kVoid:
+      case wasm::kF16:  // TODO(irezvov): FP16
         UNREACHABLE();
     }
   }

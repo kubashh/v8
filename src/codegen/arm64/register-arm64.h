@@ -576,6 +576,7 @@ bool AreEven(const CPURegister& reg1, const CPURegister& reg2,
              const CPURegister& reg5 = NoReg, const CPURegister& reg6 = NoReg,
              const CPURegister& reg7 = NoReg, const CPURegister& reg8 = NoReg);
 
+using HalfRegister = VRegister;
 using FloatRegister = VRegister;
 using DoubleRegister = VRegister;
 using Simd128Register = VRegister;

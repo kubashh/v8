@@ -255,6 +255,7 @@ Node* RepresentationChanger::GetRepresentationFor(
     case MachineRepresentation::kSandboxedPointer:
     case MachineRepresentation::kIndirectPointer:
     case MachineRepresentation::kMapWord:
+    case MachineRepresentation::kFloat16:  // TODO(irezvov): FP16
       UNREACHABLE();
   }
   UNREACHABLE();

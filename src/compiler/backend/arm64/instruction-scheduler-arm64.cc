@@ -89,6 +89,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64Rbit32:
     case kArm64Rev:
     case kArm64Rev32:
+    case kArm64Float16Add:
     case kArm64Float32Cmp:
     case kArm64Float32Add:
     case kArm64Float32Sub:
@@ -303,6 +304,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64CompareAndBranch:
       return kNoOpcodeFlags;
 
+    case kArm64LdrH:
     case kArm64LdrS:
     case kArm64LdrD:
     case kArm64LdrQ:
@@ -336,6 +338,7 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArm64Claim:
     case kArm64Poke:
     case kArm64PokePair:
+    case kArm64StrH:
     case kArm64StrS:
     case kArm64StrD:
     case kArm64StrQ:

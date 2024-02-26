@@ -470,6 +470,8 @@ WasmOpcode FromInitExprOperator(WasmInitExpr::Operator op) {
       return kExprI32Const;
     case WasmInitExpr::kI64Const:
       return kExprI64Const;
+    case WasmInitExpr::kF16Const:
+      return kExprF16Const;
     case WasmInitExpr::kF32Const:
       return kExprF32Const;
     case WasmInitExpr::kF64Const:
@@ -523,6 +525,10 @@ void WriteInitializerExpressionWithoutEnd(ZoneBuffer* buffer,
     case WasmInitExpr::kI64Const:
       buffer->write_u8(kExprI64Const);
       buffer->write_i64v(init.immediate().i64_const);
+      break;
+    case WasmInitExpr::kF16Const:
+      buffer->write_u16(kExprF16Const);
+      buffer->write_f16(init.immediate().f16_const);
       break;
     case WasmInitExpr::kF32Const:
       buffer->write_u8(kExprF32Const);

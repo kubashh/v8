@@ -172,6 +172,7 @@ class Typer::Visitor : public Reducer {
       DECLARE_IMPOSSIBLE_CASE(Float64LessThanOrEqual)
       MACHINE_FLOAT32_BINOP_LIST(DECLARE_IMPOSSIBLE_CASE)
       MACHINE_FLOAT32_UNOP_LIST(DECLARE_IMPOSSIBLE_CASE)
+      MACHINE_FLOAT16_BINOP_LIST(DECLARE_IMPOSSIBLE_CASE)
       MACHINE_FLOAT64_BINOP_LIST(DECLARE_IMPOSSIBLE_CASE)
       MACHINE_FLOAT64_UNOP_LIST(DECLARE_IMPOSSIBLE_CASE)
       MACHINE_ATOMIC_OP_LIST(DECLARE_IMPOSSIBLE_CASE)
@@ -228,6 +229,7 @@ class Typer::Visitor : public Reducer {
       DECLARE_IMPOSSIBLE_CASE(RoundUint32ToFloat32)
       DECLARE_IMPOSSIBLE_CASE(RoundUint64ToFloat32)
       DECLARE_IMPOSSIBLE_CASE(RoundUint64ToFloat64)
+      DECLARE_IMPOSSIBLE_CASE(BitcastFloat16ToInt32)
       DECLARE_IMPOSSIBLE_CASE(BitcastFloat32ToInt32)
       DECLARE_IMPOSSIBLE_CASE(BitcastFloat64ToInt64)
       DECLARE_IMPOSSIBLE_CASE(BitcastInt32ToFloat32)
@@ -896,6 +898,8 @@ Type Typer::Visitor::TypeTaggedIndexConstant(Node* node) { UNREACHABLE(); }
 Type Typer::Visitor::TypeRelocatableInt32Constant(Node* node) { UNREACHABLE(); }
 
 Type Typer::Visitor::TypeRelocatableInt64Constant(Node* node) { UNREACHABLE(); }
+
+Type Typer::Visitor::TypeFloat16Constant(Node* node) { UNREACHABLE(); }
 
 Type Typer::Visitor::TypeFloat32Constant(Node* node) { UNREACHABLE(); }
 

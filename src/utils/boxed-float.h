@@ -16,6 +16,47 @@ namespace internal {
 
 // TODO(ahaas): Make these classes with the one in double.h
 
+// Safety wrapper for a 16-bit floating-point value to make sure we don't lose
+// the exact bit pattern during deoptimization when passing this value.
+class Float16 {
+ public:
+  Float16() = default;
+
+  // This constructor does not guarantee that bit pattern of the input value
+  // is preserved if the input is a NaN.
+  explicit Float16(_Float16 value)
+      : bit_pattern_(base::bit_cast<uint16_t>(value)) {
+    // Check that the provided value is not a NaN, because the bit pattern of a
+    // NaN may be changed by a base::bit_cast, e.g. for signalling NaNs on
+    // ia32.
+    DCHECK(!std::isnan(value));
+  }
+
+  uint16_t get_bits() const { return bit_pattern_; }
+
+  _Float16 get_scalar() const { return base::bit_cast<_Float16>(bit_pattern_); }
+
+  bool is_nan() const {
+    // Even though {get_scalar()} might flip the quiet NaN bit, it's ok here,
+    // because this does not change the is_nan property.
+    return std::isnan(get_scalar());
+  }
+
+  // Return a pointer to the field storing the bit pattern. Used in code
+  // generation tests to store generated values there directly.
+  uint16_t* get_bits_address() { return &bit_pattern_; }
+
+  static constexpr Float16 FromBits(uint16_t bits) { return Float16(bits); }
+
+ private:
+  uint16_t bit_pattern_ = 0;
+
+  explicit constexpr Float16(uint16_t bit_pattern)
+      : bit_pattern_(bit_pattern) {}
+};
+
+ASSERT_TRIVIALLY_COPYABLE(Float16);
+
 // Safety wrapper for a 32-bit floating-point value to make sure we don't lose
 // the exact bit pattern during deoptimization when passing this value.
 class Float32 {

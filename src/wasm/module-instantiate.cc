@@ -1995,6 +1995,9 @@ bool InstanceBuilder::ProcessImportedWasmGlobalObject(
     case kI64:
       value = WasmValue(global_object->GetI64());
       break;
+    case kF16:
+      value = WasmValue(global_object->GetF16());
+      break;
     case kF32:
       value = WasmValue(global_object->GetF32());
       break;

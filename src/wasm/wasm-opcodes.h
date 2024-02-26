@@ -596,7 +596,9 @@ V8_EXPORT_PRIVATE bool IsJSCompatibleSignature(const FunctionSig* sig);
   V(TableInit, 0xfc0c, v_iii, "table.init")                \
   V(ElemDrop, 0xfc0d, v_v, "elem.drop")                    \
   V(TableCopy, 0xfc0e, v_iii, "table.copy")                \
-  V(TableSize, 0xfc10, i_v, "table.size")
+  V(TableSize, 0xfc10, i_v, "table.size")                  \
+  V(F16Const, 0xfc30, h_v, "f16.const")                    \
+  V(F16Add, 0xfc38, h_hh, "f16.add")
 
 #define FOREACH_NUMERIC_OPCODE_VARIADIC(V)                \
   V(MemoryInit, 0xfc08, _, "memory.init")                 \
@@ -836,6 +838,9 @@ V8_EXPORT_PRIVATE bool IsJSCompatibleSignature(const FunctionSig* sig);
   V(v_il, kWasmVoid, kWasmI32, kWasmI64)            \
   V(v_li, kWasmVoid, kWasmI64, kWasmI32)            \
   V(v_ll, kWasmVoid, kWasmI64, kWasmI64)            \
+  V(h_v, kWasmF16)                                  \
+  V(h_h, kWasmF16, kWasmF16)                        \
+  V(h_hh, kWasmF16, kWasmF16, kWasmF16)             \
   V(v_v, kWasmVoid)
 
 #define FOREACH_SIMD_SIGNATURE(V)                      \

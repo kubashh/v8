@@ -880,6 +880,9 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   Node* RoundUint64ToFloat64(Node* a) {
     return AddNode(machine()->RoundUint64ToFloat64(), a);
   }
+  Node* BitcastFloat16ToInt32(Node* a) {
+    return AddNode(machine()->BitcastFloat16ToInt32(), a);
+  }
   Node* BitcastFloat32ToInt32(Node* a) {
     return AddNode(machine()->BitcastFloat32ToInt32(), a);
   }

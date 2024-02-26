@@ -3131,6 +3131,8 @@ void InstructionSelectorT<TurbofanAdapter>::VisitNode(Node* node) {
     case IrOpcode::kRelocatableInt32Constant:
     case IrOpcode::kRelocatableInt64Constant:
       return VisitConstant(node);
+    case IrOpcode::kFloat16Constant:
+      return MarkAsFloat16(node), VisitConstant(node);
     case IrOpcode::kFloat32Constant:
       return MarkAsFloat32(node), VisitConstant(node);
     case IrOpcode::kFloat64Constant:
@@ -3417,6 +3419,8 @@ void InstructionSelectorT<TurbofanAdapter>::VisitNode(Node* node) {
       return MarkAsFloat32(node), VisitRoundInt32ToFloat32(node);
     case IrOpcode::kRoundInt64ToFloat64:
       return MarkAsFloat64(node), VisitRoundInt64ToFloat64(node);
+    case IrOpcode::kBitcastFloat16ToInt32:
+      return MarkAsWord32(node), VisitBitcastFloat16ToInt32(node);
     case IrOpcode::kBitcastFloat32ToInt32:
       return MarkAsWord32(node), VisitBitcastFloat32ToInt32(node);
     case IrOpcode::kRoundUint32ToFloat32:
@@ -3457,6 +3461,8 @@ void InstructionSelectorT<TurbofanAdapter>::VisitNode(Node* node) {
       return MarkAsFloat32(node), VisitFloat32Min(node);
     case IrOpcode::kFloat32Select:
       return MarkAsFloat32(node), VisitSelect(node);
+    case IrOpcode::kFloat16Add:
+      return MarkAsFloat16(node), VisitFloat16Add(node);
     case IrOpcode::kFloat64Add:
       return MarkAsFloat64(node), VisitFloat64Add(node);
     case IrOpcode::kFloat64Sub:
@@ -4592,6 +4598,9 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
         case ConstantOp::Kind::kTaggedIndex:
         case ConstantOp::Kind::kExternal:
           break;
+        case ConstantOp::Kind::kFloat16:
+          MarkAsFloat16(node);
+          break;
         case ConstantOp::Kind::kFloat32:
           MarkAsFloat32(node);
           break;
@@ -4820,7 +4829,15 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
     }
     case Opcode::kFloatBinop: {
       const auto& binop = op.Cast<FloatBinopOp>();
-      if (binop.rep == Rep::Float32()) {
+      if (binop.rep == Rep::Float16()) {
+        MarkAsFloat16(node);
+        switch (binop.kind) {
+          case FloatBinopOp::Kind::kAdd:
+            return VisitFloat16Add(node);
+          default:
+            UNREACHABLE();
+        }
+      } else if (binop.rep == Rep::Float32()) {
         MarkAsFloat32(node);
         switch (binop.kind) {
           case FloatBinopOp::Kind::kAdd:

@@ -34,6 +34,7 @@ class Simd128;
 #define FOREACH_NUMERIC_VALUE_TYPE(V)    \
   V(I32, 2, I32, Int32, 'i', "i32")      \
   V(I64, 3, I64, Int64, 'l', "i64")      \
+  V(F16, 1, F16, Float16, 'h', "f16")    \
   V(F32, 2, F32, Float32, 'f', "f32")    \
   V(F64, 3, F64, Float64, 'd', "f64")    \
   V(S128, 4, S128, Simd128, 's', "v128") \
@@ -541,6 +542,8 @@ class ValueType {
         return Primitive(kI32);
       case MachineRepresentation::kWord64:
         return Primitive(kI64);
+      case MachineRepresentation::kFloat16:
+        return Primitive(kF16);
       case MachineRepresentation::kFloat32:
         return Primitive(kF32);
       case MachineRepresentation::kFloat64:
@@ -727,6 +730,7 @@ inline std::ostream& operator<<(std::ostream& oss, ValueType type) {
 // Precomputed primitive types.
 constexpr ValueType kWasmI32 = ValueType::Primitive(kI32);
 constexpr ValueType kWasmI64 = ValueType::Primitive(kI64);
+constexpr ValueType kWasmF16 = ValueType::Primitive(kF16);
 constexpr ValueType kWasmF32 = ValueType::Primitive(kF32);
 constexpr ValueType kWasmF64 = ValueType::Primitive(kF64);
 constexpr ValueType kWasmS128 = ValueType::Primitive(kS128);
@@ -764,6 +768,7 @@ constexpr int kWasmHeapTypeBitsMask = (1u << ValueType::kHeapTypeBits) - 1;
 #define FOREACH_WASMVALUE_CTYPES(V) \
   V(kI32, int32_t)                  \
   V(kI64, int64_t)                  \
+  V(kF16, _Float16)                 \
   V(kF32, float)                    \
   V(kF64, double)                   \
   V(kS128, Simd128)

@@ -617,6 +617,9 @@ class InstructionSelectorT final : public Adapter {
   void MarkAsWord64(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kWord64, node);
   }
+  void MarkAsFloat16(node_t node) {
+    MarkAsRepresentation(MachineRepresentation::kFloat16, node);
+  }
   void MarkAsFloat32(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kFloat32, node);
   }
@@ -793,6 +796,7 @@ class InstructionSelectorT final : public Adapter {
   DECLARE_GENERATOR_T(ChangeUint32ToUint64)
   DECLARE_GENERATOR_T(Float64ExtractLowWord32)
   DECLARE_GENERATOR_T(Float64ExtractHighWord32)
+  DECLARE_GENERATOR_T(Float16Add)
   DECLARE_GENERATOR_T(Float32Add)
   DECLARE_GENERATOR_T(Float32Sub)
   DECLARE_GENERATOR_T(Float32Mul)
@@ -807,6 +811,7 @@ class InstructionSelectorT final : public Adapter {
   DECLARE_GENERATOR_T(Float64Mod)
   DECLARE_GENERATOR_T(Float64Pow)
   DECLARE_GENERATOR_T(BitcastWord32ToWord64)
+  DECLARE_GENERATOR_T(BitcastFloat16ToInt32)
   DECLARE_GENERATOR_T(BitcastFloat32ToInt32)
   DECLARE_GENERATOR_T(BitcastFloat64ToInt64)
   DECLARE_GENERATOR_T(BitcastInt32ToFloat32)

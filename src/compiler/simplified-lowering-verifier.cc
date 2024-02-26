@@ -471,6 +471,7 @@ void SimplifiedLoweringVerifier::VisitNode(Node* node,
       CASE(TraceInstruction)
       // Constant operators
       CASE(TaggedIndexConstant)
+      CASE(Float16Constant)
       CASE(Float32Constant)
       CASE(ExternalConstant)
       CASE(NumberConstant)
@@ -605,6 +606,7 @@ void SimplifiedLoweringVerifier::VisitNode(Node* node,
       CASE(Uint64Mod)
       MACHINE_FLOAT32_UNOP_LIST(CASE)
       MACHINE_FLOAT32_BINOP_LIST(CASE)
+      MACHINE_FLOAT16_BINOP_LIST(CASE)
       MACHINE_FLOAT64_UNOP_LIST(CASE)
       MACHINE_FLOAT64_BINOP_LIST(CASE)
       MACHINE_ATOMIC_OP_LIST(CASE)
@@ -659,6 +661,7 @@ void SimplifiedLoweringVerifier::VisitNode(Node* node,
       CASE(RoundUint32ToFloat32)
       CASE(RoundUint64ToFloat32)
       CASE(RoundUint64ToFloat64)
+      CASE(BitcastFloat16ToInt32)
       CASE(BitcastFloat32ToInt32)
       CASE(BitcastFloat64ToInt64)
       CASE(BitcastInt32ToFloat32)

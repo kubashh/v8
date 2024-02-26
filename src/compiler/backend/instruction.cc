@@ -232,6 +232,8 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
       } else if (op.IsFloatRegister()) {
         os << "[" << FloatRegister::from_code(allocated.register_code())
            << "|R";
+      } else if (op.IsHalfRegister()) {
+        os << "[" << HalfRegister::from_code(allocated.register_code()) << "|R";
 #if V8_TARGET_ARCH_X64
       } else if (op.IsSimd256Register()) {
         os << "[" << Simd256Register::from_code(allocated.register_code())
@@ -260,6 +262,9 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
           break;
         case MachineRepresentation::kWord64:
           os << "|w64";
+          break;
+        case MachineRepresentation::kFloat16:
+          os << "|f16";
           break;
         case MachineRepresentation::kFloat32:
           os << "|f32";
@@ -614,6 +619,8 @@ std::ostream& operator<<(std::ostream& os, const Constant& constant) {
       return os << constant.ToInt32();
     case Constant::kInt64:
       return os << constant.ToInt64() << "l";
+    case Constant::kFloat16:
+      return os << static_cast<float>(constant.ToFloat16()) << "h";
     case Constant::kFloat32:
       return os << constant.ToFloat32() << "f";
     case Constant::kFloat64:
@@ -1035,6 +1042,7 @@ static MachineRepresentation FilterRepresentation(MachineRepresentation rep) {
     case MachineRepresentation::kTaggedSigned:
     case MachineRepresentation::kTaggedPointer:
     case MachineRepresentation::kTagged:
+    case MachineRepresentation::kFloat16:
     case MachineRepresentation::kFloat32:
     case MachineRepresentation::kFloat64:
     case MachineRepresentation::kSimd128:

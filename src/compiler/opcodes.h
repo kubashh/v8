@@ -38,6 +38,7 @@
   V(Int32Constant)                        \
   V(Int64Constant)                        \
   V(TaggedIndexConstant)                  \
+  V(Float16Constant)                      \
   V(Float32Constant)                      \
   V(Float64Constant)                      \
   V(CompressedHeapConstant)               \
@@ -677,6 +678,8 @@
   V(Float32Max)                       \
   V(Float32Min)
 
+#define MACHINE_FLOAT16_BINOP_LIST(V) V(Float16Add)
+
 #define MACHINE_FLOAT64_UNOP_LIST(V) \
   V(Float64Abs)                      \
   V(Float64Acos)                     \
@@ -751,6 +754,7 @@
   MACHINE_BINOP_32_LIST(V)               \
   MACHINE_BINOP_64_LIST(V)               \
   MACHINE_COMPARE_BINOP_LIST(V)          \
+  MACHINE_FLOAT16_BINOP_LIST(V)          \
   MACHINE_FLOAT32_BINOP_LIST(V)          \
   MACHINE_FLOAT32_UNOP_LIST(V)           \
   MACHINE_FLOAT64_BINOP_LIST(V)          \
@@ -811,6 +815,7 @@
   V(RoundUint32ToFloat32)                \
   V(RoundUint64ToFloat32)                \
   V(RoundUint64ToFloat64)                \
+  V(BitcastFloat16ToInt32)               \
   V(BitcastFloat32ToInt32)               \
   V(BitcastFloat64ToInt64)               \
   V(BitcastInt32ToFloat32)               \

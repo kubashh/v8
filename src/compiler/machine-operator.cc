@@ -754,6 +754,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(ChangeUint32ToUint64, Operator::kNoProperties, 1, 0, 1)                \
   V(TruncateFloat64ToFloat32, Operator::kNoProperties, 1, 0, 1)            \
   V(TruncateInt64ToInt32, Operator::kNoProperties, 1, 0, 1)                \
+  V(BitcastFloat16ToInt32, Operator::kNoProperties, 1, 0, 1)               \
   V(BitcastFloat32ToInt32, Operator::kNoProperties, 1, 0, 1)               \
   V(BitcastFloat64ToInt64, Operator::kNoProperties, 1, 0, 1)               \
   V(BitcastInt32ToFloat32, Operator::kNoProperties, 1, 0, 1)               \
@@ -813,6 +814,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(Float64ExtractHighWord32, Operator::kNoProperties, 1, 0, 1)            \
   V(Float64InsertLowWord32, Operator::kNoProperties, 2, 0, 1)              \
   V(Float64InsertHighWord32, Operator::kNoProperties, 2, 0, 1)             \
+  V(Float16Add, Operator::kCommutative, 2, 0, 1)                           \
   V(LoadStackCheckOffset, Operator::kNoProperties, 0, 0, 1)                \
   V(LoadFramePointer, Operator::kNoProperties, 0, 0, 1)                    \
   V(LoadRootRegister, Operator::kNoProperties, 0, 0, 1)                    \
@@ -864,6 +866,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(Int64MulWithOverflow, Operator::kAssociative | Operator::kCommutative)
 
 #define MACHINE_TYPE_LIST(V) \
+  V(Float16)                 \
   V(Float32)                 \
   V(Float64)                 \
   V(Simd128)                 \
@@ -886,6 +889,7 @@ std::ostream& operator<<(std::ostream& os, TruncateKind kind) {
   V(Simd256)
 
 #define MACHINE_REPRESENTATION_LIST(V) \
+  V(kFloat16)                          \
   V(kFloat32)                          \
   V(kFloat64)                          \
   V(kSimd128)                          \

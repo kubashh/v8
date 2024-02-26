@@ -669,6 +669,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 
   // These operators reinterpret the bits of a floating point number as an
   // integer and vice versa.
+  const Operator* BitcastFloat16ToInt32();
   const Operator* BitcastFloat32ToInt32();
   const Operator* BitcastFloat64ToInt64();
   const Operator* BitcastInt32ToFloat32();
@@ -680,6 +681,10 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* SignExtendWord8ToInt64();
   const Operator* SignExtendWord16ToInt64();
   const Operator* SignExtendWord32ToInt64();
+
+  // Floating point operators always operate with IEEE 754 round-to-nearest
+  // (half-precision).
+  const Operator* Float16Add();
 
   // Floating point operators always operate with IEEE 754 round-to-nearest
   // (single-precision).

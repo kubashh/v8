@@ -86,6 +86,8 @@ class ZoneBuffer : public ZoneObject {
     LEBHelper::write_u32v(&pos_, static_cast<uint32_t>(val));
   }
 
+  void write_f16(_Float16 val) { write_u16(base::bit_cast<uint16_t>(val)); }
+
   void write_f32(float val) { write_u32(base::bit_cast<uint32_t>(val)); }
 
   void write_f64(double val) { write_u64(base::bit_cast<uint64_t>(val)); }

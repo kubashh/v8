@@ -24,6 +24,7 @@ class MaybeRegisterRepresentation {
   enum class Enum : uint8_t {
     kWord32,
     kWord64,
+    kFloat16,
     kFloat32,
     kFloat64,
     kTagged,
@@ -50,6 +51,10 @@ class MaybeRegisterRepresentation {
 
   static constexpr MaybeRegisterRepresentation Word64() {
     return MaybeRegisterRepresentation(Enum::kWord64);
+  }
+
+  static constexpr MaybeRegisterRepresentation Float16() {
+    return MaybeRegisterRepresentation(Enum::kFloat16);
   }
 
   static constexpr MaybeRegisterRepresentation Float32() {
@@ -90,6 +95,7 @@ class MaybeRegisterRepresentation {
       case Enum::kWord32:
       case Enum::kWord64:
         return true;
+      case Enum::kFloat16:
       case Enum::kFloat32:
       case Enum::kFloat64:
       case Enum::kTagged:
@@ -102,6 +108,7 @@ class MaybeRegisterRepresentation {
 
   constexpr bool IsFloat() const {
     switch (*this) {
+      case Enum::kFloat16:
       case Enum::kFloat32:
       case Enum::kFloat64:
         return true;
@@ -122,6 +129,7 @@ class MaybeRegisterRepresentation {
         return true;
       case Enum::kWord32:
       case Enum::kWord64:
+      case Enum::kFloat16:
       case Enum::kFloat32:
       case Enum::kFloat64:
       case Enum::kSimd128:
@@ -136,6 +144,7 @@ class MaybeRegisterRepresentation {
         return std::numeric_limits<uint32_t>::max();
       case Word64():
         return std::numeric_limits<uint64_t>::max();
+      case Enum::kFloat16:
       case Enum::kFloat32:
       case Enum::kFloat64:
       case Enum::kTagged:
@@ -152,6 +161,8 @@ class MaybeRegisterRepresentation {
         return MachineRepresentation::kWord32;
       case Word64():
         return MachineRepresentation::kWord64;
+      case Float16():
+        return MachineRepresentation::kFloat16;
       case Float32():
         return MachineRepresentation::kFloat32;
       case Float64():
@@ -173,6 +184,8 @@ class MaybeRegisterRepresentation {
         return 32;
       case Word64():
         return 64;
+      case Float16():
+        return 16;
       case Float32():
         return 32;
       case Float64():
@@ -199,6 +212,7 @@ class RegisterRepresentation : public MaybeRegisterRepresentation {
   enum class Enum : uint8_t {
     kWord32 = static_cast<int>(MaybeRegisterRepresentation::Enum::kWord32),
     kWord64 = static_cast<int>(MaybeRegisterRepresentation::Enum::kWord64),
+    kFloat16 = static_cast<int>(MaybeRegisterRepresentation::Enum::kFloat16),
     kFloat32 = static_cast<int>(MaybeRegisterRepresentation::Enum::kFloat32),
     kFloat64 = static_cast<int>(MaybeRegisterRepresentation::Enum::kFloat64),
     kTagged = static_cast<int>(MaybeRegisterRepresentation::Enum::kTagged),
@@ -233,6 +247,9 @@ class RegisterRepresentation : public MaybeRegisterRepresentation {
     } else {
       return Word32();
     }
+  }
+  static constexpr RegisterRepresentation Float16() {
+    return RegisterRepresentation(Enum::kFloat16);
   }
   static constexpr RegisterRepresentation Float32() {
     return RegisterRepresentation(Enum::kFloat32);
@@ -276,6 +293,8 @@ class RegisterRepresentation : public MaybeRegisterRepresentation {
       case MachineRepresentation::kCompressedPointer:
       case MachineRepresentation::kCompressed:
         return Compressed();
+      case MachineRepresentation::kFloat16:
+        return Float16();
       case MachineRepresentation::kFloat32:
         return Float32();
       case MachineRepresentation::kFloat64:
@@ -439,10 +458,14 @@ class WordRepresentation : public RegisterRepresentation {
 class FloatRepresentation : public RegisterRepresentation {
  public:
   enum class Enum : uint8_t {
+    kFloat16 = static_cast<int>(RegisterRepresentation::Enum::kFloat16),
     kFloat32 = static_cast<int>(RegisterRepresentation::Enum::kFloat32),
     kFloat64 = static_cast<int>(RegisterRepresentation::Enum::kFloat64)
   };
 
+  static constexpr FloatRepresentation Float16() {
+    return FloatRepresentation(Enum::kFloat16);
+  }
   static constexpr FloatRepresentation Float32() {
     return FloatRepresentation(Enum::kFloat32);
   }
@@ -476,6 +499,7 @@ class MemoryRepresentation {
     kUint32,
     kInt64,
     kUint64,
+    kFloat16,
     kFloat32,
     kFloat64,
     kAnyTagged,
@@ -521,6 +545,9 @@ class MemoryRepresentation {
   static constexpr MemoryRepresentation Uint64() {
     return MemoryRepresentation(Enum::kUint64);
   }
+  static constexpr MemoryRepresentation Float16() {
+    return MemoryRepresentation(Enum::kFloat16);
+  }
   static constexpr MemoryRepresentation Float32() {
     return MemoryRepresentation(Enum::kFloat32);
   }
@@ -565,6 +592,7 @@ class MemoryRepresentation {
       case Int64():
       case Uint64():
         return true;
+      case Float16():
       case Float32():
       case Float64():
       case AnyTagged():
@@ -589,6 +617,7 @@ class MemoryRepresentation {
       case Uint32():
       case Uint64():
         return false;
+      case Float16():
       case Float32():
       case Float64():
       case AnyTagged():
@@ -615,6 +644,7 @@ class MemoryRepresentation {
       case Uint16():
       case Uint32():
       case Uint64():
+      case Float16():
       case Float32():
       case Float64():
       case IndirectPointer():
@@ -638,6 +668,7 @@ class MemoryRepresentation {
       case Uint16():
       case Uint32():
       case Uint64():
+      case Float16():
       case Float32():
       case Float64():
       case IndirectPointer():
@@ -659,6 +690,8 @@ class MemoryRepresentation {
       case Int64():
       case Uint64():
         return RegisterRepresentation::Word64();
+      case Float16():
+        return RegisterRepresentation::Float16();
       case Float32():
         return RegisterRepresentation::Float32();
       case Float64():
@@ -683,6 +716,8 @@ class MemoryRepresentation {
         return is_signed ? Int32() : Uint32();
       case RegisterRepresentation::Word64():
         return is_signed ? Int64() : Uint64();
+      case RegisterRepresentation::Float16():
+        return Float16();
       case RegisterRepresentation::Float32():
         return Float32();
       case RegisterRepresentation::Float64():
@@ -727,6 +762,8 @@ class MemoryRepresentation {
         return MachineType::Int64();
       case Uint64():
         return MachineType::Uint64();
+      case Float16():
+        return MachineType::Float16();
       case Float32():
         return MachineType::Float32();
       case Float64():
@@ -768,6 +805,8 @@ class MemoryRepresentation {
         return IndirectPointer();
       case MachineRepresentation::kTagged:
         return AnyTagged();
+      case MachineRepresentation::kFloat16:
+        return Float16();
       case MachineRepresentation::kFloat32:
         return Float32();
       case MachineRepresentation::kFloat64:
@@ -802,6 +841,8 @@ class MemoryRepresentation {
         return TaggedPointer();
       case MachineRepresentation::kTagged:
         return AnyTagged();
+      case MachineRepresentation::kFloat16:
+        return Float16();
       case MachineRepresentation::kFloat32:
         return Float32();
       case MachineRepresentation::kFloat64:
@@ -832,6 +873,7 @@ class MemoryRepresentation {
         return 0;
       case Int16():
       case Uint16():
+      case Float16():
         return 1;
       case Int32():
       case Uint32():

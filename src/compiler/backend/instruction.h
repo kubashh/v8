@@ -94,6 +94,7 @@ class V8_EXPORT_PRIVATE INSTRUCTION_OPERAND_ALIGN InstructionOperand {
   inline bool IsAnyRegister() const;
   inline bool IsRegister() const;
   inline bool IsFPRegister() const;
+  inline bool IsHalfRegister() const;
   inline bool IsFloatRegister() const;
   inline bool IsDoubleRegister() const;
   inline bool IsSimd128Register() const;
@@ -561,6 +562,7 @@ class LocationOperand : public InstructionOperand {
     switch (rep) {
       case MachineRepresentation::kWord32:
       case MachineRepresentation::kWord64:
+      case MachineRepresentation::kFloat16:
       case MachineRepresentation::kFloat32:
       case MachineRepresentation::kFloat64:
       case MachineRepresentation::kSimd128:
@@ -651,6 +653,11 @@ bool InstructionOperand::IsRegister() const {
 bool InstructionOperand::IsFPRegister() const {
   return IsAnyRegister() &&
          IsFloatingPoint(LocationOperand::cast(this)->representation());
+}
+
+bool InstructionOperand::IsHalfRegister() const {
+  return IsAnyRegister() && LocationOperand::cast(this)->representation() ==
+                                MachineRepresentation::kFloat16;
 }
 
 bool InstructionOperand::IsFloatRegister() const {
@@ -1180,6 +1187,7 @@ class V8_EXPORT_PRIVATE Constant final {
   enum Type {
     kInt32,
     kInt64,
+    kFloat16,
     kFloat32,
     kFloat64,
     kExternalReference,
@@ -1190,6 +1198,8 @@ class V8_EXPORT_PRIVATE Constant final {
 
   explicit Constant(int32_t v);
   explicit Constant(int64_t v) : type_(kInt64), value_(v) {}
+  explicit Constant(_Float16 v)
+      : type_(kFloat16), value_(base::bit_cast<int16_t>(v)) {}
   explicit Constant(float v)
       : type_(kFloat32), value_(base::bit_cast<int32_t>(v)) {}
   explicit Constant(double v)
@@ -1225,6 +1235,11 @@ class V8_EXPORT_PRIVATE Constant final {
     if (type() == kInt32) return ToInt32();
     DCHECK_EQ(kInt64, type());
     return value_;
+  }
+
+  _Float16 ToFloat16() const {
+    DCHECK_EQ(kFloat16, type());
+    return base::bit_cast<_Float16>(static_cast<int16_t>(value_));
   }
 
   float ToFloat32() const {
@@ -1792,6 +1807,7 @@ class V8_EXPORT_PRIVATE InstructionSequence final
   int representation_mask() const { return representation_mask_; }
   bool HasFPVirtualRegisters() const {
     constexpr int kFPRepMask =
+        RepresentationBit(MachineRepresentation::kFloat16) |
         RepresentationBit(MachineRepresentation::kFloat32) |
         RepresentationBit(MachineRepresentation::kFloat64) |
         RepresentationBit(MachineRepresentation::kSimd128) |

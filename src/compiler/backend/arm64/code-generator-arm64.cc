@@ -32,6 +32,10 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
   Arm64OperandConverter(CodeGenerator* gen, Instruction* instr)
       : InstructionOperandConverter(gen, instr) {}
 
+  DoubleRegister InputFloat16Register(size_t index) {
+    return InputDoubleRegister(index).H();
+  }
+
   DoubleRegister InputFloat32Register(size_t index) {
     return InputDoubleRegister(index).S();
   }
@@ -42,6 +46,15 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
 
   DoubleRegister InputSimd128Register(size_t index) {
     return InputDoubleRegister(index).Q();
+  }
+
+  CPURegister InputFloat16OrZeroRegister(size_t index) {
+    if (instr_->InputAt(index)->IsImmediate()) {
+      DCHECK_EQ(0, base::bit_cast<int16_t>(InputFloat16(index)));
+      return wzr;
+    }
+    DCHECK(instr_->InputAt(index)->IsFPRegister());
+    return InputDoubleRegister(index).H();
   }
 
   CPURegister InputFloat32OrZeroRegister(size_t index) {
@@ -63,6 +76,10 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
   }
 
   size_t OutputCount() { return instr_->OutputCount(); }
+
+  DoubleRegister OutputFloat16Register(size_t index = 0) {
+    return OutputDoubleRegister(index).H();
+  }
 
   DoubleRegister OutputFloat32Register(size_t index = 0) {
     return OutputDoubleRegister(index).S();
@@ -229,6 +246,8 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
         }
 #endif  // V8_ENABLE_WEBASSEMBLY
         return Operand(constant.ToInt64());
+      case Constant::kFloat16:
+        return Operand::EmbeddedNumber(constant.ToFloat16());
       case Constant::kFloat32:
         return Operand::EmbeddedNumber(constant.ToFloat32());
       case Constant::kFloat64:
@@ -1736,6 +1755,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ Fcmp(i.InputFloat32Register(0), i.InputFloat32(1));
       }
       break;
+    case kArm64Float16Add:
+      __ Fcvt(i.InputFloat32Register(0), i.InputFloat16Register(0));
+      __ Fcvt(i.InputFloat32Register(1), i.InputFloat16Register(1));
+      __ Fadd(i.OutputFloat32Register(), i.InputFloat32Register(0),
+              i.InputFloat32Register(1));
+      __ Fcvt(i.OutputFloat16Register(), i.OutputFloat32Register());
+      break;
     case kArm64Float32Add:
       __ Fadd(i.OutputFloat32Register(), i.InputFloat32Register(0),
               i.InputFloat32Register(1));
@@ -2085,6 +2111,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArm64StrEncodeSandboxedPointer:
       __ StoreSandboxedPointerField(i.InputOrZeroRegister64(0),
                                     i.MemoryOperand(1));
+      break;
+    case kArm64LdrH:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Ldr(i.OutputDoubleRegister().H(), i.MemoryOperand());
+      break;
+    case kArm64StrH:
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ Str(i.InputFloat16OrZeroRegister(0), i.MemoryOperand(1));
       break;
     case kArm64LdrS:
       RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
@@ -3614,6 +3648,9 @@ void CodeGenerator::MoveToTempLocation(InstructionOperand* source,
       DoubleRegister scratch = move_cycle_.temps->AcquireD();
       move_cycle_.scratch_reg.emplace(scratch);
     }
+  } else if (rep == MachineRepresentation::kFloat16) {
+    VRegister scratch = move_cycle_.temps->AcquireH();
+    move_cycle_.scratch_reg.emplace(scratch);
   } else if (rep == MachineRepresentation::kFloat32) {
     VRegister scratch = move_cycle_.temps->AcquireS();
     move_cycle_.scratch_reg.emplace(scratch);
@@ -3748,8 +3785,7 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
       if (source->IsRegister()) {
         __ Mov(g.ToRegister(destination), g.ToRegister(source));
       } else {
-        DCHECK(source->IsSimd128Register() || source->IsFloatRegister() ||
-               source->IsDoubleRegister());
+        DCHECK(source->IsFPRegister());
         __ Mov(g.ToDoubleRegister(destination).Q(),
                g.ToDoubleRegister(source).Q());
       }
@@ -3760,7 +3796,8 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
         __ Str(g.ToRegister(source), dst);
       } else {
         VRegister src = g.ToDoubleRegister(source);
-        if (source->IsFloatRegister() || source->IsDoubleRegister()) {
+        if (source->IsHalfRegister() || source->IsFloatRegister() ||
+            source->IsDoubleRegister()) {
           __ Str(src, dst);
         } else {
           DCHECK(source->IsSimd128Register());
@@ -3775,7 +3812,8 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
         __ Ldr(g.ToRegister(destination), src);
       } else {
         VRegister dst = g.ToDoubleRegister(destination);
-        if (destination->IsFloatRegister() || destination->IsDoubleRegister()) {
+        if (destination->IsHalfRegister() || destination->IsFloatRegister() ||
+            destination->IsDoubleRegister()) {
           __ Ldr(dst, src);
         } else {
           DCHECK(destination->IsSimd128Register());
@@ -3806,7 +3844,9 @@ void CodeGenerator::AssembleMove(InstructionOperand* source,
         MoveConstantToRegister(g.ToRegister(destination), src);
       } else {
         VRegister dst = g.ToDoubleRegister(destination);
-        if (destination->IsFloatRegister()) {
+        if (destination->IsHalfRegister()) {
+          __ Fmov(dst.H(), src.ToFloat16());
+        } else if (destination->IsFloatRegister()) {
           __ Fmov(dst.S(), src.ToFloat32());
         } else {
           DCHECK(destination->IsDoubleRegister());
