@@ -16,6 +16,46 @@
       "message": "PTAL! :)",
       "revId": "7da40744a67b9ce3a7d1c1d747aad8d3b61e6d9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c23e0db_2e596d86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-26T11:54:59Z",
+      "side": 1,
+      "message": "LGTM with one clarification question. 😊",
+      "revId": "7da40744a67b9ce3a7d1c1d747aad8d3b61e6d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488acee4_9970af87",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-26T11:54:59Z",
+      "side": 1,
+      "message": "So, just to confirm: `LogicalNot` in maglev only consumes boolean values, not anything else?",
+      "range": {
+        "startLine": 676,
+        "startChar": 8,
+        "endLine": 677,
+        "endChar": 63
+      },
+      "revId": "7da40744a67b9ce3a7d1c1d747aad8d3b61e6d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
