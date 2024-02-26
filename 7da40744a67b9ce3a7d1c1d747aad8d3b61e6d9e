@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a787c661_644993c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-26T12:03:49Z",
+      "side": 1,
+      "message": "Thanks! :)",
+      "revId": "7da40744a67b9ce3a7d1c1d747aad8d3b61e6d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "488acee4_9970af87",
@@ -48,6 +65,30 @@
       "writtenOn": "2024-02-26T11:54:59Z",
       "side": 1,
       "message": "So, just to confirm: `LogicalNot` in maglev only consumes boolean values, not anything else?",
+      "range": {
+        "startLine": 676,
+        "startChar": 8,
+        "endLine": 677,
+        "endChar": 63
+      },
+      "revId": "7da40744a67b9ce3a7d1c1d747aad8d3b61e6d9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb048a05_fc0b2a58",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-26T12:03:49Z",
+      "side": 1,
+      "message": "Correct. Here is the code that Maglev emits for LogicalNot, which confirms this: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/maglev/maglev-ir.cc;l\u003d3468-3476;drc\u003d4d88fa58dce74d3e20d258bb2183d534bd4fc97a.",
+      "parentUuid": "488acee4_9970af87",
       "range": {
         "startLine": 676,
         "startChar": 8,
