@@ -37,6 +37,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "871e3d7d_53d38705",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-27T11:27:20Z",
+      "side": 1,
+      "message": "Well, we do (sort-of) support GCC. The GCC bot on our waterfall is currently on GCC-9, so that\u0027s the only version we have test coverage for, and while there is no urgency to support newer versions, we\u0027ll have to do that eventually; and every now and then it would be convenient for local investigations if builds with GCC versions we have on our workstations didn\u0027t immediately fail.\n(That said, I agree that these aren\u0027t code improvements. They\u0027re workarounds for compiler limitations. In a perfect world they wouldn\u0027t be necessary, but we have to work with what we have.)",
+      "parentUuid": "4b9beb79_f1b8a723",
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ea18e0f0_c101cf7b",
         "filename": "src/compiler/turboshaft/types.h",
         "patchSetId": 1
@@ -178,6 +196,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "41556742_9e8a5a59",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-27T11:27:20Z",
+      "side": 1,
+      "message": "I think the problem is this part:\n```\n#ifdef DEBUG\n// In debug mode, check assumptions instead of actually adding annotations.\n# define V8_ASSUME DCHECK\n```\nSo at least optdebug builds (which I was testing) don\u0027t benefit from `V8_ASSUME` in this regard.\nAnd we can\u0027t easily mark `DCHECK` as `noreturn` or similar because it might actually return:\n```\n  if (v8::base::g_abort_mode \u003d\u003d v8::base::AbortMode::kSoft) {\n    // In this mode, DCHECK failures don\u0027t lead to process termination.\n```",
+      "parentUuid": "2b18bc58_4eaa7cee",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 21
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acfbcf42_cdbca6f2",
         "filename": "src/wasm/function-compiler.cc",
         "patchSetId": 1
@@ -189,6 +231,24 @@
       "writtenOn": "2024-02-26T14:42:32Z",
       "side": 1,
       "message": "`result` will be overwritten in both switch cases below, so setting this field here seems pointless.\n\nBoth Liftoff and TurboFan seem to set it already (in `liftoff-compiler.cc` / `pipeline.cc`). If it\u0027s missing somewhere, we should add it there.",
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a72f58_965cfbaf",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-27T11:27:20Z",
+      "side": 1,
+      "message": "I agree, but GCC doesn\u0027t:\n```\n../../src/wasm/function-compiler.cc: In member function ‘v8::internal::wasm::WasmCompilationResult v8::internal::wasm::WasmCompilationUnit::ExecuteFunctionCompilation(v8::internal::wasm::CompilationEnv*, const v8::internal::wasm::WireBytesStorage*, v8::internal::Counters*, v8::internal::wasm::WasmFeatures*)’:\n../../src/wasm/function-compiler.cc:110:25: error: ‘*(signed char*)((char*)\u0026result + offsetof(v8::internal::wasm::WasmCompilationResult, v8::internal::wasm::WasmCompilationResult::result_tier))’ is used uninitialized [-Werror\u003duninitialized]\n  110 |   WasmCompilationResult result;\n      |                         ^~~~~~\n```\nAn alternative (and perhaps cleaner) fix is to provide an initializer in the `WasmCompilationResult` struct, as we do for all its other fields.",
+      "parentUuid": "acfbcf42_cdbca6f2",
       "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
