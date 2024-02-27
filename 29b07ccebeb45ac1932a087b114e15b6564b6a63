@@ -16,6 +16,23 @@
       "message": "PTAL.\nWe can fix this some other way if you prefer (and have a suggestion).",
       "revId": "29b07ccebeb45ac1932a087b114e15b6564b6a63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e3d3989_99d5c5c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-02-27T08:52:27Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "29b07ccebeb45ac1932a087b114e15b6564b6a63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
