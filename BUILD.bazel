@@ -2807,7 +2807,6 @@ filegroup(
             "src/wasm/function-body-decoder-impl.h",
             "src/wasm/function-compiler.cc",
             "src/wasm/function-compiler.h",
-            "src/wasm/fuzzing/random-module-generation.cc",
             "src/wasm/fuzzing/random-module-generation.h",
             "src/wasm/graph-builder-interface.cc",
             "src/wasm/graph-builder-interface.h",
@@ -2891,7 +2890,14 @@ filegroup(
             "src/wasm/well-known-imports.cc",
             "src/wasm/well-known-imports.h",
             "src/wasm/wrappers.cc",
+        ] +
+    select({":is_official_build": [
+    ],
+        "//conditions:default": [
+            "src/wasm/fuzzing/random-module-generation.cc",
         ],
+    })
+        ,
         "//conditions:default": [],
     }),
 )

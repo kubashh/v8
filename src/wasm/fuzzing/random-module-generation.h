@@ -9,6 +9,7 @@
 #ifndef V8_WASM_FUZZING_RANDOM_MODULE_GENERATION_H_
 #define V8_WASM_FUZZING_RANDOM_MODULE_GENERATION_H_
 
+#include "src/base/logging.h"
 #include "src/base/vector.h"
 
 namespace v8::internal {
@@ -21,7 +22,14 @@ namespace v8::internal::wasm::fuzzing {
 // Returns an empty buffer on failure, valid module wire bytes otherwise.
 // The bytes will be allocated in the zone.
 V8_EXPORT_PRIVATE base::Vector<uint8_t> GenerateRandomWasmModule(
-    Zone*, base::Vector<const uint8_t> data);
+    Zone*, base::Vector<const uint8_t> data)
+#ifdef OFFICIAL_BUILD
+{
+  UNIMPLEMENTED();
+}
+#else
+    ;  // defined in random-module-generation.cc.
+#endif
 
 }  // namespace v8::internal::wasm::fuzzing
 
