@@ -16,6 +16,23 @@
       "message": "Darius, PTAL, for me locally this drops binary size by ~500kB",
       "revId": "1bfb342bc8c9f086945e2442dfdb91af23278e9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67893f19_0c09fb16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-02-27T11:36:17Z",
+      "side": 1,
+      "message": "I guess I should actually add Darius as a reviewer.",
+      "revId": "1bfb342bc8c9f086945e2442dfdb91af23278e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
