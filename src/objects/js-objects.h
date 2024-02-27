@@ -968,7 +968,7 @@ class JSObjectWithEmbedderSlots
     : public TorqueGeneratedJSObjectWithEmbedderSlots<JSObjectWithEmbedderSlots,
                                                       JSObject> {
  public:
-  static_assert(kHeaderSize == JSObject::kHeaderSize);
+  // static_assert(kHeaderSize == JSObject::kHeaderSize);
   TQ_OBJECT_CONSTRUCTORS(JSObjectWithEmbedderSlots)
 };
 

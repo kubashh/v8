@@ -62,11 +62,11 @@ bitfield struct JSArrayBufferViewFlags extends uint32 {
 
 @abstract
 extern class JSArrayBufferView extends JSObjectWithEmbedderSlots {
-  buffer: JSArrayBuffer;
   // A BoundedSize if the sandbox is enabled
   raw_byte_offset: uintptr;
   // A BoundedSize if the sandbox is enabled
   raw_byte_length: uintptr;
+  buffer: JSArrayBuffer;
   bit_field: JSArrayBufferViewFlags;
   // Pads header size to be a multiple of kTaggedSize.
   @if(TAGGED_SIZE_8_BYTES) optional_padding: uint32;
