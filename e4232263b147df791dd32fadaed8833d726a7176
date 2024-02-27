@@ -16,6 +16,46 @@
       "message": "Ptal. The only change is the disabled test for stress_incremental_marking.",
       "revId": "e4232263b147df791dd32fadaed8833d726a7176",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "924536d3_38db20aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-27T17:49:28Z",
+      "side": 1,
+      "message": "lgtm % bot failures",
+      "revId": "e4232263b147df791dd32fadaed8833d726a7176",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96f37aa6_40830d51",
+        "filename": "test/unittests/heap/cppgc-js/unified-heap-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-02-27T17:49:28Z",
+      "side": 1,
+      "message": "I believe `stress_concurrent_allocation` would also mess with this test.\nImo you can proactively bailout for that flag as well.",
+      "range": {
+        "startLine": 810,
+        "startChar": 15,
+        "endLine": 810,
+        "endChar": 41
+      },
+      "revId": "e4232263b147df791dd32fadaed8833d726a7176",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
