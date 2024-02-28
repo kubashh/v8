@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeaab56b_33370fc0",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3820,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-02-28T13:26:12Z",
+      "side": 0,
+      "message": "Only moved, no further modifications.",
+      "range": {
+        "startLine": 3805,
+        "startChar": 0,
+        "endLine": 3820,
+        "endChar": 3
+      },
+      "revId": "04fa84d3ece44e6ab09685e38ffece61767cc86f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
