@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de2ab68c_f2f114b3",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3850,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-28T14:01:48Z",
+      "side": 1,
+      "message": "Can you add a little comment similar to the one above about \"tables before function bodies\"? In this case it would be something about \"globals after tables so we don\u0027t accidentally use globals in table init expressions\".",
+      "revId": "c96f2e20c3d233201e4e7ef6466b0176d9a3369b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
