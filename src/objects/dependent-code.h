@@ -5,6 +5,8 @@
 #ifndef V8_OBJECTS_DEPENDENT_CODE_H_
 #define V8_OBJECTS_DEPENDENT_CODE_H_
 
+#include <concepts>
+
 #include "src/objects/fixed-array.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -118,11 +120,10 @@ class DependentCode : public WeakArrayList {
   void DeoptimizeDependencyGroups(Isolate* isolate, DependencyGroups groups);
 
   // The callback is called for all non-cleared entries, and should return true
-  // iff the current entry should be cleared.
-  using IterateAndCompactFn =
-      std::function<bool(Tagged<Code>, DependencyGroups)>;
-  void IterateAndCompact(IsolateForSandbox isolate,
-                         const IterateAndCompactFn& fn);
+  // iff the current entry should be cleared. The Function template argument
+  // must be of type: bool (Tagged<Code>, DependencyGroups).
+  template <std::invocable<Tagged<Code>, DependencyGroups> Function>
+  void IterateAndCompact(IsolateForSandbox isolate, const Function& fn);
 
   // Fills the given entry with the last non-cleared entry in this list, and
   // returns the new length after the last non-cleared entry has been moved.
