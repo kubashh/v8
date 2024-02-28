@@ -26,11 +26,6 @@ namespace internal {
 namespace compiler {
 namespace test_field_type_tracking {
 
-// TODO(ishell): fix this once TransitionToPrototype stops generalizing
-// all field representations (similar to crbug/448711 where elements kind
-// and observed transitions caused generalization of all fields).
-const bool IS_PROTO_TRANS_ISSUE_FIXED = false;
-
 // TODO(ishell): fix this once TransitionToAccessorProperty is able to always
 // keep map in fast mode.
 const bool IS_ACCESSOR_FIELD_SUPPORTED = false;
@@ -2124,11 +2119,6 @@ TEST(ReconfigurePropertySplitMapTransitionsOverflow) {
 //  {} - p0 - p1 - p2A - p3 - p4A: |map|
 //
 // where "p4A" and "p4B" are exactly the same properties.
-//
-// TODO(ishell): unify this test template with
-// TestReconfigureDataFieldAttribute_GeneralizeField once
-// IS_PROTO_TRANS_ISSUE_FIXED and IS_NON_EQUIVALENT_TRANSITION_SUPPORTED are
-// fixed.
 template <typename TestConfig>
 static void TestGeneralizeFieldWithSpecialTransition(
     TestConfig* config, const CRFTData& from, const CRFTData& to,
@@ -2158,12 +2148,6 @@ static void TestGeneralizeFieldWithSpecialTransition(
   CHECK(!map->is_deprecated());
   CHECK(expectations.Check(*map));
 
-  if (config->generalizes_representations()) {
-    for (int i = 0; i < kPropCount; i++) {
-      expectations2.GeneralizeField(i);
-    }
-  }
-
   CHECK(!map2->is_deprecated());
   CHECK(map2->is_stable());
   CHECK(expectations2.Check(*map2));
@@ -2191,37 +2175,20 @@ static void TestGeneralizeFieldWithSpecialTransition(
         CHECK(!new_map2->is_dictionary_map());
 
         Handle<Map> tmp_map;
-        if (Map::TryUpdate(isolate, map2).ToHandle(&tmp_map)) {
-          // If Map::TryUpdate() manages to succeed the result must match the
-          // result of Map::Update().
-          CHECK_EQ(*new_map2, *tmp_map);
-        } else {
-          // Equivalent transitions should always find the updated map.
-          CHECK(config->is_non_equivalent_transition());
-        }
+        CHECK(Map::TryUpdate(isolate, map2).ToHandle(&tmp_map));
+        // If Map::TryUpdate() manages to succeed the result must match the
+        // result of Map::Update().
+        CHECK_EQ(*new_map2, *tmp_map);
 
-        if (config->is_non_equivalent_transition()) {
-          // In case of non-equivalent transition currently we generalize all
-          // representations.
-          for (int j = 0; j < kPropCount; j++) {
-            expectations2.GeneralizeField(j);
-          }
-          CHECK(IsUndefined(new_map2->GetBackPointer(), isolate));
-          CHECK(expectations2.Check(*new_map2));
-        } else {
-          expectations2.SetDataField(i, expected.constness,
-                                     expected.representation, expected.type);
+        expectations2.SetDataField(i, expected.constness,
+                                   expected.representation, expected.type);
 
-          CHECK(!IsUndefined(new_map2->GetBackPointer(), isolate));
-          CHECK(expectations2.Check(*new_map2));
-        }
+        CHECK(!IsUndefined(new_map2->GetBackPointer(), isolate));
+        CHECK(expectations2.Check(*new_map2));
         break;
       }
       case kFieldOwnerDependency: {
         CHECK(!map->is_deprecated());
-        // TODO(ishell): Review expectations once IS_PROTO_TRANS_ISSUE_FIXED is
-        // removed.
-        CHECK(!IS_PROTO_TRANS_ISSUE_FIXED);
         CHECK_EQ(*map, *new_map);
         CHECK(expectations.Check(*new_map));
 
@@ -2272,9 +2239,6 @@ TEST(ElementsKindTransitionFromMapOwningDescriptor) {
       return Map::CopyForPreventExtensions(CcTest::i_isolate(), map, attributes,
                                            symbol, "CopyForPreventExtensions");
     }
-    // TODO(ishell): remove once IS_PROTO_TRANS_ISSUE_FIXED is removed.
-    bool generalizes_representations() const { return false; }
-    bool is_non_equivalent_transition() const { return false; }
 
     PropertyAttributes attributes;
     Handle<Symbol> symbol;
@@ -2341,9 +2305,6 @@ TEST(ElementsKindTransitionFromMapNotOwningDescriptor) {
       return Map::CopyForPreventExtensions(isolate, map, attributes, symbol,
                                            "CopyForPreventExtensions");
     }
-    // TODO(ishell): remove once IS_PROTO_TRANS_ISSUE_FIXED is removed.
-    bool generalizes_representations() const { return false; }
-    bool is_non_equivalent_transition() const { return false; }
 
     PropertyAttributes attributes;
     Handle<Symbol> symbol;
@@ -2401,11 +2362,6 @@ TEST(PrototypeTransitionFromMapOwningDescriptor) {
       return Map::TransitionToUpdatePrototype(CcTest::i_isolate(), map,
                                               prototype_);
     }
-    // TODO(ishell): remove once IS_PROTO_TRANS_ISSUE_FIXED is removed.
-    bool generalizes_representations() const {
-      return !IS_PROTO_TRANS_ISSUE_FIXED;
-    }
-    bool is_non_equivalent_transition() const { return true; }
   };
   TestConfig config;
   TestGeneralizeFieldWithSpecialTransition(
@@ -2455,11 +2411,6 @@ TEST(PrototypeTransitionFromMapNotOwningDescriptor) {
 
       return Map::TransitionToUpdatePrototype(isolate, map, prototype_);
     }
-    // TODO(ishell): remove once IS_PROTO_TRANS_ISSUE_FIXED is removed.
-    bool generalizes_representations() const {
-      return !IS_PROTO_TRANS_ISSUE_FIXED;
-    }
-    bool is_non_equivalent_transition() const { return true; }
   };
   TestConfig config;
   TestGeneralizeFieldWithSpecialTransition(
