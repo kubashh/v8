@@ -40,6 +40,10 @@ class V8_EXPORT_PRIVATE GCInvoker final : public GarbageCollector {
   std::optional<EmbedderStackState> overridden_stack_state() const final;
   void set_override_stack_state(EmbedderStackState state) final;
   void clear_overridden_stack_state() final;
+  const EmbedderStackState* override_stack_state() const final;
+#ifdef V8_ENABLE_ALLOCATION_TIMEOUT
+  v8::base::Optional<int> UpdateAllocationTimeout() final;
+#endif  // V8_ENABLE_ALLOCATION_TIMEOUT
 
  private:
   class GCInvokerImpl;

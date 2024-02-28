@@ -41,6 +41,11 @@ class FakeGarbageCollector : public GarbageCollector {
   }
   void set_override_stack_state(EmbedderStackState state) override {}
   void clear_overridden_stack_state() override {}
+#ifdef V8_ENABLE_ALLOCATION_TIMEOUT
+  v8::base::Optional<int> UpdateAllocationTimeout() override {
+    return v8::base::nullopt;
+  }
+#endif  // V8_ENABLE_ALLOCATION_TIMEOUT
 
  private:
   StatsCollector* stats_collector_;
@@ -55,8 +60,14 @@ class MockGarbageCollector : public GarbageCollector {
   MOCK_METHOD(size_t, epoch, (), (const, override));
   MOCK_METHOD(std::optional<EmbedderStackState>, overridden_stack_state, (),
               (const, override));
+<<<<<<< HEAD
   MOCK_METHOD(void, set_override_stack_state, (EmbedderStackState), (override));
   MOCK_METHOD(void, clear_overridden_stack_state, (), (override));
+=======
+#ifdef V8_ENABLE_ALLOCATION_TIMEOUT
+  MOCK_METHOD(v8::base::Optional<int>, UpdateAllocationTimeout, (), (override));
+#endif  // V8_ENABLE_ALLOCATION_TIMEOUT
+>>>>>>> parent of c1a50530457 (Revert "cppgc: Implement --cppgc-random-gc-interval=<n>.")
 };
 
 void FakeAllocate(StatsCollector* stats_collector, size_t bytes) {
