@@ -16,6 +16,46 @@
       "message": "PTAL. Not sure how relevant this is after all; it probably only reduces the size of `libv8.so` in official builds, and I don\u0027t know if anyone uses component builds with official_build set.",
       "revId": "ab30d7b654a8901f7e77ca1a02d546771742f927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d088fad_609ce361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-28T14:15:34Z",
+      "side": 1,
+      "message": "LGTM. I think it\u0027s good to have this infrastructure and precedent. Over time we should probably exclude more test-only features from official builds (e.g. possibly all of `runtime-*-test.cc` might be in scope for that).",
+      "revId": "ab30d7b654a8901f7e77ca1a02d546771742f927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c406389_31b27899",
+        "filename": "test/fuzzer/fuzzer.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-02-28T14:15:34Z",
+      "side": 1,
+      "message": "`SKIP`?\n(`FAIL` is useful (1) when we want to check that something doesn\u0027t crash even though we\u0027re aware it doesn\u0027t compute the correct result, or (2) when we want to get notified when it stops failing, e.g. so that we don\u0027t forget to remove the stale test expectation after fixing the implementation. I think in this case, we can just save the time for running the test at all.)",
+      "range": {
+        "startLine": 40,
+        "startChar": 21,
+        "endLine": 40,
+        "endChar": 25
+      },
+      "revId": "ab30d7b654a8901f7e77ca1a02d546771742f927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
