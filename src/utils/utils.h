@@ -18,7 +18,9 @@
 #include "src/base/logging.h"
 #include "src/base/macros.h"
 #include "src/base/safe_conversions.h"
+#include "src/base/v8-fallthrough.h"
 #include "src/base/vector.h"
+#include "src/codegen/cpu-features.h"
 #include "src/common/globals.h"
 
 #if defined(V8_USE_SIPHASH)
@@ -27,6 +29,19 @@
 
 #if defined(V8_OS_AIX)
 #include <fenv.h>  // NOLINT(build/c++11)
+#endif
+
+#ifdef _MSC_VER
+// MSVC doesn't define SSE3. However, it does define AVX, and AVX implies SSE3.
+#ifdef __AVX__
+#ifndef __SSE3__
+#define __SSE3__
+#endif
+#endif
+#endif
+
+#ifdef __SSE3__
+#include <immintrin.h>
 #endif
 
 #if defined(V8_TARGET_ARCH_ARM64) && \
@@ -323,7 +338,8 @@ class SetOncePointer {
   T* pointer_ = nullptr;
 };
 
-#if defined(V8_OPTIMIZE_WITH_NEON)
+#if defined(__SSE3__) || defined(V8_OPTIMIZE_WITH_NEON)
+
 template <typename IntType, typename Char>
 V8_INLINE bool OverlappingCompare(const Char* lhs, const Char* rhs,
                                   size_t count) {
@@ -333,6 +349,153 @@ V8_INLINE bool OverlappingCompare(const Char* lhs, const Char* rhs,
          *reinterpret_cast<const IntType*>(lhs + count - sizeof(IntType)) ==
              *reinterpret_cast<const IntType*>(rhs + count - sizeof(IntType));
 }
+
+#endif
+
+#if defined(__SSE3__)
+
+// TODO(pthier): A lot of the defines are shared between this and simd.cc.
+// Move them to simd.h?
+#if defined(_MSC_VER) && defined(__clang__)
+// Generating AVX2 code with Clang on Windows without the /arch:AVX2 flag does
+// not seem possible at the moment.
+#define IS_CLANG_WIN 1
+#endif
+
+// Since we don't compile with -mavx or -mavx2 (or /arch:AVX2 on MSVC), Clang
+// and MSVC do not define __AVX__ nor __AVX2__. Thus, if __SSE3__ is defined, we
+// generate the AVX2 code, and, at runtime, we'll decide to call it or not,
+// depending on whether the CPU supports AVX2.
+// TODO(pthier): Proper define for USE_AVX2
+// #if defined(__SSE3__) && !defined(_M_IX86) && !defined(IS_CLANG_WIN)
+#ifdef _MSC_VER
+#define TARGET_AVX2
+#else
+#define TARGET_AVX2 __attribute__((target("avx2")))
+#endif
+
+template <typename Char, bool hasAVX2>
+TARGET_AVX2 V8_INLINE bool SimdMemEqual(const Char* lhs, const Char* rhs,
+                                        size_t count) {
+  static_assert(sizeof(Char) == 1);
+  static constexpr uint16_t kMatched16Mask = UINT16_MAX;
+  static constexpr uint32_t kMatched32Mask = UINT32_MAX;
+  static constexpr uint64_t kMatched64Mask = UINT64_MAX;
+  if (count == 0) {
+    return true;
+  }
+  if (count == 1) {
+    return *lhs == *rhs;
+  }
+  const size_t order =
+      sizeof(count) * CHAR_BIT - base::bits::CountLeadingZeros(count - 1);
+  switch (order) {
+    case 1:  // count: [2, 2]
+      return *reinterpret_cast<const uint16_t*>(lhs) ==
+             *reinterpret_cast<const uint16_t*>(rhs);
+    case 2:  // count: [3, 4]
+      return OverlappingCompare<uint16_t>(lhs, rhs, count);
+    case 3:  // count: [5, 8]
+      return OverlappingCompare<uint32_t>(lhs, rhs, count);
+    case 4:  // count: [9, 16]
+      return OverlappingCompare<uint64_t>(lhs, rhs, count);
+    case 5:  // count: [17, 32]
+    {
+      // Utilize more simd registers for better pipelining.
+      const __m128i lhs128_start =
+          _mm_loadu_si128(reinterpret_cast<const __m128i*>(lhs));
+      const __m128i lhs128_end = _mm_loadu_si128(
+          reinterpret_cast<const __m128i*>(lhs + count - sizeof(__m128i)));
+      const __m128i rhs128_start =
+          _mm_loadu_si128(reinterpret_cast<const __m128i*>(rhs));
+      const __m128i rhs128_end = _mm_loadu_si128(
+          reinterpret_cast<const __m128i*>(rhs + count - sizeof(__m128i)));
+      const __m128i res_start = _mm_cmpeq_epi8(lhs128_start, rhs128_start);
+      const __m128i res_end = _mm_cmpeq_epi8(lhs128_end, rhs128_end);
+      const uint32_t res =
+          _mm_movemask_epi8(res_start) << 16 | _mm_movemask_epi8(res_end);
+      return res == kMatched32Mask;
+    }
+    case 6:  // count: [33, 64] (only with AVX2 support).
+    {
+      if constexpr (hasAVX2) {
+        // Utilize more simd registers for better pipelining.
+        const __m256i lhs256_start =
+            _mm256_loadu_si256(reinterpret_cast<const __m256i*>(lhs));
+        const __m256i lhs256_end = _mm256_loadu_si256(
+            reinterpret_cast<const __m256i*>(lhs + count - sizeof(__m256i)));
+        const __m256i rhs256_start =
+            _mm256_loadu_si256(reinterpret_cast<const __m256i*>(rhs));
+        const __m256i rhs256_end = _mm256_loadu_si256(
+            reinterpret_cast<const __m256i*>(rhs + count - sizeof(__m256i)));
+        const __m256i res_start = _mm256_cmpeq_epi8(lhs256_start, rhs256_start);
+        const __m256i res_end = _mm256_cmpeq_epi8(lhs256_end, rhs256_end);
+        const uint64_t res = _mm256_movemask_epi8(res_start) << 16 |
+                             _mm256_movemask_epi8(res_end);
+        return res == kMatched64Mask;
+      }
+      V8_FALLTHROUGH;
+    }
+    default:  // count: [33, ...] without AVX2, [65, ...] with AVX2 support.
+    {
+      if constexpr (hasAVX2) {
+        const __m128i lhs128_unrolled =
+            _mm_loadu_si128(reinterpret_cast<const __m128i*>(lhs));
+        const __m128i rhs128_unrolled =
+            _mm_loadu_si128(reinterpret_cast<const __m128i*>(rhs));
+        const __m128i res_unrolled =
+            _mm_cmpeq_epi8(lhs128_unrolled, rhs128_unrolled);
+        const uint16_t res_unrolled_mask = _mm_movemask_epi8(res_unrolled);
+        if (res_unrolled_mask != kMatched16Mask) return false;
+
+        for (size_t i = count % sizeof(__m128i); i < count;
+             i += sizeof(__m128i)) {
+          const __m128i lhs128 =
+              _mm_loadu_si128(reinterpret_cast<const __m128i*>(lhs + i));
+          const __m128i rhs128 =
+              _mm_loadu_si128(reinterpret_cast<const __m128i*>(rhs + i));
+          const __m128i res = _mm_cmpeq_epi8(lhs128, rhs128);
+          const uint16_t res_mask = _mm_movemask_epi8(res);
+          if (res_mask != kMatched16Mask) return false;
+        }
+        return true;
+      } else {
+        const __m128i lhs128_unrolled =
+            _mm_loadu_si128(reinterpret_cast<const __m128i*>(lhs));
+        const __m128i rhs128_unrolled =
+            _mm_loadu_si128(reinterpret_cast<const __m128i*>(rhs));
+        const __m128i res_unrolled =
+            _mm_cmpeq_epi8(lhs128_unrolled, rhs128_unrolled);
+        const uint16_t res_unrolled_mask = _mm_movemask_epi8(res_unrolled);
+        if (res_unrolled_mask != kMatched16Mask) return false;
+
+        for (size_t i = count % sizeof(__m128i); i < count;
+             i += sizeof(__m128i)) {
+          const __m128i lhs128 =
+              _mm_loadu_si128(reinterpret_cast<const __m128i*>(lhs + i));
+          const __m128i rhs128 =
+              _mm_loadu_si128(reinterpret_cast<const __m128i*>(rhs + i));
+          const __m128i res = _mm_cmpeq_epi8(lhs128, rhs128);
+          const uint16_t res_mask = _mm_movemask_epi8(res);
+          if (res_mask != kMatched16Mask) return false;
+        }
+        return true;
+      }
+    }
+  }
+}
+
+template <typename Char>
+TARGET_AVX2 V8_INLINE bool SimdMemEqual(const Char* lhs, const Char* rhs,
+                                        size_t count) {
+  if (CpuFeatures::IsSupported(AVX2)) {
+    return SimdMemEqual<Char, true>(lhs, rhs, count);
+  } else {
+    return SimdMemEqual<Char, false>(lhs, rhs, count);
+  }
+}
+
+#elif defined(V8_OPTIMIZE_WITH_NEON)
 
 template <typename Char>
 V8_INLINE bool SimdMemEqual(const Char* lhs, const Char* rhs, size_t count) {
@@ -389,16 +552,25 @@ V8_INLINE bool SimdMemEqual(const Char* lhs, const Char* rhs, size_t count) {
     }
   }
 }
-#endif  // defined(V8_OPTIMIZE_WITH_NEON)
+
+#else
+
+template <typename Char>
+V8_INLINE bool SimdMemEqual(const Char* lhs, const Char* rhs, size_t count) {
+  UNREACHABLE();
+}
+
+#endif
 
 // Compare 8bit/16bit chars to 8bit/16bit chars.
 template <typename lchar, typename rchar>
-inline bool CompareCharsEqualUnsigned(const lchar* lhs, const rchar* rhs,
-                                      size_t chars) {
+TARGET_AVX2 inline bool CompareCharsEqualUnsigned(const lchar* lhs,
+                                                  const rchar* rhs,
+                                                  size_t chars) {
   static_assert(std::is_unsigned<lchar>::value);
   static_assert(std::is_unsigned<rchar>::value);
   if constexpr (sizeof(*lhs) == sizeof(*rhs)) {
-#if defined(V8_OPTIMIZE_WITH_NEON)
+#if defined(__SSE3__) || defined(V8_OPTIMIZE_WITH_NEON)
     if constexpr (sizeof(*lhs) == 1) {
       return SimdMemEqual(lhs, rhs, chars);
     }
