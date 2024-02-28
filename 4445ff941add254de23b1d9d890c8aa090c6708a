@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db05c7fd_8ac4aa0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-02-28T16:56:03Z",
+      "side": 1,
+      "message": "I marked it as fixed, as Clemens had another issue for the SIMD: https://crbug.com/v8/14639#c_ts1709050670",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 5
+      },
+      "revId": "4445ff941add254de23b1d9d890c8aa090c6708a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
