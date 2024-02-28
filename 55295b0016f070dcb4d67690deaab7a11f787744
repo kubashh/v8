@@ -220,6 +220,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22486b21_a93cfaf6",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-28T16:42:24Z",
+      "side": 1,
+      "message": "Can we change `V8_ASSUME` to still emit the `if (!(condition)) __builtin_unreachable();` *after* the DCHECK? It\u0027s not really documented how much of that assumption will be used *before* the `__builtin_assume` statement, but I could imagine that this does the right thing.",
+      "parentUuid": "41556742_9e8a5a59",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 21
+      },
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acfbcf42_cdbca6f2",
         "filename": "src/wasm/function-compiler.cc",
         "patchSetId": 1
@@ -249,6 +273,24 @@
       "side": 1,
       "message": "I agree, but GCC doesn\u0027t:\n```\n../../src/wasm/function-compiler.cc: In member function ‘v8::internal::wasm::WasmCompilationResult v8::internal::wasm::WasmCompilationUnit::ExecuteFunctionCompilation(v8::internal::wasm::CompilationEnv*, const v8::internal::wasm::WireBytesStorage*, v8::internal::Counters*, v8::internal::wasm::WasmFeatures*)’:\n../../src/wasm/function-compiler.cc:110:25: error: ‘*(signed char*)((char*)\u0026result + offsetof(v8::internal::wasm::WasmCompilationResult, v8::internal::wasm::WasmCompilationResult::result_tier))’ is used uninitialized [-Werror\u003duninitialized]\n  110 |   WasmCompilationResult result;\n      |                         ^~~~~~\n```\nAn alternative (and perhaps cleaner) fix is to provide an initializer in the `WasmCompilationResult` struct, as we do for all its other fields.",
       "parentUuid": "acfbcf42_cdbca6f2",
+      "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb3bd024_47cec2d4",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-28T16:42:24Z",
+      "side": 1,
+      "message": "Ah, yes, that looks like the cleaner solution.",
+      "parentUuid": "46a72f58_965cfbaf",
       "revId": "55295b0016f070dcb4d67690deaab7a11f787744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
