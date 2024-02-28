@@ -5320,8 +5320,9 @@ TEST(Regress3877) {
   }
   // The map of a.x keeps prototype alive
   CHECK(!weak_prototype_holder->get(0).IsCleared());
-  // Change the map of a.x and make the previous map garbage collectable.
-  CompileRun("a.x.__proto__ = {};");
+  // Detach the map of a.x (by promoting it to a prototype), then change its
+  // proto, this should make the previous map garbage collectable.
+  CompileRun("var b = {}; b.__proto__ = a.x; a.x.__proto__ = {}");
   for (int i = 0; i < 4; i++) {
     // We need to invoke GC without stack, otherwise some objects may not be
     // reclaimed because of conservative stack scanning.
