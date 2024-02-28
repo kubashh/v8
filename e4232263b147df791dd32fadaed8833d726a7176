@@ -56,6 +56,30 @@
       },
       "revId": "e4232263b147df791dd32fadaed8833d726a7176",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84207131_eea70d90",
+        "filename": "test/unittests/heap/cppgc-js/unified-heap-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-02-28T09:53:41Z",
+      "side": 1,
+      "message": "Good point, thanks. Ptal, I also added the flags to the V8 test.",
+      "parentUuid": "96f37aa6_40830d51",
+      "range": {
+        "startLine": 810,
+        "startChar": 15,
+        "endLine": 810,
+        "endChar": 41
+      },
+      "revId": "e4232263b147df791dd32fadaed8833d726a7176",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
