@@ -633,6 +633,12 @@ MapUpdater::State MapUpdater::FindRootMap() {
 
   // From here on, use the map with correct elements kind as root map.
   root_map_ = Map::AsElementsKind(isolate_, root_map_, to_kind);
+
+  if (root_map_->prototype() != old_map_->prototype()) {
+    root_map_ = Map::TransitionToUpdatePrototype(
+        isolate_, root_map_, handle(old_map_->prototype(), isolate_));
+  }
+
   state_ = kAtRootMap;
   return state_;  // Not done yet.
 }
@@ -1141,6 +1147,7 @@ void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
                                  const MaybeObjectHandle& new_wrapped_type) {
   DCHECK(IsSmi(*new_wrapped_type) || IsWeak(*new_wrapped_type));
   // We store raw pointers in the queue, so no allocations are allowed.
+  DisallowGarbageCollection no_gc;
   PropertyDetails details =
       map->instance_descriptors(isolate)->GetDetails(descriptor);
   if (details.location() != PropertyLocation::kField) return;
@@ -1158,11 +1165,8 @@ void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
     backlog.pop();
 
     TransitionsAccessor transitions(isolate, current);
-    int num_transitions = transitions.NumberOfTransitions();
-    for (int i = 0; i < num_transitions; ++i) {
-      Tagged<Map> target = transitions.GetTarget(i);
-      backlog.push(target);
-    }
+    transitions.ForEachTransition(
+        &no_gc, [&backlog](Tagged<Map> target) { backlog.push(target); });
     Tagged<DescriptorArray> descriptors =
         current->instance_descriptors(isolate);
     details = descriptors->GetDetails(descriptor);

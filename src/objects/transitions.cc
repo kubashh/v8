@@ -502,6 +502,19 @@ int TransitionsAccessor::NumberOfTransitions() {
   UNREACHABLE();
 }
 
+bool TransitionsAccessor::HasPrototypeTransitions() {
+  switch (encoding()) {
+    case kPrototypeInfo:
+    case kUninitialized:
+    case kMigrationTarget:
+    case kWeakRef:
+      return false;
+    case kFullTransitionArray:
+      return transitions()->HasPrototypeTransitions();
+  }
+  UNREACHABLE();
+}
+
 // static
 void TransitionsAccessor::SetMigrationTarget(Isolate* isolate, Handle<Map> map,
                                              Tagged<Map> migration_target) {
