@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ae1ce42_bb3ace1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-28T14:05:28Z",
+      "side": 1,
+      "message": "PTAL. Not sure how relevant this is after all; it probably only reduces the size of `libv8.so` in official builds, and I don\u0027t know if anyone uses component builds with official_build set.",
+      "revId": "ab30d7b654a8901f7e77ca1a02d546771742f927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
