@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2712f1_427f0030",
+        "filename": "src/objects/dependent-code.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-02-28T15:51:58Z",
+      "side": 1,
+      "message": "Unnecessary, just testing 😊, since we anyway use `-std\u003dc++20`.",
+      "revId": "68947b25373e85e419f877cba5eac78e8045a9f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
