@@ -584,11 +584,11 @@ Map::FieldCounts Map::GetFieldCounts() const {
 
 void Map::DeprecateTransitionTree(Isolate* isolate) {
   if (is_deprecated()) return;
+  DisallowGarbageCollection no_gc;
   TransitionsAccessor transitions(isolate, *this);
-  int num_transitions = transitions.NumberOfTransitions();
-  for (int i = 0; i < num_transitions; ++i) {
-    transitions.GetTarget(i)->DeprecateTransitionTree(isolate);
-  }
+  transitions.ForEachTransition(&no_gc, [isolate](Tagged<Map> map) {
+    map->DeprecateTransitionTree(isolate);
+  });
   DCHECK(!IsFunctionTemplateInfo(constructor_or_back_pointer()));
   DCHECK(CanBeDeprecated());
   set_is_deprecated(true);
@@ -1284,6 +1284,7 @@ Handle<Map> Map::Normalize(Isolate* isolate, Handle<Map> fast_map,
       // The IsMigrationTargetBit might be different if the {new_map} from
       // {cache} has already been marked as a migration target.
       constexpr int ignored_bit_field3_bits =
+          Bits3::OwnsDescriptorsBit::kMask |
           Bits3::IsInRetainedMapListBit::kMask |
           Bits3::IsMigrationTargetBit::kMask;
       DCHECK_EQ(fresh->bit_field3() & ~ignored_bit_field3_bits,
@@ -1533,10 +1534,11 @@ Handle<Map> Map::CopyReplaceDescriptors(Isolate* isolate, Handle<Map> map,
       DCHECK(!maybe_name.is_null());
       ConnectTransition(isolate, map, result, name, transition_kind);
       is_connected = true;
-    } else if (isolate->bootstrapper()->IsActive()) {
+    } else if (transition_kind == PROTOTYPE_TRANSITION ||
+               isolate->bootstrapper()->IsActive()) {
       result->InitializeDescriptors(isolate, *descriptors);
     } else {
-      descriptors->GeneralizeAllFields(transition_kind);
+      descriptors->GeneralizeAllFields();
       result->InitializeDescriptors(isolate, *descriptors);
     }
   }
@@ -1723,15 +1725,16 @@ Handle<Map> Map::CopyForElementsTransition(Isolate* isolate, Handle<Map> map) {
   return new_map;
 }
 
-Handle<Map> Map::CopyForPrototypeTransition(Isolate* isolate, Handle<Map> map) {
-  Handle<DescriptorArray> descriptors(map->instance_descriptors(isolate),
-                                      isolate);
-  int number_of_own_descriptors = map->NumberOfOwnDescriptors();
-  Handle<DescriptorArray> new_descriptors = DescriptorArray::CopyUpTo(
-      isolate, descriptors, number_of_own_descriptors);
-  return CopyReplaceDescriptors(isolate, map, new_descriptors, OMIT_TRANSITION,
-                                MaybeHandle<Name>(), "TransitionToPrototype",
-                                PROTOTYPE_TRANSITION);
+Handle<Map> Map::CopyForPrototypeTransition(Isolate* isolate, Handle<Map> map,
+                                            Handle<HeapObject> prototype) {
+  Handle<Map> new_map;
+  if (map->IsDetached(isolate)) {
+    new_map = Map::Copy(isolate, map, "UpdatePrototypeOnDetachedMap");
+  } else {
+    new_map = CopyForElementsTransition(isolate, map);
+  }
+  Map::SetPrototype(isolate, new_map, prototype);
+  return new_map;
 }
 
 Handle<Map> Map::Copy(Isolate* isolate, Handle<Map> map, const char* reason) {
@@ -2113,7 +2116,7 @@ Handle<Map> Map::CopyAddDescriptor(Isolate* isolate, Handle<Map> map,
   Handle<DescriptorArray> descriptors(map->instance_descriptors(isolate),
                                       isolate);
 
-  // Share descriptors only if map owns descriptors and it not an initial map.
+  // Share descriptors only if map owns descriptors and is not an initial map.
   if (flag == INSERT_TRANSITION && map->owns_descriptors() &&
       !IsUndefined(map->GetBackPointer(), isolate) &&
       TransitionsAccessor::CanHaveMoreTransitions(isolate, map)) {
@@ -2211,7 +2214,6 @@ bool Map::EquivalentToForTransition(const Tagged<Map> other,
 
   if (bit_field() != other->bit_field()) return false;
   if (new_target_is_base() != other->new_target_is_base()) return false;
-  if (prototype() != other->prototype()) return false;
   if (InstanceTypeChecker::IsJSFunction(instance_type())) {
     // JSFunctions require more checks to ensure that sloppy function is
     // not equivalent to strict function.
@@ -2230,7 +2232,10 @@ bool Map::EquivalentToForTransition(const Tagged<Map> other,
 
 bool Map::EquivalentToForElementsKindTransition(const Tagged<Map> other,
                                                 ConcurrencyMode cmode) const {
-  if (!EquivalentToForTransition(other, cmode)) return false;
+  if (!EquivalentToForTransition(other, cmode) ||
+      prototype() != other->prototype()) {
+    return false;
+  }
 #ifdef DEBUG
   // Ensure that we don't try to generate elements kind transitions from maps
   // with fields that may be generalized in-place. This must already be handled
@@ -2411,23 +2416,24 @@ Handle<Map> Map::TransitionRootMapToPrototypeForNewObject(
                  new_map->IsInobjectSlackTrackingInProgress());
   CHECK_IMPLIES(map->IsInobjectSlackTrackingInProgress(),
                 map->construction_counter() <= new_map->construction_counter());
-  if (map->IsInobjectSlackTrackingInProgress()) {
-    // Advance the construction count on the base map to keep it in sync with
-    // the transitioned map.
-    map->InobjectSlackTrackingStep(isolate);
-  }
   return new_map;
 }
 
 Handle<Map> Map::TransitionToUpdatePrototype(Isolate* isolate, Handle<Map> map,
                                              Handle<HeapObject> prototype) {
+  // Prototype maps are replaced by deprecation when their prototype changes. No
+  // need to add a transition.
+  if (map->is_prototype_map()) {
+    return Map::CopyForPrototypeTransition(isolate, map, prototype);
+  }
+
   Handle<Map> new_map =
       TransitionsAccessor::GetPrototypeTransition(isolate, map, prototype);
   if (new_map.is_null()) {
-    new_map = CopyForPrototypeTransition(isolate, map);
+    new_map = CopyForPrototypeTransition(isolate, map, prototype);
+    new_map->set_constructor_or_back_pointer(*map);
     TransitionsAccessor::PutPrototypeTransition(isolate, map, prototype,
                                                 new_map);
-    Map::SetPrototype(isolate, new_map, prototype);
   }
   return new_map;
 }

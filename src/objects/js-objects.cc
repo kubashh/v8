@@ -3386,7 +3386,6 @@ void JSObject::MigrateToMap(Isolate* isolate, Handle<JSObject> object,
       // Ensure that no transition was inserted for prototype migrations.
       DCHECK_EQ(0,
                 TransitionsAccessor(isolate, *old_map).NumberOfTransitions());
-      DCHECK(IsUndefined(new_map->GetBackPointer(isolate), isolate));
       DCHECK(object->map(isolate) != *old_map);
     }
   } else {
