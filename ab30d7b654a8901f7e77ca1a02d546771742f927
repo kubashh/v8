@@ -56,6 +56,30 @@
       },
       "revId": "ab30d7b654a8901f7e77ca1a02d546771742f927",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3831d40f_5d4d495d",
+        "filename": "test/fuzzer/fuzzer.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-02-28T16:24:55Z",
+      "side": 1,
+      "message": "This was meant to test precisely what this CL implements: That the random module generation does in fact *not* work in official builds.",
+      "parentUuid": "8c406389_31b27899",
+      "range": {
+        "startLine": 40,
+        "startChar": 21,
+        "endLine": 40,
+        "endChar": 25
+      },
+      "revId": "ab30d7b654a8901f7e77ca1a02d546771742f927",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
