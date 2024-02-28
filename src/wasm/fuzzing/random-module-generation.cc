@@ -3802,23 +3802,6 @@ base::Vector<uint8_t> GenerateRandomWasmModule(
     functions.push_back(builder.AddFunction(function_signatures[i]));
   }
 
-  int num_globals = module_range.get<uint8_t>() % (kMaxGlobals + 1);
-  std::vector<ValueType> globals;
-  std::vector<uint8_t> mutable_globals;
-  globals.reserve(num_globals);
-  mutable_globals.reserve(num_globals);
-
-  for (int i = 0; i < num_globals; ++i) {
-    ValueType type = GetValueType(&module_range, num_types);
-    // 1/8 of globals are immutable.
-    const bool mutability = (module_range.get<uint8_t>() % 8) != 0;
-    builder.AddGlobal(type, mutability,
-                      GenerateInitExpr(zone, module_range, &builder, type,
-                                       struct_types, array_types, 0));
-    globals.push_back(type);
-    if (mutability) mutable_globals.push_back(static_cast<uint8_t>(i));
-  }
-
   // Generate tables before function bodies, so they are available for table
   // operations.
   // Always generate at least one table for call_indirect.
@@ -3862,6 +3845,23 @@ base::Vector<uint8_t> GenerateRandomWasmModule(
       }
       builder.AddElementSegment(std::move(segment));
     }
+  }
+
+  int num_globals = module_range.get<uint8_t>() % (kMaxGlobals + 1);
+  std::vector<ValueType> globals;
+  std::vector<uint8_t> mutable_globals;
+  globals.reserve(num_globals);
+  mutable_globals.reserve(num_globals);
+
+  for (int i = 0; i < num_globals; ++i) {
+    ValueType type = GetValueType(&module_range, num_types);
+    // 1/8 of globals are immutable.
+    const bool mutability = (module_range.get<uint8_t>() % 8) != 0;
+    builder.AddGlobal(type, mutability,
+                      GenerateInitExpr(zone, module_range, &builder, type,
+                                       struct_types, array_types, 0));
+    globals.push_back(type);
+    if (mutability) mutable_globals.push_back(static_cast<uint8_t>(i));
   }
 
   int num_data_segments = module_range.get<uint8_t>() % kMaxPassiveDataSegments;
