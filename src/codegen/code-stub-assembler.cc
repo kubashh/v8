@@ -3595,12 +3595,11 @@ void CodeStubAssembler::UnsafeStoreObjectFieldNoWriteBarrier(
 void CodeStubAssembler::StoreSharedObjectField(TNode<HeapObject> object,
                                                TNode<IntPtrT> offset,
                                                TNode<Object> value) {
-  CSA_DCHECK(
-      this,
-      WordNotEqual(WordAnd(LoadBasicMemoryChunkFlags(object),
-                           IntPtrConstant(
-                               MemoryChunkMetadata::IN_WRITABLE_SHARED_SPACE)),
-                   IntPtrConstant(0)));
+  CSA_DCHECK(this,
+             WordNotEqual(
+                 WordAnd(LoadBasicMemoryChunkFlags(object),
+                         IntPtrConstant(MemoryChunk::IN_WRITABLE_SHARED_SPACE)),
+                 IntPtrConstant(0)));
   int const_offset;
   if (TryToInt32Constant(offset, &const_offset)) {
     StoreObjectField(object, const_offset, value);
@@ -17718,11 +17717,10 @@ void CodeStubAssembler::SharedValueBarrier(
   // trivially shared.
   CSA_DCHECK(this, BoolConstant(ReadOnlyHeap::IsReadOnlySpaceShared()));
   TNode<IntPtrT> page_flags = LoadBasicMemoryChunkFlags(CAST(value));
-  GotoIf(
-      WordNotEqual(WordAnd(page_flags,
-                           IntPtrConstant(MemoryChunkMetadata::READ_ONLY_HEAP)),
-                   IntPtrConstant(0)),
-      &skip_barrier);
+  GotoIf(WordNotEqual(
+             WordAnd(page_flags, IntPtrConstant(MemoryChunk::READ_ONLY_HEAP)),
+             IntPtrConstant(0)),
+         &skip_barrier);
 
   // Fast path: Check if the HeapObject is already shared.
   TNode<Uint16T> value_instance_type =
@@ -17737,8 +17735,7 @@ void CodeStubAssembler::SharedValueBarrier(
   {
     Branch(WordNotEqual(
                WordAnd(page_flags,
-                       IntPtrConstant(
-                           MemoryChunkMetadata::IN_WRITABLE_SHARED_SPACE)),
+                       IntPtrConstant(MemoryChunk::IN_WRITABLE_SHARED_SPACE)),
                IntPtrConstant(0)),
            &skip_barrier, &slow);
   }
@@ -17757,10 +17754,9 @@ void CodeStubAssembler::SharedValueBarrier(
     CSA_DCHECK(
         this,
         WordNotEqual(
-            WordAnd(
-                LoadBasicMemoryChunkFlags(CAST(var_shared_value->value())),
-                IntPtrConstant(MemoryChunkMetadata::READ_ONLY_HEAP |
-                               MemoryChunkMetadata::IN_WRITABLE_SHARED_SPACE)),
+            WordAnd(LoadBasicMemoryChunkFlags(CAST(var_shared_value->value())),
+                    IntPtrConstant(MemoryChunk::READ_ONLY_HEAP |
+                                   MemoryChunk::IN_WRITABLE_SHARED_SPACE)),
             IntPtrConstant(0)));
     Goto(&done);
   }
