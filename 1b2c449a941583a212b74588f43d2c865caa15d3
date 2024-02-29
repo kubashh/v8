@@ -22,6 +22,30 @@
       },
       "revId": "1b2c449a941583a212b74588f43d2c865caa15d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "636ef55a_45e0df06",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-02-29T12:43:40Z",
+      "side": 1,
+      "message": "The flags are defined in the MemoryChunk class (the Header) and once the Metadata classes are not subclasses of MemoryChunk anymore, we need to access the flags with the full name.",
+      "parentUuid": "e9de6bd9_13b9e1e3",
+      "range": {
+        "startLine": 9,
+        "startChar": 22,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "1b2c449a941583a212b74588f43d2c865caa15d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
