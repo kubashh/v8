@@ -215,6 +215,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ae9da23_8157e3a8",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-02-29T20:13:39Z",
+      "side": 1,
+      "message": "IIUC what is done for Promise.all is creating a context that all the calls to Promise.all will use, it is not garbage collected and it can get away with having an empty ScopeInfo. The same happens with [Factory::NewBuiltinContext](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/factory.cc;bpv\u003d1;bpt\u003d1;l\u003d1441?q\u003dNewBuiltinContext\u0026gsn\u003dNewBuiltinContext\u0026gs\u003dKYTHE%3A%2F%2FKq4CCpQBa3l0aGU6Ly9jaHJvbWl1bS5nb29nbGVzb3VyY2UuY29tL2NvZGVzZWFyY2gvY2hyb21pdW0vc3JjLy9tYWluP2xhbmc9YyUyQiUyQj9wYXRoPXY4L3NyYy9oZWFwL2ZhY3RvcnkuY2MjS3RTVWRUTnVLaGp2Y1Z2bFNad3Z3VUxKTU9mNURONWU3ZnFSUWdaUzYyMAqUAWt5dGhlOi8vY2hyb21pdW0uZ29vZ2xlc291cmNlLmNvbS9jb2Rlc2VhcmNoL2Nocm9taXVtL3NyYy8vbWFpbj9sYW5nPWMlMkIlMkI_cGF0aD12OC9zcmMvaGVhcC9mYWN0b3J5LmNjI1pJQkgxM19QTXlrT3pxb045QjlzLVJiREFFeUNCcF96MnRRWTQwalZKblU%3D) which I tried to use below but failed the verify heap step in GC and Isolate teardown (because of no scope info). I don\u0027t see a proper way to generate a ScopeInfo at this point [ScopeInfo::CreateForEmptyFunction](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/scope-info.h?q\u003dsymbol%3A%5Cbv8%3A%3Ainternal%3A%3AScopeInfo%3A%3ACreateForEmptyFunction%5Cb%20case%3Ayes) exists but only works for read only properties.\n\nDid I miss something? Do you know of another way to create these contexts on demand?",
+      "parentUuid": "7e4654ae_44bc35be",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 77
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "162b61eb_d6d7ff5f",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 24
