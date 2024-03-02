@@ -73,7 +73,7 @@ vars = {
   'build_with_chromium': False,
 
   # GN CIPD package version.
-  'gn_version': 'git_revision:f19d5817e7ba85c2fda92e2697be11a4465d3267',
+  'gn_version': 'git_revision:88e8054aff7bd0cb2295c7d9361d2be0b7355f27',
 
   # ninja CIPD package version
   # https://chrome-infra-packages.appspot.com/p/infra/3pp/tools/ninja
@@ -128,7 +128,7 @@ deps = {
   'base/trace_event/common':
     Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + '29ac73db520575590c3aceb0a6f1f58dda8934f6',
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + '6f2ff823b356445f4893851b7b05a2d3d17a383e',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + '3915ccffa2b0042d4f4883c783882f3240d89707',
   'buildtools':
     Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + '1db15eb4200ee95d93c0b11c6e235b565abcaf05',
   'buildtools/linux64': {
@@ -238,7 +238,7 @@ deps = {
     'condition': "checkout_centipede_deps",
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '56ba67e870f9511d59155a9d8f40ff4afdea73d7',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + 'f226e76aa5f1014892221b2d426ad63f04b8ed07',
     'condition': 'checkout_android',
   },
   'third_party/clang-format/script':
@@ -252,7 +252,7 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '6b84fbfb201f8fd99c3d049328615943a7df3593',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'fbb0301f1f70813fb62e1f64e05410b730c8417e',
   'third_party/fp16/src':
     Var('chromium_url') + '/external/github.com/Maratyszcza/FP16.git' + '@' + '0a92994d729ff76a58f692d3028ca1b64b145d91',
   'third_party/fuchsia-gn-sdk': {
@@ -282,7 +282,7 @@ deps = {
   'third_party/fuzztest/src':
     Var('chromium_url') + '/external/github.com/google/fuzztest.git' + '@' + 'bddcd9f77ba0a81a99ce50bcadf5149efe545df0',
   'third_party/googletest/src':
-    Var('chromium_url') + '/external/github.com/google/googletest.git' + '@' + '76bb2afb8b522d24496ad1c757a49784fbfa2e42',
+    Var('chromium_url') + '/external/github.com/google/googletest.git' + '@' + 'dda72ef32181edbfcd32a8c52b4740cd8061ab6f',
   'third_party/icu':
     Var('chromium_url') + '/chromium/deps/icu.git' + '@' + 'a622de35ac311c5ad390a7af80724634e5dc61ed',
   'third_party/instrumented_libraries':
@@ -322,7 +322,7 @@ deps = {
   'third_party/protobuf':
     Var('chromium_url') + '/external/github.com/google/protobuf'+ '@' + '6a59a2ad1f61d9696092f79b6d74368b4d7970a3',
   'third_party/re2/src':
-    Var('chromium_url') + '/external/github.com/google/re2.git' + '@' + 'f9550c3f7207f946a45bbccd1814b12b136aae72',
+    Var('chromium_url') + '/external/github.com/google/re2.git' + '@' + '2d866a3d0753f4f4fce93cccc6c59c4b052d7db4',
   'third_party/requests': {
       'url': Var('chromium_url') + '/external/github.com/kennethreitz/requests.git' + '@' + 'c7e0fc087ceeadb8b4c84a0953a422c474093d6d',
       'condition': 'checkout_android',
@@ -338,9 +338,9 @@ deps = {
     'condition': 'not build_with_chromium',
   },
   'third_party/zlib':
-    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '3787595bbbd3a374613713164db935e8331f5825',
+    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + 'aedd9b5f58a3e90bb46e1a3882a2d6dac2b9276b',
   'tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '5a776b13442d6cd33ef8a1c5f40ed43549bd63bd',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'f0aa615f872b60507989650d528da0ba2bf1ff3b',
   'tools/luci-go': {
       'packages': [
         {
@@ -356,7 +356,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'third_party/abseil-cpp': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/abseil-cpp.git' + '@' + '98ad12dbcff35f4d1594b3aabcd933fefc09ebff',
+    'url': Var('chromium_url') + '/chromium/src/third_party/abseil-cpp.git' + '@' + 'c1a0ba7fc315db06b8314ec7f13f2464176d7606',
     'condition': 'not build_with_chromium',
   }
 }
