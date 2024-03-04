@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c7003cf_12f3c6de",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:04:01Z",
+      "side": 0,
+      "message": "Minor benefit: this unsightly cast is gone.",
+      "range": {
+        "startLine": 832,
+        "startChar": 15,
+        "endLine": 832,
+        "endChar": 44
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
