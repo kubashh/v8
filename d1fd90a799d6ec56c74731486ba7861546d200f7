@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07591dd8_51ea9c09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "A wild grab bag of unrelated small cleanups/improvements, nothing too exciting. Comments should make it clear what\u0027s happening. PTAL.",
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4d2e4d_ceb7e761",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "We just forgot to do this. Fortunately, no production code relies on memories being properly marked as imported -- but it prevents us from dumping modules with imported memories faithfully in a disassembler :-)\n\nSee line 754 for precedent. There\u0027s no precedent below (for globals) because the constructor call in line 812/813 handles it.",
+      "range": {
+        "startLine": 792,
+        "startChar": 10,
+        "endLine": 792,
+        "endChar": 43
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d961592_68b9c553",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1973,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "This improves readability of wami\u0027s hexdump output.",
+      "range": {
+        "startLine": 1969,
+        "startChar": 4,
+        "endLine": 1973,
+        "endChar": 5
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "430b413d_211991c3",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "We generally report zero length for invalid constructs, so `pc_ +\u003d ...` in lines 269/272 becomes a no-op, so this change prevents the disassembler from spinning in an endless (though output-producing!) loop for certain kinds of invalid modules.\n\nFull disclosure, I\u0027m not entirely sure this is the best way to handle invalid modules, but I do believe it\u0027s an improvement over the status quo; we can rethink this later if we want.",
+      "range": {
+        "startLine": 226,
+        "startChar": 19,
+        "endLine": 226,
+        "endChar": 27
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7b590b4_e361c942",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "This was pulled out from the constructor in the header file, see comment there.",
+      "range": {
+        "startLine": 1144,
+        "startChar": 4,
+        "endLine": 1144,
+        "endChar": 60
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecc655b4_80416cc2",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "The only change on this line is passing `shared\u003dfalse`.",
+      "range": {
+        "startLine": 1265,
+        "startChar": 53,
+        "endLine": 1265,
+        "endChar": 58
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dfafb86_84f4f1c4",
+        "filename": "test/mjsunit/wasm/call_indirect.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "`table` is an object, but we want an index here. This worked by accident, because this value (via `emit_u32v`) goes through JS bitwise operations, which perform an implicit truncating to-integer conversion, which returns `0` for objects, which is the index we wanted here 😊\n\nWe could add a `typeof` check to `addActiveElementSegment`, but is it worth it?",
+      "range": {
+        "startLine": 21,
+        "startChar": 41,
+        "endLine": 21,
+        "endChar": 47
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "099b3fb1_bc10a838",
+        "filename": "test/mjsunit/wasm/memory_1gb_oob.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "The original version presumably predates introduction of this helper.\nThere\u0027s a superficial difference in result: the old version unconditionally produces five bytes, which is valid but inefficient; the new version produces as many bytes as necessary (which is the point of an LEB).",
+      "range": {
+        "startLine": 37,
+        "startChar": 27,
+        "endLine": 37,
+        "endChar": 42
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf76a579_b8d3754b",
+        "filename": "test/mjsunit/wasm/wasm-to-js-tierup.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "`local.get` parses its input as unsigned. This is harmless, the old version just sometimes unnecessarily uses one more byte to avoid setting what would be the sign bit (`0x40` becomes `(0x80|0x40), 0x00`).",
+      "range": {
+        "startLine": 595,
+        "startChar": 32,
+        "endLine": 595,
+        "endChar": 47
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96d1d613_ac6872ee",
+        "filename": "tools/wasm/module-inspector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "In this file: mostly the same changes as elsewhere.",
+      "range": {
+        "startLine": 220,
+        "startChar": 27,
+        "endLine": 220,
+        "endChar": 33
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32f8417_ef9a85b3",
+        "filename": "tools/wasm/module-inspector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 1,
+      "message": "Here and line 423: minor improvements to wami\u0027s hexdump output.",
+      "range": {
+        "startLine": 400,
+        "startChar": 4,
+        "endLine": 400,
+        "endChar": 78
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

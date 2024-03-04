@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8525a1b7_d5621407",
+        "filename": "src/wasm/names-provider.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 0,
+      "message": "Stale comment.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 54
+      },
+      "revId": "ebf24454cf5b0615c4bec327c617120779341dc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb59d220_d84965c3",
+        "filename": "src/wasm/wasm-disassembler-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 0,
+      "message": "Unused import.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 18
+      },
+      "revId": "ebf24454cf5b0615c4bec327c617120779341dc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80b27d21_e10d72f9",
+        "filename": "src/wasm/wasm-disassembler-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 0,
+      "message": "We use the `FunctionBodyDisassembler` for initializer expressions, where we pass `func_index\u003d0`, which crashes here for modules that have initializer expressions but no functions. Since fixing that here would be yucky, callers now pass in `shared` explicitly.",
+      "range": {
+        "startLine": 93,
+        "startChar": 26,
+        "endLine": 93,
+        "endChar": 65
+      },
+      "revId": "ebf24454cf5b0615c4bec327c617120779341dc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71620e34_9f30f123",
+        "filename": "test/mjsunit/wasm/gc-experiments.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 0,
+      "message": "Unnecessary: `kWasmStructRef` is already a `(ref null ...)`.",
+      "range": {
+        "startLine": 14,
+        "startChar": 15,
+        "endLine": 14,
+        "endChar": 30
+      },
+      "revId": "ebf24454cf5b0615c4bec327c617120779341dc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4908e05f_5bae621b",
+        "filename": "test/mjsunit/wasm/shared-memory.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-04T21:00:55Z",
+      "side": 0,
+      "message": "I\u0027ve discussed this with Deepti, original author of this test. Historical background is that atomic operations were originally disallowed on non-shared memories, which this test (probably) successfully tested at the time. Since it _also_ contained an accidental compile error, we didn\u0027t notice that it became obsolete when the aforementioned restriction was lifted (using atomic ops on non-shared memories is valid now). We agreed that there doesn\u0027t seem to be an obvious way to restore this test to usefulness, so we might as well drop it.",
+      "range": {
+        "startLine": 67,
+        "startChar": 10,
+        "endLine": 67,
+        "endChar": 44
+      },
+      "revId": "ebf24454cf5b0615c4bec327c617120779341dc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
