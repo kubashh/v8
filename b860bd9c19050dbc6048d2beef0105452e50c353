@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3fc880_d35e9305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-03-05T14:55:34Z",
+      "side": 1,
+      "message": "Not trying to DoS you with CLs, but when you have re-reviewed the fix could you ptal",
+      "revId": "b860bd9c19050dbc6048d2beef0105452e50c353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
