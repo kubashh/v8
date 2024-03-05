@@ -33,6 +33,24 @@
       "message": "Seems like only some of the windows bots are happy...",
       "revId": "a18ab5011bcc59cd989cafc174cf99b034f2d2d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7975c8c_c518a2a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-05T11:11:17Z",
+      "side": 1,
+      "message": "The one that failed has actually been red for weeks. \n\nAnd the other one is an infra failure. Given that v8_win64_msvc_rel passed, and that it triggers v8_win64_msvc_compile_rel (which worked), and I think that it\u0027s safe to ignore this infra failure.",
+      "parentUuid": "d705c99c_b86faf0c",
+      "revId": "a18ab5011bcc59cd989cafc174cf99b034f2d2d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
