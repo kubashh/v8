@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "949b317e813fb66448b2358ac5d5715bcdce7ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85440e8d_6a7c3aaa",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-05T13:00:31Z",
+      "side": 1,
+      "message": "I think in most cases the object is already corrupted, so this call will likely fail.\nWe have a visitor that should be valid. We could add a way to get the isolate through the visitor. Wdyt?",
+      "range": {
+        "startLine": 181,
+        "startChar": 8,
+        "endLine": 181,
+        "endChar": 32
+      },
+      "revId": "949b317e813fb66448b2358ac5d5715bcdce7ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
