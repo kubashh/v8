@@ -752,6 +752,23 @@ constexpr EmptyDoubleRegisterArray DoubleRegisterArray() { return {}; }
                          MachineType::Int32(),     /* kActualArgumentsCount */ \
                          ##__VA_ARGS__)
 
+// Code/Builtins using this descriptor are referenced from inside the sandbox
+// through a code pointer and must therefore be exposed via the code pointer
+// table (CPT). They should use a code entrypoint tag which will be used to tag
+// the entry in the CPT and will be checked to match the tag expected at the
+// callsite. Only "compatible" builtins should use the same code entrypoint tag
+// as it must be assumed that an attacker can swap code pointers (the indices
+// into the CPT) and therefore can invoke all builtins that use the same tag
+// from a given callsite.
+#define SANDBOX_EXPOSED_DESCRIPTOR(tag) \
+  static constexpr CodeEntrypointTag kEntrypointTag = tag;
+
+// Code/Builtins using this descriptor are not referenced from inside the
+// sandbox but only called directly from other code. They are therefore not
+// exposed to the sandbox via the CPT and so use the kInvalidEntrypointTag.
+#define INTERNAL_DESCRIPTOR() \
+  static constexpr CodeEntrypointTag kEntrypointTag = kInvalidEntrypointTag;
+
 #define DECLARE_DESCRIPTOR(name)                                    \
   DECLARE_DESCRIPTOR_WITH_BASE(name, StaticCallInterfaceDescriptor) \
  protected:                                                         \
@@ -763,9 +780,9 @@ constexpr EmptyDoubleRegisterArray DoubleRegisterArray() { return {}; }
 class V8_EXPORT_PRIVATE VoidDescriptor
     : public StaticCallInterfaceDescriptor<VoidDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kInvalidEntrypointTag;
   // The void descriptor could (and indeed probably should) also be NO_CONTEXT,
   // but this breaks some code assembler unittests.
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS()
   DEFINE_PARAMETER_TYPES()
   DECLARE_DESCRIPTOR(VoidDescriptor)
@@ -791,7 +808,7 @@ using ContinueToBuiltinDescriptor = VoidDescriptor;
 // TODO(jgruber): Define real descriptors for C calling conventions.
 class CCallDescriptor : public StaticCallInterfaceDescriptor<CCallDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kDefaultCodeEntrypointTag;
+  SANDBOX_EXPOSED_DESCRIPTOR(kDefaultCodeEntrypointTag)
   DEFINE_PARAMETERS()
   DEFINE_PARAMETER_TYPES()
   DECLARE_DESCRIPTOR(CCallDescriptor)
@@ -802,7 +819,7 @@ class CCallDescriptor : public StaticCallInterfaceDescriptor<CCallDescriptor> {
 class CEntryDummyDescriptor
     : public StaticCallInterfaceDescriptor<CEntryDummyDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kDefaultCodeEntrypointTag;
+  SANDBOX_EXPOSED_DESCRIPTOR(kDefaultCodeEntrypointTag)
   DEFINE_PARAMETERS()
   DEFINE_PARAMETER_TYPES()
   DECLARE_DESCRIPTOR(CEntryDummyDescriptor)
@@ -813,7 +830,7 @@ class CEntryDummyDescriptor
 class WasmDummyDescriptor
     : public StaticCallInterfaceDescriptor<WasmDummyDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kWasmEntrypointTag;
+  SANDBOX_EXPOSED_DESCRIPTOR(kWasmEntrypointTag)
   DEFINE_PARAMETERS()
   DEFINE_PARAMETER_TYPES()
   DECLARE_DESCRIPTOR(WasmDummyDescriptor)
@@ -822,6 +839,7 @@ class WasmDummyDescriptor
 class AllocateDescriptor
     : public StaticCallInterfaceDescriptor<AllocateDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_NO_CONTEXT(kRequestedSize)
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::TaggedPointer(),  // result 1
                                     MachineType::IntPtr())  // kRequestedSize
@@ -833,6 +851,7 @@ class AllocateDescriptor
 class NewHeapNumberDescriptor
     : public StaticCallInterfaceDescriptor<NewHeapNumberDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_NO_CONTEXT(kValue)
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::TaggedPointer(),  // Result
                                     MachineType::Float64())        // kValue
@@ -856,7 +875,7 @@ class JSTrampolineDescriptor
 class RegExpTrampolineDescriptor
     : public StaticCallInterfaceDescriptor<RegExpTrampolineDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kRegExpEntrypointTag;
+  SANDBOX_EXPOSED_DESCRIPTOR(kRegExpEntrypointTag)
   DEFINE_PARAMETERS()
   DEFINE_PARAMETER_TYPES()
   DECLARE_DESCRIPTOR(RegExpTrampolineDescriptor)
@@ -1055,8 +1074,7 @@ class StoreBaselineDescriptor
 class StoreTransitionDescriptor
     : public StaticCallInterfaceDescriptor<StoreTransitionDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kICHandlerEntrypointTag;
-
+  SANDBOX_EXPOSED_DESCRIPTOR(kICHandlerEntrypointTag)
   DEFINE_PARAMETERS(kReceiver, kName, kMap, kValue, kSlot, kVector)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
                          MachineType::AnyTagged(),     // kName
@@ -1074,8 +1092,7 @@ class StoreTransitionDescriptor
 class StoreWithVectorDescriptor
     : public StaticCallInterfaceDescriptor<StoreWithVectorDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kICHandlerEntrypointTag;
-
+  SANDBOX_EXPOSED_DESCRIPTOR(kICHandlerEntrypointTag)
   DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot, kVector)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
                          MachineType::AnyTagged(),     // kName
@@ -1177,8 +1194,7 @@ class DefineKeyedOwnWithVectorDescriptor
 class LoadWithVectorDescriptor
     : public StaticCallInterfaceDescriptor<LoadWithVectorDescriptor> {
  public:
-  static constexpr CodeEntrypointTag kEntrypointTag = kICHandlerEntrypointTag;
-
+  SANDBOX_EXPOSED_DESCRIPTOR(kICHandlerEntrypointTag)
   // TODO(v8:9497): Revert the Machine type for kSlot to the
   // TaggedSigned once Torque can emit better call descriptors
   DEFINE_PARAMETERS(kReceiver, kName, kSlot, kVector)
@@ -1641,6 +1657,7 @@ class CallWithArrayLike_WithFeedbackDescriptor
 class ConstructVarargsDescriptor
     : public StaticCallInterfaceDescriptor<ConstructVarargsDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_JS_PARAMETERS(kArgumentsLength, kArgumentsList)
   DEFINE_JS_PARAMETER_TYPES(MachineType::Int32(),      // kArgumentsLength
                             MachineType::AnyTagged())  // kArgumentsList
@@ -1653,6 +1670,7 @@ class ConstructVarargsDescriptor
 class ConstructForwardVarargsDescriptor
     : public StaticCallInterfaceDescriptor<ConstructForwardVarargsDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_JS_PARAMETERS(kStartIndex)
   DEFINE_JS_PARAMETER_TYPES(MachineType::Int32())
   DECLARE_DESCRIPTOR(ConstructForwardVarargsDescriptor)
@@ -1663,6 +1681,7 @@ class ConstructForwardVarargsDescriptor
 class ConstructWithSpreadDescriptor
     : public StaticCallInterfaceDescriptor<ConstructWithSpreadDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_JS_PARAMETERS(kSpread)
   DEFINE_JS_PARAMETER_TYPES(MachineType::AnyTagged())
   DECLARE_DESCRIPTOR(ConstructWithSpreadDescriptor)
@@ -1674,6 +1693,7 @@ class ConstructWithSpread_BaselineDescriptor
     : public StaticCallInterfaceDescriptor<
           ConstructWithSpread_BaselineDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   // Note: kSlot comes before kSpread since as an untagged value it must be
   // passed in a register.
   DEFINE_JS_PARAMETERS_NO_CONTEXT(kSlot, kSpread)
@@ -1686,6 +1706,7 @@ class ConstructWithSpread_WithFeedbackDescriptor
     : public StaticCallInterfaceDescriptor<
           ConstructWithSpread_WithFeedbackDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   // Note: kSlot comes before kSpread since as an untagged value it must be
   // passed in a register.
   DEFINE_JS_PARAMETERS(kSlot, kSpread, kFeedbackVector)
@@ -1698,6 +1719,7 @@ class ConstructWithSpread_WithFeedbackDescriptor
 class ConstructWithArrayLikeDescriptor
     : public StaticCallInterfaceDescriptor<ConstructWithArrayLikeDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kTarget, kNewTarget, kArgumentsList)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kNewTarget
@@ -1711,6 +1733,7 @@ class ConstructWithArrayLike_WithFeedbackDescriptor
     : public StaticCallInterfaceDescriptor<
           ConstructWithArrayLike_WithFeedbackDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kTarget, kNewTarget, kArgumentsList, kSlot, kFeedbackVector)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kNewTarget
@@ -1723,6 +1746,7 @@ class ConstructWithArrayLike_WithFeedbackDescriptor
 class ConstructForwardAllArgsDescriptor
     : public StaticCallInterfaceDescriptor<ConstructForwardAllArgsDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kConstructor, kNewTarget)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kConstructor
                          MachineType::AnyTagged())  // kNewTarget
@@ -1735,6 +1759,7 @@ class ConstructForwardAllArgs_BaselineDescriptor
     : public StaticCallInterfaceDescriptor<
           ConstructForwardAllArgs_BaselineDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kTarget, kNewTarget, kSlot)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kNewTarget
@@ -1746,6 +1771,7 @@ class ConstructForwardAllArgs_WithFeedbackDescriptor
     : public StaticCallInterfaceDescriptor<
           ConstructForwardAllArgs_WithFeedbackDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kTarget, kNewTarget, kSlot, kVector)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kNewTarget
@@ -1758,6 +1784,7 @@ class ConstructForwardAllArgs_WithFeedbackDescriptor
 class ConstructStubDescriptor
     : public StaticCallInterfaceDescriptor<ConstructStubDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_JS_PARAMETERS()
   DEFINE_JS_PARAMETER_TYPES()
 
@@ -1956,6 +1983,7 @@ class CEntry1ArgvOnStackDescriptor
 class CallApiCallbackOptimizedDescriptor
     : public StaticCallInterfaceDescriptor<CallApiCallbackOptimizedDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_VARARGS(kApiFunctionAddress, kActualArgumentsCount,
                             kCallData, kHolder)
   //                           receiver is implicit stack argument 1
@@ -1977,6 +2005,7 @@ class CallApiCallbackOptimizedDescriptor
 class CallApiCallbackGenericDescriptor
     : public StaticCallInterfaceDescriptor<CallApiCallbackGenericDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_VARARGS(kActualArgumentsCount, kTopmostScriptHavingContext,
                             kFunctionTemplateInfo, kHolder)
   //                           receiver is implicit stack argument 1
@@ -1999,6 +2028,7 @@ class CallApiCallbackGenericDescriptor
 class ApiGetterDescriptor
     : public StaticCallInterfaceDescriptor<ApiGetterDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kReceiver, kHolder, kCallback)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kReceiver
                          MachineType::AnyTagged(),  // kHolder
@@ -2213,6 +2243,7 @@ class SuspendGeneratorBaselineDescriptor final
 class RestartFrameTrampolineDescriptor final
     : public StaticCallInterfaceDescriptor<RestartFrameTrampolineDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS()
   DECLARE_DESCRIPTOR(RestartFrameTrampolineDescriptor)
 };
@@ -2220,6 +2251,7 @@ class RestartFrameTrampolineDescriptor final
 class RunMicrotasksEntryDescriptor final
     : public StaticCallInterfaceDescriptor<RunMicrotasksEntryDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_ENTRY(kRootRegisterValue, kMicrotaskQueue)
   DEFINE_PARAMETER_TYPES(MachineType::Pointer(),  // kRootRegisterValue
                          MachineType::Pointer())  // kMicrotaskQueue
@@ -2231,6 +2263,7 @@ class RunMicrotasksEntryDescriptor final
 class RunMicrotasksDescriptor final
     : public StaticCallInterfaceDescriptor<RunMicrotasksDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kMicrotaskQueue)
   DEFINE_PARAMETER_TYPES(MachineType::Pointer())
   DECLARE_DESCRIPTOR(RunMicrotasksDescriptor)
