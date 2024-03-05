@@ -39,6 +39,30 @@
       },
       "revId": "949b317e813fb66448b2358ac5d5715bcdce7ca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcaadc73_86c56ad5",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-03-05T13:04:05Z",
+      "side": 1,
+      "message": "I am not sure if the object is corrupted. The \"wrong\" visitor ID is loaded from the map (So it could also be the map that\u0027s corrupted).\nIf that fails, we at least know that the object is corrupted, and that is good info to confirm that the object was corrupted.\nAdding the isolate to the visitor seems to be a bit overkill to get insight into a couple of crashes (not blocking any release; just curious because they seem to started occuring recently).",
+      "parentUuid": "85440e8d_6a7c3aaa",
+      "range": {
+        "startLine": 181,
+        "startChar": 8,
+        "endLine": 181,
+        "endChar": 32
+      },
+      "revId": "949b317e813fb66448b2358ac5d5715bcdce7ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
