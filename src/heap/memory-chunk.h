@@ -259,6 +259,10 @@ class V8_EXPORT_PRIVATE MemoryChunk final {
     return static_cast<uint32_t>(address) & kAlignmentMask;
   }
 
+  size_t Offset(Address address) {
+    return address - reinterpret_cast<Address>(this);
+  }
+
  private:
   // Flags that are only mutable from the main thread when no concurrent
   // component (e.g. marker, sweeper, compilation, allocation) is running.

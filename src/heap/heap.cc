@@ -6397,11 +6397,11 @@ void Heap::ClearRecordedSlot(Tagged<HeapObject> object, ObjectSlot slot) {
 
 // static
 int Heap::InsertIntoRememberedSetFromCode(MutablePageMetadata* chunk,
-                                          Address slot) {
+                                          size_t slot_offset) {
   // This is called during runtime by a builtin, therefore it is run in the main
   // thread.
   DCHECK_NULL(LocalHeap::Current());
-  RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk, slot);
+  RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk, slot_offset);
   return 0;
 }
 
@@ -7156,12 +7156,14 @@ void Heap::CombinedGenerationalAndSharedEphemeronBarrierSlow(
 
 void Heap::GenerationalBarrierSlow(Tagged<HeapObject> object, Address slot,
                                    Tagged<HeapObject> value) {
-  MutablePageMetadata* chunk = MutablePageMetadata::FromHeapObject(object);
+  MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
+  MutablePageMetadata* metadata = MutablePageMetadata::cast(chunk->Metadata());
   if (LocalHeap::Current() == nullptr) {
-    RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk, slot);
+    RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(
+        metadata, chunk->Offset(slot));
   } else {
-    RememberedSet<OLD_TO_NEW_BACKGROUND>::Insert<AccessMode::ATOMIC>(chunk,
-                                                                     slot);
+    RememberedSet<OLD_TO_NEW_BACKGROUND>::Insert<AccessMode::ATOMIC>(
+        metadata, chunk->Offset(slot));
   }
 }
 
@@ -7169,7 +7171,7 @@ void Heap::SharedHeapBarrierSlow(Tagged<HeapObject> object, Address slot) {
   MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
   DCHECK(!chunk->InWritableSharedSpace());
   RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(
-      MutablePageMetadata::cast(chunk->Metadata()), slot);
+      MutablePageMetadata::cast(chunk->Metadata()), chunk->Offset(slot));
 }
 
 void Heap::RecordEphemeronKeyWrite(Tagged<EphemeronHashTable> table,
@@ -7246,10 +7248,10 @@ void Heap::WriteBarrierForRangeImpl(MemoryChunk* source_chunk,
     if (kModeMask & kDoGenerationalOrShared) {
       if (Heap::InYoungGeneration(value_heap_object)) {
         RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(
-            source_page, slot.address());
+            source_page, source_chunk->Offset(slot.address()));
       } else if (InWritableSharedSpace(value_heap_object)) {
         RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(
-            source_page, slot.address());
+            source_page, source_chunk->Offset(slot.address()));
       } else if (kModeMask == kDoGenerationalOrShared) {
         cached_uninteresting_page = compressed_page;
       }
@@ -7258,7 +7260,7 @@ void Heap::WriteBarrierForRangeImpl(MemoryChunk* source_chunk,
     if (kModeMask & kDoMarking) {
       marking_barrier->MarkValue(object, value_heap_object);
       if (kModeMask & kDoEvacuationSlotRecording) {
-        collector->RecordSlot(source_page, HeapObjectSlot(slot),
+        collector->RecordSlot(source_chunk, HeapObjectSlot(slot),
                               value_heap_object);
       }
     }
