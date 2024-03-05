@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3681a97a_cdccaddd",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-03-05T12:54:12Z",
+      "side": 1,
+      "message": "I wonder if extracting this repeating sequence works with this format.",
+      "range": {
+        "startLine": 516,
+        "startChar": 30,
+        "endLine": 517,
+        "endChar": 76
+      },
+      "revId": "07536f6ca9771df57c926c57a698046f9f9f524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
