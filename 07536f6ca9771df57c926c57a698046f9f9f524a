@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10e488ee_b4283822",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-05T13:07:11Z",
+      "side": 1,
+      "message": "Turned around?",
+      "range": {
+        "startLine": 120,
+        "startChar": 60,
+        "endLine": 120,
+        "endChar": 73
+      },
+      "revId": "07536f6ca9771df57c926c57a698046f9f9f524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e60fc9bd_a35582a9",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-05T13:07:11Z",
+      "side": 1,
+      "message": "nit: consistency over simplicity, maybe spell out \"no pointer compression\" like in the builder below.",
+      "range": {
+        "startLine": 120,
+        "startChar": 28,
+        "endLine": 120,
+        "endChar": 46
+      },
+      "revId": "07536f6ca9771df57c926c57a698046f9f9f524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae21b197_e7d4abf5",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-05T13:07:11Z",
+      "side": 1,
+      "message": "nit: rather v8_linux64_native_arm64_no_pointer_compression_compile_rel?\n\nOr rename the one below with a 3-way dance to include _sim",
+      "range": {
+        "startLine": 263,
+        "startChar": 7,
+        "endLine": 263,
+        "endChar": 54
+      },
+      "revId": "07536f6ca9771df57c926c57a698046f9f9f524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3681a97a_cdccaddd",
         "filename": "infra/mb/mb_config.pyl",
         "patchSetId": 2
@@ -14,6 +83,30 @@
       "writtenOn": "2024-03-05T12:54:12Z",
       "side": 1,
       "message": "I wonder if extracting this repeating sequence works with this format.",
+      "range": {
+        "startLine": 516,
+        "startChar": 30,
+        "endLine": 517,
+        "endChar": 76
+      },
+      "revId": "07536f6ca9771df57c926c57a698046f9f9f524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58fba3c2_bf96d10d",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-05T13:07:11Z",
+      "side": 1,
+      "message": "Where is \u0027no_sandbox\u0027, \u0027dcheck_always_on\u0027, \u0027v8_enable_slow_dchecks\u0027,\n      \u0027v8_enable_javascript_promise_hooks\u0027, from? I thought we only add no pc to a release bot?",
+      "parentUuid": "3681a97a_cdccaddd",
       "range": {
         "startLine": 516,
         "startChar": 30,
