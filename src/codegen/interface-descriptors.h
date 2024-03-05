@@ -484,7 +484,7 @@ class StaticCallInterfaceDescriptor : public CallInterfaceDescriptor {
   static constexpr bool kNoStackScan = false;
   // TODO(saelo): we should not have a default value here to force all interface
   // descriptors to define a (unique) tag.
-  static constexpr CodeEntrypointTag kEntrypointTag = kDefaultCodeEntrypointTag;
+  static constexpr CodeEntrypointTag kEntrypointTag = kInvalidEntrypointTag;
   static constexpr auto kStackArgumentOrder = StackArgumentOrder::kDefault;
 
   // The set of registers available to the parameters, as a
@@ -1469,6 +1469,7 @@ class AsyncFunctionStackParameterDescriptor final
     : public StaticCallInterfaceDescriptor<
           AsyncFunctionStackParameterDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kPromise, kResult)
   DEFINE_PARAMETER_TYPES(MachineType::TaggedPointer(), MachineType::AnyTagged())
   DECLARE_DESCRIPTOR(AsyncFunctionStackParameterDescriptor)
@@ -1906,6 +1907,7 @@ class CompareNoContextDescriptor
 class StringEqualDescriptor
     : public StaticCallInterfaceDescriptor<StringEqualDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_NO_CONTEXT(kLeft, kRight, kLength)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kLeft
                          MachineType::AnyTagged(),  // kRight
@@ -1916,6 +1918,7 @@ class StringEqualDescriptor
 class BinaryOpDescriptor
     : public StaticCallInterfaceDescriptor<BinaryOpDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS(kLeft, kRight)
   DECLARE_DESCRIPTOR(BinaryOpDescriptor)
 
@@ -1925,6 +1928,7 @@ class BinaryOpDescriptor
 class BinaryOp_BaselineDescriptor
     : public StaticCallInterfaceDescriptor<BinaryOp_BaselineDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_NO_CONTEXT(kLeft, kRight, kSlot)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kLeft
                          MachineType::AnyTagged(),  // kRight
@@ -1937,6 +1941,7 @@ class BinaryOp_BaselineDescriptor
 class BinarySmiOp_BaselineDescriptor
     : public StaticCallInterfaceDescriptor<BinarySmiOp_BaselineDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_NO_CONTEXT(kLeft, kRight, kSlot)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kLeft
                          MachineType::TaggedSigned(),  // kRight
@@ -1949,6 +1954,7 @@ class BinarySmiOp_BaselineDescriptor
 class StringAtAsStringDescriptor final
     : public StaticCallInterfaceDescriptor<StringAtAsStringDescriptor> {
  public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_PARAMETERS_NO_CONTEXT(kReceiver, kPosition)
   // TODO(turbofan): Return untagged value here.
   DEFINE_RESULT_AND_PARAMETER_TYPES(
