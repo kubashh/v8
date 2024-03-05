@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6b6ce9e0_76588bd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-05T09:10:25Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "da4d2e4d_ceb7e761",
         "filename": "src/wasm/module-decoder-impl.h",
         "patchSetId": 1
@@ -89,6 +106,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b844c77b_848920c5",
+        "filename": "src/wasm/wasm-disassembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-05T09:10:25Z",
+      "side": 1,
+      "message": "I think it\u0027s fine.",
+      "parentUuid": "430b413d_211991c3",
+      "range": {
+        "startLine": 226,
+        "startChar": 19,
+        "endLine": 226,
+        "endChar": 27
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f7b590b4_e361c942",
         "filename": "src/wasm/wasm-disassembler.cc",
         "patchSetId": 1
@@ -146,6 +187,30 @@
       "writtenOn": "2024-03-04T21:00:55Z",
       "side": 1,
       "message": "`table` is an object, but we want an index here. This worked by accident, because this value (via `emit_u32v`) goes through JS bitwise operations, which perform an implicit truncating to-integer conversion, which returns `0` for objects, which is the index we wanted here 😊\n\nWe could add a `typeof` check to `addActiveElementSegment`, but is it worth it?",
+      "range": {
+        "startLine": 21,
+        "startChar": 41,
+        "endLine": 21,
+        "endChar": 47
+      },
+      "revId": "d1fd90a799d6ec56c74731486ba7861546d200f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28bb8a0c_41091c03",
+        "filename": "test/mjsunit/wasm/call_indirect.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-05T09:10:25Z",
+      "side": 1,
+      "message": "Fine as is. Given that we ran into this issue here, that might be an indication that a `typeof` would be nice to be sure. OTOH there are so many other places and it doesn\u0027t make sense to guard all of them.",
+      "parentUuid": "1dfafb86_84f4f1c4",
       "range": {
         "startLine": 21,
         "startChar": 41,
