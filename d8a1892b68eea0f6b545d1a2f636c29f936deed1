@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c509eee_346dadce",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-03-05T12:48:12Z",
+      "side": 1,
+      "message": "No, because `WordRepresentation` is not a \"structural type\".",
+      "parentUuid": "ae9dc6d2_f78c33aa",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 36
+      },
+      "revId": "d8a1892b68eea0f6b545d1a2f636c29f936deed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87b84871_5bfeeaaf",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-02-08T08:40:25Z",
       "side": 1,
       "message": "`matcher.MatchBitwiseAnd` if often followed by `matcher.MatchIntegralWordConstant` throughout this file. Maybe add a `MatchBitwiseAndWordConstantRhs` helper or something like that? (it can also be done in a follow up)",
+      "range": {
+        "startLine": 130,
+        "startChar": 3,
+        "endLine": 134,
+        "endChar": 29
+      },
+      "revId": "d8a1892b68eea0f6b545d1a2f636c29f936deed1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b57afdc_8bec2c43",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-03-05T12:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87b84871_5bfeeaaf",
       "range": {
         "startLine": 130,
         "startChar": 3,
