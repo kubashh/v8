@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7fc67ec_72f7af9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-05T17:42:47Z",
+      "side": 1,
+      "message": "ATM, nodejs still uses V8 version 11.9.169.7, which is before some of these were deprecated. They will have to update in their next V8 roll.\n\nGoogle internal embedders should be OK with the deprecation.",
+      "revId": "969eaa170840b8a0dcbc6a6c88617054736146ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
