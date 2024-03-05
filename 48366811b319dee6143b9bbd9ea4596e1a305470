@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079f7b5f_d69ae813",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-05T18:42:28Z",
+      "side": 1,
+      "message": "PTAL.\n\nA good deal of this isn\u0027t fundamentally new: the overall structure largely mimics the existing `ExtendedFunctionDis`/`HexDumpModuleDis` in `tools/wasm/module-inspector.cc`; the generated output is partly inspired by `GenerateTestCase()` in `test/fuzzer/wasm-fuzzer-common.cc` and partly informed by `test/mjsunit/wasm/wasm-module-builder.js`\u0027s requirements.\nA good deal of it is also fairly repetitive.\n\nHappy to walk you through it offline, or answer specific questions.\n\nIf you decide to leave comments, be prepared that (1) I will address them and (2) that will make the CL bigger :-P",
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
