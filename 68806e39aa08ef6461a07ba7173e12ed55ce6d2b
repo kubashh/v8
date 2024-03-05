@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bf6f1c4_285619b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-03-05T11:34:25Z",
+      "side": 1,
+      "message": "Oops. The Blink code already relies on this CL (we try to produce crowdsourced compile hints and local compile hints at the same time). Luckily crowdsourced compile hints are produced with so low frequency that it\u0027s not going wrong too badly.",
+      "revId": "68806e39aa08ef6461a07ba7173e12ed55ce6d2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
