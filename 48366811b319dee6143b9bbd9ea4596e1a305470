@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "541df223_5a606e9a",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T16:40:40Z",
+      "side": 1,
+      "message": "Oh, now I get it. This would have to be `const char* const kLocalPrefix`, without the `constexpr` the pointer is non-const.\nLet\u0027s keep it as is, this clarifies my confusion though as `constexpr` shouldn\u0027t be required.",
+      "parentUuid": "7a64ea47_ce67e7f6",
+      "range": {
+        "startLine": 35,
+        "startChar": 9,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fe5d24f_4c4ca7cc",
