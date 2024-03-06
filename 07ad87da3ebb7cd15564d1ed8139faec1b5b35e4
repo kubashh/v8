@@ -16,6 +16,24 @@
       "message": "Code lgtm.\n\nMy only concern is a performance penalty for CSS.\nSince most pages are normal pages, the ToT version can in most cases just hash the page address and immediately get the right `Page`. Only for large pages we would actually need the more expensive `upper_bound` search.\nIn the new version we use `upper_bound` for all pages, which could slow down CSS.\nUnfortunately we don\u0027t currently have a way to continuously track CSS performance.\n\nCC\u0027ing Nikos (who implemented the ToT version and is working on CSS) for FYI.",
       "revId": "07ad87da3ebb7cd15564d1ed8139faec1b5b35e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ed18638_b58d8a6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-06T15:00:31Z",
+      "side": 1,
+      "message": "The previous version took advantage of the fact that for normal pages we can easily get to the page start and therefore lookup could be more efficient.\n\nWe used to have an `unordered_set` for normal pages, giving O(1) for `find`, and a `set` for large pages, giving O(logL) for the `upper_bound`.\n\nNow we have a single `set` for all pages, giving O(log(N+L)) for `upper_bound`.\n\nIt\u0027s indeed a bit worse but I don\u0027t think it will matter much, given the result reported in [1]. I doubt it would show in any real benchmark now.\n\n[1] https://docs.google.com/document/d/1GD9NJkNL5Z35wgtZP-zU7t52G1mqGT2kkPDI8d-R0Cs/edit?usp\u003dsharing\u0026resourcekey\u003d0-JxJG4pA8UEFV4TUW047gVA",
+      "parentUuid": "add2bd16_9620a9e7",
+      "revId": "07ad87da3ebb7cd15564d1ed8139faec1b5b35e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
