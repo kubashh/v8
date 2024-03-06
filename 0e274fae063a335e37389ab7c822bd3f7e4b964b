@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4778be5_154f93d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-06T14:29:15Z",
+      "side": 1,
+      "message": "Is there a larger context for this?\nOn the face of it, it seems to me the CL is mostly moving the offset calculation from the callee to the caller and spreading it around, which on its own is not much of an improvement imo.\nIf the goal is to align Insert and InsertTyped, maybe the other direction is preferable?",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e10b226_781bcac0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-06T14:29:15Z",
+      "side": 1,
+      "message": "Code generally looks good but I\u0027m wondering about the why. See my comment below.",
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01ddbd79_4a235b07",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7251,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-06T14:29:15Z",
+      "side": 1,
+      "message": "nit: Rename to `source_page_metadata`?",
+      "range": {
+        "startLine": 7251,
+        "startChar": 12,
+        "endLine": 7251,
+        "endChar": 23
+      },
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd686419_cfe0eb72",
+        "filename": "src/heap/memory-chunk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-06T14:29:15Z",
+      "side": 1,
+      "message": "Can you DCHECK that `address` is a valid address in the chunk?",
+      "range": {
+        "startLine": 262,
+        "startChar": 9,
+        "endLine": 262,
+        "endChar": 15
+      },
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
