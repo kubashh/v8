@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9db06f7e_fab3c3d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-03-06T15:15:21Z",
+      "side": 1,
+      "message": "Moving the metadata out of the MemoryChunks unfortunately regresses perf, but I was able to win back a bit of the regression with refactorings like this.\nFor example, in this case there\u0027s the MemoryChunk already available or used in most of the callers of the remembered set inserts, so moving the offset calculation higher will allow us to save the extra Metadata\u003d\u003eChunk lookup later.\nFor example, if you look at the GenerationalBarrierSlow, before this CL, we do the MutablePageMetadata lookup (which looks up the MemoryChunk and then MutablePageMetadata from there). We can already use the MemoryChunk at that point to calculate the offset.",
+      "parentUuid": "d4778be5_154f93d1",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2e10b226_781bcac0",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c61a2f12_22452aa0",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7251,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-03-06T15:15:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01ddbd79_4a235b07",
+      "range": {
+        "startLine": 7251,
+        "startChar": 12,
+        "endLine": 7251,
+        "endChar": 23
+      },
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd686419_cfe0eb72",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-03-06T14:29:15Z",
       "side": 1,
       "message": "Can you DCHECK that `address` is a valid address in the chunk?",
+      "range": {
+        "startLine": 262,
+        "startChar": 9,
+        "endLine": 262,
+        "endChar": 15
+      },
+      "revId": "0e274fae063a335e37389ab7c822bd3f7e4b964b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f8f443_60c37e6a",
+        "filename": "src/heap/memory-chunk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-03-06T15:15:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd686419_cfe0eb72",
       "range": {
         "startLine": 262,
         "startChar": 9,
