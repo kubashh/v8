@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "add2bd16_9620a9e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-06T14:51:38Z",
+      "side": 1,
+      "message": "Code lgtm.\n\nMy only concern is a performance penalty for CSS.\nSince most pages are normal pages, the ToT version can in most cases just hash the page address and immediately get the right `Page`. Only for large pages we would actually need the more expensive `upper_bound` search.\nIn the new version we use `upper_bound` for all pages, which could slow down CSS.\nUnfortunately we don\u0027t currently have a way to continuously track CSS performance.\n\nCC\u0027ing Nikos (who implemented the ToT version and is working on CSS) for FYI.",
+      "revId": "07ad87da3ebb7cd15564d1ed8139faec1b5b35e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
