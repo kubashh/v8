@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf444ee_81a006ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-03-06T10:29:41Z",
+      "side": 1,
+      "message": "just noticed that Dominik is OOO",
+      "revId": "25280318fa13e4d68f03a41edc8da011da7e2a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
