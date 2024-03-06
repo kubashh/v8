@@ -421,11 +421,8 @@ void MemoryAllocator::PerformFreeMemory(MutablePageMetadata* chunk_metadata) {
 void MemoryAllocator::Free(MemoryAllocator::FreeMode mode,
                            MutablePageMetadata* chunk_metadata) {
   MemoryChunk* chunk = chunk_metadata->Chunk();
-  if (chunk->IsLargePage()) {
-    RecordLargePageDestroyed(*LargePageMetadata::cast(chunk_metadata));
-  } else {
-    RecordNormalPageDestroyed(*PageMetadata::cast(chunk_metadata));
-  }
+  RecordMemoryChunkDestroyed(chunk);
+
   switch (mode) {
     case FreeMode::kImmediately:
       PreFreeMemory(chunk_metadata);
@@ -469,12 +466,14 @@ PageMetadata* MemoryAllocator::AllocatePage(
       isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
       chunk_info->area_end, std::move(chunk_info->reservation), executable);
 
+  MemoryChunk* chunk = page->Chunk();
+
 #ifdef DEBUG
-  if (page->Chunk()->executable()) RegisterExecutableMemoryChunk(page);
+  if (chunk->executable()) RegisterExecutableMemoryChunk(page);
 #endif  // DEBUG
 
   space->InitializePage(page);
-  RecordNormalPageCreated(*page);
+  RecordMemoryChunkCreated(chunk);
   return page;
 }
 
@@ -508,12 +507,13 @@ LargePageMetadata* MemoryAllocator::AllocateLargePage(
   LargePageMetadata* page = new (chunk_info->start) LargePageMetadata(
       isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
       chunk_info->area_end, std::move(chunk_info->reservation), executable);
+  MemoryChunk* chunk = page->Chunk();
 
 #ifdef DEBUG
-  if (page->Chunk()->executable()) RegisterExecutableMemoryChunk(page);
+  if (chunk->executable()) RegisterExecutableMemoryChunk(page);
 #endif  // DEBUG
 
-  RecordLargePageCreated(*page);
+  RecordMemoryChunkCreated(chunk);
   return page;
 }
 
@@ -664,66 +664,44 @@ bool MemoryAllocator::SetPermissionsOnExecutableMemoryChunk(VirtualMemory* vm,
 
 #if defined(V8_ENABLE_CONSERVATIVE_STACK_SCANNING) || defined(DEBUG)
 
-const MemoryChunkMetadata* MemoryAllocator::LookupChunkContainingAddress(
+const MemoryChunk* MemoryAllocator::LookupChunkContainingAddress(
     Address addr) const {
   // All threads should be either parked or in a safepoint whenever this method
   // is called, thus pages cannot be allocated or freed at the same time and a
   // mutex is not required here.
-  // As the address may not correspond to a valid heap object, the chunk we
-  // obtain below is not necessarily a valid chunk.
-  MemoryChunkMetadata* chunk = MemoryChunkMetadata::FromAddress(addr);
-  // Check if it corresponds to a known normal or large page.
-  if (auto it = normal_pages_.find(chunk); it != normal_pages_.end()) {
-    // The chunk is a normal page.
-    auto* normal_page = PageMetadata::cast(chunk);
-    DCHECK_LE(normal_page->address(), addr);
-    if (normal_page->Contains(addr)) return normal_page;
-  } else if (auto it = large_pages_.upper_bound(chunk);
-             it != large_pages_.begin()) {
-    // The chunk could be inside a large page.
-    DCHECK_IMPLIES(it != large_pages_.end(), addr < (*it)->address());
-    auto* large_page = *std::next(it, -1);
-    DCHECK_NOT_NULL(large_page);
-    DCHECK_LE(large_page->address(), addr);
-    if (large_page->Contains(addr)) return large_page;
+
+  // upper_bound gives us an entry greater than addr.
+  auto it = chunks_.upper_bound(addr);
+  if (it == chunks_.begin()) {
+    // addr is before the first chunk.
+    return nullptr;
   }
+  it--;
+  const MemoryChunk* chunk = MemoryChunk::FromAddress(*it);
+
+  if (chunk->Metadata()->Contains(addr)) {
+    return chunk;
+  }
+
   // Not found in any page.
   return nullptr;
 }
 
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING || DEBUG
 
-void MemoryAllocator::RecordNormalPageCreated(const PageMetadata& page) {
+void MemoryAllocator::RecordMemoryChunkCreated(const MemoryChunk* chunk) {
 #ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  base::MutexGuard guard(&pages_mutex_);
-  auto result = normal_pages_.insert(&page);
+  base::MutexGuard guard(&chunks_mutex_);
+  auto result = chunks_.insert(chunk->address());
   USE(result);
   DCHECK(result.second);
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 }
 
-void MemoryAllocator::RecordNormalPageDestroyed(const PageMetadata& page) {
+void MemoryAllocator::RecordMemoryChunkDestroyed(const MemoryChunk* chunk) {
 #ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  base::MutexGuard guard(&pages_mutex_);
-  auto size = normal_pages_.erase(&page);
-  USE(size);
-  DCHECK_EQ(1u, size);
-#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-}
-
-void MemoryAllocator::RecordLargePageCreated(const LargePageMetadata& page) {
-#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  base::MutexGuard guard(&pages_mutex_);
-  auto result = large_pages_.insert(&page);
-  USE(result);
-  DCHECK(result.second);
-#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-}
-
-void MemoryAllocator::RecordLargePageDestroyed(const LargePageMetadata& page) {
-#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  base::MutexGuard guard(&pages_mutex_);
-  auto size = large_pages_.erase(&page);
+  base::MutexGuard guard(&chunks_mutex_);
+  auto size = chunks_.erase(chunk->address());
   USE(size);
   DCHECK_EQ(1u, size);
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
