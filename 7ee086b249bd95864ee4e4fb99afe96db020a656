@@ -16,6 +16,40 @@
       "message": "PTAL\n\nPinpoint for windows seems to be a RNG, but at least doesn\u0027t look like a regression.",
       "revId": "7ee086b249bd95864ee4e4fb99afe96db020a656",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9b744c_208257dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-03-06T11:42:04Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "7ee086b249bd95864ee4e4fb99afe96db020a656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a6fe42d_6730caae",
+        "filename": "src/utils/utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-03-06T11:42:04Z",
+      "side": 1,
+      "message": "nit: I guess it\u0027d be slightly better to omit the declaration entirely and fail early at compile-time",
+      "revId": "7ee086b249bd95864ee4e4fb99afe96db020a656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
