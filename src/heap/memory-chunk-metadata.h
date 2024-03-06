@@ -182,32 +182,6 @@ class MemoryChunkMetadata {
 };
 
 }  // namespace internal
-
-namespace base {
-
-// Define special hash function for chunk pointers, to be used with std data
-// structures, e.g.
-// std::unordered_set<MemoryChunkMetadata*, base::hash<MemoryChunkMetadata*>
-// This hash function discards the trailing zero bits (chunk alignment).
-// Notice that, when pointer compression is enabled, it also discards the
-// cage base.
-template <>
-struct hash<const i::MemoryChunkMetadata*> {
-  V8_INLINE size_t operator()(const i::MemoryChunkMetadata* chunk) const {
-    return static_cast<v8::internal::Tagged_t>(
-               reinterpret_cast<uintptr_t>(chunk)) >>
-           kPageSizeBits;
-  }
-};
-
-template <>
-struct hash<i::MemoryChunkMetadata*> {
-  V8_INLINE size_t operator()(i::MemoryChunkMetadata* chunk) const {
-    return hash<const i::MemoryChunkMetadata*>()(chunk);
-  }
-};
-
-}  // namespace base
 }  // namespace v8
 
 #endif  // V8_HEAP_MEMORY_CHUNK_METADATA_H_

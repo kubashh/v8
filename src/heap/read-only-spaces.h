@@ -341,18 +341,6 @@ class SharedReadOnlySpace : public ReadOnlySpace {
 };
 
 }  // namespace internal
-
-namespace base {
-// Define special hash function for page pointers, to be used with std data
-// structures, e.g. std::unordered_set<ReadOnlyPageMetadata*,
-// base::hash<ReadOnlyPageMetadata*>
-template <>
-struct hash<i::ReadOnlyPageMetadata*> : hash<i::MemoryChunkMetadata*> {};
-template <>
-struct hash<const i::ReadOnlyPageMetadata*>
-    : hash<const i::MemoryChunkMetadata*> {};
-}  // namespace base
-
 }  // namespace v8
 
 #endif  // V8_HEAP_READ_ONLY_SPACES_H_

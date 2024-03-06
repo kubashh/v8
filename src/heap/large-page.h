@@ -56,18 +56,6 @@ class LargePageMetadata : public MutablePageMetadata {
 };
 
 }  // namespace internal
-
-namespace base {
-// Define special hash function for page pointers, to be used with std data
-// structures, e.g. std::unordered_set<LargePageMetadata*,
-// base::hash<LargePageMetadata*>
-template <>
-struct hash<i::LargePageMetadata*> : hash<i::MemoryChunkMetadata*> {};
-template <>
-struct hash<const i::LargePageMetadata*> : hash<const i::MemoryChunkMetadata*> {
-};
-}  // namespace base
-
 }  // namespace v8
 
 #endif  // V8_HEAP_LARGE_PAGE_H_

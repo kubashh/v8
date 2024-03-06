@@ -146,16 +146,6 @@ static_assert(sizeof(PageMetadata) <=
               MemoryChunkLayout::kMemoryChunkHeaderSize);
 
 }  // namespace internal
-
-namespace base {
-// Define special hash function for page pointers, to be used with std data
-// structures, e.g. std::unordered_set<PageMetadata*, base::hash<PageMetadata*>
-template <>
-struct hash<i::PageMetadata*> : hash<i::MemoryChunkMetadata*> {};
-template <>
-struct hash<const i::PageMetadata*> : hash<const i::MemoryChunkMetadata*> {};
-}  // namespace base
-
 }  // namespace v8
 
 #endif  // V8_HEAP_PAGE_H_
