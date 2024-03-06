@@ -16,6 +16,362 @@
       "message": "PTAL.\n\nA good deal of this isn\u0027t fundamentally new: the overall structure largely mimics the existing `ExtendedFunctionDis`/`HexDumpModuleDis` in `tools/wasm/module-inspector.cc`; the generated output is partly inspired by `GenerateTestCase()` in `test/fuzzer/wasm-fuzzer-common.cc` and partly informed by `test/mjsunit/wasm/wasm-module-builder.js`\u0027s requirements.\nA good deal of it is also fairly repetitive.\n\nHappy to walk you through it offline, or answer specific questions.\n\nIf you decide to leave comments, be prepared that (1) I will address them and (2) that will make the CL bigger :-P",
       "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c6ad0d8_117ec456",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "LGTM with comments. Impressive work! 😊",
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8183ed54_b6ab32f0",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Does this do anything?",
+      "range": {
+        "startLine": 35,
+        "startChar": 9,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fe5d24f_4c4ca7cc",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "We could also precede this with a comment, e.g. `out \u003c\u003c \"/*invalid*/ \" \u003c\u003c index;`\nWDYT?",
+      "range": {
+        "startLine": 113,
+        "startChar": 13,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "352ec43d_02a2cb7b",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Up to you, I\u0027m not a huge fan of these in general.",
+      "range": {
+        "startLine": 266,
+        "startChar": 7,
+        "endLine": 266,
+        "endChar": 11
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89401d3d_a06e71a8",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "I think this might also be confusing, it\u0027s just a comment though, so I don\u0027t have a strong opinion.",
+      "range": {
+        "startLine": 303,
+        "startChar": 6,
+        "endLine": 305,
+        "endChar": 7
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "366e166a_109267f6",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this have to be:\n```suggestion\n      if (i !\u003d 0 \u0026\u0026 c \u003e\u003d \u00270\u0027 \u0026\u0026 c \u003c\u003d \u00279\u0027) continue;\n```",
+      "range": {
+        "startLine": 327,
+        "startChar": 6,
+        "endLine": 327,
+        "endChar": 41
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8198134_6b3327c7",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Let\u0027s add a comment that this is invalid (either to the C++ or into the stream).",
+      "range": {
+        "startLine": 481,
+        "startChar": 12,
+        "endLine": 481,
+        "endChar": 32
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4298874b_a383cfda",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Maybe precede this with `//`?",
+      "range": {
+        "startLine": 492,
+        "startChar": 12,
+        "endLine": 492,
+        "endChar": 35
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135ba632_690929ae",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Maybe `increase_next_indentation` or `increase_indentation_after`?\nIt could be a bit confusing why we have two booleans otherwise.",
+      "range": {
+        "startLine": 530,
+        "startChar": 11,
+        "endLine": 530,
+        "endChar": 31
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db5afc89_4238006e",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "I don\u0027t know, this is super-confusing.\nCould we instead change this to\n```\nelse decrease_indentation \u003d true;\nbreak;\n```\nI understand that the current code works just fine (because of the base_indentation check) but there\u0027s a lot of complexity and the fallthrough really isn\u0027t necessary.",
+      "range": {
+        "startLine": 537,
+        "startChar": 10,
+        "endLine": 537,
+        "endChar": 24
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa1a259_e355662f",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Nit: `sizeof buffer` to keep it in sync.",
+      "range": {
+        "startLine": 599,
+        "startChar": 70,
+        "endLine": 599,
+        "endChar": 74
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87d280d6_774cb5d0",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 620,
+        "startChar": 70,
+        "endLine": 620,
+        "endChar": 74
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7ddc11b_af90e123",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Is this done in `PrintMjsunitImmediatesAndGetLength`? If yes, then the name might be misleading.",
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "507ea107_d0706df9",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "(Same for the cases below) Nit: These should be single quotes to align with our JS code style.",
+      "range": {
+        "startLine": 1126,
+        "startChar": 40,
+        "endLine": 1126,
+        "endChar": 42
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eed8abd_8fe97302",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "This should have an owner. Shouldn\u0027t this be a presubmit failure?",
+      "range": {
+        "startLine": 1497,
+        "startChar": 30,
+        "endLine": 1497,
+        "endChar": 34
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f328357_6c07f2c3",
+        "filename": "tools/wasm/module-inspector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-06T11:15:52Z",
+      "side": 1,
+      "message": "Does this mean that we print offsets or that we don\u0027t print them? 😊",
+      "range": {
+        "startLine": 1013,
+        "startChar": 26,
+        "endLine": 1013,
+        "endChar": 44
+      },
+      "revId": "48366811b319dee6143b9bbd9ea4596e1a305470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
