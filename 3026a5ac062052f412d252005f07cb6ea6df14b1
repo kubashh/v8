@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6305c0a9_0638877e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-06T16:44:10Z",
+      "side": 1,
+      "message": "Hey Clemens!\nCould you maybe take just a very quick high-level look to see what you think of the current state and if this is something you also had in mind?\n\n\nNote: I didn\u0027t test if this behaves how it should and if I handled the separation of type- and instruction-generation properly.",
+      "revId": "3026a5ac062052f412d252005f07cb6ea6df14b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2423c4bf_af342655",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-06T16:44:10Z",
+      "side": 1,
+      "message": "Make a struct out of these:\n\n```\nstruct TypeLimitations {\n   bool include_numeric_types;\n   ...\n}\n```",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 56
+      },
+      "revId": "3026a5ac062052f412d252005f07cb6ea6df14b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34a75fd_f2ecb6c5",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2404,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-06T16:44:10Z",
+      "side": 1,
+      "message": "I am unsure about this separation",
+      "range": {
+        "startLine": 2396,
+        "startChar": 0,
+        "endLine": 2404,
+        "endChar": 63
+      },
+      "revId": "3026a5ac062052f412d252005f07cb6ea6df14b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3562d28_ad8db537",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-06T16:44:10Z",
+      "side": 1,
+      "message": "Should we add strings here too? Or should it be a default with wasmGC or always a default?\n\nWhat about exceptions? (kExn, kNoExn). Should they be part of the general setup of the fuzzer?",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 20
+      },
+      "revId": "3026a5ac062052f412d252005f07cb6ea6df14b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
