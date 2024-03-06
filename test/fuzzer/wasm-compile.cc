@@ -9,21 +9,25 @@
 
 namespace v8::internal::wasm::fuzzing {
 
+template <bool wasmGC, bool simd>
 class WasmCompileFuzzer : public WasmExecutionFuzzer {
   bool GenerateModule(Isolate* isolate, Zone* zone,
                       base::Vector<const uint8_t> data,
                       ZoneBuffer* buffer) override {
+    Configuration config = {.wasmGC = wasmGC, .simd = simd};
     base::Vector<const uint8_t> wire_bytes =
-        GenerateRandomWasmModule(zone, data);
+        GenerateRandomWasmModule(config, zone, data);
     if (wire_bytes.empty()) return false;
     buffer->write(wire_bytes.data(), wire_bytes.size());
     return true;
   }
 };
 
+using WasmCompileFuzzer_Full = WasmCompileFuzzer<true, true>;
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   constexpr bool require_valid = true;
-  WasmCompileFuzzer().FuzzWasmModule({data, size}, require_valid);
+  WasmCompileFuzzer_Full().FuzzWasmModule({data, size}, require_valid);
   return 0;
 }
 
