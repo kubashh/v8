@@ -238,7 +238,7 @@ deps = {
     'condition': "checkout_centipede_deps",
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + 'e2d639b5dbd948c7c294b499bfff8a4b1abae1ef',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + '3cc763dee49f8b8a8b04d7b95c70908931123669',
     'condition': 'checkout_android',
   },
   'third_party/clang-format/script':
@@ -252,7 +252,7 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'de6a9a9692db6667df3b7f972bcead57d6154e9f',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'b1d5eb293d9f9244897456e73bfb7d1b814ac895',
   'third_party/fp16/src':
     Var('chromium_url') + '/external/github.com/Maratyszcza/FP16.git' + '@' + '0a92994d729ff76a58f692d3028ca1b64b145d91',
   'third_party/fuchsia-gn-sdk': {
@@ -356,7 +356,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'third_party/abseil-cpp': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/abseil-cpp.git' + '@' + '7dcda6ce5910f535decf965a0e148073fe7153b6',
+    'url': Var('chromium_url') + '/chromium/src/third_party/abseil-cpp.git' + '@' + '308441de3def801c65d3ca3ed45564dab7db02fd',
     'condition': 'not build_with_chromium',
   }
 }
