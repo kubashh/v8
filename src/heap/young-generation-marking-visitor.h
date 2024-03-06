@@ -112,7 +112,7 @@ class YoungGenerationMarkingVisitor final
   V8_INLINE bool ShortCutStrings(HeapObjectSlot slot, HeapObject* heap_object);
 #endif  // V8_MINORMS_STRING_SHORTCUTTING
 
-  template <typename T>
+  template <typename T, typename TBodyDescriptor = T::BodyDescriptor>
   int VisitEmbedderTracingSubClassWithEmbedderTracing(Tagged<Map> map,
                                                       Tagged<T> object);
 

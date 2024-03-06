@@ -71,6 +71,8 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   static FieldAccess ForJSObjectOffset(
       int offset, WriteBarrierKind write_barrier_kind = kFullWriteBarrier);
 
+  static FieldAccess ForJSObjectWithEmbedderDataSlotsCppHeapWrappable();
+
   // Provides access to JSCollecton::table() field.
   static FieldAccess ForJSCollectionTable();
 
