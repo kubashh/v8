@@ -50,6 +50,24 @@
       "message": "nit: I guess it\u0027d be slightly better to omit the declaration entirely and fail early at compile-time",
       "revId": "7ee086b249bd95864ee4e4fb99afe96db020a656",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dba565f_1b4aaab9",
+        "filename": "src/utils/utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-03-06T11:48:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a6fe42d_6730caae",
+      "revId": "7ee086b249bd95864ee4e4fb99afe96db020a656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
