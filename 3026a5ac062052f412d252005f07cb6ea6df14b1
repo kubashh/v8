@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bae447e8_f89d13c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-06T16:52:28Z",
+      "side": 1,
+      "message": "I would propose to make this all static instead of dynamic, to avoid having to allocate a `std::vector` for every single decision, and to generally speed things up. The fuzzers will be separate binaries anyway.\n\nFor now I would propose to start with just enabling or disabling SIMD (to keep it simple), so having a `struct WasmModuleGenerationOptions { bool generate_simd; }`, and passing this around as a template argument: `template\u003cWasmModuleGenerationOptions options\u003e base::Vector\u003cuint8_t\u003e GenerateRandomWasmModule(...);`.\nThis makes it nicely extensible and readable.\n\nGenerating the arrays statically based on the template argument requires some careful coding, but can be done. Let me know if we should pair-program together a bit.",
+      "revId": "3026a5ac062052f412d252005f07cb6ea6df14b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2423c4bf_af342655",
