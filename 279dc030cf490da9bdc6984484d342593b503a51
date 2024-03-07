@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9a42663_52842bef",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-03-07T13:31:57Z",
+      "side": 1,
+      "message": "This got moved up, since erasing the metadata pointer from a set will access the memory for hash generation. So remove it, before freeing the memory.",
+      "range": {
+        "startLine": 424,
+        "startChar": 38,
+        "endLine": 424,
+        "endChar": 58
+      },
+      "revId": "279dc030cf490da9bdc6984484d342593b503a51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
