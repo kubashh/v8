@@ -16,6 +16,40 @@
       "message": "Nice, thanks!",
       "revId": "4d92c34dc0736de3facb675a3aa130f8b0e13d4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44c8cee8_1e576dc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-03-07T10:40:44Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "4d92c34dc0736de3facb675a3aa130f8b0e13d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deabbeae_04b79741",
+        "filename": "src/sandbox/code-entrypoint-tag.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-03-07T10:40:44Z",
+      "side": 1,
+      "message": "You defined different names but left the same values... Is this on purpose?",
+      "revId": "4d92c34dc0736de3facb675a3aa130f8b0e13d4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
