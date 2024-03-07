@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e764fd4c_cc23113e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-07T10:07:19Z",
+      "side": 1,
+      "message": "LGTM from what I can see, but I\u0027m missing the context here. A method is introduced and in this CL there\u0027s no call site, so I don\u0027t know its purpose.\n\nI\u0027m cc:ing Nico, who reviewed the previous related CL.",
+      "revId": "0bdf76e26b77d3360a2dd9658f256a96dbbc937a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
