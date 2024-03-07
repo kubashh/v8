@@ -2655,8 +2655,7 @@ void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
     LoopScope loop_scope(this, &loop_builder);
     HoleCheckElisionScope elider(this);
     builder()->SetExpressionAsStatementPosition(stmt->each());
-    builder()->ForInContinue(index, cache_length);
-    loop_builder.BreakIfFalse(ToBooleanMode::kAlreadyBoolean);
+    loop_builder.BreakIfForInDone(index, cache_length);
     builder()->ForInNext(receiver, index, triple.Truncate(2),
                          feedback_index(slot));
     loop_builder.ContinueIfUndefined();
@@ -2674,7 +2673,6 @@ void BytecodeGenerator::VisitForInStatement(ForInStatement* stmt) {
 
     VisitIterationBody(stmt, &loop_builder);
     builder()->ForInStep(index);
-    builder()->StoreAccumulatorInRegister(index);
   }
   builder()->Bind(&subject_undefined_label);
 }
