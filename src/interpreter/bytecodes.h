@@ -372,6 +372,8 @@ namespace interpreter {
     OperandType::kIdx)                                                         \
   V(JumpIfJSReceiverConstant, ImplicitRegisterUse::kReadAccumulator,           \
     OperandType::kIdx)                                                         \
+  V(JumpIfForInDoneConstant, ImplicitRegisterUse::kNone, OperandType::kIdx,    \
+    OperandType::kReg, OperandType::kReg)                                      \
   /* - [Start ToBoolean jumps] */                                              \
   V(JumpIfToBooleanTrueConstant, ImplicitRegisterUse::kReadAccumulator,        \
     OperandType::kIdx)                                                         \
@@ -396,6 +398,8 @@ namespace interpreter {
     OperandType::kUImm)                                                        \
   V(JumpIfJSReceiver, ImplicitRegisterUse::kReadAccumulator,                   \
     OperandType::kUImm)                                                        \
+  V(JumpIfForInDone, ImplicitRegisterUse::kNone, OperandType::kUImm,           \
+    OperandType::kReg, OperandType::kReg)                                      \
                                                                                \
   /* Smi-table lookup for switch statements */                                 \
   V(SwitchOnSmiNoFeedback, ImplicitRegisterUse::kReadAccumulator,              \
@@ -405,11 +409,9 @@ namespace interpreter {
   V(ForInEnumerate, ImplicitRegisterUse::kWriteAccumulator, OperandType::kReg) \
   V(ForInPrepare, ImplicitRegisterUse::kReadAndClobberAccumulator,             \
     OperandType::kRegOutTriple, OperandType::kIdx)                             \
-  V(ForInContinue, ImplicitRegisterUse::kWriteAccumulator, OperandType::kReg,  \
-    OperandType::kReg)                                                         \
   V(ForInNext, ImplicitRegisterUse::kWriteAccumulator, OperandType::kReg,      \
     OperandType::kReg, OperandType::kRegPair, OperandType::kIdx)               \
-  V(ForInStep, ImplicitRegisterUse::kWriteAccumulator, OperandType::kReg)      \
+  V(ForInStep, ImplicitRegisterUse::kNone, OperandType::kRegInOut)             \
                                                                                \
   /* Update the pending message */                                             \
   V(SetPendingMessage, ImplicitRegisterUse::kReadWriteAccumulator)             \
@@ -500,7 +502,8 @@ namespace interpreter {
   V(JumpIfUndefined)                                    \
   V(JumpIfNotUndefined)                                 \
   V(JumpIfUndefinedOrNull)                              \
-  V(JumpIfJSReceiver)
+  V(JumpIfJSReceiver)                                   \
+  V(JumpIfForInDone)
 
 #define JUMP_CONDITIONAL_CONSTANT_BYTECODE_LIST(V)     \
   JUMP_TOBOOLEAN_CONDITIONAL_CONSTANT_BYTECODE_LIST(V) \
@@ -511,7 +514,8 @@ namespace interpreter {
   V(JumpIfUndefinedOrNullConstant)                     \
   V(JumpIfTrueConstant)                                \
   V(JumpIfFalseConstant)                               \
-  V(JumpIfJSReceiverConstant)
+  V(JumpIfJSReceiverConstant)                          \
+  V(JumpIfForInDoneConstant)
 
 #define JUMP_CONSTANT_BYTECODE_LIST(V)         \
   JUMP_UNCONDITIONAL_CONSTANT_BYTECODE_LIST(V) \
@@ -719,7 +723,7 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
   // an immediate byte operand (OperandType::kImm).
   static constexpr bool IsConditionalJumpImmediate(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpIfToBooleanTrue &&
-           bytecode <= Bytecode::kJumpIfJSReceiver;
+           bytecode <= Bytecode::kJumpIfForInDone;
   }
 
   // Returns true if the bytecode is a conditional jump taking
@@ -733,7 +737,7 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
   // any kind of operand.
   static constexpr bool IsConditionalJump(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpIfNullConstant &&
-           bytecode <= Bytecode::kJumpIfJSReceiver;
+           bytecode <= Bytecode::kJumpIfForInDone;
   }
 
   // Returns true if the bytecode is an unconditional jump.
@@ -767,14 +771,14 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
   // any kind of operand.
   static constexpr bool IsJump(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpLoop &&
-           bytecode <= Bytecode::kJumpIfJSReceiver;
+           bytecode <= Bytecode::kJumpIfForInDone;
   }
 
   // Returns true if the bytecode is a forward jump or conditional jump taking
   // any kind of operand.
   static constexpr bool IsForwardJump(Bytecode bytecode) {
     return bytecode >= Bytecode::kJump &&
-           bytecode <= Bytecode::kJumpIfJSReceiver;
+           bytecode <= Bytecode::kJumpIfForInDone;
   }
 
   // Return true if |bytecode| is a jump without effects,
@@ -992,6 +996,7 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
     switch (operand_type) {
       case OperandType::kReg:
       case OperandType::kRegOut:
+      case OperandType::kRegInOut:
         return 1;
       case OperandType::kRegPair:
       case OperandType::kRegOutPair:
