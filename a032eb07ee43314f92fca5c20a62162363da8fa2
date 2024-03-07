@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "634646ab_c573ffb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-07T10:27:27Z",
+      "side": 1,
+      "message": "Ah excellent, good to know that this is now supported!",
+      "parentUuid": "dee3f728_971ae573",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "a032eb07ee43314f92fca5c20a62162363da8fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e128b822_4c9e9de3",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b7da621_4cf0727f",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-07T10:27:27Z",
+      "side": 1,
+      "message": "Added more fine-grained tags now :)",
+      "parentUuid": "87163a76_bcc5383e",
+      "revId": "a032eb07ee43314f92fca5c20a62162363da8fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69a35249_638870cd",
@@ -71,6 +113,24 @@
       "writtenOn": "2024-03-06T14:57:12Z",
       "side": 1,
       "message": "Here and below: this should be `INTERNAL_DESCRIPTOR()`.\n\nThe code handlers that we call indirectly from IC dispatchers use the following descriptors: `LoadWithVectorDescriptor`, `StoreWithVectorDescriptor`, `StoreTransitionDescriptor` (we call them using various `XxxCallStub` methods). It seems that we accidentally marked these builtins as TFH while they are actually TFC.\n\nAnd the builtins that are called indirectly from Torque use `CallBuiltinPointer`.",
+      "revId": "a032eb07ee43314f92fca5c20a62162363da8fa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d1e0bad_09478820",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-07T10:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69a35249_638870cd",
       "revId": "a032eb07ee43314f92fca5c20a62162363da8fa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
