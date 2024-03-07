@@ -1984,7 +1984,6 @@ ToNumberHint BinopHintToToNumberHint(BinaryOperationHint hint) {
 
     case BinaryOperationHint::kNone:
     case BinaryOperationHint::kString:
-    case BinaryOperationHint::kStringOrStringWrapper:
     case BinaryOperationHint::kBigInt:
     case BinaryOperationHint::kBigInt64:
     case BinaryOperationHint::kAny:
@@ -2016,7 +2015,6 @@ void MaglevGraphBuilder::VisitUnaryOperation() {
       break;
     }
     case BinaryOperationHint::kString:
-    case BinaryOperationHint::kStringOrStringWrapper:
     case BinaryOperationHint::kBigInt:
     case BinaryOperationHint::kBigInt64:
     case BinaryOperationHint::kAny:
@@ -2064,8 +2062,6 @@ void MaglevGraphBuilder::VisitBinaryOperation() {
         return;
       }
       break;
-    case BinaryOperationHint::kStringOrStringWrapper:
-    // TODO(v8:12199): Fast path for the string wrapper case.
     case BinaryOperationHint::kBigInt:
     case BinaryOperationHint::kBigInt64:
     case BinaryOperationHint::kAny:
@@ -2104,7 +2100,6 @@ void MaglevGraphBuilder::VisitBinarySmiOperation() {
       break;
     }
     case BinaryOperationHint::kString:
-    case BinaryOperationHint::kStringOrStringWrapper:
     case BinaryOperationHint::kBigInt:
     case BinaryOperationHint::kBigInt64:
     case BinaryOperationHint::kAny:
@@ -8783,7 +8778,6 @@ void MaglevGraphBuilder::BuildToNumberOrToNumeric(Object::Conversion mode) {
     // TODO(leszeks): Faster ToNumber for kNumberOrOddball
     case BinaryOperationHint::kNumberOrOddball:
     case BinaryOperationHint::kString:
-    case BinaryOperationHint::kStringOrStringWrapper:
     case BinaryOperationHint::kAny:
       if (CheckType(value, NodeType::kNumber)) return;
       SetAccumulator(AddNewNode<ToNumberOrNumeric>({value}, mode));
