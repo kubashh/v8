@@ -402,6 +402,10 @@
     },
     'tests': [
       {'name': 'v8testing', 'shards': 5},
+      {'name': 'benchmarks', 'shards': 5},
+      {'name': 'mozilla', 'shards': 5},
+      {'name': 'test262', 'shards': 10},
+      {'name': 'mjsunit', 'shards': 5},
     ],
   },
   'v8_linux64_dbg': {
@@ -1732,6 +1736,10 @@
     },
     'tests': [
       {'name': 'v8testing', 'shards': 5},
+      {'name': 'benchmarks', 'shards': 5},
+      {'name': 'mozilla', 'shards': 5},
+      {'name': 'test262', 'shards': 10},
+      {'name': 'mjsunit', 'shards': 5},
     ],
   },
   'V8 Linux64 GC Stress - custom snapshot': {
