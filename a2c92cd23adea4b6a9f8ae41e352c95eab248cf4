@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f26500_cd343621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-07T17:49:59Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "a2c92cd23adea4b6a9f8ae41e352c95eab248cf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17cd00d7_9d50242d",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-07T17:49:59Z",
+      "side": 1,
+      "message": "I set the shards for the tests based on the same ratio we have for other the minor_mc bot (which had twice as many shards for test262 as the other tests).",
+      "range": {
+        "startLine": 407,
+        "startChar": 27,
+        "endLine": 407,
+        "endChar": 33
+      },
+      "revId": "a2c92cd23adea4b6a9f8ae41e352c95eab248cf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
