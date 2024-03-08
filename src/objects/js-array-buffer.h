@@ -154,8 +154,6 @@ class JSArrayBuffer
   DECL_PRINTER(JSArrayBuffer)
   DECL_VERIFIER(JSArrayBuffer)
 
-  static constexpr int kEndOfTaggedFieldsOffset = kRawByteLengthOffset;
-
   static const int kSizeWithEmbedderFields =
       kHeaderSize +
       v8::ArrayBuffer::kEmbedderFieldCount * kEmbedderDataSlotSize;
@@ -267,8 +265,6 @@ class JSArrayBufferView
   DECL_BOOLEAN_ACCESSORS(is_length_tracking)
   DECL_BOOLEAN_ACCESSORS(is_backed_by_rab)
   inline bool IsVariableLength() const;
-
-  static constexpr int kEndOfTaggedFieldsOffset = kRawByteOffsetOffset;
 
   static_assert(IsAligned(kRawByteOffsetOffset, kUIntptrSize));
   static_assert(IsAligned(kRawByteLengthOffset, kUIntptrSize));
