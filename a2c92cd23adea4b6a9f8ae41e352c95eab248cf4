@@ -80,6 +80,24 @@
       "message": "drop mjsunit, that\u0027s already part of v8testing",
       "revId": "a2c92cd23adea4b6a9f8ae41e352c95eab248cf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6650ef83_83a51991",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-08T07:19:06Z",
+      "side": 1,
+      "message": "Done\nDropped it from the minor_ms bot as well",
+      "parentUuid": "f2720b7b_b1385df3",
+      "revId": "a2c92cd23adea4b6a9f8ae41e352c95eab248cf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
