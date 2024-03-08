@@ -255,7 +255,8 @@ class MemoryAllocator {
   // Used to store all data about MemoryChunk allocation, e.g. in
   // AllocateUninitializedChunk.
   struct MemoryChunkAllocationResult {
-    void* start;
+    void* chunk;
+    void* optional_metadata;
     size_t size;
     size_t area_start;
     size_t area_end;
