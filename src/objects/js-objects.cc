@@ -37,6 +37,7 @@
 #include "src/objects/js-atomics-synchronization.h"
 #include "src/objects/lookup.h"
 #include "src/objects/map-updater.h"
+#include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/tagged.h"
 #ifdef V8_INTL_SUPPORT
@@ -2360,7 +2361,8 @@ bool JSReceiver::IsCodeLike(Isolate* isolate) const {
 // static
 MaybeHandle<JSObject> JSObject::New(Handle<JSFunction> constructor,
                                     Handle<JSReceiver> new_target,
-                                    Handle<AllocationSite> site) {
+                                    Handle<AllocationSite> site,
+                                    bool can_have_cpp_wrapper) {
   // If called through new, new.target can be:
   // - a subclass of constructor,
   // - a proxy wrapper around constructor, or
@@ -2379,7 +2381,8 @@ MaybeHandle<JSObject> JSObject::New(Handle<JSFunction> constructor,
       JSFunction::GetDerivedMap(isolate, constructor, new_target), JSObject);
   constexpr int initial_capacity = PropertyDictionary::kInitialCapacity;
   Handle<JSObject> result = isolate->factory()->NewFastOrSlowJSObjectFromMap(
-      initial_map, initial_capacity, AllocationType::kYoung, site);
+      initial_map, initial_capacity, AllocationType::kYoung, site,
+      can_have_cpp_wrapper);
   return result;
 }
 
@@ -2625,7 +2628,8 @@ int JSObject::GetHeaderSize(InstanceType type,
       // Special type check for API Objects because they are in a large variable
       // instance type range.
       if (InstanceTypeChecker::IsJSApiObject(type)) {
-        return JSObject::kHeaderSize;
+        return JSObjectWithEmbedderSlotsOrJSSpecialObjectBodyDescriptor::
+            kHeaderSize;
       }
       FATAL("unexpected instance type: %s\n", NonAPIInstanceTypeToString(type));
     }

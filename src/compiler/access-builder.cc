@@ -11,6 +11,7 @@
 #include "src/objects/heap-number.h"
 #include "src/objects/js-collection.h"
 #include "src/objects/js-generator.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/ordered-hash-table.h"
 #include "src/objects/source-text-module.h"
@@ -142,6 +143,23 @@ FieldAccess AccessBuilder::ForJSObjectOffset(
                         Type::NonInternal(), MachineType::AnyTagged(),
                         write_barrier_kind,  "JSObjectOffset"};
   return access;
+}
+
+// static
+FieldAccess AccessBuilder::ForJSObjectWithEmbedderDataSlotsCppHeapWrappable() {
+  return {
+      kTaggedBase,
+      JSObjectWithEmbedderSlots::kCppHeapWrappableOffset,
+      Handle<Name>(),
+      OptionalMapRef(),
+      Type::ExternalPointer(),
+      MachineType::Pointer(),
+      kNoWriteBarrier,
+      "CppHeapWrappable",
+      ConstFieldInfo::None(),
+      false,
+      kExternalObjectValueTag,
+  };
 }
 
 // static

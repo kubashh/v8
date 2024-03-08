@@ -14,6 +14,7 @@
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/pretenuring-handler-inl.h"
 #include "src/heap/scavenger.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/map.h"
 #include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/objects-inl.h"
@@ -543,7 +544,11 @@ int ScavengeVisitor::VisitJSArrayBuffer(Tagged<Map> map,
 
 int ScavengeVisitor::VisitJSApiObject(Tagged<Map> map,
                                       Tagged<JSObject> object) {
-  return VisitJSObject(map, object);
+  int size = JSObjectWithEmbedderSlotsOrJSSpecialObjectBodyDescriptor::SizeOf(
+      map, object);
+  JSObjectWithEmbedderSlotsOrJSSpecialObjectBodyDescriptor::IterateBody(
+      map, object, size, this);
+  return size;
 }
 
 int ScavengeVisitor::VisitEphemeronHashTable(Tagged<Map> map,
