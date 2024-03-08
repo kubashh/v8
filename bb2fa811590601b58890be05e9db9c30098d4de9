@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "792b220e_89c61bcc",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-08T17:07:26Z",
+      "side": 1,
+      "message": "Hmmm, I wonder what the issue is here with the explicit specialization..\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5353507?checksRunsSelected\u003dv8_linux64_gcc_light_compile_dbg\u0026tab\u003dchecks\n\n(Just note: I tried to leave the Generate function definitions outside of the class, but then I had issues with partial template specialisation, as bothe the class WasmGenerator and the method Generate is templatized)",
+      "range": {
+        "startLine": 2124,
+        "startChar": 2,
+        "endLine": 2124,
+        "endChar": 13
+      },
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2ee0f6b_5b055594",
         "filename": "src/wasm/fuzzing/random-module-generation.cc",
         "patchSetId": 6
@@ -88,6 +111,24 @@
       "writtenOn": "2024-03-08T16:29:32Z",
       "side": 1,
       "message": "The syntax used in the runtime function makes the arguments more clear: `GenerateRandomWasmModule\u003c{.generate_simd \u003d true}\u003e`. I think we could just write the same here.",
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "481e6999_50c54683",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-08T17:07:26Z",
+      "side": 1,
+      "message": "Well, seems like the node_ci_linux64_rel doesn\u0027t like it 😞",
+      "parentUuid": "a6aecbd7_735f39ea",
       "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
