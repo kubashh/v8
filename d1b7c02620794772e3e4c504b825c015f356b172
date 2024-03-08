@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe45f650_50be700b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-08T16:34:27Z",
+      "side": 1,
+      "message": "Can you have an early look to check the used approach for adding the field in the object hierarchy? (The GC crash indicates that I am not covering all initialization paths.)",
+      "revId": "d1b7c02620794772e3e4c504b825c015f356b172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
