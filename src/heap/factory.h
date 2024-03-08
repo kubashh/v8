@@ -622,7 +622,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       DirectHandle<Map> map, int number_of_slow_properties,
       AllocationType allocation = AllocationType::kYoung,
       DirectHandle<AllocationSite> allocation_site =
-          DirectHandle<AllocationSite>::null());
+          DirectHandle<AllocationSite>::null(),
+      bool can_have_cpp_wrapper = false);
   inline Handle<JSObject> NewFastOrSlowJSObjectFromMap(DirectHandle<Map> map);
   // Allocates and initializes a new JavaScript object with the given
   // {prototype} and {properties}. The newly created object will be
@@ -1271,6 +1272,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // Initializes JSObject body starting at given offset.
   void InitializeJSObjectBody(Tagged<JSObject> obj, Tagged<Map> map,
                               int start_offset);
+  void InitializeCppHeapWrapper(Tagged<JSObject> obj);
 
   Handle<WeakArrayList> NewUninitializedWeakArrayList(
       int capacity, AllocationType allocation = AllocationType::kYoung);
