@@ -617,6 +617,12 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(JSExternalObject)
 EXTERNAL_POINTER_ACCESSORS(JSExternalObject, value, void*, kValueOffset,
                            kExternalObjectValueTag)
 
+EXTERNAL_POINTER_ACCESSORS(JSObjectWithEmbedderSlots, cpp_heap_wrappable, void*,
+                           kCppHeapWrappableOffset, kExternalObjectValueTag)
+
+EXTERNAL_POINTER_ACCESSORS(JSSpecialObject, cpp_heap_wrappable, void*,
+                           kCppHeapWrappableOffset, kExternalObjectValueTag)
+
 bool JSMessageObject::DidEnsureSourcePositionsAvailable() const {
   return shared_info() == Smi::zero();
 }
