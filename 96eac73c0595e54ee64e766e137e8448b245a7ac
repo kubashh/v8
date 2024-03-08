@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28a6180e_a1212020",
+        "filename": "src/baseline/arm/baseline-assembler-arm-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-08T19:28:38Z",
+      "side": 0,
+      "message": "I admit I\u0027m surprised that there\u0027s no uses of `AddSmi` for rhs values other than 1.",
+      "revId": "96eac73c0595e54ee64e766e137e8448b245a7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
