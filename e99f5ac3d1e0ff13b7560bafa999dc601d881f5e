@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e20b0bcd_72a1678d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-03-08T15:48:56Z",
+      "side": 1,
+      "message": "ptal,\nthe same thing for battery saver (split off because I want to try to merge the other one)",
+      "revId": "e99f5ac3d1e0ff13b7560bafa999dc601d881f5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
