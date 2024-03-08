@@ -387,13 +387,16 @@ class PipelineData {
   Graph* graph() const { return graph_; }
   void set_graph(Graph* graph) { graph_ = graph; }
   turboshaft::PipelineData GetTurboshaftPipelineData(
-      turboshaft::TurboshaftPipelineKind kind) {
+      turboshaft::TurboshaftPipelineKind kind,
+      turboshaft::Graph* graph = nullptr) {
     if (!ts_data_.has_value()) {
       ts_data_.emplace(kind, info_, schedule_, graph_zone_, info_->zone(),
                        broker_, isolate_, source_positions_, node_origins_,
                        sequence_, frame_, assembler_options_,
                        &max_unoptimized_frame_height_,
-                       &max_pushed_argument_count_, instruction_zone_);
+                       &max_pushed_argument_count_, instruction_zone_, graph);
+    } else {
+      DCHECK_NULL(graph);
     }
     return ts_data_.value();
   }
@@ -3568,6 +3571,55 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   } else {
     return second_pipeline.FinalizeCode();
   }
+}
+
+MaybeHandle<Code> Pipeline::GenerateCodeForTurboshaftBuiltin(
+    Isolate* isolate, CallDescriptor* call_descriptor, turboshaft::Graph* graph,
+    CodeKind kind, const char* debug_name, Builtin builtin) {
+  Zone* graph_zone = graph->graph_zone();
+  OptimizedCompilationInfo info(base::CStrVector(debug_name), graph_zone, kind);
+  info.set_builtin(builtin);
+
+  turboshaft::Tracing::Scope tracing_scope(&info);
+
+  ZoneStats zone_stats(isolate->allocator());
+  std::unique_ptr<TurbofanPipelineStatistics> pipeline_statistics(
+      CreatePipelineStatistics(Handle<Script>::null(), &info, isolate,
+                               &zone_stats));
+
+  PipelineData data(&zone_stats, isolate, &info, pipeline_statistics.get());
+
+  UnparkedScopeIfNeeded scope(data.broker(),
+                              v8_flags.turboshaft_trace_reduction);
+
+  PipelineImpl pipeline(&data);
+  base::Optional<turboshaft::PipelineData::Scope> turboshaft_pipeline(
+      data.GetTurboshaftPipelineData(turboshaft::TurboshaftPipelineKind::kCSA,
+                                     graph));
+
+  pipeline.Run<turboshaft::CsaEarlyMachineOptimizationPhase>();
+  pipeline.Run<turboshaft::CsaLoadEliminationPhase>();
+  pipeline.Run<turboshaft::CsaLateEscapeAnalysisPhase>();
+  pipeline.Run<turboshaft::CsaBranchEliminationPhase>();
+  pipeline.Run<turboshaft::CsaOptimizePhase>();
+
+  pipeline.Run<turboshaft::CodeEliminationAndSimplificationPhase>();
+
+  // DecompressionOptimization has to run as the last phase because it
+  // constructs an (slightly) invalid graph that mixes Tagged and Compressed
+  // representations.
+  pipeline.Run<turboshaft::DecompressionOptimizationPhase>();
+
+  Linkage linkage(call_descriptor);
+  pipeline.SelectInstructionsTurboshaft(&linkage);
+  turboshaft_pipeline.reset();
+  data.DeleteGraphZone();
+
+  pipeline.AllocateRegisters(linkage.GetIncomingDescriptor(), false);
+
+  pipeline.AssembleCode(&linkage);
+
+  return pipeline.FinalizeCode(false);
 }
 
 struct BlockStartsAsJSON {

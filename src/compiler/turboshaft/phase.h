@@ -46,7 +46,8 @@ class V8_EXPORT_PRIVATE PipelineData
       NodeOriginTable*& node_origins, InstructionSequence*& sequence,
       Frame*& frame, AssemblerOptions& assembler_options,
       size_t* address_of_max_unoptimized_frame_height,
-      size_t* address_of_max_pushed_argument_count, Zone*& instruction_zone)
+      size_t* address_of_max_pushed_argument_count, Zone*& instruction_zone,
+      turboshaft::Graph* graph = nullptr)
       : pipeline_kind_(pipeline_kind),
         info_(info),
         schedule_(schedule),
@@ -64,7 +65,8 @@ class V8_EXPORT_PRIVATE PipelineData
         address_of_max_pushed_argument_count_(
             address_of_max_pushed_argument_count),
         instruction_zone_(instruction_zone),
-        graph_(graph_zone_->New<turboshaft::Graph>(graph_zone_)) {}
+        graph_(graph ? graph
+                     : graph_zone_->New<turboshaft::Graph>(graph_zone_)) {}
 
   bool has_graph() const { return graph_ != nullptr; }
   turboshaft::Graph& graph() const { return *graph_; }

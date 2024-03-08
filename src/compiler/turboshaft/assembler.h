@@ -2514,6 +2514,10 @@ class TurboshaftAssemblerOpInterface
     }
     return cached_param;
   }
+  template <typename T>
+  V<T> Parameter(int index, const char* debug_name = nullptr) {
+    return Parameter(index, V<T>::rep, debug_name);
+  }
   OpIndex OsrValue(int index) { return ReduceIfReachableOsrValue(index); }
   void Return(OpIndex pop_count, base::Vector<const OpIndex> return_values) {
     ReduceIfReachableReturn(pop_count, return_values);
