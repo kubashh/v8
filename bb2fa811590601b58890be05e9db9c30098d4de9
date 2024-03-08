@@ -16,6 +16,80 @@
       "message": "Hey Clemens!\nCould you please take a look?\nAs the CL description says, this is basically just refactoring/moving the code.",
       "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fde2bf47_4bfd1ea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-08T16:29:32Z",
+      "side": 1,
+      "message": "Very nice! Great idea to split it and land this refactoring first. I trust that you didn\u0027t modify anything in the moved code :) \n\nJust a few minor nits, otherwise LGTM!",
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2ee0f6b_5b055594",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-08T16:29:32Z",
+      "side": 1,
+      "message": "Same here about the other syntax for the options struct.",
+      "range": {
+        "startLine": 4033,
+        "startChar": 26,
+        "endLine": 4034,
+        "endChar": 14
+      },
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b944928_59708819",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-08T16:29:32Z",
+      "side": 1,
+      "message": "Let\u0027s say \"MVP\" instead of \"standard\". To be more clear.",
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6aecbd7_735f39ea",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-08T16:29:32Z",
+      "side": 1,
+      "message": "The syntax used in the runtime function makes the arguments more clear: `GenerateRandomWasmModule\u003c{.generate_simd \u003d true}\u003e`. I think we could just write the same here.",
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
