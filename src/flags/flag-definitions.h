@@ -701,6 +701,8 @@ DEFINE_MAYBE_BOOL(
 // Flags to experiment with the new efficiency mode
 DEFINE_BOOL(efficiency_mode_for_tiering_heuristics, false,
             "Use efficiency mode in tiering heuristics.")
+DEFINE_BOOL(efficiency_mode_synchronous_optimization, false,
+            "Use synchronous optimization in efficiency mode.")
 DEFINE_BOOL(efficiency_mode_disable_turbofan, true,
             "Defer tier-up to turbofan while in efficiency mode.")
 DEFINE_INT(efficiency_mode_delay_turbofan, 15000,

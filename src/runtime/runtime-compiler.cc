@@ -462,7 +462,8 @@ Tagged<Object> CompileOptimizedOSR(Isolate* isolate,
   const ConcurrencyMode mode =
       V8_LIKELY(isolate->concurrent_recompilation_enabled() &&
                 v8_flags.concurrent_osr &&
-                !isolate->UseEfficiencyModeForTiering())
+                !(v8_flags.efficiency_mode_synchronous_optimization &&
+                  isolate->UseEfficiencyModeForTiering()))
           ? ConcurrencyMode::kConcurrent
           : ConcurrencyMode::kSynchronous;
 

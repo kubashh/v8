@@ -349,8 +349,9 @@ void TieringManager::MaybeOptimizeFrame(Tagged<JSFunction> function,
     }
   }
 
-  if (isolate_->UseEfficiencyModeForTiering() &&
-      d.code_kind != CodeKind::TURBOFAN) {
+  if (V8_UNLIKELY(v8_flags.efficiency_mode_synchronous_optimization &&
+                  isolate_->UseEfficiencyModeForTiering() &&
+                  d.code_kind != CodeKind::TURBOFAN)) {
     d.concurrency_mode = ConcurrencyMode::kSynchronous;
   }
 
