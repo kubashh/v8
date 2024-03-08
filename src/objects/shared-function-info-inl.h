@@ -142,7 +142,7 @@ void SharedFunctionInfo::SetData(Tagged<Object> value, ReleaseStoreTag tag,
 #ifdef V8_ENABLE_SANDBOX
 void SharedFunctionInfo::clear_function_data(ReleaseStoreTag) {
   TaggedField<Object, kFunctionDataOffset>::Release_Store(*this,
-                                                          Smi::FromInt(-1));
+                                                          Smi::FromInt(-2));
 }
 
 void SharedFunctionInfo::clear_trusted_function_data(ReleaseStoreTag) {
@@ -978,6 +978,7 @@ Builtin SharedFunctionInfo::builtin_id() const {
   // The builtin id is read from the heap and so must be assumed to be
   // untrusted in the sandbox attacker model. As it is considered trusted by
   // e.g. `GetCode` (when fetching the code for this SFI), we validate it here.
+  CHECK_GE(id, 0);
   SBXCHECK(Builtins::IsBuiltinId(id));
   return Builtins::FromInt(id);
 }
