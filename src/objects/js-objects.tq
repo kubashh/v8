@@ -46,7 +46,9 @@ extern class JSExternalObject extends JSObject {
 
 // A JSObject that may contain EmbedderDataSlots.
 @abstract
-extern class JSObjectWithEmbedderSlots extends JSObject {}
+extern class JSObjectWithEmbedderSlots extends JSObject {
+  cpp_heap_wrappable: ExternalPointer;
+}
 
 @abstract
 @lowestInstanceTypeWithinParentClassRange
@@ -56,7 +58,10 @@ extern class JSCustomElementsObject extends JSObject {}
 // JSObjectWithEmbedderSlots due to type id constraints.
 @abstract
 @lowestInstanceTypeWithinParentClassRange
-extern class JSSpecialObject extends JSCustomElementsObject {}
+extern class JSSpecialObject extends JSCustomElementsObject {
+  // Mirror the same class hierarchy as with JSObjectWithEmbedderSlots.
+  cpp_heap_wrappable: ExternalPointer;
+}
 
 macro GetDerivedMap(
     implicit context: Context)(target: JSFunction,
