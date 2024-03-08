@@ -413,9 +413,13 @@ void MemoryAllocator::PerformFreeMemory(MutablePageMetadata* chunk_metadata) {
   DCHECK(!chunk->InReadOnlySpace());
   chunk_metadata->ReleaseAllAllocatedMemory();
 
-  VirtualMemory* reservation = chunk_metadata->reserved_memory();
-  DCHECK(reservation->IsReserved());
-  reservation->Free();
+  DCHECK(chunk_metadata->reserved_memory()->IsReserved());
+  DCHECK(!chunk->InReadOnlySpace());
+  if (chunk->IsLargePage()) {
+    delete reinterpret_cast<LargePageMetadata*>(chunk_metadata);
+  } else {
+    delete reinterpret_cast<PageMetadata*>(chunk_metadata);
+  }
 }
 
 void MemoryAllocator::Free(MemoryAllocator::FreeMode mode,
@@ -462,11 +466,10 @@ PageMetadata* MemoryAllocator::AllocatePage(
 
   if (!chunk_info) return nullptr;
 
-  PageMetadata* page = new (chunk_info->start) PageMetadata(
+  PageMetadata* page = new PageMetadata(
       isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
-      chunk_info->area_end, std::move(chunk_info->reservation), executable);
-
-  MemoryChunk* chunk = page->Chunk();
+      chunk_info->area_end, std::move(chunk_info->reservation));
+  MemoryChunk* chunk = new (chunk_info->start) MemoryChunk(page, executable);
 
 #ifdef DEBUG
   if (chunk->executable()) RegisterExecutableMemoryChunk(page);
@@ -485,9 +488,16 @@ ReadOnlyPageMetadata* MemoryAllocator::AllocateReadOnlyPage(
       AllocateUninitializedChunkAt(space, size, NOT_EXECUTABLE, hint,
                                    PageSize::kRegular);
   if (!chunk_info) return nullptr;
-  return new (chunk_info->start) ReadOnlyPageMetadata(
-      isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
-      chunk_info->area_end, std::move(chunk_info->reservation));
+  Address metadata_address =
+      reinterpret_cast<Address>(chunk_info->start) + sizeof(MemoryChunk);
+  ReadOnlyPageMetadata* page =
+      new (reinterpret_cast<ReadOnlyPageMetadata*>(metadata_address))
+          ReadOnlyPageMetadata(isolate_->heap(), space, chunk_info->size,
+                               chunk_info->area_start, chunk_info->area_end,
+                               std::move(chunk_info->reservation));
+
+  new (chunk_info->start) MemoryChunk(page);
+  return page;
 }
 
 std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping>
@@ -504,10 +514,10 @@ LargePageMetadata* MemoryAllocator::AllocateLargePage(
 
   if (!chunk_info) return nullptr;
 
-  LargePageMetadata* page = new (chunk_info->start) LargePageMetadata(
+  LargePageMetadata* page = new LargePageMetadata(
       isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
       chunk_info->area_end, std::move(chunk_info->reservation), executable);
-  MemoryChunk* chunk = page->Chunk();
+  MemoryChunk* chunk = new (chunk_info->start) MemoryChunk(page, executable);
 
 #ifdef DEBUG
   if (chunk->executable()) RegisterExecutableMemoryChunk(page);
@@ -519,10 +529,10 @@ LargePageMetadata* MemoryAllocator::AllocateLargePage(
 
 base::Optional<MemoryAllocator::MemoryChunkAllocationResult>
 MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
-  MemoryChunkMetadata* chunk = pool()->TryGetPooled();
-  if (chunk == nullptr) return {};
+  MemoryChunkMetadata* chunk_metadata = pool()->TryGetPooled();
+  if (chunk_metadata == nullptr) return {};
   const int size = MutablePageMetadata::kPageSize;
-  const Address start = chunk->ChunkAddress();
+  const Address start = chunk_metadata->ChunkAddress();
   const Address area_start =
       start +
       MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(space->identity());
@@ -537,7 +547,8 @@ MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
 
   size_ += size;
   return MemoryChunkAllocationResult{
-      chunk, size, area_start, area_end, std::move(reservation),
+      chunk_metadata->Chunk(), size, area_start, area_end,
+      std::move(reservation),
   };
 }
 
