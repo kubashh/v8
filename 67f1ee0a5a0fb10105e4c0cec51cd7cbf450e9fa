@@ -16,6 +16,23 @@
       "message": "PTAL! :)",
       "revId": "67f1ee0a5a0fb10105e4c0cec51cd7cbf450e9fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b92ca1f_8f82e649",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-11T15:14:20Z",
+      "side": 1,
+      "message": "Looks good to me, but not to the bots...",
+      "revId": "67f1ee0a5a0fb10105e4c0cec51cd7cbf450e9fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
