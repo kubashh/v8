@@ -24,7 +24,7 @@
 #include <immintrin.h>
 #endif
 
-#ifdef V8_HOST_ARCH_ARM64
+#ifdef V8_TARGET_ARCH_ARM64
 // We use Neon only on 64-bit ARM (because on 32-bit, some instructions and some
 // types are not available). Note that ARM64 is guaranteed to have Neon.
 #define NEON64
@@ -425,10 +425,6 @@ uintptr_t ArrayIndexOfIncludesDouble(Address array_start, uintptr_t array_len,
   return ArrayIndexOfIncludes<ArrayIndexOfIncludesKind::DOUBLE>(
       array_start, array_len, from_index, search_element);
 }
-
-#ifdef NEON64
-#undef NEON64
-#endif
 
 }  // namespace internal
 }  // namespace v8

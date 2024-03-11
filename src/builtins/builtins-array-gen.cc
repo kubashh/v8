@@ -638,11 +638,11 @@ class ArrayIncludesIndexofAssembler : public CodeStubAssembler {
   const int kSIMDThreshold = 48;
 
   // For now, we can vectorize if:
-  //   - SSE3/AVX are present (x86/x64). Note that if __AVX__ is defined, then
-  //     __SSE3__ will be as well, so we just check __SSE3__.
+  //   - SSE3/AVX are present (x86/x64).
   //   - Neon is present and the architecture is 64-bit (because Neon on 32-bit
   //     architecture lacks some instructions).
-#if defined(__SSE3__) || defined(V8_HOST_ARCH_ARM64)
+#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_IA32) || \
+    defined(V8_TARGET_ARCH_ARM64)
   const bool kCanVectorize = true;
 #else
   const bool kCanVectorize = false;
