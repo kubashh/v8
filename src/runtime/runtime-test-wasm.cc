@@ -730,9 +730,10 @@ RUNTIME_FUNCTION(Runtime_WasmGenerateRandomModule) {
     }
   }
 
+  constexpr wasm::fuzzing::WasmModuleGenerationOptions options = {true};
   base::Vector<const uint8_t> module_bytes =
-      wasm::fuzzing::GenerateRandomWasmModule(&temporary_zone,
-                                              base::VectorOf(input_bytes));
+      wasm::fuzzing::GenerateRandomWasmModule<options>(
+          &temporary_zone, base::VectorOf(input_bytes));
 
   if (module_bytes.empty()) return ReadOnlyRoots(isolate).undefined_value();
 
