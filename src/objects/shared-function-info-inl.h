@@ -140,9 +140,10 @@ void SharedFunctionInfo::SetData(Tagged<Object> value, ReleaseStoreTag tag,
 }
 
 #ifdef V8_ENABLE_SANDBOX
+constexpr int kClearedFunctionDataValue = -1;
 void SharedFunctionInfo::clear_function_data(ReleaseStoreTag) {
-  TaggedField<Object, kFunctionDataOffset>::Release_Store(*this,
-                                                          Smi::FromInt(-1));
+  TaggedField<Object, kFunctionDataOffset>::Release_Store(
+      *this, Smi::FromInt(kClearedFunctionDataValue));
 }
 
 void SharedFunctionInfo::clear_trusted_function_data(ReleaseStoreTag) {
@@ -968,6 +969,13 @@ bool SharedFunctionInfo::HasBuiltinId() const {
       kNullIndirectPointerHandle) {
     return false;
   }
+  // It can happen that SetData is called on another thread at this point and
+  // transitions from function_data to trusted_function_data. In this case,
+  // we'll see the kClearedFunctionDataValue Smi value here and so must be able
+  // to handle that, for example by checking that the id is a valid builtin id.
+  static_assert(!Builtins::IsBuiltinId(kClearedFunctionDataValue));
+  Tagged<Object> data = function_data(kAcquireLoad);
+  return IsSmi(data) && Builtins::IsBuiltinId(Smi::ToInt(data));
 #endif
   return IsSmi(function_data(kAcquireLoad));
 }
