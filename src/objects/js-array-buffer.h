@@ -154,8 +154,6 @@ class JSArrayBuffer
   DECL_PRINTER(JSArrayBuffer)
   DECL_VERIFIER(JSArrayBuffer)
 
-  static constexpr int kEndOfTaggedFieldsOffset = kRawByteLengthOffset;
-
   static const int kSizeWithEmbedderFields =
       kHeaderSize +
       v8::ArrayBuffer::kEmbedderFieldCount * kEmbedderDataSlotSize;
@@ -251,6 +249,8 @@ class JSArrayBufferView
     : public TorqueGeneratedJSArrayBufferView<JSArrayBufferView,
                                               JSObjectWithEmbedderSlots> {
  public:
+  class BodyDescriptor;
+
   // [byte_offset]: offset of typed array in bytes.
   DECL_PRIMITIVE_ACCESSORS(byte_offset, size_t)
 
@@ -267,8 +267,6 @@ class JSArrayBufferView
   DECL_BOOLEAN_ACCESSORS(is_length_tracking)
   DECL_BOOLEAN_ACCESSORS(is_backed_by_rab)
   inline bool IsVariableLength() const;
-
-  static constexpr int kEndOfTaggedFieldsOffset = kRawByteOffsetOffset;
 
   static_assert(IsAligned(kRawByteOffsetOffset, kUIntptrSize));
   static_assert(IsAligned(kRawByteLengthOffset, kUIntptrSize));
