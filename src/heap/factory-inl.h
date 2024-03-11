@@ -71,11 +71,16 @@ Handle<JSArray> Factory::NewJSArrayWithElements(
 
 Handle<JSObject> Factory::NewFastOrSlowJSObjectFromMap(
     DirectHandle<Map> map, int number_of_slow_properties,
-    AllocationType allocation, DirectHandle<AllocationSite> allocation_site) {
-  return map->is_dictionary_map()
-             ? NewSlowJSObjectFromMap(map, number_of_slow_properties,
-                                      allocation, allocation_site)
-             : NewJSObjectFromMap(map, allocation, allocation_site);
+    AllocationType allocation, DirectHandle<AllocationSite> allocation_site,
+    bool can_have_cpp_wrapper) {
+  auto js_object = map->is_dictionary_map()
+                       ? NewSlowJSObjectFromMap(map, number_of_slow_properties,
+                                                allocation, allocation_site)
+                       : NewJSObjectFromMap(map, allocation, allocation_site);
+  if (can_have_cpp_wrapper && IsJSApiObject(*js_object)) {
+    InitializeCppHeapWrapper(*js_object);
+  }
+  return js_object;
 }
 
 Handle<JSObject> Factory::NewFastOrSlowJSObjectFromMap(DirectHandle<Map> map) {
