@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59fb4d0_277a3ae6",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2093,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "Future reference if people wonder why it is written like this",
+      "range": {
+        "startLine": 2086,
+        "startChar": 2,
+        "endLine": 2093,
+        "endChar": 27
+      },
+      "revId": "975b9232fa46e7bf839157323894b1a3afbfe705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eca1694_09490565",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2095,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "_ _ _ _ _ _ START _ _ _ _ _ _\n\nJust copied the bodies",
+      "range": {
+        "startLine": 2095,
+        "startChar": 2,
+        "endLine": 2095,
+        "endChar": 3
+      },
+      "revId": "975b9232fa46e7bf839157323894b1a3afbfe705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac6496d_d38ae5d2",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2870,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "_ _ _ _ _ _ END _ _ _ _ _ _\n\nJust copied the body",
+      "range": {
+        "startLine": 2870,
+        "startChar": 2,
+        "endLine": 2870,
+        "endChar": 3
+      },
+      "revId": "975b9232fa46e7bf839157323894b1a3afbfe705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfd6bc01_9f034117",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "_ _ _ _ _ _ START _ _ _ _ _ _\n\nJust copied the body",
+      "range": {
+        "startLine": 2929,
+        "startChar": 2,
+        "endLine": 2929,
+        "endChar": 3
+      },
+      "revId": "975b9232fa46e7bf839157323894b1a3afbfe705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f97bc0a_b1cc6851",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3255,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "_ _ _ _ _ _ END _ _ _ _ _ _\n\nJust copied the body",
+      "range": {
+        "startLine": 3255,
+        "startChar": 2,
+        "endLine": 3255,
+        "endChar": 3
+      },
+      "revId": "975b9232fa46e7bf839157323894b1a3afbfe705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

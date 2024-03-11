@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b685d664_4d353bd8",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "resolving",
+      "parentUuid": "792b220e_89c61bcc",
+      "range": {
+        "startLine": 2124,
+        "startChar": 2,
+        "endLine": 2124,
+        "endChar": 13
+      },
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2ee0f6b_5b055594",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e761a58_02b97318",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4034,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "Changed all of them to initialise the struct before the function call.",
+      "parentUuid": "d2ee0f6b_5b055594",
+      "range": {
+        "startLine": 4033,
+        "startChar": 26,
+        "endLine": 4034,
+        "endChar": 14
+      },
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b944928_59708819",
@@ -94,6 +142,24 @@
       "writtenOn": "2024-03-08T16:29:32Z",
       "side": 1,
       "message": "Let\u0027s say \"MVP\" instead of \"standard\". To be more clear.",
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f0b763c_a7b34070",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b944928_59708819",
       "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -129,6 +195,24 @@
       "side": 1,
       "message": "Well, seems like the node_ci_linux64_rel doesn\u0027t like it 😞",
       "parentUuid": "a6aecbd7_735f39ea",
+      "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee135754_070e33c2",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-11T19:59:16Z",
+      "side": 1,
+      "message": "changed to initialise before the function call.",
+      "parentUuid": "481e6999_50c54683",
       "revId": "bb2fa811590601b58890be05e9db9c30098d4de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
