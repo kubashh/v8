@@ -23,6 +23,7 @@ namespace internal {
 // Sets the embedder fields to 0 for a TypedArray which is under construction.
 void TypedArrayBuiltinsAssembler::SetupTypedArrayEmbedderFields(
     TNode<JSTypedArray> holder) {
+  InitializeJSObjectWithEmbedderSlotsCppHeapWrapperPtr(holder);
   for (int offset = JSTypedArray::kHeaderSize;
        offset < JSTypedArray::kSizeWithEmbedderFields; offset += kTaggedSize) {
     // TODO(v8:10391, saelo): Handle external pointers in EmbedderDataSlot

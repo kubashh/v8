@@ -21,6 +21,7 @@ namespace internal {
 
 void PromiseBuiltinsAssembler::ZeroOutEmbedderOffsets(
     TNode<JSPromise> promise) {
+  InitializeJSObjectWithEmbedderSlotsCppHeapWrapperPtr(promise);
   for (int offset = JSPromise::kHeaderSize;
        offset < JSPromise::kSizeWithEmbedderFields; offset += kTaggedSize) {
     StoreObjectFieldNoWriteBarrier(promise, offset, SmiConstant(Smi::zero()));
