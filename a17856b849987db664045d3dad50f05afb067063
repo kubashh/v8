@@ -239,6 +239,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd6278b4_bf154b4b",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-11T23:58:00Z",
+      "side": 1,
+      "message": "The synthetic context for `Promise.all` _is_ garbage collected. You should be able to use the empty scope info (`RootIndex::kEmptyScopeInfo`).\n\nLooking through the codebase, it seems like there\u0027s no way in C++ to do this. It basically involves porting the Torque `AllocateSyntheticFunctionContext` macro [1] to C++. That macro allocates a synthetic context (i.e. not tied to an actual JS function with source) with a number of extra slots to hold internal state.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/contexts.tq;l\u003d46-58;drc\u003d8fcd3f809ba5c71f7a29bc6623c1f93a9eac72fe",
+      "parentUuid": "9ae9da23_8157e3a8",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 77
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "162b61eb_d6d7ff5f",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 24
