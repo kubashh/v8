@@ -16,6 +16,24 @@
       "message": "Do you know what the setter is?",
       "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2a56ec_236e42f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-11T09:44:42Z",
+      "side": 1,
+      "message": "You mean the code that calls `SetData` in this case? I think the only scenario where we do the untrusted -\u003e trusted function data transition is after having uncompiled an SFI (so it now contains a `UncompiledData`), then recompiling it again. I guess in that case it\u0027d go via `set_bytecode_array` -\u003e `SetData`. Is that what you mean?\n\nIt also happens initially I think (The SFI is initialized with the kInvalidBuiltinId: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/shared-function-info.cc;l\u003d41) but I guess at that point the SFI isn\u0027t yet published so a compilation job couldn\u0027t see it.",
+      "parentUuid": "57fe719c_9df12546",
+      "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
