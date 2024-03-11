@@ -22,6 +22,30 @@
       },
       "revId": "c81bb59eed8e05a803df5db7d26af77447f50d64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b301234_70082865",
+        "filename": "src/codegen/bailout-reason.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-11T09:39:07Z",
+      "side": 1,
+      "message": "Oh that\u0027s nice, thanks! It still needs `std::underlying_type_t` it seems, but that\u0027s still better than checking for uint8_t.",
+      "parentUuid": "07541adc_4480fb3c",
+      "range": {
+        "startLine": 17,
+        "startChar": 21,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "c81bb59eed8e05a803df5db7d26af77447f50d64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
