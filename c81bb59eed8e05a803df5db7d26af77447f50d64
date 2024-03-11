@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07541adc_4480fb3c",
+        "filename": "src/codegen/bailout-reason.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-11T09:32:26Z",
+      "side": 1,
+      "message": "also valid would be `std::is_unsigned_v\u003cBailoutReason\u003e`\n```suggestion\n  static_assert(std::is_unsigned_v\u003cBailoutReason\u003e);\n```",
+      "range": {
+        "startLine": 17,
+        "startChar": 21,
+        "endLine": 17,
+        "endChar": 30
+      },
+      "revId": "c81bb59eed8e05a803df5db7d26af77447f50d64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
