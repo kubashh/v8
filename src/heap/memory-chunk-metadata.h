@@ -60,8 +60,8 @@ class MemoryChunkMetadata {
   }
 
   MemoryChunkMetadata(Heap* heap, BaseSpace* space, size_t chunk_size,
-                   Address area_start, Address area_end,
-                   VirtualMemory reservation);
+                      Address area_start, Address area_end,
+                      VirtualMemory reservation);
 
   Address ChunkAddress() const { return Chunk()->address(); }
   Address MetadataAddress() const { return reinterpret_cast<Address>(this); }
@@ -92,6 +92,8 @@ class MemoryChunkMetadata {
 
   bool InOldSpace() const;
   V8_EXPORT_PRIVATE bool InLargeObjectSpace() const;
+  bool InSharedSpace() const;
+  bool InTrustedSpace() const;
 
   bool IsWritable() const {
     // If this is a read-only space chunk but heap_ is non-null, it has not yet
@@ -139,8 +141,6 @@ class MemoryChunkMetadata {
   }
 
  protected:
-  MemoryChunk chunk_;
-
   // Overall size of the chunk, including the header and guards.
   size_t size_;
 
