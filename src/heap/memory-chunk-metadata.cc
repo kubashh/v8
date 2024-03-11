@@ -19,8 +19,7 @@ MemoryChunkMetadata::MemoryChunkMetadata(Heap* heap, BaseSpace* space,
                                          size_t chunk_size, Address area_start,
                                          Address area_end,
                                          VirtualMemory reservation)
-    : chunk_(this),
-      size_(chunk_size),
+    : size_(chunk_size),
       heap_(heap),
       area_start_(area_start),
       area_end_(area_end),
@@ -35,6 +34,16 @@ bool MemoryChunkMetadata::InOldSpace() const {
 
 bool MemoryChunkMetadata::InLargeObjectSpace() const {
   return owner()->identity() == LO_SPACE;
+}
+
+bool MemoryChunkMetadata::InSharedSpace() const {
+  return owner()->identity() == SHARED_SPACE ||
+         owner()->identity() == SHARED_LO_SPACE;
+}
+
+bool MemoryChunkMetadata::InTrustedSpace() const {
+  return owner()->identity() == TRUSTED_SPACE ||
+         owner()->identity() == TRUSTED_LO_SPACE;
 }
 
 #ifdef THREAD_SANITIZER
@@ -57,13 +66,13 @@ void MemoryChunkMetadata::SynchronizedHeapStore() {
 
 class BasicMemoryChunkValidator {
   // Computed offsets should match the compiler generated ones.
-  static_assert(MemoryChunkLayout::kSizeOffset ==
-                offsetof(MemoryChunkMetadata, size_));
   static_assert(MemoryChunkLayout::kFlagsOffset ==
                 offsetof(MemoryChunk, main_thread_flags_));
   static_assert(MemoryChunkLayout::kMetadataOffset ==
                 offsetof(MemoryChunk, metadata_));
-  static_assert(offsetof(MemoryChunkMetadata, chunk_) == 0);
+
+  static_assert(MemoryChunkLayout::kSizeOffset ==
+                offsetof(MemoryChunkMetadata, size_));
   static_assert(MemoryChunkLayout::kHeapOffset ==
                 offsetof(MemoryChunkMetadata, heap_));
   static_assert(offsetof(MemoryChunkMetadata, size_) ==
