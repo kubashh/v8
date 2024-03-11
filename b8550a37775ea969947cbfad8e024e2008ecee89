@@ -75,6 +75,30 @@
       },
       "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70797a04_8fa3f14c",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-11T12:21:30Z",
+      "side": 1,
+      "message": "One reason I chose -1 here is that if there was some other bug that lead us to use the cleared function_data field (as a HeapObject), then it would most likely crash with a recognizable crashing address (roughly at cage base + 0xfffffffe), while with a valid HeapObject we might crash in less obvious ways.\n\nI left a comment now to explain this and a TODO to consider using a different value.",
+      "parentUuid": "1a86213a_26722d7e",
+      "range": {
+        "startLine": 978,
+        "startChar": 34,
+        "endLine": 978,
+        "endChar": 45
+      },
+      "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
