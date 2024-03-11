@@ -34,6 +34,47 @@
       "parentUuid": "57fe719c_9df12546",
       "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5fc361b_a60c3d26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-11T10:49:32Z",
+      "side": 1,
+      "message": "yeah that is what I meant -- and ok, that makes sense.",
+      "parentUuid": "8b2a56ec_236e42f5",
+      "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a86213a_26722d7e",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-11T10:49:32Z",
+      "side": 1,
+      "message": "I\u0027m wondering if we should use some other non-Smi value here instead, e.g. a new sentinel hole, or a circular reference to the SharedFunctionInfo, so that any other IsSmi checks that we\u0027ve missed also fail. Though, this check is fast (since we\u0027re reading the Smi for IsSmi anyway) and introducing a new sentinel is asking for trouble in cases where we switch over the instance type...\n\nLGTM as is but maybe something to reevaluate.",
+      "range": {
+        "startLine": 978,
+        "startChar": 34,
+        "endLine": 978,
+        "endChar": 45
+      },
+      "revId": "b8550a37775ea969947cbfad8e024e2008ecee89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
