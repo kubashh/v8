@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec119797_3256b590",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1447139
+      },
+      "writtenOn": "2024-03-12T18:25:29Z",
+      "side": 1,
+      "message": "Hello, recently I wrote [a blog post](https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/webassembly-bitmask-operations) on the Arm developer site about the various options to implement the Wasm vector bitmask operations on the 64-bit Arm architecture. This change follows the recommendation from the blog post, but I will repeat the main performance points here - when the corresponding instruction sequences are benchmarked against each other, the new one (i.e. the one using the polynomial multiplication) improves latency for 8-bit elements by 56.49% on Cortex-X1 and by 20.43% on Cortex-A55. For 16-bit elements the numbers are 7.66% and 16.67% respectively; the throughput numbers are similar.",
+      "revId": "14cb524eec31a69e5bb5ce43990a8bdf7daa7874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
