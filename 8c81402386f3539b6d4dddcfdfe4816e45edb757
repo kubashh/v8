@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc900568_f2e68f84",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-03-12T14:54:18Z",
+      "side": 1,
+      "message": "Ow man, this was dumb! 😊\nInteresting that I still pass all test with maglev-streess and maglev-escape-analysis.\nWhat does this say about our tests?",
+      "parentUuid": "abb91e2a_108fe167",
+      "range": {
+        "startLine": 1418,
+        "startChar": 46,
+        "endLine": 1418,
+        "endChar": 47
+      },
+      "revId": "8c81402386f3539b6d4dddcfdfe4816e45edb757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "844c304a_c3528404",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-12T14:49:26Z",
       "side": 1,
       "message": "This should be moved after the call to `foo` below, otherwise it is always true (we haven\u0027t even tried to optimize `foo` at this point.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 30
+      },
+      "revId": "8c81402386f3539b6d4dddcfdfe4816e45edb757",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ad7cb77_0a1105d7",
+        "filename": "test/mjsunit/maglev/regress-328846303.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-03-12T14:54:18Z",
+      "side": 1,
+      "message": "Oops... this is later. after the next line.",
+      "parentUuid": "844c304a_c3528404",
       "range": {
         "startLine": 17,
         "startChar": 0,
