@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c7e1cbd_00d0e81b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-12T15:49:39Z",
+      "side": 1,
+      "message": "Darius: PTAL.\n\nMartyn: Does this patch makes sense to you? I think that bit of functionality was just missing, and it is admittedly hard to test the case where it\u0027s needed.\n\nSpeaking of tests: in the wild, this is currently being hit by the \"1Password\" Chrome extension when `--turboshaft-wasm` is enabled. I haven\u0027t spent the time to figure out why Turbofan isn\u0027t triggering it; presumably it just gets lucky. I have an artificial repro that creates the situation described in the commit message (and works with both optimizing compilers), but it takes ~90 seconds (TS) / ~200 seconds (TF) to run in an arm64.optdebug simulator build, so I\u0027d prefer not to check that in. We could try to craft a cctest repro that uses the `MacroAssembler` directly, which should be faster, but that would have the drawback of being decoupled from our compilers\u0027 production behavior.",
+      "revId": "e38cd7d5344b6bd303607e18eec7fd56e560fee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48a821df_28ab3d1b",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-12T15:49:39Z",
+      "side": 1,
+      "message": "Specifically, this DCHECK failed before this patch -- because an _earlier_ invocation of this function left inconsistent state behind.",
+      "range": {
+        "startLine": 516,
+        "startChar": 2,
+        "endLine": 516,
+        "endChar": 25
+      },
+      "revId": "e38cd7d5344b6bd303607e18eec7fd56e560fee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b280b757_39ea1776",
+        "filename": "src/codegen/arm64/assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-12T15:49:39Z",
+      "side": 1,
+      "message": "Drive-by cleanup.",
+      "range": {
+        "startLine": 526,
+        "startChar": 38,
+        "endLine": 526,
+        "endChar": 55
+      },
+      "revId": "e38cd7d5344b6bd303607e18eec7fd56e560fee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
