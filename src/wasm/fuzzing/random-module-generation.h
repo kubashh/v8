@@ -52,6 +52,11 @@ extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
         WasmModuleGenerationOptions::kMVP>(Zone*,
                                            base::Vector<const uint8_t> data);
 
+extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+    base::Vector<uint8_t> GenerateRandomWasmModule<
+        WasmModuleGenerationOptions::kGenerateSIMD>(
+        Zone*, base::Vector<const uint8_t> data);
+
 V8_EXPORT_PRIVATE base::Vector<uint8_t> GenerateWasmModuleForInitExpressions(
     Zone*, base::Vector<const uint8_t> data, size_t* count);
 #endif
