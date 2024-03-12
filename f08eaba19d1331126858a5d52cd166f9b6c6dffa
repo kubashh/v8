@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bcbdb1b_985887dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-12T13:58:30Z",
+      "side": 1,
+      "message": "Not seeing anything about CQ in this CL yet, but +1 for CI only first.",
+      "revId": "f08eaba19d1331126858a5d52cd166f9b6c6dffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
