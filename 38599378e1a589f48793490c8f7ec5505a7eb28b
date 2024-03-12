@@ -33,6 +33,23 @@
       "message": "Nice, looking great! Having all the member defined in the class declaration even improves readability.",
       "revId": "38599378e1a589f48793490c8f7ec5505a7eb28b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eace7165_723f8291",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-12T08:39:39Z",
+      "side": 1,
+      "message": "Thank you!",
+      "revId": "38599378e1a589f48793490c8f7ec5505a7eb28b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
