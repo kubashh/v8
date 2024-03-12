@@ -16,6 +16,23 @@
       "message": "Wohoo, now all the bots are happy 🎉",
       "revId": "38599378e1a589f48793490c8f7ec5505a7eb28b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0767f5c_ee24e528",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-12T08:38:26Z",
+      "side": 1,
+      "message": "Nice, looking great! Having all the member defined in the class declaration even improves readability.",
+      "revId": "38599378e1a589f48793490c8f7ec5505a7eb28b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
