@@ -15,7 +15,6 @@ class WasmCompileFuzzer : public WasmExecutionFuzzer {
                       ZoneBuffer* buffer) override {
     base::Vector<const uint8_t> wire_bytes =
         GenerateRandomWasmModule<WasmModuleGenerationOptions::kMVP>(zone, data);
-    if (wire_bytes.empty()) return false;
     buffer->write(wire_bytes.data(), wire_bytes.size());
     return true;
   }
