@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf71203e_95d2c454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-03-12T15:36:52Z",
+      "side": 1,
+      "message": "Follow-up to the isolate groups patch to add API.  Thoughts welcome :)",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
