@@ -16,6 +16,7 @@
 #include "src/heap/heap-inl.h"  // For MaxNumberToStringCacheSize.
 #include "src/objects/feedback-cell.h"
 #include "src/objects/heap-number-inl.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/oddball.h"
 #include "src/objects/string-inl.h"
@@ -71,11 +72,18 @@ Handle<JSArray> Factory::NewJSArrayWithElements(
 
 Handle<JSObject> Factory::NewFastOrSlowJSObjectFromMap(
     DirectHandle<Map> map, int number_of_slow_properties,
-    AllocationType allocation, DirectHandle<AllocationSite> allocation_site) {
-  return map->is_dictionary_map()
-             ? NewSlowJSObjectFromMap(map, number_of_slow_properties,
-                                      allocation, allocation_site)
-             : NewJSObjectFromMap(map, allocation, allocation_site);
+    AllocationType allocation, DirectHandle<AllocationSite> allocation_site,
+    bool can_have_cpp_wrapper) {
+  auto js_object = map->is_dictionary_map()
+                       ? NewSlowJSObjectFromMap(map, number_of_slow_properties,
+                                                allocation, allocation_site)
+                       : NewJSObjectFromMap(map, allocation, allocation_site);
+  if (can_have_cpp_wrapper &&
+      (IsJSApiObject(*js_object) || IsJSGlobalObject(*js_object) ||
+       IsJSGlobalProxy(*js_object) || IsJSSpecialApiObject(*js_object))) {
+    InitializeCppHeapWrapper(*js_object);
+  }
+  return js_object;
 }
 
 Handle<JSObject> Factory::NewFastOrSlowJSObjectFromMap(DirectHandle<Map> map) {
