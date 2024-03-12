@@ -16,6 +16,74 @@
       "message": "Follow-up to the isolate groups patch to add API.  Thoughts welcome :)",
       "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58430da4_17fd6179",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1275548
+      },
+      "writtenOn": "2024-03-12T16:11:42Z",
+      "side": 1,
+      "message": "Thanks for working on this. Some comments from the embedder\u0027s POV.",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc73deed_a4e6f7fb",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1275548
+      },
+      "writtenOn": "2024-03-12T16:11:42Z",
+      "side": 1,
+      "message": "It might be worth saying more directly: Isolate groups are reference counted, and the `IsolateGroup` type is a reference to one.\n\nOtherwise at first I didn\u0027t understand why this type was copyable.",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "273d4b42_dd27f89b",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1275548
+      },
+      "writtenOn": "2024-03-12T16:11:42Z",
+      "side": 1,
+      "message": "As an embedder, I think I\u0027d rather have this API CHECK-fail if V8 is not built with multi-cage enabled. I wouldn\u0027t want to silently get a single group when I intended to get multiple -- I\u0027d rather V8 tell me loudly that I have built it wrong, so I can go fix that.\n\nAlso perhaps in the future there will be settings that can be passed to customize the group, e.g. maybe passing in a custom PageAllocator instance or something like that. In that case falling back to the global group would mean ignoring any such settings, which doesn\u0027t feel right.",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "944c9e4f_9859afbf",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1275548
+      },
+      "writtenOn": "2024-03-12T16:11:42Z",
+      "side": 1,
+      "message": "Should there be a move constructor that avoids the overhead of incrementing / decrementing the refcount?",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
