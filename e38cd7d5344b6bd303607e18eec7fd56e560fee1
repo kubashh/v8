@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7809d996_c53f2660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-12T19:34:56Z",
+      "side": 1,
+      "message": "\u003e when a forward branch needs a veneer, it\u0027s emitted, the branch is updated to point to it, and all of the earlier branches in the chain are updated to point to the veneer too, even if they don\u0027t need one.\n\nYes, but only if the next (in instruction order; \"previous\" in link walking order) unresolved branch instruction can\u0027t be linked to that earlier branch. In the example in the commit description, the distance from the second `tbz` to the `b.eq` is 40KB, which `tbz` can\u0027t encode. If that difference was small enough, we\u0027d link the second `tbz` to the `b.eq` instead of emitting a veneer for the `b.eq` (see the condition in line 535).\n\n\u003e will this result in lots of extra veneers for long range conditional branches that happen to be in the same chain as shorter range tbz/tbnz?\n\nWe will emit some veneers that would be avoidable. I don\u0027t know how many. Also, this hasn\u0027t changed in this patch: I\u0027m only fixing the existing logic. The fact that this bug was undiscovered until now is indirect evidence that this situation occurs only infrequently.\n\nWhile investigating this bug, one thing I noticed is that we sometimes emit several veneers for the same target label, because each branch gets its own. E.g. if we have:\n```\n  b.eq label1\n  b.ls label1\n  b.hi label1\n  [lots of code]\n  label1: ...\n```\nwe\u0027ll turn that into:\n```\n  b.eq veneer1\n  b.ls veneer2\n  b.hi veneer3\n  [some code]\n  veneer1: b label1\n  veneer2: b label1\n  veneer3: b label1\n  [some more code]\n  label1: ...\n```\nso if we wanted to emit less code for veneers, we could deduplicate them by target label (only within the same veneer pool, of course). I haven\u0027t measured how impactful this would be; maybe it barely ever matters in practice.",
+      "parentUuid": "ee7e90a3_30ed0189",
+      "revId": "e38cd7d5344b6bd303607e18eec7fd56e560fee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "48a821df_28ab3d1b",
         "filename": "src/codegen/arm64/assembler-arm64.cc",
         "patchSetId": 1
