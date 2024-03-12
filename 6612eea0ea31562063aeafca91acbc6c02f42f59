@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f37c2c9_f5282e72",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-12T14:52:07Z",
+      "side": 1,
+      "message": "Done + added it to the .cc file too.",
+      "parentUuid": "6d7f9113_c5690311",
+      "revId": "6612eea0ea31562063aeafca91acbc6c02f42f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0eb31028_92c0a82d",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-03-12T14:43:57Z",
       "side": 1,
       "message": "Actually, this condition can already be removed from the other fuzzer (maybe in a separate CL). I think the only case where we fail to create a module is for SIMD.",
+      "revId": "6612eea0ea31562063aeafca91acbc6c02f42f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2785d405_3144b867",
+        "filename": "test/fuzzer/wasm-compile-simd.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-12T14:52:07Z",
+      "side": 1,
+      "message": "Ok. \nLeaving this comment open until the other CL is created+submitted.",
+      "parentUuid": "0eb31028_92c0a82d",
       "revId": "6612eea0ea31562063aeafca91acbc6c02f42f59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
