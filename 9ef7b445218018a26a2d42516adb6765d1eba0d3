@@ -34,6 +34,52 @@
       "parentUuid": "54baec67_3b954426",
       "revId": "9ef7b445218018a26a2d42516adb6765d1eba0d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1afad02_e93c13e8",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-12T10:26:58Z",
+      "side": 1,
+      "message": "how about `metadata`?",
+      "range": {
+        "startLine": 478,
+        "startChar": 16,
+        "endLine": 478,
+        "endChar": 20
+      },
+      "revId": "9ef7b445218018a26a2d42516adb6765d1eba0d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "404a2c5f_f9b0e1e6",
+        "filename": "src/heap/memory-allocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-12T10:26:58Z",
+      "side": 1,
+      "message": "I think this deserves a comment: IIUC, then this is to reuse an existng previous allocation that was pooled, right?",
+      "range": {
+        "startLine": 259,
+        "startChar": 10,
+        "endLine": 259,
+        "endChar": 27
+      },
+      "revId": "9ef7b445218018a26a2d42516adb6765d1eba0d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
