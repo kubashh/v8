@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa2df78_90fe8204",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-13T12:20:59Z",
+      "side": 1,
+      "message": "PTAL. I don\u0027t know who\u0027s the current owner of the existing json fuzzer. It was originally added by Jochen (https://source.chromium.org/chromium/chromium/src/+/main:v8/test/fuzzer/json.cc).\n\nA fuzztest for this is probably not that valuable (i.e. I don\u0027t think it will find anything), but serves more as a demo.",
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae660982_15e79d91",
+        "filename": "test/unittests/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-13T12:20:59Z",
+      "side": 1,
+      "message": "This dependency seems unused and vacated in V8 since some time. Now I used it again, but there are probably other libraries for the same purpose. I just used this because it was already there and because Chromium also depends on it.",
+      "range": {
+        "startLine": 814,
+        "startChar": 17,
+        "endLine": 814,
+        "endChar": 46
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4224657_189e9947",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-13T12:20:59Z",
+      "side": 1,
+      "message": "This is an area where I don\u0027t really know what I\u0027m doing... Since fuzztest calls the ParseValidJsonP repeatedly with different inputs in the same process, would we need a separate try_catch around each call?",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 37
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

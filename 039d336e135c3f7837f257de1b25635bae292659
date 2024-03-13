@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6ffe48_314ddf07",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-13T12:20:59Z",
+      "side": 1,
+      "message": "This could be instructed to add various formatting options.",
+      "range": {
+        "startLine": 51,
+        "startChar": 28,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "039d336e135c3f7837f257de1b25635bae292659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
