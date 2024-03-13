@@ -39,6 +39,30 @@
       },
       "revId": "9ae22cc2872af670728745d2b56ea7b066f32063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd6f3567_52d9f111",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-13T14:04:11Z",
+      "side": 1,
+      "message": "Ack; we will see through later errors that the wire bytes were empty.\n\nBut you could add a comment before the `return true;` and say that without SIMD we are always able to produce a valid module.",
+      "parentUuid": "f1f950d9_8a0c7742",
+      "range": {
+        "startLine": 18,
+        "startChar": 18,
+        "endLine": 18,
+        "endChar": 28
+      },
+      "revId": "9ae22cc2872af670728745d2b56ea7b066f32063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
