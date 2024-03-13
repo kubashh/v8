@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6232314f_40a6167f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-13T13:43:29Z",
+      "side": 1,
+      "message": "Hey Clemens! Could you take a look please?",
+      "revId": "9ae22cc2872af670728745d2b56ea7b066f32063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1f950d9_8a0c7742",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-13T13:43:29Z",
+      "side": 1,
+      "message": "I guess it\u0027s not important to add a CHECK(!wire_bytes.empty()).\n\n(I just thought about it, because I had a failure before with the error message: `Generated module should validate, but got: WasmFuzzerSyncCompile: expected 4 bytes, fell off end @+0`, and a check failure would have been more obvious. But I guess it should not happen in the future so it\u0027s ok.)",
+      "range": {
+        "startLine": 18,
+        "startChar": 18,
+        "endLine": 18,
+        "endChar": 28
+      },
+      "revId": "9ae22cc2872af670728745d2b56ea7b066f32063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
