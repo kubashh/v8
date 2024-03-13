@@ -237,6 +237,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0cb52903_83c8d5fa",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-03-13T14:03:23Z",
+      "side": 1,
+      "message": "Indeed, I was using some primitive online json parser to check, but I should\u0027ve just looked it up.\n\nI was earlier asserting that isEmpty is false, but e.g. null counts as empty. But so does [] apparently, therefore I removed the assertion anyways.\n\nI\u0027ll simplify.",
+      "parentUuid": "962d98c1_d19850e9",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 73
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1477b27_f14420a5",
         "filename": "test/unittests/json/json-unittest.cc",
         "patchSetId": 13
