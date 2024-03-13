@@ -44,9 +44,10 @@ class V8_EXPORT_PRIVATE MemoryChunkLayout {
 #define FIELD(Type, Name) \
   k##Name##Offset, k##Name##End = k##Name##Offset + sizeof(Type) - 1
   enum Header {
-    // MemoryChunk fields:
     FIELD(uintptr_t, Flags),
     FIELD(MemoryChunkMetadata*, Metadata),
+  };
+  enum Metadata {
     // MemoryChunkMetadata fields:
     FIELD(size_t, Size),
     FIELD(Heap*, Heap),
@@ -59,6 +60,8 @@ class V8_EXPORT_PRIVATE MemoryChunkLayout {
     FIELD(VirtualMemory, Reservation),
     // MutablePageMetadata fields:
     FIELD(SlotSet* [kNumSets], SlotSet),
+    FIELD(void*, Pad1),
+    FIELD(void*, Pad2),
     FIELD(TypedSlotsSet* [kNumSets], TypedSlotSet),
     FIELD(ProgressBar, ProgressBar),
     FIELD(std::atomic<intptr_t>, LiveByteCount),
