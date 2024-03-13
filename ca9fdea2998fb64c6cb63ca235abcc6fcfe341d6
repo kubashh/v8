@@ -104,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d52fbd79_40966369",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-13T22:49:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55942c1b_a781aed6",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b465c63a_0ed81e66",
@@ -117,6 +135,24 @@
       "writtenOn": "2023-12-08T18:46:16Z",
       "side": 1,
       "message": "The lifetime of this is fishy to me, see comment above for the external pointer table.",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd211096_6e74bbe1",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-13T22:49:56Z",
+      "side": 1,
+      "message": "@syg@chromium.org With the external pointer thing out of the way. Does the lifetime of the AsyncWaiterQueueNodes looks good?",
+      "parentUuid": "b465c63a_0ed81e66",
       "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7fc6f3c6_e2375bfe",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-13T22:49:56Z",
+      "side": 1,
+      "message": "Looked a little more into this, storing a canonical map in the native context for this result object seems like a little excessive for the MVP. Mostly because we are not using it in torque code or any kind of optimizing compiler code, I think we can leave this TODO open for now.",
+      "parentUuid": "458c6b3d_c6d7f308",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 60
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5543bd08_e2ed9b96",
         "filename": "src/builtins/builtins-atomics-synchronization.cc",
         "patchSetId": 24
@@ -251,6 +275,30 @@
       "side": 1,
       "message": "The synthetic context for `Promise.all` _is_ garbage collected. You should be able to use the empty scope info (`RootIndex::kEmptyScopeInfo`).\n\nLooking through the codebase, it seems like there\u0027s no way in C++ to do this. It basically involves porting the Torque `AllocateSyntheticFunctionContext` macro [1] to C++. That macro allocates a synthetic context (i.e. not tied to an actual JS function with source) with a number of extra slots to hold internal state.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/contexts.tq;l\u003d46-58;drc\u003d8fcd3f809ba5c71f7a29bc6623c1f93a9eac72fe",
       "parentUuid": "9ae9da23_8157e3a8",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 77
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "168f27c8_f0621434",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-13T22:49:56Z",
+      "side": 1,
+      "message": "Got it, my problem wasn\u0027t the empty scope info, but that I was using the wrong context slots, now it starts with `Context::MIN_CONTEXT_SLOTS`, which is what intl does in https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/intl-objects.h;drc\u003d064b9a7903b793734b6c03a86ee53a2dc85f0f80;l\u003d55.",
+      "parentUuid": "cd6278b4_bf154b4b",
       "range": {
         "startLine": 903,
         "startChar": 0,
