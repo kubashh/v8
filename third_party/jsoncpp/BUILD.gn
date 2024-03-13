@@ -3,29 +3,20 @@
 # found in the LICENSE file.
 
 config("jsoncpp_config") {
-  include_dirs = [
-    "source/include",
-    "generated",
-  ]
-
-  # TODO(crbug.com/983223): Update JsonCpp BUILD.gn to remove deprecated
-  # declaration flag.
-  # This temporary flag allowing clients to update to the new version, and then
-  # update to the new StreamWriter and CharReader classes.
-  if (!is_win || is_clang) {
-    cflags_cc = [ "-Wno-deprecated-declarations" ]
-  }
+  include_dirs = [ "source/include" ]
 }
 
 source_set("jsoncpp") {
   sources = [
-    "generated/version.h",
+    "source/include/json/allocator.h",
     "source/include/json/assertions.h",
     "source/include/json/config.h",
     "source/include/json/forwards.h",
     "source/include/json/json.h",
+    "source/include/json/json_features.h",
     "source/include/json/reader.h",
     "source/include/json/value.h",
+    "source/include/json/version.h",
     "source/include/json/writer.h",
     "source/src/lib_json/json_reader.cpp",
     "source/src/lib_json/json_tool.h",
