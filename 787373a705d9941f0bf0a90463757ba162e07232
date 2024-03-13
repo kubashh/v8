@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "08457c6b_73c6f6ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-13T13:17:32Z",
+      "side": 1,
+      "message": "LGTM, even though this looks a bit like black magic.\n\nOne question about the domain part. It\u0027s the first time I am seeing this, so I am trying to make sense of the code :)",
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ae660982_15e79d91",
         "filename": "test/unittests/BUILD.gn",
         "patchSetId": 13
@@ -59,6 +76,70 @@
         "startChar": 4,
         "endLine": 21,
         "endChar": 37
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6bb0d6f_f7aa0ae6",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-13T13:17:32Z",
+      "side": 1,
+      "message": "Yes, this looks like the standard setup before calling into V8. I am not sure if JSON parsing is expected to throw exceptions if we feed it with valid input, so the `TryCatch` might not be needed.",
+      "parentUuid": "a4224657_189e9947",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 37
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "882c5d9d_ef589dd8",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-13T13:17:32Z",
+      "side": 1,
+      "message": "I guess the type to put here would be too complex to write out, right?\nIt\u0027s probably some Domain for `Json::Value`.",
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6099de8d_5588beae",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-13T13:17:32Z",
+      "side": 1,
+      "message": "This line makes sense to me. It says: If you want to build a `Json::Value`, choose one of the leaf, array, or object domain.\n\nWhat does the next line specify? Is it actually OK to call `.Set` twice for the same type?",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 73
       },
       "revId": "787373a705d9941f0bf0a90463757ba162e07232",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
