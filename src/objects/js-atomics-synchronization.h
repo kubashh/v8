@@ -9,6 +9,7 @@
 
 #include "src/base/platform/time.h"
 #include "src/execution/thread-id.h"
+#include "src/objects/contexts.h"
 #include "src/objects/js-objects.h"
 #include "src/objects/js-struct.h"
 
@@ -22,8 +23,13 @@ namespace internal {
 
 namespace detail {
 class WaiterQueueNode;
+class SyncWaiterQueueNode;
+template <typename>
+class AsyncWaiterQueueNode;
 }  // namespace detail
 
+using detail::AsyncWaiterQueueNode;
+using detail::SyncWaiterQueueNode;
 using detail::WaiterQueueNode;
 
 // JSSynchronizationPrimitive is the base class for JSAtomicsMutex and
@@ -193,17 +199,36 @@ class JSAtomicsMutex
       base::Optional<base::TimeDelta> timeout = base::nullopt);
 
   V8_WARN_UNUSED_RESULT inline bool TryLock();
+  static void LockAsync(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      Handle<JSPromise> promise, MaybeHandle<JSPromise> unlock_promise,
+      base::Optional<base::TimeDelta> timeout = base::nullopt);
+  static Handle<JSPromise> LockOrQueuePromise(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+      Handle<JSObject> run_under_lock, base::Optional<base::TimeDelta> timeout);
+  static bool LockOrQueueAsyncNode(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+      std::shared_ptr<AsyncWaiterQueueNode<JSAtomicsMutex>>& node);
+  static void HandleAsyncNotify(
+      std::shared_ptr<AsyncWaiterQueueNode<JSAtomicsMutex>>& node);
+  static void HandleAsyncTimeout(
+      std::shared_ptr<AsyncWaiterQueueNode<JSAtomicsMutex>>& node);
 
   inline void Unlock(Isolate* requester);
 
   inline bool IsHeld();
   inline bool IsCurrentThreadOwner();
 
+  enum AsyncContextSlot {
+    kMutex = Context::MIN_CONTEXT_SLOTS,
+    kUnlockPromise,
+    kLength
+  };
+
   TQ_OBJECT_CONSTRUCTORS(JSAtomicsMutex)
 
  private:
   friend class Factory;
-  friend class WaiterQueueNode;
 
   // There are 3 state bits: whether there are waiter threads in the queue,
   // whether the waiter queue is locked (both inherited from the base class),
@@ -215,12 +240,19 @@ class JSAtomicsMutex
 
   inline void SetCurrentThreadAsOwner();
   inline void ClearOwnerThread();
+  inline bool TryLockExplicitAndSetOwner();
 
   inline std::atomic<int32_t>* AtomicOwnerThreadIdPtr();
 
   V8_EXPORT_PRIVATE static bool LockSlowPath(
       Isolate* requester, Handle<JSAtomicsMutex> mutex,
       std::atomic<StateT>* state, base::Optional<base::TimeDelta> timeout);
+  static bool LockAsyncSlowPath(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                                std::atomic<StateT>* state,
+                                Handle<JSPromise> promise,
+                                MaybeHandle<JSPromise> unlock_promise,
+                                base::Optional<base::TimeDelta> timeout);
+
   V8_EXPORT_PRIVATE void UnlockSlowPath(Isolate* requester,
                                         std::atomic<StateT>* state);
 
@@ -234,6 +266,28 @@ class JSAtomicsMutex
                                          StateT& expected);
   static void UnlockWaiterQueueWithNewState(std::atomic<StateT>* state,
                                             StateT new_state);
+  V8_EXPORT_PRIVATE static bool SpinningMutexTryLock(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      std::atomic<StateT>* state);
+  V8_EXPORT_PRIVATE static bool BackoffTryLock(Isolate* requester,
+                                               Handle<JSAtomicsMutex> mutex,
+                                               std::atomic<StateT>* state);
+  static bool DequeueTimedOutAsyncWaiter(Isolate* requester,
+                                         Handle<JSAtomicsMutex> mutex,
+                                         std::atomic<StateT>* state,
+                                         WaiterQueueNode* timed_out_waiter);
+
+  V8_EXPORT_PRIVATE static bool MaybeEnqueueNode(Isolate* requester,
+                                                 Handle<JSAtomicsMutex> mutex,
+                                                 std::atomic<StateT>* state,
+                                                 WaiterQueueNode* this_waiter);
+
+  using LockSlowPathWrapper = std::function<bool(std::atomic<StateT>* state)>;
+
+  static inline bool LockInternal(Isolate* requester,
+                                  Handle<JSAtomicsMutex> mutex,
+                                  base::Optional<base::TimeDelta> timeout,
+                                  LockSlowPathWrapper slow_path_wrapper);
 
   using TorqueGeneratedJSAtomicsMutex<
       JSAtomicsMutex, JSSynchronizationPrimitive>::owner_thread_id;
@@ -289,6 +343,15 @@ class JSAtomicsCondition
       Isolate* requester, Handle<JSAtomicsCondition> cv,
       Handle<JSAtomicsMutex> mutex, base::Optional<base::TimeDelta> timeout);
 
+  V8_EXPORT_PRIVATE static Handle<JSPromise> WaitAsync(
+      Isolate* requester, Handle<JSAtomicsCondition> cv,
+      Handle<JSAtomicsMutex> mutex, base::Optional<base::TimeDelta> timeout);
+
+  static void HandleAsyncNotify(
+      std::shared_ptr<AsyncWaiterQueueNode<JSAtomicsCondition>>& node);
+  static void HandleAsyncTimeout(
+      std::shared_ptr<AsyncWaiterQueueNode<JSAtomicsCondition>>& node);
+
   static constexpr uint32_t kAllWaiters = UINT32_MAX;
 
   // Notify {count} waiters. Returns the number of waiters woken up.
@@ -298,16 +361,26 @@ class JSAtomicsCondition
 
   Tagged<Object> NumWaitersForTesting(Isolate* isolate);
 
+  enum AsyncContextSlot : int {
+    kMutex = Context::MIN_CONTEXT_SLOTS,
+    kConditionVariable,
+    kLength
+  };
+
   TQ_OBJECT_CONSTRUCTORS(JSAtomicsCondition)
 
  private:
   friend class Factory;
-  friend class WaiterQueueNode;
 
   static constexpr StateT kEmptyState = 0;
 
   static bool TryLockWaiterQueueExplicit(std::atomic<StateT>* state,
                                          StateT& expected);
+  static void QueueWaiter(Isolate* requester, Handle<JSAtomicsCondition> cv,
+                          WaiterQueueNode* waiter);
+  static WaiterQueueNode* RemoveTimedOutWaiter(
+      Handle<JSAtomicsCondition> cv,
+      AsyncWaiterQueueNode<JSAtomicsCondition>* waiter);
 
   using DequeueAction = std::function<WaiterQueueNode*(WaiterQueueNode**)>;
   static WaiterQueueNode* DequeueExplicit(Isolate* requester,
