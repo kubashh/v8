@@ -213,6 +213,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "962d98c1_d19850e9",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-13T13:59:22Z",
+      "side": 1,
+      "message": "Ah, yes, I think I understand the code now :) \n\nBut I also think it\u0027s not necessary. Strings like \"true\" or \"3\" should be valid JSON.",
+      "parentUuid": "a42190fc_6b86d4ff",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 73
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1477b27_f14420a5",
         "filename": "test/unittests/json/json-unittest.cc",
         "patchSetId": 13
