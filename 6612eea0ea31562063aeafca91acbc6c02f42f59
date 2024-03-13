@@ -103,6 +103,24 @@
       "parentUuid": "0eb31028_92c0a82d",
       "revId": "6612eea0ea31562063aeafca91acbc6c02f42f59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c505318_31ba2da8",
+        "filename": "test/fuzzer/wasm-compile-simd.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-13T15:09:05Z",
+      "side": 1,
+      "message": "Done, resolving",
+      "parentUuid": "2785d405_3144b867",
+      "revId": "6612eea0ea31562063aeafca91acbc6c02f42f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
