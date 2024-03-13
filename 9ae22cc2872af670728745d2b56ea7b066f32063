@@ -63,6 +63,30 @@
       },
       "revId": "9ae22cc2872af670728745d2b56ea7b066f32063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb00209c_b63178a5",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-13T14:08:38Z",
+      "side": 1,
+      "message": "Ok. I added the comment.",
+      "parentUuid": "fd6f3567_52d9f111",
+      "range": {
+        "startLine": 18,
+        "startChar": 18,
+        "endLine": 18,
+        "endChar": 28
+      },
+      "revId": "9ae22cc2872af670728745d2b56ea7b066f32063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
