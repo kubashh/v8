@@ -800,11 +800,13 @@ v8_source_set("v8_unittests_sources") {
     sources += [
       "fuzztest-adapter.h",
       "fuzztest-init-adapter.h",
+      "json/json-unittest.cc",
     ]
 
     deps += [
       "//third_party/abseil-cpp:absl_full",
       "//third_party/fuzztest:fuzztest",
+      #"//third_party/jsoncpp:jsoncpp",
     ]
   }
 
