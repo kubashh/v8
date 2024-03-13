@@ -105,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f21d6ab_577ab49a",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-13T13:23:10Z",
+      "side": 1,
+      "message": "We should be able to check that `!isolate-\u003ehas_pending_exceptions()` or something like that.",
+      "parentUuid": "b6bb0d6f_f7aa0ae6",
+      "range": {
+        "startLine": 18,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 37
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "882c5d9d_ef589dd8",
@@ -140,6 +164,29 @@
         "startChar": 0,
         "endLine": 85,
         "endChar": 73
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1477b27_f14420a5",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-13T13:23:10Z",
+      "side": 1,
+      "message": "What does this `std::move` do? An rvalue `this` pointer for an instance function call doesn\u0027t exist I guess? So removing it shouldn\u0027t have any impact?",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 27
       },
       "revId": "787373a705d9941f0bf0a90463757ba162e07232",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
