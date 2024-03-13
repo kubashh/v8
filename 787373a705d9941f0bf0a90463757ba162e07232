@@ -214,6 +214,30 @@
       },
       "revId": "787373a705d9941f0bf0a90463757ba162e07232",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9279d194_bf73684c",
+        "filename": "test/unittests/json/json-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-13T13:37:02Z",
+      "side": 1,
+      "message": "Wow, I didn\u0027t know that was possible. Given that `Finalize` still requires to leave a valid object behind, I am not totally convinced that this is a nice design, but anyways, that\u0027s independent of this CL. 😊",
+      "parentUuid": "eb6a355a_d09dab88",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 27
+      },
+      "revId": "787373a705d9941f0bf0a90463757ba162e07232",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
