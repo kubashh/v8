@@ -52,8 +52,9 @@ class MutablePageMetadata : public MemoryChunkMetadata {
 
   MutablePageMetadata(Heap* heap, BaseSpace* space, size_t size,
                       Address area_start, Address area_end,
-                      VirtualMemory reservation, Executability executable,
-                      PageSize page_size);
+                      VirtualMemory reservation, PageSize page_size);
+
+  MemoryChunk::MainThreadFlags InitialFlags(Executability executable) const;
 
   // Only works if the pointer is in the first kPageSize of the MemoryChunk.
   static MutablePageMetadata* FromAddress(Address a) {
@@ -320,6 +321,9 @@ class MutablePageMetadata : public MemoryChunkMetadata {
   // Counts overall allocated LAB size on the page since the last GC. Used
   // only for new space pages.
   size_t allocated_lab_size_ = 0;
+
+  void* pad1_ = nullptr;
+  void* pad2_ = nullptr;
 
   // Counts the number of young gen GCs that a page survived in new space. This
   // counter is reset to 0 whenever the page is empty.
