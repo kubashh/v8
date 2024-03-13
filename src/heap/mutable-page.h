@@ -52,8 +52,9 @@ class MutablePageMetadata : public MemoryChunkMetadata {
 
   MutablePageMetadata(Heap* heap, BaseSpace* space, size_t size,
                       Address area_start, Address area_end,
-                      VirtualMemory reservation, Executability executable,
-                      PageSize page_size);
+                      VirtualMemory reservation, PageSize page_size);
+
+  MemoryChunk::MainThreadFlags InitialFlags(Executability executable) const;
 
   // Only works if the pointer is in the first kPageSize of the MemoryChunk.
   static MutablePageMetadata* FromAddress(Address a) {
@@ -290,6 +291,9 @@ class MutablePageMetadata : public MemoryChunkMetadata {
   // set for large pages. In the latter case the number of entries in the array
   // is ceil(size() / kPageSize).
   TypedSlotSet* typed_slot_set_[NUMBER_OF_REMEMBERED_SET_TYPES] = {nullptr};
+
+  void* pad1_ = nullptr;
+  void* pad2_ = nullptr;
 
   // Used by the marker to keep track of the scanning progress in large objects
   // that have a progress bar and are scanned in increments.
