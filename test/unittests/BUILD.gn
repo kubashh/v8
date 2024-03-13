@@ -805,7 +805,13 @@ v8_source_set("v8_unittests_sources") {
     deps += [
       "//third_party/abseil-cpp:absl_full",
       "//third_party/fuzztest:fuzztest",
+      "//third_party/jsoncpp:jsoncpp",
     ]
+
+    if (!is_win) {
+      sources += [ "json/json-unittest.cc" ]
+      deps += [ "//third_party/jsoncpp:jsoncpp" ]
+    }
   }
 
   if (v8_enable_webassembly) {
