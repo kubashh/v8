@@ -10068,7 +10068,7 @@ void CodeStubAssembler::LookupBinary(TNode<Name> unique_name,
   // Assume non-empty array.
   CSA_DCHECK(this, Uint32LessThanOrEqual(var_low.value(), var_high.value()));
 
-  Label binary_loop(this, {&var_high, &var_low});
+  Label binary_loop(this, {&var_high, &var_low}), scan_loop(this, &var_low);
   Goto(&binary_loop);
   BIND(&binary_loop);
   {
@@ -10082,7 +10082,8 @@ void CodeStubAssembler::LookupBinary(TNode<Name> unique_name,
 
     TNode<Uint32T> mid_hash = LoadNameHashAssumeComputed(mid_name);
 
-    Label mid_greater(this), mid_less(this), merge(this);
+    Label mid_greater(this), mid_less(this), merge(this),
+        second_mid_greater(this), second_mid_less(this), second_merge(this);
     Branch(Uint32GreaterThanOrEqual(mid_hash, hash), &mid_greater, &mid_less);
     BIND(&mid_greater);
     {
@@ -10095,10 +10096,31 @@ void CodeStubAssembler::LookupBinary(TNode<Name> unique_name,
       Goto(&merge);
     }
     BIND(&merge);
+    GotoIf(Word32Equal(var_low.value(), var_high.value()), &scan_loop);
+
+    mid = Unsigned(
+        Int32Add(var_low.value(),
+                 Word32Shr(Int32Sub(var_high.value(), var_low.value()), 1)));
+    sorted_key_index = GetSortedKeyIndex<Array>(array, mid);
+    mid_name = GetKey<Array>(array, sorted_key_index);
+    mid_hash = LoadNameHashAssumeComputed(mid_name);
+
+    Branch(Uint32GreaterThanOrEqual(mid_hash, hash), &second_mid_greater,
+           &second_mid_less);
+    BIND(&second_mid_greater);
+    {
+      var_high = mid;
+      Goto(&second_merge);
+    }
+    BIND(&second_mid_less);
+    {
+      var_low = Unsigned(Int32Add(mid, Int32Constant(1)));
+      Goto(&second_merge);
+    }
+    BIND(&second_merge);
     GotoIf(Word32NotEqual(var_low.value(), var_high.value()), &binary_loop);
   }
 
-  Label scan_loop(this, &var_low);
   Goto(&scan_loop);
   BIND(&scan_loop);
   {
