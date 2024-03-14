@@ -515,6 +515,15 @@ PackNode* SLPTree::BuildTreeRec(const NodeGroup& node_group,
       }
     }
 
+    case Opcode::kSimd128Splat: {
+      if (op0.input(0) != op1.input(0)) {
+        TRACE("Failed due to different splat input!\n");
+        return nullptr;
+      }
+      PackNode* pnode = NewPackNode(node_group);
+      return pnode;
+    }
+
     default:
       TRACE("Default branch #%d:%s\n", node0.id(),
             GetSimdOpcodeName(op0).c_str());
