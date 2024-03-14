@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d1a8ea8_36609171",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-14T13:52:52Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "f51a183027dd8733bfc1163ab922a464d4905d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db9540e5_bd19a7ef",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-14T13:52:52Z",
+      "side": 1,
+      "message": "As discussed, please leave a comment (or TODO) to note that this is not implemented yet.",
+      "revId": "f51a183027dd8733bfc1163ab922a464d4905d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "206b3013_41ed11d9",
+        "filename": "src/wasm/fuzzing/random-module-generation.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-14T13:52:52Z",
+      "side": 1,
+      "message": "nit: Typically the `constexpr` comes before the type (also below).",
+      "revId": "f51a183027dd8733bfc1163ab922a464d4905d9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
