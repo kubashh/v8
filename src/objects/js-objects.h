@@ -339,7 +339,7 @@ class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
 
   V8_EXPORT_PRIVATE static V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> New(
       Handle<JSFunction> constructor, Handle<JSReceiver> new_target,
-      Handle<AllocationSite> site);
+      Handle<AllocationSite> site, bool can_have_cpp_wrapper = false);
 
   static MaybeHandle<JSObject> NewWithMap(Isolate* isolate,
                                           Handle<Map> initial_map,
@@ -969,7 +969,10 @@ class JSObjectWithEmbedderSlots
     : public TorqueGeneratedJSObjectWithEmbedderSlots<JSObjectWithEmbedderSlots,
                                                       JSObject> {
  public:
-  static_assert(kHeaderSize == JSObject::kHeaderSize);
+  class BodyDescriptor;
+
+  DECL_EXTERNAL_POINTER_ACCESSORS(cpp_heap_wrappable, void*)
+
   TQ_OBJECT_CONSTRUCTORS(JSObjectWithEmbedderSlots)
 };
 
@@ -994,7 +997,8 @@ class JSSpecialObject
     : public TorqueGeneratedJSSpecialObject<JSSpecialObject,
                                             JSCustomElementsObject> {
  public:
-  static_assert(kHeaderSize == JSObject::kHeaderSize);
+  DECL_EXTERNAL_POINTER_ACCESSORS(cpp_heap_wrappable, void*)
+
   TQ_OBJECT_CONSTRUCTORS(JSSpecialObject)
 };
 
