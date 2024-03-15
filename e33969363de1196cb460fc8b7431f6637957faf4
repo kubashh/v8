@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e32fa5d_956b242d",
+        "filename": "src/heap/factory-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T16:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9801bf8_a153a4e8",
+      "range": {
+        "startLine": 82,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 42
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "646b92b7_db8571f1",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-15T11:20:42Z",
       "side": 1,
       "message": "we could probably drop this, unconditionally read the instance type off the map, and decide based on that -- we deref the map for instance size in `AllocateRawWithAllocationSite/InitializeJSObjectFromMap` anyway, so it should be roughly equivalent in terms of memory access cost",
+      "range": {
+        "startLine": 2886,
+        "startChar": 4,
+        "endLine": 2886,
+        "endChar": 19
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d4db2ad_cd8585bb",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2886,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T16:36:54Z",
+      "side": 1,
+      "message": "I am using the information from the callsite now and just DCHECK internally that we are not off. This should be the fastest way (not sure it\u0027s measurable).",
+      "parentUuid": "646b92b7_db8571f1",
       "range": {
         "startLine": 2886,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f215949_acf4206d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2900,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T16:36:54Z",
+      "side": 1,
+      "message": "I renamed the flag and moved the logic to determine whether we create such a wrapper to the callers. I am only DCHECKing internally that we are doing the right thing.",
+      "parentUuid": "eb2d8356_18c0f883",
+      "range": {
+        "startLine": 2900,
+        "startChar": 45,
+        "endLine": 2900,
+        "endChar": 64
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "883c4237_0692b6d7",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-03-15T11:20:42Z",
       "side": 1,
       "message": "can you get the instance type out of the map, and do instance type checks here? Rather than dereferencing the object, map, and instance type each time.",
+      "range": {
+        "startLine": 2901,
+        "startChar": 7,
+        "endLine": 2901,
+        "endChar": 20
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb1c406_9b67c86d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2901,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T16:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "883c4237_0692b6d7",
       "range": {
         "startLine": 2901,
         "startChar": 7,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2987c80_725f5205",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T16:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16b0b61f_1bf95db9",
+      "range": {
+        "startLine": 2906,
+        "startChar": 4,
+        "endLine": 2906,
+        "endChar": 28
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f788f4e_d505a5f3",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-03-15T11:20:42Z",
       "side": 1,
       "message": "(throughout the CL) won\u0027t NewJSObjectFromMap do this for you, if you pass in the right flag?",
+      "range": {
+        "startLine": 3109,
+        "startChar": 2,
+        "endLine": 3109,
+        "endChar": 26
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e6ccac_73907b95",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T16:36:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f788f4e_d505a5f3",
       "range": {
         "startLine": 3109,
         "startChar": 2,
