@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9801bf8_a153a4e8",
+        "filename": "src/heap/factory-inl.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T11:20:42Z",
+      "side": 1,
+      "message": "pass into New[Slow]JSObjectFromMap instead, and ideally share the logic between those two as well (e.g. a \"MaybeInitializeCppHeapWrapper\" helper)",
+      "range": {
+        "startLine": 82,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 42
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "646b92b7_db8571f1",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2886,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T11:20:42Z",
+      "side": 1,
+      "message": "we could probably drop this, unconditionally read the instance type off the map, and decide based on that -- we deref the map for instance size in `AllocateRawWithAllocationSite/InitializeJSObjectFromMap` anyway, so it should be roughly equivalent in terms of memory access cost",
+      "range": {
+        "startLine": 2886,
+        "startChar": 4,
+        "endLine": 2886,
+        "endChar": 19
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb2d8356_18c0f883",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2900,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T11:20:42Z",
+      "side": 1,
+      "message": "it feels like in most cases we know for certain that this is an API wrapper, rather than it being possible -- could we hoist this instance type check to the caller and have it decide?",
+      "range": {
+        "startLine": 2900,
+        "startChar": 45,
+        "endLine": 2900,
+        "endChar": 64
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883c4237_0692b6d7",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2901,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T11:20:42Z",
+      "side": 1,
+      "message": "can you get the instance type out of the map, and do instance type checks here? Rather than dereferencing the object, map, and instance type each time.",
+      "range": {
+        "startLine": 2901,
+        "startChar": 7,
+        "endLine": 2901,
+        "endChar": 20
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16b0b61f_1bf95db9",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T11:20:42Z",
+      "side": 1,
+      "message": "could this move to `InitializeJSObjectFromMap`?",
+      "range": {
+        "startLine": 2906,
+        "startChar": 4,
+        "endLine": 2906,
+        "endChar": 28
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f788f4e_d505a5f3",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T11:20:42Z",
+      "side": 1,
+      "message": "(throughout the CL) won\u0027t NewJSObjectFromMap do this for you, if you pass in the right flag?",
+      "range": {
+        "startLine": 3109,
+        "startChar": 2,
+        "endLine": 3109,
+        "endChar": 26
+      },
+      "revId": "e33969363de1196cb460fc8b7431f6637957faf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
