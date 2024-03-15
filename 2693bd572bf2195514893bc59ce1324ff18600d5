@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1a0912b_b19d8c51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-03-15T11:16:14Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "2693bd572bf2195514893bc59ce1324ff18600d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "139e1219_32bf6994",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-03-15T11:16:14Z",
+      "side": 1,
+      "message": "This is part of the `not i18n` section.",
+      "range": {
+        "startLine": 2221,
+        "startChar": 2,
+        "endLine": 2221,
+        "endChar": 11
+      },
+      "revId": "2693bd572bf2195514893bc59ce1324ff18600d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
