@@ -1084,7 +1084,15 @@ Reduction JSCreateLowering::ReduceJSCreatePromise(Node* node) {
   static_assert(v8::Promise::kPending == 0);
   a.Store(AccessBuilder::ForJSObjectOffset(JSPromise::kFlagsOffset),
           jsgraph()->ZeroConstant());
-  static_assert(JSPromise::kHeaderSize == 5 * kTaggedSize);
+#ifdef V8_ENABLE_SANDBOX
+  a.Store(AccessBuilder::ForJSObjectWithEmbedderDataSlotsCppHeapWrappable(),
+          jsgraph()->ZeroConstant());
+  static_assert(JSPromise::kHeaderSize == 6 * kTaggedSize);
+#else
+  a.Store(AccessBuilder::ForJSObjectWithEmbedderDataSlotsCppHeapWrappable(),
+          jsgraph()->ZeroConstant());
+  static_assert(JSPromise::kHeaderSize == 7 * kTaggedSize);
+#endif
   for (int offset = JSPromise::kHeaderSize;
        offset < JSPromise::kSizeWithEmbedderFields; offset += kTaggedSize) {
     a.Store(AccessBuilder::ForJSObjectOffset(offset),
