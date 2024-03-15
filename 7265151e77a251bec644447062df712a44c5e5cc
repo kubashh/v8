@@ -152,6 +152,30 @@
       },
       "revId": "7265151e77a251bec644447062df712a44c5e5cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "837088be_b67080c7",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-03-15T11:27:21Z",
+      "side": 1,
+      "message": "I\u0027ve evaluated the performance of some of the options from our discussion:\n1) Transition Array Lookup before the Description array lookup.\n2) Introduce MegaTransition state for all keyed stores. \n3) Introduce MegaTransition state only for enumerated key stores. (The key is from for-in statement)\n\nAccording to the tests, option 1) doesn\u0027t seem to benefit performance:\nhttps://pinpoint-dot-chromeperf.appspot.com/job/11f5e50ade0000\n\nOption 2) even have some regression, which I think is due to the deoptimization. \n\nOption 3) is the only option that might be beneficial (+0.6~1% to speedometer2):\nhttps://pinpoint-dot-chromeperf.appspot.com/job/102f95535e0000\nhttps://pinpoint-dot-chromeperf.appspot.com/job/161435765e0000\nhttps://pinpoint-dot-chromeperf.appspot.com/job/11df9eaa5e0000\n\nComparing 2) and 3), I think 3) is better because it is less likely to have deoptimization in JIT code (1/450000 of the chance to deopt), and we can avoid the `TryToName` heuristic because we know that the key is UniqueName.\n\nI haven\u0027t try the options that tighten the fast path to simple transitioning fast data stores yet, I think we can make it as a TODO because it sounds to depends on the collected feedback in this CL.\n\nDo you have any suggestion and comments for our next step?",
+      "parentUuid": "81cbaeb3_ee29644a",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
