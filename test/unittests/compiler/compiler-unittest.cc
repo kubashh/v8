@@ -621,7 +621,7 @@ TEST_F(CompilerTest, CompileFunctionScriptOrigin) {
                             i_isolate()))
                   ->StrictEquals(NewString("test")));
   v8::TryCatch try_catch(isolate());
-  isolate()->SetCaptureStackTraceForUncaughtExceptions(true);
+  isolate()->EnableStackTraceCaptureForUncaughtExceptions();
   EXPECT_TRUE(fun->Call(context(), context()->Global(), 0, nullptr).IsEmpty());
   EXPECT_TRUE(try_catch.HasCaught());
   EXPECT_TRUE(!try_catch.Exception().IsEmpty());

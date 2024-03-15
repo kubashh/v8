@@ -148,8 +148,8 @@ WASM_COMPILED_EXEC_TEST(CollectDetailedWasmStack_ExplicitThrowFromJs) {
           CompileRun("(function callFn(fn) { fn(); })"))));
 
   Isolate* isolate = js_wasm_wrapper->GetIsolate();
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true, 10,
-                                                     v8::StackTrace::kOverview);
+  isolate->EnableStackTraceCaptureForUncaughtExceptions(
+      10, v8::StackTrace::kOverview);
   Handle<Object> global(isolate->context()->global_object(), isolate);
   MaybeHandle<Object> maybe_exc;
   Handle<Object> args[] = {js_wasm_wrapper};
@@ -188,8 +188,8 @@ WASM_COMPILED_EXEC_TEST(CollectDetailedWasmStack_WasmUrl) {
           CompileRun("(function callFn(fn) { fn(); })"))));
 
   Isolate* isolate = js_wasm_wrapper->GetIsolate();
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true, 10,
-                                                     v8::StackTrace::kOverview);
+  isolate->EnableStackTraceCaptureForUncaughtExceptions(
+      10, v8::StackTrace::kOverview);
 
   // Set the wasm script source url.
   const char* url = "http://example.com/example.wasm";
@@ -252,8 +252,8 @@ WASM_COMPILED_EXEC_TEST(CollectDetailedWasmStack_WasmError) {
             CompileRun("(function callFn(fn) { fn(); })"))));
 
     Isolate* isolate = js_wasm_wrapper->GetIsolate();
-    isolate->SetCaptureStackTraceForUncaughtExceptions(
-        true, 10, v8::StackTrace::kOverview);
+    isolate->EnableStackTraceCaptureForUncaughtExceptions(
+        10, v8::StackTrace::kOverview);
     Handle<Object> global(isolate->context()->global_object(), isolate);
     MaybeHandle<Object> maybe_exc;
     Handle<Object> args[] = {js_wasm_wrapper};

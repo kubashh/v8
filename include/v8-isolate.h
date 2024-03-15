@@ -1649,7 +1649,23 @@ class V8_EXPORT Isolate {
    */
   void SetCaptureStackTraceForUncaughtExceptions(
       bool capture, int frame_limit = 10,
+      StackTrace::StackTraceOptions options = StackTrace::kOverview) {
+    // Keeping this method only to not break the API for node and chrome dry
+    // runs.
+    if (capture) {
+      EnableStackTraceCaptureForUncaughtExceptions(frame_limit, options);
+    }
+  }
+
+  int EnableStackTraceCaptureForUncaughtExceptions(
+      int frame_limit = 10,
       StackTrace::StackTraceOptions options = StackTrace::kOverview);
+
+  void UpdateStackTraceCaptureForUncaughtExceptions(
+      int capture_id, std::optional<int> frame_limit,
+      std::optional<StackTrace::StackTraceOptions> options = {});
+
+  void DisableStackTraceCaptureForUncaughtExceptions(int capture_id);
 
   /**
    * Iterates through all external resources referenced from current isolate

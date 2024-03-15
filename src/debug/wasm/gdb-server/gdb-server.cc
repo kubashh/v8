@@ -390,8 +390,9 @@ std::atomic<uint32_t> GdbServer::DebugDelegate::id_s;
 
 GdbServer::DebugDelegate::DebugDelegate(Isolate* isolate, GdbServer* gdb_server)
     : isolate_(isolate), id_(id_s++), gdb_server_(gdb_server) {
-  isolate_->SetCaptureStackTraceForUncaughtExceptions(
-      true, kMaxWasmCallStack, v8::StackTrace::kOverview);
+  stack_trace_capture_id_ =
+      isolate_->EnableStackTraceCaptureForUncaughtExceptions(
+          kMaxWasmCallStack, v8::StackTrace::kOverview);
 
   // Register the delegate
   isolate_->debug()->SetDebugDelegate(this);
@@ -403,6 +404,8 @@ GdbServer::DebugDelegate::DebugDelegate(Isolate* isolate, GdbServer* gdb_server)
 GdbServer::DebugDelegate::~DebugDelegate() {
   // Deregister the delegate
   isolate_->debug()->SetDebugDelegate(nullptr);
+  isolate_->DisableStackTraceCaptureForUncaughtExceptions(
+      stack_trace_capture_id_);
 }
 
 void GdbServer::DebugDelegate::ScriptCompiled(Local<debug::Script> script,

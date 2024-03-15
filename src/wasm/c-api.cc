@@ -532,8 +532,8 @@ auto Store::make(Engine*) -> own<Store> {
   }
   // We want stack traces for traps.
   constexpr int kStackLimit = 10;
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true, kStackLimit,
-                                                     v8::StackTrace::kOverview);
+  isolate->EnableStackTraceCaptureForUncaughtExceptions(
+      kStackLimit, v8::StackTrace::kOverview);
 
   return make_own(seal<Store>(store.release()));
 }
@@ -2347,9 +2347,9 @@ struct borrowed_vec {
 
 #define WASM_DEFINE_OWN(name, Name)                                            \
   struct wasm_##name##_t : Name {};                                            \
-                                                                               \
+                                                                        \
   void wasm_##name##_delete(wasm_##name##_t* x) { delete x; }                  \
-                                                                               \
+                                                                        \
   extern "C++" inline auto hide_##name(Name* x)->wasm_##name##_t* {            \
     return static_cast<wasm_##name##_t*>(x);                                   \
   }                                                                            \

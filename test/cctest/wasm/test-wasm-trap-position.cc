@@ -81,8 +81,8 @@ WASM_COMPILED_EXEC_TEST(Unreachable) {
           CompileRun("(function callFn(fn) { fn(); })"))));
 
   Isolate* isolate = js_wasm_wrapper->GetIsolate();
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true, 10,
-                                                     v8::StackTrace::kOverview);
+  isolate->EnableStackTraceCaptureForUncaughtExceptions(
+      10, v8::StackTrace::kOverview);
   Handle<Object> global(isolate->context()->global_object(), isolate);
   MaybeHandle<Object> maybe_exc;
   Handle<Object> args[] = {js_wasm_wrapper};
@@ -123,8 +123,8 @@ WASM_COMPILED_EXEC_TEST(IllegalLoad) {
           CompileRun("(function callFn(fn) { fn(); })"))));
 
   Isolate* isolate = js_wasm_wrapper->GetIsolate();
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true, 10,
-                                                     v8::StackTrace::kOverview);
+  isolate->EnableStackTraceCaptureForUncaughtExceptions(
+      10, v8::StackTrace::kOverview);
   Handle<Object> global(isolate->context()->global_object(), isolate);
   MaybeHandle<Object> maybe_exc;
   Handle<Object> args[] = {js_wasm_wrapper};

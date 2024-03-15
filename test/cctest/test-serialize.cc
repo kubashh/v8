@@ -5819,7 +5819,7 @@ UNINITIALIZED_TEST(NoStackFrameCacheSerialization) {
   SnapshotCreatorParams testing_params;
   v8::SnapshotCreator creator(testing_params.create_params);
   v8::Isolate* isolate = creator.GetIsolate();
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  isolate->EnableStackTraceCaptureForUncaughtExceptions();
   {
     v8::HandleScope handle_scope(isolate);
     {

@@ -177,6 +177,7 @@ class GdbServer {
     Isolate* isolate_;
     uint32_t id_;
     GdbServer* gdb_server_;
+    int stack_trace_capture_id_;
 
     static std::atomic<uint32_t> id_s;
   };

@@ -152,7 +152,7 @@ class V8_EXPORT Message {
 
   /**
    * Exception stack trace. By default stack traces are not captured for
-   * uncaught exceptions. SetCaptureStackTraceForUncaughtExceptions allows
+   * uncaught exceptions. EnableStackTraceCaptureForUncaughtExceptions allows
    * to change this option.
    */
   Local<StackTrace> GetStackTrace() const;

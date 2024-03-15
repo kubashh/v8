@@ -82,7 +82,8 @@ THREADED_TEST(ExceptionCreateMessage) {
   v8::Local<String> foo_str = v8_str("foo");
   v8::Local<String> message_str = v8_str("message");
 
-  context->GetIsolate()->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id =
+      context->GetIsolate()->EnableStackTraceCaptureForUncaughtExceptions();
 
   Local<v8::FunctionTemplate> fun =
       v8::FunctionTemplate::New(context->GetIsolate(), ThrowV8Exception);
@@ -122,10 +123,11 @@ THREADED_TEST(ExceptionCreateMessage) {
   CHECK(!stackTrace.IsEmpty());
   CHECK_EQ(2, stackTrace->GetFrameCount());
 
-  context->GetIsolate()->SetCaptureStackTraceForUncaughtExceptions(false);
+  context->GetIsolate()->DisableStackTraceCaptureForUncaughtExceptions(
+      capture_id);
 
-  // Now check message location when SetCaptureStackTraceForUncaughtExceptions
-  // is false.
+  // Now check message location when the stack trace capture for uncaught
+  // exceptions is disabled.
   try_catch.Reset();
 
   CompileRun(
@@ -423,7 +425,7 @@ TEST(CaptureStackTraceForUncaughtException) {
   v8::Isolate* isolate = env->GetIsolate();
   v8::HandleScope scope(isolate);
   isolate->AddMessageListener(StackTraceForUncaughtExceptionListener);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions();
 
   CompileRunWithOrigin(uncaught_exception_source, "origin");
   v8::Local<v8::Object> global = env->Global();
@@ -433,7 +435,7 @@ TEST(CaptureStackTraceForUncaughtException) {
   CHECK(v8::Function::Cast(*trouble)
             ->Call(env.local(), global, 0, nullptr)
             .IsEmpty());
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(StackTraceForUncaughtExceptionListener);
   CHECK_EQ(1, report_count);
 }
@@ -475,12 +477,12 @@ TEST(CaptureStackTraceForUncaughtExceptionAndSetters) {
   v8::Local<v8::Object> object = v8::Object::New(isolate);
   isolate->AddMessageListener(StackTraceForUncaughtExceptionAndSettersListener,
                               object);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true, 1024,
-                                                     v8::StackTrace::kDetailed);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions(
+      1024, v8::StackTrace::kDetailed);
 
   CompileRun(uncaught_setter_exception_source);
   CompileRun("throw 'exception';");
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(
       StackTraceForUncaughtExceptionAndSettersListener);
   CHECK(object
@@ -542,9 +544,9 @@ TEST(GetStackTraceContainsFunctionsWithFunctionName) {
   CompileRunWithOrigin(functions_with_function_name, "origin");
 
   isolate->AddMessageListener(StackTraceFunctionNameListener);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions();
   CompileRunWithOrigin(functions_with_function_name_caller, "origin");
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(StackTraceFunctionNameListener);
 }
 
@@ -586,9 +588,9 @@ TEST(RethrowStackTrace) {
       "  }                              \n"
       "}                                \n";
   isolate->AddMessageListener(RethrowStackTraceHandler);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions();
   CompileRun(source);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(RethrowStackTraceHandler);
 }
 
@@ -622,9 +624,9 @@ TEST(RethrowPrimitiveStackTrace) {
       "  t(e1)                          \n"
       "}                                \n";
   isolate->AddMessageListener(RethrowPrimitiveStackTraceHandler);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions();
   CompileRun(source);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(RethrowPrimitiveStackTraceHandler);
 }
 
@@ -647,9 +649,9 @@ TEST(RethrowExistingStackTrace) {
       "var e = new Error();           \n"
       "throw e;                       \n";
   isolate->AddMessageListener(RethrowExistingStackTraceHandler);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions();
   CompileRun(source);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(RethrowExistingStackTraceHandler);
 }
 
@@ -671,9 +673,9 @@ TEST(RethrowBogusErrorStackTrace) {
       "var e = {__proto__: new Error()} \n"
       "throw e;                         \n";
   isolate->AddMessageListener(RethrowBogusErrorStackTraceHandler);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int capture_id = isolate->EnableStackTraceCaptureForUncaughtExceptions();
   CompileRun(source);
-  isolate->SetCaptureStackTraceForUncaughtExceptions(false);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
   isolate->RemoveMessageListeners(RethrowBogusErrorStackTraceHandler);
 }
 
@@ -881,8 +883,8 @@ UNINITIALIZED_TEST(CaptureStackTraceForStackOverflow) {
   {
     LocalContext current(isolate);
     v8::HandleScope scope(isolate);
-    isolate->SetCaptureStackTraceForUncaughtExceptions(
-        true, 10, v8::StackTrace::kDetailed);
+    isolate->EnableStackTraceCaptureForUncaughtExceptions(
+        10, v8::StackTrace::kDetailed);
     v8::TryCatch try_catch(isolate);
     CompileRun("(function f(x) { f(x+1); })(0)");
     CHECK(try_catch.HasCaught());

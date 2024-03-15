@@ -16131,7 +16131,7 @@ TEST(PromiseRejectCallback) {
   CHECK_EQ(1, promise_resolve_after_resolved_counter);
 
   // Test stack frames.
-  env->GetIsolate()->SetCaptureStackTraceForUncaughtExceptions(true);
+  env->GetIsolate()->EnableStackTraceCaptureForUncaughtExceptions();
 
   ResetPromiseStates();
 
