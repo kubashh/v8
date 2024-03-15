@@ -111,12 +111,13 @@ BUILTIN(DataViewConstructor) {
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
         isolate, result,
         JSObject::NewWithMap(isolate, initial_map,
-                             Handle<AllocationSite>::null()));
+                             Handle<AllocationSite>::null(), true));
   } else {
     // Create a JSDataView.
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
         isolate, result,
-        JSObject::New(target, new_target, Handle<AllocationSite>::null()));
+        JSObject::New(target, new_target, Handle<AllocationSite>::null(),
+                      true));
   }
   Handle<JSDataViewOrRabGsabDataView> data_view =
       Handle<JSDataViewOrRabGsabDataView>::cast(result);
