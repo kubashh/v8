@@ -1413,7 +1413,7 @@ void AccessorAssembler::HandleStoreICHandlerCase(
     BIND(&store_transition);
     {
       TNode<Map> map = CAST(map_or_property_cell);
-      HandleStoreICTransitionMapHandlerCase(p, map, miss,
+      HandleStoreICTransitionMapHandlerCase(p, map, miss, miss,
                                             p->IsAnyDefineOwn()
                                                 ? kDontCheckPrototypeValidity
                                                 : kCheckPrototypeValidity);
@@ -1424,7 +1424,7 @@ void AccessorAssembler::HandleStoreICHandlerCase(
 
 void AccessorAssembler::HandleStoreICTransitionMapHandlerCase(
     const StoreICParameters* p, TNode<Map> transition_map, Label* miss,
-    StoreTransitionMapFlags flags) {
+    Label* slow, StoreTransitionMapFlags flags) {
   DCHECK_EQ(0, flags & ~kStoreTransitionMapFlagsMask);
   if (flags & kCheckPrototypeValidity) {
     TNode<Object> maybe_validity_cell =
@@ -1466,20 +1466,20 @@ void AccessorAssembler::HandleStoreICTransitionMapHandlerCase(
     // Both DontDelete and ReadOnly attributes must not be set and it has to be
     // a kData property.
     GotoIf(IsSetWord32(details, kKindAndAttributesDontDeleteReadOnlyMask),
-           miss);
+           slow);
 
     // DontEnum attribute is allowed only for private symbols and vice versa.
     Branch(Word32Equal(
                IsSetWord32(details, PropertyDetails::kAttributesDontEnumMask),
                IsPrivateSymbol(CAST(p->name()))),
-           &attributes_ok, miss);
+           &attributes_ok, slow);
 
     BIND(&attributes_ok);
   }
 
   OverwriteExistingFastDataProperty(CAST(p->receiver()), transition_map,
                                     descriptors, last_key_index, details,
-                                    p->value(), miss, true);
+                                    p->value(), slow, true);
 }
 
 void AccessorAssembler::UpdateMayHaveInterestingProperty(

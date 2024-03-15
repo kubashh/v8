@@ -288,7 +288,7 @@ class V8_EXPORT_PRIVATE AccessorAssembler : public CodeStubAssembler {
   };
   void HandleStoreICTransitionMapHandlerCase(const StoreICParameters* p,
                                              TNode<Map> transition_map,
-                                             Label* miss,
+                                             Label* miss, Label* slow,
                                              StoreTransitionMapFlags flags);
 
   // Updates flags on |dict| if |name| is an interesting property.
