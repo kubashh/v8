@@ -441,7 +441,8 @@ MaybeHandle<JSObject> InstantiateObject(Isolate* isolate,
   Handle<JSObject> object;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate, object,
-      JSObject::New(constructor, new_target, Handle<AllocationSite>::null()),
+      JSObject::New(constructor, new_target, Handle<AllocationSite>::null(),
+                    true),
       JSObject);
 
   if (is_prototype) JSObject::OptimizeAsPrototype(object);
@@ -626,7 +627,7 @@ MaybeHandle<JSObject> ApiNatives::InstantiateRemoteObject(
       FunctionTemplateInfo::cast(data->constructor()), isolate);
   Handle<Map> object_map = isolate->factory()->NewContextlessMap(
       JS_SPECIAL_API_OBJECT_TYPE,
-      JSObject::kHeaderSize +
+      JSSpecialObject::kHeaderSize +
           data->embedder_field_count() * kEmbedderDataSlotSize,
       TERMINAL_FAST_ELEMENTS_KIND);
   object_map->SetConstructor(*constructor);
