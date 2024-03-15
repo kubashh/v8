@@ -3605,10 +3605,8 @@ void Shell::PromiseRejectCallback(v8::PromiseRejectMessage data) {
     return;
   }
 
-  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
-  bool capture_exceptions =
-      i_isolate->get_capture_stack_trace_for_uncaught_exceptions();
-  isolate->SetCaptureStackTraceForUncaughtExceptions(true);
+  int stack_trace_capture_id =
+      isolate->EnableStackTraceCaptureForUncaughtExceptions();
   v8::Local<Value> exception = data.GetValue();
   v8::Local<Message> message;
   // Assume that all objects are stack-traces.
@@ -3622,7 +3620,8 @@ void Shell::PromiseRejectCallback(v8::PromiseRejectMessage data) {
         v8::String::NewFromUtf8Literal(isolate, "Unhandled Promise."));
     message = Exception::CreateMessage(isolate, exception);
   }
-  isolate->SetCaptureStackTraceForUncaughtExceptions(capture_exceptions);
+  isolate->DisableStackTraceCaptureForUncaughtExceptions(
+      stack_trace_capture_id);
 
   isolate_data->AddUnhandledPromise(promise, message, exception);
 }

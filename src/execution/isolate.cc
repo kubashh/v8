@@ -1297,8 +1297,8 @@ MaybeHandle<JSObject> Isolate::CaptureAndSetErrorStack(
   int stack_trace_limit = 0;
   if (GetStackTraceLimit(this, &stack_trace_limit)) {
     int limit = stack_trace_limit;
-    if (capture_stack_trace_for_uncaught_exceptions_ &&
-        !(stack_trace_for_uncaught_exceptions_options_ &
+    if (stack_trace_capture_status_.is_enabled &&
+        !(stack_trace_capture_status_.current_options &
           StackTrace::kExposeFramesAcrossSecurityOrigins)) {
       // Collect up to the maximum of what the JavaScript program and
       // the inspector want. There's a special case here where the API
@@ -1306,8 +1306,8 @@ MaybeHandle<JSObject> Isolate::CaptureAndSetErrorStack(
       // in which case we collect a separate trace below. Note that
       // the inspector doesn't use this option, so we could as well
       // just deprecate this in the future.
-      if (limit < stack_trace_for_uncaught_exceptions_frame_limit_) {
-        limit = stack_trace_for_uncaught_exceptions_frame_limit_;
+      if (limit < stack_trace_capture_status_.current_frame_limit) {
+        limit = stack_trace_capture_status_.current_frame_limit;
       }
     }
     error_stack = CaptureSimpleStackTrace(this, limit, mode, caller);
@@ -1320,18 +1320,18 @@ MaybeHandle<JSObject> Isolate::CaptureAndSetErrorStack(
   // the Error.stackTraceLimit value was below what was requested via
   // the API, or a negative limit to indicate the opposite), or we
   // collect a "detailed stack trace" eagerly and stash that away.
-  if (capture_stack_trace_for_uncaught_exceptions_) {
+  if (stack_trace_capture_status_.is_enabled) {
     Handle<Object> limit_or_stack_frame_infos;
     if (IsUndefined(*error_stack, this) ||
-        (stack_trace_for_uncaught_exceptions_options_ &
+        (stack_trace_capture_status_.current_options &
          StackTrace::kExposeFramesAcrossSecurityOrigins)) {
       limit_or_stack_frame_infos = CaptureDetailedStackTrace(
-          stack_trace_for_uncaught_exceptions_frame_limit_,
-          stack_trace_for_uncaught_exceptions_options_);
+          stack_trace_capture_status_.current_frame_limit,
+          stack_trace_capture_status_.current_options);
     } else {
       int limit =
-          stack_trace_limit > stack_trace_for_uncaught_exceptions_frame_limit_
-              ? -stack_trace_for_uncaught_exceptions_frame_limit_
+          stack_trace_limit > stack_trace_capture_status_.current_frame_limit
+              ? -stack_trace_capture_status_.current_frame_limit
               : stack_trace_limit;
       limit_or_stack_frame_infos = handle(Smi::FromInt(limit), this);
     }
@@ -2532,9 +2532,9 @@ void Isolate::PrintCurrentStackTrace(std::ostream& out) {
 bool Isolate::ComputeLocation(MessageLocation* target) {
   DebuggableStackFrameIterator it(this);
   if (it.done()) return false;
-  // Compute the location from the function and the relocation info of the
-  // baseline code. For optimized code this will use the deoptimization
-  // information to get canonical location information.
+    // Compute the location from the function and the relocation info of the
+    // baseline code. For optimized code this will use the deoptimization
+    // information to get canonical location information.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope code_ref_scope;
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -2623,7 +2623,7 @@ bool Isolate::ComputeLocationFromDetailedStackTrace(MessageLocation* target,
 Handle<JSMessageObject> Isolate::CreateMessage(Handle<Object> exception,
                                                MessageLocation* location) {
   Handle<FixedArray> stack_trace_object;
-  if (capture_stack_trace_for_uncaught_exceptions_) {
+  if (stack_trace_capture_status_.is_enabled) {
     if (IsJSError(*exception)) {
       // We fetch the stack trace that corresponds to this error object.
       // If the lookup fails, the exception is probably not a valid Error
@@ -2635,8 +2635,8 @@ Handle<JSMessageObject> Isolate::CreateMessage(Handle<Object> exception,
     if (stack_trace_object.is_null()) {
       // Not an error object, we capture stack and location at throw site.
       stack_trace_object = CaptureDetailedStackTrace(
-          stack_trace_for_uncaught_exceptions_frame_limit_,
-          stack_trace_for_uncaught_exceptions_options_);
+          stack_trace_capture_status_.current_frame_limit,
+          stack_trace_capture_status_.current_options);
     }
   }
   MessageLocation computed_location;
@@ -3026,15 +3026,100 @@ bool Isolate::WalkCallStackAndPromiseTree(
   return false;
 }
 
-void Isolate::SetCaptureStackTraceForUncaughtExceptions(
-    bool capture, int frame_limit, StackTrace::StackTraceOptions options) {
-  capture_stack_trace_for_uncaught_exceptions_ = capture;
-  stack_trace_for_uncaught_exceptions_frame_limit_ = frame_limit;
-  stack_trace_for_uncaught_exceptions_options_ = options;
+int Isolate::EnableStackTraceCaptureForUncaughtExceptions(
+    int frame_limit, StackTrace::StackTraceOptions options) {
+  int id = stack_trace_capture_status_.next_id;
+  stack_trace_capture_status_.next_id++;
+  stack_trace_capture_status_.is_enabled = true;
+  stack_trace_capture_status_.current_frame_limit =
+      std::max(frame_limit, stack_trace_capture_status_.current_frame_limit);
+  stack_trace_capture_status_.current_options =
+      static_cast<StackTrace::StackTraceOptions>(
+          stack_trace_capture_status_.current_options | options);
+  stack_trace_capture_status_.capture_entries.emplace_back(id, frame_limit,
+                                                           options);
+  return id;
 }
 
-bool Isolate::get_capture_stack_trace_for_uncaught_exceptions() const {
-  return capture_stack_trace_for_uncaught_exceptions_;
+void Isolate::UpdateStackTraceCaptureForUncaughtExceptions(
+    int capture_id, std::optional<int> frame_limit,
+    std::optional<StackTrace::StackTraceOptions> options) {
+  // Skip if there's nothing to update.
+  if (!frame_limit && !options) {
+    return;
+  }
+
+  int new_frame_limit = 0;
+  auto new_options = static_cast<StackTrace::StackTraceOptions>(0);
+
+  std::vector<StackTraceCaptureEntry>& entries =
+      stack_trace_capture_status_.capture_entries;
+  bool found = false;
+  for (auto it = entries.begin(); it != entries.end(); it++) {
+    if (it->id == capture_id) {
+      DCHECK(!found);
+      found = true;
+      if (frame_limit) {
+        it->frame_limit = *frame_limit;
+      }
+      if (options) {
+        it->options = *options;
+      }
+    }
+    new_frame_limit = std::max(new_frame_limit, it->frame_limit);
+    new_options =
+        static_cast<StackTrace::StackTraceOptions>(new_options | it->options);
+  }
+
+  if (found) {
+    stack_trace_capture_status_.current_frame_limit = new_frame_limit;
+    stack_trace_capture_status_.current_options = new_options;
+  } else {
+    DCHECK_EQ(stack_trace_capture_status_.is_enabled,
+              stack_trace_capture_status_.capture_entries.size());
+    DCHECK_EQ(new_frame_limit, stack_trace_capture_status_.current_frame_limit);
+    DCHECK_EQ(new_options, stack_trace_capture_status_.current_options);
+  }
+}
+
+void Isolate::DisableStackTraceCaptureForUncaughtExceptions(int capture_id) {
+  int new_frame_limit = 0;
+  auto new_options = static_cast<StackTrace::StackTraceOptions>(0);
+
+  std::vector<StackTraceCaptureEntry>& entries =
+      stack_trace_capture_status_.capture_entries;
+  bool found = false;
+  for (auto it = entries.begin(); it != entries.end();) {
+    if (it->id == capture_id) {
+      DCHECK(!found);
+      found = true;
+      it = entries.erase(it);
+    } else {
+      new_frame_limit = std::max(new_frame_limit, it->frame_limit);
+      new_options =
+          static_cast<StackTrace::StackTraceOptions>(new_options | it->options);
+      it++;
+    }
+  }
+
+  if (found && stack_trace_capture_status_.capture_entries.empty()) {
+    stack_trace_capture_status_.is_enabled = false;
+    stack_trace_capture_status_.current_frame_limit = 0;
+    stack_trace_capture_status_.current_options =
+        static_cast<StackTrace::StackTraceOptions>(0);
+  } else if (found) {
+    DCHECK(stack_trace_capture_status_.is_enabled);
+    DCHECK_LE(new_frame_limit, stack_trace_capture_status_.current_frame_limit);
+    DCHECK_EQ(new_options & ~stack_trace_capture_status_.current_options,
+              static_cast<StackTrace::StackTraceOptions>(0));
+    stack_trace_capture_status_.current_frame_limit = new_frame_limit;
+    stack_trace_capture_status_.current_options = new_options;
+  } else {
+    DCHECK_EQ(stack_trace_capture_status_.is_enabled,
+              stack_trace_capture_status_.capture_entries.size());
+    DCHECK_EQ(new_frame_limit, stack_trace_capture_status_.current_frame_limit);
+    DCHECK_EQ(new_options, stack_trace_capture_status_.current_options);
+  }
 }
 
 void Isolate::SetAbortOnUncaughtExceptionCallback(
@@ -5550,10 +5635,10 @@ void Isolate::UpdatePromiseHookProtector() {
 
 void Isolate::PromiseHookStateUpdated() {
   promise_hook_flags_ =
-    (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
-    PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
-    PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
-    PromiseHookFields::IsDebugActive::encode(debug()->is_active());
+      (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
+      PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
+      PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
+      PromiseHookFields::IsDebugActive::encode(debug()->is_active());
 
   if (promise_hook_flags_ != 0) {
     UpdatePromiseHookProtector();

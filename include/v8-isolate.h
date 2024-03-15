@@ -1647,9 +1647,15 @@ class V8_EXPORT Isolate {
    * Tells V8 to capture current stack trace when uncaught exception occurs
    * and report it to the message listeners. The option is off by default.
    */
-  void SetCaptureStackTraceForUncaughtExceptions(
-      bool capture, int frame_limit = 10,
+  int EnableStackTraceCaptureForUncaughtExceptions(
+      int frame_limit = 10,
       StackTrace::StackTraceOptions options = StackTrace::kOverview);
+
+  void UpdateStackTraceCaptureForUncaughtExceptions(
+      int capture_id, std::optional<int> frame_limit,
+      std::optional<StackTrace::StackTraceOptions> options = {});
+
+  void DisableStackTraceCaptureForUncaughtExceptions(int capture_id);
 
   /**
    * Iterates through all external resources referenced from current isolate

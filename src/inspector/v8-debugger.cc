@@ -1038,10 +1038,20 @@ void V8Debugger::setAsyncCallStackDepth(V8DebuggerAgentImpl* agent, int depth) {
 
 void V8Debugger::setMaxCallStackSizeToCapture(V8RuntimeAgentImpl* agent,
                                               int size) {
-  if (size < 0) {
-    m_maxCallStackSizeToCaptureMap.erase(agent);
-  } else {
-    m_maxCallStackSizeToCaptureMap[agent] = size;
+  if (m_captureStackTraceMap.contains(agent)) {
+    if (size < 0) {
+      int capture_id = m_captureStackTraceMap[agent].first;
+      m_captureStackTraceMap.erase(agent);
+      m_isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
+    } else {
+      m_captureStackTraceMap[agent].second = size;
+      m_isolate->UpdateStackTraceCaptureForUncaughtExceptions(
+          m_captureStackTraceMap[agent].first, size);
+    }
+  } else if (size >= 0) {
+    int capture_id =
+        m_isolate->EnableStackTraceCaptureForUncaughtExceptions(size);
+    m_captureStackTraceMap[agent] = {capture_id, size};
   }
 
   // The following logic is a bit complicated to decipher because we
@@ -1059,18 +1069,15 @@ void V8Debugger::setMaxCallStackSizeToCapture(V8RuntimeAgentImpl* agent,
   // browser via `Runtime` domain while still minimizing the performance
   // overhead of having the inspector attached - see the relevant design
   // document https://bit.ly/v8-cheaper-inspector-stack-traces for more
-  if (m_maxCallStackSizeToCaptureMap.empty()) {
+  if (m_captureStackTraceMap.empty()) {
     m_maxCallStackSizeToCapture =
         V8StackTraceImpl::kDefaultMaxCallStackSizeToCapture;
-    m_isolate->SetCaptureStackTraceForUncaughtExceptions(false);
   } else {
     m_maxCallStackSizeToCapture = 0;
-    for (auto const& pair : m_maxCallStackSizeToCaptureMap) {
-      if (m_maxCallStackSizeToCapture < pair.second)
-        m_maxCallStackSizeToCapture = pair.second;
+    for (auto const& pair : m_captureStackTraceMap) {
+      if (m_maxCallStackSizeToCapture < pair.second.second)
+        m_maxCallStackSizeToCapture = pair.second.second;
     }
-    m_isolate->SetCaptureStackTraceForUncaughtExceptions(
-        m_maxCallStackSizeToCapture > 0, m_maxCallStackSizeToCapture);
   }
 }
 
