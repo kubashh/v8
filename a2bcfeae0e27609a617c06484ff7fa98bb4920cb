@@ -16,6 +16,213 @@
       "message": "Hi Darius, this patch is ready for review, PTAL!",
       "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68c9c5f5_7a4054b1",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3754,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "Could you add a DCHECK here that `kind \u003e\u003d kFirstSignExtensionOp`?",
+      "range": {
+        "startLine": 3754,
+        "startChar": 2,
+        "endLine": 3754,
+        "endChar": 4
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9348c90_4fd700ea",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "Could you add a DCHECK here that `kind \u003e\u003d kFirstSignExtensionOp`?",
+      "range": {
+        "startLine": 3764,
+        "startChar": 2,
+        "endLine": 3764,
+        "endChar": 4
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92dab47a_7cf83907",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7822,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "nit: add a newline here",
+      "range": {
+        "startLine": 7822,
+        "startChar": 46,
+        "endLine": 7822,
+        "endChar": 47
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56d99e63_090b60be",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7953,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "nit: add a newline here",
+      "range": {
+        "startLine": 7953,
+        "startChar": 47,
+        "endLine": 7953,
+        "endChar": 48
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b14f0cb7_05657597",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "Same thing, I\u0027d prefer `.input()` rather than `.input(0)`, see next comment.",
+      "range": {
+        "startLine": 256,
+        "startChar": 8,
+        "endLine": 256,
+        "endChar": 36
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9204e928_5cd0455e",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "I\u0027d prefer to have `.left()` and `.right()` rather than `.input(_)`.\n\nMaybe you should introduce Opmasks (see opmasks.h) for all unary/binary sign extensions, then the outer switch would be replaced by 2 ifs:\n```\nif (const Simd128UnopOp* unop0 \u003d op0.TryCast\u003cSimd128UnopOp\u003e()) {\n\n\n} else if (const Simd128BinopOp* unop0 \u003d op0.TryCast\u003cSimd128BinopOp\u003e()) {\n\n\n} else {\n  return {false, false};\n}\n```\n\nAnd inside the inner switches, the `op1.Cast\u003cSimd128BinopOp\u003e().kind \u003d\u003d Simd128BinopOp::Kind::k##op_high \u0026\u0026 op0.input(0) \u003d\u003d op1.input(0) \u0026\u0026 op0.input(1) \u003d\u003d op1.input(1)` would become:\n```\nif (const Simd128BinopOp* binop1 \u003d op1.TryCast\u003cOpmask::kSimd128##op_high\u003e();\n    binop1 \u0026\u0026 binop0.left() \u003d\u003d binop1.left() \u0026\u0026 binop0.right() \u0026\u0026 binop1.right()) {\n    return {true, true}; \n  }\n}\n```",
+      "range": {
+        "startLine": 267,
+        "startChar": 8,
+        "endLine": 267,
+        "endChar": 68
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aea33a7_d492e191",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "You could also write this as `auto [is_sign_ext, is_packable_sign_ext] \u003d IsPackableSignExtensionOp(op0, op1);`, but if you prefer with the explicit `bool` declaration and the `std::tie`, it\u0027s also fine :)",
+      "range": {
+        "startLine": 338,
+        "startChar": 2,
+        "endLine": 340,
+        "endChar": 42
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e055c994_2c54f410",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "nit: build",
+      "range": {
+        "startLine": 499,
+        "startChar": 64,
+        "endLine": 499,
+        "endChar": 69
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10847f37_a352926b",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-15T10:06:37Z",
+      "side": 1,
+      "message": "nit: build",
+      "range": {
+        "startLine": 522,
+        "startChar": 65,
+        "endLine": 522,
+        "endChar": 70
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
