@@ -56,6 +56,7 @@ constexpr InlineCacheState RECOMPUTE_HANDLER =
 constexpr InlineCacheState POLYMORPHIC = InlineCacheState::POLYMORPHIC;
 constexpr InlineCacheState MEGAMORPHIC = InlineCacheState::MEGAMORPHIC;
 constexpr InlineCacheState MEGADOM = InlineCacheState::MEGADOM;
+constexpr InlineCacheState MEGATRANSITION = InlineCacheState::MEGATRANSITION;
 constexpr InlineCacheState GENERIC = InlineCacheState::GENERIC;
 
 char IC::TransitionMarkFromState(IC::State state) {
@@ -74,6 +75,8 @@ char IC::TransitionMarkFromState(IC::State state) {
       return 'N';
     case MEGADOM:
       return 'D';
+    case MEGATRANSITION:
+      return 'T';
     case GENERIC:
       return 'G';
   }
@@ -394,6 +397,11 @@ void IC::ConfigureVectorState(
   OnFeedbackChanged("Polymorphic");
 }
 
+void IC::ConfigureVectorState(IC::State new_state) {
+  DCHECK_EQ(MEGATRANSITION, new_state);
+  nexus()->ConfigureMegaTransition();
+}
+
 MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
                                  bool update_feedback,
                                  Handle<Object> receiver) {
@@ -628,6 +636,21 @@ bool IC::UpdateMegaDOMIC(const MaybeObjectHandle& handler, Handle<Name> name) {
   return true;
 }
 
+bool IC::UpdateMegaTransitionIC(LookupIterator* lookup) {
+  if (!v8_flags.mega_transition_ic) return false;
+
+  if (!IsKeyedStoreIC()) return false;
+
+  if (lookup->state() != LookupIterator::TRANSITION) return false;
+
+  if (lookup->transition_map()->is_dictionary_map()) return false;
+
+  ConfigureVectorState(MEGATRANSITION);
+  vector_set_ = true;
+
+  return true;
+}
+
 bool IC::UpdatePolymorphicIC(Handle<Name> name,
                              const MaybeObjectHandle& handler) {
   DCHECK(IsHandler(*handler));
@@ -751,7 +774,8 @@ void IC::SetCache(Handle<Name> name, Handle<Object> handler) {
   SetCache(name, MaybeObjectHandle(handler));
 }
 
-void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
+void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler,
+                  LookupIterator* lookup) {
   DCHECK(IsHandler(*handler));
   // Currently only load and store ICs support non-code handlers.
   DCHECK(IsAnyLoad() || IsAnyStore() || IsAnyHas());
@@ -774,6 +798,24 @@ void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
       if (!is_keyed() || state() == RECOMPUTE_HANDLER) {
         CopyICToMegamorphicCache(name);
       }
+      V8_FALLTHROUGH;
+    case MEGATRANSITION: {
+      DCHECK_NOT_NULL(lookup);
+      if (UpdateMegaTransitionIC(lookup)) break;
+      JavaScriptStackFrameIterator it(isolate());
+      while (!it.done()) {
+        if (it.frame()->is_java_script()) {
+          JavaScriptFrame* frame = it.frame();
+          if (frame->is_optimized()) {
+            Tagged<JSFunction> function = frame->function();
+            Tagged<Code> code = function->abstract_code(isolate())->GetCode();
+            code->SetMarkedForDeoptimization(isolate(),
+                                             "not transitioning store");
+          }
+          break;
+        }
+      }
+    }
       V8_FALLTHROUGH;
     case MEGADOM:
       ConfigureVectorState(MEGAMORPHIC, name);
@@ -1951,7 +1993,7 @@ void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
   // Can't use {lookup->name()} because the LookupIterator might be in
   // "elements" mode for keys that are strings representing integers above
   // JSArray::kMaxIndex.
-  SetCache(lookup->GetName(), handler);
+  SetCache(lookup->GetName(), handler, lookup);
   TraceIC("StoreIC", lookup->GetName());
 }
 

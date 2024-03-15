@@ -297,6 +297,8 @@ namespace internal {
   /* Handlers */                                                               \
   TFH(KeyedLoadIC_PolymorphicName, LoadWithVector)                             \
   TFH(KeyedStoreIC_Megamorphic, StoreWithVector)                               \
+  TFH(KeyedStoreIC_Transition, StoreWithVector)                                \
+  TFH(EnumeratedKeyedStoreIC_Transition, StoreWithVector)                      \
   TFH(DefineKeyedOwnIC_Megamorphic, StoreNoFeedback)                           \
   TFH(LoadGlobalIC_NoFeedback, LoadGlobalNoFeedback)                           \
   TFH(LoadIC_FunctionPrototype, LoadWithVector)                                \
@@ -675,6 +677,7 @@ namespace internal {
   TFH(KeyedStoreIC, StoreWithVector)                                           \
   TFH(KeyedStoreICTrampoline, Store)                                           \
   TFH(KeyedStoreICTrampoline_Megamorphic, Store)                               \
+  TFH(EnumeratedKeyedStoreICTrampoline_Transition, Store)                      \
   TFH(KeyedStoreICBaseline, StoreBaseline)                                     \
   TFH(DefineKeyedOwnIC, DefineKeyedOwnWithVector)                              \
   TFH(DefineKeyedOwnICTrampoline, DefineKeyedOwn)                              \

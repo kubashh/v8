@@ -253,6 +253,15 @@ bool ShouldUseMegamorphicAccessBuiltin(FeedbackSource const& source,
   UNREACHABLE();
 }
 
+bool IsStoreTransition(FeedbackSource const& source, JSHeapBroker* broker) {
+  ProcessedFeedback const& feedback =
+      broker->GetFeedbackForPropertyAccess(source, AccessMode::kStore, {});
+  if (feedback.kind() == ProcessedFeedback::kNamedAccess) {
+    return feedback.AsNamedAccess().IsStoreTransition();
+  }
+  return false;
+}
+
 }  // namespace
 
 void JSGenericLowering::LowerJSHasProperty(Node* node) {
@@ -402,12 +411,23 @@ void JSGenericLowering::LowerJSGetIterator(Node* node) {
   ReplaceWithBuiltinCall(node, Builtin::kGetIteratorWithFeedback);
 }
 
+bool IsJSForInCacheArrayElement(Node* node) {
+  if (node->opcode() != IrOpcode::kLoadElement) return false;
+  if (ElementAccessOf(node->op()).type != Type::InternalizedString())
+    return false;
+  return true;
+}
+
 void JSGenericLowering::LowerJSSetKeyedProperty(Node* node) {
   JSSetKeyedPropertyNode n(node);
   const PropertyAccess& p = n.Parameters();
   FrameState frame_state = n.frame_state();
   Node* outer_state = frame_state.outer_frame_state();
   static_assert(n.FeedbackVectorIndex() == 3);
+  Node* key = node->InputAt(1);
+  bool is_enumerated_keyed_store_transition =
+      IsStoreTransition(p.feedback(), broker()) &&
+      IsJSForInCacheArrayElement(key);
   if (outer_state->opcode() != IrOpcode::kFrameState) {
     n->RemoveInput(n.FeedbackVectorIndex());
     node->InsertInput(zone(), 3,
@@ -418,19 +438,29 @@ void JSGenericLowering::LowerJSSetKeyedProperty(Node* node) {
     // the paths are controlled by feedback.
     // TODO(v8:12548): refactor SetKeyedIC as a subclass of KeyedStoreIC, which
     // can be called here.
-    ReplaceWithBuiltinCall(
-        node, ShouldUseMegamorphicAccessBuiltin(p.feedback(), {},
-                                                AccessMode::kStore, broker())
-                  ? Builtin::kKeyedStoreICTrampoline_Megamorphic
-                  : Builtin::kKeyedStoreICTrampoline);
+    Builtin builtin;
+    if (is_enumerated_keyed_store_transition) {
+      builtin = Builtin::kEnumeratedKeyedStoreICTrampoline_Transition;
+    } else {
+      builtin = ShouldUseMegamorphicAccessBuiltin(p.feedback(), {},
+                                                  AccessMode::kStore, broker())
+                    ? Builtin::kKeyedStoreICTrampoline_Megamorphic
+                    : Builtin::kKeyedStoreICTrampoline;
+    }
+    ReplaceWithBuiltinCall(node, builtin);
   } else {
+    Builtin builtin;
+    if (is_enumerated_keyed_store_transition) {
+      builtin = Builtin::kEnumeratedKeyedStoreIC_Transition;
+    } else {
+      builtin = ShouldUseMegamorphicAccessBuiltin(p.feedback(), {},
+                                                  AccessMode::kStore, broker())
+                    ? Builtin::kKeyedStoreIC_Megamorphic
+                    : Builtin::kKeyedStoreIC;
+    }
     node->InsertInput(zone(), 3,
                       jsgraph()->TaggedIndexConstant(p.feedback().index()));
-    ReplaceWithBuiltinCall(
-        node, ShouldUseMegamorphicAccessBuiltin(p.feedback(), {},
-                                                AccessMode::kStore, broker())
-                  ? Builtin::kKeyedStoreIC_Megamorphic
-                  : Builtin::kKeyedStoreIC);
+    ReplaceWithBuiltinCall(node, builtin);
   }
 }
 

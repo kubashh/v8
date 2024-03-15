@@ -3887,6 +3887,7 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
     Label if_handler(this, &var_handler),
         try_polymorphic(this, Label::kDeferred),
         try_megamorphic(this, Label::kDeferred),
+        try_transition(this, Label::kDeferred),
         no_feedback(this, Label::kDeferred),
         try_polymorphic_name(this, Label::kDeferred);
 
@@ -3923,12 +3924,22 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
       // Check megamorphic case.
       Comment("KeyedStoreIC_try_megamorphic");
       Branch(TaggedEqual(strong_feedback, MegamorphicSymbolConstant()),
-             &no_feedback, &try_polymorphic_name);
+             &no_feedback, &try_transition);
     }
 
     BIND(&no_feedback);
     {
       TailCallBuiltin(Builtin::kKeyedStoreIC_Megamorphic, p->context(),
+                      p->receiver(), p->name(), p->value(), p->slot(),
+                      p->vector());
+    }
+
+    BIND(&try_transition);
+    {
+      Comment("KeyedStoreIC_try_transition");
+      GotoIfNot(TaggedEqual(strong_feedback, MegaTransitionSymbolConstant()),
+                &try_polymorphic_name);
+      TailCallBuiltin(Builtin::kKeyedStoreIC_Transition, p->context(),
                       p->receiver(), p->name(), p->value(), p->slot(),
                       p->vector());
     }
@@ -4770,6 +4781,20 @@ void AccessorAssembler::GenerateKeyedStoreICTrampoline_Megamorphic() {
 
   TailCallBuiltin(Builtin::kKeyedStoreIC_Megamorphic, context, receiver, name,
                   value, slot, vector);
+}
+
+void AccessorAssembler::GenerateEnumeratedKeyedStoreICTrampoline_Transition() {
+  using Descriptor = StoreDescriptor;
+
+  auto receiver = Parameter<Object>(Descriptor::kReceiver);
+  auto name = Parameter<Object>(Descriptor::kName);
+  auto value = Parameter<Object>(Descriptor::kValue);
+  auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  TNode<FeedbackVector> vector = LoadFeedbackVectorForStub();
+
+  TailCallBuiltin(Builtin::kEnumeratedKeyedStoreIC_Transition, context,
+                  receiver, name, value, slot, vector);
 }
 
 void AccessorAssembler::GenerateKeyedStoreICBaseline() {

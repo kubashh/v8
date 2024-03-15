@@ -62,6 +62,7 @@ class IC {
   }
 
   static inline bool IsHandler(MaybeObject object);
+  static inline bool IsStoreTransitionHandler(MaybeObject object);
 
   // Nofity the IC system that a feedback has changed.
   static void OnFeedbackChanged(Isolate* isolate, Tagged<FeedbackVector> vector,
@@ -91,6 +92,8 @@ class IC {
                             MaybeObjectHandles* handlers);
   void ConfigureVectorState(
       Handle<Name> name, std::vector<MapAndHandler> const& maps_and_handlers);
+  // Configure the vector for MEGATRANSITION.
+  void ConfigureVectorState(IC::State new_state);
 
   char TransitionMarkFromState(IC::State state);
   void TraceIC(const char* type, Handle<Object> name);
@@ -103,6 +106,7 @@ class IC {
 
   void UpdateMonomorphicIC(const MaybeObjectHandle& handler, Handle<Name> name);
   bool UpdateMegaDOMIC(const MaybeObjectHandle& handler, Handle<Name> name);
+  bool UpdateMegaTransitionIC(LookupIterator* lookup);
   bool UpdatePolymorphicIC(Handle<Name> name, const MaybeObjectHandle& handler);
   void UpdateMegamorphicCache(Handle<Map> map, Handle<Name> name,
                               const MaybeObjectHandle& handler);
@@ -113,7 +117,8 @@ class IC {
   bool IsTransitionOfMonomorphicTarget(Tagged<Map> source_map,
                                        Tagged<Map> target_map);
   void SetCache(Handle<Name> name, Handle<Object> handler);
-  void SetCache(Handle<Name> name, const MaybeObjectHandle& handler);
+  void SetCache(Handle<Name> name, const MaybeObjectHandle& handler,
+                LookupIterator* lookup = nullptr);
   FeedbackSlotKind kind() const { return kind_; }
   bool IsGlobalIC() const { return IsLoadGlobalIC() || IsStoreGlobalIC(); }
   bool IsLoadIC() const { return IsLoadICKind(kind_); }

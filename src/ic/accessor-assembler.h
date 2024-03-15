@@ -71,6 +71,7 @@ class V8_EXPORT_PRIVATE AccessorAssembler : public CodeStubAssembler {
   void GenerateKeyedStoreIC();
   void GenerateKeyedStoreICTrampoline();
   void GenerateKeyedStoreICTrampoline_Megamorphic();
+  void GenerateEnumeratedKeyedStoreICTrampoline_Transition();
   void GenerateKeyedStoreICBaseline();
 
   void GenerateDefineKeyedOwnIC();

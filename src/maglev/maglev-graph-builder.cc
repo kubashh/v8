@@ -4174,6 +4174,16 @@ ReduceResult MaglevGraphBuilder::TryBuildNamedAccess(
   }
 }
 
+ReduceResult MaglevGraphBuilder::TryBuildKeyedStoreTransition(
+    ValueNode* receiver, ValueNode* lookup_start_object, ValueNode* name,
+    compiler::FeedbackSource const& feedback_source) {
+  if (receiver != lookup_start_object) return ReduceResult::Fail();
+
+  return BuildCallBuiltin<Builtin::kEnumeratedKeyedStoreIC_Transition>(
+      {receiver, GetTaggedValue(name), GetAccumulatorTagged()},
+      feedback_source);
+}
+
 ValueNode* MaglevGraphBuilder::GetInt32ElementIndex(ValueNode* object) {
   RecordUseReprHintIfPhi(object, UseRepresentation::kInt32);
 
@@ -5329,6 +5339,15 @@ void MaglevGraphBuilder::VisitSetKeyedProperty() {
       RETURN_VOID_ON_ABORT(EmitUnconditionalDeopt(
           DeoptimizeReason::kInsufficientTypeFeedbackForGenericKeyedAccess));
 
+    case compiler::ProcessedFeedback::kNamedAccess: {
+      ValueNode* key = LoadRegisterTagged(1);
+      if (processed_feedback.AsNamedAccess().IsStoreTransition() &&
+          current_for_in_state.key == key) {
+        RETURN_VOID_IF_DONE(
+            TryBuildKeyedStoreTransition(object, object, key, feedback_source));
+      }
+      break;
+    }
     case compiler::ProcessedFeedback::kElementAccess: {
       // Get the key without conversion. TryBuildElementAccess will try to pick
       // the best representation.
