@@ -176,6 +176,30 @@
       },
       "revId": "7265151e77a251bec644447062df712a44c5e5cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef6d4ec_3d09b133",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-15T12:41:48Z",
+      "side": 1,
+      "message": "\u003e 1/450000 of the chance to deopt\n\nWhere does this number come from? Just counting deopts with the two different options? Do you know why option 2) was deopting so much?",
+      "parentUuid": "837088be_b67080c7",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
