@@ -1405,6 +1405,11 @@ enum class ExternalBackingStoreType {
   kNumValues
 };
 
+enum class NewJSObjectType : uint8_t {
+  kNoAPIWrapper,
+  kPossibleAPIWrapper,
+};
+
 bool inline IsBaselineCodeFlushingEnabled(base::EnumSet<CodeFlushMode> mode) {
   return mode.contains(CodeFlushMode::kFlushBaselineCode);
 }
