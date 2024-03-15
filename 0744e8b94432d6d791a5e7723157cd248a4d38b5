@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0db805_20e9eee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-15T17:13:20Z",
+      "side": 1,
+      "message": "Actually, Promise objects may have embedder fields that are unrelated to API wrappers. I will split them off into a separate hierarchy which avoids all the Promise-related changes.",
+      "revId": "0744e8b94432d6d791a5e7723157cd248a4d38b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
