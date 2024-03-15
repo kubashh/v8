@@ -10531,11 +10531,24 @@ void Isolate::SetFailedAccessCheckCallbackFunction(
   i_isolate->SetFailedAccessCheckCallback(callback);
 }
 
-void Isolate::SetCaptureStackTraceForUncaughtExceptions(
-    bool capture, int frame_limit, StackTrace::StackTraceOptions options) {
+int Isolate::EnableStackTraceCaptureForUncaughtExceptions(
+    int frame_limit, StackTrace::StackTraceOptions options) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
-  i_isolate->SetCaptureStackTraceForUncaughtExceptions(capture, frame_limit,
-                                                       options);
+  return i_isolate->EnableStackTraceCaptureForUncaughtExceptions(frame_limit,
+                                                                 options);
+}
+
+void Isolate::UpdateStackTraceCaptureForUncaughtExceptions(
+    int capture_id, std::optional<int> frame_limit,
+    std::optional<StackTrace::StackTraceOptions> options) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
+  return i_isolate->UpdateStackTraceCaptureForUncaughtExceptions(
+      capture_id, frame_limit, options);
+}
+
+void Isolate::DisableStackTraceCaptureForUncaughtExceptions(int capture_id) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
+  i_isolate->DisableStackTraceCaptureForUncaughtExceptions(capture_id);
 }
 
 void Isolate::VisitExternalResources(ExternalResourceVisitor* visitor) {

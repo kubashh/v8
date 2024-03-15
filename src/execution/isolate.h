@@ -942,9 +942,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     Handle<Object> exception_;
   };
 
-  void SetCaptureStackTraceForUncaughtExceptions(
-      bool capture, int frame_limit, StackTrace::StackTraceOptions options);
-  bool get_capture_stack_trace_for_uncaught_exceptions() const;
+  int EnableStackTraceCaptureForUncaughtExceptions(
+      int frame_limit, StackTrace::StackTraceOptions options);
+  void UpdateStackTraceCaptureForUncaughtExceptions(
+      int capture_id, std::optional<int> frame_limit,
+      std::optional<StackTrace::StackTraceOptions> options);
+  void DisableStackTraceCaptureForUncaughtExceptions(int capture_id);
 
   void SetAbortOnUncaughtExceptionCallback(
       v8::Isolate::AbortOnUncaughtExceptionCallback callback);
@@ -2283,6 +2286,27 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     EntryStackItem* previous_item;
   };
 
+  class StackTraceCaptureEntry {
+   public:
+    StackTraceCaptureEntry(int id, int frame_limit,
+                           StackTrace::StackTraceOptions options)
+        : id(id), frame_limit(frame_limit), options(options) {}
+
+    int id;
+    int frame_limit;
+    StackTrace::StackTraceOptions options;
+  };
+
+  class StackTraceCaptureStatus {
+   public:
+    int next_id = 1;
+    bool is_enabled = false;
+    int current_frame_limit = 0;
+    StackTrace::StackTraceOptions current_options =
+        static_cast<StackTrace::StackTraceOptions>(0);
+    std::vector<StackTraceCaptureEntry> capture_entries;
+  };
+
   static Isolate* process_wide_shared_space_isolate_;
 
   void Deinit();
@@ -2370,10 +2394,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   Deoptimizer* current_deoptimizer_ = nullptr;
   bool deoptimizer_lazy_throw_ = false;
   MaterializedObjectStore* materialized_object_store_ = nullptr;
-  bool capture_stack_trace_for_uncaught_exceptions_ = false;
-  int stack_trace_for_uncaught_exceptions_frame_limit_ = 0;
-  StackTrace::StackTraceOptions stack_trace_for_uncaught_exceptions_options_ =
-      StackTrace::kOverview;
+  StackTraceCaptureStatus stack_trace_capture_status_;
   DescriptorLookupCache* descriptor_lookup_cache_ = nullptr;
   HandleScopeImplementer* handle_scope_implementer_ = nullptr;
   UnicodeCache* unicode_cache_ = nullptr;

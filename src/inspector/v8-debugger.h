@@ -292,7 +292,11 @@ class V8Debugger : public v8::debug::DebugDelegate,
   std::list<std::shared_ptr<AsyncStackTrace>> m_allAsyncStacks;
 
   std::unordered_map<V8DebuggerAgentImpl*, int> m_maxAsyncCallStackDepthMap;
-  std::unordered_map<V8RuntimeAgentImpl*, int> m_maxCallStackSizeToCaptureMap;
+  // The first item of the pairs is the
+  // v8::Isolate::EnableStackTraceCaptureForUncaughtExceptions capture id. The
+  // second item is the frame limit of that capture.
+  std::unordered_map<V8RuntimeAgentImpl*, std::pair<int, int>>
+      m_captureStackTraceMap;
   void* m_taskWithScheduledBreak = nullptr;
 
   // If any of the following three is true, we schedule pause on next JS
