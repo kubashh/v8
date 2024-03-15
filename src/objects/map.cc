@@ -261,7 +261,6 @@ VisitorId Map::GetVisitorId(Tagged<Map> map) {
     case JS_OBJECT_TYPE:
     case JS_PRIMITIVE_WRAPPER_TYPE:
     case JS_PROMISE_PROTOTYPE_TYPE:
-    case JS_PROMISE_TYPE:
     case JS_REG_EXP_PROTOTYPE_TYPE:
     case JS_REG_EXP_STRING_ITERATOR_TYPE:
     case JS_REG_EXP_TYPE:
@@ -319,6 +318,7 @@ VisitorId Map::GetVisitorId(Tagged<Map> map) {
           COMPRESS_POINTERS_BOOL && JSObject::GetEmbedderFieldCount(map) > 0;
       return has_raw_data_fields ? kVisitJSObject : kVisitJSObjectFast;
     }
+    case JS_PROMISE_TYPE:
     case JS_API_OBJECT_TYPE:
     case JS_GLOBAL_PROXY_TYPE:
     case JS_GLOBAL_OBJECT_TYPE:
