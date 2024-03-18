@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c812871_c66ceb9d",
+        "filename": "src/baseline/baseline-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-18T11:02:54Z",
+      "side": 1,
+      "message": "it\u0027s not, good catch! In practice it doesn\u0027t matter for jumps, but using a scratch is better.",
+      "parentUuid": "fb97528b_ad338657",
+      "revId": "f54e203408852c09dd8122b2186047f1c3a98664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26bc9632_270202d5",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-03-08T19:28:38Z",
       "side": 1,
       "message": "I\u0027m not familiar with the constant table. With `minimum_operand_size`, can you explain why the `UNREACHABLE` below is still unreachable?",
+      "revId": "f54e203408852c09dd8122b2186047f1c3a98664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb81b9cb_0a2993cf",
+        "filename": "src/interpreter/constant-array-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-18T11:02:54Z",
+      "side": 1,
+      "message": "there are three constant table slices, for 8-bit, 16-bit, and 32-bit index operands respectively. These have, respectively, capacity `2^8`, `2^16-2^8`, and `2^32-2^16`, and operand sizes 1,2, and 4. Forward jumps previously had exactly one operand, which was either the jump distance (if close enough), or an index into the constant pool to a Smi with the jump distance (if it was bound too far away). The size of this operand was, until now, the operand size needed to index into the first available constant pool slot (as specified by the slices).\n\nThe change here is that there is a jump with other operands, which may have their own operand size requirement (e.g. if there are \u003e255 registers). So, if there is such a requirement, we first skip over the smaller-sized constant pool slices; that\u0027s ok though, because in the end the last slice is effectively unbounded. The smaller slices may end up having wasted space, but c\u0027est la vie I guess.",
+      "parentUuid": "26bc9632_270202d5",
       "revId": "f54e203408852c09dd8122b2186047f1c3a98664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
