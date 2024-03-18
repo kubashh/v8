@@ -22,6 +22,30 @@
       },
       "revId": "2f3ee825ba5300d7a1c6d00cd90492e8d99fecf1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "289748e0_47f021d2",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-18T10:04:28Z",
+      "side": 1,
+      "message": "This is in the previous patch https://chromium-review.googlesource.com/c/v8/v8/+/5147609/5?usp\u003drelated-change . We use the line ends information stored in heap when available, and only use the temporary storage out of heap when it is not.",
+      "parentUuid": "f62b8d25_f5e7e8b9",
+      "range": {
+        "startLine": 295,
+        "startChar": 5,
+        "endLine": 295,
+        "endChar": 61
+      },
+      "revId": "2f3ee825ba5300d7a1c6d00cd90492e8d99fecf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
