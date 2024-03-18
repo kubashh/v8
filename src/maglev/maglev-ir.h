@@ -4986,7 +4986,7 @@ class InlinedAllocation : public FixedInputValueNodeT<1, InlinedAllocation> {
   void RemoveNonEscapingUse() { non_escaping_use_count_--; }
   void ForceEscape() { non_escaping_use_count_ = 0; }
 
-  const InlinedAllocation* dependency() const { return dependency_; }
+  InlinedAllocation* dependency() { return dependency_; }
   void DependOn(InlinedAllocation* dep) {
     // TODO(victorgomes): Current the escape analysis only works with
     // initializing stores, we can only have single one directional dependency.
@@ -4995,15 +4995,7 @@ class InlinedAllocation : public FixedInputValueNodeT<1, InlinedAllocation> {
     non_escaping_use_count_++;
   }
 
-  bool HasEscaped() const {
-    if (dependency_ && dependency_->HasEscaped()) return true;
-    bool escaped = use_count_ > non_escaping_use_count_;
-    if (escaped && dependency_) {
-      // We are escaping, force dependency to escape as well.
-      dependency_->ForceEscape();
-    }
-    return escaped;
-  }
+  bool HasEscaped() const { return use_count_ > non_escaping_use_count_; }
 
  private:
   int size_;

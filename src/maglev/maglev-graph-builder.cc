@@ -9173,6 +9173,7 @@ InlinedAllocation* MaglevGraphBuilder::ExtendOrReallocateCurrentAllocationBlock(
   InlinedAllocation* allocation =
       AddNewNode<InlinedAllocation>({current_allocation_block_}, size, value);
   current_allocation_block_->Add(allocation);
+  graph()->inlined_allocations().push_back(allocation);
   return allocation;
 }
 
@@ -9768,6 +9769,32 @@ void MaglevGraphBuilder::PeelLoop() {
     predecessors_[loop_header] = 0;
   }
   iterator_.SetOffset(loop_header);
+}
+
+void MaglevGraphBuilder::EscapeDependentAllocations() {
+  // Analyse dependency chain and force escape allocations until a fixpoint.
+  ZoneVector<InlinedAllocation*> working_set(graph()->inlined_allocations());
+  ZoneVector<InlinedAllocation*> may_still_escape(zone());
+  while (!working_set.empty()) {
+    InlinedAllocation* alloc = working_set.back();
+    working_set.pop_back();
+    if (alloc->dependency() == nullptr ||
+        (alloc->HasEscaped() && alloc->dependency()->HasEscaped())) {
+      continue;
+    }
+    if (!alloc->HasEscaped() && !alloc->dependency()->HasEscaped()) {
+      may_still_escape.push_back(alloc);
+      may_still_escape.push_back(alloc->dependency());
+      continue;
+    }
+    // Escape both allocations and flush may_still_escape to the working set.
+    alloc->ForceEscape();
+    alloc->dependency()->ForceEscape();
+    for (auto* value : may_still_escape) {
+      working_set.push_back(value);
+    }
+    may_still_escape.clear();
+  }
 }
 
 void MaglevGraphBuilder::VisitJumpLoop() {

@@ -10,6 +10,7 @@
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/compiler/heap-refs.h"
 #include "src/maglev/maglev-basic-block.h"
+#include "src/maglev/maglev-ir.h"
 
 namespace v8 {
 namespace internal {
@@ -37,6 +38,7 @@ class Graph final : public ZoneObject {
         float_(zone),
         external_references_(zone),
         parameters_(zone),
+        inlined_allocations_(zone),
         register_inputs_(),
         constants_(zone),
         inlined_functions_(zone),
@@ -99,6 +101,9 @@ class Graph final : public ZoneObject {
     return external_references_;
   }
   ZoneVector<InitialValue*>& parameters() { return parameters_; }
+  ZoneVector<InlinedAllocation*>& inlined_allocations() {
+    return inlined_allocations_;
+  }
   RegList& register_inputs() { return register_inputs_; }
   compiler::ZoneRefMap<compiler::ObjectRef, Constant*>& constants() {
     return constants_;
@@ -137,6 +142,7 @@ class Graph final : public ZoneObject {
   ZoneMap<uint64_t, Float64Constant*> float_;
   ZoneMap<Address, ExternalConstant*> external_references_;
   ZoneVector<InitialValue*> parameters_;
+  ZoneVector<InlinedAllocation*> inlined_allocations_;
   RegList register_inputs_;
   compiler::ZoneRefMap<compiler::ObjectRef, Constant*> constants_;
   ZoneVector<OptimizedCompilationInfo::InlinedFunctionHolder>
