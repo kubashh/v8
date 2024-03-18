@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60de86df_911ba1d0",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3754,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68c9c5f5_7a4054b1",
+      "range": {
+        "startLine": 3754,
+        "startChar": 2,
+        "endLine": 3754,
+        "endChar": 4
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9348c90_4fd700ea",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-15T10:06:37Z",
       "side": 1,
       "message": "Could you add a DCHECK here that `kind \u003e\u003d kFirstSignExtensionOp`?",
+      "range": {
+        "startLine": 3764,
+        "startChar": 2,
+        "endLine": 3764,
+        "endChar": 4
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f5b7fbd_ff85f521",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9348c90_4fd700ea",
       "range": {
         "startLine": 3764,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9d09bfa_48f694ac",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7822,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done, add `//clang-format off` for this.",
+      "parentUuid": "92dab47a_7cf83907",
+      "range": {
+        "startLine": 7822,
+        "startChar": 46,
+        "endLine": 7822,
+        "endChar": 47
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56d99e63_090b60be",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37a99132_18da3f66",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7953,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done, add `//clang-format off` for this.",
+      "parentUuid": "56d99e63_090b60be",
+      "range": {
+        "startLine": 7953,
+        "startChar": 47,
+        "endLine": 7953,
+        "endChar": 48
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b14f0cb7_05657597",
@@ -123,6 +219,30 @@
       "writtenOn": "2024-03-15T10:06:37Z",
       "side": 1,
       "message": "Same thing, I\u0027d prefer `.input()` rather than `.input(0)`, see next comment.",
+      "range": {
+        "startLine": 256,
+        "startChar": 8,
+        "endLine": 256,
+        "endChar": 36
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9929428f_601e18e5",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b14f0cb7_05657597",
       "range": {
         "startLine": 256,
         "startChar": 8,
@@ -158,6 +278,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da1462a2_ad1a8a0b",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Ok, I add two new macros in `operations.h` to create Opmasks for these ops and refactor this function.",
+      "parentUuid": "9204e928_5cd0455e",
+      "range": {
+        "startLine": 267,
+        "startChar": 8,
+        "endLine": 267,
+        "endChar": 68
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6aea33a7_d492e191",
         "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
         "patchSetId": 7
@@ -169,6 +313,30 @@
       "writtenOn": "2024-03-15T10:06:37Z",
       "side": 1,
       "message": "You could also write this as `auto [is_sign_ext, is_packable_sign_ext] \u003d IsPackableSignExtensionOp(op0, op1);`, but if you prefer with the explicit `bool` declaration and the `std::tie`, it\u0027s also fine :)",
+      "range": {
+        "startLine": 338,
+        "startChar": 2,
+        "endLine": 340,
+        "endChar": 42
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "373928f0_1935a4cb",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aea33a7_d492e191",
       "range": {
         "startLine": 338,
         "startChar": 2,
@@ -202,6 +370,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9e97d89_25be2820",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e055c994_2c54f410",
+      "range": {
+        "startLine": 499,
+        "startChar": 64,
+        "endLine": 499,
+        "endChar": 69
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10847f37_a352926b",
@@ -215,6 +407,30 @@
       "writtenOn": "2024-03-15T10:06:37Z",
       "side": 1,
       "message": "nit: build",
+      "range": {
+        "startLine": 522,
+        "startChar": 65,
+        "endLine": 522,
+        "endChar": 70
+      },
+      "revId": "a2bcfeae0e27609a617c06484ff7fa98bb4920cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d21c5b1_fd868549",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-18T05:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10847f37_a352926b",
       "range": {
         "startLine": 522,
         "startChar": 65,
