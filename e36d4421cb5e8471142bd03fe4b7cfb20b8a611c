@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "765198c2_ff3eb815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-18T16:14:53Z",
+      "side": 1,
+      "message": "Hey Clemens, PTAL.\n\nThis is just an automatic renaming, I didn\u0027t modify other things.",
+      "revId": "e36d4421cb5e8471142bd03fe4b7cfb20b8a611c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
