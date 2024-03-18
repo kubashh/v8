@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30819460_fa02f28e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-18T15:45:40Z",
+      "side": 1,
+      "message": "LGTM. (I\u0027m not an OWNER of `src/debug/` though.)",
+      "revId": "9a31986ff93a7bc375137dfc96d73855f7fec836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
