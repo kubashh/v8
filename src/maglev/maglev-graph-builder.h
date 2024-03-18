@@ -221,6 +221,8 @@ class MaglevGraphBuilder {
     in_prologue_ = false;
 
     BuildBody();
+
+    EscapeDependentAllocations();
   }
 
   ReduceResult BuildInlined(ValueNode* context, ValueNode* function,
@@ -256,6 +258,8 @@ class MaglevGraphBuilder {
       VisitSingleBytecode();
     }
   }
+
+  void EscapeDependentAllocations();
 
   SmiConstant* GetSmiConstant(int constant) {
     DCHECK(Smi::IsValid(constant));
