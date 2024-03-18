@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b2cddca_3004b0d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 35
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-18T11:17:33Z",
+      "side": 1,
+      "message": "Please take another look. I branched the type hierarchy for JSPromise because that type can have embedder fields but isn\u0027t ever directly a wrapper for Blink.",
+      "revId": "fadc3f58299f4c26468fac959b82c1e09d19658c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
