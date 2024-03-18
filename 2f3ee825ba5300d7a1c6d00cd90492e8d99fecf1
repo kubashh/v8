@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f62b8d25_f5e7e8b9",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-03-18T09:42:12Z",
+      "side": 1,
+      "message": "Just for better understanding: wow do tools access the line-ends information for scripts that had it already initialized?",
+      "range": {
+        "startLine": 295,
+        "startChar": 5,
+        "endLine": 295,
+        "endChar": 61
+      },
+      "revId": "2f3ee825ba5300d7a1c6d00cd90492e8d99fecf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
