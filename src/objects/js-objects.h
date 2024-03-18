@@ -16,6 +16,7 @@
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
+#include "v8-internal.h"
 
 namespace v8 {
 namespace internal {
@@ -983,6 +984,11 @@ class JSAPIObjectWithEmbedderSlots
   class BodyDescriptor;
 
   DECL_EXTERNAL_POINTER_ACCESSORS(cpp_heap_wrappable, void*)
+
+  template <ExternalPointerTag tag>
+  V8_INLINE void SetCppHeapWrappable(IsolateForSandbox isolate, void*);
+  template <ExternalPointerTag tag>
+  V8_INLINE void* GetCppHeapWrappable(IsolateForSandbox isolate) const;
 
   TQ_OBJECT_CONSTRUCTORS(JSAPIObjectWithEmbedderSlots)
 };
