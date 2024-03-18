@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1e76f95_de7af7c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "This generally looks good, thank you José!",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25ee78b9_d4f3d155",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4354,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "This template is not used anywhere. The following functions for `String::LineEndsVector` and `Tagged\u003cFixedArray\u003e` are not template specializations, just overloaded functions. Moreover, I find the default behaviour of returning 0 here rather non-intuitive. Can\u0027t we just remove this template?",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c462374_370a778b",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4366,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56bffa61_513862e2",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4383,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "As the line ends are non-negative, I think these two lines are redundant.",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d8b73d9_f8493f1a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4408,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "I know this code was just copied here, but I\u0027m finding it hard to understand the correctness of this binary search. IUIC, `left` could start from `1`, instead of `0`. The invariants are that upon loop entry:\n```\n1 \u003c\u003d left \u003c\u003d right\nGetLineEnd(ends, left-1) \u003c position \u003c\u003d GetLineEnd(ends, right)\n```\nIf that\u0027s the case, let\u0027s add those in `DCHECK`s.\n\nThen, the loop\u0027s condition could be simply `while (true)`, as we are guaranteed to exit from the third alternative. If that were not the case, `info-\u003eline` could be undefined in line 4411.",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec006833_d046cad2",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "Can we move all these functions to the anonymous namespace that precedes them?\nAlso, add empty lines in between, where necessary.",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e3d986_1eb92c54",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-18T11:48:47Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we `D?CHECK` here that the map indeed contains the line ends for this script?",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
