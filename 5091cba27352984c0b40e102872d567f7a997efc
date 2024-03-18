@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "827b382e_bc1ea9bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-18T18:50:55Z",
+      "side": 1,
+      "message": "PTAL.\nWith this patch, a million local runs of the test passed without error, whereas previously I saw a failure roughly for 1 in 30K runs.\n\nI don\u0027t know *why* getting the functions from the stack isn\u0027t reliable (I saw two distinct failure modes, there may be more), and we may want to investigate that, but the priority of that isn\u0027t clear to me, so this patch at least de-flakes the test, which is certainly useful as an immediate measure.",
+      "revId": "5091cba27352984c0b40e102872d567f7a997efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
