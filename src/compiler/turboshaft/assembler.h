@@ -998,9 +998,11 @@ class GenericReducerBase : public ReducerBaseForwarder<Next> {
         Base::ReduceCall(callee, frame_state, arguments, descriptor, effects);
     bool has_catch_block = false;
     if (descriptor->can_throw == CanThrow::kYes) {
+      DCHECK(effects.is_required_when_unused());
       has_catch_block = CatchIfInCatchScope(raw_call);
     }
-    return ReduceDidntThrow(raw_call, has_catch_block, &descriptor->out_reps);
+    return ReduceDidntThrow(raw_call, has_catch_block, &descriptor->out_reps,
+                            effects);
   }
 
  private:

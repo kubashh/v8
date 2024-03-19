@@ -250,11 +250,12 @@ using kProjection1 = ProjectionMask::For<1>;
 
 using ComparisonMask = MaskBuilder<ComparisonOp, FIELD(ComparisonOp, kind),
                                    FIELD(ComparisonOp, rep)>;
-
 using kWord32Equal = ComparisonMask::For<ComparisonOp::Kind::kEqual,
                                          WordRepresentation::Word32()>;
 using kWord64Equal = ComparisonMask::For<ComparisonOp::Kind::kEqual,
                                          WordRepresentation::Word64()>;
+using ComparisonKindMask = MaskBuilder<ComparisonOp, FIELD(ComparisonOp, kind)>;
+using kComparisonEqual = ComparisonKindMask::For<ComparisonOp::Kind::kEqual>;
 
 using ChangeOpMask =
     MaskBuilder<ChangeOp, FIELD(ChangeOp, kind), FIELD(ChangeOp, assumption),
