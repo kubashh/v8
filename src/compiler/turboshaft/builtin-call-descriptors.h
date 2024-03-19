@@ -201,7 +201,8 @@ struct BuiltinCallDescriptor {
     // TODO(chromium:1489500, nicohartmann@): We can probably relax this to
     // base_effects.AssumesConsistentHeap().CanReadMemory() but for now we go
     // with stronger effects until we better understand the recent crashes.
-    static constexpr OpEffects kEffects = base_effects.CanCallAnything();
+    static constexpr OpEffects kEffects =
+        base_effects.AssumesConsistentHeap().CanReadMemory();
   };
   using FindOrderedHashMapEntry =
       FindOrderedHashEntry<Builtin::kFindOrderedHashMapEntry>;
