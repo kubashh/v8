@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "792bc5ba_98fe99fd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T23:51:35Z",
+      "side": 1,
+      "message": "Typo: property",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b6cfe0c_b7105366",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -14,6 +31,40 @@
       "writtenOn": "2024-03-19T11:37:40Z",
       "side": 1,
       "message": "Toon, Shu, PTAL and let me know what you think about this approach.\n\nAn alternative could be to also turn `Error.message` into an accessor. When the setter is called, we also trigger Error.stack serialization before updating the \u0027message\u0027 property. I\u0027m not sure if that\u0027s fully spec compliant though, as the spec explicitly calls out \u0027message\u0027 as a data property in the Error constructor spec.",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6ef78fc_c7f1cfa1",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T23:51:35Z",
+      "side": 1,
+      "message": "Please add a comment that this is a V8-specific extension to retain the original message for the stack trace, which is also V8-specific.",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "718f848d_0596e414",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T23:51:35Z",
+      "side": 1,
+      "message": "IIUC, if you explicitly call `captureStackTrace` on an Error subclass, this will end up overwriting the original message from construction time to be the value of `obj.message` at that time. Should this copying logic check for the existence of the private `error_message_symbol` first?\n\nAlso, shouldn\u0027t this copying be done before the `CaptureAndSetErrorStack` call?\n\nAlso also, we are changing the number of `.message` property gets that `captureStackTrace` performs, which is user observable. I seriously hope there\u0027s no code depending on `.message` being getters.",
       "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
