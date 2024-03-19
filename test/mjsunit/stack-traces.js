@@ -154,6 +154,12 @@ function testClassNames() {
   (new MyObjCreator).Create();
 }
 
+function testChangeMessage() {
+  const e = new Error('old');
+  e.message = 'new';
+  throw e;
+}
+
 // Utility function for testing that the expected strings occur
 // in the stack trace produced when running the given function.
 function testTrace(name, fun, expected, unexpected) {
@@ -289,6 +295,7 @@ testTrace("testStrippedCustomError", testStrippedCustomError, ["hep-hey"],
     ["new CustomError", "collectStackTrace"]);
 testTrace("testClassNames", testClassNames,
           ["new MyObj", "MyObjCreator.Create"], ["as Create"]);
+testTrace("testChangeMessage", testChangeMessage, ["Error: old"], ["Error: new"]);
 testCallerCensorship();
 testUnintendedCallerCensorship();
 testErrorsDuringFormatting();
