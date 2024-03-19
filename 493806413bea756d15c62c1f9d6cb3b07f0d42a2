@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab777969_4a2201af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-19T18:43:41Z",
+      "side": 1,
+      "message": "Updated the patch, adding unit tests for the path using the out-of-heap cached line ends, and adding the offset check that was missing (and wrong!).",
+      "revId": "493806413bea756d15c62c1f9d6cb3b07f0d42a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
