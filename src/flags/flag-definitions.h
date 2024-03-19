@@ -1952,6 +1952,8 @@ DEFINE_VALUE_IMPLICATION(fuzzer_gc_analysis, stress_scavenge, 99)
 DEFINE_BOOL(
     reclaim_unmodified_wrappers, true,
     "reclaim otherwise unreachable unmodified wrapper objects when possible")
+DEFINE_SIZE_T(min_new_space_capacity_for_pretenuring, 0,
+              "min new space capacity for pretenuring (in KBytes)")
 
 // These flags will be removed after experiments. Do not rely on them.
 DEFINE_BOOL(gc_experiment_less_compaction, false,

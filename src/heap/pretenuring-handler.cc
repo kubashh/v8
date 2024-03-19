@@ -23,6 +23,12 @@ PretenuringHandler::~PretenuringHandler() = default;
 namespace {
 
 static constexpr int kMinMementoCount = 100;
+// The minimum new space capacity from which allocation sites can be
+// pretenured. A too small capacity means frequent GCs. Objects thus don't get
+// a chance to die before being promoted, which may lead to wrong pretenuring
+// decisions.
+static constexpr size_t kDefaultMinNewSpaceCapacityForPretenuring =
+    8192 * KB * Heap::kPointerMultiplier;
 
 double GetPretenuringRatioThreshold(size_t new_space_capacity) {
   static constexpr double kScavengerPretenureRatio = 0.85;
@@ -168,12 +174,6 @@ void PretenuringHandler::RemoveAllocationSitePretenuringFeedback(
 
 void PretenuringHandler::ProcessPretenuringFeedback(
     size_t new_space_capacity_before_gc) {
-  // The minimum new space capacity from which allocation sites can be
-  // pretenured. A too small capacity means frequent GCs. Objects thus don't get
-  // a chance to die before being promoted, which may lead to wrong pretenuring
-  // decisions.
-  static constexpr size_t kDefaultMinNewSpaceCapacityForPretenuring =
-      8192 * KB * Heap::kPointerMultiplier;
 
   DCHECK(heap_->tracer()->IsInAtomicPause());
 
@@ -181,8 +181,11 @@ void PretenuringHandler::ProcessPretenuringFeedback(
 
   const size_t min_new_space_capacity_for_pretenuring =
       std::min(heap_->new_space()->MaximumCapacity(),
-               kDefaultMinNewSpaceCapacityForPretenuring);
-
+               v8_flags.min_new_space_capacity_for_pretenuring > 0
+                   ? static_cast<size_t>(
+                         v8_flags.min_new_space_capacity_for_pretenuring) *
+                         KB
+                   : kDefaultMinNewSpaceCapacityForPretenuring);
   bool trigger_deoptimization = false;
   int tenure_decisions = 0;
   int dont_tenure_decisions = 0;
