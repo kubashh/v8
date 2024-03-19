@@ -16,6 +16,23 @@
       "message": "(I should say, since you +1ed already -- PTAL again at my comment reply)",
       "revId": "959d0bfadc3744e2902c5544a835fa3592494775",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53fa73d9_81736198",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T14:40:43Z",
+      "side": 1,
+      "message": "Still lgtm!",
+      "revId": "959d0bfadc3744e2902c5544a835fa3592494775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
