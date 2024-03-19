@@ -16,6 +16,92 @@
       "message": "Thanks for your comments! I upload a new patchset, PTAL!",
       "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "761efaa9_655e5e93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-19T09:14:11Z",
+      "side": 1,
+      "message": "LGTM % small nits :)",
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2cc81ee_99bc04ca",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-19T09:14:11Z",
+      "side": 1,
+      "message": "```suggestion\n#define SIMD_SIGN_EXTENSION_UNARY_MASK(kind) \\\n```",
+      "range": {
+        "startLine": 339,
+        "startChar": 20,
+        "endLine": 339,
+        "endChar": 21
+      },
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b65a3769_6e550bcd",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-19T09:14:11Z",
+      "side": 1,
+      "message": "```suggestion\nFOREACH_SIMD_128_UNARY_SIGN_EXTENSION_OPCODE(SIMD_SIGN_EXTENSION_UNARY_MASK)\n```",
+      "range": {
+        "startLine": 341,
+        "startChar": 57,
+        "endLine": 341,
+        "endChar": 58
+      },
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c43b85cb_e7f0be76",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-19T09:14:11Z",
+      "side": 1,
+      "message": "```suggestion\n#undef SIMD_SIGN_EXTENSION_UNARY_MASK\n```",
+      "range": {
+        "startLine": 342,
+        "startChar": 19,
+        "endLine": 342,
+        "endChar": 20
+      },
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
