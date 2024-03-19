@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9cd0d3_f88164e7",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4354,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-19T17:01:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25ee78b9_d4f3d155",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c462374_370a778b",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-03-18T11:48:47Z",
       "side": 1,
       "message": "Same as above.",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7583e6c_474d087a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4366,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-19T17:01:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c462374_370a778b",
       "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7737ab7e_3be32d3d",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4383,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-19T17:01:14Z",
+      "side": 1,
+      "message": "Removing this test and replacing with a CHECK(position\u003e\u003d0) breaks 7 tests. There are several cases where we pass -1 offset.\n\nWe check and expect index -1 to work as an equivalent of position 0 (i.e. when there is no offset information).\n\nSo I will keep this unchanged.",
+      "parentUuid": "56bffa61_513862e2",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d8b73d9_f8493f1a",
         "filename": "src/objects/objects.cc",
         "patchSetId": 5
@@ -88,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7415eccd_5520602a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4408,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-19T17:01:14Z",
+      "side": 1,
+      "message": "I agree we can start with left \u003d 1, as the other branch of the if is the short path for the frequent case of having all script in one line, so we are never going to have a left \u003c 1.\n\nDefinitely the loop is confusing. I am not sure why we need to check right is \u003e 0. And that theoretical case would leave, as you say, info-\u003eline undefined.\n\nThough, this patch is targetted to provide the dual implementation of line end retrieval for heap snapshot. I would prefer to leave the algorithm as is, and leave for a later patch cleaning up the binary search implementaiton. WDYT?",
+      "parentUuid": "4d8b73d9_f8493f1a",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec006833_d046cad2",
         "filename": "src/objects/objects.cc",
         "patchSetId": 5
@@ -99,6 +171,24 @@
       "writtenOn": "2024-03-18T11:48:47Z",
       "side": 1,
       "message": "Can we move all these functions to the anonymous namespace that precedes them?\nAlso, add empty lines in between, where necessary.",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e78b97ed_3c2f2899",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-19T17:01:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ec006833_d046cad2",
       "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
