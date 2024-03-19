@@ -309,6 +309,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd856bcd_9f024b10",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "168f27c8_f0621434",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 77
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "162b61eb_d6d7ff5f",

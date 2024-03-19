@@ -1,0 +1,312 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c87182a5_c8cfff08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 31
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Nit: please reform commit message to column limit.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "918e340a_86f110b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "I think this is missing code to deal with removing waiter nodes on isolate deletion, like `FutexEmulation::IsolateDeinit`. I\u0027m not sure how to best do this... maybe another intrusive linked list on `AsyncWaiterQueueNode`s for nodes on the same isolate?",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac380318_3719d07b",
+        "filename": "src/objects/js-atomics-synchronization-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Maybe `LockImpl`?",
+      "range": {
+        "startLine": 150,
+        "startChar": 21,
+        "endLine": 150,
+        "endChar": 33
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da2601b_c99ecc15",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Nit: typo JSPromise",
+      "range": {
+        "startLine": 23,
+        "startChar": 37,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "595486e4_35494169",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Nit: This is usually called `PerformPromiseThen`.",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 32
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f69ba5d7_ed121de2",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "No need to name `then_promise` as an intermediate.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da0c4ffe_025d174a",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "SFIs for well-known builtins like the ones in this file should be cached. See e.g. `isolate-\u003efactory()-\u003esource_text_module_execute_async_module_fulfilled_sfi()`.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "188b93dc_f4680b90",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Does the compiler warn against unused return value if you don\u0027t assign the return value of `SetPromiseThen` to anything?",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af285742_d7f90ba3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Nit: typo synchronous",
+      "range": {
+        "startLine": 112,
+        "startChar": 65,
+        "endLine": 112,
+        "endChar": 76
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4919af8_c03cb0b5",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Nit: typo enqueue",
+      "range": {
+        "startLine": 120,
+        "startChar": 10,
+        "endLine": 120,
+        "endChar": 16
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b1c474_820ad83d",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Please add a `DCHECK` that `synchronization_primitive_` is a mutex and not a condition.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d27569_199aaf0a",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Please add a `DCHECK_NOT_NULL(this_waiter)`.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eff0a796_bc0e5643",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Typo: an",
+      "range": {
+        "startLine": 825,
+        "startChar": 35,
+        "endLine": 825,
+        "endChar": 38
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4408628f_5bc659dd",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Not sure I understand why tasks need to be made ahead of time, before they\u0027re posted. They should be allocated when they need to be posted.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6e5cb60_a0785406",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Please either make this an `enum class` or make the enum values more descriptive, e.g. `kMutexContextSlot`, `kContextLength`, etc.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "800a7604_c72c5d1d",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-19T00:11:14Z",
+      "side": 1,
+      "message": "Let\u0027s do `V8_INLINE` on `BackoffTryLock`.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
