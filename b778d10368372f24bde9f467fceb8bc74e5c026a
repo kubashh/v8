@@ -16,6 +16,23 @@
       "message": "PTAL again!",
       "revId": "b778d10368372f24bde9f467fceb8bc74e5c026a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7cbe791_d09a5eb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-03-19T14:57:32Z",
+      "side": 1,
+      "message": "lgtm modulo the fact that at some point, we should figure out why dependencies currently need to be bidirectional (and fix it).",
+      "revId": "b778d10368372f24bde9f467fceb8bc74e5c026a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
