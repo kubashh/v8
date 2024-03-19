@@ -796,6 +796,8 @@ DEFINE_NEG_NEG_IMPLICATION(allocation_site_tracking,
 // Flags for experimental implementation features.
 DEFINE_BOOL(allocation_site_pretenuring, true,
             "pretenure with allocation sites")
+DEFINE_INT(min_new_space_capacity_for_pretenuring, 4096,
+           "min_new_space_capacity_for_pretenuring")
 DEFINE_BOOL(page_promotion, true, "promote pages based on utilization")
 DEFINE_INT(page_promotion_threshold, 70,
            "min percentage of live bytes on a page to enable fast evacuation "
