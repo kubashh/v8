@@ -16,6 +16,24 @@
       "message": "ptal.\n\nFix is in https://chromium-review.googlesource.com/c/v8/v8/+/5378409/1..2\nI tried using size_t instead of converting everything to uint64_t, but that gets some values truncated on x86, which resulted in a crash. Specifically the cast of `current_size` to uint64_t when computing `halfway_to_the_max` in line 154 is needed.\nIf we later get rid of this halfway heuristic, I believe we could just use size_t everywhere without any casts.",
       "revId": "7b7d3028258f2e055efa8047a83a68bd0e435351",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c80713e_5b63c91c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-19T16:55:08Z",
+      "side": 1,
+      "message": "The half way heuristic is kind of intrinsic to heap growing for a long time. Just removing that will shift a lot I think.",
+      "parentUuid": "4a652dca_cc6bd70d",
+      "revId": "7b7d3028258f2e055efa8047a83a68bd0e435351",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
