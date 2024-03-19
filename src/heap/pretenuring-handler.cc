@@ -173,7 +173,7 @@ void PretenuringHandler::ProcessPretenuringFeedback(
   // a chance to die before being promoted, which may lead to wrong pretenuring
   // decisions.
   static constexpr size_t kDefaultMinNewSpaceCapacityForPretenuring =
-      8192 * KB * Heap::kPointerMultiplier;
+      4096 * KB * Heap::kPointerMultiplier;
 
   DCHECK(heap_->tracer()->IsInAtomicPause());
 
