@@ -236,7 +236,8 @@ MaybeHandle<Object> AppendErrorString(Isolate* isolate, Handle<Object> error,
   try_catch.SetVerbose(false);
   try_catch.SetCaptureMessage(false);
   MaybeHandle<String> err_str =
-      ErrorUtils::ToString(isolate, Handle<Object>::cast(error));
+      ErrorUtils::ToString(isolate, Handle<Object>::cast(error),
+                           ErrorUtils::ToStringMessageSource::kOriginalMessage);
   if (err_str.is_null()) {
     // Error.toString threw. Try to return a string representation of the thrown
     // exception instead.
@@ -248,7 +249,9 @@ MaybeHandle<Object> AppendErrorString(Isolate* isolate, Handle<Object> error,
     Handle<Object> exception = handle(isolate->exception(), isolate);
     try_catch.Reset();
 
-    err_str = ErrorUtils::ToString(isolate, exception);
+    err_str = ErrorUtils::ToString(
+        isolate, exception,
+        ErrorUtils::ToStringMessageSource::kOriginalMessage);
     if (err_str.is_null()) {
       // Formatting the thrown exception threw again, give up.
       DCHECK(isolate->has_exception());
@@ -596,6 +599,11 @@ MaybeHandle<JSObject> ErrorUtils::Construct(
         JSObject::SetOwnPropertyIgnoreAttributes(
             err, isolate->factory()->message_string(), msg_string, DONT_ENUM),
         JSObject);
+    RETURN_ON_EXCEPTION(isolate,
+                        JSObject::SetOwnPropertyIgnoreAttributes(
+                            err, isolate->factory()->error_message_symbol(),
+                            msg_string, DONT_ENUM),
+                        JSObject);
   }
 
   if (!IsUndefined(*options, isolate)) {
@@ -661,7 +669,8 @@ MaybeHandle<String> GetStringPropertyOrDefault(Isolate* isolate,
 
 // ES6 section 19.5.3.4 Error.prototype.toString ( )
 MaybeHandle<String> ErrorUtils::ToString(Isolate* isolate,
-                                         Handle<Object> receiver) {
+                                         Handle<Object> receiver,
+                                         ToStringMessageSource message_source) {
   // 1. Let O be the this value.
   // 2. If Type(O) is not Object, throw a TypeError exception.
   if (!IsJSReceiver(*receiver)) {
@@ -687,12 +696,28 @@ MaybeHandle<String> ErrorUtils::ToString(Isolate* isolate,
   // 5. Let msg be ? Get(O, "message").
   // 6. If msg is undefined, let msg be the empty String; otherwise let msg be
   // ? ToString(msg).
-  Handle<String> msg_key = isolate->factory()->message_string();
-  Handle<String> msg_default = isolate->factory()->empty_string();
   Handle<String> msg;
-  ASSIGN_RETURN_ON_EXCEPTION(
-      isolate, msg,
-      GetStringPropertyOrDefault(isolate, recv, msg_key, msg_default), String);
+  Handle<String> msg_default = isolate->factory()->empty_string();
+  if (message_source == ToStringMessageSource::kCurrentMessageProperty) {
+    Handle<String> msg_key = isolate->factory()->message_string();
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, msg,
+        GetStringPropertyOrDefault(isolate, recv, msg_key, msg_default),
+        String);
+  } else {
+    DCHECK_EQ(message_source, ToStringMessageSource::kOriginalMessage);
+    // For Error.stack formatting use the original message with which the error
+    // was constructed.
+    LookupIterator it(isolate, LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR,
+                      receiver, isolate->factory()->error_message_symbol());
+    Handle<Object> result = JSReceiver::GetDataProperty(&it);
+    if (!it.IsFound() || IsUndefined(*result, isolate)) {
+      msg = msg_default;
+    } else {
+      ASSIGN_RETURN_ON_EXCEPTION(isolate, msg,
+                                 Object::ToString(isolate, result), String);
+    }
+  }
 
   // 7. If name is the empty String, return msg.
   // 8. If msg is the empty String, return name.
@@ -1153,6 +1178,21 @@ MaybeHandle<Object> ErrorUtils::CaptureStackTrace(Isolate* isolate,
   // "error_stack_symbol" property.
   RETURN_ON_EXCEPTION(
       isolate, isolate->CaptureAndSetErrorStack(object, mode, caller), Object);
+
+  // Copy any 'message' property to the |object|'s private
+  // "error_message_symbol" property. The stack should consistently contain
+  // the error message at the time |captureStackTrace| was called.
+  Handle<Object> msg_object;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, msg_object,
+      Object::GetProperty(isolate, object,
+                          isolate->factory()->message_string()),
+      Object);
+  RETURN_ON_EXCEPTION(isolate,
+                      JSObject::SetOwnPropertyIgnoreAttributes(
+                          object, isolate->factory()->error_message_symbol(),
+                          msg_object, DONT_ENUM),
+                      Object);
 
   return isolate->factory()->undefined_value();
 }
