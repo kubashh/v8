@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "41631c02bb6fdc6980a5de8b55a4b8560f7dc114",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1ae07bd_d0e7479a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-19T16:03:43Z",
+      "side": 1,
+      "message": "LGTM % comment :)",
+      "revId": "41631c02bb6fdc6980a5de8b55a4b8560f7dc114",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d822d16_23619d65",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3190,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-19T16:03:43Z",
+      "side": 1,
+      "message": "Could we extract this whole loop in a helper in instruction-selector.h (and impl in .cc) so that it doesn\u0027t have to be repeated in each architecture-specific instruction selector? (`UnwrapEqualZero` or something similar for instance)",
+      "range": {
+        "startLine": 3174,
+        "startChar": 0,
+        "endLine": 3190,
+        "endChar": 3
+      },
+      "revId": "41631c02bb6fdc6980a5de8b55a4b8560f7dc114",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
