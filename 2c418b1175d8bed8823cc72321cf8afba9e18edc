@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d13b92d_1a861a3d",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-19T13:45:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "24ba2b6b_1588bfda",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "2c418b1175d8bed8823cc72321cf8afba9e18edc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6839b122_bd791cb9",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-19T13:39:39Z",
       "side": 1,
       "message": "This is enforced by the condition in line 108",
+      "range": {
+        "startLine": 109,
+        "startChar": 2,
+        "endLine": 109,
+        "endChar": 11
+      },
+      "revId": "2c418b1175d8bed8823cc72321cf8afba9e18edc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb5578cb_c6c49774",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-19T13:45:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6839b122_bd791cb9",
       "range": {
         "startLine": 109,
         "startChar": 2,
