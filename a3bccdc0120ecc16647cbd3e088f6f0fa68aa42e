@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7bae58f_74395b7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 31
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c87182a5_c8cfff08",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "918e340a_86f110b5",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b437bf14_0690ee3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Good catch! We already have the requester in the node, so we could just iterate the list to delete the nodes created in a certain isolate. The main issue would be handling nodes whose notification has already being queued in the event loop, since these are not in the list anymore and are responsible of notifying the next node in the queue. For the latter, currently the lifetime of the nodes is controlled by the tasks, so if they are already on the event loop and they will be cancelled and deleted by `Isolate::Deinit`, then we get a chance to do something on the `WaiterQueueNode`\u0027s destructor, like calling notify on the next node. There might be a couple of timing issues with other threads posting tasks, so I need to think this through really well.",
+      "parentUuid": "918e340a_86f110b5",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac380318_3719d07b",
         "filename": "src/objects/js-atomics-synchronization-inl.h",
         "patchSetId": 31
@@ -48,6 +84,30 @@
       "writtenOn": "2024-03-19T00:11:14Z",
       "side": 1,
       "message": "Maybe `LockImpl`?",
+      "range": {
+        "startLine": 150,
+        "startChar": 21,
+        "endLine": 150,
+        "endChar": 33
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4c1e29_670facb4",
+        "filename": "src/objects/js-atomics-synchronization-inl.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac380318_3719d07b",
       "range": {
         "startLine": 150,
         "startChar": 21,
@@ -81,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9df6955_b79ee053",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4da2601b_c99ecc15",
+      "range": {
+        "startLine": 23,
+        "startChar": 37,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "595486e4_35494169",
@@ -104,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4d3485_c27cefd2",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "595486e4_35494169",
+      "range": {
+        "startLine": 24,
+        "startChar": 18,
+        "endLine": 24,
+        "endChar": 32
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f69ba5d7_ed121de2",
@@ -117,6 +225,24 @@
       "writtenOn": "2024-03-19T00:11:14Z",
       "side": 1,
       "message": "No need to name `then_promise` as an intermediate.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a4eb62e_40d45c57",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f69ba5d7_ed121de2",
       "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +281,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9298eb73_2f173870",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "188b93dc_f4680b90",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af285742_d7f90ba3",
@@ -168,6 +312,30 @@
       "writtenOn": "2024-03-19T00:11:14Z",
       "side": 1,
       "message": "Nit: typo synchronous",
+      "range": {
+        "startLine": 112,
+        "startChar": 65,
+        "endLine": 112,
+        "endChar": 76
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9209747_2ac3ac0b",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af285742_d7f90ba3",
       "range": {
         "startLine": 112,
         "startChar": 65,
@@ -201,6 +369,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82354a1a_7d650496",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4919af8_c03cb0b5",
+      "range": {
+        "startLine": 120,
+        "startChar": 10,
+        "endLine": 120,
+        "endChar": 16
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7b1c474_820ad83d",
@@ -214,6 +406,24 @@
       "writtenOn": "2024-03-19T00:11:14Z",
       "side": 1,
       "message": "Please add a `DCHECK` that `synchronization_primitive_` is a mutex and not a condition.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44a501b9_2eaecac3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7b1c474_820ad83d",
       "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -235,6 +445,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f5119c_5af5a3b7",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53d27569_199aaf0a",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eff0a796_bc0e5643",
@@ -248,6 +476,30 @@
       "writtenOn": "2024-03-19T00:11:14Z",
       "side": 1,
       "message": "Typo: an",
+      "range": {
+        "startLine": 825,
+        "startChar": 35,
+        "endLine": 825,
+        "endChar": 38
+      },
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fb911cb_cc2a7df9",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eff0a796_bc0e5643",
       "range": {
         "startLine": 825,
         "startChar": 35,
@@ -310,6 +562,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caad6726_36d79e4c",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6e5cb60_a0785406",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "800a7604_c72c5d1d",
@@ -323,6 +593,24 @@
       "writtenOn": "2024-03-19T00:11:14Z",
       "side": 1,
       "message": "Let\u0027s do `V8_INLINE` on `BackoffTryLock`.",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c5de625_e9e2753c",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 31
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-03-19T22:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "800a7604_c72c5d1d",
       "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
