@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8cc044e_d8071a88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-19T13:39:39Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "2c418b1175d8bed8823cc72321cf8afba9e18edc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24ba2b6b_1588bfda",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-19T13:39:39Z",
+      "side": 1,
+      "message": "Reordering the computation a bit to make it easier to parse (imo)",
+      "range": {
+        "startLine": 48,
+        "startChar": 18,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "2c418b1175d8bed8823cc72321cf8afba9e18edc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6839b122_bd791cb9",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-19T13:39:39Z",
+      "side": 1,
+      "message": "This is enforced by the condition in line 108",
+      "range": {
+        "startLine": 109,
+        "startChar": 2,
+        "endLine": 109,
+        "endChar": 11
+      },
+      "revId": "2c418b1175d8bed8823cc72321cf8afba9e18edc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
