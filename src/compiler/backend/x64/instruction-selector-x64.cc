@@ -4255,10 +4255,19 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitWordCompareZero(
     node_t user, node_t value, FlagsContinuation* cont) {
   using namespace turboshaft;  // NOLINT(build/namespaces)
   // Try to combine with comparisons against 0 by simply inverting the branch.
-  while (const ComparisonOp* equal =
-             this->TryCast<Opmask::kWord32Equal>(value)) {
+  while (const ComparisonOp* equal = TryCast<Opmask::kComparisonEqual>(value)) {
+    if (equal->rep == RegisterRepresentation::Word32()) {
+      if (!MatchIntegralZero(equal->right())) break;
+#ifdef V8_COMPRESS_POINTERS
+    } else if (equal->rep == RegisterRepresentation::Tagged()) {
+      static_assert(RegisterRepresentation::Tagged().MapTaggedToWord() ==
+                    RegisterRepresentation::Word32());
+      if (!MatchSmiZero(equal->right())) break;
+#endif  // V8_COMPRESS_POINTERS
+    } else {
+      break;
+    }
     if (!CanCover(user, value)) break;
-    if (!MatchIntegralZero(equal->right())) break;
 
     user = value;
     value = equal->left();
