@@ -123,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c810f3_054d8224",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4383,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-20T09:22:12Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7737ab7e_3be32d3d",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d8b73d9_f8493f1a",
@@ -154,6 +172,24 @@
       "side": 1,
       "message": "I agree we can start with left \u003d 1, as the other branch of the if is the short path for the frequent case of having all script in one line, so we are never going to have a left \u003c 1.\n\nDefinitely the loop is confusing. I am not sure why we need to check right is \u003e 0. And that theoretical case would leave, as you say, info-\u003eline undefined.\n\nThough, this patch is targetted to provide the dual implementation of line end retrieval for heap snapshot. I would prefer to leave the algorithm as is, and leave for a later patch cleaning up the binary search implementaiton. WDYT?",
       "parentUuid": "4d8b73d9_f8493f1a",
+      "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba55fd10_beafc113",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4408,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-20T09:22:12Z",
+      "side": 1,
+      "message": "OK, let\u0027s do that.",
+      "parentUuid": "7415eccd_5520602a",
       "revId": "28189e31706f71047ae10424de0ecc8d5e3a821f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
