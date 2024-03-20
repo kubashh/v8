@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86a912b8_cf72bee8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-03-20T08:45:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "792bc5ba_98fe99fd",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b6cfe0c_b7105366",
@@ -70,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7699316d_4a6d338a",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-03-20T08:45:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6ef78fc_c7f1cfa1",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "718f848d_0596e414",
@@ -83,6 +119,24 @@
       "writtenOn": "2024-03-19T23:51:35Z",
       "side": 1,
       "message": "IIUC, if you explicitly call `captureStackTrace` on an Error subclass, this will end up overwriting the original message from construction time to be the value of `obj.message` at that time. Should this copying logic check for the existence of the private `error_message_symbol` first?\n\nAlso, shouldn\u0027t this copying be done before the `CaptureAndSetErrorStack` call?\n\nAlso also, we are changing the number of `.message` property gets that `captureStackTrace` performs, which is user observable. I seriously hope there\u0027s no code depending on `.message` being getters.",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58326cf2_a3d199e5",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-03-20T08:45:20Z",
+      "side": 1,
+      "message": "Good catch! Added a check for `error_message_symbol` and only copy the `message` property if it\u0027s not present. Also added test cases for this.\n\nThe message does not need to be done before `CaptureAndSetErrorStack`. That function doesn\u0027t actually serialize anything, just collects the strucutered stack trace data for later use. As such, it doesn\u0027t look at the message.\n\nAs for number of observed `.message` gets, I really hope no one relies on that, but unfortunately we don\u0027t have a good way of finding out other than landing the change and waiting if anything breaks.",
+      "parentUuid": "718f848d_0596e414",
       "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
