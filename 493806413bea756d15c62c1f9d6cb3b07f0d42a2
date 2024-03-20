@@ -50,6 +50,24 @@
       "message": "This needs to be `V8_EXPORT_PRIVATE` to be used in the new test (see compilation errors).",
       "revId": "493806413bea756d15c62c1f9d6cb3b07f0d42a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c34ba06_dd58737b",
+        "filename": "src/objects/script.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-03-20T16:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d75717e_4890e651",
+      "revId": "493806413bea756d15c62c1f9d6cb3b07f0d42a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
