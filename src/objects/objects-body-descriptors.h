@@ -8,8 +8,7 @@
 #include "src/objects/map.h"
 #include "src/objects/objects.h"
 
-namespace v8 {
-namespace internal {
+namespace v8::internal {
 
 // This is the base class for object's body descriptors.
 //
@@ -86,6 +85,18 @@ class BodyDescriptorBase {
                                              ObjectVisitor* v);
 };
 
+// This class describes a body of an object without any pointers.
+class DataOnlyBodyDescriptor : public BodyDescriptorBase {
+ public:
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
+                                 int object_size, ObjectVisitor* v) {}
+
+ private:
+  // Note: {SizeOf} is not implemented here; sub-classes will have to implement
+  // it.
+};
+
 // This class describes a body of an object in which all pointer fields are
 // located in the [start_offset, end_offset) interval.
 // All pointers have to be strong.
@@ -107,11 +118,8 @@ class FixedRangeBodyDescriptor : public BodyDescriptorBase {
     IterateBody(map, obj, v);
   }
 
- private:
-  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
-    // Has to be implemented by the subclass.
-    UNREACHABLE();
-  }
+  // Note: {SizeOf} is not implemented here; sub-classes will have to implement
+  // it.
 };
 
 // This class describes a body of an object of a fixed size
@@ -120,13 +128,22 @@ class FixedRangeBodyDescriptor : public BodyDescriptorBase {
 // All pointers have to be strong.
 template <int start_offset, int end_offset, int size>
 class FixedBodyDescriptor
-    : public FixedRangeBodyDescriptor<start_offset, end_offset> {
+    : public std::conditional_t<
+          start_offset == end_offset, DataOnlyBodyDescriptor,
+          FixedRangeBodyDescriptor<start_offset, end_offset>> {
  public:
-  static const int kSize = size;
+  static constexpr int kSize = size;
+
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
+    DCHECK_EQ(kSize, map->instance_size());
     return kSize;
   }
 };
+
+template <typename T>
+using FixedBodyDescriptorFor =
+    FixedBodyDescriptor<T::kStartOfStrongFieldsOffset,
+                        T::kEndOfStrongFieldsOffset, T::kSize>;
 
 // This class describes a body of an object in which all pointer fields are
 // located in the [start_offset, object_size) interval.
@@ -142,11 +159,8 @@ class SuffixRangeBodyDescriptor : public BodyDescriptorBase {
     IteratePointers(obj, start_offset, object_size, v);
   }
 
- private:
-  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
-    // Has to be implemented by the subclass.
-    UNREACHABLE();
-  }
+  // Note: {SizeOf} is not implemented here; sub-classes will have to implement
+  // it.
 };
 
 // This class describes a body of an object of a variable size
@@ -159,11 +173,9 @@ class FlexibleBodyDescriptor : public SuffixRangeBodyDescriptor<start_offset> {
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object);
 };
 
-// A forward-declacable descriptor body alias for most of the Struct successors.
+// A forward-declarable descriptor body alias for most of the Struct successors.
 class StructBodyDescriptor
-    : public FlexibleBodyDescriptor<HeapObject::kHeaderSize> {
- public:
-};
+    : public FlexibleBodyDescriptor<HeapObject::kHeaderSize> {};
 
 // This class describes a body of an object in which all pointer fields are
 // located in the [start_offset, object_size) interval.
@@ -179,11 +191,8 @@ class SuffixRangeWeakBodyDescriptor : public BodyDescriptorBase {
     IterateMaybeWeakPointers(obj, start_offset, object_size, v);
   }
 
- private:
-  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
-    // Has to be implemented by the subclass.
-    UNREACHABLE();
-  }
+  // Note: {SizeOf} is not implemented here; sub-classes will have to implement
+  // it.
 };
 
 // This class describes a body of an object of a variable size
@@ -197,27 +206,13 @@ class FlexibleWeakBodyDescriptor
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object);
 };
 
-// This class describes a body of an object without any pointers.
-class DataOnlyBodyDescriptor : public BodyDescriptorBase {
- public:
-  template <typename ObjectVisitor>
-  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
-                                 int object_size, ObjectVisitor* v) {}
-
- private:
-  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
-    // Has to be implemented by the subclass.
-    UNREACHABLE();
-  }
-};
-
 // This class describes a body of an object which has a parent class that also
 // has a body descriptor. This represents a union of the parent's body
 // descriptor, and a new descriptor for the child -- so, both parent and child's
 // slots are iterated. The parent must be fixed size, and its slots be disjoint
 // with the child's.
 template <class ParentBodyDescriptor, class ChildBodyDescriptor>
-class SubclassBodyDescriptor final : public BodyDescriptorBase {
+class SubclassBodyDescriptor : public BodyDescriptorBase {
  public:
   // The parent must end be before the child's start offset, to make sure that
   // their slots are disjoint.
@@ -244,7 +239,65 @@ class SubclassBodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
-}  // namespace internal
-}  // namespace v8
+// Visitor for exposed trusted objects with fixed layout according to
+// FixedBodyDescriptor.
+template <typename T, IndirectPointerTag kTag>
+class FixedExposedTrustedObjectBodyDescriptor
+    : public FixedBodyDescriptorFor<T> {
+  static_assert(std::is_base_of_v<ExposedTrustedObject, T>);
+  using Base = FixedBodyDescriptorFor<T>;
+
+ public:
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
+                                 int object_size, ObjectVisitor* v) {
+    Base::IterateSelfIndirectPointer(obj, kTag, v);
+    Base::IterateBody(map, obj, object_size, v);
+  }
+};
+
+// A mix-in for visiting a trusted pointer field.
+template <size_t kFieldOffset, IndirectPointerTag kTag, typename Base>
+class WithStrongTrustedPointer : public Base {
+ public:
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
+                                 int object_size, ObjectVisitor* v) {
+    Base::IterateBody(map, obj, object_size, v);
+    Base::IterateTrustedPointer(obj, kFieldOffset, v,
+                                IndirectPointerMode::kStrong, kTag);
+  }
+};
+
+template <size_t kFieldOffset, typename Base>
+using WithStrongCodePointer =
+    WithStrongTrustedPointer<kFieldOffset, kCodeIndirectPointerTag, Base>;
+
+// A mix-in for visiting an external pointer field.
+template <size_t kFieldOffset, ExternalPointerTag kTag, typename Base>
+class WithExternalPointer : public Base {
+ public:
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
+                                 int object_size, ObjectVisitor* v) {
+    Base::IterateBody(map, obj, object_size, v);
+    v->VisitExternalPointer(obj,
+                            obj->RawExternalPointerField(kFieldOffset, kTag));
+  }
+};
+
+// A mix-in for visiting an external pointer field.
+template <size_t kFieldOffset, typename Base>
+class WithProtectedPointer : public Base {
+ public:
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
+                                 int object_size, ObjectVisitor* v) {
+    Base::IterateBody(map, obj, object_size, v);
+    Base::IterateProtectedPointer(obj, kFieldOffset, v);
+  }
+};
+
+}  // namespace v8::internal
 
 #endif  // V8_OBJECTS_OBJECTS_BODY_DESCRIPTORS_H_
