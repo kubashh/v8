@@ -139,6 +139,24 @@
       "parentUuid": "718f848d_0596e414",
       "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee88a714_25cfabfa",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-03-20T09:24:06Z",
+      "side": 1,
+      "message": "Looks like I spook too soon: https://github.com/nodejs/node/blob/main/lib/internal/per_context/domexception.js#L53-L93\n\nNode.js\u0027 DOMException first calls `Error.captureStackTrace`, and then sets up a message getter. Since we now call `message` during `captureStackTrace`, the getter throws an exception as the underlying data was not yet set up.",
+      "parentUuid": "58326cf2_a3d199e5",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
