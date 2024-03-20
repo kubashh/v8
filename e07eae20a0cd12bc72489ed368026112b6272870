@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d053a00d_cf729049",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-20T19:24:53Z",
+      "side": 1,
+      "message": "No strong feelings on my side. I don\u0027t really see this as an improvement, but I also won\u0027t veto the change if you like it.\n\nKeeping the BodyVisitor definitions in `objects-body-descriptors-inl.h` is probably good for compile times, as that header is #included a lot less than `wasm-objects.h`. OTOH, having the body descriptor in the class body is nice for making sure it\u0027s in sync with the class definition.\n\nI wonder whether a macro in the style of `RUNTIME_FUNCTION` could be an interesting alternative. It only easily defines a single function, but perhaps that\u0027s enough, and we could build it such that we can write something like:\n```\nclass Foo : public TorqueGeneratedFoo\u003c...\u003e {\n\n  // stuff...\n  \n  VISIT_BODY() {\n    VisitCodePointer(kCodeOffset);\n    VisitStrongTrustedPointer(kTrustedInternalOffset, kSomePointerTag);\n    VisitExternalPointer(kCallTargetOffset, kSomeOtherTag);\n    VisitStrongFields(kStrongFieldsStart, kStrongFieldsEnd);\n  }\n};\n```\nJust a thought.",
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "94d30fdd_5d64320a",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 2
@@ -77,6 +94,98 @@
         "startChar": 70,
         "endLine": 847,
         "endChar": 73
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da28b89e_dbeef387",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-20T19:24:53Z",
+      "side": 1,
+      "message": "WDYT about manually forcing semantically meaningful formatting here, using `// --` comments if that\u0027s enough, or `// clang-format off` otherwise? I think ideally we\u0027d have:\n```\nusing BodyDescriptor \u003d \n    WithStrongCodePointer\u003ckWrapperCodeOffset,\n    WithStrongTrustedPointer\u003ckTrustedInternalOffset,\n                             kWasmInternalFunctionIndirectPointerTag,\n    FixedBodyDescriptorFor\u003cWasmFunctionData\u003e\u003e\u003e;\n```",
+      "range": {
+        "startLine": 843,
+        "startChar": 2,
+        "endLine": 847,
+        "endChar": 74
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2156611a_9c5089ac",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-20T19:24:53Z",
+      "side": 1,
+      "message": "So this doesn\u0027t include inherited fields, requiring `SubclassBodyDescriptor` to fill the gap? That\u0027s... unintuitive.",
+      "range": {
+        "startLine": 875,
+        "startChar": 29,
+        "endLine": 875,
+        "endChar": 77
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba7a13f5_7f61ee05",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-20T19:24:53Z",
+      "side": 1,
+      "message": "I think the old way of writing BodyDescriptors was almost as readable as this comment, so the existence of the comment (which is very nice to have now!) IMHO indicates that the new version scores lower on readability.",
+      "range": {
+        "startLine": 931,
+        "startChar": 2,
+        "endLine": 935,
+        "endChar": 65
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df2429b4_0e897c98",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-03-20T19:24:53Z",
+      "side": 1,
+      "message": "Ideal formatting:\n```\nusing BodyDescriptor \u003d\n    WithProtectedPointer\u003ckProtectedRefOffset,\n    WithExternalPointer\u003ckCallTargetOffset, \n                        kWasmInternalFunctionCallTargetTag,\n    WithStrongCodePointer\u003ckCodeOffset,\n    FixedExposedTrustedObjectBodyDescriptor\u003cWasmInternalFunction,\n        kWasmInternalFunctionIndirectPointerTag\u003e\u003e\u003e\u003e;\n```",
+      "range": {
+        "startLine": 936,
+        "startChar": 2,
+        "endLine": 943,
+        "endChar": 80
       },
       "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
