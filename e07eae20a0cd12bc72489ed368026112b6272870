@@ -16,6 +16,46 @@
       "message": "I thought we could make defining body descriptors a bit easier by defining more \"templates\" (not in the C++ sense) that can be stitched together.\n\nAdding Omer as main reviewer, and Matthias, Andreas, and Jakob for input from a usability / readability perspective (as we discussed this before).\nConsider this a proposal for now, I am open to suggestions or objection :)",
       "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaeaaad5_67efd724",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-20T16:37:30Z",
+      "side": 1,
+      "message": "LGTM, very nice!",
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d30fdd_5d64320a",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-20T16:37:30Z",
+      "side": 1,
+      "message": "Note: I think the turbofan phases have some template magic to convert a list into this nesting. It could make this more readable on the other hand it could make any compiler errors even more confusing...",
+      "range": {
+        "startLine": 847,
+        "startChar": 70,
+        "endLine": 847,
+        "endChar": 73
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
