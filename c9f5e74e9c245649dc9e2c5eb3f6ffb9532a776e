@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "413689c6_15fe27be",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-20T01:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2cc81ee_99bc04ca",
+      "range": {
+        "startLine": 339,
+        "startChar": 20,
+        "endLine": 339,
+        "endChar": 21
+      },
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b65a3769_6e550bcd",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcabfa63_738872de",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-20T01:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b65a3769_6e550bcd",
+      "range": {
+        "startLine": 341,
+        "startChar": 57,
+        "endLine": 341,
+        "endChar": 58
+      },
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c43b85cb_e7f0be76",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-03-19T09:14:11Z",
       "side": 1,
       "message": "```suggestion\n#undef SIMD_SIGN_EXTENSION_UNARY_MASK\n```",
+      "range": {
+        "startLine": 342,
+        "startChar": 19,
+        "endLine": 342,
+        "endChar": 20
+      },
+      "revId": "c9f5e74e9c245649dc9e2c5eb3f6ffb9532a776e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857902a2_a3b7033e",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1572942
+      },
+      "writtenOn": "2024-03-20T01:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c43b85cb_e7f0be76",
       "range": {
         "startLine": 342,
         "startChar": 19,
