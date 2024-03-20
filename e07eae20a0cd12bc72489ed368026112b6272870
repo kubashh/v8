@@ -56,6 +56,30 @@
       },
       "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2acab090_3c75afea",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-20T16:44:39Z",
+      "side": 1,
+      "message": "Yes, I thought about this (it could also replace the existing `SubclassBodyDescriptor`), but then we would need to make the order of the list very clear, in case two descriptors both provide e.g. a `SizeOf` method.\n\nThe nesting make it (hopefully) clear that the outermost class wins.",
+      "parentUuid": "94d30fdd_5d64320a",
+      "range": {
+        "startLine": 847,
+        "startChar": 70,
+        "endLine": 847,
+        "endChar": 73
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
