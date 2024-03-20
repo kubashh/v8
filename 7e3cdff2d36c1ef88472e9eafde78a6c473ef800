@@ -157,6 +157,24 @@
       "parentUuid": "58326cf2_a3d199e5",
       "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "156b6c9a_dcb065f9",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-03-20T10:25:41Z",
+      "side": 1,
+      "message": "Change of tactics: The CL leaves `Error.captureStackTrace` alone. After seeing the Node.js code we are somewhat hesitant to apply this also for custom error shenanigans. We\u0027ll restrict it standard Error objects.\n\nI also added a kill switch. Let me know if we should land the CL with the flag off and finch the whole thing, or if we land it enabled and kill the feature via finch if we run into any web compat issues.",
+      "parentUuid": "ee88a714_25cfabfa",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
