@@ -16,6 +16,46 @@
       "message": "PTAL, thanks!",
       "revId": "a35aa5ba83e0581f32bc2aca9718227263a43175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96016a4e_5a3c76d7",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-20T11:54:08Z",
+      "side": 1,
+      "message": "`cpu_revec_feature_support` maybe? Or, put a block `{}` around all of this so that `cpu_feature_support` has a narrower scope.",
+      "range": {
+        "startLine": 3378,
+        "startChar": 9,
+        "endLine": 3378,
+        "endChar": 28
+      },
+      "revId": "a35aa5ba83e0581f32bc2aca9718227263a43175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36dec60a_7e2b8fd2",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-03-20T11:54:08Z",
+      "side": 1,
+      "message": "Don\u0027t you need to add Simd128Splat to this list? \n\nIf this is indeed missing, can you add a test that breaks because of this omission? :)",
+      "revId": "a35aa5ba83e0581f32bc2aca9718227263a43175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
