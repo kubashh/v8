@@ -175,6 +175,24 @@
       "parentUuid": "ee88a714_25cfabfa",
       "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38bc4735_e140123b",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-20T17:34:47Z",
+      "side": 1,
+      "message": "Ouch, Hyrum\u0027s Law strikes again. Shipping with the flag on-by-default and be ready with a killswitch sounds better to me. Did you also add a `base::Feature` in gin on the chromium side?",
+      "parentUuid": "156b6c9a_dcb065f9",
+      "revId": "7e3cdff2d36c1ef88472e9eafde78a6c473ef800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

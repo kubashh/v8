@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aac1de37_462c8e7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-03-20T17:34:47Z",
+      "side": 1,
+      "message": "lgtm % adding a `base::Feature` in chromium/src/gin.",
+      "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
