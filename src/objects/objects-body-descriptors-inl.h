@@ -810,9 +810,6 @@ class WasmInternalFunction::BodyDescriptor final : public BodyDescriptorBase {
     IteratePointers(obj, kStartOfStrongFieldsOffset, kEndOfStrongFieldsOffset,
                     v);
     IterateProtectedPointer(obj, kProtectedRefOffset, v);
-    v->VisitExternalPointer(
-        obj, obj->RawExternalPointerField(kCallTargetOffset,
-                                          kWasmInternalFunctionCallTargetTag));
     IterateCodePointer(obj, kCodeOffset, v, IndirectPointerMode::kStrong);
   }
 

@@ -192,19 +192,18 @@ WasmGraphBuilderBase::BuildImportedFunctionTargetAndRef(
           : __ LoadProtectedFixedArrayElement(
                 imported_function_refs,
                 __ ChangeUint32ToUintPtr(func_index.value())));
-  V<FixedAddressArray> imported_targets = LOAD_IMMUTABLE_INSTANCE_FIELD(
-      trusted_instance_data, ImportedFunctionTargets,
-      MemoryRepresentation::TaggedPointer());
+  V<TrustedFixedAddressArray> imported_targets = LOAD_PROTECTED_INSTANCE_FIELD(
+      trusted_instance_data, ImportedFunctionTargets, TrustedFixedAddressArray);
   V<WordPtr> target =
       func_index.is_constant()
           ? __ Load(imported_targets, LoadOp::Kind::TaggedBase(),
                     MemoryRepresentation::UintPtr(),
-                    FixedAddressArray::OffsetOfElementAt(
+                    TrustedFixedAddressArray::OffsetOfElementAt(
                         func_index.constant_value()))
           : __
             Load(imported_targets, __ ChangeUint32ToUintPtr(func_index.value()),
                  LoadOp::Kind::TaggedBase(), MemoryRepresentation::UintPtr(),
-                 FixedAddressArray::OffsetOfElementAt(0),
+                 TrustedFixedAddressArray::OffsetOfElementAt(0),
                  kSystemPointerSizeLog2);
   return {target, ref};
 }
@@ -6344,18 +6343,9 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
             internal_function, LoadOp::Kind::TaggedBase().Immutable(),
             WasmInternalFunction::kProtectedRefOffset));
 
-#ifdef V8_ENABLE_SANDBOX
-    V<Word32> target_handle =
-        __ Load(internal_function, LoadOp::Kind::TaggedBase(),
-                MemoryRepresentation::Uint32(),
-                WasmInternalFunction::kCallTargetOffset);
-    V<WordPtr> target = __ DecodeExternalPointer(
-        target_handle, kWasmInternalFunctionCallTargetTag);
-#else
     V<WordPtr> target = __ Load(internal_function, LoadOp::Kind::TaggedBase(),
                                 MemoryRepresentation::UintPtr(),
                                 WasmInternalFunction::kCallTargetOffset);
-#endif
     Label<WordPtr> done(&asm_);
     // For wasm functions, we have a cached handle to a pointer to off-heap
     // code. For WasmJSFunctions we used not to be able to cache this handle

@@ -7775,11 +7775,11 @@ class LiftoffCompiler {
           ObjectAccess::ElementOffsetInProtectedFixedArray(imm.index));
 
       Register imported_targets = target;
-      LOAD_TAGGED_PTR_INSTANCE_FIELD(imported_targets, ImportedFunctionTargets,
-                                     pinned);
+      LOAD_PROTECTED_PTR_INSTANCE_FIELD(imported_targets,
+                                        ImportedFunctionTargets, pinned);
       __ LoadFullPointer(
           target, imported_targets,
-          wasm::ObjectAccess::ElementOffsetInTaggedFixedAddressArray(
+          wasm::ObjectAccess::ElementOffsetInTaggedTrustedFixedAddressArray(
               imm.index));
 
       __ PrepareCall(&sig, call_descriptor, &target, imported_function_ref);
@@ -8122,10 +8122,9 @@ class LiftoffCompiler {
                               wasm::ObjectAccess::ToTagged(
                                   WasmInternalFunction::kProtectedRefOffset));
 
-      __ LoadExternalPointer(
-          target, internal_function,
-          wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCallTargetOffset),
-          kWasmInternalFunctionCallTargetTag, temp);
+      __ LoadFullPointer(target, internal_function,
+                         wasm::ObjectAccess::ToTagged(
+                             WasmInternalFunction::kCallTargetOffset));
 
       FREEZE_STATE(frozen);
       Label perform_call;
