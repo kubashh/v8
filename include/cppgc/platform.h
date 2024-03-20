@@ -55,6 +55,11 @@ class V8_EXPORT Platform {
     return nullptr;
   }
 
+  virtual std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
+      TaskPriority priority) {
+    return GetForegroundTaskRunner();
+  }
+
   /**
    * Posts `job_task` to run in parallel. Returns a `JobHandle` associated with
    * the `Job`, which can be joined or canceled.
