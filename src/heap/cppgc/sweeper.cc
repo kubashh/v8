@@ -1116,7 +1116,8 @@ class Sweeper::SweeperImpl final {
     DCHECK_GE(config_.sweeping_type,
               SweepingConfig::SweepingType::kIncremental);
 
-    auto runner = platform_->GetForegroundTaskRunner();
+    auto runner =
+        platform_->GetForegroundTaskRunner(TaskPriority::kUserVisible);
     if (!runner) return;
 
     incremental_sweeper_handle_ =

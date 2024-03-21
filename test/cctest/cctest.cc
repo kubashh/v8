@@ -46,6 +46,7 @@
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/common/globals.h"
 #include "src/init/v8.h"
+#include "v8-platform.h"
 #ifdef V8_ENABLE_TURBOFAN
 #include "src/compiler/pipeline.h"
 #endif  // V8_ENABLE_TURBOFAN
@@ -425,7 +426,12 @@ int TestPlatform::NumberOfWorkerThreads() {
 
 std::shared_ptr<v8::TaskRunner> TestPlatform::GetForegroundTaskRunner(
     v8::Isolate* isolate) {
-  return CcTest::default_platform()->GetForegroundTaskRunner(isolate);
+  return GetForegroundTaskRunner(isolate, v8::TaskPriority::kUserBlocking);
+}
+
+std::shared_ptr<v8::TaskRunner> TestPlatform::GetForegroundTaskRunner(
+    v8::Isolate* isolate, v8::TaskPriority priority) {
+  return CcTest::default_platform()->GetForegroundTaskRunner(isolate, priority);
 }
 
 void TestPlatform::PostTaskOnWorkerThreadImpl(

@@ -697,6 +697,8 @@ class TestPlatform : public v8::Platform {
   int NumberOfWorkerThreads() override;
   std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
       v8::Isolate* isolate) override;
+  std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
+      v8::Isolate* isolate, v8::TaskPriority priority) override;
   void PostTaskOnWorkerThreadImpl(v8::TaskPriority priority,
                                   std::unique_ptr<v8::Task> task,
                                   const v8::SourceLocation& location) override;
