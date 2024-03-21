@@ -140,6 +140,11 @@ class MockPlatform : public TestPlatform {
     return mock_task_runner_;
   }
 
+  std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
+      v8::Isolate*, v8::TaskPriority priority) override {
+    return mock_task_runner_;
+  }
+
   double Delay() { return mock_task_runner_->Delay(); }
 
   void PerformTask() { mock_task_runner_->PerformTask(); }

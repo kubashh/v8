@@ -37,8 +37,8 @@ class PredictablePlatform final : public Platform {
   }
 
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
-    return platform_->GetForegroundTaskRunner(isolate);
+      v8::Isolate* isolate, TaskPriority priority) override {
+    return platform_->GetForegroundTaskRunner(isolate, priority);
   }
 
   int NumberOfWorkerThreads() override {
@@ -144,7 +144,7 @@ class DelayedTasksPlatform final : public Platform {
   }
 
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
-      v8::Isolate* isolate) override {
+      v8::Isolate* isolate, TaskPriority priority) override {
     std::shared_ptr<TaskRunner> runner =
         platform_->GetForegroundTaskRunner(isolate);
 

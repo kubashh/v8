@@ -17,6 +17,7 @@
 #include "src/libplatform/default-foreground-task-runner.h"
 #include "src/libplatform/default-job.h"
 #include "src/libplatform/default-worker-threads-task-runner.h"
+#include "v8-platform.h"
 
 namespace v8 {
 namespace platform {
@@ -199,6 +200,11 @@ void DefaultPlatform::RunIdleTasks(v8::Isolate* isolate,
 
 std::shared_ptr<TaskRunner> DefaultPlatform::GetForegroundTaskRunner(
     v8::Isolate* isolate) {
+  return GetForegroundTaskRunner(isolate, TaskPriority::kUserBlocking);
+}
+
+std::shared_ptr<TaskRunner> DefaultPlatform::GetForegroundTaskRunner(
+    v8::Isolate* isolate, TaskPriority priority) {
   base::MutexGuard guard(&lock_);
   if (foreground_task_runner_map_.find(isolate) ==
       foreground_task_runner_map_.end()) {
