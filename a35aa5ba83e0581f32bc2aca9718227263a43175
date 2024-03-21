@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd0fd590_f960e871",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3378,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2024-03-21T05:14:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96016a4e_5a3c76d7",
+      "range": {
+        "startLine": 3378,
+        "startChar": 9,
+        "endLine": 3378,
+        "endChar": 28
+      },
+      "revId": "a35aa5ba83e0581f32bc2aca9718227263a43175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36dec60a_7e2b8fd2",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-03-20T11:54:08Z",
       "side": 1,
       "message": "Don\u0027t you need to add Simd128Splat to this list? \n\nIf this is indeed missing, can you add a test that breaks because of this omission? :)",
+      "revId": "a35aa5ba83e0581f32bc2aca9718227263a43175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "754ee9a9_96e758ad",
+        "filename": "src/compiler/turboshaft/wasm-revec-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2024-03-21T05:14:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36dec60a_7e2b8fd2",
       "revId": "a35aa5ba83e0581f32bc2aca9718227263a43175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
