@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1873beb_b4a8c6a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-03-21T12:28:29Z",
+      "side": 1,
+      "message": "As discussed offline, I think we could make the ObjectTemplate instantiation business nicer... but I\u0027m fine with doing it this way here.\n\nOne thing I\u0027m thinking is that we could have fewer types with these generic pointers by specializing array buffers (at least). We can handle array buffers in a less generic way. They aren\u0027t traditional wrappers.\n\n(Another thing that came up is that we could change how we store boilerplates for ObjectTemplates by storing them directly on the JSFunction that relates to the ObjectTemplate. It seems like the JSFunction is used to allocate the wrappers; not the ObjectTemplate directly.)",
+      "revId": "86f6a976d5836f3efd8c1f685f4773d515aa5336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d66476a7_3891e76e",
+        "filename": "src/objects/js-array-buffer.tq",
+        "patchSetId": 38
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-03-21T12:28:29Z",
+      "side": 1,
+      "message": "We could move the `bit_field` here in case of `SANDBOX+!TAGGED_SIZE_8_BYTES` (the common case) and drop the 2 fields of padding.",
+      "revId": "86f6a976d5836f3efd8c1f685f4773d515aa5336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
