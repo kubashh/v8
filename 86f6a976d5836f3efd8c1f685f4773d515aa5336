@@ -69,6 +69,24 @@
       "parentUuid": "d66476a7_3891e76e",
       "revId": "86f6a976d5836f3efd8c1f685f4773d515aa5336",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30d161cc_e0066a6e",
+        "filename": "src/objects/js-array-buffer.tq",
+        "patchSetId": 38
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-03-21T15:20:05Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "872368ac_c1e56e56",
+      "revId": "86f6a976d5836f3efd8c1f685f4773d515aa5336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
