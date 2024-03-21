@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4470f57_e1a6ae4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1447139
+      },
+      "writtenOn": "2024-03-21T17:45:40Z",
+      "side": 1,
+      "message": "Could someone submit this change to the commit queue, please? I don\u0027t have the necessary rights.",
+      "revId": "1c46196ee050d79cbb612c06b592b776bdf9a206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
