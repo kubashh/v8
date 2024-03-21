@@ -16,6 +16,74 @@
       "message": "Hi! first in the series of CL based on the design doc. PTAL, thanks!",
       "revId": "fabb26fea74229cfb975083b083530242d91e418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23be5c85_a1a38ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-21T05:40:31Z",
+      "side": 1,
+      "message": "Highlighted changes that were made on top of moving the functions to the new class.",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ea85b9d_cd6d74c7",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-21T05:40:31Z",
+      "side": 1,
+      "message": "Derived class being a template class requires explicit specifier when calling into base class members. There are other similar changes in this file.",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8e5d0dd_e1297c85",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-21T05:40:31Z",
+      "side": 1,
+      "message": "Also requires changes to typename",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e061079_bd9ac820",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-21T05:40:31Z",
+      "side": 1,
+      "message": "Another side effect was the need for explicit `this-\u003e`",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
