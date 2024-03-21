@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d549ca99_78863751",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2551,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-03-21T10:31:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7dac33a_2cb296df",
+      "range": {
+        "startLine": 2551,
+        "startChar": 39,
+        "endLine": 2551,
+        "endChar": 53
+      },
+      "revId": "bc34d22cc5d9df7a9e308e90c816f3a616124e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57a7ed65_11fe169c",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-03-21T09:32:42Z",
       "side": 1,
       "message": "Should `new WebAssembly.Global({value: \"exnref\", mutable: true}, null)` fail? If yes, let\u0027s test it.\nAlso, what about exporting an exnref global to JS? Is it invalid as well?",
+      "range": {
+        "startLine": 51,
+        "startChar": 67,
+        "endLine": 51,
+        "endChar": 88
+      },
+      "revId": "bc34d22cc5d9df7a9e308e90c816f3a616124e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "361fc52a_4226a8e7",
+        "filename": "test/mjsunit/wasm/exnref-global.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-03-21T10:31:18Z",
+      "side": 1,
+      "message": "Very good point, the type check was actually missing for reading the exported global from JS.",
+      "parentUuid": "57a7ed65_11fe169c",
       "range": {
         "startLine": 51,
         "startChar": 67,
