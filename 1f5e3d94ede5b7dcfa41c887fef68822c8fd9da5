@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1d77da4_8ab7ce19",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-21T09:46:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a61427a4_12d696c5",
+      "range": {
+        "startLine": 953,
+        "startChar": 6,
+        "endLine": 953,
+        "endChar": 23
+      },
+      "revId": "1f5e3d94ede5b7dcfa41c887fef68822c8fd9da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40d5707e_b4e8c999",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-21T09:06:44Z",
       "side": 1,
       "message": "Why is the `MoreArgs` still needed here? I thought it\u0027s only needed to make sub-classing/templates work well, but here we are already at the very bottom, this function gets called directly from application code. Why do we have to allow `MoreArgs` here?",
+      "range": {
+        "startLine": 880,
+        "startChar": 78,
+        "endLine": 881,
+        "endChar": 73
+      },
+      "revId": "1f5e3d94ede5b7dcfa41c887fef68822c8fd9da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1d2703_b2f8a6f0",
+        "filename": "src/objects/fixed-array.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-21T09:46:13Z",
+      "side": 1,
+      "message": "This is to allow passing the `allocation` (`kYoung` vs `kOld`) argument for e.g. `FixedAddressArray`. This argument does not exist for `TrustedFixedAddressArray` (where we always allocate in the trusted space).\nI added comments to the two places.",
+      "parentUuid": "40d5707e_b4e8c999",
       "range": {
         "startLine": 880,
         "startChar": 78,
