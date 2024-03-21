@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6938e35_ca6084e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-21T05:30:45Z",
+      "side": 1,
+      "message": "Hi! first in the series of CL based on the design doc. PTAL, thanks!",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
