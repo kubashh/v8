@@ -43,6 +43,8 @@ class WasmFastApiCallData extends HeapObject {
 // This is the representation that is used internally by wasm to represent
 // function references.
 extern class WasmInternalFunction extends ExposedTrustedObject {
+  // The call target, stored as raw pointer in this trusted object.
+  call_target: RawPtr;
   // This is the "reference" value that must be passed along in the "instance"
   // register when calling the given function. It is either the target instance
   // data (for wasm functions), or a WasmApiFunctionRef object (for functions
@@ -50,6 +52,8 @@ extern class WasmInternalFunction extends ExposedTrustedObject {
   // equals the respective entry in the module's imported_function_refs array.
   // Torque code should use the '.ref' macro to access the value.
   protected_ref: ProtectedPointer<WasmTrustedInstanceData|WasmApiFunctionRef>;
+  // This field is used when the call target is null.
+  code: ProtectedPointer<Code>;
   // The external (JS) representation of this function reference.
   external: JSFunction|Undefined;
   // The function index if ref is a WasmInstanceObject, -1 otherwise.
@@ -59,12 +63,6 @@ extern class WasmInternalFunction extends ExposedTrustedObject {
   // so we can construct the two objects subsequently and satify any in-between
   // heap verification.
   func_ref: WasmFuncRef|Undefined;
-  // This field is used when the call target is null.
-  // TODO(14564): Remove the indirection.
-  @if(V8_ENABLE_SANDBOX) code: IndirectPointer<Code>;
-  @ifnot(V8_ENABLE_SANDBOX) code: Code;
-  // The call target, stored as raw pointer in this trusted object.
-  call_target: RawPtr;
 }
 
 extern operator '.ref' macro LoadRefFromWasmInternalFunction(

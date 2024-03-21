@@ -3164,10 +3164,13 @@ Node* WasmGraphBuilder::BuildCallRef(const wasm::FunctionSig* sig,
   Node* is_null_target = gasm_->WordEqual(target, gasm_->IntPtrConstant(0));
   gasm_->GotoIfNot(is_null_target, &end_label, target);
   {
-    // Compute the call target from the (on-heap) wrapper code. The cached
-    // target can only be null for WasmJSFunctions.
-    Node* call_target = BuildLoadCodeEntrypointViaCodePointer(
+    // The cached target can only be null for WasmJSFunctions.
+    // Load the call target from the (trusted) code object. No sandboxing or
+    // tagging is needed here because all involved data is trusted.
+    Node* code_object = gasm_->LoadProtectedPointerFromObject(
         internal_function, WasmInternalFunction::kCodeOffset);
+    Node* call_target = gasm_->LoadFromObject(
+        MachineType::Pointer(), code_object, Code::kInstructionStartOffset);
     gasm_->Goto(&end_label, call_target);
   }
 

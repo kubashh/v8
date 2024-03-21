@@ -1710,7 +1710,7 @@ Handle<WasmInternalFunction> Factory::NewWasmInternalFunction(
     DCHECK(IsWasmTrustedInstanceData(*ref) || IsWasmApiFunctionRef(*ref));
     internal->set_ref(*ref);
     // Default values, will be overwritten by the caller.
-    internal->set_code(*BUILTIN_CODE(isolate(), Abort));
+    internal->clear_code();
     internal->set_function_index(function_index);
     internal->set_external(*undefined_value());
     // Initially set undefined here, so heap verification passes if the

@@ -842,7 +842,7 @@ class WasmInternalFunction::BodyDescriptor final : public BodyDescriptorBase {
     IteratePointers(obj, kStartOfStrongFieldsOffset, kEndOfStrongFieldsOffset,
                     v);
     IterateProtectedPointer(obj, kProtectedRefOffset, v);
-    IterateCodePointer(obj, kCodeOffset, v, IndirectPointerMode::kStrong);
+    IterateProtectedPointer(obj, kCodeOffset, v);
   }
 
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {

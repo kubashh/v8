@@ -6355,24 +6355,14 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     // probably also cache that somehow.
     // TODO(manoskouk): Figure out how to improve the situation.
     IF (UNLIKELY(__ WordPtrEqual(target, 0))) {
-#ifdef V8_ENABLE_SANDBOX
-      // In this case we can use a shortcut: the code pointer table (CPT) entry
-      // through which we reference the Code object also directly contains the
-      // entrypoint, so we don't have to load it from the Code object.
-      V<Word32> call_target_handle = __ Load(
+      // Load the call target from the (trusted) code object. No sandboxing or
+      // tagging is needed here because all involved data is trusted.
+      V<Code> wrapper_code = V<Code>::Cast(__ LoadProtectedPointerField(
           internal_function, LoadOp::Kind::TaggedBase(),
-          MemoryRepresentation::Uint32(), WasmInternalFunction::kCodeOffset);
-      V<WordPtr> call_target =
-          BuildLoadWasmCodeEntrypointViaCodePointer(call_target_handle);
-#else
-      V<Code> wrapper_code =
-          __ Load(internal_function, LoadOp::Kind::TaggedBase(),
-                  MemoryRepresentation::TaggedPointer(),
-                  WasmInternalFunction::kCodeOffset);
+          WasmInternalFunction::kCodeOffset));
       V<WordPtr> call_target = __ Load(wrapper_code, LoadOp::Kind::TaggedBase(),
                                        MemoryRepresentation::UintPtr(),
                                        Code::kInstructionStartOffset);
-#endif
       GOTO(done, call_target);
     } ELSE {
       GOTO(done, target);

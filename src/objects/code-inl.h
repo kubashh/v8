@@ -664,20 +664,21 @@ Tagged<Object> Code::raw_instruction_stream(PtrComprCageBase cage_base,
 }
 
 DEF_GETTER(Code, instruction_start, Address) {
+  Address instr_start = ReadField<Address>(kInstructionStartOffset);
 #ifdef V8_ENABLE_SANDBOX
-  return ReadCodeEntrypointViaCodePointerField(kSelfIndirectPointerOffset,
-                                               entrypoint_tag());
-#else
-  return ReadField<Address>(kInstructionStartOffset);
+  // Check that the entry in the code pointer table is consistent with the
+  // instruction start stored in the object.
+  DCHECK_EQ(instr_start, ReadCodeEntrypointViaCodePointerField(
+                             kSelfIndirectPointerOffset, entrypoint_tag()));
 #endif
+  return instr_start;
 }
 
 void Code::set_instruction_start(IsolateForSandbox isolate, Address value) {
+  WriteField<Address>(kInstructionStartOffset, value);
 #ifdef V8_ENABLE_SANDBOX
   WriteCodeEntrypointViaCodePointerField(kSelfIndirectPointerOffset, value,
                                          entrypoint_tag());
-#else
-  WriteField<Address>(kInstructionStartOffset, value);
 #endif
 }
 

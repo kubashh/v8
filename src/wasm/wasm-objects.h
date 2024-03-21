@@ -910,7 +910,7 @@ class WasmInternalFunction
   V8_EXPORT_PRIVATE static Handle<JSFunction> GetOrCreateExternal(
       Handle<WasmInternalFunction> internal);
 
-  DECL_CODE_POINTER_ACCESSORS(code)
+  DECL_PROTECTED_POINTER_ACCESSORS(code, Code)
   DECL_PROTECTED_POINTER_ACCESSORS(ref, ExposedTrustedObject)
 
   // Dispatched behavior.

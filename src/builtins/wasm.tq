@@ -561,10 +561,10 @@ builtin WasmI64AtomicWait(
   return Unsigned(SmiToInt32(result));
 }
 
-// Type feedback collection support for `call_ref`.
-
 extern macro LoadWasmInternalFunctionInstructionStart(WasmInternalFunction):
     RawPtr;
+
+// Type feedback collection support for `call_ref`.
 
 // Vector format:
 // Two slots per call_ref instruction. These slots' values can be:

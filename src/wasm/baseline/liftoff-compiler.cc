@@ -8099,7 +8099,7 @@ class LiftoffCompiler {
 
       // We limit ourselves to four registers:
       // (1) func_ref / internal_function.
-      // (2) first_param_reg, initially used for ref.
+      // (2) first_param_reg
       // (3) target, initially used as temp.
       // (4) temp.
       LiftoffRegList pinned;
@@ -8117,8 +8117,7 @@ class LiftoffCompiler {
           kWasmInternalFunctionIndirectPointerTag);
 
       // Load "ref" (WasmTrustedInstanceData or WasmApiFunctionRef) and target.
-      Register ref = first_param_reg;
-      __ LoadProtectedPointer(ref, internal_function,
+      __ LoadProtectedPointer(first_param_reg, internal_function,
                               wasm::ObjectAccess::ToTagged(
                                   WasmInternalFunction::kProtectedRefOffset));
 
@@ -8134,18 +8133,15 @@ class LiftoffCompiler {
       __ emit_cond_jump(kNotEqual, &perform_call, kIntPtrKind, target,
                         null_address, frozen);
       // The cached target can only be null for WasmJSFunctions.
-#ifdef V8_ENABLE_SANDBOX
-      // In this case, we can use a shortcut and load the entrypoint directly
-      // from the code pointer table without going through the Code object.
-      __ LoadCodeEntrypointViaCodePointer(
-          target, internal_function,
+      // In that case, load the instruction start from the Code object. No
+      // sandboxing or tagging needed here as all involved data is trusted.
+      Register code = target;
+      __ LoadProtectedPointer(
+          code, internal_function,
           wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCodeOffset));
-#else
-      __ LoadTaggedPointer(
-          target, internal_function, no_reg,
-          wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCodeOffset));
-      __ LoadCodeInstructionStart(target, target, kWasmEntrypointTag);
-#endif
+      __ LoadFullPointer(
+          target, code,
+          wasm::ObjectAccess::ToTagged(Code::kInstructionStartOffset));
       // Fall through to {perform_call}.
 
       __ bind(&perform_call);
