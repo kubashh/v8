@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30625bb8_fd1d7d3a",
+        "filename": "test/mjsunit/wasm/exnref.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-03-21T11:16:58Z",
+      "side": 1,
+      "message": "PTAL, I had to modify this test too. This makes the test a bit weaker, because it would still pass even if we (incorrectly) don\u0027t catch the exception. But the main purpose of the test is to check that we push the caught exnref on the stack. The rest should be covered by other tests.",
+      "revId": "204036163531c0f60cec2f9072cf461298944143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
