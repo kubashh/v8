@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ede401a_344c67bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-21T09:03:16Z",
+      "side": 1,
+      "message": "Can you give me some context for this change?\nWhat priority is used on ToT? And why change it?",
+      "revId": "f3f6304d21330779068fca409296ec49b910a609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd879afc_1e1d7de8",
+        "filename": "src/libplatform/default-platform.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-03-21T09:03:16Z",
+      "side": 1,
+      "message": "`priority` is unused. Is that intentional?",
+      "range": {
+        "startLine": 207,
+        "startChar": 39,
+        "endLine": 207,
+        "endChar": 47
+      },
+      "revId": "f3f6304d21330779068fca409296ec49b910a609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
