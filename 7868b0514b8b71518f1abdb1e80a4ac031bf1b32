@@ -50,6 +50,24 @@
       "message": "This method will trigger user code. My guess based on the use of `GetDataProperty` above is that you don\u0027t actually want to trigger observable side effects here.",
       "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53793879_507606cb",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-03-22T06:14:54Z",
+      "side": 1,
+      "message": "I copied the above code from how load the structured stack trace data from the prototype chain.\n\nIMO it\u0027s fine to trigger user code here: In the existing code you\u0027d be able to observe the `toString` call to the message property already if you call `Error.prototype.toString` or `Error.stack`.\n\nNow you\u0027d be able to observe the toString call to whatever you passed to the Error constructor when you call `Error.stack`.\n\nWe could default to the empty string if the error was constructed with a non-string message, but I slightly prefer having an observable toString call in here.",
+      "parentUuid": "0fc4fb6b_6f82f5a5",
+      "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
