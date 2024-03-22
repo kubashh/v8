@@ -626,6 +626,24 @@ EXTERNAL_POINTER_ACCESSORS(JSAPIObjectWithEmbedderSlots, cpp_heap_wrappable,
 EXTERNAL_POINTER_ACCESSORS(JSSpecialObject, cpp_heap_wrappable, void*,
                            kCppHeapWrappableOffset, kExternalObjectValueTag)
 
+template <ExternalPointerTag tag>
+void* JSAPIObjectWithEmbedderSlots::GetCppHeapWrappable(
+    IsolateForSandbox isolate) const {
+  struct C2440 {};
+  Address result =
+      TryReadExternalPointerField<tag>(kCppHeapWrappableOffset, isolate);
+  return reinterpret_cast<void*>(reinterpret_cast<C2440*>(result));
+}
+
+template <ExternalPointerTag tag>
+void JSAPIObjectWithEmbedderSlots::SetCppHeapWrappable(
+    IsolateForSandbox isolate, void* instance) {
+  WriteLazilyInitializedExternalPointerField<tag>(
+      JSAPIObjectWithEmbedderSlots::kCppHeapWrappableOffset, isolate,
+      reinterpret_cast<Address>(instance));
+  WriteBarrier::MarkingFromCppHeapWrappable(*this, instance);
+}
+
 bool JSMessageObject::DidEnsureSourcePositionsAvailable() const {
   return shared_info() == Smi::zero();
 }
