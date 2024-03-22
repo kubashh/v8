@@ -16,6 +16,24 @@
       "message": "PTAL.\nThis just renames the existing wasm-compile-fuzzer too.\n\nI will upload the chrome changes too as 3 CLs for every fuzzer separately.",
       "revId": "d9271c814885bcccfdc47e0bc9dc45603a627b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "020055ec_5694b72e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-22T18:29:25Z",
+      "side": 1,
+      "message": "I\u0027d probably keep them together, that might speed up the review process as the chromium changes are very mechanic.",
+      "parentUuid": "9d880161_7411b3f4",
+      "revId": "d9271c814885bcccfdc47e0bc9dc45603a627b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
