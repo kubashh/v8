@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d880161_7411b3f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-22T18:02:19Z",
+      "side": 1,
+      "message": "PTAL.\nThis just renames the existing wasm-compile-fuzzer too.\n\nI will upload the chrome changes too as 3 CLs for every fuzzer separately.",
+      "revId": "d9271c814885bcccfdc47e0bc9dc45603a627b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
