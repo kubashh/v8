@@ -51,6 +51,23 @@
       "message": "Clemens, could you please take a look at the whole chain of CLs?",
       "revId": "d9271c814885bcccfdc47e0bc9dc45603a627b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c819ff6_9adb1518",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T12:06:50Z",
+      "side": 1,
+      "message": "Not sure if this is worth the trouble. This would break compilation on the chromium side, because the v8-side definition is renamed. So we would have to temporarily remove the fuzzer from chromium, then land this CL, then re-add the fuzzer.\n\nI think that\u0027s not necessary, we can live with the old name.",
+      "revId": "d9271c814885bcccfdc47e0bc9dc45603a627b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
