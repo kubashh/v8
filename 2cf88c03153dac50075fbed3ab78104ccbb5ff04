@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d39169bb_2e3dfba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-03-25T17:59:44Z",
+      "side": 1,
+      "message": "Cherry pick of fix for M124",
+      "revId": "2cf88c03153dac50075fbed3ab78104ccbb5ff04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
