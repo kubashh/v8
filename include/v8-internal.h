@@ -728,7 +728,8 @@ class Internals {
       kIsolateExternalPointerTableOffset + kExternalPointerTableSize;
 #ifdef V8_ENABLE_SANDBOX
   static const int kIsolateTrustedCageBaseOffset =
-      kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
+      kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize +
+      kExternalPointerTableSize;
   static const int kIsolateTrustedPointerTableOffset =
       kIsolateTrustedCageBaseOffset + kApiSystemPointerSize;
   static const int kIsolateApiCallbackThunkArgumentOffset =
