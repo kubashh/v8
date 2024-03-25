@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4c902cd_6d977801",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-25T08:51:31Z",
+      "side": 1,
+      "message": "+saelo for the use of the arbitrary external pointer tag",
+      "revId": "932a00feb1a78ff23c9b846c6af4df79ac77a396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "854fff92_d63d9efa",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-25T08:51:31Z",
+      "side": 1,
+      "message": "Is this okay? The GC doesn\u0027t generally know the type tag and we would otherwise need to store it (which defeats the purpose, I guess).",
+      "range": {
+        "startLine": 500,
+        "startChar": 41,
+        "endLine": 500,
+        "endChar": 63
+      },
+      "revId": "932a00feb1a78ff23c9b846c6af4df79ac77a396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
