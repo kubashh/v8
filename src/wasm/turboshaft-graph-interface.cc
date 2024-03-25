@@ -1116,7 +1116,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         result = __ Word32Constant(0);
         break;
       case MachineRepresentation::kWord8:
-        // No need to change endianness for byte size, return original node
+        // No need to change endianness for byte size, return original node.
         return node;
       case MachineRepresentation::kSimd128:
         DCHECK(ReverseBytesSupported(value_size_in_bytes));
@@ -3271,11 +3271,21 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       return;
     }
     DCHECK_EQ(info.op_type, kLoad);
+    RegisterRepresentation loaded_value_rep = info.result_rep;
+#if V8_TARGET_BIG_ENDIAN
+    // Do not sign-extend / zero-extend the value to 64 bits as the bytes need
+    // to be reversed first to keep little-endian load / store semantics. Still
+    // extend for 1 byte loads as it doesn't require reversing any bytes.
+    if (info.result_rep == RegisterRepresentation::Word64() &&
+        info.input_rep.SizeInBytes() < 8 && info.input_rep.SizeInBytes() != 1) {
+      loaded_value_rep = RegisterRepresentation::Word32();
+    }
+#endif
     result->op = __ Load(MemBuffer(imm.memory->index, imm.offset), index,
                          access_kind == MemoryAccessKind::kProtected
                              ? LoadOp::Kind::Protected().Atomic()
                              : LoadOp::Kind::RawAligned().Atomic(),
-                         info.input_rep, info.result_rep);
+                         info.input_rep, loaded_value_rep);
 
 #ifdef V8_TARGET_BIG_ENDIAN
     // Reverse the value bytes after load.
