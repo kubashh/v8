@@ -7767,20 +7767,19 @@ class LiftoffCompiler {
 
       // Load the ref object (either a WasmTrustedInstanceData or a
       // WasmApiFunctionRef).
-      Register imported_function_refs = imported_function_ref;
-      LOAD_PROTECTED_PTR_INSTANCE_FIELD(imported_function_refs,
-                                        ImportedFunctionRefs, pinned);
+      Register dispatch_table = target;
+      LOAD_PROTECTED_PTR_INSTANCE_FIELD(dispatch_table, DispatchTableForImports,
+                                        pinned);
       __ LoadProtectedPointer(
-          imported_function_ref, imported_function_refs,
-          ObjectAccess::ElementOffsetInProtectedFixedArray(imm.index));
+          imported_function_ref, dispatch_table,
+          ObjectAccess::ToTagged(WasmDispatchTable::OffsetOf(imm.index) +
+                                 WasmDispatchTable::kRefBias));
 
-      Register imported_targets = target;
-      LOAD_PROTECTED_PTR_INSTANCE_FIELD(imported_targets,
-                                        ImportedFunctionTargets, pinned);
       __ LoadFullPointer(
-          target, imported_targets,
-          wasm::ObjectAccess::ElementOffsetInTaggedTrustedFixedAddressArray(
-              imm.index));
+          target, dispatch_table,
+          ObjectAccess::ToTagged(WasmDispatchTable::OffsetOf(imm.index) +
+                                 WasmDispatchTable::kTargetBias));
+      dispatch_table = no_reg;
 
       __ PrepareCall(&sig, call_descriptor, &target, imported_function_ref);
       if (tail_call) {
