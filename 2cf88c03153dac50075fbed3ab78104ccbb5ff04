@@ -33,6 +33,24 @@
       "message": "lgtm, but please prepend \"chromium:\" to the bug id before landing for easy tracking",
       "revId": "2cf88c03153dac50075fbed3ab78104ccbb5ff04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1f7575d_71b00761",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2024-03-25T20:05:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d8e2e597_6fd0f888",
+      "revId": "2cf88c03153dac50075fbed3ab78104ccbb5ff04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
