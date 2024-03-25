@@ -39,6 +39,30 @@
       },
       "revId": "932a00feb1a78ff23c9b846c6af4df79ac77a396",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4be16aa6_2ae8df98",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-25T10:25:41Z",
+      "side": 1,
+      "message": "So with this you might get pointers to non-cpp-heap objects here if an attacker swaps an external pointer handle inside the sandbox. I assume that\u0027s not great since we then try to mark that thing? Can you use `kEmbedderDataSlotPayloadTag` here? Otherwise I guess it\u0027s fine for now since eventually we\u0027ll (probably) have a dedicated table where every entry in that table contains a valid cpp-heap object.",
+      "parentUuid": "854fff92_d63d9efa",
+      "range": {
+        "startLine": 500,
+        "startChar": 41,
+        "endLine": 500,
+        "endChar": 63
+      },
+      "revId": "932a00feb1a78ff23c9b846c6af4df79ac77a396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
