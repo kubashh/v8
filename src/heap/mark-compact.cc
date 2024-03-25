@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <limits>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -467,7 +468,10 @@ void MarkCompactCollector::ComputeEvacuationHeuristics(
   // For memory reducing and optimize for memory mode we directly define both
   // constants.
   const int kTargetFragmentationPercentForReduceMemory = 20;
-  const size_t kMaxEvacuatedBytesForReduceMemory = 12 * MB;
+  const size_t kMaxEvacuatedBytesForReduceMemory =
+      (v8_flags.minor_ms && heap_->isolate()->IsIsolateInBackground())
+          ? std::numeric_limits<size_t>::max()
+          : 12 * MB;
   const int kTargetFragmentationPercentForOptimizeMemory = 20;
   const size_t kMaxEvacuatedBytesForOptimizeMemory = 6 * MB;
 
