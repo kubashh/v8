@@ -16,6 +16,23 @@
       "message": "With some inspiration of Nico (CCed) I refactored this now to avoid the nesting and instead provide the mix-in classes as a list.\n\nThis looks a lot better at the use sites, but requires some more boilerplate for the mix-in definitions.\nIt\u0027s better overall I think. Comments?",
       "revId": "79d0a625c2c36891c07c7101b4c99f563ea5a40a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ebf92f_ae940e3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T16:24:11Z",
+      "side": 1,
+      "message": "Resolving previous comments...",
+      "revId": "79d0a625c2c36891c07c7101b4c99f563ea5a40a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

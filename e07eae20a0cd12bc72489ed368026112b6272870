@@ -71,6 +71,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ac33ddfd_8a93f84f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T16:24:11Z",
+      "side": 1,
+      "message": "I would like to avoid mixing macros into this. PS3 provides similar usability with plain C++.",
+      "parentUuid": "d053a00d_cf729049",
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "94d30fdd_5d64320a",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 2
@@ -139,6 +157,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb2dd4c_32b8c8cc",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T16:24:11Z",
+      "side": 1,
+      "message": "I think this improved substantially in PS3; PTAL.",
+      "parentUuid": "da28b89e_dbeef387",
+      "range": {
+        "startLine": 843,
+        "startChar": 2,
+        "endLine": 847,
+        "endChar": 74
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2156611a_9c5089ac",
@@ -152,6 +194,30 @@
       "writtenOn": "2024-03-20T19:24:53Z",
       "side": 1,
       "message": "So this doesn\u0027t include inherited fields, requiring `SubclassBodyDescriptor` to fill the gap? That\u0027s... unintuitive.",
+      "range": {
+        "startLine": 875,
+        "startChar": 29,
+        "endLine": 875,
+        "endChar": 77
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16994449_c97cddb5",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T16:24:11Z",
+      "side": 1,
+      "message": "Yep, it is. This is even checked (statically) in `SubclassBodyDescriptor`, so it\u0027s by design.",
+      "parentUuid": "2156611a_9c5089ac",
       "range": {
         "startLine": 875,
         "startChar": 29,
@@ -185,6 +251,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7301ecd5_c66f391c",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T16:24:11Z",
+      "side": 1,
+      "message": "Ack. The new code improves readability again so we don\u0027t need the comment any more.",
+      "parentUuid": "ba7a13f5_7f61ee05",
+      "range": {
+        "startLine": 931,
+        "startChar": 2,
+        "endLine": 935,
+        "endChar": 65
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df2429b4_0e897c98",
@@ -198,6 +288,30 @@
       "writtenOn": "2024-03-20T19:24:53Z",
       "side": 1,
       "message": "Ideal formatting:\n```\nusing BodyDescriptor \u003d\n    WithProtectedPointer\u003ckProtectedRefOffset,\n    WithExternalPointer\u003ckCallTargetOffset, \n                        kWasmInternalFunctionCallTargetTag,\n    WithStrongCodePointer\u003ckCodeOffset,\n    FixedExposedTrustedObjectBodyDescriptor\u003cWasmInternalFunction,\n        kWasmInternalFunctionIndirectPointerTag\u003e\u003e\u003e\u003e;\n```",
+      "range": {
+        "startLine": 936,
+        "startChar": 2,
+        "endLine": 943,
+        "endChar": 80
+      },
+      "revId": "e07eae20a0cd12bc72489ed368026112b6272870",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8116ea6e_0c57eb11",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-25T16:24:11Z",
+      "side": 1,
+      "message": "Yep, that\u0027s what we get with the new list layout instead of nesting.",
+      "parentUuid": "df2429b4_0e897c98",
       "range": {
         "startLine": 936,
         "startChar": 2,
