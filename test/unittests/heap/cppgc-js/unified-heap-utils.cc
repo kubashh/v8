@@ -161,8 +161,8 @@ void NewWrapperHelper::SetWrappableConnection(v8::Isolate* isolate,
                                               v8::Local<v8::Object> api_object,
                                               void* instance) {
   i::Handle<i::JSReceiver> js_obj = v8::Utils::OpenHandle(*api_object);
-  JSAPIObjectWithEmbedderSlots::unchecked_cast(*js_obj)
-      ->SetCppHeapWrappable<kExternalObjectValueTag>(
+  JSApiWrapper(JSObject::cast(*js_obj))
+      .SetCppHeapWrappable<kExternalObjectValueTag>(
           reinterpret_cast<i::Isolate*>(isolate), instance);
 }
 
@@ -170,8 +170,8 @@ void NewWrapperHelper::SetWrappableConnection(v8::Isolate* isolate,
 void* NewWrapperHelper::ReadWrappablePointer(v8::Isolate* isolate,
                                              v8::Local<v8::Object> api_object) {
   i::Handle<i::JSReceiver> js_obj = v8::Utils::OpenHandle(*api_object);
-  return JSAPIObjectWithEmbedderSlots::unchecked_cast(*js_obj)
-      ->GetCppHeapWrappable<kExternalObjectValueTag>(
+  return JSApiWrapper(JSObject::cast(*js_obj))
+      .GetCppHeapWrappable<kExternalObjectValueTag>(
           reinterpret_cast<i::Isolate*>(isolate));
 }
 

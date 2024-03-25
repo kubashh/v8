@@ -726,6 +726,9 @@ class Internals {
       kIsolateEmbedderDataOffset + kNumIsolateDataSlots * kApiSystemPointerSize;
   static const int kIsolateSharedExternalPointerTableAddressOffset =
       kIsolateExternalPointerTableOffset + kExternalPointerTableSize;
+  static const int kIsolateCppHeapPointerTableAddressOffset =
+      kIsolateSharedExternalPointerTableAddressOffset +
+      kExternalPointerTableSize;
 #ifdef V8_ENABLE_SANDBOX
   static const int kIsolateTrustedCageBaseOffset =
       kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
@@ -735,7 +738,7 @@ class Internals {
       kIsolateTrustedPointerTableOffset + kTrustedPointerTableSize;
 #else
   static const int kIsolateApiCallbackThunkArgumentOffset =
-      kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
+      kIsolateCppHeapPointerTableAddressOffset + kApiSystemPointerSize;
 #endif  // V8_ENABLE_SANDBOX
 #else
   static const int kIsolateApiCallbackThunkArgumentOffset =

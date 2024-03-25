@@ -41,6 +41,7 @@
 #include "src/objects/transitions.h"
 #include "src/objects/turbofan-types-inl.h"
 #include "src/objects/turboshaft-types-inl.h"
+#include "v8-internal.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/wasm-objects-inl.h"
@@ -119,10 +120,10 @@ class JSAPIObjectWithEmbedderSlotsOrJSSpecialObjectBodyDescriptor
     static_assert(JSAPIObjectWithEmbedderSlots::kCppHeapWrappableOffsetEnd +
                       1 ==
                   JSAPIObjectWithEmbedderSlots::kHeaderSize);
-    v->VisitExternalPointer(
+    v->VisitCppHeapPointer(
         obj, obj->RawExternalPointerField(
                  JSAPIObjectWithEmbedderSlots::kCppHeapWrappableOffset,
-                 kExternalObjectValueTag));
+                 kAnyExternalPointerTag));
   }
 
   template <typename ConcreteType, typename ObjectVisitor>
