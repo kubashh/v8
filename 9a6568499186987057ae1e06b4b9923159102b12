@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "9a6568499186987057ae1e06b4b9923159102b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "649dd5cb_d5040f97",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8718,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-03-26T09:38:54Z",
+      "side": 1,
+      "message": "Btw, do you know if the C API tests are expected to run with the usual variants?\nWhen I execute the test runner locally with `--variant\u003dturboshaft` (which implies this flag), 0 tests get executed, so I think the new code won\u0027t receive coverage on the try bots.\nI was able to run the tests locally with `--extra-flags\u003d--turboshaft-wasm-wrappers` though.",
+      "range": {
+        "startLine": 8715,
+        "startChar": 0,
+        "endLine": 8718,
+        "endChar": 0
+      },
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
