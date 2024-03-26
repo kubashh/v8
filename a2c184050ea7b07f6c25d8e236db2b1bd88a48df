@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d3db00_79994a15",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T12:34:34Z",
+      "side": 1,
+      "message": "Sure, works for me!",
+      "parentUuid": "bcdf8a08_92c94ca0",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85e84932_f9a8f3df",
