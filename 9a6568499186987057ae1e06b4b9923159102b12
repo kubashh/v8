@@ -56,6 +56,127 @@
       },
       "revId": "9a6568499186987057ae1e06b4b9923159102b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d20aad79_655e7842",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8718,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T11:41:36Z",
+      "side": 1,
+      "message": "I don\u0027t know. You could ask machenbach@ about this.",
+      "parentUuid": "649dd5cb_d5040f97",
+      "range": {
+        "startLine": 8715,
+        "startChar": 0,
+        "endLine": 8718,
+        "endChar": 0
+      },
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9b3503a_fe08abaa",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T11:41:36Z",
+      "side": 1,
+      "message": "Maybe add a comment that this is the instance",
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c80dc7a_d3ce276f",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T11:41:36Z",
+      "side": 1,
+      "message": "You could probably use `LoadTaggedField`, could you not?\n\nSame below.",
+      "range": {
+        "startLine": 716,
+        "startChar": 11,
+        "endLine": 716,
+        "endChar": 15
+      },
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f0ecc3c_35444164",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T11:41:36Z",
+      "side": 1,
+      "message": "Doesn\u0027t this parameter mean how many stack parameters have to be popped? How can this always be 0? What if parameters are passed to the wrapper over the stack, how do they get popped?",
+      "range": {
+        "startLine": 780,
+        "startChar": 16,
+        "endLine": 780,
+        "endChar": 36
+      },
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9540a22a_bf924b7d",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1315,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T11:41:36Z",
+      "side": 1,
+      "message": "So far `SafeStore` is only used for untagged parameters. Maybe it\u0027s better to not support tagged parameters at all so far, and only add support once it is used with tagged parameters. Otherwise we add untested code.",
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9467b500_28c1671d",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T11:41:36Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "9a6568499186987057ae1e06b4b9923159102b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
