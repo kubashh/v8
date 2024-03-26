@@ -34,6 +34,23 @@
       "parentUuid": "7d032ef9_218f141a",
       "revId": "450f7928e8a4a8091f5efe2234d993b59acb8f97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cf9ce76_65f66b7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-03-26T08:18:26Z",
+      "side": 1,
+      "message": "It sounds like this CL is outdated now?\n\nIf that\u0027s the case please abandon it.",
+      "revId": "450f7928e8a4a8091f5efe2234d993b59acb8f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
