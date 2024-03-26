@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b74c04f4_ba09bed3",
+        "filename": "src/sandbox/external-pointer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-26T21:10:21Z",
+      "side": 1,
+      "message": "Here and others: It seems a trade off what logic to put on slots and what to implement here. I see some duplicated stuff in other methods already.",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 44
+      },
+      "revId": "31b9530be8f78dcbca25238eccd52c07309abfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "770507ad_21eb7767",
+        "filename": "src/sandbox/isolate.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-26T21:10:21Z",
+      "side": 1,
+      "message": "Do you have an intuition on whether this is actually necessary? If we just wouldn\u0027t use the field, the compiler would optimize this away anyways?\n\nIf you agree, we could easily merge the classes and only make the accessors conditional.",
+      "range": {
+        "startLine": 57,
+        "startChar": 9,
+        "endLine": 57,
+        "endChar": 10
+      },
+      "revId": "31b9530be8f78dcbca25238eccd52c07309abfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
