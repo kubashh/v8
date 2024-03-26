@@ -687,6 +687,7 @@ void MarkCompactCollector::Prepare() {
     }
 #ifdef V8_COMPRESS_POINTERS
     heap_->external_pointer_space()->StartCompactingIfNeeded();
+    heap_->cpp_heap_pointer_space()->StartCompactingIfNeeded();
 #endif  // V8_COMPRESS_POINTERS
   }
 
@@ -2891,6 +2892,8 @@ void MarkCompactCollector::ClearNonLiveReferences() {
       isolate->shared_external_pointer_table().SweepAndCompact(
           isolate->shared_external_pointer_space(), isolate->counters());
     }
+    isolate->cpp_heap_pointer_table().SweepAndCompact(
+        isolate->heap()->cpp_heap_pointer_space(), isolate->counters());
   }
 #endif  // V8_ENABLE_SANDBOX
 
