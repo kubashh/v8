@@ -9299,8 +9299,7 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastObject(
   int allocation_size = SloppyArgumentsElements::SizeFor(elements.mapped_count);
   InlinedAllocation* allocation = ExtendOrReallocateCurrentAllocationBlock(
       allocation_size, allocation_type, DeoptObject(elements));
-  // TODO(victorgomes): Add AddNonEscapingUses for the arguments object to
-  // be elided.
+  AddNonEscapingUses(allocation, allocation_size / kTaggedSize);
   AddNewNode<StoreMap>({allocation}, broker()->sloppy_arguments_elements_map());
   BuildInitializeStoreTaggedField(allocation,
                                   GetSmiConstant(elements.mapped_count),
@@ -9355,8 +9354,7 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastObject(
       BuildAllocateFastObject(arguments.elements, allocation_type);
   InlinedAllocation* allocation = ExtendOrReallocateCurrentAllocationBlock(
       store_count * kTaggedSize, allocation_type, DeoptObject(arguments));
-  // TODO(victorgomes): Add AddNonEscapingUses for the arguments object to be
-  // elided.
+  AddNonEscapingUses(allocation, store_count);
   BuildStoreReceiverMap(allocation, arguments.map);
   AddNewNode<StoreTaggedFieldNoWriteBarrier>(
       {allocation, GetRootConstant(RootIndex::kEmptyFixedArray)},

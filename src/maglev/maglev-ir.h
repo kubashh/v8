@@ -1011,7 +1011,7 @@ struct DeoptObject {
       : type(kFixedArray), fixed_array(fixed_array) {}
   explicit DeoptObject(Float64 number) : type(kNumber), number(number) {}
   explicit DeoptObject(FastArgumentsObject arguments)
-      : type(kArguments), arguments(arguments) {}
+      : type(kArgumentsObject), arguments(arguments) {}
   explicit DeoptObject(FastMappedArgumentsElements mapped_elements)
       : type(kMappedArgumentsElements), mapped_elements(mapped_elements) {}
 
@@ -1019,7 +1019,7 @@ struct DeoptObject {
     kObject,
     kNumber,
     kFixedArray,
-    kArguments,
+    kArgumentsObject,
     kMappedArgumentsElements
   } type;
   union {

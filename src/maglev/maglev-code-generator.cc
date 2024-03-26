@@ -1433,6 +1433,100 @@ class MaglevFrameTranslationBuilder {
     }
   }
 
+  void BuildUnmappedArgumentsElements(FastUnmappedArgumentsElements elements) {
+    switch (elements.tag()) {
+      case FastUnmappedArgumentsElementsType::kRuntimeValue:
+        // TODO: pass type!
+        translation_array_builder_->ArgumentsElements(
+            CreateArgumentsType::kUnmappedArguments);
+        break;
+      case FastUnmappedArgumentsElementsType::kStaticValue:
+        UNREACHABLE();
+    }
+  }
+
+  void BuildArgumentsElements(FastArgumentsElements elements) {
+    switch (elements.tag()) {
+      case FastArgumentsElementsType::kUnmapped:
+        return BuildUnmappedArgumentsElements(
+            elements.get<FastUnmappedArgumentsElements>());
+      case FastArgumentsElementsType::kMapped:
+        return BuildMappedArgumentsElements(
+            elements.get<FastMappedArgumentsElements>());
+    }
+  }
+
+  void BuildArgumentsElementsLength(FastUnmappedArgumentsElements elements) {
+    switch (elements.tag()) {
+      case FastUnmappedArgumentsElementsType::kRuntimeValue:
+        translation_array_builder_->ArgumentsLength();
+        break;
+      case FastUnmappedArgumentsElementsType::kStaticValue: {
+        UNREACHABLE();
+        // FastFixedArray fixed_array = elements.get<FastFixedArray>();
+        // int value;
+        // switch (fixed_array.type) {
+        //   case FastFixedArray::kEmpty:
+        //     value = 0;
+        //     break;
+        //   case FastFixedArray::kTagged:
+        //     value = fixed_array.length;
+        //     break;
+        //   default:
+        //     // The argument elements array are either empty or tagged.
+        //     UNREACHABLE();
+        // }
+        // translation_array_builder_->StoreLiteral(GetDeoptLiteral())
+      }
+    }
+  }
+
+  void BuildArgumentsElementsLength(FastArgumentsElements elements) {
+    switch (elements.tag()) {
+      case FastArgumentsElementsType::kUnmapped:
+        return BuildArgumentsElementsLength(
+            elements.get<FastUnmappedArgumentsElements>());
+      case FastArgumentsElementsType::kMapped:
+        return BuildArgumentsElementsLength(
+            elements.get<FastMappedArgumentsElements>().unmapped_elements);
+    }
+  }
+
+  void BuildMappedArgumentsElements(FastMappedArgumentsElements elements) {
+    int dup_id = GetDuplicatedId(elements.id);
+    if (dup_id != kNotDuplicated) {
+      translation_array_builder_->DuplicateObject(dup_id);
+      return;
+    }
+    int store_count =
+        SloppyArgumentsElements::SizeFor(elements.mapped_count) / kTaggedSize;
+    translation_array_builder_->BeginCapturedObject(store_count);
+    translation_array_builder_->StoreLiteral(GetDeoptLiteral(
+        ReadOnlyRoots(local_isolate_).sloppy_arguments_elements_map()));
+    translation_array_builder_->StoreLiteral(
+        GetDeoptLiteral(Smi::FromInt(elements.mapped_count)));
+    BuildUnmappedArgumentsElements(elements.unmapped_elements);
+  }
+
+  void BuildArgumentsObject(FastArgumentsObject arguments) {
+    int dup_id = GetDuplicatedId(arguments.id);
+    if (dup_id != kNotDuplicated) {
+      translation_array_builder_->DuplicateObject(dup_id);
+      return;
+    }
+    int store_count = arguments.callee.has_value() ? 5 : 4;
+    translation_array_builder_->BeginCapturedObject(store_count);
+    translation_array_builder_->StoreLiteral(
+        GetDeoptLiteral(*arguments.map.object()));
+    translation_array_builder_->StoreLiteral(
+        GetDeoptLiteral(ReadOnlyRoots(local_isolate_).empty_fixed_array()));
+    BuildArgumentsElements(arguments.elements);
+    BuildArgumentsElementsLength(arguments.elements);
+    if (arguments.callee.has_value()) {
+      UNREACHABLE();
+    }
+  }
+
   void BuildDeoptObject(const DeoptObject value) {
     switch (value.type) {
       case DeoptObject::kObject:
@@ -1441,11 +1535,12 @@ class MaglevFrameTranslationBuilder {
       case DeoptObject::kFixedArray:
         BuildFastFixedArray(value.fixed_array);
         break;
-      case DeoptObject::kArguments:
+      case DeoptObject::kArgumentsObject:
+        BuildArgumentsObject(value.arguments);
+        break;
       case DeoptObject::kMappedArgumentsElements:
-        // TODO(victorgomes); Still not supported. Currently we always escape
-        // the arguments object.
-        UNREACHABLE();
+        BuildMappedArgumentsElements(value.mapped_elements);
+        break;
       case DeoptObject::kNumber:
         BuildHeapNumber(value.number);
         break;
