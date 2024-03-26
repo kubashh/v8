@@ -96,7 +96,7 @@ size_t CodeRange::GetWritableReservedAreaSize() {
   if (v8_flags.trace_code_range_allocation) PrintF(__VA_ARGS__)
 
 bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
-                                size_t requested) {
+                                size_t requested, bool immutable) {
   DCHECK_NE(requested, 0);
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
     page_allocator = GetPlatformPageAllocator();
@@ -249,6 +249,10 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
                    base, size, PageAllocator::kReadWriteExecute)) {
       return false;
     }
+    if (immutable) {
+      immutable_ = true;
+      params.page_allocator->MakeImmutable(base, size);
+    }
     if (!params.page_allocator->DiscardSystemPages(base, size)) return false;
   }
   return true;
@@ -324,6 +328,8 @@ base::AddressRegion CodeRange::GetPreferredRegion(size_t radius_in_megabytes,
 }
 
 void CodeRange::Free() {
+  CHECK(!immutable_);
+
   if (IsReserved()) {
 #if defined(V8_OS_WIN64)
     if (win64_unwindinfo::CanRegisterUnwindInfoForNonABICompliantCodeRange()) {
@@ -466,7 +472,7 @@ V8_DECLARE_ONCE(init_code_range_once);
 void InitProcessWideCodeRange(v8::PageAllocator* page_allocator,
                               size_t requested_size) {
   CodeRange* code_range = new CodeRange();
-  if (!code_range->InitReservation(page_allocator, requested_size)) {
+  if (!code_range->InitReservation(page_allocator, requested_size, true)) {
     V8::FatalProcessOutOfMemory(
         nullptr, "Failed to reserve virtual memory for CodeRange");
   }
