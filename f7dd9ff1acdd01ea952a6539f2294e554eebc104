@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96de686c_37717b09",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2881,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T12:47:08Z",
+      "side": 1,
+      "message": "You generate code for two additions here, but you could sum up kEntriesOffset with kRefBias to avoid one addition.",
+      "range": {
+        "startLine": 2881,
+        "startChar": 45,
+        "endLine": 2881,
+        "endChar": 51
+      },
+      "revId": "f7dd9ff1acdd01ea952a6539f2294e554eebc104",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd6f3630_32aae242",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-03-26T12:47:08Z",
+      "side": 1,
+      "message": "kEntryOffset is a constant, so you could add it to kTargetBias and kRefBias below at compile time, instead of to the function index at runtime.",
+      "range": {
+        "startLine": 203,
+        "startChar": 20,
+        "endLine": 203,
+        "endChar": 54
+      },
+      "revId": "f7dd9ff1acdd01ea952a6539f2294e554eebc104",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
