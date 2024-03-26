@@ -33,6 +33,23 @@
       "message": "Resolving previous comments...",
       "revId": "79d0a625c2c36891c07c7101b4c99f563ea5a40a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0580556f_554a22f3",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-26T17:37:27Z",
+      "side": 1,
+      "message": "To re-iterate my point: I think this is nice compared to the previous implementation as the members and the \"Please add something here, otherwise GC will break your objects\" `BodyDescriptor` implementation are much closer together.\n\nI\u0027m a bit concerned on compile time as this is in a header that is basically included everywhere (probably hundreds of compile units?) and defines somewhat deeply nested templates.\n\nGiven my limited understanding of templates I assume the whole `IterateBody` functions are going to be cheap as we only instantiate the class but in most cases are not going to use (and therefore instantiate) the instance function. So it probably isn\u0027t that bad?",
+      "revId": "79d0a625c2c36891c07c7101b4c99f563ea5a40a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
