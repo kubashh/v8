@@ -14,6 +14,7 @@
 #include "src/heap/local-factory.h"
 #include "src/heap/local-heap.h"
 #include "src/logging/runtime-call-stats.h"
+#include "src/sandbox/isolate.h"
 
 namespace v8 {
 
@@ -166,6 +167,7 @@ class V8_EXPORT_PRIVATE LocalIsolate final : private HiddenLocalFactory {
  private:
   friend class v8::internal::LocalFactory;
   friend class LocalIsolateFactory;
+  friend class IsolateForPointerCompression;
   friend class IsolateForSandbox;
 
   // See IsolateForSandbox.
