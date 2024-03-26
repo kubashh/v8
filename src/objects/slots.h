@@ -375,6 +375,59 @@ class ExternalPointerSlot
 #endif  // V8_ENABLE_SANDBOX
 };
 
+// Similar to ExternalPointerSlot with the difference that it refers to an
+// `CppHeapPointer_t` which has different sizing than `ExternalPointer_t`.
+class CppHeapPointerSlot : public SlotBase<CppHeapPointerSlot, CppHeapPointer_t,
+                                           /*SlotDataAlignment=*/kTaggedSize> {
+ public:
+  CppHeapPointerSlot()
+      : SlotBase(kNullAddress)
+#ifdef V8_ENABLE_SANDBOX
+        ,
+        tag_(kExternalPointerNullTag)
+#endif
+  {
+  }
+
+  CppHeapPointerSlot(Address ptr, ExternalPointerTag tag)
+      : SlotBase(ptr)
+#ifdef V8_ENABLE_SANDBOX
+        ,
+        tag_(tag)
+#endif
+  {
+  }
+
+#ifdef V8_COMPRESS_POINTERS
+
+  // When the external pointer is sandboxed, its slot stores a handle to an
+  // entry in an ExternalPointerTable. These methods allow access to the
+  // underlying handle while the load/store methods below resolve the handle to
+  // the real pointer.
+  // Handles should generally be accessed atomically as they may be accessed
+  // from other threads, for example GC marking threads.
+  inline CppHeapPointerHandle Relaxed_LoadHandle() const;
+  inline void Relaxed_StoreHandle(CppHeapPointerHandle handle) const;
+  inline void Release_StoreHandle(CppHeapPointerHandle handle) const;
+
+#endif  // V8_COMPRESS_POINTERS
+
+  inline Address try_load(IsolateForSandbox isolate);
+  inline void store(IsolateForSandbox isolate, Address value);
+
+#ifdef V8_ENABLE_SANDBOX
+  ExternalPointerTag tag() const { return tag_; }
+#else
+  ExternalPointerTag tag() const { return kExternalPointerNullTag; }
+#endif  // V8_ENABLE_SANDBOX
+
+ private:
+#ifdef V8_ENABLE_SANDBOX
+  // The tag associated with this slot.
+  ExternalPointerTag tag_;
+#endif  // V8_ENABLE_SANDBOX
+};
+
 // An IndirectPointerSlot instance describes a 32-bit field ("slot") containing
 // an IndirectPointerHandle, i.e. an index to an entry in a pointer table which
 // contains the "real" pointer to the referenced HeapObject. These slots are

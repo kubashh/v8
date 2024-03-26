@@ -9,6 +9,7 @@
 
 #include "src/codegen/machine-type.h"
 #include "src/objects/tagged.h"
+#include "v8-internal.h"
 
 namespace v8 {
 namespace internal {
@@ -88,6 +89,10 @@ struct ExternalPointerHandleT : Uint32T {
   static constexpr MachineType kMachineType = MachineType::Uint32();
 };
 
+struct CppHeapPointerHandleT : Uint32T {
+  static constexpr MachineType kMachineType = MachineType::Uint32();
+};
+
 struct IndirectPointerHandleT : Uint32T {
   static constexpr MachineType kMachineType = MachineType::Uint32();
 };
@@ -101,6 +106,16 @@ struct ExternalPointerT : UntaggedT {
   static constexpr MachineType kMachineType = MachineType::Pointer();
 };
 #endif
+
+#ifdef V8_COMPRESS_POINTERS
+struct CppHeapPointerT : Uint32T {
+  static constexpr MachineType kMachineType = MachineType::Uint32();
+};
+#else   // !V8_COMPRESS_POINTERS
+struct CppHeapPointerT : UntaggedT {
+  static constexpr MachineType kMachineType = MachineType::Pointer();
+};
+#endif  // !V8_COMPRESS_POINTERS
 
 struct Float16T : Word32T {
   static constexpr MachineType kMachineType = MachineType::Uint16();
