@@ -1690,7 +1690,13 @@ void CheckStringAndResource(
     } else {
       expected_alive = 0;
     }
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    // With conservative stack scanning, some resources may not be reclaimed
+    // because of false positives.
+    CHECK_GE(alive_resources, expected_alive);
+#else
     CHECK_EQ(alive_resources, expected_alive);
+#endif
   }
 }
 
@@ -1791,8 +1797,6 @@ void TestConcurrentExternalizationWithDeadStrings(bool share_resources,
   Factory* factory = i_isolate->factory();
 
   ManualGCScope manual_gc_scope(i_isolate);
-  DisableConservativeStackScanningScopeForTesting no_css(i_isolate->heap());
-
   HandleScope scope(i_isolate);
 
   Handle<FixedArray> shared_strings = CreateSharedOneByteStrings(
@@ -2309,6 +2313,10 @@ class ClientIsolateThreadForRetainingByRememberedSet : public v8::base::Thread {
           ->GetForegroundTaskRunner(test_->main_isolate())
           ->PostTask(std::make_unique<WakeupTask>(
               test_->i_main_isolate(), test_->main_isolate_wakeup_counter()));
+
+      // We need to ensure that the shared GC does not scan the stack for this
+      // client, otherwise some objects may survive.
+      DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
 
       // Wait for main thread to do a shared GC.
       while (wakeup_counter_ < 1) {
