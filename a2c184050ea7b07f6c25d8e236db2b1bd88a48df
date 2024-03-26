@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "af30ea70_015e9c94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-26T12:32:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6dc4c082_443996f5",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b1189fab_d55952d7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -65,6 +83,24 @@
       "writtenOn": "2024-03-26T11:56:16Z",
       "side": 1,
       "message": "Should we also DCHECK here that the tag is one of the \"embedder\" tags here? (Maybe we need a `IsEmbedderExternalPointerType` similar to the existing `IsSharedExternalPointerType`)",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcdf8a08_92c94ca0",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-26T12:32:11Z",
+      "side": 1,
+      "message": "Would you be okay with leaving that to a follow up. I think we need to make up our minds on how the tag structure should be for the API which will likely result in which tags we should check here as well.\n\n(I can see how we want a X tags reserved for internal use here because really all we have is a reference to a CppHeap.)",
+      "parentUuid": "18f75144_805dca93",
       "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
