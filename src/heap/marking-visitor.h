@@ -140,7 +140,7 @@ class MarkingVisitorBase : public ConcurrentHeapVisitor<int, ConcreteVisitor> {
   V8_INLINE void VisitExternalPointer(Tagged<HeapObject> host,
                                       ExternalPointerSlot slot) override;
   V8_INLINE void VisitCppHeapPointer(Tagged<HeapObject> host,
-                                     ExternalPointerSlot slot) override;
+                                     CppHeapPointerSlot slot) override;
   V8_INLINE void VisitIndirectPointer(Tagged<HeapObject> host,
                                       IndirectPointerSlot slot,
                                       IndirectPointerMode mode) final;
