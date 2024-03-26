@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc4c082_443996f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:56:16Z",
+      "side": 1,
+      "message": "Nit: visitation?",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b1189fab_d55952d7",
@@ -14,6 +31,40 @@
       "writtenOn": "2024-03-26T10:37:18Z",
       "side": 1,
       "message": "ptal\n\nI am still investigating the node issue but the CL is otherwise ready. The follow up will introduce the separate slot and pointer",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5915b774_7e921010",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:56:16Z",
+      "side": 1,
+      "message": "Looks good overall, only minor comments!",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f75144_805dca93",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:56:16Z",
+      "side": 1,
+      "message": "Should we also DCHECK here that the tag is one of the \"embedder\" tags here? (Maybe we need a `IsEmbedderExternalPointerType` similar to the existing `IsSharedExternalPointerType`)",
       "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
