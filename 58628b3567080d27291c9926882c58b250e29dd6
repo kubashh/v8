@@ -33,6 +33,24 @@
       "message": "Is it guaranteed that the signature slot has always been initialized before this call?",
       "revId": "58628b3567080d27291c9926882c58b250e29dd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85eda598_9964e21f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1840,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-26T13:35:13Z",
+      "side": 1,
+      "message": "Yes, it\u0027s initialized to `-1` at allocation. I added a comment and a `DCHECK` now.",
+      "parentUuid": "e58ab38b_e7a71efe",
+      "revId": "58628b3567080d27291c9926882c58b250e29dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
