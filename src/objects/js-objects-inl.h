@@ -635,7 +635,7 @@ template <ExternalPointerTag tag>
 void JSApiWrapper::SetCppHeapWrappable(IsolateForSandbox isolate,
                                        void* instance) {
   if (instance == nullptr) {
-    object_->ResetLazilyInitializedExternalPointerField(
+    object_->ResetLazilyInitializedCppHeapPointerField(
         JSAPIObjectWithEmbedderSlots::kCppHeapWrappableOffset);
     return;
   }

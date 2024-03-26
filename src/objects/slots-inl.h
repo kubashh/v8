@@ -19,6 +19,7 @@
 #include "src/sandbox/indirect-pointer-inl.h"
 #include "src/sandbox/isolate-inl.h"
 #include "src/utils/memcopy.h"
+#include "v8-internal.h"
 
 namespace v8 {
 namespace internal {
@@ -260,6 +261,45 @@ uint32_t ExternalPointerSlot::GetContentAsIndexAfterDeserialization(
 #else
   return static_cast<uint32_t>(ReadMaybeUnalignedValue<Address>(address()));
 #endif
+}
+
+#ifdef V8_COMPRESS_POINTERS
+CppHeapPointerHandle CppHeapPointerSlot::Relaxed_LoadHandle() const {
+  return base::AsAtomic32::Relaxed_Load(location());
+}
+
+void CppHeapPointerSlot::Relaxed_StoreHandle(
+    CppHeapPointerHandle handle) const {
+  return base::AsAtomic32::Relaxed_Store(location(), handle);
+}
+
+void CppHeapPointerSlot::Release_StoreHandle(
+    CppHeapPointerHandle handle) const {
+  return base::AsAtomic32::Release_Store(location(), handle);
+}
+#endif  // V8_COMPRESS_POINTERS
+
+Address CppHeapPointerSlot::try_load(IsolateForSandbox isolate) {
+#ifdef V8_COMPRESS_POINTERS
+  const ExternalPointerTable& table = isolate.GetCppHeapPointerTable();
+  CppHeapPointerHandle handle = Relaxed_LoadHandle();
+  if (handle == 0) {
+    return kNullAddress;
+  }
+  return table.Get(handle, tag_);
+#else   // !V8_COMPRESS_POINTERS
+  return static_cast<Address>(base::AsAtomicPointer::Relaxed_Load(location()));
+#endif  // !V8_COMPRESS_POINTERS
+}
+
+void CppHeapPointerSlot::store(IsolateForSandbox isolate, Address value) {
+#ifdef V8_COMPRESS_POINTERS
+  ExternalPointerTable& table = isolate.GetCppHeapPointerTable();
+  CppHeapPointerHandle handle = Relaxed_LoadHandle();
+  table.Set(handle, value, tag_);
+#else   // !V8_COMPRESS_POINTERS
+  base::AsAtomicPointer::Relaxed_Store(location(), value);
+#endif  // !V8_COMPRESS_POINTERS
 }
 
 Tagged<Object> IndirectPointerSlot::load(IsolateForSandbox isolate) const {

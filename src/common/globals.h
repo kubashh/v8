@@ -538,6 +538,8 @@ static_assert(kExternalPointerSlotSize == kTaggedSize);
 static_assert(kExternalPointerSlotSize == kSystemPointerSize);
 #endif
 
+constexpr int kCppHeapPointerSlotSize = sizeof(CppHeapPointer_t);
+
 constexpr int kIndirectPointerSize = sizeof(IndirectPointerHandle);
 // When the sandbox is enabled, trusted pointers are implemented as indirect
 // pointers (indices into the trusted pointer table). Otherwise they are regular

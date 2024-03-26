@@ -8,6 +8,7 @@
 #include "src/base/macros.h"
 #include "src/common/globals.h"
 #include "src/objects/instance-type.h"
+#include "src/objects/slots.h"
 #include "src/objects/tagged-field.h"
 #include "src/sandbox/indirect-pointer-tag.h"
 #include "src/sandbox/isolate.h"
@@ -320,6 +321,7 @@ class HeapObject : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
       size_t offset, IsolateForSandbox isolate, Address value);
 
   inline void ResetLazilyInitializedExternalPointerField(size_t offset);
+  inline void ResetLazilyInitializedCppHeapPointerField(size_t offset);
 
   template <ExternalPointerTag tag>
   inline void WriteLazilyInitializedCppHeapPointerField(
@@ -389,6 +391,8 @@ class HeapObject : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   inline MaybeObjectSlot RawMaybeWeakField(int byte_offset) const;
   inline InstructionStreamSlot RawInstructionStreamField(int byte_offset) const;
   inline ExternalPointerSlot RawExternalPointerField(
+      int byte_offset, ExternalPointerTag tag) const;
+  inline CppHeapPointerSlot RawCppHeapPointerField(
       int byte_offset, ExternalPointerTag tag) const;
   inline IndirectPointerSlot RawIndirectPointerField(
       int byte_offset, IndirectPointerTag tag) const;
