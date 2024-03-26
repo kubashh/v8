@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4d06b38_99d6b992",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "Nice, thanks!\n\nMy main comment here is that I think we should try to remove everything `ExternalPointer*` from the `CompactibleExternalEntityTable` class and move it back into the `ExternalPointerTable` (at the risk of some code duplication later on). Basically the \"contract\" with these tables is that only the leaf classes (ExternalPointerTable, TrustedPointerTable, CodePointerTable) know about their respective handle types (ExternalPointerHandle, TrustedPointerHandle, ...), and I think that\u0027s worth trying to preserve. I think for the `ExternalBufferTable` we\u0027ll also want our own handle type then (`ExternalBufferHandle`).\n\nI think in practice that would mean moving `Mark` and probably `SweepAndCompact` back into EPT and maybe make it call some routine in the parent class instead where necessary (e.g. `MaybeCreateEvacuationEntry`).",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b1b17a_df525744",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "I\u0027m wondering if this should still be in the child class and only `MaybeCreateEvacuationEntry` in this class?\nI think it\u0027d be nice to have all routines that deal with external pointers (or external pointer handles, etc.) in the `ExternalPointerTable` class, if that\u0027s possible.",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ea85b9d_cd6d74c7",
@@ -82,6 +116,97 @@
       "writtenOn": "2024-03-21T05:40:31Z",
       "side": 1,
       "message": "Another side effect was the need for explicit `this-\u003e`",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a21234b1_dd0868ff",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "I think these we probably also want to keep in the child class since they deal with external pointers.",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff4ab9bc_dac375b0",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "Nit: maybe \"for pointer tables that support compaction\"",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 31
+      },
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba28352b_1014bbe6",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "Maybe move this comment (until \"Table compaction\") back to the EPT class since it\u0027s specific to that. Technically, the first part about segments should go into the `ExternalEntityClass` I think. Feel free to do that, but you can also just leave it like it was.",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59afdd7e_d1bfcdb0",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "Nit: while you are here: `decision`",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29d9525c_ca34aa3e",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-26T11:38:19Z",
+      "side": 1,
+      "message": "Nit: maybe remove \"external\" here to make the comment more universal",
       "revId": "fabb26fea74229cfb975083b083530242d91e418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
