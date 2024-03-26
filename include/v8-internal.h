@@ -301,6 +301,26 @@ using ExternalPointer_t = Address;
 constexpr ExternalPointer_t kNullExternalPointer = 0;
 constexpr ExternalPointerHandle kNullExternalPointerHandle = 0;
 
+// A handle similar to `ExternalPointerHandle`. The difference is that it is a
+// handle that always refers to an object managed by `CppHeap`.
+using CppHeapPointerHandle = uint32_t;
+
+#ifdef V8_COMPRESS_POINTERS
+using CppHeapPointer_t = CppHeapPointerHandle;
+#else
+using CppHeapPointer_t = Address;
+#endif
+// CppHeapPointers always use handles on pointer-compression configurations. In
+// non-compressed configurations they are simply raw pointers.
+#ifdef V8_COMPRESS_POINTERS
+static_assert(sizeof(CppHeapPointer_t) == sizeof(uint32_t));
+#else
+static_assert(sizeof(CppHeapPointer_t) == sizeof(void*));
+#endif
+
+constexpr CppHeapPointer_t kNullCppHeapPointer = 0;
+constexpr CppHeapPointerHandle kNullCppHeapPointerHandle = 0;
+
 //
 // External Pointers.
 //
