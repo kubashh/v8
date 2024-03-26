@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1189fab_d55952d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-26T10:37:18Z",
+      "side": 1,
+      "message": "ptal\n\nI am still investigating the node issue but the CL is otherwise ready. The follow up will introduce the separate slot and pointer",
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85e84932_f9a8f3df",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-26T10:37:18Z",
+      "side": 1,
+      "message": "This is wrong here because we should be able to mark the object purely based on the slot. The slot could then come from anywhere.\n\nI am fixing it up in a follow up CL.",
+      "range": {
+        "startLine": 200,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 22
+      },
+      "revId": "a2c184050ea7b07f6c25d8e236db2b1bd88a48df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
