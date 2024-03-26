@@ -162,5 +162,9 @@ bool PageAllocator::DecommitPages(void* address, size_t size) {
   return base::OS::DecommitPages(address, size);
 }
 
+bool PageAllocator::MakeImmutable(void* address, size_t size) {
+  return base::OS::MakeImmutable(address, size);
+}
+
 }  // namespace base
 }  // namespace v8

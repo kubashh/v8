@@ -547,6 +547,8 @@ class PageAllocator {
    */
   virtual bool DecommitPages(void* address, size_t size) = 0;
 
+  virtual bool MakeImmutable(void* address, size_t size) = 0;
+
   /**
    * INTERNAL ONLY: This interface has not been stabilised and may change
    * without notice from one release to another without being deprecated first.

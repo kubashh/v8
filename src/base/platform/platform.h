@@ -400,6 +400,8 @@ class V8_BASE_EXPORT OS {
 
   V8_WARN_UNUSED_RESULT static bool DecommitPages(void* address, size_t size);
 
+  V8_WARN_UNUSED_RESULT static bool MakeImmutable(void* address, size_t size);
+
   V8_WARN_UNUSED_RESULT static bool CanReserveAddressSpace();
 
   V8_WARN_UNUSED_RESULT static Optional<AddressSpaceReservation>
