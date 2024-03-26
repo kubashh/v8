@@ -12,6 +12,7 @@
 #ifndef V8_OBJECTS_OBJECTS_INL_H_
 #define V8_OBJECTS_OBJECTS_INL_H_
 
+#include "include/v8-internal.h"
 #include "src/base/bits.h"
 #include "src/base/memory.h"
 #include "src/base/numbers/double.h"
@@ -41,6 +42,7 @@
 #include "src/objects/regexp-match-info-inl.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/slots-inl.h"
+#include "src/objects/slots.h"
 #include "src/objects/smi-inl.h"
 #include "src/objects/tagged-field-inl.h"
 #include "src/objects/tagged-impl-inl.h"
@@ -814,6 +816,10 @@ void HeapObject::ResetLazilyInitializedExternalPointerField(size_t offset) {
   i::ResetLazilyInitializedExternalPointerField(field_address(offset));
 }
 
+void HeapObject::ResetLazilyInitializedCppHeapPointerField(size_t offset) {
+  CppHeapPointerSlot(field_address(offset), kAnyExternalPointerTag).reset();
+}
+
 template <ExternalPointerTag tag>
 void HeapObject::WriteLazilyInitializedCppHeapPointerField(
     size_t offset, IsolateForSandbox isolate, Address value) {
@@ -930,6 +936,11 @@ InstructionStreamSlot HeapObject::RawInstructionStreamField(
 ExternalPointerSlot HeapObject::RawExternalPointerField(
     int byte_offset, ExternalPointerTag tag) const {
   return ExternalPointerSlot(field_address(byte_offset), tag);
+}
+
+CppHeapPointerSlot HeapObject::RawCppHeapPointerField(
+    int byte_offset, ExternalPointerTag tag) const {
+  return CppHeapPointerSlot(field_address(byte_offset), tag);
 }
 
 IndirectPointerSlot HeapObject::RawIndirectPointerField(
