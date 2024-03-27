@@ -16,6 +16,24 @@
       "message": "Nit: maybe just add something here like \"Additionally, the external pointer table supports compaction. For details about the compaction algorithm see the CompactibleExternalEntityTable class\"",
       "revId": "980b37da26ad069648c497019fec2bde3fa7803d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c1e9acc_60245aaf",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T12:42:22Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "6f77175f_dd8b8477",
+      "revId": "980b37da26ad069648c497019fec2bde3fa7803d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
