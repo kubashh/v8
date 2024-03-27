@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad934c0_5b9df064",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-03-27T12:18:25Z",
+      "side": 1,
+      "message": "PTAL!\n\nWe\u0027ve enabled escape analysis to maglev-future to get some fuzzing 7 days ago, I didn\u0027t get any issue, so let\u0027s try to enable for real.",
+      "revId": "7443b79483e8b848d36aaa325237a53d0b83ac9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
