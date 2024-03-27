@@ -16,6 +16,24 @@
       "message": "Maybe also mention that those use a dedicated pointer table?",
       "revId": "9bc9b2979bb0241cee8dcbff460fc893c6e79515",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c91308_14db00d6",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-27T11:55:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62bad5e6_80e1d8e6",
+      "revId": "9bc9b2979bb0241cee8dcbff460fc893c6e79515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

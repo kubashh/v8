@@ -33,6 +33,24 @@
       "message": "Nit: I think the first sentence in this comment isn\u0027t accurate now since we also use handles when pointer compression is enabled (and the sandbox is off)",
       "revId": "2181f576284b9ca38005b4dbfd449eb0cf7e9a7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "967e84a1_57bcc8af",
+        "filename": "src/objects/slots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-27T11:55:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60cf1208_22247c38",
+      "revId": "2181f576284b9ca38005b4dbfd449eb0cf7e9a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

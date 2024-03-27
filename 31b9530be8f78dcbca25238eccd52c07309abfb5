@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64ef13f0_8b2f90e4",
+        "filename": "src/sandbox/external-pointer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-27T11:55:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3d2bf1f2_961b146c",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 44
+      },
+      "revId": "31b9530be8f78dcbca25238eccd52c07309abfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "770507ad_21eb7767",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Yeah I suspect the compiler would be smart enough to just optimize it away when it isn\u0027t needed, and I think it\u0027d be nice to avoid the duplication here. Alternatively maybe you could always pass in a \"real\" Isolate* to the new routines (the main reason for the `IsolateForSandbox` class was that it could be constructed from both an `Isolate` and a `LocalIsolate`), but using this specialized class is probably nicer as it makes it explicit what the isolate is for.",
       "parentUuid": "770507ad_21eb7767",
+      "range": {
+        "startLine": 57,
+        "startChar": 9,
+        "endLine": 57,
+        "endChar": 10
+      },
+      "revId": "31b9530be8f78dcbca25238eccd52c07309abfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f42719f3_4be9cef4",
+        "filename": "src/sandbox/isolate.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-27T11:55:00Z",
+      "side": 1,
+      "message": "Kept the specialized class for the \"just for pointer compression\" use case.",
+      "parentUuid": "f38aa69a_327f6d18",
       "range": {
         "startLine": 57,
         "startChar": 9,
