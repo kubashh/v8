@@ -51,6 +51,24 @@
       "parentUuid": "f4f3c94a_bdd17918",
       "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a0237f8_4e238c3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-03-27T11:50:24Z",
+      "side": 1,
+      "message": "Also, is this improvement due to a change in GC timing or because pretenuring actually works better this way?",
+      "parentUuid": "1ecce1f2_3782b76a",
+      "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
