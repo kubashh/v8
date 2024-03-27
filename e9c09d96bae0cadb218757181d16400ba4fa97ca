@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b6b204_82b630cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-27T11:41:23Z",
+      "side": 1,
+      "message": "Thanks! Mostly looks good, just a few more nits. We can see if there\u0027s a good way to share code for `SweepAndCompact` once we add the `ExternalBufferTable`",
+      "revId": "e9c09d96bae0cadb218757181d16400ba4fa97ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85ef6ed2_fc190a0d",
@@ -14,6 +31,70 @@
       "writtenOn": "2024-03-27T09:36:46Z",
       "side": 1,
       "message": "cl presubmit failed on this format error, it was introduced recently in https://chromium-review.googlesource.com/c/v8/v8/+/5387168. Let me know if I should split this out.",
+      "revId": "e9c09d96bae0cadb218757181d16400ba4fa97ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "409552ea_4effa486",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4757,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-27T11:41:23Z",
+      "side": 1,
+      "message": "Seems fine to me to leave it here.",
+      "parentUuid": "85ef6ed2_fc190a0d",
+      "revId": "e9c09d96bae0cadb218757181d16400ba4fa97ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76be919b_268a17b4",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-27T11:41:23Z",
+      "side": 1,
+      "message": "Nit: maybe drop this since it now refers to a method in child classes",
+      "range": {
+        "startLine": 27,
+        "startChar": 33,
+        "endLine": 27,
+        "endChar": 56
+      },
+      "revId": "e9c09d96bae0cadb218757181d16400ba4fa97ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fece5ab_b986bf23",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-27T11:41:23Z",
+      "side": 1,
+      "message": "Nit: maybe remove this mention or replace with `AddInvalidatedField`?",
+      "range": {
+        "startLine": 139,
+        "startChar": 7,
+        "endLine": 139,
+        "endChar": 44
+      },
       "revId": "e9c09d96bae0cadb218757181d16400ba4fa97ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
