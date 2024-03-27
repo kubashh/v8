@@ -87,6 +87,24 @@
       "parentUuid": "3a9431b6_41be35e7",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caac8334_5bf4a818",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-27T14:42:19Z",
+      "side": 1,
+      "message": "Sorry, only seeing this now after it landed. I am not sure I can follow the type safety argument. Assuming these definitions:\n\n    enum Foo : bool { kFoo \u003d true, kNoFoo \u003d false };\n    enum Bar : bool { kBar \u003d true, kNoBar \u003d false };\n    f(Foo);\n\nThen both `f(kBar)` and `f(true)` would be a type error.\nIf I am not missing anything, then PS1 would have both type safety and nice readability, while PS2 regressed significantly on readability.\n\nThe only remaining concern with non-class enums is pollution of the name space, but in a `cc` file this shouldn\u0027t be a concern.",
+      "parentUuid": "8c2a6a33_d423e04b",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
