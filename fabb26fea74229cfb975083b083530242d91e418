@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d2e412c_488cbe3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T10:08:30Z",
+      "side": 1,
+      "message": "Thanks for the review! I was thinking of using the same handle type as EPT for ExternalBufferTable and went with deduplicating most of the routines based on that. It makes sense to move those routines back to the leaf classes based on the contract and having a separate handle type for ExternalBufferTable.\n\nI didn\u0027t create any subroutine for SweepAndCompact, the function in its current state has 3 parts init (determining the start of evacuation area), processing (determine segments for deallocation based on evacuation entries), post (deallocate segment and adjust freelist head). The processing part is dependent on the handle type, so only init and post can be deduplicated but wasn\u0027t sure if it is worth doing based on the code size. Let me know if you feel otherwise.",
+      "parentUuid": "b4d06b38_99d6b992",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15b1b17a_df525744",
         "filename": "src/sandbox/compactible-external-entity-table-inl.h",
         "patchSetId": 1
