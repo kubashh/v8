@@ -123,6 +123,24 @@
       "parentUuid": "caac8334_5bf4a818",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4d93e3c_751299fc",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-27T15:06:39Z",
+      "side": 1,
+      "message": "Glad that this could be clarified then :) \nI am not a big fan of enum classes because of the added verbosity.\n\ncppreference.com mentions implicit conversions from \"unscoped enumeration\"s to integral values, but not the other way around: https://en.cppreference.com/w/cpp/language/implicit_conversion\n\nOn enumerations it mentions (https://en.cppreference.com/w/cpp/language/enum):\n`Values of unscoped enumeration type can be promoted or converted to integral types`, but `Values of integer, floating-point, and enumeration types can be converted to any enumeration type by using static_cast.`.\n\nGodbolt also confirms my example: https://godbolt.org/z/qbqsGWv1M",
+      "parentUuid": "eecea07e_19fc4dbe",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
