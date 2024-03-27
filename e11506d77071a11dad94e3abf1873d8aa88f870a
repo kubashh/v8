@@ -33,6 +33,24 @@
       "message": "I agree that this is a lot better than the old implementation where a `if (include_numeric_types)` below would actually return whether numeric types are excluded.\n\nStill, there isn\u0027t any type safety on this in `GetValueTypeHelper`, so mixing up any of these flags in any of the callers would result in very confusing behavior.\nI\u0027d be in favor to switch to enum classes.\nI\u0027m aware that the now simpler `if` then becomes `if(static_cast\u003cbool\u003e(include_numeric_types))` but I think that\u0027s a cheap price to pay vs. mixing these enum values accidentally.\n\nIf you agree, let\u0027s replace these with enum classes here. If you disagree, I can provide an LGTM and we merge this CL. 😊",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "943c977e_293eb114",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-27T09:39:09Z",
+      "side": 1,
+      "message": "Hmm, I am a bit unsure too.\nGood point, that it would be",
+      "parentUuid": "1c834336_c0f17b9a",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

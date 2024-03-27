@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e8ff11_f540a830",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-27T09:39:09Z",
+      "side": 1,
+      "message": "Good point. I changed them to enum classes, because we call the GetValueTypeHelper more often than we use them in ifs, so makes sense. Thanks!:)",
+      "revId": "bf4d82c2a33179d6329ff87af12573e17f492a8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
