@@ -16,6 +16,23 @@
       "message": "Here are the benchmark results, we run every case separately, and calculate the final score by geomean, the [score] column uses the threshold flag value equal to 2048Kb.\n\n```shell\n\n                               benchmark:    score |  master_ |      % |\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d+\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d+\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d+\n                                Richards:  26677.0 |  26759.3 |   -0.3 |\n                               DeltaBlue:  72286.2 |  72433.9 |   -0.2 |\n                                  Crypto:  34642.3 |  34675.2 |        |\n                                RayTrace:  59820.3 |  59818.8 |        |   \n                             EarleyBoyer:  54722.8 |  54553.3 |    0.3 |  \n                                  RegExp:   6516.3 |   6510.6 |        | \n                                   Splay:  31047.1 |  14973.9 |  107.3 |\n                            SplayLatency:  93771.0 |  24812.8 |  277.9 |\n                            NavierStokes:  30657.4 |  30653.8 |        |  \n                                   PdfJS:  45244.6 |  45305.7 |   -0.1 | \n                                Mandreel:  35895.0 |  35629.8 |    0.7 |\n                         MandreelLatency:  48882.3 |  48667.0 |    0.4 | \n                                 Gameboy:  73739.2 |  73349.2 |    0.5 |\n                                CodeLoad:  32064.4 |  31944.6 |    0.4 |\n                                   Box2D:  27013.7 |  26944.8 |    0.3 |\n                                    zlib:  57529.6 |  57457.7 |    0.1 |\n                              Typescript:  59091.1 |  58223.1 |    1.5 |     \n                                  Octane:  40152.7 |  34907.1 |   15.0 |\n---------------------------------------------------+----------+--------+\n```",
       "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4f3c94a_bdd17918",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-03-27T09:18:48Z",
+      "side": 1,
+      "message": "Zhenwei is from our nodejs team and they would like to tune the pretenuring heuristic for better workloads performance.\n\nAnd I also found that adjusting this threshold can improve the performance of Speedometer2/EmberJS-Debug by up to ~50%. Is this a known issue?\nhttps://pinpoint-dot-chromeperf.appspot.com/job/104d10ccde0000",
+      "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
