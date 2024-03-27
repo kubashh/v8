@@ -105,6 +105,24 @@
       "parentUuid": "8c2a6a33_d423e04b",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eecea07e_19fc4dbe",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-27T14:54:09Z",
+      "side": 1,
+      "message": "So the only \"type behavior\" difference on enum and enum classes is that the conversion from enum to underlying type is implicit?\nI thought it was in both ways that was my main reasoning for suggesting enum classes...",
+      "parentUuid": "caac8334_5bf4a818",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
