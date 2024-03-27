@@ -141,6 +141,24 @@
       "parentUuid": "eecea07e_19fc4dbe",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38a2ce49_9173cf74",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-27T15:13:25Z",
+      "side": 1,
+      "message": "Thanks for clarifying, at least in these cases the implicit conversion to integral values isn\u0027t an issue, so we can go back to enums.\n@evih@chromium.org: You could locally revert this change and then cherry-pick patchset 1 onto it and then you shouldn\u0027t need to write a single new line of code. 😊\n\nThe only implication is that we should make sure that we provide proper values for the enum, when using the previous `enum PackedTypes { kIncludePackedTypes, kExcludePackedTypes };` it implied that any `if (include_packed_types)` in the `GetValueTypeHelper` would do the opposite of what one expects.\nI\u0027d be in favor of explicit values as in Eva\u0027s patch set or at least ordering them accordingly that a conversion to bool does reasonable things.",
+      "parentUuid": "c4d93e3c_751299fc",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
