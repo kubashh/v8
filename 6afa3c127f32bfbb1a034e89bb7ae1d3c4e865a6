@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "399747dc_888203f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-27T13:05:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8fd98d7c_c1fc71be",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 68
+      },
+      "revId": "6afa3c127f32bfbb1a034e89bb7ae1d3c4e865a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83ad73c4_5fe63624",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-27T11:59:42Z",
       "side": 1,
       "message": "This part I\u0027m not sure about, as discussed offline.",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 16,
+        "endChar": 69
+      },
+      "revId": "6afa3c127f32bfbb1a034e89bb7ae1d3c4e865a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631f4085_560f8c3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-03-27T13:05:37Z",
+      "side": 1,
+      "message": "You\u0027re right, this practically disables the check entirely. I\u0027ll take a better look and come back. Let\u0027s delay this until then.",
+      "parentUuid": "83ad73c4_5fe63624",
       "range": {
         "startLine": 16,
         "startChar": 4,
