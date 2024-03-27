@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d2bf1f2_961b146c",
+        "filename": "src/sandbox/external-pointer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-27T08:16:51Z",
+      "side": 1,
+      "message": "Yeah the other routines here don\u0027t reuse the slot implementation, but I also don\u0027t feel strongly about breaking with that tradition :)",
+      "parentUuid": "b74c04f4_ba09bed3",
+      "range": {
+        "startLine": 88,
+        "startChar": 18,
+        "endLine": 88,
+        "endChar": 44
+      },
+      "revId": "31b9530be8f78dcbca25238eccd52c07309abfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "770507ad_21eb7767",
         "filename": "src/sandbox/isolate.h",
         "patchSetId": 9
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-26T21:10:21Z",
       "side": 1,
       "message": "Do you have an intuition on whether this is actually necessary? If we just wouldn\u0027t use the field, the compiler would optimize this away anyways?\n\nIf you agree, we could easily merge the classes and only make the accessors conditional.",
+      "range": {
+        "startLine": 57,
+        "startChar": 9,
+        "endLine": 57,
+        "endChar": 10
+      },
+      "revId": "31b9530be8f78dcbca25238eccd52c07309abfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f38aa69a_327f6d18",
+        "filename": "src/sandbox/isolate.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-03-27T08:16:51Z",
+      "side": 1,
+      "message": "Yeah I suspect the compiler would be smart enough to just optimize it away when it isn\u0027t needed, and I think it\u0027d be nice to avoid the duplication here. Alternatively maybe you could always pass in a \"real\" Isolate* to the new routines (the main reason for the `IsolateForSandbox` class was that it could be constructed from both an `Isolate` and a `LocalIsolate`), but using this specialized class is probably nicer as it makes it explicit what the isolate is for.",
+      "parentUuid": "770507ad_21eb7767",
       "range": {
         "startLine": 57,
         "startChar": 9,
