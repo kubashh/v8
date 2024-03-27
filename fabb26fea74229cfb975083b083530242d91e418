@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d63513ae_e96b871a",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:33:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "15b1b17a_df525744",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ea85b9d_cd6d74c7",
@@ -137,6 +155,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d920f7b_838242e9",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:33:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a21234b1_dd0868ff",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff4ab9bc_dac375b0",
@@ -150,6 +186,30 @@
       "writtenOn": "2024-03-26T11:38:19Z",
       "side": 1,
       "message": "Nit: maybe \"for pointer tables that support compaction\"",
+      "range": {
+        "startLine": 22,
+        "startChar": 7,
+        "endLine": 22,
+        "endChar": 31
+      },
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8500c1_b74b5c98",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:33:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ff4ab9bc_dac375b0",
       "range": {
         "startLine": 22,
         "startChar": 7,
@@ -177,6 +237,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b03fa26a_a4f32da5",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:33:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ba28352b_1014bbe6",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59afdd7e_d1bfcdb0",
@@ -194,6 +272,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c609b71_3c3b0f9d",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:33:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "59afdd7e_d1bfcdb0",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29d9525c_ca34aa3e",
@@ -207,6 +303,24 @@
       "writtenOn": "2024-03-26T11:38:19Z",
       "side": 1,
       "message": "Nit: maybe remove \"external\" here to make the comment more universal",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e6b8946_c9d2691b",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:33:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "29d9525c_ca34aa3e",
       "revId": "fabb26fea74229cfb975083b083530242d91e418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
