@@ -69,6 +69,24 @@
       "parentUuid": "943c977e_293eb114",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2a6a33_d423e04b",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-03-27T09:42:02Z",
+      "side": 1,
+      "message": "😊",
+      "parentUuid": "3a9431b6_41be35e7",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
