@@ -104,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5566bbe6_52535b32",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:36:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ea85b9d_cd6d74c7",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8e5d0dd_e1297c85",
@@ -117,6 +135,24 @@
       "writtenOn": "2024-03-21T05:40:31Z",
       "side": 1,
       "message": "Also requires changes to typename",
+      "revId": "fabb26fea74229cfb975083b083530242d91e418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6fd3b82_641c6bc6",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:36:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8e5d0dd_e1297c85",
       "revId": "fabb26fea74229cfb975083b083530242d91e418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

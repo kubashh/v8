@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85ef6ed2_fc190a0d",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 4757,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-27T09:36:46Z",
+      "side": 1,
+      "message": "cl presubmit failed on this format error, it was introduced recently in https://chromium-review.googlesource.com/c/v8/v8/+/5387168. Let me know if I should split this out.",
+      "revId": "e9c09d96bae0cadb218757181d16400ba4fa97ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
