@@ -16,6 +16,69 @@
       "message": "Still LGTM.",
       "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e13c422f_c76954ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-03-27T09:21:03Z",
+      "side": 1,
+      "message": "one last comment round, sorry for the delay",
+      "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59fb1745_581735f5",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4389,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-03-27T09:21:03Z",
+      "side": 1,
+      "message": "Could we make this an instance method instead?",
+      "range": {
+        "startLine": 4389,
+        "startChar": 0,
+        "endLine": 4389,
+        "endChar": 50
+      },
+      "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8678b610_396421fc",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-03-27T09:21:03Z",
+      "side": 1,
+      "message": "let\u0027s also add a `DisallowGarbageCollection no_gc;` scope here since there are a few raw pointers around, or even better, pass it in as reference like in https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/transitions.h;l\u003d149?q\u003dPrintTransitionTree%20-path:(%5E%7C%2F)gen%20-path:third_party%2F.*%2Fthird_party",
+      "range": {
+        "startLine": 4392,
+        "startChar": 33,
+        "endLine": 4392,
+        "endChar": 37
+      },
+      "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
