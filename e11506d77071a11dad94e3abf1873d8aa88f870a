@@ -159,6 +159,24 @@
       "parentUuid": "c4d93e3c_751299fc",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ba48de1_95a6eb11",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-03-27T15:33:18Z",
+      "side": 1,
+      "message": "Yes, exactly.\n\nRestoring PS1 (locally) can be done via `git fetch https://chromium.googlesource.com/v8/v8 refs/changes/18/5396418/1 \u0026\u0026 git checkout -p FETCH_HEAD -- src/wasm/fuzzing`. Or even skip the `-p`, but I always like to confirm that these are the changes I wanted :)",
+      "parentUuid": "38a2ce49_9173cf74",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
