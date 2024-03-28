@@ -69,6 +69,24 @@
       "parentUuid": "1ecce1f2_3782b76a",
       "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0adaab51_adef8d0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-03-28T09:28:21Z",
+      "side": 1,
+      "message": "For the performance impact in S2, I didn\u0027t reproduce the improvement at `HEAD` commit (`9d6a9f718349093310559ca17a7a0efe0864b585`), but I found a ~50% performance gap between `HEAD` and the commit I used to do the test (`02fc06ba6e8123cb8f7d7076f2227aefeda3aa87`)\nhttps://pinpoint-dot-chromeperf.appspot.com/job/1547d04c3e0000\n\nZhenwei\u0027s previous test also shows a +15% improvement to Octane, but we only see the improvement when we run each subcase separately (Running the whole Octane doesn\u0027t seems to be influenced). And we found that tuning the threshold can make pretenuring works better by allocating a nested objects to old space:\n\n```\nfunction GeneratePayloadTree(depth, tag) {\n  if (depth \u003d\u003d 0) {\n    return {\n      array  : [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ],\n      string : \u0027String for key \u0027 + tag + \u0027 in leaf node\u0027\n    };\n  } else {\n    return {\n      left:  GeneratePayloadTree(depth - 1, tag),\n      right: GeneratePayloadTree(depth - 1, tag)\n    };\n  }\n}\n```",
+      "parentUuid": "1a0237f8_4e238c3d",
+      "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
