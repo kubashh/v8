@@ -87,6 +87,41 @@
       "parentUuid": "1a0237f8_4e238c3d",
       "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "926cbdaf_f5303887",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3350333
+      },
+      "writtenOn": "2024-03-28T10:03:00Z",
+      "side": 1,
+      "message": "we ran the Octane benchmark on `HEAD`\u003ccommit `b3905a6815ffad286414f9a5a7d0fa670b226379`\u003e, and overall performance improved by ~15%.\nWe executed individual Octane subcases one by one（just comment the other subcases when ran current subcase in `octane/run.js`） \nand using geomean to obtain the total score, because we observed that executing the complete Octane influences the behavior of GC behavior \ndue to the order of subcases, which results in different scores. Specifically, our method of execution is as follows:\n\n```shell\ntest/benchmarks/csuite/csuite.py octane baseline \u003cpath to unchanged d8 binary\u003e\n## Here we use min_new_space_capacity_for_pretenuring\u003d2MB\ntest/benchmarks/csuite/csuite.py octane compare \u003cpath to changed d8 binary\u003e\n```",
+      "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1d42d5b_1e39842e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3350333
+      },
+      "writtenOn": "2024-03-28T10:03:00Z",
+      "side": 1,
+      "message": "we ran the Octane benchmark on `HEAD`\u003ccommit `b3905a6815ffad286414f9a5a7d0fa670b226379`\u003e, and overall performance improved by ~15%.\nWe executed individual Octane subcases one by one（just comment the other subcases when ran current subcases in `octane/run.js`） \nand using geomean to obtain the total score, because we observed that executing the complete Octane influences the behavior of GC behavior \ndue to the order of subcases, which results in different scores. Specifically, our method of execution is as follows:\n\n```shell\ntest/benchmarks/csuite/csuite.py octane baseline \u003cpath to unchanged d8 binary\u003e\n## Here we use min_new_space_capacity_for_pretenuring\u003d2MB\ntest/benchmarks/csuite/csuite.py octane compare \u003cpath to changed d8 binary\u003e\n```",
+      "parentUuid": "0adaab51_adef8d0b",
+      "revId": "ce16c97e9e988dd5993e2567989c490c8faed72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
