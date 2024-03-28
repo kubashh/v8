@@ -177,6 +177,24 @@
       "parentUuid": "38a2ce49_9173cf74",
       "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c353a1_738041de",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-03-28T09:18:20Z",
+      "side": 1,
+      "message": "I also thought the same as Matthias, good to know, thanks! 😊\n\nPatchset 1 is here: https://crrev.com/c/5401856",
+      "parentUuid": "0ba48de1_95a6eb11",
+      "revId": "e11506d77071a11dad94e3abf1873d8aa88f870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
