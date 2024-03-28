@@ -2672,20 +2672,6 @@ V8_WARN_UNUSED_RESULT MaybeLocal<Function> ScriptCompiler::CompileFunction(
                                  options, no_cache_reason, nullptr);
 }
 
-#ifdef V8_SCRIPTORMODULE_LEGACY_LIFETIME
-// static
-MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
-    Local<Context> context, Source* source, size_t arguments_count,
-    Local<String> arguments[], size_t context_extension_count,
-    Local<Object> context_extensions[], CompileOptions options,
-    NoCacheReason no_cache_reason,
-    Local<ScriptOrModule>* script_or_module_out) {
-  return CompileFunctionInternal(
-      context, source, arguments_count, arguments, context_extension_count,
-      context_extensions, options, no_cache_reason, script_or_module_out);
-}
-#endif  // V8_SCRIPTORMODULE_LEGACY_LIFETIME
-
 MaybeLocal<Function> ScriptCompiler::CompileFunctionInternal(
     Local<Context> v8_context, Source* source, size_t arguments_count,
     Local<String> arguments[], size_t context_extension_count,
@@ -5590,14 +5576,6 @@ int Function::GetScriptStartPosition() const {
     return func->shared()->StartPosition();
   }
   return kLineOffsetNotFound;
-}
-
-MaybeLocal<UnboundScript> Function::GetUnboundScript() const {
-  auto self = *Utils::OpenDirectHandle(this);
-  if (!IsJSFunction(self)) return MaybeLocal<UnboundScript>();
-  auto sfi = i::JSFunction::cast(self)->shared();
-  i::Isolate* isolate = self->GetIsolate();
-  return ToApiHandle<UnboundScript>(i::direct_handle(sfi, isolate), isolate);
 }
 
 int Function::ScriptId() const {
