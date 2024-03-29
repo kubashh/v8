@@ -628,6 +628,34 @@ static_assert(
 constexpr int kCodePointerTableEntryEntrypointOffset = 0;
 constexpr int kCodePointerTableEntryCodeObjectOffset = 8;
 
+// See `ExternalPointerHandle` for the main documentation. The difference to
+// `ExternalPointerHandle` is that the handle always refers to a
+// (external pointer, size) tuple. The handles are used in combination with a
+// dedicated external buffer table (EBT).
+using ExternalBufferHandle = uint32_t;
+
+// The size of the virtual memory reservation for the external buffer table.
+// As with the external pointer table, a maximum table size in combination with
+// shifted indices allows omitting bounds checks.
+constexpr size_t kExternalBufferTableReservationSize = 128 * MB;
+
+// The external buffer handles are stores shifted to the left by this amount
+// to guarantee that they are smaller than the maximum table size.
+constexpr uint32_t kExternalBufferHandleShift = 9;
+
+// A null handle always references an entry that contains nullptr.
+constexpr ExternalBufferHandle kNullExternalBufferHandle = 0;
+
+// The maximum number of entries in an trusted pointer table.
+constexpr int kExternalBufferTableEntrySize = 16;
+constexpr int kExternalBufferTableEntrySizeLog2 = 4;
+constexpr size_t kMaxExternalBufferPointers =
+    kExternalBufferTableReservationSize / kExternalBufferTableEntrySize;
+static_assert((1 << (32 - kExternalBufferHandleShift)) ==
+                  kMaxExternalBufferPointers,
+              "kExternalBufferTableReservationSize and "
+              "kExternalBufferHandleShift don't match");
+
 // Constants that can be used to mark places that should be modified once
 // certain types of objects are moved out of the sandbox and into trusted space.
 constexpr bool kRuntimeGeneratedCodeObjectsLiveInTrustedSpace = true;
@@ -703,6 +731,7 @@ class Internals {
   // ExternalPointerTable and TrustedPointerTable layout guarantees.
   static const int kExternalPointerTableBasePointerOffset = 0;
   static const int kExternalPointerTableSize = 2 * kApiSystemPointerSize;
+  static const int kExternalBufferTableSize = 2 * kApiSystemPointerSize;
   static const int kTrustedPointerTableSize = 2 * kApiSystemPointerSize;
   static const int kTrustedPointerTableBasePointerOffset = 0;
 
@@ -746,19 +775,22 @@ class Internals {
       kIsolateEmbedderDataOffset + kNumIsolateDataSlots * kApiSystemPointerSize;
   static const int kIsolateSharedExternalPointerTableAddressOffset =
       kIsolateExternalPointerTableOffset + kExternalPointerTableSize;
-  static const int kIsolateCppHeapPointerTableAddressOffset =
-      kIsolateSharedExternalPointerTableAddressOffset +
-      kExternalPointerTableSize;
+  static const int kIsolateCppHeapPointerTableOffset =
+      kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
 #ifdef V8_ENABLE_SANDBOX
   static const int kIsolateTrustedCageBaseOffset =
-      kIsolateCppHeapPointerTableAddressOffset + kApiSystemPointerSize;
+      kIsolateCppHeapPointerTableOffset + kExternalPointerTableSize;
   static const int kIsolateTrustedPointerTableOffset =
       kIsolateTrustedCageBaseOffset + kApiSystemPointerSize;
-  static const int kIsolateApiCallbackThunkArgumentOffset =
+  static const int kIsolateExternalBufferTableOffset =
       kIsolateTrustedPointerTableOffset + kTrustedPointerTableSize;
+  static const int kIsolateSharedExternalBufferTableAddressOffset =
+      kIsolateExternalBufferTableOffset + kExternalBufferTableSize;
+  static const int kIsolateApiCallbackThunkArgumentOffset =
+      kIsolateSharedExternalBufferTableAddressOffset + kApiSystemPointerSize;
 #else
   static const int kIsolateApiCallbackThunkArgumentOffset =
-      kIsolateCppHeapPointerTableAddressOffset + kApiSystemPointerSize;
+      kIsolateCppHeapPointerTableOffset + kExternalPointerTableSize;
 #endif  // V8_ENABLE_SANDBOX
 #else
   static const int kIsolateApiCallbackThunkArgumentOffset =

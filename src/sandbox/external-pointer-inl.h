@@ -8,6 +8,7 @@
 #include "include/v8-internal.h"
 #include "src/base/atomic-utils.h"
 #include "src/objects/slots.h"
+#include "src/sandbox/external-buffer-table-inl.h"
 #include "src/sandbox/external-pointer-table-inl.h"
 #include "src/sandbox/external-pointer.h"
 #include "src/sandbox/isolate-inl.h"
@@ -48,6 +49,37 @@ inline void ExternalPointerMember<tag>::store_encoded(ExternalPointer_t value) {
 }
 
 template <ExternalPointerTag tag>
+inline void ExternalBufferMember<tag>::Init(IsolateForSandbox isolate,
+                                            std::pair<Address, size_t> value) {
+  InitExternalBufferField<tag>(reinterpret_cast<Address>(storage_), isolate,
+                               value);
+}
+
+template <ExternalPointerTag tag>
+inline std::pair<Address, size_t> ExternalBufferMember<tag>::load(
+    const IsolateForSandbox isolate) const {
+  return ReadExternalBufferField<tag>(reinterpret_cast<Address>(storage_),
+                                      isolate);
+}
+
+template <ExternalPointerTag tag>
+inline void ExternalBufferMember<tag>::store(IsolateForSandbox isolate,
+                                             std::pair<Address, size_t> value) {
+  WriteExternalBufferField<tag>(reinterpret_cast<Address>(storage_), isolate,
+                                value);
+}
+
+template <ExternalPointerTag tag>
+inline ExternalPointer_t ExternalBufferMember<tag>::load_encoded() const {
+  return base::bit_cast<ExternalPointer_t>(storage_);
+}
+
+template <ExternalPointerTag tag>
+inline void ExternalBufferMember<tag>::store_encoded(ExternalPointer_t value) {
+  memcpy(storage_, &value, sizeof(ExternalPointer_t));
+}
+
+template <ExternalPointerTag tag>
 V8_INLINE void InitExternalPointerField(Address field_address,
                                         IsolateForSandbox isolate,
                                         Address value) {
@@ -63,6 +95,25 @@ V8_INLINE void InitExternalPointerField(Address field_address,
   base::AsAtomic32::Release_Store(location, handle);
 #else
   WriteExternalPointerField<tag>(field_address, isolate, value);
+#endif  // V8_ENABLE_SANDBOX
+}
+
+template <ExternalPointerTag tag>
+V8_INLINE void InitExternalBufferField(Address field_address,
+                                       IsolateForSandbox isolate,
+                                       std::pair<Address, size_t> value) {
+#ifdef V8_ENABLE_SANDBOX
+  static_assert(tag != kExternalPointerNullTag);
+  ExternalBufferTable& table = isolate.GetExternalBufferTableFor(tag);
+  ExternalBufferHandle handle = table.AllocateAndInitializeEntry(
+      isolate.GetExternalBufferTableSpaceFor(tag, field_address), value, tag);
+  // Use a Release_Store to ensure that the store of the pointer into the
+  // table is not reordered after the store of the handle. Otherwise, other
+  // threads may access an uninitialized table entry and crash.
+  auto location = reinterpret_cast<ExternalBufferHandle*>(field_address);
+  base::AsAtomic32::Release_Store(location, handle);
+#else
+  WriteExternalPointerField<tag>(field_address, isolate, value.first);
 #endif  // V8_ENABLE_SANDBOX
 }
 
@@ -103,6 +154,25 @@ V8_INLINE Address TryReadCppHeapPointerField(
 #else   // !V8_COMPRESS_POINTERS
   return slot.try_load(isolate);
 #endif  // !V8_COMPRESS_POINTERS
+}
+
+template <ExternalPointerTag tag>
+V8_INLINE std::pair<Address, size_t> ReadExternalBufferField(
+    Address field_address, IsolateForSandbox isolate) {
+#ifdef V8_ENABLE_SANDBOX
+  static_assert(tag != kExternalPointerNullTag);
+  // Handles may be written to objects from other threads so the handle needs
+  // to be loaded atomically. We assume that the load from the table cannot
+  // be reordered before the load of the handle due to the data dependency
+  // between the two loads and therefore use relaxed memory ordering, but
+  // technically we should use memory_order_consume here.
+  auto location = reinterpret_cast<ExternalBufferHandle*>(field_address);
+  ExternalBufferHandle handle = base::AsAtomic32::Relaxed_Load(location);
+  return isolate.GetExternalBufferTableFor(tag).Get(handle, tag);
+#else
+  return std::make_pair<Address, size_t>(
+      ReadMaybeUnalignedValue<Address>(field_address), 0);
+#endif  // V8_ENABLE_SANDBOX
 }
 
 template <ExternalPointerTag tag>
@@ -163,6 +233,21 @@ V8_INLINE void WriteLazilyInitializedExternalPointerField(
   }
 #else
   WriteMaybeUnalignedValue<Address>(field_address, value);
+#endif  // V8_ENABLE_SANDBOX
+}
+
+template <ExternalPointerTag tag>
+V8_INLINE void WriteExternalBufferField(Address field_address,
+                                        IsolateForSandbox isolate,
+                                        std::pair<Address, size_t> value) {
+#ifdef V8_ENABLE_SANDBOX
+  static_assert(tag != kExternalPointerNullTag);
+  // See comment above for why this is a Relaxed_Load.
+  auto location = reinterpret_cast<ExternalBufferHandle*>(field_address);
+  ExternalBufferHandle handle = base::AsAtomic32::Relaxed_Load(location);
+  isolate.GetExternalBufferTableFor(tag).Set(handle, value, tag);
+#else
+  WriteMaybeUnalignedValue<Address>(field_address, value.first);
 #endif  // V8_ENABLE_SANDBOX
 }
 

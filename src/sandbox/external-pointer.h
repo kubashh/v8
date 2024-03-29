@@ -30,6 +30,26 @@ class ExternalPointerMember {
   alignas(alignof(Tagged_t)) char storage_[sizeof(ExternalPointer_t)];
 };
 
+template <ExternalPointerTag tag>
+class ExternalBufferMember {
+ public:
+  ExternalBufferMember() = default;
+
+  void Init(IsolateForSandbox isolate, std::pair<Address, size_t> value);
+
+  inline std::pair<Address, size_t> load(const IsolateForSandbox isolate) const;
+  inline void store(IsolateForSandbox isolate,
+                    std::pair<Address, size_t> value);
+
+  inline ExternalPointer_t load_encoded() const;
+  inline void store_encoded(ExternalPointer_t value);
+
+  Address storage_address() { return reinterpret_cast<Address>(storage_); }
+
+ private:
+  alignas(alignof(Tagged_t)) char storage_[sizeof(ExternalPointer_t)];
+};
+
 // Creates and initializes an entry in the external pointer table and writes the
 // handle for that entry to the field.
 template <ExternalPointerTag tag>
