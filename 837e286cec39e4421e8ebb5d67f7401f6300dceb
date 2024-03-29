@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "041f03ba_36c3e1e7",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-03-29T04:28:08Z",
+      "side": 1,
+      "message": "@mlippautz@chromium.org seems like this should be ` kIsolateCppHeapPointerTableOffset` since the actual member was not a pointer ? Found this accidentally while trying to new table member and offset calculations err\u0027d, as part of https://bugs.chromium.org/p/v8/issues/detail?id\u003d14585. I can address it in my next CL if that is okay ?\n\n```\n  static const int kIsolateCppHeapPointerTableOffset \u003d\n      kIsolateSharedExternalPointerTableAddressOffset +\n      kApiSystemPointerSize;\n#ifdef V8_ENABLE_SANDBOX\n  static const int kIsolateTrustedCageBaseOffset \u003d\n      kIsolateCppHeapPointerTableOffset + kExternalPointerTableSize;\n  static const int kIsolateTrustedPointerTableOffset \u003d\n      kIsolateTrustedCageBaseOffset + kApiSystemPointerSize;\n```",
+      "revId": "837e286cec39e4421e8ebb5d67f7401f6300dceb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
