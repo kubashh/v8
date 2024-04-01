@@ -16,6 +16,74 @@
       "message": "@syg@chromium.org more QoL improvements PTAL, thanks!",
       "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "637b08d9_e37f69de",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-01T23:51:30Z",
+      "side": 1,
+      "message": "API nit: this constructor with a `CHECK(is_locked)` feels weirdly unergonomic to me. WDYT about a static factory method (maybe with a private constructor) instead of a constructor overload? Maybe \"AlreadyLocked\" or something like that.",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "307b2691_66b58a28",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-01T23:51:30Z",
+      "side": 1,
+      "message": "Using `WaiterQueueLockGuard` in this method seems to add more complexity than not, since it means the `~WaiterQueueLockGuard` needs to guard against a detached state. How about not using it in this method, removing `DetachFromState`, and removing the need to handle a null state? Can keep the complexity comment to discourage future attempts.",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cac19133_8e500b97",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-01T23:51:30Z",
+      "side": 1,
+      "message": "Using the RAII guard here means `Notify()` below is called with the lock held, which is longer than necessary. Should add a sub-block around the guard.",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f8b7b56_1f9265e9",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-01T23:51:30Z",
+      "side": 1,
+      "message": "`V8_NODISCARD` and `final` please.",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
