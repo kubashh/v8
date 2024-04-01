@@ -80,10 +80,34 @@ class JSSynchronizationPrimitive
   static bool TryLockWaiterQueueExplicit(std::atomic<StateT>* state,
                                          StateT& expected);
 
+  // The waiter queue lock guard provides a RAII-style mechanism for locking the
+  // waiter queue. A new state must be set before destroying the guard.
+  class WaiterQueueLockGuard {
+   public:
+    explicit WaiterQueueLockGuard(std::atomic<StateT>* state,
+                                  StateT& current_state);
+    // Constructor for creating a wrapper around a state whose waiter queue
+    // is already locked and owned by this thread.
+    explicit WaiterQueueLockGuard(std::atomic<StateT>* state, bool is_locked);
+    WaiterQueueLockGuard(const WaiterQueueLockGuard&) = delete;
+    WaiterQueueLockGuard() = delete;
+    ~WaiterQueueLockGuard();
+    void set_new_state(StateT new_state);
+    void DetachFromState();
+    static std::optional<WaiterQueueLockGuard> LockWaiterQueueOrJSMutex(
+        std::atomic<StateT>* state, StateT& current_state);
+
+   private:
+    std::atomic<StateT>* state_;
+    StateT new_state_;
+  };
+
   using TorqueGeneratedJSSynchronizationPrimitive<
       JSSynchronizationPrimitive, AlwaysSharedSpaceJSObject>::state;
   using TorqueGeneratedJSSynchronizationPrimitive<
       JSSynchronizationPrimitive, AlwaysSharedSpaceJSObject>::set_state;
+
+  static constexpr StateT kEmptyState = 0;
 
  private:
 #if V8_COMPRESS_POINTERS
@@ -94,6 +118,7 @@ class JSSynchronizationPrimitive
 #else
   inline WaiterQueueNode** waiter_queue_head_location() const;
 #endif
+  static constexpr StateT kInvalidState = ~0;
 };
 
 // A non-recursive mutex that is exposed to JS.
@@ -215,7 +240,7 @@ class JSAtomicsMutex
   // and whether the lock itself is locked (IsLockedField).
   using IsLockedField = JSSynchronizationPrimitive::NextBitField<bool, 1>;
 
-  static constexpr StateT kUnlockedUncontended = 0;
+  static constexpr StateT kUnlockedUncontended = kEmptyState;
   static constexpr StateT kLockedUncontended = IsLockedField::encode(true);
 
   inline void SetCurrentThreadAsOwner();
@@ -237,6 +262,8 @@ class JSAtomicsMutex
   static bool TryLockExplicit(std::atomic<StateT>* state, StateT& expected);
   static void UnlockWaiterQueueWithNewState(std::atomic<StateT>* state,
                                             StateT new_state);
+  static std::optional<WaiterQueueLockGuard> LockWaiterQueueOrJSMutex(
+      std::atomic<StateT>* state, StateT& current_state);
 
   using TorqueGeneratedJSAtomicsMutex<
       JSAtomicsMutex, JSSynchronizationPrimitive>::owner_thread_id;
@@ -304,8 +331,6 @@ class JSAtomicsCondition
  private:
   friend class Factory;
   friend class WaiterQueueNode;
-
-  static constexpr StateT kEmptyState = 0;
 
   using DequeueAction = std::function<WaiterQueueNode*(WaiterQueueNode**)>;
   static WaiterQueueNode* DequeueExplicit(Isolate* requester,
