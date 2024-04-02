@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ac3105a_65ac3100",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-02T18:56:19Z",
+      "side": 1,
+      "message": "Ah of course, it doesn\u0027t matter that the factory can see the private constructor, `std::optional` still can\u0027t. What you said sounds good and sounds like the best we can do anyway.",
+      "parentUuid": "0e0c54c5_159ac827",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "307b2691_66b58a28",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 4
