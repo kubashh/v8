@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59cadb78_7e6e5698",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-02T00:00:11Z",
+      "side": 1,
+      "message": "After reading your second CL, is this actually a drive-by fix for the case where the waiter has timed out and is racing with this unlock?",
+      "parentUuid": "cac19133_8e500b97",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f8b7b56_1f9265e9",
         "filename": "src/objects/js-atomics-synchronization.h",
         "patchSetId": 4
