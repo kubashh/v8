@@ -127,6 +127,30 @@
       },
       "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ef2ba13_5d330f11",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-04-02T17:20:56Z",
+      "side": 1,
+      "message": "It\u0027s mostly for documentation/debugging (it gets compiled away in release mode).\nWe got in the habit of adding it large-ish functions that deal with raw pointers.",
+      "parentUuid": "1beea321_af6e1f55",
+      "range": {
+        "startLine": 4392,
+        "startChar": 33,
+        "endLine": 4392,
+        "endChar": 37
+      },
+      "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
