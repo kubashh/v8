@@ -85,6 +85,24 @@
       "parentUuid": "0fc4fb6b_6f82f5a5",
       "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95d0aea3_9593507b",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-04-02T16:05:01Z",
+      "side": 1,
+      "message": "Then why use `GetDataProperty` above instead of just getting the property with `GetProperty`? Why skip interceptors?",
+      "parentUuid": "53793879_507606cb",
+      "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
