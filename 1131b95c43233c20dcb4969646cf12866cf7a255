@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe8d8186_005f8f49",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T01:33:56Z",
+      "side": 1,
+      "message": "IIUC neither the `std::optional` in place constructor nor `std::optional.emplace` work with a private constructor, so I settle with this unergonomic public constructor to further discourage using it. Using a factory function would look something like `std::optional\u003cWaiterQueueLockGuard\u003e(NewAlreadyLockedGuard())` but this creates a temporary object that is moved into the optional. However, after the move, the constructor of the temporary object is called, so I would need to write a custom move constructor to null out the state pointer and keep the logic to handle null pointers in the destructor, even if we remove the `DetachFromState` logic as you suggest below.\n\nWhich design do you prefer? I\u0027m completely open to exploring other options if you have any suggestions.",
+      "parentUuid": "637b08d9_e37f69de",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "307b2691_66b58a28",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 4
@@ -48,6 +66,24 @@
       "writtenOn": "2024-04-01T23:51:30Z",
       "side": 1,
       "message": "Using `WaiterQueueLockGuard` in this method seems to add more complexity than not, since it means the `~WaiterQueueLockGuard` needs to guard against a detached state. How about not using it in this method, removing `DetachFromState`, and removing the need to handle a null state? Can keep the complexity comment to discourage future attempts.",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80c3495c_57e06ccc",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T01:33:56Z",
+      "side": 1,
+      "message": "Should we remove this even if we go with the factory method logic described above?",
+      "parentUuid": "307b2691_66b58a28",
       "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -89,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aee998e7_77f1c6b6",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T01:33:56Z",
+      "side": 1,
+      "message": "Yes, it is possible but unlikely to happen in the sync case, but it can happen on the async case on Isolate Deinit.",
+      "parentUuid": "59cadb78_7e6e5698",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f8b7b56_1f9265e9",
         "filename": "src/objects/js-atomics-synchronization.h",
         "patchSetId": 4
@@ -100,6 +154,24 @@
       "writtenOn": "2024-04-01T23:51:30Z",
       "side": 1,
       "message": "`V8_NODISCARD` and `final` please.",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88b2e9c1_34a2e622",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T01:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f8b7b56_1f9265e9",
       "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
