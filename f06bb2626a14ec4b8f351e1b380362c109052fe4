@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3832d43a_7c20b2de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-02T06:59:38Z",
+      "side": 1,
+      "message": "For backmerges to versions older than 12.2 (+-1, I don\u0027t recall the exact version tbh), you have to use `b/\u003cbug number\u003e` (we fixed the presubmit script so that it\u0027s not an issue anymore, but we didn\u0027t backmerge the CL fixing the presubmit script)",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "f06bb2626a14ec4b8f351e1b380362c109052fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
