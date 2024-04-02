@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "206e6cdc_b99578d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-04-02T06:04:01Z",
+      "side": 1,
+      "message": "Friendly ping.",
+      "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b8de1acd_2be3e2f3",
         "filename": "src/execution/messages.cc",
         "patchSetId": 7
