@@ -33,6 +33,24 @@
       "message": "Nit: Actually, this whole class definition can be moved inside the `.cc` file, I think? Please do that if possible.",
       "revId": "99719d7334eebf07eb79e8101963b136a7de8575",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f84348e_8a4b705c",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T21:40:14Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c5f668fd_3a26d265",
+      "revId": "99719d7334eebf07eb79e8101963b136a7de8575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

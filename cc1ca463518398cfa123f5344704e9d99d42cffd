@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0140d597_ef29f6ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T21:40:14Z",
+      "side": 1,
+      "message": "Moved `WaiterQueueLockGuard` to the `detail` namespace in the .cc, could you re-apply the vote?",
+      "revId": "cc1ca463518398cfa123f5344704e9d99d42cffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
