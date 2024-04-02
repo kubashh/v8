@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e0c54c5_159ac827",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-02T18:53:27Z",
+      "side": 1,
+      "message": "IIUC the in-place `std::optional` constructor doesn\u0027t work with private constructors because they are not accessible. I can leave the constructor as-is an introduce a factory function anyway just for better readability, WDYT?",
+      "parentUuid": "873eb092_5f862332",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "307b2691_66b58a28",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 4
