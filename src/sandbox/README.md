@@ -33,16 +33,17 @@ The sandbox is designed to be testable, both manually and automatically.
 To use a "sandbox testing" configurations, two steps are required:
 
 1. V8 needs to be build with `v8_enable_memory_corruption_api = true`. This
-   will, when sandbox testing mode is enabled, see below, expose a JavaScript
-   `Sandbox` object through which memory inside the sandbox can be arbitrarily
-   modified. This API effectively emulates common exploit primitives that can
-   be constructed from a typical V8 vulnerability.
-2. The sandbox testing mode needs to be enabled at runtime via
-   `--sandbox-fuzzing`. This will enable the sandbox crash filter, which will
-   filter out harmless crashes such as access violations inside the sandbox or
-   other, unexploitable crashes. As such, it effectively defines what
-   constitutes a sandbox violation bug. The sandbox crash filter is currently
-   only available on Linux and in d8.
+   will, when sandbox testing mode is enabled, expose a JavaScript `Sandbox`
+   object through which memory inside the sandbox can be arbitrarily modified.
+   This API effectively emulates common exploit primitives that can be
+   constructed from a typical V8 vulnerability.
+2. The sandbox testing mode needs to be enabled at runtime, for example via
+   `--sandbox-testing` (or `--sandbox-fuzzing` specifically for fuzz-testing).
+   This will expose the memory corruption API to JavaScript code and enable the
+   sandbox crash filter, which will for example filter out harmless crashes
+   such as access violations inside the sandbox or other unexploitable crashes.
+   As such, it effectively defines what constitutes a sandbox bypass. The
+   sandbox crash filter is currently only available on Linux and in d8.
 
 The following example demonstrates these two parts:
 
@@ -50,7 +51,7 @@ The following example demonstrates these two parts:
 // Create a DataView that can read and write inside the sandbox.
 let memory = new DataView(new Sandbox.MemoryView(0, 0x100000000));
 
-// Create an object to corrupt and obtain its address in the sandbox.
+// Create an object to corrupt and obtain its address inside the sandbox.
 let corruptMe = {};
 let addr = Sandbox.getAddressOf(corruptMe);
 

@@ -30,6 +30,7 @@ namespace internal {
 #ifdef V8_ENABLE_SANDBOX
 
 SandboxTesting::Mode SandboxTesting::mode_ = SandboxTesting::Mode::kDisabled;
+Address SandboxTesting::target_page_ = kNullAddress;
 
 #ifdef V8_ENABLE_MEMORY_CORRUPTION_API
 
@@ -284,6 +285,14 @@ void SandboxGetInstanceTypeOfObjectAt(
   SandboxGetInstanceTypeOfImpl(info, &GetArgumentObjectPassedAsAddress);
 }
 
+void SandboxGetTargetPage(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  DCHECK(ValidateCallbackInfo(info));
+  v8::Isolate* isolate = info.GetIsolate();
+  Address page = SandboxTesting::target_page();
+  CHECK_NE(page, kNullAddress);
+  info.GetReturnValue().Set(v8::Number::New(isolate, page));
+}
+
 Handle<FunctionTemplateInfo> NewFunctionTemplate(
     Isolate* isolate, FunctionCallback func,
     ConstructorBehavior constructor_behavior) {
@@ -372,6 +381,10 @@ void SandboxTesting::InstallMemoryCorruptionApiIfEnabled(Isolate* isolate) {
                   "getInstanceTypeOf", 1);
   InstallFunction(isolate, sandbox, SandboxGetInstanceTypeOfObjectAt,
                   "getInstanceTypeOfObjectAt", 1);
+
+  if (mode() == Mode::kForTesting) {
+    InstallGetter(isolate, sandbox, SandboxGetTargetPage, "targetPage");
+  }
 
   // Install the Sandbox object as property on the global object.
   Handle<JSGlobalObject> global = isolate->global_object();
@@ -535,7 +548,8 @@ void CrashFilter(int signal, siginfo_t* info, void* void_context) {
     }
   }
 
-  if (info->si_code == SEGV_ACCERR) {
+  if (info->si_code == SEGV_ACCERR &&
+      !SandboxTesting::IsInsideTargetPage(faultaddr)) {
     // This indicates an access to a valid mapping but with insufficient
     // permissions, for example accessing a region mapped with PROT_NONE, or
     // writing to a read-only mapping.
@@ -556,6 +570,18 @@ void CrashFilter(int signal, siginfo_t* info, void* void_context) {
     FilterCrash(
         "Caught harmless memory access violaton (memory permission violation). "
         "Exiting process...\n");
+  }
+
+  if (SandboxTesting::mode() == SandboxTesting::Mode::kForTesting) {
+    // In sandbox testing mode, the access violation must happen on a specific
+    // page and it must be a write access. Check for this now.
+    // As the target page is mapped as read-only, a SEGV will only be raised
+    // for a write (or execute) access, so we do not need to check for this.
+    if (!SandboxTesting::IsInsideTargetPage(faultaddr)) {
+      FilterCrash(
+          "Detected invalid sandbox violation (not on target page). Exiting "
+          "process...\n");
+    }
   }
 
   // Otherwise it's a sandbox violation, so restore the original signal
@@ -642,11 +668,48 @@ void SandboxTesting::Enable(Mode mode) {
 
   mode_ = mode;
 
+  if (mode == Mode::kForTesting) {
+#ifdef V8_USE_ADDRESS_SANITIZER
+    // This doesn't make sense: ASan would catch many bugs early on, before
+    // they can be turned into an arbitrary write primitive.
+    FATAL(
+        "The sandbox testing mode is currently incompatible with "
+        "AddressSanitizer");
+#else
+    // Map the target address that must be written to to demonstrate a sandbox
+    // bypass. A simple way to enforce that the access is a write (or execute)
+    // access is by mapping the page readable. That way, read accessed to not
+    // cause a crash and so won't be seen by the crash filter at all.
+    VirtualAddressSpace* vas = GetPlatformVirtualAddressSpace();
+    target_page_ =
+        vas->AllocatePages(vas->RandomPageAddress(), vas->page_size(),
+                           vas->page_size(), PagePermissions::kRead);
+    CHECK_NE(target_page_, kNullAddress);
+    fprintf(stderr,
+            "Sandbox testing mode is enabled. Write to the page starting at "
+            "0x%lx (available from JavaScript as `Sandbox.targetPage`) to "
+            "demonstrate a sandbox bypass.\n",
+            target_page_);
+#endif  // V8_USE_ADDRESS_SANITIZER
+  } else {
+    fprintf(stderr,
+            "Sandbox fuzzing mode is enabled. Only sandbox violations will be "
+            "reported, all other crashes will be ignored.\n");
+  }
+
 #ifdef V8_OS_LINUX
   InstallCrashFilter();
 #else
   FATAL("The sandbox crash filter is currently only available on Linux");
 #endif  // V8_OS_LINUX
+}
+
+bool SandboxTesting::IsInsideTargetPage(Address faultaddr) {
+  if (mode() != Mode::kForTesting) return false;
+  size_t kPageSize = sysconf(_SC_PAGESIZE);
+  size_t kPageMask = ~(kPageSize - 1);
+  Address fault_page = faultaddr & kPageMask;
+  return fault_page == target_page();
 }
 
 #endif  // V8_ENABLE_SANDBOX
