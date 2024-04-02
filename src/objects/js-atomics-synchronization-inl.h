@@ -127,6 +127,13 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(JSAtomicsMutex)
 
 CAST_ACCESSOR(JSAtomicsMutex)
 
+// static
+std::optional<JSSynchronizationPrimitive::WaiterQueueLockGuard>
+JSAtomicsMutex::NewAlreadyLockedWaiterQueueLockGuard(
+    std::atomic<StateT>* state) {
+  return std::optional<WaiterQueueLockGuard>(std::in_place, state, true);
+}
+
 JSAtomicsMutex::LockGuardBase::LockGuardBase(Isolate* isolate,
                                              Handle<JSAtomicsMutex> mutex,
                                              bool locked)
