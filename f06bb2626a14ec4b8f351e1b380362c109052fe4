@@ -22,6 +22,30 @@
       },
       "revId": "f06bb2626a14ec4b8f351e1b380362c109052fe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "582c746e_d518f093",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-04-02T14:01:56Z",
+      "side": 1,
+      "message": "Thanks Darius, I will change the commit message and try again",
+      "parentUuid": "3832d43a_7c20b2de",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "f06bb2626a14ec4b8f351e1b380362c109052fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
