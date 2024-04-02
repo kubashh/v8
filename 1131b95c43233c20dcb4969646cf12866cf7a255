@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "873eb092_5f862332",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-02T18:14:02Z",
+      "side": 1,
+      "message": "Can the factory return an in-place `std::optional\u003c\u003e` directly with a private constructor? Basically an even more specialized factory function just to make `LockWaiterQueueOrJSMutex` more readable.",
+      "parentUuid": "fe8d8186_005f8f49",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "307b2691_66b58a28",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 4
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Should we remove this even if we go with the factory method logic described above?",
       "parentUuid": "307b2691_66b58a28",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5adbf90a_e7641c6f",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-02T18:14:02Z",
+      "side": 1,
+      "message": "Yes, making the `state_` non-nullable seems good and unrelated to the factory thing, right? If I had to choose between the two I can live with the weird-looking constructor but I\u0027d still get rid of nullable state.",
+      "parentUuid": "80c3495c_57e06ccc",
       "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +173,24 @@
       "side": 1,
       "message": "Yes, it is possible but unlikely to happen in the sync case, but it can happen on the async case on Isolate Deinit.",
       "parentUuid": "59cadb78_7e6e5698",
+      "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b63e11fe_9017a661",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-02T18:14:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "aee998e7_77f1c6b6",
       "revId": "1131b95c43233c20dcb4969646cf12866cf7a255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
