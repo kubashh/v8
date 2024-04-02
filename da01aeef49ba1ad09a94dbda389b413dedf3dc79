@@ -151,6 +151,30 @@
       },
       "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be9b4a65_b45e74e1",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-04-02T18:00:48Z",
+      "side": 1,
+      "message": "Oh OK. I will add it, but using \u0026 instead of * so it is not possible to use it without passing a DisallowGarbageCollection.",
+      "parentUuid": "5ef2ba13_5d330f11",
+      "range": {
+        "startLine": 4392,
+        "startChar": 33,
+        "endLine": 4392,
+        "endChar": 37
+      },
+      "revId": "da01aeef49ba1ad09a94dbda389b413dedf3dc79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
