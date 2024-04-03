@@ -94,6 +94,8 @@ class JsonString final {
 struct JsonProperty {
   JsonProperty() { UNREACHABLE(); }
   explicit JsonProperty(const JsonString& string) : string(string) {}
+  JsonProperty(const JsonString& string, Handle<Object> value)
+      : string(string), value(value) {}
 
   JsonString string;
   Handle<Object> value;
@@ -321,14 +323,17 @@ class JsonParser final {
   // A JSON value is either a (double-quoted) string literal, a number literal,
   // one of "true", "false", or "null", or an object or array literal.
   template <bool should_track_json_source>
-  MaybeHandle<Object> ParseJsonValue(Handle<Object> reviver);
+  MaybeHandle<Object> ParseJsonValue();
+
+  V8_INLINE MaybeHandle<Object> ParseJsonValueRecursive();
+  MaybeHandle<Object> ParseJsonArray();
+  MaybeHandle<Object> ParseJsonObject();
 
   Handle<Object> BuildJsonObject(
       const JsonContinuation& cont,
       const SmallVector<JsonProperty>& property_stack, Handle<Map> feedback);
   Handle<Object> BuildJsonArray(
-      const JsonContinuation& cont,
-      const SmallVector<Handle<Object>>& element_stack);
+      size_t start, const SmallVector<Handle<Object>>& element_stack);
 
   static const int kMaxContextCharacters = 10;
   static const int kMinOriginalSourceLengthForContext =
@@ -395,6 +400,9 @@ class JsonParser final {
   // The parsed value's source to be passed to the reviver, if the reviver is
   // callable.
   MaybeHandle<Object> parsed_val_node_;
+
+  SmallVector<Handle<Object>> element_stack_;
+  SmallVector<JsonProperty> property_stack_;
 
   // Cached pointer to the raw chars in source. In case source is on-heap, we
   // register an UpdatePointers callback. For this reason, chars_, cursor_ and

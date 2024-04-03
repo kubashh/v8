@@ -546,12 +546,12 @@ MaybeHandle<Object> JsonParser<Char>::ParseJson(Handle<Object> reviver) {
   bool reviver_is_callable = IsCallable(*reviver);
   bool should_track_json_source =
       v8_flags.harmony_json_parse_with_source && reviver_is_callable;
-  if (should_track_json_source) {
-    ASSIGN_RETURN_ON_EXCEPTION(isolate(), result, ParseJsonValue<true>(reviver),
+  if (V8_UNLIKELY(should_track_json_source)) {
+    ASSIGN_RETURN_ON_EXCEPTION(isolate(), result, ParseJsonValue<true>(),
                                Object);
   } else {
-    ASSIGN_RETURN_ON_EXCEPTION(isolate(), result,
-                               ParseJsonValue<false>(reviver), Object);
+    ASSIGN_RETURN_ON_EXCEPTION(isolate(), result, ParseJsonValueRecursive(),
+                               Object);
   }
 
   if (!Check(JsonToken::EOS)) {
@@ -1346,9 +1346,7 @@ Handle<Object> JsonParser<Char>::BuildJsonObject(
 
 template <typename Char>
 Handle<Object> JsonParser<Char>::BuildJsonArray(
-    const JsonContinuation& cont,
-    const SmallVector<Handle<Object>>& element_stack) {
-  size_t start = cont.index;
+    size_t start, const SmallVector<Handle<Object>>& element_stack) {
   int length = static_cast<int>(element_stack.size() - start);
 
   ElementsKind kind = PACKED_SMI_ELEMENTS;
@@ -1429,13 +1427,114 @@ bool JsonParser<Char>::ParseRawJson() {
   return true;
 }
 
+template <typename Char>
+V8_INLINE MaybeHandle<Object> JsonParser<Char>::ParseJsonValueRecursive() {
+  SkipWhitespace();
+  switch (peek()) {
+    case JsonToken::NUMBER:
+      return ParseJsonNumber();
+    case JsonToken::STRING:
+      Consume(JsonToken::STRING);
+      return MakeString(ScanJsonString(false));
+
+    case JsonToken::TRUE_LITERAL:
+      ScanLiteral("true");
+      return factory()->true_value();
+    case JsonToken::FALSE_LITERAL:
+      ScanLiteral("false");
+      return factory()->false_value();
+    case JsonToken::NULL_LITERAL:
+      ScanLiteral("null");
+      return factory()->null_value();
+
+    case JsonToken::LBRACE:
+      return ParseJsonObject();
+    case JsonToken::LBRACK:
+      return ParseJsonArray();
+
+    case JsonToken::COLON:
+    case JsonToken::COMMA:
+    case JsonToken::ILLEGAL:
+    case JsonToken::RBRACE:
+    case JsonToken::RBRACK:
+    case JsonToken::EOS:
+      ReportUnexpectedCharacter(CurrentCharacter());
+      // Pop the continuation stack to correctly tear down handle scopes.
+      return MaybeHandle<Object>();
+
+    case JsonToken::WHITESPACE:
+      UNREACHABLE();
+  }
+}
+
+template <typename Char>
+MaybeHandle<Object> JsonParser<Char>::ParseJsonObject() {
+  Consume(JsonToken::LBRACE);
+  if (Check(JsonToken::RBRACE)) {
+    return factory()->NewJSObject(object_constructor_);
+  }
+
+  {
+    StackLimitCheck check(isolate_);
+    if (V8_UNLIKELY(check.HasOverflowed())) {
+      return ParseJsonValue<false>();
+    }
+  }
+
+  JsonContinuation cont(isolate_, JsonContinuation::kObjectProperty,
+                        property_stack_.size());
+  do {
+    ExpectNext(JsonToken::STRING,
+               MessageTemplate::kJsonParseExpectedPropNameOrRBrace);
+    JsonString key = ScanJsonPropertyKey(&cont);
+    ExpectNext(JsonToken::COLON,
+               MessageTemplate::kJsonParseExpectedColonAfterPropertyName);
+    Handle<Object> value;
+    if (V8_UNLIKELY(!ParseJsonValueRecursive().ToHandle(&value))) return {};
+    property_stack_.emplace_back(key, value);
+  } while (Check(JsonToken::COMMA));
+
+  Expect(JsonToken::RBRACE, MessageTemplate::kJsonParseExpectedCommaOrRBrace);
+  Handle<Object> result = BuildJsonObject(cont, property_stack_, {});
+  property_stack_.resize_no_init(cont.index);
+  return cont.scope.CloseAndEscape(result);
+}
+
+template <typename Char>
+MaybeHandle<Object> JsonParser<Char>::ParseJsonArray() {
+  Consume(JsonToken::LBRACK);
+  if (Check(JsonToken::RBRACK)) {
+    return factory()->NewJSArray(0, PACKED_SMI_ELEMENTS);
+  }
+
+  {
+    StackLimitCheck check(isolate_);
+    if (V8_UNLIKELY(check.HasOverflowed())) {
+      return ParseJsonValue<false>();
+    }
+  }
+
+  HandleScope handle_scope(isolate_);
+  size_t start = element_stack_.size();
+  do {
+    Handle<Object> value;
+    if (V8_UNLIKELY(!ParseJsonValueRecursive().ToHandle(&value))) return {};
+    element_stack_.emplace_back(value);
+  } while (Check(JsonToken::COMMA));
+
+  Expect(JsonToken::RBRACK, MessageTemplate::kJsonParseExpectedCommaOrRBrack);
+  Handle<Object> result = BuildJsonArray(start, element_stack_);
+  element_stack_.resize_no_init(start);
+  return handle_scope.CloseAndEscape(result);
+}
+
 // Parse any JSON value.
 template <typename Char>
 template <bool should_track_json_source>
-MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
+MaybeHandle<Object> JsonParser<Char>::ParseJsonValue() {
   std::vector<JsonContinuation> cont_stack;
-  SmallVector<JsonProperty> property_stack;
-  SmallVector<Handle<Object>> element_stack;
+  SmallVector<JsonProperty>& property_stack = property_stack_;
+  SmallVector<Handle<Object>>& element_stack = element_stack_;
 
   cont_stack.reserve(16);
 
@@ -1722,7 +1821,7 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           // Break to start producing the subsequent element value.
           if (V8_LIKELY(Check(JsonToken::COMMA))) break;
 
-          value = BuildJsonArray(cont, element_stack);
+          value = BuildJsonArray(cont.index, element_stack);
           Expect(JsonToken::RBRACK,
                  MessageTemplate::kJsonParseExpectedCommaOrRBrack);
           // Return the array.
