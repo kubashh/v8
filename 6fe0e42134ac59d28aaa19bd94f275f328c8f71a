@@ -16,6 +16,69 @@
       "message": "@nicohartmann@chromium.org: PTAL 😊",
       "revId": "6fe0e42134ac59d28aaa19bd94f275f328c8f71a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f6cdbe9_dbc14121",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-03T13:53:53Z",
+      "side": 1,
+      "message": "LGTM % nits",
+      "revId": "6fe0e42134ac59d28aaa19bd94f275f328c8f71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b1e7169_18a90ec8",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 6735,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-03T13:53:53Z",
+      "side": 1,
+      "message": "nit: Can\u0027t we have a more precise type for those?",
+      "range": {
+        "startLine": 6735,
+        "startChar": 15,
+        "endLine": 6735,
+        "endChar": 25
+      },
+      "revId": "6fe0e42134ac59d28aaa19bd94f275f328c8f71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aadc1849_eda3c170",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-03T13:53:53Z",
+      "side": 1,
+      "message": "nit: Maybe replace with `{}`",
+      "range": {
+        "startLine": 272,
+        "startChar": 11,
+        "endLine": 272,
+        "endChar": 29
+      },
+      "revId": "6fe0e42134ac59d28aaa19bd94f275f328c8f71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
