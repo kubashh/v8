@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f205f662_9ec93baa",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 6735,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-03T17:55:03Z",
+      "side": 1,
+      "message": "Resolving, I guess this is also an open question for the JS hierarchy. Ideally, we wouldn\u0027t need to include the whole object type definitions for figuring out the hierarchy.",
+      "parentUuid": "b85cdb68_cf6ebaa1",
+      "range": {
+        "startLine": 6735,
+        "startChar": 15,
+        "endLine": 6735,
+        "endChar": 25
+      },
+      "revId": "6fe0e42134ac59d28aaa19bd94f275f328c8f71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aadc1849_eda3c170",
