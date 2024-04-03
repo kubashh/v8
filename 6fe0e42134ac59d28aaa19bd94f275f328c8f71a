@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b85cdb68_cf6ebaa1",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 6735,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-03T14:23:44Z",
+      "side": 1,
+      "message": "I mean, I guess the ship has sailed, we already include it in `assembler.h` and there probably aren\u0027t many files including the `index.h` but not `assembler.h`.",
+      "parentUuid": "7c7b2f95_ecf3b521",
+      "range": {
+        "startLine": 6735,
+        "startChar": 15,
+        "endLine": 6735,
+        "endChar": 25
+      },
+      "revId": "6fe0e42134ac59d28aaa19bd94f275f328c8f71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aadc1849_eda3c170",
         "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
         "patchSetId": 1
