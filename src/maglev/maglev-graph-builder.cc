@@ -3617,7 +3617,11 @@ bool MaglevGraphBuilder::CanElideWriteBarrier(ValueNode* object,
 void MaglevGraphBuilder::BuildInitializeStoreTaggedField(
     InlinedAllocation* object, ValueNode* value, int offset) {
   if (InlinedAllocation* inlined_value = value->TryCast<InlinedAllocation>()) {
-    graph()->allocations().Union(object, inlined_value);
+    auto deps = graph()->allocations().find(object);
+    CHECK(deps != graph()->allocations().end());
+    deps->second.push_back(inlined_value);
+    // graph()->allocations()[inlined_value]->push_back(object);
+    // graph()->allocations().Union(object, inlined_value);
     inlined_value->AddNonEscapingUses();
   }
   BuildStoreTaggedField(object, value, offset);
@@ -8895,7 +8899,9 @@ void FastObject::ClearFields() {
 
 FastObject::FastObject(int id, compiler::JSFunctionRef constructor, Zone* zone,
                        compiler::JSHeapBroker* broker)
-    : id(id), map(constructor.initial_map(broker)) {
+    : id(id),
+      map(constructor.initial_map(broker)),
+      elements(FastElementsArray(FastFixedArray())) {
   compiler::SlackTrackingPrediction prediction =
       broker->dependencies()->DependOnInitialMapInstanceSizePrediction(
           constructor);
@@ -8903,7 +8909,6 @@ FastObject::FastObject(int id, compiler::JSFunctionRef constructor, Zone* zone,
   instance_size = prediction.instance_size();
   fields = zone->AllocateArray<FastField>(inobject_properties);
   ClearFields();
-  elements = FastFixedArray();
 }
 
 void MaglevGraphBuilder::VisitCreateRegExpLiteral() {
@@ -9138,26 +9143,27 @@ base::Optional<FastObject> MaglevGraphBuilder::TryReadBoilerplateForFastLiteral(
         !boilerplate.IsElementsTenured(boilerplate_elements)) {
       return {};
     }
-    fast_literal.elements = FastFixedArray(boilerplate_elements);
+    fast_literal.elements =
+        FastElementsArray(FastFixedArray(boilerplate_elements));
   } else {
     // Compute the elements to store first (might have effects).
     if (boilerplate_elements.IsFixedDoubleArray()) {
       int const size = FixedDoubleArray::SizeFor(elements_length);
       if (size > kMaxRegularHeapObjectSize) return {};
-      fast_literal.elements =
-          FastFixedArray(NewObjectId(), elements_length, zone(), double{});
+      fast_literal.elements = FastElementsArray(
+          FastFixedArray(NewObjectId(), elements_length, zone(), double{}));
 
       compiler::FixedDoubleArrayRef elements =
           boilerplate_elements.AsFixedDoubleArray();
       for (int i = 0; i < elements_length; ++i) {
         Float64 value = elements.GetFromImmutableFixedDoubleArray(i);
-        fast_literal.elements.double_values[i] = value;
+        fast_literal.elements.fixed_array.double_values[i] = value;
       }
     } else {
       int const size = FixedArray::SizeFor(elements_length);
       if (size > kMaxRegularHeapObjectSize) return {};
-      fast_literal.elements =
-          FastFixedArray(NewObjectId(), elements_length, zone());
+      fast_literal.elements = FastElementsArray(
+          FastFixedArray(NewObjectId(), elements_length, zone()));
 
       compiler::FixedArrayRef elements = boilerplate_elements.AsFixedArray();
       for (int i = 0; i < elements_length; ++i) {
@@ -9170,9 +9176,10 @@ base::Optional<FastObject> MaglevGraphBuilder::TryReadBoilerplateForFastLiteral(
               element_value->AsJSObject(), allocation, max_depth - 1,
               max_properties);
           if (!object.has_value()) return {};
-          fast_literal.elements.values[i] = FastField(*object);
+          fast_literal.elements.fixed_array.values[i] = FastField(*object);
         } else {
-          fast_literal.elements.values[i] = FastField(*element_value);
+          fast_literal.elements.fixed_array.values[i] =
+              FastField(*element_value);
         }
       }
     }
@@ -9205,7 +9212,8 @@ InlinedAllocation* MaglevGraphBuilder::ExtendOrReallocateCurrentAllocationBlock(
   DCHECK_GE(current_size, 0);
   InlinedAllocation* allocation =
       AddNewNode<InlinedAllocation>({current_allocation_block_}, size, value);
-  graph()->allocations().MakeSet(allocation);
+  // graph()->allocations().MakeSet(allocation);
+  graph()->allocations().emplace(allocation, zone());
   current_allocation_block_->Add(allocation);
   return allocation;
 }
@@ -9241,6 +9249,9 @@ void MaglevGraphBuilder::AddDeoptUse(FastContext context) {
 void MaglevGraphBuilder::AddDeoptUse(DeoptObject value) {
   switch (value.type) {
     case DeoptObject::kObject:
+      DCHECK_EQ(value.object.elements.type, FastElementsArray::kRuntimeValue);
+      AddDeoptUse(value.object.elements.value);
+      break;
     case DeoptObject::kFixedArray:
     case DeoptObject::kArguments:
     case DeoptObject::kMappedArgumentsElements:
@@ -9262,12 +9273,13 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastObject(
     properties[i] = BuildAllocateFastObject(object.fields[i], allocation_type);
   }
   ValueNode* elements =
-      BuildAllocateFastObject(object.elements, allocation_type);
+      BuildAllocateFastObject(object.elements.fixed_array, allocation_type);
 
   DCHECK(object.map.IsJSObjectMap());
   // TODO(leszeks): Fold allocations.
   InlinedAllocation* allocation = ExtendOrReallocateCurrentAllocationBlock(
       object.instance_size, allocation_type, DeoptObject(object));
+  allocation->value().object.elements = FastElementsArray(elements);
   AddNonEscapingUses(allocation, object.inobject_properties + 3);
   BuildStoreReceiverMap(allocation, object.map);
   AddNewNode<StoreTaggedFieldNoWriteBarrier>(

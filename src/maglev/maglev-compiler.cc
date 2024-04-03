@@ -214,6 +214,31 @@ class AnyUseMarkingProcessor {
   std::vector<Node*> stores_to_allocations_;
 
   void EscapeDependentAllocationsIfNeeded(
+      ZoneMap<InlinedAllocation*, ZoneVector<InlinedAllocation*>> allocations,
+      InlinedAllocation* value, ZoneVector<InlinedAllocation*>& deps) {
+    if (value->IsEscaping()) {
+      value->SetHasEscaped(true);
+      for (auto dep : deps) {
+        dep->ForceEscaping();
+        if (!dep->HasEscaped()) {
+          EscapeDependentAllocationsIfNeeded(allocations, dep,
+                                             allocations.find(dep)->second);
+        }
+      }
+    } else {
+      value->SetHasEscaped(false);
+    }
+  }
+
+  void EscapeDependentAllocationsIfNeeded(
+      ZoneMap<InlinedAllocation*, ZoneVector<InlinedAllocation*>>&
+          allocations) {
+    for (auto i : allocations) {
+      EscapeDependentAllocationsIfNeeded(allocations, i.first, i.second);
+    }
+  }
+
+  void EscapeDependentAllocationsIfNeeded(
       DisjointZoneSet<InlinedAllocation*>& allocations) {
     // Create a map from root to strongly connected components.
     std::unordered_map<InlinedAllocation*, std::vector<InlinedAllocation*>>

@@ -335,6 +335,11 @@ bool CheckToBooleanOnAllRoots(LocalIsolate* local_isolate) {
 
 }  // namespace
 
+size_t FastObject::GetInputLocationsArraySize() const {
+  DCHECK_EQ(elements.type, FastElementsArray::kRuntimeValue);
+  return elements.value->GetInputLocationsArraySize();
+}
+
 size_t FastContext::GetInputLocationsArraySize() const {
   size_t size = previous_context->GetInputLocationsArraySize();
   if (extension.has_value()) {

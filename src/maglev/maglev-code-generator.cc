@@ -1357,8 +1357,9 @@ class MaglevFrameTranslationBuilder {
     translation_array_builder_->StoreLiteral(GetDeoptLiteral(*value));
   }
 
-  void BuildFastObject(const FastObject& object) {
-    if (!TryDeduplicateObject(object.id)) {
+  void BuildFastObject(const FastObject& object,
+                       const InputLocation*& input_location) {
+    if (!TryDeduplicateObject(object, input_location)) {
       return;
     }
     translation_array_builder_->BeginCapturedObject(object.instance_size /
@@ -1367,13 +1368,14 @@ class MaglevFrameTranslationBuilder {
         GetDeoptLiteral(*object.map.object()));
     translation_array_builder_->StoreLiteral(
         GetDeoptLiteral(ReadOnlyRoots(local_isolate_).empty_fixed_array()));
-    BuildFastFixedArray(object.elements);
+    DCHECK_EQ(object.elements.type, FastElementsArray::kRuntimeValue);
+    BuildDeoptFrameSingleValue(object.elements.value, input_location);
     if (object.js_array_length.has_value()) {
       translation_array_builder_->StoreLiteral(
           GetDeoptLiteral(*object.js_array_length->object()));
     }
     for (int i = 0; i < object.inobject_properties; i++) {
-      BuildFieldValue(object.fields[i]);
+      BuildFieldValue(object.fields[i], input_location);
     }
   }
 
@@ -1403,14 +1405,15 @@ class MaglevFrameTranslationBuilder {
     }
   }
 
-  void BuildFieldValue(const FastField value) {
+  void BuildFieldValue(const FastField value,
+                       const InputLocation*& input_location) {
     switch (value.type) {
       case FastField::kUninitialized:
         translation_array_builder_->StoreLiteral(GetDeoptLiteral(
             ReadOnlyRoots(local_isolate_).one_pointer_filler_map()));
         break;
       case FastField::kObject:
-        BuildFastObject(value.object);
+        BuildFastObject(value.object, input_location);
         break;
       case FastField::kMutableDouble:
         BuildHeapNumber(value.mutable_double_value);
@@ -1422,7 +1425,8 @@ class MaglevFrameTranslationBuilder {
     }
   }
 
-  void BuildFastFixedArray(const FastFixedArray array) {
+  void BuildFastFixedArray(const FastFixedArray array,
+                           const InputLocation*& input_location) {
     switch (array.type) {
       case FastFixedArray::kEmpty:
         translation_array_builder_->StoreLiteral(
@@ -1442,7 +1446,7 @@ class MaglevFrameTranslationBuilder {
         translation_array_builder_->StoreLiteral(
             GetDeoptLiteral(Smi::FromInt(array.length)));
         for (int i = 0; i < array.length; i++) {
-          BuildFieldValue(array.values[i]);
+          BuildFieldValue(array.values[i], input_location);
         }
         break;
       case FastFixedArray::kDouble:
@@ -1471,10 +1475,10 @@ class MaglevFrameTranslationBuilder {
                         const InputLocation*& input_location) {
     switch (value.type) {
       case DeoptObject::kObject:
-        BuildFastObject(value.object);
+        BuildFastObject(value.object, input_location);
         break;
       case DeoptObject::kFixedArray:
-        BuildFastFixedArray(value.fixed_array);
+        BuildFastFixedArray(value.fixed_array, input_location);
         break;
       case DeoptObject::kArguments:
       case DeoptObject::kMappedArgumentsElements:

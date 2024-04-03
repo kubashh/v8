@@ -91,6 +91,8 @@ void DeepForDeoptObject(DeoptObject object, InputLocation*& input_location,
                         Function&& f) {
   switch (object.type) {
     case DeoptObject::kObject:
+      f(object.object.elements.value, input_location);
+      break;
     case DeoptObject::kFixedArray:
     case DeoptObject::kArguments:
     case DeoptObject::kMappedArgumentsElements:

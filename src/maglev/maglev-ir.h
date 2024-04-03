@@ -925,6 +925,19 @@ struct FastContext {
   base::Optional<ValueNode*> extension;
 };
 
+struct FastElementsArray {
+  explicit FastElementsArray(FastFixedArray fixed_array)
+      : type(kFixedArray), fixed_array(fixed_array) {}
+  explicit FastElementsArray(ValueNode* value)
+      : type(kRuntimeValue), value(value) {}
+
+  enum { kFixedArray, kRuntimeValue } type;
+  union {
+    FastFixedArray fixed_array;
+    ValueNode* value;
+  };
+};
+
 // Encoding of a fast allocation site boilerplate object.
 struct FastObject {
   FastObject(int id, compiler::MapRef map, Zone* zone, FastFixedArray elements)
@@ -933,13 +946,14 @@ struct FastObject {
         inobject_properties(map.GetInObjectProperties()),
         instance_size(map.instance_size()),
         fields(zone->AllocateArray<FastField>(inobject_properties)),
-        elements(elements) {
+        elements(FastElementsArray(elements)) {
     DCHECK(!map.is_dictionary_map());
     DCHECK(!map.IsInobjectSlackTrackingInProgress());
   }
   FastObject(int id, compiler::JSFunctionRef constructor, Zone* zone,
              compiler::JSHeapBroker* broker);
 
+  size_t GetInputLocationsArraySize() const;
   void ClearFields();
 
   int id;
@@ -947,7 +961,7 @@ struct FastObject {
   int inobject_properties;
   int instance_size;
   FastField* fields;
-  FastFixedArray elements;
+  FastElementsArray elements;
   compiler::OptionalObjectRef js_array_length;
 };
 
@@ -1092,6 +1106,7 @@ struct DeoptObject {
   size_t GetInputLocationsArraySize() const {
     switch (type) {
       case DeoptObject::kObject:
+        return object.GetInputLocationsArraySize();
       case DeoptObject::kNumber:
       case DeoptObject::kFixedArray:
       case DeoptObject::kArguments:

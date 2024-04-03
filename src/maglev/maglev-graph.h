@@ -124,7 +124,10 @@ class Graph final : public ZoneObject {
     return external_references_;
   }
   ZoneVector<InitialValue*>& parameters() { return parameters_; }
-  DisjointZoneSet<InlinedAllocation*>& allocations() { return allocations_; }
+  // DisjointZoneSet<InlinedAllocation*>& allocations() { return allocations_; }
+  ZoneMap<InlinedAllocation*, ZoneVector<InlinedAllocation*>>& allocations() {
+    return allocations_;
+  }
 
   RegList& register_inputs() { return register_inputs_; }
   compiler::ZoneRefMap<compiler::ObjectRef, Constant*>& constants() {
@@ -164,7 +167,8 @@ class Graph final : public ZoneObject {
   ZoneMap<uint64_t, Float64Constant*> float_;
   ZoneMap<Address, ExternalConstant*> external_references_;
   ZoneVector<InitialValue*> parameters_;
-  DisjointZoneSet<InlinedAllocation*> allocations_;
+  // DisjointZoneSet<InlinedAllocation*> allocations_;
+  ZoneMap<InlinedAllocation*, ZoneVector<InlinedAllocation*>> allocations_;
   RegList register_inputs_;
   compiler::ZoneRefMap<compiler::ObjectRef, Constant*> constants_;
   ZoneVector<OptimizedCompilationInfo::InlinedFunctionHolder>
