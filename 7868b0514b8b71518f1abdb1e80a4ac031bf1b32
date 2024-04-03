@@ -103,6 +103,24 @@
       "parentUuid": "53793879_507606cb",
       "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b2fa20e_e5072527",
+        "filename": "src/execution/messages.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-04-03T05:25:22Z",
+      "side": 1,
+      "message": "Is it ok to trigger interceptors for private symbol keys?",
+      "parentUuid": "95d0aea3_9593507b",
+      "revId": "7868b0514b8b71518f1abdb1e80a4ac031bf1b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
