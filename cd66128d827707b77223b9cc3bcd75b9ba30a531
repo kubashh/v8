@@ -63,6 +63,30 @@
       },
       "revId": "cd66128d827707b77223b9cc3bcd75b9ba30a531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "247f4045_f6af8076",
+        "filename": "test/mjsunit/regress/wasm/regress-40258436.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-04T14:17:43Z",
+      "side": 1,
+      "message": "You are so fast I didn\u0027t even have the chance to resolve this! 😄",
+      "parentUuid": "f1994b26_54f1a217",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 24
+      },
+      "revId": "cd66128d827707b77223b9cc3bcd75b9ba30a531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
