@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f884450_aec2c365",
+        "filename": "src/json/json-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-04-04T09:29:10Z",
+      "side": 1,
+      "message": "Moved the deprecated check there since that can happen dynamically. Detached happens when we don\u0027t have space in the transition array when we create the transition, so this can\u0027t happen later. Keeping it here to avoid handle creation in that case ...",
+      "parentUuid": "28461ab2_7caf6b50",
+      "range": {
+        "startLine": 1495,
+        "startChar": 21,
+        "endLine": 1495,
+        "endChar": 44
+      },
+      "revId": "699f2358dc9cdedcbf4f632884bcd6bb4f1d86af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2689962_4d60df5c",
