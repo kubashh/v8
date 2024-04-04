@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49e5e69b_fcca2a1a",
+        "filename": "src/compiler/turboshaft/builtin-call-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-04T08:54:16Z",
+      "side": 0,
+      "message": "I don\u0027t think removing this is the right fix. Either we\u0027d need to do the same for Turbofan in `wasm-compiler.cc` or we should reconsider how to fix it.\n\nI think so far our strategy in Turbofan is: Mark trapping instructions as `Opterator::kNoThrow` as while they might throw, their exception cannot be caught, so they don\u0027t need the `IfException` continuation.\nIn the mid term this should disappear as these `Operator::Properties` are a turbofan artifact and somewhat repeat the `OpEffects` below in a different way.\nWhat happens if we add `CanLeaveCurrentFunction()` to the `kEffects` below instead? Does it work now? If not, we might have to reconsider our effects we set on those calls in turboshaft.",
+      "range": {
+        "startLine": 619,
+        "startChar": 29,
+        "endLine": 619,
+        "endChar": 47
+      },
+      "revId": "e0be9104a43fdb8c234e918078949c2a4f00ed11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
