@@ -22,6 +22,30 @@
       },
       "revId": "e0be9104a43fdb8c234e918078949c2a4f00ed11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "249c0867_1faa2ade",
+        "filename": "src/compiler/turboshaft/builtin-call-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-04T13:52:25Z",
+      "side": 0,
+      "message": "Thanks! I changed it to `CanLeaveCurrentFunction ()` and it fixes the problem.",
+      "parentUuid": "49e5e69b_fcca2a1a",
+      "range": {
+        "startLine": 619,
+        "startChar": 29,
+        "endLine": 619,
+        "endChar": 47
+      },
+      "revId": "e0be9104a43fdb8c234e918078949c2a4f00ed11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
