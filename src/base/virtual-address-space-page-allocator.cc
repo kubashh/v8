@@ -73,5 +73,10 @@ bool VirtualAddressSpacePageAllocator::DecommitPages(void* address,
   return vas_->DecommitPages(reinterpret_cast<Address>(address), size);
 }
 
+bool VirtualAddressSpacePageAllocator::MakeImmutable(void* address,
+                                                     size_t size) {
+  UNREACHABLE();
+}
+
 }  // namespace base
 }  // namespace v8

@@ -220,5 +220,9 @@ bool BoundedPageAllocator::DecommitPages(void* address, size_t size) {
   return page_allocator_->DecommitPages(address, size);
 }
 
+bool BoundedPageAllocator::MakeImmutable(void* address, size_t size) {
+  return page_allocator_->MakeImmutable(address, size);
+}
+
 }  // namespace base
 }  // namespace v8

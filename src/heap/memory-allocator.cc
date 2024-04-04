@@ -32,6 +32,7 @@ void DeleteMemoryChunk(MemoryChunkMetadata* metadata) {
   DCHECK(!chunk->InReadOnlySpace());
   // The Metadata contains a VirtualMemory reservation and the destructor will
   // release the MemoryChunk.
+  RwxMemoryWriteScope scope("Write access for releasing the memory chunk");
   if (chunk->IsLargePage()) {
     delete reinterpret_cast<LargePageMetadata*>(metadata);
   } else {
