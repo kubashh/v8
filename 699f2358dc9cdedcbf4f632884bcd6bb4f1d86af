@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28461ab2_7caf6b50",
+        "filename": "src/json/json-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1495,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-04-04T08:19:19Z",
+      "side": 1,
+      "message": "The recursive call here can invalidate the `feedback` passed as argument if I am not mistaken.\nThe checks for `detached`/`deprecated` should probably be moved to `BuildJsonObject`?",
+      "range": {
+        "startLine": 1495,
+        "startChar": 21,
+        "endLine": 1495,
+        "endChar": 44
+      },
+      "revId": "699f2358dc9cdedcbf4f632884bcd6bb4f1d86af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2689962_4d60df5c",
+        "filename": "src/json/json-parser.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-04-04T08:19:19Z",
+      "side": 1,
+      "message": "nit: `feedback_` is not used.",
+      "range": {
+        "startLine": 405,
+        "startChar": 2,
+        "endLine": 405,
+        "endChar": 8
+      },
+      "revId": "699f2358dc9cdedcbf4f632884bcd6bb4f1d86af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
