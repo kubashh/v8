@@ -97,7 +97,8 @@ class CodeRange final : public VirtualMemoryCage {
     return embedded_blob_code_copy_.load(std::memory_order_acquire);
   }
 
-  bool InitReservation(v8::PageAllocator* page_allocator, size_t requested);
+  bool InitReservation(v8::PageAllocator* page_allocator, size_t requested,
+                       bool immutable);
 
   void Free();
 
@@ -132,6 +133,8 @@ class CodeRange final : public VirtualMemoryCage {
   // When sharing a CodeRange among Isolates, calls to RemapEmbeddedBuiltins may
   // race during Isolate::Init.
   base::Mutex remap_embedded_builtins_mutex_;
+
+  bool immutable_ = false;
 };
 
 }  // namespace internal
