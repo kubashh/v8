@@ -33,6 +33,24 @@
       "message": "Nit: Would the name `context_worklists` make more sense here? It\u0027s an array of local worklists but each one is the local worklist for a specific context. Wdyt?",
       "revId": "6f2cfafe9100c920f0395a433f84bd7315d10a18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45efd14f_44ea0082",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-04-04T09:28:20Z",
+      "side": 1,
+      "message": "I agree. That would give more clarity. Thanks!",
+      "parentUuid": "bbc6e3f4_a52826c9",
+      "revId": "6f2cfafe9100c920f0395a433f84bd7315d10a18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
