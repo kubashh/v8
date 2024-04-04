@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd7544a5_783b9d2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-04T09:05:38Z",
+      "side": 1,
+      "message": "LGTM, thanks",
+      "revId": "f3b33113f78ddcfd52e13eefaed0b965744dff06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da01f450_57d72e3c",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "I thought `V\u003cAny\u003e::Cast` casts an `OpIndex` into a `V\u003cAny\u003e`. Alternatively `graph.PreviousIndex` could also return a `V\u003cAny\u003e` instead of an `OpIndex`.\n\nI don\u0027t think allowing comparisons of different `V` types would help much, shouldn\u0027t they typically have the same type?",
       "parentUuid": "da01f450_57d72e3c",
+      "range": {
+        "startLine": 1783,
+        "startChar": 12,
+        "endLine": 1783,
+        "endChar": 24
+      },
+      "revId": "f3b33113f78ddcfd52e13eefaed0b965744dff06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b6fb33_7364bfe8",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1783,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-04T09:05:38Z",
+      "side": 1,
+      "message": "I think `graph.PreviousIndex` returning a plain `OpIndex` is fine and casting here to `V\u003cAny\u003e` is fine here, too. I was just thinking in general that we might want to be able to compare indices regardless of type (I think this wouldn\u0027t harm), but we can think about this another time and consider in a follow up. I think it\u0027s rarely necessary anyway.",
+      "parentUuid": "567d393e_f0be4c65",
       "range": {
         "startLine": 1783,
         "startChar": 12,
