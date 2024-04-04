@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da01f450_57d72e3c",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1783,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-04T08:22:51Z",
+      "side": 1,
+      "message": "Do you think we should allow comparison of different `V` types to make this nicer?",
+      "range": {
+        "startLine": 1783,
+        "startChar": 12,
+        "endLine": 1783,
+        "endChar": 24
+      },
+      "revId": "f3b33113f78ddcfd52e13eefaed0b965744dff06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
