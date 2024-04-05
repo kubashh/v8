@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5e7c9b9_3ce67b9e",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "If that is an open question, I\u0027d feel inclined not to make it a dependency.\n\nThose implications magically add flags. All the `--trace-turbo*` flags don\u0027t imply that we have turbofan enabled, they just don\u0027t do anything if turbofan is disabled.\nI don\u0027t think there is anything wrong with that. I could extend the comment to `(turboshaft only)`?\n\nIn the end it boils down to: What\u0027s more confusing?\nA) Passing `--experimental-wasm-deopt` and it doesn\u0027t do anything?\nB) Passing `--experimental-wasm-deopt` and suddenly every single wasm function gets compiled with turboshaft instead of turbofan.",
+      "parentUuid": "4dbba4a2_280fc2e6",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1ec6414_c6b7dec1",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 5
@@ -118,6 +136,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b1762bc_234fdc99",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2400,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "Removed the `Generate` suffix and moved it to one of the multiple `private:` markers. It\u0027s somewhat difficult to see where we are in the file, How do people feel if we moved the implementations out of the class definition? (I can do that in a separate CL, it would probably touch everything though due to less indentation...) With nested classes spanning over hundreds of lines it isn\u0027t that easy to read.",
+      "parentUuid": "30f05746_329f959d",
+      "range": {
+        "startLine": 2400,
+        "startChar": 7,
+        "endLine": 2400,
+        "endChar": 25
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a992a3fe_d5ed4b91",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 5
@@ -129,6 +171,24 @@
       "writtenOn": "2024-04-05T08:18:29Z",
       "side": 1,
       "message": "So the first input is assumed to be a \"closure\"? Can we say that more explicitly, like `// The first input is the closure for JS; Wasm adds the WasmTrustedInstanceData instead.`?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0398a3d8_b1dd8d97",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "I took over your comment and added one more sentence as while we add the `WasmTrustedInstance` we really don\u0027t care about this value. We have other cases of `FrameStateType`s that also don\u0027t have a closure and they can just set this to `undefined` and be done with it but we don\u0027t have access to the heap / the `undefined` value. The code generator will not even see the value (as we\u0027re going to tell it \"our frame type doesn\u0027t have a closure\" but the instruction selector will still \"consume\" it: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/backend/instruction-selector.cc;l\u003d1133",
+      "parentUuid": "a992a3fe_d5ed4b91",
       "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +206,30 @@
       "writtenOn": "2024-04-04T15:30:46Z",
       "side": 1,
       "message": "nit: Is this debugging leftovers?",
+      "range": {
+        "startLine": 2432,
+        "startChar": 6,
+        "endLine": 2432,
+        "endChar": 66
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f26a022_a9d0188c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2432,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "Oops, yes, that\u0027s a leftover.",
+      "parentUuid": "836b809e_666ff534",
       "range": {
         "startLine": 2432,
         "startChar": 6,
@@ -179,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "376c3536_874ff788",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2436,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "There\u0027s nothing more C++\u0027y than iterators that are just raw pointers...\nBut yeah, let\u0027s use the nicer for each. 😊",
+      "parentUuid": "23c63d58_b48c57f6",
+      "range": {
+        "startLine": 2435,
+        "startChar": 0,
+        "endLine": 2436,
+        "endChar": 66
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43d80a53_e8675a73",
@@ -192,6 +300,30 @@
       "writtenOn": "2024-04-05T08:18:29Z",
       "side": 1,
       "message": "a few nits:\n- actual constants (using the `kFoo` syntax) should be constexpr,\n- the `The` part seems weird; these seem to be counts,\n- should we have a single `constexpr size_t kExtraLocals \u003d 3; // closure, context, instance`?",
+      "range": {
+        "startLine": 2442,
+        "startChar": 0,
+        "endLine": 2444,
+        "endChar": 38
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cd6d338_d71d2a70",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2444,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "The naming is taken from https://source.chromium.org/chromium/chromium/src/+/main:v8/src/deoptimizer/translated-state.cc;l\u003d851 . I don\u0027t see the benefit of the more verbose `constexpr` for literals.\n\nFrom the C++ style guide naming rules:\n`const int kDaysInAWeek \u003d 7;`\nso I don\u0027t think the `k` is limited to constexpr.\n\nChanged to your proposal.",
+      "parentUuid": "43d80a53_e8675a73",
       "range": {
         "startLine": 2442,
         "startChar": 0,
@@ -225,6 +357,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37d773cf_a688fb27",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d713ccaf_8c538021",
+      "range": {
+        "startLine": 2450,
+        "startChar": 4,
+        "endLine": 2450,
+        "endChar": 8
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16283759_8d8e3132",
@@ -238,6 +394,30 @@
       "writtenOn": "2024-04-05T08:18:29Z",
       "side": 1,
       "message": "`auto*`",
+      "range": {
+        "startLine": 2455,
+        "startChar": 4,
+        "endLine": 2455,
+        "endChar": 8
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e556493_fe6f8b02",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16283759_8d8e3132",
       "range": {
         "startLine": 2455,
         "startChar": 4,
@@ -271,6 +451,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72c1810f_bfc7deb9",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cfd880f_c4a46be5",
+      "range": {
+        "startLine": 2482,
+        "startChar": 50,
+        "endLine": 2482,
+        "endChar": 60
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89fdbba1_ba1bd13a",
@@ -284,6 +488,24 @@
       "writtenOn": "2024-04-05T08:18:29Z",
       "side": 1,
       "message": "Ack, I think this would make sense to be consistent with other builtin calls. I think it also generates smaller code, right?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c229ee5_8c85e155",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "I am not sure as this is only used for deopt on 32 bit platforms (which is also a reason why I feel this is fine as a `TODO` for later on without worrying too much about it.)",
+      "parentUuid": "89fdbba1_ba1bd13a",
       "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -305,6 +527,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c149f877_2ca2b6e2",
+        "filename": "test/mjsunit/wasm/deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bada41ef_5c53b878",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e1b843b_5afbe1d3",
@@ -318,6 +558,24 @@
       "writtenOn": "2024-04-05T08:18:29Z",
       "side": 1,
       "message": "This is actually a TODO to extend the test later, right?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eab008b_a3bb6b9d",
+        "filename": "test/mjsunit/wasm/deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:06:33Z",
+      "side": 1,
+      "message": "More as a note to the reviewers and my future self. Made it a `TODO` to make it clear that this is going to change (and to ensure I don\u0027t forget. 😊)",
+      "parentUuid": "9e1b843b_5afbe1d3",
       "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
