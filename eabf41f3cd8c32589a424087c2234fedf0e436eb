@@ -16,6 +16,29 @@
       "message": "Thanks a lot for the thorough reviews! 😊",
       "revId": "eabf41f3cd8c32589a424087c2234fedf0e436eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24c65bd8_62d03884",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4945,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T09:24:25Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 4945,
+        "startChar": 42,
+        "endLine": 4945,
+        "endChar": 47
+      },
+      "revId": "eabf41f3cd8c32589a424087c2234fedf0e436eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

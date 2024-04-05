@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb528ef1_86075e97",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T09:24:25Z",
+      "side": 1,
+      "message": "I think `--trace-turbo*` is a bit different, as that\u0027s not supposed to change anything about the compilation. I see your point though, but I don\u0027t really agree here. If the user enables a feature which only makes sense together with another feature, then we historically added an implication for such a dependency. This would also disallow combinations like `--wasm-deopt --no-wasm-turboshaft`. So I\u0027d prefer to stick to that idea, and if we want to change this, then we should discuss this with the overall team and document the new guidelines somewhere.",
+      "parentUuid": "a5e7c9b9_3ce67b9e",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1ec6414_c6b7dec1",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 5
@@ -148,6 +166,30 @@
       "side": 1,
       "message": "Removed the `Generate` suffix and moved it to one of the multiple `private:` markers. It\u0027s somewhat difficult to see where we are in the file, How do people feel if we moved the implementations out of the class definition? (I can do that in a separate CL, it would probably touch everything though due to less indentation...) With nested classes spanning over hundreds of lines it isn\u0027t that easy to read.",
       "parentUuid": "30f05746_329f959d",
+      "range": {
+        "startLine": 2400,
+        "startChar": 7,
+        "endLine": 2400,
+        "endChar": 25
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ba4b09e_00c7c441",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2400,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T09:24:25Z",
+      "side": 1,
+      "message": "Ack, that might improve readability even though it requires a separate declaration for each method.\nI am a bit undecided, but if you think it helps then feel free to do it.",
+      "parentUuid": "2b1762bc_234fdc99",
       "range": {
         "startLine": 2400,
         "startChar": 7,
@@ -324,6 +366,30 @@
       "side": 1,
       "message": "The naming is taken from https://source.chromium.org/chromium/chromium/src/+/main:v8/src/deoptimizer/translated-state.cc;l\u003d851 . I don\u0027t see the benefit of the more verbose `constexpr` for literals.\n\nFrom the C++ style guide naming rules:\n`const int kDaysInAWeek \u003d 7;`\nso I don\u0027t think the `k` is limited to constexpr.\n\nChanged to your proposal.",
       "parentUuid": "43d80a53_e8675a73",
+      "range": {
+        "startLine": 2442,
+        "startChar": 0,
+        "endLine": 2444,
+        "endChar": 38
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bf94ac6_572e9dd5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2444,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T09:24:25Z",
+      "side": 1,
+      "message": "Ah, interesting, I really thought the style guide mandates `constexpr`. It requires that the \"value is fixed for the duration of the program\", which `constexpr` would ensure automatically, but maybe they want to allow constants that are initialized via an expression that\u0027s not recognized as a constant.",
+      "parentUuid": "3cd6d338_d71d2a70",
       "range": {
         "startLine": 2442,
         "startChar": 0,
@@ -512,6 +578,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2812431_ad58b472",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T09:24:25Z",
+      "side": 1,
+      "message": "Wait, if we don\u0027t call via the table, wouldn\u0027t this break relocation? I.e. after deserialization in another process the call target might be wrong?",
+      "parentUuid": "6c229ee5_8c85e155",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bada41ef_5c53b878",
         "filename": "test/mjsunit/wasm/deopt.js",
         "patchSetId": 5
@@ -541,6 +625,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "bada41ef_5c53b878",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f71b5b9f_72fe6c8c",
+        "filename": "test/mjsunit/wasm/deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T09:24:25Z",
+      "side": 1,
+      "message": "Please actually do it :)",
+      "parentUuid": "c149f877_2ca2b6e2",
       "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
