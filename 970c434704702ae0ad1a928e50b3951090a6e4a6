@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "71b18f12_72932a05",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-05T16:30:06Z",
+      "side": 1,
+      "message": "To prevent something like the last case I described [in this comment](https://bugs.chromium.org/p/v8/issues/detail?id\u003d14704#c1) from happening. I\u0027m not 100% sure that it can happen, but it also seems like the more correct thing to do since we use release stores and this is not a performance critical path.",
+      "parentUuid": "43d62e56_5880e1f5",
+      "revId": "970c434704702ae0ad1a928e50b3951090a6e4a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c2d82584_1c340487",
