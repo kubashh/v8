@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21ea427_6379f35e",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:46:54Z",
+      "side": 1,
+      "message": "OK, I don\u0027t have a very strong opinion here, adding an implication now.",
+      "parentUuid": "bb528ef1_86075e97",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1ec6414_c6b7dec1",
@@ -596,6 +614,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50955789_65b1451f",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:46:54Z",
+      "side": 1,
+      "message": "I think you have a point here. I thought about \"cross-isolates\" and assumed \"well, the builtins are always at the same address as they are shared\". (They are shared within the whole process, right?)\nSo I guess, this is less of a `TODO` and more of a `FIXME`. 😊\nWe\u0027ll also run into `UNREACHABLE` here, I guess:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-serialization.cc;l\u003d894\nI know that we have serialization/deserialization tests. Do they cover multi-process cases? (Right now we can\u0027t properly test it as we can\u0027t call the deopt builtin yet.",
+      "parentUuid": "a2812431_ad58b472",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bada41ef_5c53b878",
         "filename": "test/mjsunit/wasm/deopt.js",
         "patchSetId": 5
@@ -643,6 +679,24 @@
       "side": 1,
       "message": "Please actually do it :)",
       "parentUuid": "c149f877_2ca2b6e2",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "add579b9_1093bac2",
+        "filename": "test/mjsunit/wasm/deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T09:46:54Z",
+      "side": 1,
+      "message": "Oh, I somehow associated your request with the note lines...\nI don\u0027t want to move this line up. I can replicate it though. 😊\nThis line ensures that we didn\u0027t deopt after calling the optimized function with the same call target.",
+      "parentUuid": "f71b5b9f_72fe6c8c",
       "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
