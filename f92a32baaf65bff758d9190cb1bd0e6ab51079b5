@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "663c92ed_ae4a99fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T12:26:34Z",
+      "side": 1,
+      "message": "Thanks again! Please note that the +1s were invalidated due to the changed list of touched files in patchset 8.",
+      "revId": "f92a32baaf65bff758d9190cb1bd0e6ab51079b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
