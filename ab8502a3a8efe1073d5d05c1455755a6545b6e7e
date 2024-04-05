@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "910c7812_f7aa8fad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-05T15:04:51Z",
+      "side": 1,
+      "message": "PTAL! The bot that failed with the initial land seems flaky (and already had a similar failures a few builds before and turned green ever before the revert), so I haven\u0027t changed anything.",
+      "revId": "ab8502a3a8efe1073d5d05c1455755a6545b6e7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
