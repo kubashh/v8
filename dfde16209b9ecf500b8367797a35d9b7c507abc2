@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51fa1974_c6cca1fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "Nice first step! LGTM with a number of minor comments.",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dbba4a2_280fc2e6",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "Should we add an implication to `turboshaft_wasm`?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1ec6414_c6b7dec1",
@@ -60,6 +94,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30f05746_329f959d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2400,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "+1, and the `Generate` prefix is redundant (all methods generate the graph to do stuff instead of doing the stuff directly).",
+      "parentUuid": "d1ec6414_c6b7dec1",
+      "range": {
+        "startLine": 2400,
+        "startChar": 7,
+        "endLine": 2400,
+        "endChar": 25
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a992a3fe_d5ed4b91",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "So the first input is assumed to be a \"closure\"? Can we say that more explicitly, like `// The first input is the closure for JS; Wasm adds the WasmTrustedInstanceData instead.`?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "836b809e_666ff534",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 5
@@ -77,6 +152,172 @@
         "endLine": 2432,
         "endChar": 66
       },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23c63d58_b48c57f6",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2436,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "Can we make this more C++\u0027y , à la `for (const Value\u0026 arg : base::VectorOf(args, callee_sig-\u003eparameter_count()) {`?",
+      "range": {
+        "startLine": 2435,
+        "startChar": 0,
+        "endLine": 2436,
+        "endChar": 66
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d80a53_e8675a73",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2444,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "a few nits:\n- actual constants (using the `kFoo` syntax) should be constexpr,\n- the `The` part seems weird; these seem to be counts,\n- should we have a single `constexpr size_t kExtraLocals \u003d 3; // closure, context, instance`?",
+      "range": {
+        "startLine": 2442,
+        "startChar": 0,
+        "endLine": 2444,
+        "endChar": 38
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d713ccaf_8c538021",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "`auto*`",
+      "range": {
+        "startLine": 2450,
+        "startChar": 4,
+        "endLine": 2450,
+        "endChar": 8
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16283759_8d8e3132",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "`auto*`",
+      "range": {
+        "startLine": 2455,
+        "startChar": 4,
+        "endLine": 2455,
+        "endChar": 8
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cfd880f_c4a46be5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "Other places make this more explicit via (`use_deopt ? 0 : 1`).",
+      "range": {
+        "startLine": 2482,
+        "startChar": 50,
+        "endLine": 2482,
+        "endChar": 60
+      },
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89fdbba1_ba1bd13a",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "Ack, I think this would make sense to be consistent with other builtin calls. I think it also generates smaller code, right?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bada41ef_5c53b878",
+        "filename": "test/mjsunit/wasm/deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "Can we move this one line up, after the explicit tier up?",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e1b843b_5afbe1d3",
+        "filename": "test/mjsunit/wasm/deopt.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T08:18:29Z",
+      "side": 1,
+      "message": "This is actually a TODO to extend the test later, right?",
       "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
