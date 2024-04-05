@@ -359,6 +359,13 @@ void WasmCode::Validate() const {
         CHECK(contains(target));
         break;
       }
+      case RelocInfo::OFF_HEAP_TARGET:
+        // TODO(mliedtke): Reconsider whether we might want to route calls to
+        // the eager deopt builtin through the wasm stub call table.
+        CHECK_WITH_MSG(v8_flags.wasm_deopt,
+                       "Off-heap targets are exclusively used by the "
+                       "experimental deopt feature");
+        break;
       case RelocInfo::EXTERNAL_REFERENCE:
       case RelocInfo::CONST_POOL:
       case RelocInfo::VENEER_POOL:
