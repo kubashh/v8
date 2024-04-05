@@ -16,6 +16,23 @@
       "message": "Oops, I changed the commit message and overwrote my own +1.",
       "revId": "e2f23bb9e6267126fd2aa4c9ac01beba133f0152",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e967aab2_57e62033",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-05T16:55:08Z",
+      "side": 1,
+      "message": "Still lgtm",
+      "revId": "e2f23bb9e6267126fd2aa4c9ac01beba133f0152",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
