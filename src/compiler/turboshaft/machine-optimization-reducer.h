@@ -1214,9 +1214,9 @@ class MachineOptimizationReducer : public Next {
     }
   }
 
-  OpIndex REDUCE(OverflowCheckedBinop)(OpIndex left, OpIndex right,
-                                       OverflowCheckedBinopOp::Kind kind,
-                                       WordRepresentation rep) {
+  V<Tuple<Word, Word32>> REDUCE(OverflowCheckedBinop)(
+      V<Word> left, V<Word> right, OverflowCheckedBinopOp::Kind kind,
+      WordRepresentation rep) {
     if (ShouldSkipOptimizationStep()) {
       return Next::ReduceOverflowCheckedBinop(left, right, kind, rep);
     }
@@ -1273,7 +1273,7 @@ class MachineOptimizationReducer : public Next {
     // left - 0  =>  (left, false)
     if (kind == any_of(Kind::kSignedAdd, Kind::kSignedSub) &&
         matcher.MatchZero(right)) {
-      return __ Tuple(left, right);
+      return __ Tuple(left, __ Word32Constant(0));
     }
 
     if (kind == Kind::kSignedMul) {
@@ -1304,7 +1304,7 @@ class MachineOptimizationReducer : public Next {
       if (OpIndex x; matcher.MatchConstantShiftRightArithmeticShiftOutZeros(
                          left, &x, WordRepresentation::Word32(), &amount) &&
                      amount == 1) {
-        return __ Tuple(x, __ Word32Constant(0));
+        return __ Tuple(V<Word>::Cast(x), __ Word32Constant(0));
       }
     }
 
