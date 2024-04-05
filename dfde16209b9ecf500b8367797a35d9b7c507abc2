@@ -648,6 +648,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb295733_1e3d6bc1",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-05T10:46:12Z",
+      "side": 1,
+      "message": "Yeah, great that you noticed it here but once I replaced it with `WASM_STUB_CALL` for the 32 bit platforms* we don\u0027t need to be able to test it in V8 as we don\u0027t add new relocation kinds. (on x64 we use the root register to load the builtin, so that sounds like a very reasonable choice also for wasm. On arm64 for some reason we emit a jump to a label and then that label calls the builtin via a root register offset. I\u0027d assume that maybe those calls have different sizes depending on the offset (?) while we need all \"deoptimization exits\" to have fixed size.)\n\n(*) While doing this I noticed that I misremembered it, it\u0027s only ia32 that does the OFF_HEAP_TARGET, arm32 uses the root register as well.",
+      "parentUuid": "3b8d5722_73d1c3d5",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bada41ef_5c53b878",
