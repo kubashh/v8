@@ -632,6 +632,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b8d5722_73d1c3d5",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-05T10:17:25Z",
+      "side": 1,
+      "message": "Good point, I think we can\u0027t really test this in V8. Or at least we would need a very special test setup where we explicitly spawn a new process and send the serialized data there.\nCurrently we would only see failures in chromium.",
+      "parentUuid": "50955789_65b1451f",
+      "revId": "dfde16209b9ecf500b8367797a35d9b7c507abc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bada41ef_5c53b878",
         "filename": "test/mjsunit/wasm/deopt.js",
         "patchSetId": 5
