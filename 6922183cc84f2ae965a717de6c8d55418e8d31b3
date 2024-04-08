@@ -68,6 +68,24 @@
       "parentUuid": "f7138cd4_624d1d7e",
       "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc17c050_f2e91c5a",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7951,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-08T12:22:44Z",
+      "side": 1,
+      "message": "We got another (duplicate) report of this, so landing this now to fix the issue. Let me know if you have an idea how to make this a bit nicer.",
+      "parentUuid": "6bc40fe6_369ffc04",
+      "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
