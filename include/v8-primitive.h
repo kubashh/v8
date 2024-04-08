@@ -190,7 +190,8 @@ class V8_EXPORT String : public Name {
     // Used by WriteUtf8 to replace orphan surrogate code units with the
     // unicode replacement character. Needs to be set to guarantee valid UTF-8
     // output.
-    REPLACE_INVALID_UTF8 = 8
+    REPLACE_INVALID_UTF8 = 8,
+    NO_FLATTEN = 16,
   };
 
   // 16-bit character codes.
