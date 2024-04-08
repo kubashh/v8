@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a52d2c4f_77e085c0",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-08T14:38:22Z",
+      "side": 1,
+      "message": "Done. Maybe we should get rid of some of these different versions at some point.",
+      "parentUuid": "d1709cf6_f1f5b199",
+      "range": {
+        "startLine": 1898,
+        "startChar": 11,
+        "endLine": 1899,
+        "endChar": 73
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "213ee5c2_9981198a",
@@ -72,6 +96,30 @@
       "writtenOn": "2024-04-08T13:43:31Z",
       "side": 1,
       "message": "Please add a comment explaining what this class is and why it exists.",
+      "range": {
+        "startLine": 714,
+        "startChar": 6,
+        "endLine": 714,
+        "endChar": 20
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "180ea0ca_fee82459",
+        "filename": "src/compiler/turboshaft/index.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-08T14:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "213ee5c2_9981198a",
       "range": {
         "startLine": 714,
         "startChar": 6,
@@ -107,6 +155,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee713f2f_7cffb702",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-08T14:38:22Z",
+      "side": 1,
+      "message": "Yes, I couldn\u0027t find an easy way around this. We could think about introducing a `Word64ResemblingWord32Pair` and have this as another member of the `Word` union. But I don\u0027t know if this makes things much better and since all this \"hackery\" is very local to this reducer, I think it\u0027s not critical.",
+      "parentUuid": "6ec26149_751004db",
+      "range": {
+        "startLine": 217,
+        "startChar": 17,
+        "endLine": 217,
+        "endChar": 32
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd58dbf1_100b7993",
         "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
         "patchSetId": 7
@@ -118,6 +190,30 @@
       "writtenOn": "2024-04-08T13:43:31Z",
       "side": 1,
       "message": "`V\u003cWord32\u003e x` here so that yèou don\u0027t need the Cast afterwards maybe?",
+      "range": {
+        "startLine": 1304,
+        "startChar": 10,
+        "endLine": 1304,
+        "endChar": 19
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cddab481_cfc07c05",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-08T14:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd58dbf1_100b7993",
       "range": {
         "startLine": 1304,
         "startChar": 10,
@@ -141,6 +237,30 @@
       "writtenOn": "2024-04-08T13:43:31Z",
       "side": 1,
       "message": "Remove?",
+      "range": {
+        "startLine": 1048,
+        "startChar": 51,
+        "endLine": 1048,
+        "endChar": 74
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19cdded0_e9667809",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-08T14:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c7468f8_2a8582ec",
       "range": {
         "startLine": 1048,
         "startChar": 51,
