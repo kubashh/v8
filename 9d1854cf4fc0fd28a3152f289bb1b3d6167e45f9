@@ -37,6 +37,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad30d476_2305fb35",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-04-08T10:06:02Z",
+      "side": 1,
+      "message": "Typo.",
+      "range": {
+        "startLine": 209,
+        "startChar": 72,
+        "endLine": 210,
+        "endChar": 9
+      },
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2719c3a_5bb85228",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-04-08T10:06:02Z",
+      "side": 1,
+      "message": "Please mention that it\u0027s not going to be possible to pass shared JS objects across IsolateGroup boundary.",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dc73deed_a4e6f7fb",
         "filename": "include/v8-isolate.h",
         "patchSetId": 2
@@ -65,6 +105,24 @@
       "writtenOn": "2024-03-12T16:11:42Z",
       "side": 1,
       "message": "As an embedder, I think I\u0027d rather have this API CHECK-fail if V8 is not built with multi-cage enabled. I wouldn\u0027t want to silently get a single group when I intended to get multiple -- I\u0027d rather V8 tell me loudly that I have built it wrong, so I can go fix that.\n\nAlso perhaps in the future there will be settings that can be passed to customize the group, e.g. maybe passing in a custom PageAllocator instance or something like that. In that case falling back to the global group would mean ignoring any such settings, which doesn\u0027t feel right.",
+      "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70acb271_97a65c4b",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-04-08T10:06:02Z",
+      "side": 1,
+      "message": "+1 to be loud.",
+      "parentUuid": "273d4b42_dd27f89b",
       "revId": "9d1854cf4fc0fd28a3152f289bb1b3d6167e45f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
