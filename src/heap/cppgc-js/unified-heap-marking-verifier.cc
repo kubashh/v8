@@ -21,7 +21,8 @@ class UnifiedHeapVerificationVisitor final : public JSVisitor {
       : JSVisitor(cppgc::internal::VisitorFactory::CreateKey()),
         state_(state) {}
 
-  void Visit(const void*, cppgc::TraceDescriptor desc) final {
+  void Visit(const void*, cppgc::TraceDescriptor desc,
+             const char* member_name) final {
     state_.VerifyMarked(desc.base_object_payload);
   }
 

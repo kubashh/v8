@@ -26,7 +26,7 @@ class V8_EXPORT_PRIVATE MarkingVisitorBase : public VisitorBase {
   ~MarkingVisitorBase() override = default;
 
  protected:
-  void Visit(const void*, TraceDescriptor) final;
+  void Visit(const void*, TraceDescriptor, const char* member_name) final;
   void VisitMultipleUncompressedMember(const void*, size_t,
                                        TraceDescriptorCallback) final;
 #if defined(CPPGC_POINTER_COMPRESSION)

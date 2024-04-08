@@ -42,7 +42,7 @@ class V8_EXPORT_PRIVATE UnifiedHeapMarkingVisitorBase : public JSVisitor {
 
  protected:
   // C++ handling.
-  void Visit(const void*, TraceDescriptor) final;
+  void Visit(const void*, TraceDescriptor, const char* member_name) final;
   void VisitMultipleUncompressedMember(const void*, size_t,
                                        TraceDescriptorCallback) final;
 #if defined(CPPGC_POINTER_COMPRESSION)

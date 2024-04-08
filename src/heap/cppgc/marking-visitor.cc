@@ -18,7 +18,8 @@ MarkingVisitorBase::MarkingVisitorBase(HeapBase& heap,
                                        BasicMarkingState& marking_state)
     : marking_state_(marking_state) {}
 
-void MarkingVisitorBase::Visit(const void* object, TraceDescriptor desc) {
+void MarkingVisitorBase::Visit(const void* object, TraceDescriptor desc,
+                               const char* member_name) {
   marking_state_.MarkAndPush(object, desc);
 }
 

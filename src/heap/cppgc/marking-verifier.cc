@@ -153,7 +153,7 @@ class VerificationVisitor final : public cppgc::Visitor {
   explicit VerificationVisitor(VerificationState& state)
       : cppgc::Visitor(VisitorFactory::CreateKey()), state_(state) {}
 
-  void Visit(const void*, TraceDescriptor desc) final {
+  void Visit(const void*, TraceDescriptor desc, const char* member_name) final {
     state_.VerifyMarked(desc.base_object_payload);
   }
 

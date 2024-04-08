@@ -148,7 +148,8 @@ class DispatchingVisitor : public VisitorBase {
   }
 
  protected:
-  void Visit(const void* t, TraceDescriptor desc) override {
+  void Visit(const void* t, TraceDescriptor desc,
+             const char* member_name) override {
     desc.callback(this, desc.base_object_payload);
   }
 };
@@ -161,7 +162,8 @@ class CheckingVisitor final : public DispatchingVisitor {
       : object_(object), payload_(payload) {}
 
  protected:
-  void Visit(const void* t, TraceDescriptor desc) final {
+  void Visit(const void* t, TraceDescriptor desc,
+             const char* member_name) final {
     EXPECT_EQ(object_, t);
     EXPECT_EQ(payload_, desc.base_object_payload);
     desc.callback(this, desc.base_object_payload);
@@ -378,7 +380,8 @@ class HashingVisitor final : public DispatchingVisitor {
   size_t hash() const { return hash_; }
 
  protected:
-  void Visit(const void* t, TraceDescriptor desc) final {
+  void Visit(const void* t, TraceDescriptor desc,
+             const char* member_name) final {
     hash_combine(hash_, desc.base_object_payload);
     desc.callback(this, desc.base_object_payload);
   }

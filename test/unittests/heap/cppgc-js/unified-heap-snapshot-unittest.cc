@@ -127,9 +127,11 @@ std::vector<SnapshotObjectId> GetIds(const v8::HeapSnapshot& snapshot,
   return result;
 }
 
-bool ContainsRetainingPath(const v8::HeapSnapshot& snapshot,
-                           const std::vector<std::string> retaining_path,
-                           bool debug_retaining_path = false) {
+bool ContainsRetainingPath(
+    const v8::HeapSnapshot& snapshot,
+    const std::vector<std::string> retaining_path,
+    bool debug_retaining_path = false,
+    std::optional<std::vector<std::optional<std::string>>> edge_names = {}) {
   const HeapSnapshot& heap_snapshot =
       reinterpret_cast<const HeapSnapshot&>(snapshot);
   std::vector<HeapEntry*> haystack = {heap_snapshot.root()};
@@ -138,7 +140,16 @@ bool ContainsRetainingPath(const v8::HeapSnapshot& snapshot,
     std::vector<HeapEntry*> new_haystack;
     for (HeapEntry* parent : haystack) {
       for (int j = 0; j < parent->children_count(); j++) {
-        HeapEntry* child = parent->child(j)->to();
+        HeapGraphEdge* edge = parent->child(j);
+        if (edge_names && (*edge_names)[i]) {
+          bool edge_has_name = edge->type() != HeapGraphEdge::kElement &&
+                               edge->type() != HeapGraphEdge::kHidden;
+          if (!edge_has_name ||
+              0 != strcmp(edge->name(), (*edge_names)[i]->c_str())) {
+            continue;
+          }
+        }
+        HeapEntry* child = edge->to();
         if (0 == strcmp(child->name(), needle.c_str())) {
           new_haystack.push_back(child);
         }
@@ -169,7 +180,7 @@ class BaseWithoutName : public cppgc::GarbageCollected<BaseWithoutName> {
 
   virtual void Trace(cppgc::Visitor* v) const {
     v->Trace(next);
-    v->Trace(next2);
+    v->Trace(next2, "testMemberName");
   }
   cppgc::Member<BaseWithoutName> next;
   cppgc::Member<BaseWithoutName> next2;
@@ -343,6 +354,22 @@ TEST_F(UnifiedHeapSnapshotTest, RetainingNamedThroughUnnamed) {
   EXPECT_TRUE(ContainsRetainingPath(
       *snapshot, {kExpectedCppRootsName, GetExpectedName<BaseWithoutName>(),
                   GetExpectedName<GCed>()}));
+}
+
+TEST_F(UnifiedHeapSnapshotTest, NamedEdges) {
+  cppgc::Persistent<BaseWithoutName> base_without_name =
+      cppgc::MakeGarbageCollected<BaseWithoutName>(allocation_handle());
+  base_without_name->next2 =
+      cppgc::MakeGarbageCollected<GCed>(allocation_handle());
+  const v8::HeapSnapshot* snapshot = TakeHeapSnapshot();
+  EXPECT_TRUE(IsValidSnapshot(snapshot));
+  std::vector<std::optional<std::string>> expected_edge_names(3);
+  expected_edge_names[2] = std::string("testMemberName");
+  EXPECT_TRUE(ContainsRetainingPath(
+      *snapshot,
+      {kExpectedCppRootsName, GetExpectedName<BaseWithoutName>(),
+       GetExpectedName<GCed>()},
+      false, expected_edge_names));
 }
 
 TEST_F(UnifiedHeapSnapshotTest, PendingCallStack) {
