@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "227beb73_0836c060",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-08T14:36:09Z",
+      "side": 1,
+      "message": "lgtm with suggestion",
+      "revId": "3c2a9378bbf263e5b79aac835ff444a59bce901c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3ea0d8d_4707bd19",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-08T14:36:09Z",
+      "side": 1,
+      "message": "how about splitting this across `if (hit_isolate_cache_)` and `switch(no_cache_reason_)` below, to be consistent with `kNoCacheBecauseStreamingSource`?",
+      "range": {
+        "startLine": 3261,
+        "startChar": 0,
+        "endLine": 3266,
+        "endChar": 66
+      },
+      "revId": "3c2a9378bbf263e5b79aac835ff444a59bce901c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
