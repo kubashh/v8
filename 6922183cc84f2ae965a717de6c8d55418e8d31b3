@@ -50,6 +50,24 @@
       "message": "Would it not be sufficient to pop `sig-\u003eParameterCount()` many values from the stack, and then trap? That would be a bit more code than what you generate now, but it would be much more obvious and understandable. I would also allow the commit message of this CL to be much more understandable.",
       "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc40fe6_369ffc04",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7951,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-08T08:55:29Z",
+      "side": 1,
+      "message": "It would be sufficient here, but then we would need to mark following code as \"dynamically unreachable\". This has lead to inconsistencies before, if different compilers do not agree on which code is reachable. I think the problem was that call site counting for feedback collection was inconsistent then.\n\nI agree that it would be nicer to just return early here, but I don\u0027t see how to make that work. Let me know if you have an idea though.",
+      "parentUuid": "f7138cd4_624d1d7e",
+      "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
