@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2b645a_179dfc91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-08T05:35:57Z",
+      "side": 1,
+      "message": "I don\u0027t like the solution in this CL. It looks elegant, but it is also unexpected and surprising. I made a suggestion for a different approach. If that one does not work, then I\u0027m fine with the current CL, it\u0027s probably not worth spending more time on this CL. But if it works, then I would prefer that to your current approach.",
+      "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7138cd4_624d1d7e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7951,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-08T05:35:57Z",
+      "side": 1,
+      "message": "Would it not be sufficient to pop `sig-\u003eParameterCount()` many values from the stack, and then trap? That would be a bit more code than what you generate now, but it would be much more obvious and understandable. I would also allow the commit message of this CL to be much more understandable.",
+      "revId": "6922183cc84f2ae965a717de6c8d55418e8d31b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
