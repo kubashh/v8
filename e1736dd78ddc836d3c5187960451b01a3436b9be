@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "98ce0926_eee586b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-08T12:42:26Z",
+      "side": 1,
+      "message": "Ack; I looked into getting back from the `WasmInternalFunction` to the `WasmFuncRef` by loading from the `func_refs` field of the instance, but that only works for exported functions, not JS-API-function.\n\nI left a comment in `wasm-objects.tq` to say what we use the field for and that we could get rid of one indirection there.",
+      "parentUuid": "4ed72e9f_4e82ee9d",
+      "range": {
+        "startLine": 17,
+        "startChar": 10,
+        "endLine": 17,
+        "endChar": 66
+      },
+      "revId": "e1736dd78ddc836d3c5187960451b01a3436b9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "03a1bf32_d8bb0bb1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
