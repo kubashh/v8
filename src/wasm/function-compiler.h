@@ -130,7 +130,13 @@ class V8_EXPORT_PRIVATE JSToWasmWrapperCompilationUnit final {
                                  uint32_t canonical_sig_index,
                                  const wasm::WasmModule* module, bool is_import,
                                  WasmFeatures enabled_features);
+  JSToWasmWrapperCompilationUnit(JSToWasmWrapperCompilationUnit&&)
+      V8_NOEXCEPT = default;
   ~JSToWasmWrapperCompilationUnit();
+
+  // Allow move construction (for putting the units in a std::vector).
+  JSToWasmWrapperCompilationUnit& operator=(JSToWasmWrapperCompilationUnit&&)
+      V8_NOEXCEPT = default;
 
   Isolate* isolate() const { return isolate_; }
 
@@ -153,11 +159,11 @@ class V8_EXPORT_PRIVATE JSToWasmWrapperCompilationUnit final {
   // isolate (during the "Execute" phase) must be audited carefully, i.e. we
   // should only access immutable information (like the root table). The isolate
   // is guaranteed to be alive when this unit executes.
-  Isolate* const isolate_;
-  const bool is_import_;
-  const FunctionSig* const sig_;
-  uint32_t const canonical_sig_index_;
-  std::unique_ptr<OptimizedCompilationJob> const job_;
+  Isolate* isolate_;
+  bool is_import_;
+  const FunctionSig* sig_;
+  uint32_t canonical_sig_index_;
+  std::unique_ptr<OptimizedCompilationJob> job_;
 };
 
 inline bool CanUseGenericJsToWasmWrapper(const WasmModule* module,
