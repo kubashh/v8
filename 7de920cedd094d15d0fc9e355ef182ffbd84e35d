@@ -16,6 +16,121 @@
       "message": "This looks somewhat redundant with the `std::tuple` type and the existing accessors like `std::tuple_size` and `std::tuple_element`. Did you consider using this instead?\nIf there\u0027s a reason to use our own template here then that\u0027s fine with me.",
       "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1709cf6_f1f5b199",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1899,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-08T13:43:31Z",
+      "side": 1,
+      "message": "Maybe just `return WordPtrConstant(value)`",
+      "range": {
+        "startLine": 1898,
+        "startChar": 11,
+        "endLine": 1899,
+        "endChar": 73
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213ee5c2_9981198a",
+        "filename": "src/compiler/turboshaft/index.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-08T13:43:31Z",
+      "side": 1,
+      "message": "Please add a comment explaining what this class is and why it exists.",
+      "range": {
+        "startLine": 714,
+        "startChar": 6,
+        "endLine": 714,
+        "endChar": 20
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ec26149_751004db",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-08T13:43:31Z",
+      "side": 1,
+      "message": "That\u0027s... a weird one... But I guess that there is no way around it, given that we\u0027re unexpectedly converting a Word to a tuple :/",
+      "range": {
+        "startLine": 217,
+        "startChar": 17,
+        "endLine": 217,
+        "endChar": 32
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd58dbf1_100b7993",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-08T13:43:31Z",
+      "side": 1,
+      "message": "`V\u003cWord32\u003e x` here so that yèou don\u0027t need the Cast afterwards maybe?",
+      "range": {
+        "startLine": 1304,
+        "startChar": 10,
+        "endLine": 1304,
+        "endChar": 19
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c7468f8_2a8582ec",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-08T13:43:31Z",
+      "side": 1,
+      "message": "Remove?",
+      "range": {
+        "startLine": 1048,
+        "startChar": 51,
+        "endLine": 1048,
+        "endChar": 74
+      },
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
