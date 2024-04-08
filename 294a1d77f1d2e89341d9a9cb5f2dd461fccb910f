@@ -34,6 +34,154 @@
       "parentUuid": "7915f0a0_3b95e4b8",
       "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7529c1fa_cd8a5f5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "Looks good overall, left some comments, and I think you need to rebase the CL",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49448643_a7ef804b",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "Nit: I feel like this block of code should move up, closer to ExternalPointer. Maybe into line 323, just above the \n```\n//\n// External Pointers.\n//\n```\ncomment",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d836395d_f05f98cf",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "I wonder if we want to have some sort of `DCHECK(IsExternalBufferPointerTag(tag))` here and introduce the respective predicate in v8-internal.h? We could then leave a comment there that, should we ever run out of external pointer tags, we could reuse tags for external buffers since they use a separate table.",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d899dda8_0458fea8",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "Can this code and the long comment above it move into the parent class (I guess some new helper function) to reduce duplication?",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 3
+      },
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "956ee792_012b8889",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "I wonder if we need to support lazy-initialization for external buffers. I think we don\u0027t, and so we could drop a bit of code, e.g. this comment here. Then the code below can probably be simplified to (but maybe it needs to be moved below `  if (handle \u003d\u003d kNullExternalBufferHandle) return;` then)\n```\n#ifdef DEBUG\n  DCHECK_Eq(handle, base::AsAtomic32::Acquire_Load(\n      reinterpret_cast\u003cExternalBufferHandle*\u003e(handle_location)));\n#endif\n```",
+      "range": {
+        "startLine": 181,
+        "startChar": 22,
+        "endLine": 181,
+        "endChar": 40
+      },
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad4b498a_6db6c279",
+        "filename": "src/sandbox/external-buffer-table.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "I\u0027ll think again about whether there\u0027s some way to reduce code duplication here. In the meantime, could you maybe just leave a TODO comment for that here?",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c24124f7_d5da9488",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "I think this function is currently not needed, is it? If so, feel free to drop it to simplify things",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e6d950_c82cf7b2",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-08T08:55:56Z",
+      "side": 1,
+      "message": "Same here, I think this isn\u0027t currently needed",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
