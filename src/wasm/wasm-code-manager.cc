@@ -1983,8 +1983,11 @@ VirtualMemory WasmCodeManager::TryAllocate(size_t size, void* hint) {
     CHECK(SetPermissions(GetPlatformPageAllocator(), mem.address(), mem.size(),
                          PageAllocator::kReadWriteExecute));
   }
-  page_allocator->DiscardSystemPages(reinterpret_cast<void*>(mem.address()),
-                                     mem.size());
+  {
+    RwxMemoryWriteScope scope("discard");
+    page_allocator->DiscardSystemPages(reinterpret_cast<void*>(mem.address()),
+                                       mem.size());
+  }
 #endif  // !defined(V8_OS_WIN)
 
   ThreadIsolation::RegisterJitPage(mem.address(), mem.size());

@@ -604,6 +604,17 @@ bool OS::DecommitPages(void* address, size_t size) {
 }
 #endif  // !defined(_AIX)
 
+#define SYS_mseal 462
+
+bool OS::MakeImmutable(void* address, size_t size) {
+  DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
+  DCHECK_EQ(0, size % CommitPageSize());
+
+  long ret = syscall(SYS_mseal, address, size, 0);
+
+  return ret == 0;
+}
+
 // static
 bool OS::CanReserveAddressSpace() { return true; }
 
