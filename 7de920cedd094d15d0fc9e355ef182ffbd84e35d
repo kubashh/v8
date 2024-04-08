@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcd6b057_2d82c940",
+        "filename": "src/base/template-meta-programming/list.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-08T13:47:15Z",
+      "side": 1,
+      "message": "It would be possible to use `std::tuple` instead of `list`, but I did prefer to have a separate class template because I wanted to have something that\u0027s purely compile time programming. `list` has no members and there is no point in ever defining a variable of such type, while that is the case with `std::tuple`.",
+      "parentUuid": "10e1df5d_6e555d4e",
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1709cf6_f1f5b199",
         "filename": "src/compiler/turboshaft/assembler.h",
         "patchSetId": 7
