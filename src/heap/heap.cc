@@ -3195,6 +3195,7 @@ void* Heap::AllocateExternalBackingStore(
         new_space_backing_store_bytes >= byte_length) {
       // Performing a young generation GC amortizes over the allocated backing
       // store bytes and may free enough external bytes for this allocation.
+      CHECK(false);
       CollectGarbage(NEW_SPACE,
                      GarbageCollectionReason::kExternalMemoryPressure);
     }
