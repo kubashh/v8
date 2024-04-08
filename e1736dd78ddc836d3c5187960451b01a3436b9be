@@ -3,6 +3,29 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4ed72e9f_4e82ee9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-08T10:00:01Z",
+      "side": 1,
+      "message": "I suppose if we wanted to get rid of that indirection, we could do so at the cost of some memory, by storing references to both `WasmInternalFunction` and `WasmFuncRef` on the `WasmFunctionData`. (I looked into storing *only* the `WasmInternalFunction` there, which satisfies *most* use cases this CL touches, but the one major issue is passing function objects across the JS→Wasm boundary, where JSFunctions must be turned into WasmFuncRefs.)",
+      "range": {
+        "startLine": 17,
+        "startChar": 10,
+        "endLine": 17,
+        "endChar": 66
+      },
+      "revId": "e1736dd78ddc836d3c5187960451b01a3436b9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "03a1bf32_d8bb0bb1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -14,6 +37,23 @@
       "writtenOn": "2024-04-05T17:27:15Z",
       "side": 1,
       "message": "As discussed before, we don\u0027t actually need the backlink from the WasmFuncRef to the WasmInternalFunction. PTAL.",
+      "revId": "e1736dd78ddc836d3c5187960451b01a3436b9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d5115c_dae2fe5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-08T10:00:01Z",
+      "side": 1,
+      "message": "LGTM",
       "revId": "e1736dd78ddc836d3c5187960451b01a3436b9be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
