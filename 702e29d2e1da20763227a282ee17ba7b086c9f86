@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ffe271_02117e28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-08T09:54:07Z",
+      "side": 1,
+      "message": "src/wasm LGTM, didn\u0027t review src/base yet (waiting for questions to be answered).",
+      "revId": "702e29d2e1da20763227a282ee17ba7b086c9f86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
