@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10e1df5d_6e555d4e",
+        "filename": "src/base/template-meta-programming/list.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-08T13:09:15Z",
+      "side": 1,
+      "message": "This looks somewhat redundant with the `std::tuple` type and the existing accessors like `std::tuple_size` and `std::tuple_element`. Did you consider using this instead?\nIf there\u0027s a reason to use our own template here then that\u0027s fine with me.",
+      "revId": "7de920cedd094d15d0fc9e355ef182ffbd84e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
