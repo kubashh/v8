@@ -3218,7 +3218,6 @@ struct ScriptCompileTimerScope {
         all_scripts_histogram_scope_(isolate->counters()->compile_script()),
         no_cache_reason_(no_cache_reason),
         hit_isolate_cache_(false),
-        producing_code_cache_(false),
         consuming_code_cache_(false),
         consuming_code_cache_failed_(false) {}
 
@@ -3241,8 +3240,6 @@ struct ScriptCompileTimerScope {
 
   void set_hit_isolate_cache() { hit_isolate_cache_ = true; }
 
-  void set_producing_code_cache() { producing_code_cache_ = true; }
-
   void set_consuming_code_cache() { consuming_code_cache_ = true; }
 
   void set_consuming_code_cache_failed() {
@@ -3257,12 +3254,16 @@ struct ScriptCompileTimerScope {
   NestedTimedHistogramScope all_scripts_histogram_scope_;
   ScriptCompiler::NoCacheReason no_cache_reason_;
   bool hit_isolate_cache_;
-  bool producing_code_cache_;
   bool consuming_code_cache_;
   bool consuming_code_cache_failed_;
 
   CacheBehaviour GetCacheBehaviour() {
-    if (producing_code_cache_) {
+    // A roundabout way of knowing the embedder is going to produce a code cache
+    // (which is done by a separate API call later) is to check whether
+    // no_cache_reason_ is
+    // ScriptCompiler::kNoCacheBecauseDeferredProduceCodeCache.
+    if (no_cache_reason_ ==
+        ScriptCompiler::kNoCacheBecauseDeferredProduceCodeCache) {
       if (hit_isolate_cache_) {
         return CacheBehaviour::kHitIsolateCacheWhenProduceCodeCache;
       } else {
@@ -3316,11 +3317,7 @@ struct ScriptCompileTimerScope {
       case ScriptCompiler::kNoCacheBecauseResourceWithNoCacheHandler:
         return CacheBehaviour::kNoCacheBecauseResourceWithNoCacheHandler;
       case ScriptCompiler::kNoCacheBecauseDeferredProduceCodeCache: {
-        if (hit_isolate_cache_) {
-          return CacheBehaviour::kHitIsolateCacheWhenProduceCodeCache;
-        } else {
-          return CacheBehaviour::kProduceCodeCache;
-        }
+        UNREACHABLE();  // Already handled above.
       }
     }
     UNREACHABLE();
