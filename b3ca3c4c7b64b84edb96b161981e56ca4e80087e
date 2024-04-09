@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c95e4f_c7150335",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-09T21:01:46Z",
+      "side": 1,
+      "message": "lgtm % comment in profile-generator.cc",
+      "revId": "b3ca3c4c7b64b84edb96b161981e56ca4e80087e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78aee772_ba558662",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-09T21:01:46Z",
+      "side": 1,
+      "message": "This DCHECK is not equivalent to what you had before and, based on the bot failures, I suspect it\u0027s wrong.",
+      "range": {
+        "startLine": 1205,
+        "startChar": 4,
+        "endLine": 1205,
+        "endChar": 18
+      },
+      "revId": "b3ca3c4c7b64b84edb96b161981e56ca4e80087e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
