@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3efd2714_1991700d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "Nice thanks! A couple more suggestions",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54c25cb8_c1ca592a",
@@ -14,6 +31,126 @@
       "writtenOn": "2024-04-09T05:34:36Z",
       "side": 1,
       "message": "Is this what you had in mind ? From the existing tags I can think of only this one tag that would use the buffer table. For external array buffer, we first want to introduce a compile time flag and a separate tag, so I decided to keep it out for separate CL.",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f3024c_12c80b20",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "Yep, exactly like this! Thanks!",
+      "parentUuid": "54c25cb8_c1ca592a",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4a995c2_36584e29",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "With the new managed resources (see https://chromium-review.googlesource.com/c/v8/v8/+/5425025), could you add a `DCHECK(!IsManagedResourceTag(tag))` here since we don\u0027t expect them in the external buffer table and won\u0027t be able to handle them? Maybe also somewhere leave a comment to consider introducing a dedicated `ExternalBufferTag` enum which would guarantee that this can\u0027t happen.",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64817d01_dce1f8df",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "Nit: could you leave a TODO here like \"TODO investigate whether we could have a reusable \"TaggedPayload\" class that can be used by the external pointer tables and the trusted pointer tables\"?",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "752400d4_0fecf2fe",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "Could you add a comment here briefly describing what this table is used for?",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1bfb481_17ff9dd6",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "How about\n```\n  using super \u003d\n      CompactibleExternalEntityTable\u003cExternalPointerTableEntry,\n                                     kExternalPointerTableReservationSize\u003e;\n```\nInstead, like here: https://chromium-review.googlesource.com/c/v8/v8/+/5185345/18/src/sandbox/external-pointer-table.h",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c152a363_ffd00fd4",
+        "filename": "src/sandbox/external-pointer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "I wonder if these should move into a dedicated set of files (`external-buffer*`), wdyt?",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72488966_f0e2510e",
+        "filename": "src/sandbox/external-pointer-table-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-09T10:36:56Z",
+      "side": 1,
+      "message": "Actually, I wonder: can this logic move into `AllocateEntry`, if `AllocateEntry` is added to `CompactibleExternalEntityTable`? It seems like we have all information available there, and I think that\u0027s also what\u0027s being done here: https://chromium-review.googlesource.com/c/v8/v8/+/5185345/18/src/sandbox/external-pointer-table.h",
       "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
