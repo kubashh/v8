@@ -80,6 +80,30 @@
       },
       "revId": "d1979c62a2b1ee27a6eecf7dda1788afadb7f027",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6642a7_5ac845f1",
+        "filename": "test/mjsunit/regress/wasm/regress-333457544.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-09T14:29:26Z",
+      "side": 1,
+      "message": "Ah, I confused it with the element segment, my bad.",
+      "parentUuid": "2be5edc0_10d7376e",
+      "range": {
+        "startLine": 11,
+        "startChar": 38,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "d1979c62a2b1ee27a6eecf7dda1788afadb7f027",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
