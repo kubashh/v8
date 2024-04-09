@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db43059_ce7ebbd3",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "49448643_a7ef804b",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d836395d_f05f98cf",
@@ -87,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1b4db8_e09ff639",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d836395d_f05f98cf",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d899dda8_0458fea8",
@@ -100,6 +136,30 @@
       "writtenOn": "2024-04-08T08:55:56Z",
       "side": 1,
       "message": "Can this code and the long comment above it move into the parent class (I guess some new helper function) to reduce duplication?",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 3
+      },
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92a35807_34b73085",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d899dda8_0458fea8",
       "range": {
         "startLine": 167,
         "startChar": 0,
@@ -133,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "537b7f29_36623276",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "956ee792_012b8889",
+      "range": {
+        "startLine": 181,
+        "startChar": 22,
+        "endLine": 181,
+        "endChar": 40
+      },
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad4b498a_6db6c279",
@@ -146,6 +230,24 @@
       "writtenOn": "2024-04-08T08:55:56Z",
       "side": 1,
       "message": "I\u0027ll think again about whether there\u0027s some way to reduce code duplication here. In the meantime, could you maybe just leave a TODO comment for that here?",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80aa6eef_0afe20d9",
+        "filename": "src/sandbox/external-buffer-table.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ad4b498a_6db6c279",
       "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -167,6 +269,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c596413e_6fa2d631",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c24124f7_d5da9488",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57e6d950_c82cf7b2",
@@ -180,6 +300,24 @@
       "writtenOn": "2024-04-08T08:55:56Z",
       "side": 1,
       "message": "Same here, I think this isn\u0027t currently needed",
+      "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57de489d_07aa3b84",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:24:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "57e6d950_c82cf7b2",
       "revId": "294a1d77f1d2e89341d9a9cb5f2dd461fccb910f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
