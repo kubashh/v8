@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83b8c3ad_74b29e76",
+        "filename": "src/builtins/wasm-strings.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-09T12:06:23Z",
+      "side": 1,
+      "message": "`StringNewWtf8Array` can return `WasmNull` (with the right variant). The provided variant will never return `WasmNull`, so we dcheck for it and then downcast manually.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 38
+      },
+      "revId": "c427650daff1efbb2f580eee1a1c5feb62446e26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
