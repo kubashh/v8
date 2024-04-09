@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c25cb8_c1ca592a",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-09T05:34:36Z",
+      "side": 1,
+      "message": "Is this what you had in mind ? From the existing tags I can think of only this one tag that would use the buffer table. For external array buffer, we first want to introduce a compile time flag and a separate tag, so I decided to keep it out for separate CL.",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
