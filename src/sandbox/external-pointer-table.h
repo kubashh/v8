@@ -91,9 +91,9 @@ struct ExternalPointerTableEntry {
   // Returns true if this entry contains an evacuation entry.
   inline bool HasEvacuationEntry() const;
 
-  // Move the content of this entry into the provided entry while also clearing
-  // the marking bit. Used during table compaction. This invalidates the entry.
-  inline void UnmarkAndMigrateInto(ExternalPointerTableEntry& other);
+  // Move the content of this entry into the provided entry.
+  // Used during table compaction. This invalidates the entry.
+  inline void MigrateInto(ExternalPointerTableEntry& other);
 
   // Mark this entry as alive during table garbage collection.
   inline void Mark();

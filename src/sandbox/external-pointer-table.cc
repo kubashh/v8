@@ -99,17 +99,9 @@ uint32_t ExternalPointerTable::SweepAndCompact(Space* space,
 
   std::vector<Segment> segments_to_deallocate;
   for (auto segment : base::Reversed(space->segments_)) {
-    // If we evacuated all live entries in this segment then we can take a
-    // shortcut here and only check if any managed resources need to be freed.
-    // Afterwards, the entire segment will be deallocated after this loop.
-    if (evacuation_was_successful &&
-        segment.first_entry() >= start_of_evacuation_area) {
-      segments_to_deallocate.push_back(segment);
-      for (uint32_t i = segment.last_entry(); i >= segment.first_entry(); i--) {
-        CheckAndHandleFreedManagedResourceEntry(i);
-      }
-      continue;
-    }
+    bool segment_will_be_evacuated =
+        evacuation_was_successful &&
+        segment.first_entry() >= start_of_evacuation_area;
 
     // Remember the state of the freelist before this segment in case this
     // segment turns out to be completely empty and we deallocate it.
@@ -120,24 +112,29 @@ uint32_t ExternalPointerTable::SweepAndCompact(Space* space,
     for (uint32_t i = segment.last_entry(); i >= segment.first_entry(); i--) {
       auto payload = at(i).GetRawPayload();
       if (payload.ContainsEvacuationEntry()) {
-        bool entry_was_resolved = false;
+        // Segments that will be evacuated cannot contain evacuation entries
+        // into which other entries would be evacuated.
+        DCHECK(!segment_will_be_evacuated);
+
         // Resolve the evacuation entry: take the pointer to the handle from the
         // evacuation entry, copy the entry to its new location, and finally
         // update the handle to point to the new entry.
+        //
         // While we now know that the entry being evacuated is free, we don't
         // add it to (the start of) the freelist because that would immediately
         // cause new fragmentation when the next entry is allocated. Instead, we
         // assume that the segments out of which entries are evacuated will all
         // be decommitted anyway after this loop, which is usually the case
         // unless compaction was already aborted during marking.
+        //
+        // Note that the field may have been invalidated in the meantime (for
+        // example if the host object has been in-place converted to a
+        // different type of object). In that case, handle_location is invalid
+        // so we can't evacuate the old entry, but that is also not necessary
+        // since it is guaranteed to be dead.
+        bool entry_was_resolved = false;
         Address handle_location =
             payload.ExtractEvacuationEntryHandleLocation();
-
-        // The field may have been invalidated in the meantime (for example if
-        // the host object has been in-place converted to a different type of
-        // object). In that case, handle_location is invalid so we can't
-        // evacuate the old entry, but that is also not necessary since it is
-        // guaranteed to be dead.
         if (!space->FieldWasInvalidated(handle_location)) {
           entry_was_resolved = TryResolveEvacuationEntryDuringSweeping(
               i, reinterpret_cast<ExternalPointerHandle*>(handle_location),
@@ -164,10 +161,13 @@ uint32_t ExternalPointerTable::SweepAndCompact(Space* space,
       DCHECK(!at(i).HasEvacuationEntry());
     }
 
-    // If a segment is completely empty, free it.
+    // If a segment is completely empty, or if all live entries will be
+    // evacuated out of it at the end of this loop, free the segment.
+    // Note: for segments that will be evacuated, we could avoid building up a
+    // freelist, but it's probably not worth the effort.
     uint32_t free_entries = current_freelist_length - previous_freelist_length;
     bool segment_is_empty = free_entries == kEntriesPerSegment;
-    if (segment_is_empty) {
+    if (segment_is_empty || segment_will_be_evacuated) {
       segments_to_deallocate.push_back(segment);
       // Restore the state of the freelist before this segment.
       current_freelist_head = previous_freelist_head;
@@ -219,7 +219,7 @@ bool ExternalPointerTable::TryResolveEvacuationEntryDuringSweeping(
   DCHECK_GE(old_index, start_of_evacuation_area);
   DCHECK_LT(new_index, start_of_evacuation_area);
   auto& new_entry = at(new_index);
-  at(old_index).UnmarkAndMigrateInto(new_entry);
+  at(old_index).MigrateInto(new_entry);
   *handle_location = new_handle;
 
   // If this entry references a managed resource, update the resource to
