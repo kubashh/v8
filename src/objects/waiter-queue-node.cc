@@ -40,6 +40,28 @@ void WaiterQueueNode::Enqueue(WaiterQueueNode** head,
   }
 }
 
+void WaiterQueueNode::DequeueUnchecked(WaiterQueueNode** head) {
+  if (next_ == this) {
+    // The queue contains exactly 1 node.
+    *head = nullptr;
+  } else {
+    // The queue contains >1 nodes.
+    if (this == *head) {
+      WaiterQueueNode* tail = (*head)->prev_;
+      // The matched node is the head, so next is the new head.
+      next_->prev_ = tail;
+      tail->next_ = next_;
+      *head = next_;
+    } else {
+      // The matched node is in the middle of the queue, so the head does
+      // not need to be updated.
+      prev_->next_ = next_;
+      next_->prev_ = prev_;
+    }
+  }
+  SetNotInListForVerification();
+}
+
 WaiterQueueNode* WaiterQueueNode::DequeueMatching(
     WaiterQueueNode** head, const DequeueMatcher& matcher) {
   DCHECK_NOT_NULL(head);
@@ -48,31 +70,30 @@ WaiterQueueNode* WaiterQueueNode::DequeueMatching(
   WaiterQueueNode* cur = *head;
   do {
     if (matcher(cur)) {
-      WaiterQueueNode* next = cur->next_;
-      if (next == cur) {
-        // The queue contains exactly 1 node.
-        *head = nullptr;
-      } else {
-        // The queue contains >1 nodes.
-        if (cur == original_head) {
-          // The matched node is the original head, so next is the new head.
-          WaiterQueueNode* tail = original_head->prev_;
-          next->prev_ = tail;
-          tail->next_ = next;
-          *head = next;
-        } else {
-          // The matched node is in the middle of the queue, so the head does
-          // not need to be updated.
-          cur->prev_->next_ = next;
-          next->prev_ = cur->prev_;
-        }
-      }
-      cur->SetNotInListForVerification();
+      cur->DequeueUnchecked(head);
       return cur;
     }
     cur = cur->next_;
   } while (cur != original_head);
   return nullptr;
+}
+
+void WaiterQueueNode::DequeueAllMatchingForAsyncCleanup(
+    WaiterQueueNode** head, const DequeueMatcher& matcher) {
+  DCHECK_NOT_NULL(head);
+  DCHECK_NOT_NULL(*head);
+  WaiterQueueNode* original_tail = (*head)->prev_;
+  WaiterQueueNode* cur = *head;
+  for (;;) {
+    DCHECK_NOT_NULL(cur);
+    WaiterQueueNode* next = cur->next_;
+    if (matcher(cur)) {
+      cur->DequeueUnchecked(head);
+      cur->SetReadyForAsyncCleanup();
+    }
+    if (cur == original_tail) break;
+    cur = next;
+  }
 }
 
 // static
@@ -127,51 +148,6 @@ int WaiterQueueNode::LengthFromHead(WaiterQueueNode* head) {
   return len;
 }
 
-void WaiterQueueNode::Wait() {
-  AllowGarbageCollection allow_before_parking;
-  requester_->main_thread_local_heap()->BlockWhileParked([this]() {
-    base::MutexGuard guard(&wait_lock_);
-    while (should_wait) {
-      wait_cond_var_.Wait(&wait_lock_);
-    }
-  });
-}
-
-// Returns false if timed out, true otherwise.
-bool WaiterQueueNode::WaitFor(const base::TimeDelta& rel_time) {
-  bool result;
-  AllowGarbageCollection allow_before_parking;
-  requester_->main_thread_local_heap()->BlockWhileParked([this, rel_time,
-                                                          &result]() {
-    base::MutexGuard guard(&wait_lock_);
-    base::TimeTicks current_time = base::TimeTicks::Now();
-    base::TimeTicks timeout_time = current_time + rel_time;
-    for (;;) {
-      if (!should_wait) {
-        result = true;
-        return;
-      }
-      current_time = base::TimeTicks::Now();
-      if (current_time >= timeout_time) {
-        result = false;
-        return;
-      }
-      base::TimeDelta time_until_timeout = timeout_time - current_time;
-      bool wait_res = wait_cond_var_.WaitFor(&wait_lock_, time_until_timeout);
-      USE(wait_res);
-      // The wake up may have been spurious, so loop again.
-    }
-  });
-  return result;
-}
-
-void WaiterQueueNode::Notify() {
-  base::MutexGuard guard(&wait_lock_);
-  should_wait = false;
-  wait_cond_var_.NotifyOne();
-  SetNotInListForVerification();
-}
-
 uint32_t WaiterQueueNode::NotifyAllInList() {
   WaiterQueueNode* cur = this;
   uint32_t count = 0;
@@ -193,6 +169,31 @@ void WaiterQueueNode::SetNotInListForVerification() {
 #ifdef DEBUG
   next_ = prev_ = nullptr;
 #endif
+}
+
+void WaiterQueueNode::RemoveFromUnlockedWaiterList(WaiterQueueNode* node) {
+  node->requester_->async_unlocked_waiter_queue_nodes().remove_if(
+      [=](std::unique_ptr<WaiterQueueNode>& n) { return n.get() == node; });
+}
+
+void WaiterQueueNode::RemoveFromLockedWaiterList(WaiterQueueNode* node) {
+  node->requester_->async_locked_waiter_queue_nodes().remove_if(
+      [=](std::unique_ptr<WaiterQueueNode>& n) { return n.get() == node; });
+}
+
+void WaiterQueueNode::MoveToLockedWaiterList(WaiterQueueNode* node) {
+  std::list<std::unique_ptr<WaiterQueueNode>>& unlocked_list =
+      node->requester_->async_unlocked_waiter_queue_nodes();
+  std::list<std::unique_ptr<WaiterQueueNode>>& locked_list =
+      node->requester_->async_locked_waiter_queue_nodes();
+  auto it = std::find_if(unlocked_list.begin(), unlocked_list.end(),
+                         [=](std::unique_ptr<WaiterQueueNode>& waiter) {
+                           return waiter.get() == node;
+                         });
+  DCHECK(it != unlocked_list.end());
+  it->release();
+  unlocked_list.erase(it);
+  locked_list.emplace_back(node);
 }
 
 }  // namespace detail

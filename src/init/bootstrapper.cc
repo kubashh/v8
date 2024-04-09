@@ -5695,6 +5695,19 @@ void Genesis::InitializeGlobal_harmony_struct() {
     JSObject::AddProperty(isolate(), atomics_object, mutex_str, mutex_fun,
                           DONT_ENUM);
 
+    Handle<SharedFunctionInfo> resolve_handler_info =
+        factory()->NewSharedFunctionInfoForBuiltin(
+            factory()->empty_string(),
+            Builtin::kAtomicsMutexAsyncUnlockResolveHandler);
+    isolate()->heap()->SetAtomicsMutexAsyncUnlockResolveHandlerSFI(
+        resolve_handler_info);
+    Handle<SharedFunctionInfo> reject_handler_info =
+        factory()->NewSharedFunctionInfoForBuiltin(
+            factory()->empty_string(),
+            Builtin::kAtomicsMutexAsyncUnlockRejectHandler);
+    isolate()->heap()->SetAtomicsMutexAsyncUnlockRejectHandlerSFI(
+        reject_handler_info);
+
     SimpleInstallFunction(isolate(), mutex_fun, "lock",
                           Builtin::kAtomicsMutexLock, 2, true);
     SimpleInstallFunction(isolate(), mutex_fun, "lockWithTimeout",
@@ -5703,6 +5716,8 @@ void Genesis::InitializeGlobal_harmony_struct() {
                           Builtin::kAtomicsMutexTryLock, 2, true);
     SimpleInstallFunction(isolate(), mutex_fun, "isMutex",
                           Builtin::kAtomicsMutexIsMutex, 1, true);
+    SimpleInstallFunction(isolate(), mutex_fun, "lockAsync",
+                          Builtin::kAtomicsMutexLockAsync, 2, true);
   }
 
   {  // Atomics.Condition
@@ -5717,12 +5732,19 @@ void Genesis::InitializeGlobal_harmony_struct() {
     JSObject::AddProperty(isolate(), atomics_object, condition_str,
                           condition_fun, DONT_ENUM);
 
+    Handle<SharedFunctionInfo> resolve_handler_info =
+        factory()->NewSharedFunctionInfoForBuiltin(
+            factory()->empty_string(), Builtin::kAtomicsConditionGetLock);
+    isolate()->heap()->SetAtomicsConditionGetLockSFI(resolve_handler_info);
+
     SimpleInstallFunction(isolate(), condition_fun, "wait",
                           Builtin::kAtomicsConditionWait, 2, false);
     SimpleInstallFunction(isolate(), condition_fun, "notify",
                           Builtin::kAtomicsConditionNotify, 2, false);
     SimpleInstallFunction(isolate(), condition_fun, "isCondition",
                           Builtin::kAtomicsConditionIsCondition, 1, true);
+    SimpleInstallFunction(isolate(), condition_fun, "waitAsync",
+                          Builtin::kAtomicsConditionWaitAsync, 2, false);
   }
 }
 
