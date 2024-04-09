@@ -1359,7 +1359,8 @@ class Heap final {
   }
 
   size_t PromotedSinceLastGC() {
-    size_t old_generation_size = OldGenerationSizeOfObjects();
+    size_t old_generation_size =
+        OldGenerationSizeOfObjects() + OldGenerationWastedBytes();
     return old_generation_size > old_generation_size_at_last_gc_
                ? old_generation_size - old_generation_size_at_last_gc_
                : 0;
@@ -1383,16 +1384,25 @@ class Heap final {
   // Excludes external memory held by those objects.
   V8_EXPORT_PRIVATE size_t OldGenerationSizeOfObjects() const;
 
+  // Returns the amount of wasted bytes in non-new spaces.
+  // Returns 0 when MinorMS is not used.
+  V8_EXPORT_PRIVATE size_t OldGenerationWastedBytes() const;
+
   // Returns the size of objects residing in new spaces.
   // Excludes external memory held by those objects.
-  // Returns 0 when MinorMS is not used.
   V8_EXPORT_PRIVATE size_t YoungGenerationSizeOfObjects() const;
+
+  // Returns the amount of wasted bytes in new spaces.
+  V8_EXPORT_PRIVATE size_t YoungGenerationWastedBytes() const;
 
   // Returns the size of objects held by the EmbedderHeapTracer.
   V8_EXPORT_PRIVATE size_t EmbedderSizeOfObjects() const;
 
   // Returns the global size of objects (embedder + V8 non-new spaces).
   V8_EXPORT_PRIVATE size_t GlobalSizeOfObjects() const;
+
+  // Returns the global amount of wasted bytes.
+  V8_EXPORT_PRIVATE size_t GlobalWastedBytes() const;
 
   // We allow incremental marking to overshoot the V8 and global allocation
   // limit for performance reasons. If the overshoot is too large then we are
@@ -1871,7 +1881,7 @@ class Heap final {
   // ===========================================================================
 
   inline size_t OldGenerationSpaceAvailable() {
-    uint64_t bytes = OldGenerationSizeOfObjects() +
+    uint64_t bytes = OldGenerationSizeOfObjects() + OldGenerationWastedBytes() +
                      AllocatedExternalMemorySinceMarkCompact();
 
     if (old_generation_allocation_limit() <= bytes) return 0;
@@ -1963,7 +1973,7 @@ class Heap final {
 
   bool ShouldStressCompaction() const;
 
-  base::Optional<size_t> GlobalMemoryAvailable();
+  size_t GlobalMemoryAvailable();
 
   void RecomputeLimits(GarbageCollector collector, base::TimeTicks time);
 
