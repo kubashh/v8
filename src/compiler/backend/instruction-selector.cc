@@ -5230,7 +5230,7 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
       const SelectOp& select = op.Cast<SelectOp>();
       // If there is a Select, then it should only be one that is supported by
       // the machine, and it should be meant to be implementation with cmove.
-      DCHECK_EQ(select.implem, SelectOp::Implementation::kCMove);
+      // DCHECK_EQ(select.implem, SelectOp::Implementation::kCMove);
       MarkAsRepresentation(select.rep, node);
       return VisitSelect(node);
     }

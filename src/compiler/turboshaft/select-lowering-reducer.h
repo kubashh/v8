@@ -46,6 +46,12 @@ class SelectLoweringReducer : public Next {
       return Next::ReduceSelect(cond, vtrue, vfalse, rep, hint, implem);
     }
 
+#ifdef V8_TARGET_ARCH_X64
+    if (rep.IsWord()) {
+      return Next::ReduceSelect(cond, vtrue, vfalse, rep, hint, implem);
+    }
+#endif
+
     Variable result = __ NewLoopInvariantVariable(rep);
     IF (cond) {
       __ SetVariable(result, vtrue);
