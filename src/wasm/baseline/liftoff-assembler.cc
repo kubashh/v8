@@ -1186,7 +1186,10 @@ void LiftoffAssembler::SpillRegister(LiftoffRegister reg) {
   for (uint32_t idx = cache_state_.stack_height() - 1;; --idx) {
     DCHECK_GT(cache_state_.stack_height(), idx);
     auto* slot = &cache_state_.stack_state[idx];
-    if (!slot->is_reg() || !slot->reg().overlaps(reg)) continue;
+    if (!slot->is_reg() || !slot->reg().overlaps(reg)) {
+      if (idx == 0) break;
+      continue;
+    }
     if (slot->reg().is_pair()) {
       // Make sure to decrement *both* registers in a pair, because the
       // {clear_used} call below only clears one of them.
@@ -1197,7 +1200,7 @@ void LiftoffAssembler::SpillRegister(LiftoffRegister reg) {
     }
     Spill(slot->offset(), slot->reg(), slot->kind());
     slot->MakeStack();
-    if (--remaining_uses == 0) break;
+    if (--remaining_uses == 0 || idx == 0) break;
   }
   cache_state_.clear_used(reg);
   cache_state_.last_spilled_regs.set(reg);
