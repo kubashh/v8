@@ -16,6 +16,23 @@
       "message": "PTAL, as discussed on chat.",
       "revId": "5d0074293aa1e2e135d712acd394886f69b559d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba49095_749201e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-09T13:49:03Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5d0074293aa1e2e135d712acd394886f69b559d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
