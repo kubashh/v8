@@ -321,6 +321,34 @@ using CppHeapPointer_t = Address;
 constexpr CppHeapPointer_t kNullCppHeapPointer = 0;
 constexpr CppHeapPointerHandle kNullCppHeapPointerHandle = 0;
 
+// See `ExternalPointerHandle` for the main documentation. The difference to
+// `ExternalPointerHandle` is that the handle always refers to a
+// (external pointer, size) tuple. The handles are used in combination with a
+// dedicated external buffer table (EBT).
+using ExternalBufferHandle = uint32_t;
+
+// The size of the virtual memory reservation for the external buffer table.
+// As with the external pointer table, a maximum table size in combination with
+// shifted indices allows omitting bounds checks.
+constexpr size_t kExternalBufferTableReservationSize = 128 * MB;
+
+// The external buffer handles are stores shifted to the left by this amount
+// to guarantee that they are smaller than the maximum table size.
+constexpr uint32_t kExternalBufferHandleShift = 9;
+
+// A null handle always references an entry that contains nullptr.
+constexpr ExternalBufferHandle kNullExternalBufferHandle = 0;
+
+// The maximum number of entries in an external buffer table.
+constexpr int kExternalBufferTableEntrySize = 16;
+constexpr int kExternalBufferTableEntrySizeLog2 = 4;
+constexpr size_t kMaxExternalBufferPointers =
+    kExternalBufferTableReservationSize / kExternalBufferTableEntrySize;
+static_assert((1 << (32 - kExternalBufferHandleShift)) ==
+                  kMaxExternalBufferPointers,
+              "kExternalBufferTableReservationSize and "
+              "kExternalBufferHandleShift don't match");
+
 //
 // External Pointers.
 //
@@ -537,6 +565,13 @@ V8_INLINE static constexpr bool IsManagedExternalPointerType(
   return tag >= kFirstManagedTag && tag <= kLastManagedTag;
 }
 
+// True if the external pointer must be accessed from external buffer table.
+// If we run out of external pointer tags, we can reuse tags for external
+// buffers as they use a separate table.
+V8_INLINE static constexpr bool IsExternalBufferTag(ExternalPointerTag tag) {
+  return tag == kExternalStringResourceDataTag;
+}
+
 // Sanity checks.
 #define CHECK_SHARED_EXTERNAL_POINTER_TAGS(Tag, ...) \
   static_assert(IsSharedExternalPointerType(Tag));
@@ -739,6 +774,7 @@ class Internals {
   // ExternalPointerTable and TrustedPointerTable layout guarantees.
   static const int kExternalPointerTableBasePointerOffset = 0;
   static const int kExternalPointerTableSize = 2 * kApiSystemPointerSize;
+  static const int kExternalBufferTableSize = 2 * kApiSystemPointerSize;
   static const int kTrustedPointerTableSize = 2 * kApiSystemPointerSize;
   static const int kTrustedPointerTableBasePointerOffset = 0;
 
@@ -789,8 +825,12 @@ class Internals {
       kIsolateCppHeapPointerTableOffset + kExternalPointerTableSize;
   static const int kIsolateTrustedPointerTableOffset =
       kIsolateTrustedCageBaseOffset + kApiSystemPointerSize;
-  static const int kIsolateApiCallbackThunkArgumentOffset =
+  static const int kIsolateExternalBufferTableOffset =
       kIsolateTrustedPointerTableOffset + kTrustedPointerTableSize;
+  static const int kIsolateSharedExternalBufferTableAddressOffset =
+      kIsolateExternalBufferTableOffset + kExternalBufferTableSize;
+  static const int kIsolateApiCallbackThunkArgumentOffset =
+      kIsolateSharedExternalBufferTableAddressOffset + kApiSystemPointerSize;
 #else
   static const int kIsolateApiCallbackThunkArgumentOffset =
       kIsolateCppHeapPointerTableOffset + kExternalPointerTableSize;
