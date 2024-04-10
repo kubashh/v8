@@ -1534,9 +1534,12 @@ class GraphBuilder {
     // No need to update the interrupt budget once we reach Turboshaft.
     return maglev::ProcessResult::kContinue;
   }
-  maglev::ProcessResult Process(maglev::ReduceInterruptBudgetForLoop*,
+  maglev::ProcessResult Process(maglev::ReduceInterruptBudgetForLoop* node,
                                 const maglev::ProcessingState&) {
-    // No need to update the interrupt budget once we reach Turboshaft.
+    // No need to update the interrupt budget once we reach Turboshaft. However,
+    // we still need to emit a StackCheck to handle interrupt requests.
+    __ JSLoopStackCheck(native_context(),
+                        BuildFrameState(node->lazy_deopt_info()));
     return maglev::ProcessResult::kContinue;
   }
 
