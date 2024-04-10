@@ -16,6 +16,57 @@
       "message": "Could you please take a look?",
       "revId": "fb8b1079b82f1a1a9fa4a3b8572240b5a82e9829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9903fdfb_3dc4f460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-10T14:24:39Z",
+      "side": 1,
+      "message": "Nice, thanks for also fixing unrelated comments to use a consistent formatting.\n\nTwo comments, otherwise LGTM.",
+      "revId": "fb8b1079b82f1a1a9fa4a3b8572240b5a82e9829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58f8f283_61859aad",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-10T14:24:39Z",
+      "side": 1,
+      "message": "Does this still make sense? If tests want 16 pages, they could just specify it at the call. If I don\u0027t miss anything, then I think we should just drop this method and always specify a minimum (\u003d initial) size.",
+      "revId": "fb8b1079b82f1a1a9fa4a3b8572240b5a82e9829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "862920c7_4894e0b7",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-10T14:24:39Z",
+      "side": 1,
+      "message": "This should be write_u32v now to allow for more than 127 memories (we currently allow up to 100k).",
+      "revId": "fb8b1079b82f1a1a9fa4a3b8572240b5a82e9829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
