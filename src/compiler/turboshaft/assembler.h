@@ -1835,15 +1835,15 @@ class TurboshaftAssemblerOpInterface
         CheckForMinusZeroMode::kDontCheckForMinusZero, feedback));
   }
 
-  OpIndex TruncateJSPrimitiveToUntagged(
-      V<Object> object, TruncateJSPrimitiveToUntaggedOp::UntaggedKind kind,
+  V<Word> TruncateJSPrimitiveToUntagged(
+      V<JSPrimitive> object, TruncateJSPrimitiveToUntaggedOp::UntaggedKind kind,
       TruncateJSPrimitiveToUntaggedOp::InputAssumptions input_assumptions) {
     return ReduceIfReachableTruncateJSPrimitiveToUntagged(object, kind,
                                                           input_assumptions);
   }
 
-  OpIndex TruncateJSPrimitiveToUntaggedOrDeopt(
-      V<Object> object, V<turboshaft::FrameState> frame_state,
+  V<Word> TruncateJSPrimitiveToUntaggedOrDeopt(
+      V<JSPrimitive> object, V<turboshaft::FrameState> frame_state,
       TruncateJSPrimitiveToUntaggedOrDeoptOp::UntaggedKind kind,
       TruncateJSPrimitiveToUntaggedOrDeoptOp::InputRequirement
           input_requirement,
@@ -2164,6 +2164,9 @@ class TurboshaftAssemblerOpInterface
   }
 
   V<Smi> TagSmi(ConstOrV<Word32> input) {
+    if (input.is_constant()) {
+      return SmiConstant(input.constant_value());
+    }
     constexpr int kSmiShiftBits = kSmiShiftSize + kSmiTagSize;
     // Do shift on 32bit values if Smis are stored in the lower word.
     if constexpr (Is64() && SmiValuesAre31Bits()) {
