@@ -16,6 +16,29 @@
       "message": "PTAL!\nI also noticed that the documentation for --stress-compaction says \"implies --force_marking_deque_overflow\" (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/flags/flag-definitions.h;l\u003d1925;drc\u003d31a98b03f9e6a879b9bdea8a48cc5d3de042a4ed) but I can\u0027t see where that would happen (there doesn\u0027t seem to be a corresponding IMPLICATION). Maybe that\u0027s outdated?",
       "revId": "c11705b2d76333dc3bb94848543312a15b95ed39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e7229ad_8bffc170",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-10T09:58:10Z",
+      "side": 1,
+      "message": "Do you also want to make `num_segments_to_evacuate` more aggressive?",
+      "range": {
+        "startLine": 137,
+        "startChar": 11,
+        "endLine": 137,
+        "endChar": 35
+      },
+      "revId": "c11705b2d76333dc3bb94848543312a15b95ed39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
