@@ -39,6 +39,30 @@
       },
       "revId": "c11705b2d76333dc3bb94848543312a15b95ed39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3be51e15_3876c61a",
+        "filename": "src/sandbox/compactible-external-entity-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-10T10:57:22Z",
+      "side": 1,
+      "message": "Yeah, I guess we can be more aggressive here still. How about this instead? Now we will compact whenever we have at least one segment worth of free segments. Otherwise, compaction can never succeed.",
+      "parentUuid": "9e7229ad_8bffc170",
+      "range": {
+        "startLine": 137,
+        "startChar": 11,
+        "endLine": 137,
+        "endChar": 35
+      },
+      "revId": "c11705b2d76333dc3bb94848543312a15b95ed39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
