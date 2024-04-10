@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d806163_57bff514",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "will rebase again once https://chromium-review.googlesource.com/c/v8/v8/+/5439561 gets merged.",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

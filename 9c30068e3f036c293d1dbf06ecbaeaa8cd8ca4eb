@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4876a0db_91d60239",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b4a995c2_36584e29",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64817d01_dce1f8df",
@@ -83,6 +101,24 @@
       "writtenOn": "2024-04-09T10:36:56Z",
       "side": 1,
       "message": "Nit: could you leave a TODO here like \"TODO investigate whether we could have a reusable \"TaggedPayload\" class that can be used by the external pointer tables and the trusted pointer tables\"?",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be85ee6a_e665c71d",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "I can take a look at it in follow-up CL.",
+      "parentUuid": "64817d01_dce1f8df",
       "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -104,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e53e9d_d6e1cbdb",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "752400d4_0fecf2fe",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1bfb481_17ff9dd6",
@@ -117,6 +171,24 @@
       "writtenOn": "2024-04-09T10:36:56Z",
       "side": 1,
       "message": "How about\n```\n  using super \u003d\n      CompactibleExternalEntityTable\u003cExternalPointerTableEntry,\n                                     kExternalPointerTableReservationSize\u003e;\n```\nInstead, like here: https://chromium-review.googlesource.com/c/v8/v8/+/5185345/18/src/sandbox/external-pointer-table.h",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab62a5b4_ce9b5fcf",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d1bfb481_17ff9dd6",
       "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -138,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f580c4ea_463e2104",
+        "filename": "src/sandbox/external-pointer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "Makes sense, I guess that means we also need ExternalBuffer_t.",
+      "parentUuid": "c152a363_ffd00fd4",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72488966_f0e2510e",
@@ -151,6 +241,24 @@
       "writtenOn": "2024-04-09T10:36:56Z",
       "side": 1,
       "message": "Actually, I wonder: can this logic move into `AllocateEntry`, if `AllocateEntry` is added to `CompactibleExternalEntityTable`? It seems like we have all information available there, and I think that\u0027s also what\u0027s being done here: https://chromium-review.googlesource.com/c/v8/v8/+/5185345/18/src/sandbox/external-pointer-table.h",
+      "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7290eb1_0ad2f278",
+        "filename": "src/sandbox/external-pointer-table-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T12:35:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "72488966_f0e2510e",
       "revId": "9c30068e3f036c293d1dbf06ecbaeaa8cd8ca4eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
