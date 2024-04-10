@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3789b734_e050d2e7",
+        "filename": "src/sandbox/external-pointer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-10T06:27:57Z",
+      "side": 1,
+      "message": "Why is that exactly? Can you describe the layout here? (It\u0027s a bit hard to navigate in the CL itself and probably worthwhile having this here.)",
+      "range": {
+        "startLine": 129,
+        "startChar": 18,
+        "endLine": 129,
+        "endChar": 57
+      },
+      "revId": "ab94e0575372fc2bf82da95cdc6aea3e08c6d2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7501e68_b3b28e02",
         "filename": "src/sandbox/external-pointer-table-inl.h",
         "patchSetId": 1
