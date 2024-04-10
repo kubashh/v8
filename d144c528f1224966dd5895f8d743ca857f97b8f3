@@ -16,6 +16,23 @@
       "message": "will rebase again once https://chromium-review.googlesource.com/c/v8/v8/+/5439561 gets merged.",
       "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf29f48_bdf74439",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-10T17:35:33Z",
+      "side": 1,
+      "message": "Looking into the windows build failure https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8751140545198081025/+/u/build/compile/stdout?format\u003draw it comes from the atomic operation on 128-bit Payload type. I am thinking of removing the Payload wrapper and have the entry class as follows. Downside is we cannot explore a reusable TaggedPayload for the buffer table. Thoughts ?\n\n```\nstruct ExternalBufferTableEntry {\n private:\n  std::atomic\u003cAddress\u003e encoded_word_;\n  std::atomic\u003csize_t\u003e raw_size_;\n};\n```",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
