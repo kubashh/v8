@@ -786,7 +786,7 @@ class TSReducerBase : public Next {
                 << ReducerName() << "]: emitted " << op << "\n";
     }
     op_to_block_[result] = Asm().current_block();
-    DCHECK(ValidInputs(result));
+    ValidateInputs(result);
 #endif  // DEBUG
     if (op.IsBlockTerminator()) Asm().FinalizeBlock();
     return result;
@@ -797,7 +797,7 @@ class TSReducerBase : public Next {
   GrowingOpIndexSidetable<Block*> op_to_block_{Asm().phase_zone(),
                                                &Asm().output_graph()};
 
-  bool ValidInputs(OpIndex op_idx) {
+  bool ValidateInputs(OpIndex op_idx) {
     const Operation& op = Asm().output_graph().Get(op_idx);
     if (auto* phi = op.TryCast<PhiOp>()) {
       auto pred_blocks = Asm().current_block()->Predecessors();
@@ -809,7 +809,7 @@ class TSReducerBase : public Next {
                     << " does not dominate predecessor B"
                     << pred_block->index().id() << ".\n";
           std::cerr << op_idx.id() << ": " << op << "\n";
-          return false;
+          UNREACHABLE();
         }
       }
     } else {
@@ -820,7 +820,7 @@ class TSReducerBase : public Next {
           std::cerr << "Input #" << input.id()
                     << " does not dominate its use.\n";
           std::cerr << op_idx.id() << ": " << op << "\n";
-          return false;
+          UNREACHABLE();
         }
       }
     }
@@ -1828,7 +1828,9 @@ class TurboshaftAssemblerOpInterface
     return ConvertJSPrimitiveToObject(
         value, native_context, OptionalV<JSGlobalProxy>::Nullopt(), mode);
   }
-
+  V<Any> Constant(ConstantOp::Kind kind, ConstantOp::Storage storage) {
+    return ReduceIfReachableConstant(kind, storage);
+  }
   V<Word32> Word32Constant(uint32_t value) {
     return ReduceIfReachableConstant(ConstantOp::Kind::kWord32,
                                      uint64_t{value});
@@ -1940,6 +1942,11 @@ class TurboshaftAssemblerOpInterface
     return HeapConstant(cached_centry_stub_constants_[index].ToHandleChecked());
   }
 
+  V<Any> Change(V<Any> input, ChangeOp::Kind kind,
+                ChangeOp::Assumption assumption, RegisterRepresentation from,
+                RegisterRepresentation to) {
+    return ReduceIfReachableChange(input, kind, assumption, from, to);
+  }
 #define DECL_CHANGE_V(name, kind, assumption, from, to)                  \
   V<to> name(ConstOrV<from> input) {                                     \
     return ReduceIfReachableChange(resolve(input), ChangeOp::Kind::kind, \
