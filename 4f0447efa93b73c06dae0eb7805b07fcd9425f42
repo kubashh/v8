@@ -16,6 +16,23 @@
       "message": "Victor, PTAL.",
       "revId": "4f0447efa93b73c06dae0eb7805b07fcd9425f42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77bf8c18_d9884acd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-10T13:51:00Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "4f0447efa93b73c06dae0eb7805b07fcd9425f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
