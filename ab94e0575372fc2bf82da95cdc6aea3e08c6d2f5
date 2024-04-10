@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba109f3f_7bb8a12e",
+        "filename": "src/sandbox/external-pointer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-10T07:18:35Z",
+      "side": 1,
+      "message": "Exactly! I moved the DCHECK into SweepAndCompact now where it makes more sense and the comment can explain why this is the case. PTAL!",
+      "parentUuid": "f72f56ab_3fa11648",
+      "range": {
+        "startLine": 129,
+        "startChar": 18,
+        "endLine": 129,
+        "endChar": 57
+      },
+      "revId": "ab94e0575372fc2bf82da95cdc6aea3e08c6d2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7501e68_b3b28e02",
         "filename": "src/sandbox/external-pointer-table-inl.h",
         "patchSetId": 1
