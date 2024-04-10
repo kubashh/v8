@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd8c3979_bf0c7228",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2024-04-10T08:28:22Z",
+      "side": 1,
+      "message": "@cbruni@chromium.org \u003c Pinging after a week, as comments have been addressed.",
+      "revId": "ab8a849a53ca71c9344e2c73b16265827055aa20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
