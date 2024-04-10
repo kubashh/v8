@@ -310,7 +310,8 @@ using Variable = SnapshotTable<OpIndex, VariableData>::Key;
 #define TURBOSHAFT_OTHER_OPERATION_LIST(V) \
   V(Allocate)                              \
   V(DecodeExternalPointer)                 \
-  V(StackCheck)
+  V(StackCheck)                            \
+  V(JSLoopStackCheck)
 
 #define TURBOSHAFT_OPERATION_LIST_NOT_BLOCK_TERMINATOR(V) \
   TURBOSHAFT_WASM_OPERATION_LIST(V)                       \
@@ -3313,9 +3314,36 @@ struct StackCheckOp : FixedArityOperationT<0, StackCheckOp> {
     return {};
   }
 
-  void Validate(const Graph& graph) const {}
+  void Validate(const Graph& graph) const {
+    // JS loop stack checks should be done with JSLoopStackCheckOp rather than
+    // StackCheckOp.
+    DCHECK_IMPLIES(check_origin == CheckOrigin::kFromJS,
+                   check_kind == CheckKind::kFunctionHeaderCheck);
+  }
 
   auto options() const { return std::tuple{check_origin, check_kind}; }
+};
+
+struct JSLoopStackCheckOp : FixedArityOperationT<2, JSLoopStackCheckOp> {
+  static constexpr OpEffects effects =
+      OpEffects().CanDependOnChecks().CanDeopt().CanReadHeapMemory();
+
+  V<Context> native_context() const { return Base::input<Context>(0); }
+  V<FrameState> frame_state() const { return Base::input<FrameState>(1); }
+
+  base::Vector<const RegisterRepresentation> outputs_rep() const { return {}; }
+
+  base::Vector<const MaybeRegisterRepresentation> inputs_rep(
+      ZoneVector<MaybeRegisterRepresentation>& storage) const {
+    return {};
+  }
+
+  explicit JSLoopStackCheckOp(V<Context> context, V<FrameState> frame_state)
+      : Base(context, frame_state) {}
+
+  void Validate(const Graph& graph) const {}
+
+  auto options() const { return std::tuple{}; }
 };
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
