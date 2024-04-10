@@ -228,7 +228,11 @@ bool TickSample::GetStackSample(Isolate* v8_isolate, RegisterState* regs,
   sample_info->embedder_context = nullptr;
   sample_info->context = nullptr;
 
-  if (sample_info->vm_state == GC) return true;
+  if (v8_isolate->heap()->IsInMovingGC()) {
+    // If objects are potentially being moved, we can't trust pointers like
+    // the context pointer to be in a valid state.
+    return true;
+  }
 
   EmbedderState* embedder_state = isolate->current_embedder_state();
   if (embedder_state != nullptr) {
