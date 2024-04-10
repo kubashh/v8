@@ -52,6 +52,24 @@
       "parentUuid": "73139370_9680ba7f",
       "revId": "9ef7a1daa5cc234b1efe8f723a538cbc79721189",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21059d2c_e992ac83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-04-10T14:02:56Z",
+      "side": 1,
+      "message": "It\u0027s in the comment in flags.cc:72.\nMaybe not the best place, but that\u0027s where it will crash if ever we violate it.",
+      "parentUuid": "633721f8_cb9a0fe1",
+      "revId": "9ef7a1daa5cc234b1efe8f723a538cbc79721189",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
