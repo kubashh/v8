@@ -137,11 +137,15 @@ void CompactibleExternalEntityTable<Entry,
   uint32_t num_segments_to_evacuate =
       (num_free_entries / 2) /
       ExternalEntityTable<Entry, size>::kEntriesPerSegment;
-
   uint32_t space_size =
       num_total_entries * ExternalEntityTable<Entry, size>::kEntrySize;
   bool should_compact = (space_size >= 1 * MB) && (free_ratio >= 0.10) &&
                         (num_segments_to_evacuate >= 1);
+
+  // However, if --stress-compaction is enabled, we compact whenever possible.
+  if (v8_flags.stress_compaction) {
+    should_compact = num_segments_to_evacuate >= 1;
+  }
 
   if (should_compact) {
     // If we're compacting, attempt to free up the last N segments so that they
