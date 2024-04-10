@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd95f128_d81b0512",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-10T14:05:39Z",
+      "side": 1,
+      "message": "For memory 64 the method could be called `AddMemory64()`.",
+      "range": {
+        "startLine": 355,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 23
+      },
+      "revId": "8fe66964946717cc377ceaa457a560fe75f6c255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
