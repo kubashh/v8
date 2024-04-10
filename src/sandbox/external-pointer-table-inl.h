@@ -122,16 +122,10 @@ bool ExternalPointerTableEntry::HasEvacuationEntry() const {
   return payload.ContainsEvacuationEntry();
 }
 
-void ExternalPointerTableEntry::UnmarkAndMigrateInto(
-    ExternalPointerTableEntry& other) {
+void ExternalPointerTableEntry::MigrateInto(ExternalPointerTableEntry& other) {
   auto payload = payload_.load(std::memory_order_relaxed);
   // We expect to only migrate entries containing external pointers.
   DCHECK(payload.ContainsExternalPointer());
-
-  // During compaction, entries that are evacuated may not be visited during
-  // sweeping and may therefore still have their marking bit set. As such, we
-  // should clear that here.
-  payload.ClearMarkBit();
 
   other.payload_.store(payload, std::memory_order_relaxed);
 #if defined(LEAK_SANITIZER)
