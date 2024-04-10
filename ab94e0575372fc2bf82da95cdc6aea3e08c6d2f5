@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f72f56ab_3fa11648",
+        "filename": "src/sandbox/external-pointer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-04-10T07:05:36Z",
+      "side": 1,
+      "message": "FWIW I think the answer is: the compaction mechanism takes an EPT entry A and allocates a new placeholder evacuation entry B where B\u0027s index is lower than A. When B is swept, the heap\u0027s reference to A is rewritten to B, A\u0027s payload is written to B, and then A is clobbered.  A and will be swept to a freelist on the next GC.\n\nSweeping visits EPT entries from high to low index, so A will be swept and therefore unmarked by the time that B is swept.",
+      "parentUuid": "3789b734_e050d2e7",
+      "range": {
+        "startLine": 129,
+        "startChar": 18,
+        "endLine": 129,
+        "endChar": 57
+      },
+      "revId": "ab94e0575372fc2bf82da95cdc6aea3e08c6d2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7501e68_b3b28e02",
         "filename": "src/sandbox/external-pointer-table-inl.h",
         "patchSetId": 1
