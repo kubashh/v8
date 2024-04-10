@@ -127,6 +127,12 @@ class WasmGraphAssembler : public GraphAssembler {
     return LoadProtectedPointerFromObject(object, IntPtrConstant(offset));
   }
 
+  Node* LoadImmutableProtectedPointerFromObject(Node* object, Node* offset);
+  Node* LoadImmutableProtectedPointerFromObject(Node* object, int offset) {
+    return LoadImmutableProtectedPointerFromObject(object,
+                                                   IntPtrConstant(offset));
+  }
+
   // Returns the load node (where the source position for the trap needs to be
   // set by the caller) and the result.
   std::pair<Node*, Node*> LoadProtectedPointerFromObjectTrapOnNull(

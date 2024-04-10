@@ -2265,14 +2265,11 @@ class TurboshaftAssemblerOpInterface
     // The bit cast is needed to change the type of the node to Tagged. This is
     // necessary so that if this value gets spilled on the stack, then the GC
     // will process it.
-    // TODO(clemensb): Can an addition instead of bitwise-or generate better
-    // code?
     return BitcastWordPtrToTagged(
         WordPtrBitwiseOr(ChangeUint32ToUintPtr(tagged), trusted_cage_base));
 #else
-    return Load(base, index, LoadOp::Kind::TaggedBase(),
-                MemoryRepresentation::TaggedPointer(), offset,
-                index.valid() ? element_size_log2 : 0);
+    return Load(base, index, kind, MemoryRepresentation::TaggedPointer(),
+                offset, index.valid() ? element_size_log2 : 0);
 #endif  // V8_ENABLE_SANDBOX
   }
 

@@ -149,12 +149,28 @@ Node* WasmGraphAssembler::LoadProtectedPointerFromObject(Node* object,
 #if V8_ENABLE_SANDBOX
   static_assert(COMPRESS_POINTERS_BOOL);
   Node* tagged = LoadFromObject(MachineType::Int32(), object, offset);
-  Node* trusted_cage_base = Load(MachineType::Pointer(), LoadRootRegister(),
-                                 IsolateData::trusted_cage_base_offset());
+  Node* trusted_cage_base =
+      LoadImmutable(MachineType::Pointer(), LoadRootRegister(),
+                    IsolateData::trusted_cage_base_offset());
   return BitcastWordToTagged(
       WordOr(trusted_cage_base, BuildChangeUint32ToUintPtr(tagged)));
 #else
   return LoadFromObject(MachineType::AnyTagged(), object, offset);
+#endif  // V8_ENABLE_SANDBOX
+}
+
+Node* WasmGraphAssembler::LoadImmutableProtectedPointerFromObject(
+    Node* object, Node* offset) {
+#if V8_ENABLE_SANDBOX
+  static_assert(COMPRESS_POINTERS_BOOL);
+  Node* tagged = LoadImmutableFromObject(MachineType::Int32(), object, offset);
+  Node* trusted_cage_base =
+      LoadImmutable(MachineType::Pointer(), LoadRootRegister(),
+                    IsolateData::trusted_cage_base_offset());
+  return BitcastWordToTagged(
+      WordOr(trusted_cage_base, BuildChangeUint32ToUintPtr(tagged)));
+#else
+  return LoadImmutableFromObject(MachineType::AnyTagged(), object, offset);
 #endif  // V8_ENABLE_SANDBOX
 }
 
