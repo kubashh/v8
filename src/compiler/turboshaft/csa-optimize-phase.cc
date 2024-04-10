@@ -15,6 +15,7 @@
 #include "src/compiler/turboshaft/memory-optimization-reducer.h"
 #include "src/compiler/turboshaft/pretenuring-propagation-reducer.h"
 #include "src/compiler/turboshaft/required-optimization-reducer.h"
+#include "src/compiler/turboshaft/select-lowering-reducer.h"
 #include "src/compiler/turboshaft/value-numbering-reducer.h"
 #include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/numbers/conversions-inl.h"
@@ -23,8 +24,11 @@
 namespace v8::internal::compiler::turboshaft {
 
 void CsaEarlyMachineOptimizationPhase::Run(Zone* temp_zone) {
-  CopyingPhase<MachineOptimizationReducer, ValueNumberingReducer>::Run(
-      temp_zone);
+  CopyingPhase<SelectDetectionReducer, MachineOptimizationReducer,
+               ValueNumberingReducer>::Run(temp_zone);
+
+  CopyingPhase<SelectLoweringReducer, MachineOptimizationReducer,
+               ValueNumberingReducer>::Run(temp_zone);
 }
 
 void CsaLoadEliminationPhase::Run(Zone* temp_zone) {
