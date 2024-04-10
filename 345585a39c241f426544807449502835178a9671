@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "345585a39c241f426544807449502835178a9671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf16d7e_a7ed1cb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-10T14:40:06Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "345585a39c241f426544807449502835178a9671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d352434d_e876f5a1",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4741,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-10T14:40:06Z",
+      "side": 1,
+      "message": "Just a note: I\u0027m not a huge fan of this shadowing.\n`myop.input(1)` doesn\u0027t work any more for these operations. This can be annoying on templates and in general I find it to be slightly confusing as a reader.",
+      "range": {
+        "startLine": 4741,
+        "startChar": 17,
+        "endLine": 4741,
+        "endChar": 22
+      },
+      "revId": "345585a39c241f426544807449502835178a9671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
