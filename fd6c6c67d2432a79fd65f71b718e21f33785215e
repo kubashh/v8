@@ -16,6 +16,23 @@
       "message": "Thanks! Can you take another look, please?",
       "revId": "fd6c6c67d2432a79fd65f71b718e21f33785215e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66dd5110_8e579488",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-10T14:47:24Z",
+      "side": 1,
+      "message": "Thanks, LGTM.",
+      "revId": "fd6c6c67d2432a79fd65f71b718e21f33785215e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
