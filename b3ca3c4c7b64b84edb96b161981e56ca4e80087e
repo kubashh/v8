@@ -39,6 +39,30 @@
       },
       "revId": "b3ca3c4c7b64b84edb96b161981e56ca4e80087e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de66ed0b_cccf1886",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-10T11:56:10Z",
+      "side": 1,
+      "message": "Discussed with Camillo, we think this DCHECK isn\u0027t relevant anymore.",
+      "parentUuid": "78aee772_ba558662",
+      "range": {
+        "startLine": 1205,
+        "startChar": 4,
+        "endLine": 1205,
+        "endChar": 18
+      },
+      "revId": "b3ca3c4c7b64b84edb96b161981e56ca4e80087e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
