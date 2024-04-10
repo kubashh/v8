@@ -16,6 +16,24 @@
       "message": "I guess my pre-coffee brain thought this might create some issues if you had for instance, an implication with a shorter prefix that matches the start of a longer flag name -- like `turbo_whatsit \u003c turbo_whatsit_maxim` or something returning the incorrect flag.\n\nHowever, I haven\u0027t been able to get this to return an incorrect value on godbolt.org yet, so it seems like a fine approach.",
       "revId": "9ef7a1daa5cc234b1efe8f723a538cbc79721189",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73139370_9680ba7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-04-10T08:49:07Z",
+      "side": 1,
+      "message": "I think it works correctly as long as the flag with the suffix compares against other flags exactly as the flag without the suffix would compare. This is always true if the suffix begins with a space, e.g., `max_opt \u003c 3`, as it happens in our flag definitions.\n\nThe only case I found it does not work correctly is a bit contrived:\n\n - implication:       `foo\u003c3` (without a space between `foo` and `\u003c`)\n - flag\u0027s name:       `foo`\n - other flag\u0027s name: `foo42`\n\nThen, it\u0027s `foo` \u003c `foo42` \u003c `foo\u003c3` and looking for the implication string produces `foo42` instead of `foo`. This is the reason why I didn\u0027t add tests without spaces; we have flags `enable_avx` and `enable_avx2`.\n\nI suppose we can safely ignore this scenario...\n\nIt would be nice to have checks for this, when adding implications to our flag definitions, but let\u0027s leave it for a different CL as it\u0027s not easy to implement.",
+      "parentUuid": "ee91c17f_04868baa",
+      "revId": "9ef7a1daa5cc234b1efe8f723a538cbc79721189",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
