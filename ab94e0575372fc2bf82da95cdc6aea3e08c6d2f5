@@ -33,6 +33,24 @@
       "message": "Nice simplification.",
       "revId": "ab94e0575372fc2bf82da95cdc6aea3e08c6d2f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460a3592_7d30c76a",
+        "filename": "src/sandbox/external-pointer-table-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-04-10T06:18:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7501e68_b3b28e02",
+      "revId": "ab94e0575372fc2bf82da95cdc6aea3e08c6d2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
