@@ -16,6 +16,23 @@
       "message": "Hey, could you please take a look at my changes?",
       "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abcc33ad_6759264a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-10T06:11:55Z",
+      "side": 1,
+      "message": "I think this fix goes in the wrong direction. Liftoff keeps a internal version of the wasm value stack, and for each stack slot, Liftoff knows if the slot value is currently cached in a register or not. Multiple slots can be cached in the same register. The number of slots cached with the same register is stored in `cache_state_.get_use_count(reg)`.\n\nAs far as I understand your CL description and the changed code, a register should get spilled but when the end of the stack is reached, Liftoff still thinks that there are stack slots left that have their value cached in the register. This means probably, that `cache_state_.get_use_count(reg)` is out of sync. It would be better to figure out why the cache state is out of sync. This CL makes Liftoff continue with an invalid state, which may lead to the generation of incorrect code.\n\nIf you compile V8 with the gn arg `v8_enable_slow_dchecks` to enable the DCHECK in [1], maybe in combination with --trace-liftoff and --trace-wasm-decoder, you should be able to find the instruction when the cache state gets invalid and why.\n\nIf you need more help, please ask.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/baseline/liftoff-compiler.cc;l\u003d1328;drc\u003def58cad72c78506b85c55ace095200cc1d31c4de",
+      "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
