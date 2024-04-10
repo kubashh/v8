@@ -87,24 +87,13 @@ FullObjectSlot TracedNode::Publish(Tagged<Object> object,
                                    bool needs_young_bit_update,
                                    bool needs_black_allocation,
                                    bool has_old_host, bool is_droppable_value) {
-  DCHECK(!is_in_use());
-  DCHECK(!is_weak());
-  DCHECK(!markbit());
-  DCHECK(!is_droppable());
-  if (needs_young_bit_update) {
-    set_is_in_young_list(true);
-  }
-  if (needs_black_allocation) {
-    set_markbit();
-  }
-  if (has_old_host) {
-    DCHECK(is_in_young_list());
-    set_has_old_host(true);
-  }
-  if (is_droppable_value) {
-    set_droppable(true);
-  }
-  set_is_in_use(true);
+  DCHECK_EQ(flags_, 0);
+
+  flags_ = needs_young_bit_update << IsInYoungList::kShift |
+           needs_black_allocation << Markbit::kShift |
+           has_old_host << HasOldHost::kShift |
+           is_droppable_value << IsDroppable::kShift | 1 << IsInUse::kShift;
+
   reinterpret_cast<std::atomic<Address>*>(&object_)->store(
       object.ptr(), std::memory_order_release);
   return FullObjectSlot(&object_);
