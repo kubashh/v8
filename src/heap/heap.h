@@ -559,6 +559,10 @@ class Heap final {
     HeapState state = gc_state();
     return state != NOT_IN_GC && state != TEAR_DOWN;
   }
+  bool IsInMovingGC() const {
+    HeapState state = gc_state();
+    return state == MARK_COMPACT || state == SCAVENGE;
+  }
   bool force_oom() const { return force_oom_; }
 
   bool ignore_local_gc_requests() const {
