@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c802277_189cda67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-10T11:24:05Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "57ae260be5e7fe5a74d2d0253046bfefbe46b4c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73373779_3cecd0d3",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-10T11:24:05Z",
+      "side": 1,
+      "message": "yay, thanks! (we often call it `Base`)",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 13
+      },
+      "revId": "57ae260be5e7fe5a74d2d0253046bfefbe46b4c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
