@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce94c22_eee0f1f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-11T10:02:51Z",
+      "side": 1,
+      "message": "PTAL 😊",
+      "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d6025a_72b3913c",
+        "filename": "test/mjsunit/regress/wasm/regress-333754542.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-11T10:02:51Z",
+      "side": 1,
+      "message": "I tried, but I couldn\u0027t make it work without the infinite loop, it\u0027s a very brittle repro... 😊\nAnyways, by setting `--no-wasm-lazy-compilation --no-wasm-dynamic-tiering` we enforce eager compilation, so this crashes on the turboshaft test runner without the fix.",
+      "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
