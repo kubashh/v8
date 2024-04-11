@@ -312,6 +312,9 @@ class FeedbackVector
   inline bool interrupt_budget_reset_by_ic_change() const;
   inline void set_interrupt_budget_reset_by_ic_change(bool value);
 
+  inline bool has_function_context_specialized_turbofan_code() const;
+  inline void set_has_function_context_specialized_turbofan_code(bool value);
+
   void reset_flags();
 
   // Conversion from a slot to an integer index to the underlying array.

@@ -5937,6 +5937,11 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     TRACE_CANNOT_INLINE("it has not been compiled/run with feedback yet");
     return false;
   }
+  if (feedback_vector->object()->maybe_has_turbofan_code() ||
+      feedback_vector->object()
+          ->has_function_context_specialized_turbofan_code()) {
+    return false;
+  }
   // TODO(olivf): This is a temporary stopgap to prevent infinite recursion when
   // inlining, because we currently excempt small functions from some of the
   // negative heuristics. We should refactor these heuristics and make sure they
