@@ -295,6 +295,7 @@ class RegisterRepresentation : public MaybeRegisterRepresentation {
       case MachineRepresentation::kSimd256:
         return Simd256();
       case MachineRepresentation::kMapWord:
+      case MachineRepresentation::kProtectedPointer:
       case MachineRepresentation::kIndirectPointer:
       case MachineRepresentation::kSandboxedPointer:
       case MachineRepresentation::kNone:
@@ -323,6 +324,7 @@ class RegisterRepresentation : public MaybeRegisterRepresentation {
         return RegisterRepresentation::Float32();
       case MachineRepresentation::kFloat64:
         return RegisterRepresentation::Float64();
+      case MachineRepresentation::kProtectedPointer:
       case MachineRepresentation::kIndirectPointer:
       case MachineRepresentation::kSandboxedPointer:
         return RegisterRepresentation::WordPtr();
@@ -529,6 +531,7 @@ class MemoryRepresentation {
     kAnyTagged,
     kTaggedPointer,
     kTaggedSigned,
+    kProtectedPointer,
     kIndirectPointer,
     kSandboxedPointer,
     kSimd128,
@@ -592,6 +595,9 @@ class MemoryRepresentation {
   static constexpr MemoryRepresentation TaggedSigned() {
     return MemoryRepresentation(Enum::kTaggedSigned);
   }
+  static constexpr MemoryRepresentation ProtectedPointer() {
+    return MemoryRepresentation(Enum::kProtectedPointer);
+  }
   static constexpr MemoryRepresentation IndirectPointer() {
     return MemoryRepresentation(Enum::kIndirectPointer);
   }
@@ -621,6 +627,7 @@ class MemoryRepresentation {
       case AnyTagged():
       case TaggedPointer():
       case TaggedSigned():
+      case ProtectedPointer():
       case IndirectPointer():
       case SandboxedPointer():
       case Simd128():
@@ -646,6 +653,7 @@ class MemoryRepresentation {
       case AnyTagged():
       case TaggedPointer():
       case TaggedSigned():
+      case ProtectedPointer():
       case IndirectPointer():
       case SandboxedPointer():
       case Simd128():
@@ -659,6 +667,7 @@ class MemoryRepresentation {
       case AnyTagged():
       case TaggedPointer():
       case TaggedSigned():
+      case ProtectedPointer():
         return true;
       case Int8():
       case Int16():
@@ -682,6 +691,7 @@ class MemoryRepresentation {
     switch (*this) {
       case AnyTagged():
       case TaggedPointer():
+      case ProtectedPointer():
         return true;
       case TaggedSigned():
       case Int8():
@@ -721,8 +731,8 @@ class MemoryRepresentation {
       case AnyTagged():
       case TaggedPointer():
       case TaggedSigned():
-        return RegisterRepresentation::Tagged();
       case IndirectPointer():
+      case ProtectedPointer():
         return RegisterRepresentation::Tagged();
       case SandboxedPointer():
         return RegisterRepresentation::Word64();
@@ -796,6 +806,8 @@ class MemoryRepresentation {
         return MachineType::TaggedPointer();
       case TaggedSigned():
         return MachineType::TaggedSigned();
+      case ProtectedPointer():
+        return MachineType::ProtectedPointer();
       case IndirectPointer():
         return MachineType::IndirectPointer();
       case SandboxedPointer():
@@ -825,6 +837,8 @@ class MemoryRepresentation {
         // Turboshaft does not support map packing.
         DCHECK(!V8_MAP_PACKING_BOOL);
         return TaggedPointer();
+      case MachineRepresentation::kProtectedPointer:
+        return ProtectedPointer();
       case MachineRepresentation::kIndirectPointer:
         return IndirectPointer();
       case MachineRepresentation::kTagged:
@@ -879,6 +893,7 @@ class MemoryRepresentation {
       case MachineRepresentation::kBit:
       case MachineRepresentation::kCompressedPointer:
       case MachineRepresentation::kCompressed:
+      case MachineRepresentation::kProtectedPointer:
       case MachineRepresentation::kIndirectPointer:
         UNREACHABLE();
     }
@@ -909,6 +924,7 @@ class MemoryRepresentation {
       case AnyTagged():
       case TaggedPointer():
       case TaggedSigned():
+      case ProtectedPointer():
         return kTaggedSizeLog2;
       case Simd128():
         return 4;

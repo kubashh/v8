@@ -1219,8 +1219,9 @@ std::tuple<InstructionCode, ImmediateMode> GetStoreOpcodeAndImmediate(
       opcode = kArm64StrQ;
       immediate_mode = kNoImmediate;
       break;
-    case MachineRepresentation::kSimd256:  // Fall through.
-    case MachineRepresentation::kMapWord:  // Fall through.
+    case MachineRepresentation::kSimd256:           // Fall through.
+    case MachineRepresentation::kMapWord:           // Fall through.
+    case MachineRepresentation::kProtectedPointer:  // Fall through.
     case MachineRepresentation::kNone:
       UNREACHABLE();
   }
@@ -1721,6 +1722,10 @@ void InstructionSelectorT<Adapter>::VisitLoad(node_t node) {
     case MachineRepresentation::kWord64:
       opcode = kArm64Ldr;
       immediate_mode = kLoadStoreImm64;
+      break;
+    case MachineRepresentation::kProtectedPointer:
+      CHECK(V8_ENABLE_SANDBOX_BOOL);
+      opcode = kArm64LdrDecompressProtected;
       break;
     case MachineRepresentation::kSandboxedPointer:
       opcode = kArm64LdrDecodeSandboxedPointer;

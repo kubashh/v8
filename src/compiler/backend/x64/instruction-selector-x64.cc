@@ -1047,6 +1047,10 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
     case MachineRepresentation::kWord64:
       opcode = kX64Movq;
       break;
+    case MachineRepresentation::kProtectedPointer:
+      CHECK(V8_ENABLE_SANDBOX_BOOL);
+      opcode = kX64MovqDecompressProtected;
+      break;
     case MachineRepresentation::kSandboxedPointer:
       opcode = kX64MovqDecodeSandboxedPointer;
       break;
@@ -1096,10 +1100,11 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
       return kX64MovqEncodeSandboxedPointer;
     case MachineRepresentation::kSimd128:
       return kX64Movdqu;
-    case MachineRepresentation::kSimd256:  // Fall through.
+    case MachineRepresentation::kSimd256:
       return kX64Movdqu256;
     case MachineRepresentation::kNone:     // Fall through.
     case MachineRepresentation::kMapWord:  // Fall through.
+    case MachineRepresentation::kProtectedPointer:
       UNREACHABLE();
   }
   UNREACHABLE();
