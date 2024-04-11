@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fedf4a1_40686ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1289798
+      },
+      "writtenOn": "2024-04-11T23:29:13Z",
+      "side": 1,
+      "message": "Hey all! In Cloudflare Workers, we implement the DOMException API as a C++ host object. Unfortunately we end up having to create a separate Error object in order to get the stack, which ends up being a bit wasteful. This change should make things easier by allowing us to attach the stack directly to the wrapper object for our c++ types.",
+      "revId": "5929e6c308e6a245a7882a8e5446c3f2a1997a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
