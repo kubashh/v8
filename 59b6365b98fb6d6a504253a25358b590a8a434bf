@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bfda4bc_7d1a0ab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-11T21:20:10Z",
+      "side": 1,
+      "message": "pthier@, PTAL.\n\n+leszeks@ for src/codegen/ OWNER stamp.",
+      "revId": "59b6365b98fb6d6a504253a25358b590a8a434bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
