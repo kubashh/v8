@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee23ce25_a284c0f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-11T10:04:57Z",
+      "side": 1,
+      "message": "LGTM, thanks! :)",
+      "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04d6025a_72b3913c",
@@ -31,6 +48,24 @@
       "writtenOn": "2024-04-11T10:02:51Z",
       "side": 1,
       "message": "I tried, but I couldn\u0027t make it work without the infinite loop, it\u0027s a very brittle repro... 😊\nAnyways, by setting `--no-wasm-lazy-compilation --no-wasm-dynamic-tiering` we enforce eager compilation, so this crashes on the turboshaft test runner without the fix.",
+      "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e10e2a6_1029055a",
+        "filename": "test/mjsunit/regress/wasm/regress-333754542.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-11T10:04:57Z",
+      "side": 1,
+      "message": "Ack, sounds good :) Anyways, it\u0027s just about a missed optimization in the compiler, so it\u0027s not like it\u0027s critical to have a very robust repro :)",
+      "parentUuid": "04d6025a_72b3913c",
       "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
