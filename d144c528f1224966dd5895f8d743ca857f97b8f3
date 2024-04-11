@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "716acf9a_2b9c51fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-11T14:04:20Z",
+      "side": 1,
+      "message": "Nice, I like it! Please rebase once more and I can start another round of dry-runs",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d806163_57bff514",
@@ -18,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29ef34fa_dceff313",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-11T14:04:20Z",
+      "side": 1,
+      "message": "Acknowledged. It\u0027s landing just now, sorry for the delay/trouble with that Cl... :(",
+      "parentUuid": "4d806163_57bff514",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19b01dca_040d0b05",
+        "filename": "src/sandbox/external-buffer-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-11T14:04:20Z",
+      "side": 1,
+      "message": "We\u0027ve now removed this shortcut in https://chromium-review.googlesource.com/c/v8/v8/+/5439561 It should still be fine here since we don\u0027t support managed buffers (yet?), but maybe there\u0027s some value in keeping the implementations as close together as possible for now?",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cf29f48_bdf74439",
@@ -31,6 +83,41 @@
       "writtenOn": "2024-04-10T17:35:33Z",
       "side": 1,
       "message": "Looking into the windows build failure https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8751140545198081025/+/u/build/compile/stdout?format\u003draw it comes from the atomic operation on 128-bit Payload type. I am thinking of removing the Payload wrapper and have the entry class as follows. Downside is we cannot explore a reusable TaggedPayload for the buffer table. Thoughts ?\n\n```\nstruct ExternalBufferTableEntry {\n private:\n  std::atomic\u003cAddress\u003e encoded_word_;\n  std::atomic\u003csize_t\u003e raw_size_;\n};\n```",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d9d77b5_6d9ec08c",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-11T14:04:20Z",
+      "side": 1,
+      "message": "I think that\u0027s fine. That\u0027s basically what we already do for the code pointer table: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/sandbox/code-pointer-table.h;l\u003d84;drc\u003d0c86ce8471f83b0004a61a4d5fb7be29ac60e2cc\nWe could still use a \"TaggedPayload\" class since I guess we\u0027d only need to tag one of the two values, the other can be a raw `Address` or `size_t`.\n\nThe only drawback is that the compiler seems unable to fold two atomic 64-bit loads into one atomic 128-bit load. Maybe worth keeping that as a comment, but I think it\u0027s definitely fine that way for now.",
+      "parentUuid": "8cf29f48_bdf74439",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf41070_cec0f70d",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-11T14:04:20Z",
+      "side": 1,
+      "message": "Could you call this `Base` instead? Sorry, I realize that I suggested that name, but I\u0027ve since looked through our code base and it seems we typically call this `Base`, and I\u0027ve now done the same in the CompactibleExternalEntityTable class",
       "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
