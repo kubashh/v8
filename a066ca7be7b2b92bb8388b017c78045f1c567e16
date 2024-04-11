@@ -22,6 +22,30 @@
       },
       "revId": "a066ca7be7b2b92bb8388b017c78045f1c567e16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3056ad2_66e4a323",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-11T09:54:44Z",
+      "side": 0,
+      "message": "Yes to the question.\n\nBut good point about implicit truncations in Turbofan, I forgot about that. Still, I think that this TryRemoveWord32ToWord64Conversion should never be needed here, since REDUCE(Comparison) and REDUCE(WordBinop) will already have removed 32-\u003e64 extensions. REDUCE(Shift) doesn\u0027t do it, but I just added it.",
+      "parentUuid": "62b65885_ce24619d",
+      "range": {
+        "startLine": 2483,
+        "startChar": 18,
+        "endLine": 2483,
+        "endChar": 51
+      },
+      "revId": "a066ca7be7b2b92bb8388b017c78045f1c567e16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
