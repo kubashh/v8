@@ -8,15 +8,45 @@
 #include <algorithm>
 #include <iterator>
 #include <optional>
+#include <type_traits>
 #include <vector>
 
 namespace v8::base {
 
+namespace detail {
+template <typename C, typename T, typename = void>
+struct container_defines_contains : std::false_type {};
+template <typename C, typename T>
+struct container_defines_contains<
+    C, T, std::void_t<decltype(std::declval<C>().contains(std::declval<T>()))>>
+    : std::true_type {};
+template <typename C, typename T>
+constexpr bool container_defines_contains_v =
+    container_defines_contains<C, T>::value;
+
+template <typename C, typename T, typename = void>
+struct container_defines_find : std::false_type {};
+template <typename C, typename T>
+struct container_defines_find<
+    C, T, std::void_t<decltype(std::declval<C>().find(std::declval<T>()))>>
+    : std::true_type {};
+template <typename C, typename T>
+constexpr bool container_defines_find_v = container_defines_find<C, T>::value;
+}  // namespace detail
+
 // Returns true iff the {element} is found in the {container}.
 template <typename C, typename T>
 bool contains(const C& container, const T& element) {
-  const auto e = std::end(container);
-  return std::find(std::begin(container), e, element) != e;
+  if constexpr (detail::container_defines_contains_v<C, T>) {
+    return container.contains(element);
+  } else {
+    const auto e = std::end(container);
+    if constexpr (detail::container_defines_find_v<C, T>) {
+      return container.find(element) != e;
+    } else {
+      return std::find(std::begin(container), e, element) != e;
+    }
+  }
 }
 
 // Returns the first index of {element} in {container}. Returns std::nullopt if

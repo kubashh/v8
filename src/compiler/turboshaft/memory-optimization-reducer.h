@@ -29,7 +29,9 @@ inline bool ValueNeedsWriteBarrier(const Graph* graph, const Operation& value,
   if (value.Is<Opmask::kBitcastWordPtrToSmi>()) {
     return false;
   } else if (const ConstantOp* constant = value.TryCast<ConstantOp>()) {
-    if (constant->kind == ConstantOp::Kind::kHeapObject) {
+    if (constant->kind == ConstantOp::Kind::kSmi) {
+      return false;
+    } else if (constant->kind == ConstantOp::Kind::kHeapObject) {
       RootIndex root_index;
       if (isolate->roots_table().IsRootHandle(constant->handle(),
                                               &root_index) &&
