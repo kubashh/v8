@@ -68,6 +68,24 @@
       "parentUuid": "04d6025a_72b3913c",
       "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29579899_1b87444e",
+        "filename": "test/mjsunit/regress/wasm/regress-333754542.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-11T10:05:35Z",
+      "side": 1,
+      "message": "Yeah, but making sure that we run this reducer in wasm makes sense. 😊",
+      "parentUuid": "8e10e2a6_1029055a",
+      "revId": "92f937ae594b947f0fb66d2626f9e23b6b3815da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
