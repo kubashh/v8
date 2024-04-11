@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62b65885_ce24619d",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-11T08:45:45Z",
+      "side": 0,
+      "message": "This isn\u0027t necessary because we shouldn\u0027t ever have a `Word64` input, right?\nStill, there is a risk that we still have it from Turbofan graphs (as we weren\u0027t able to enforce the \"no implicit truncation\" check for turboshaft graphs created from Turbofan).",
+      "range": {
+        "startLine": 2483,
+        "startChar": 18,
+        "endLine": 2483,
+        "endChar": 51
+      },
+      "revId": "a066ca7be7b2b92bb8388b017c78045f1c567e16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
