@@ -16,6 +16,63 @@
       "message": "PTAL:\nClemens as primary reviewer, for memory expertise and because the Liftoff changes are the most nontrivial part of this CL.\nMatthias for src/compiler/OWNERShip.",
       "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e28fb581_9d3c560d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T10:46:03Z",
+      "side": 1,
+      "message": "LGTM with a nit and a clarification question 😊",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e056931_85c8aa07",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7104,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T10:46:03Z",
+      "side": 1,
+      "message": "Nit: Let\u0027s add a `DCHECK(imm.memory-\u003eis_memory64);` here and in the same places below.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45a31755_f82786f4",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7372,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T10:46:03Z",
+      "side": 1,
+      "message": "This is safe because we ensure in `PopMemTypeToVarState` that it\u0027s a \"new\" register by:\n```\n      // Choose a register to hold the (combination of) high word(s). It cannot\n      // be one of the pinned registers, and it cannot be used in the value\n      // stack.\n      *high_word \u003d\n          !pinned-\u003ehas(reg.high()) \u0026\u0026 __ cache_state()-\u003eis_free(reg.high())\n              ? reg.high().gp()\n              : __ GetUnusedRegister(kGpReg, *pinned).gp();\n```\ncorrect?",
+      "range": {
+        "startLine": 7372,
+        "startChar": 6,
+        "endLine": 7372,
+        "endChar": 37
+      },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
