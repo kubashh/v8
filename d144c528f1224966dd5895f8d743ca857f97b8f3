@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3484178_928da935",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-12T11:49:01Z",
+      "side": 1,
+      "message": "Should be good for a dry-run, PTAL",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d806163_57bff514",
@@ -70,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc7b0c1c_044bef2d",
+        "filename": "src/sandbox/external-buffer-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-12T11:49:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "19b01dca_040d0b05",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cf29f48_bdf74439",
@@ -105,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3feb83c_478c7768",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-12T11:49:01Z",
+      "side": 1,
+      "message": "Missed the codepointertable, thanks for the pointer! I see that it does not use Payload for the code_ object, during the TaggedPayload exploration should we try converting it as well ?\n\n\u003e We could still use a \"TaggedPayload\" class since I guess we\u0027d only need to tag one of the two values, the other can be a raw Address or size_t.\n\nOh yeah, sounds good.\n\n\u003e The only drawback is that the compiler seems unable to fold two atomic 64-bit loads into one atomic 128-bit load.\n\nSeems like this might be a clang only issue, on linux we can use gcc libatomic as fallback https://godbolt.org/z/4PbTYsvzW and windows msvc seems to support it natively.",
+      "parentUuid": "3d9d77b5_6d9ec08c",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cf41070_cec0f70d",
@@ -118,6 +171,24 @@
       "writtenOn": "2024-04-11T14:04:20Z",
       "side": 1,
       "message": "Could you call this `Base` instead? Sorry, I realize that I suggested that name, but I\u0027ve since looked through our code base and it seems we typically call this `Base`, and I\u0027ve now done the same in the CompactibleExternalEntityTable class",
+      "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "369d1858_7f037da6",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-12T11:49:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3cf41070_cec0f70d",
       "revId": "d144c528f1224966dd5895f8d743ca857f97b8f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
