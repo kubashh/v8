@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "946f5cf0_28d9e6d7",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "I\u0027d prefer to stick with the simplest and fastest approach as long as it has no drawbacks, but I\u0027ve added your idea to the comment in case we change our minds later.",
+      "parentUuid": "e15ffc62_5bc81285",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e109d49b_773c6ee3",
@@ -82,6 +100,24 @@
       "writtenOn": "2024-04-12T11:22:44Z",
       "side": 1,
       "message": "Is it correct to use `Uint32Constant` here? The runtime seems to expect a Smi.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b138f75d_b09533b3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6185,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "The builtin expects a `uint32` and performs the Smi tagging before calling the runtime. As you just said in another context, \"if we call a builtin anyway, we should push as much work as possible into the builtin.\" 😊",
+      "parentUuid": "e109d49b_773c6ee3",
       "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48c01742_b50ea36c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7104,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "Obsolete after the refactoring Clemens requested.",
+      "parentUuid": "3e056931_85c8aa07",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fbceafc_d53b4bc5",
@@ -116,6 +170,24 @@
       "writtenOn": "2024-04-12T11:22:44Z",
       "side": 1,
       "message": "Just an idea to optimize this (optional):\nTo avoid this additional OOL code, we could have a variant of `MemTypeToVarState` which sets the returned register to `kMaxUint32` if any high word had bits set.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a1841ac_bda92db4",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7107,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "Done. Good idea!",
+      "parentUuid": "8fbceafc_d53b4bc5",
       "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +209,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32ab02d2_ae3e7fdb",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7162,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "\u003e Why is this so different to `StringNewWtf8`?\n\nMade it more similar.\n\n\u003e Edit: You are switching more methods below to pop before the call. Any reason for that?\n\nNo particular reason, just how the patch evolved. At first I tried to use the existing `PopMemTypeToVarState` helper everywhere, then I introduced the non-popping variant, and only used it where it was really necessary.",
+      "parentUuid": "f51d2042_082c29f1",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bcff18c_0683c0fc",
@@ -150,6 +240,30 @@
       "writtenOn": "2024-04-12T11:22:44Z",
       "side": 1,
       "message": "Those two could also just be constants. Would avoid register moves and potentially spilling.",
+      "range": {
+        "startLine": 7297,
+        "startChar": 1,
+        "endLine": 7305,
+        "endChar": 51
+      },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1a53de_601e17fd",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7305,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "Done. As discussed, supporting Smi constants in the `VarState` constructor would be difficult, so for now the way to avoid these is to move the builtin\u0027s untagged parameters to the first three positions, and perform the Smi tagging in the builtin. (A minor drawback is that doing so makes the call from optimized code very slightly more expensive, because that could previously perform the Smi-tagging at compile time.)",
+      "parentUuid": "8bcff18c_0683c0fc",
       "range": {
         "startLine": 7297,
         "startChar": 1,
@@ -207,6 +321,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3b539c6_94c85415",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7372,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "It\u0027s safe because Clemens introduced the technique in crrev.com/c/3468335, and he knows what he\u0027s doing 😊\nSpecifically: (1) yes, as you say, `offset_high_word` was a fresh register, and (2) we\u0027re done with it at this point.\n\nBut all this code is gone now anyway.",
+      "parentUuid": "9e583c3d_06701fce",
+      "range": {
+        "startLine": 7372,
+        "startChar": 6,
+        "endLine": 7372,
+        "endChar": 37
+      },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa25e7b_654edff1",
@@ -220,6 +358,30 @@
       "writtenOn": "2024-04-12T11:22:44Z",
       "side": 1,
       "message": "Another candidate for a constant.",
+      "range": {
+        "startLine": 7379,
+        "startChar": 0,
+        "endLine": 7382,
+        "endChar": 49
+      },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11f1a901_0a8f76d4",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7382,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-12T16:20:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa25e7b_654edff1",
       "range": {
         "startLine": 7379,
         "startChar": 0,
