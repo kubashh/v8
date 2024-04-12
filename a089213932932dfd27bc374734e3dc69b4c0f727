@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "746bbfdd_d25e90b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-04-12T12:41:25Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "a089213932932dfd27bc374734e3dc69b4c0f727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fdf8ed3_eec4020e",
+        "filename": "test/unittests/gen_fuzztest_configs.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-04-12T12:41:25Z",
+      "side": 1,
+      "message": "Escaping parens because I now use format() below.",
+      "range": {
+        "startLine": 42,
+        "startChar": 19,
+        "endLine": 42,
+        "endChar": 20
+      },
+      "revId": "a089213932932dfd27bc374734e3dc69b4c0f727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
