@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de57b33_8b58359e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-12T09:16:14Z",
+      "side": 1,
+      "message": "This CL would benefit from a CL description, IMO, which mentions that you introduce a new operation, and why.",
+      "revId": "b148ab0224903120c46090facd35fc872f03242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4673afb4_ad721ffc",
@@ -14,6 +31,23 @@
       "writtenOn": "2024-04-12T09:05:33Z",
       "side": 1,
       "message": "@ahaas@chromium.org PTAL src/wasm",
+      "revId": "b148ab0224903120c46090facd35fc872f03242d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b1da8c_fa7d3063",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-12T09:16:14Z",
+      "side": 1,
+      "message": "LGTM",
       "revId": "b148ab0224903120c46090facd35fc872f03242d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
