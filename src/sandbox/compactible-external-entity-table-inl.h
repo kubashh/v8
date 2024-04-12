@@ -53,6 +53,30 @@ void CompactibleExternalEntityTable<Entry, size>::MaybeCreateEvacuationEntry(
 }
 
 template <typename Entry, size_t size>
+uint32_t CompactibleExternalEntityTable<Entry, size>::AllocateEntry(
+    Space* space) {
+  uint32_t index = Base::AllocateEntry(space);
+  // When we're compacting a space, we're trying to move all entries above a
+  // threshold index (the start of the evacuation area) into segments below
+  // that threshold. However, if the freelist becomes too short and we start
+  // allocating entries inside the area that is supposed to be evacuated, we
+  // need to abort compaction. This is not just an optimization but is also
+  // required for correctness: during sweeping we might otherwise assume that
+  // all entries inside the evacuation area have been moved and that these
+  // segments can therefore be deallocated. In particular, this check will also
+  // make sure that we abort compaction if we extend the space with a new
+  // segment and allocate at least one entry in it (if that segment is located
+  // after the threshold, otherwise it is unproblematic).
+  uint32_t start_of_evacuation_area =
+      space->start_of_evacuation_area_.load(std::memory_order_relaxed);
+  if (V8_UNLIKELY(index >= start_of_evacuation_area)) {
+    space->AbortCompacting(start_of_evacuation_area);
+  }
+
+  return index;
+}
+
+template <typename Entry, size_t size>
 void CompactibleExternalEntityTable<Entry, size>::Space::StartCompacting(
     uint32_t start_of_evacuation_area) {
   DCHECK_EQ(invalidated_fields_.size(), 0);

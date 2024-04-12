@@ -269,6 +269,10 @@ class V8_EXPORT_PRIVATE ExternalPointerTable
   static_assert(kMaxExternalPointers == kMaxCapacity);
 #endif
 
+  using Base =
+      CompactibleExternalEntityTable<ExternalPointerTableEntry,
+                                     kExternalPointerTableReservationSize>;
+
  public:
   // Size of an ExternalPointerTable, for layout computation in IsolateData.
   static int constexpr kSize = 2 * kSystemPointerSize;
@@ -279,9 +283,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable
 
   // The Spaces used by an ExternalPointerTable also contain the state related
   // to compaction.
-  using CompactibleSpace = CompactibleExternalEntityTable<
-      ExternalPointerTableEntry, kExternalPointerTableReservationSize>::Space;
-  struct Space : public CompactibleSpace {
+  struct Space : public Base::Space {
    public:
     // During table compaction, we may record the addresses of fields
     // containing external pointer handles (if they are evacuation candidates).
