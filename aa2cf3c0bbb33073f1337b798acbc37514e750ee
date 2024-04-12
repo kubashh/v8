@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15bae9e7_e5621ce4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-12T09:05:02Z",
+      "side": 1,
+      "message": "Thanks. I\u0027ll need a new +1 since I touched a few more files while refactoring the CheckKind and CheckOrigin in a single Kind.",
+      "revId": "aa2cf3c0bbb33073f1337b798acbc37514e750ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
