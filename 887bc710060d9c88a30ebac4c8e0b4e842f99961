@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6de102ab_f0c1e2ca",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-12T12:36:08Z",
+      "side": 1,
+      "message": "Given this will be resolved in https://chromium-review.googlesource.com/c/v8/v8/+/5185345/comment/33849afa_14a4721e/, let me remove this to avoid conflict.",
+      "revId": "887bc710060d9c88a30ebac4c8e0b4e842f99961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
