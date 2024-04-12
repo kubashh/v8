@@ -2043,11 +2043,23 @@
   'language/statements/class/decorator/syntax/valid/class-element-decorator-member-expr-identifier-reference': [FAIL],
   'language/statements/class/decorator/syntax/valid/class-element-decorator-parenthesized-expr-identifier-reference': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=14304
-  'intl402/DurationFormat/prototype/format/numeric-hour-with-zero-minutes-and-non-zero-seconds': [FAIL],
+  # https://github.com/tc39/proposal-intl-duration-format/pull/185#issuecomment-2046207903
+  'intl402/DurationFormat/constructor-options-defaults': [FAIL],
 
   # intl402/DurationFormat/prototype/format/precision-exact-mathematical-values
   'intl402/DurationFormat/prototype/format/precision-exact-mathematical-values': [FAIL],
+
+  # https://github.com/tc39/test262/issues/4050
+  'intl402/DurationFormat/prototype/format/negative-duration-style-default-en': [FAIL],
+  'intl402/DurationFormat/prototype/format/negative-durationstyle-long-en': [FAIL],
+  'intl402/DurationFormat/prototype/format/negative-durationstyle-digital-en': [FAIL],
+  'intl402/DurationFormat/prototype/format/negative-durationstyle-narrow-en': [FAIL],
+  'intl402/DurationFormat/prototype/format/negative-duration-style-short-en': [FAIL],
+  'intl402/DurationFormat/prototype/formatToParts/negative-duration-formatToParts-style-digital-en': [FAIL],
+  'intl402/DurationFormat/prototype/formatToParts/negative-duration-formatToParts-style-long-en': [FAIL],
+  'intl402/DurationFormat/prototype/formatToParts/negative-duration-formatToParts-style-narrow-en': [FAIL],
+  'intl402/DurationFormat/prototype/formatToParts/negative-duration-formatToParts-style-short-en': [FAIL],
+  'intl402/DurationFormat/prototype/formatToParts/negative-duration-formatToParts-style-default-en': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=14303
   'built-ins/RegExp/unicodeSets/generated/rgi-emoji-15.1': [FAIL],
@@ -2457,8 +2469,6 @@
   'built-ins/Temporal/ZonedDateTime/prototype/withPlainDate/order-of-operations': [FAIL],
   'built-ins/Temporal/ZonedDateTime/prototype/withPlainTime/getpossibleinstantsfor-called-with-iso8601-calendar': [FAIL],
   'built-ins/Temporal/ZonedDateTime/prototype/withPlainTime/order-of-operations': [FAIL],
-  'intl402/DurationFormat/prototype/format/style-digital-fractionalDigits-undefined-en': [FAIL],
-  'intl402/DurationFormat/constructor-options-style-conflict': [FAIL],
   'language/global-code/script-decl-lex-var-declared-via-eval-sloppy': [FAIL],
 }],
 # end import test262@6396ebde0316639292530460d1ef961fd9bbe0d4

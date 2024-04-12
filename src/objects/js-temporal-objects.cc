@@ -379,8 +379,6 @@ V8_WARN_UNUSED_RESULT
 Handle<BigInt> GetEpochFromISOParts(Isolate* isolate,
                                     const DateTimeRecord& date_time);
 
-int32_t DurationSign(Isolate* isolaet, const DurationRecord& dur);
-
 // #sec-temporal-isodaysinmonth
 int32_t ISODaysInMonth(Isolate* isolate, int32_t year, int32_t month);
 
@@ -1373,7 +1371,7 @@ Handle<String> TemporalDurationToString(Isolate* isolate,
   // 1. Let sign be ! DurationSign(years, months, weeks, days, hours, minutes,
   // seconds, milliseconds, microseconds, nanoseconds).
   DurationRecord dur = duration;
-  int32_t sign = DurationSign(isolate, dur);
+  int32_t sign = DurationRecord::Sign(dur);
   // Note: for the operation below, to avoid microseconds .. seconds lost
   // precision while the resulting value may exceed the precision limit, we use
   // extra double xx_add to hold the additional temp value.
@@ -5768,7 +5766,7 @@ Maybe<DurationRecord> DifferenceISODateTime(
   // timeDifference.[[Milliseconds]], timeDifference.[[Microseconds]],
   // timeDifference.[[Nanoseconds]]).
   time_difference.days = 0;
-  double time_sign = DurationSign(isolate, {0, 0, 0, time_difference});
+  double time_sign = DurationRecord::Sign({0, 0, 0, time_difference});
 
   // 5. Let dateSign be ! CompareISODate(y2, mon2, d2, y1, mon1, d1).
   double date_sign = CompareISODate(date_time2.date, date_time1.date);
@@ -5985,8 +5983,12 @@ Handle<BigInt> GetEpochFromISOParts(Isolate* isolate,
       .ToHandleChecked();
 }
 
+}  // namespace
+
+namespace temporal {
+
 // #sec-temporal-durationsign
-int32_t DurationSign(Isolate* isolaet, const DurationRecord& dur) {
+int32_t DurationRecord::Sign(const DurationRecord& dur) {
   TEMPORAL_ENTER_FUNC();
 
   // 1. For each value v of « years, months, weeks, days, hours, minutes,
@@ -6017,17 +6019,13 @@ int32_t DurationSign(Isolate* isolaet, const DurationRecord& dur) {
   return 0;
 }
 
-}  // namespace
-
-namespace temporal {
-
 // #sec-temporal-isvalidduration
 bool IsValidDuration(Isolate* isolate, const DurationRecord& dur) {
   TEMPORAL_ENTER_FUNC();
 
   // 1. Let sign be ! DurationSign(years, months, weeks, days, hours, minutes,
   // seconds, milliseconds, microseconds, nanoseconds).
-  int32_t sign = DurationSign(isolate, dur);
+  int32_t sign = DurationRecord::Sign(dur);
   // 2. For each value v of « years, months, weeks, days, hours, minutes,
   // seconds, milliseconds, microseconds, nanoseconds », do a. If v is not
   // finite, return false. b. If v < 0 and sign > 0, return false. c. If v > 0
@@ -6254,12 +6252,12 @@ Maybe<TimeDurationRecord> DifferenceTime(Isolate* isolate,
   dur.nanoseconds = time2.nanosecond - time1.nanosecond;
   // 8. Let sign be ! DurationSign(0, 0, 0, 0, hours, minutes, seconds,
   // milliseconds, microseconds, nanoseconds).
-  double sign = DurationSign(
-      isolate, {0,
-                0,
-                0,
-                {0, dur.hours, dur.minutes, dur.seconds, dur.milliseconds,
-                 dur.microseconds, dur.nanoseconds}});
+  double sign = DurationRecord::Sign(
+      {0,
+       0,
+       0,
+       {0, dur.hours, dur.minutes, dur.seconds, dur.milliseconds,
+        dur.microseconds, dur.nanoseconds}});
 
   // 9. Let bt be ! BalanceTime(hours × sign, minutes × sign, seconds × sign,
   // milliseconds × sign, microseconds × sign, nanoseconds × sign).
@@ -6786,8 +6784,7 @@ Maybe<DateDurationRecord> UnbalanceDurationRelative(
   }
   // 2. Let sign be ! DurationSign(years, months, weeks, days, 0, 0, 0, 0, 0,
   // 0).
-  double sign = DurationSign(
-      isolate,
+  double sign = DurationRecord::Sign(
       {dur.years, dur.months, dur.weeks, {dur.days, 0, 0, 0, 0, 0, 0}});
   // 3. Assert: sign ≠ 0.
   DCHECK_NE(sign, 0);
@@ -7017,8 +7014,7 @@ Maybe<DateDurationRecord> BalanceDurationRelative(
 
   // 3. Let sign be ! DurationSign(years, months, weeks, days, 0, 0, 0, 0, 0,
   // 0).
-  double sign = DurationSign(
-      isolate,
+  double sign = DurationRecord::Sign(
       {dur.years, dur.months, dur.weeks, {dur.days, 0, 0, 0, 0, 0, 0}});
   // 4. Assert: sign ≠ 0.
   DCHECK_NE(sign, 0);
@@ -7944,18 +7940,18 @@ MaybeHandle<Smi> JSTemporalDuration::Sign(Isolate* isolate,
   // duration.[[Weeks]], duration.[[Days]], duration.[[Hours]],
   // duration.[[Minutes]], duration.[[Seconds]], duration.[[Milliseconds]],
   // duration.[[Microseconds]], duration.[[Nanoseconds]]).
-  return handle(Smi::FromInt(DurationSign(
-                    isolate, {Object::Number(duration->years()),
-                              Object::Number(duration->months()),
-                              Object::Number(duration->weeks()),
-                              {Object::Number(duration->days()),
-                               Object::Number(duration->hours()),
-                               Object::Number(duration->minutes()),
-                               Object::Number(duration->seconds()),
-                               Object::Number(duration->milliseconds()),
-                               Object::Number(duration->microseconds()),
-                               Object::Number(duration->nanoseconds())}})),
-                isolate);
+  return handle(
+      Smi::FromInt(DurationRecord::Sign(
+          {Object::Number(duration->years()),
+           Object::Number(duration->months()),
+           Object::Number(duration->weeks()),
+           {Object::Number(duration->days()), Object::Number(duration->hours()),
+            Object::Number(duration->minutes()),
+            Object::Number(duration->seconds()),
+            Object::Number(duration->milliseconds()),
+            Object::Number(duration->microseconds()),
+            Object::Number(duration->nanoseconds())}})),
+      isolate);
 }
 
 // #sec-get-temporal.duration.prototype.blank
@@ -7970,8 +7966,7 @@ MaybeHandle<Oddball> JSTemporalDuration::Blank(
   // duration.[[Microseconds]], duration.[[Nanoseconds]]).
   // 4. If sign = 0, return true.
   // 5. Return false.
-  int32_t sign = DurationSign(
-      isolate,
+  int32_t sign = DurationRecord::Sign(
       {Object::Number(duration->years()),
        Object::Number(duration->months()),
        Object::Number(duration->weeks()),
@@ -14196,10 +14191,10 @@ AddDurationToOrSubtractDurationFromPlainYearMonth(
   // 8. Set sign to ! DurationSign(duration.[[Years]], duration.[[Months]],
   // duration.[[Weeks]], balanceResult.[[Days]], 0, 0, 0, 0, 0, 0).
   int32_t sign =
-      DurationSign(isolate, {duration.years,
-                             duration.months,
-                             duration.weeks,
-                             {balance_result.days, 0, 0, 0, 0, 0, 0}});
+      DurationRecord::Sign({duration.years,
+                            duration.months,
+                            duration.weeks,
+                            {balance_result.days, 0, 0, 0, 0, 0, 0}});
 
   // 9. If sign < 0, then
   Handle<Object> day;

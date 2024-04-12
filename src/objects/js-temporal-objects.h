@@ -1179,6 +1179,8 @@ struct DurationRecord {
                                       double hours, double minutes,
                                       double seconds, double milliseconds,
                                       double microseconds, double nanoseconds);
+
+  static int32_t Sign(const DurationRecord& dur);
 };
 
 // #sec-temporal-topartialduration
