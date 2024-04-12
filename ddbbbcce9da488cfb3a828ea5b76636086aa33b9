@@ -52,6 +52,24 @@
       "parentUuid": "2747a8c5_370e067b",
       "revId": "ddbbbcce9da488cfb3a828ea5b76636086aa33b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e4d6a2_a494bb7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-04-12T12:03:16Z",
+      "side": 1,
+      "message": "We have now v8_win_arm64_compile_dbg optional builder. You can include it in your CQ to prevent CI closing the tree with https://ci.chromium.org/ui/p/v8/builders/luci.v8.ci/V8%20Win%20-%20arm64%20-%20debug%20builder .\n\nI\u0027ll abandon this CL now.",
+      "parentUuid": "02fcb72e_87d417b7",
+      "revId": "ddbbbcce9da488cfb3a828ea5b76636086aa33b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
