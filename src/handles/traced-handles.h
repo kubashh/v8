@@ -64,11 +64,6 @@ class TracedNode final {
     flags_ = IsInYoungList::update(flags_, v);
   }
 
-  IndexType next_free() const { return next_free_index_; }
-  void set_next_free(IndexType next_free_index) {
-    next_free_index_ = next_free_index;
-  }
-
   template <AccessMode access_mode = AccessMode::NON_ATOMIC>
   void set_markbit() {
     if constexpr (access_mode == AccessMode::NON_ATOMIC) {
@@ -117,7 +112,6 @@ class TracedNode final {
                                    bool has_old_host, bool is_droppable);
   void Release();
 
- private:
   using IsInUse = base::BitField8<bool, 0, 1>;
   using IsInYoungList = IsInUse::Next<bool, 1>;
   using IsWeak = IsInYoungList::Next<bool, 1>;
@@ -128,8 +122,6 @@ class TracedNode final {
   using HasOldHost = Markbit::Next<bool, 1>;
 
   Address object_ = kNullAddress;
-  // When a node is not in use, this index is used to build the free list.
-  IndexType next_free_index_;
   IndexType index_;
   uint8_t flags_ = 0;
 };
@@ -138,12 +130,18 @@ class TracedNodeBlock final {
   class NodeIteratorImpl final
       : public base::iterator<std::forward_iterator_tag, TracedNode> {
    public:
-    explicit NodeIteratorImpl(TracedNodeBlock* block) : block_(block) {}
+    explicit NodeIteratorImpl(TracedNodeBlock* block)
+        : block_(block), used_nodes_(block->used_nodes_) {
+      MoveForward();
+    }
     NodeIteratorImpl(TracedNodeBlock* block,
                      TracedNode::IndexType current_index)
-        : block_(block), current_index_(current_index) {}
+        : block_(block),
+          used_nodes_(block->used_nodes_),
+          current_index_(current_index) {}
     NodeIteratorImpl(const NodeIteratorImpl& other) V8_NOEXCEPT
         : block_(other.block_),
+          used_nodes_(other.used_nodes_),
           current_index_(other.current_index_) {}
 
     TracedNode* operator*() { return block_->at(current_index_); }
@@ -154,7 +152,13 @@ class TracedNodeBlock final {
       return !(*this == rhs);
     }
     inline NodeIteratorImpl& operator++() {
-      current_index_++;
+#if DEBUG
+      uint64_t idx = current_index_;
+#endif
+      MoveForward();
+#if DEBUG
+      DCHECK_LT(idx, current_index_);
+#endif
       return *this;
     }
     inline NodeIteratorImpl operator++(int) {
@@ -164,7 +168,20 @@ class TracedNodeBlock final {
     }
 
    private:
+    inline void MoveForward() {
+      uint64_t idx = base::bits::CountTrailingZeros(used_nodes_);
+      DCHECK_LE(idx, 64);
+      if (idx < 64) {
+        used_nodes_ &= ~(1 << idx);
+        current_index_ = idx;
+      } else {
+        used_nodes_ = 0;
+        current_index_ = block_->capacity_;
+      }
+    }
+
     TracedNodeBlock* block_;
+    uint64_t used_nodes_;
     TracedNode::IndexType current_index_ = 0;
   };
 
@@ -208,12 +225,11 @@ class TracedNodeBlock final {
   static constexpr size_t kMaxCapacity = 1;
 #else  // !defined(V8_USE_ADDRESS_SANITIZER)
 #ifdef V8_HOST_ARCH_64_BIT
-  static constexpr size_t kMinCapacity = 256;
+  static constexpr size_t kMinCapacity = 32;
 #else   // !V8_HOST_ARCH_64_BIT
-  static constexpr size_t kMinCapacity = 128;
+  static constexpr size_t kMinCapacity = 32;
 #endif  // !V8_HOST_ARCH_64_BIT
-  static constexpr size_t kMaxCapacity =
-      std::numeric_limits<TracedNode::IndexType>::max() - 1;
+  static constexpr size_t kMaxCapacity = 64;
 #endif  // !defined(V8_USE_ADDRESS_SANITIZER)
 
   static constexpr TracedNode::IndexType kInvalidFreeListNodeIndex = -1;
@@ -260,7 +276,7 @@ class TracedNodeBlock final {
   TracedHandles& traced_handles_;
   TracedNode::IndexType used_ = 0;
   const TracedNode::IndexType capacity_ = 0;
-  TracedNode::IndexType first_free_node_ = 0;
+  uint64_t used_nodes_ = 0;
 };
 
 // TracedHandles hold handles that must go through cppgc's tracing methods. The

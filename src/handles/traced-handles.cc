@@ -24,10 +24,9 @@ namespace v8::internal {
 class TracedNodeBlock;
 
 TracedNode::TracedNode(IndexType index, IndexType next_free_index)
-    : next_free_index_(next_free_index), index_(index) {
+    : index_(index) {
   // TracedNode size should stay within 2 words.
   static_assert(sizeof(TracedNode) <= (2 * kSystemPointerSize));
-  DCHECK(!is_in_use());
   DCHECK(!is_in_young_list());
   DCHECK(!is_weak());
   DCHECK(!markbit());
@@ -36,11 +35,9 @@ TracedNode::TracedNode(IndexType index, IndexType next_free_index)
 }
 
 void TracedNode::Release() {
-  DCHECK(is_in_use());
   // Only preserve the in-young-list bit which is used to avoid duplicates in
   // TracedHandles::young_nodes_;
   flags_ &= IsInYoungList::encode(true);
-  DCHECK(!is_in_use());
   DCHECK(!is_weak());
   DCHECK(!markbit());
   DCHECK(!has_old_host());
@@ -71,12 +68,7 @@ void TracedNodeBlock::Delete(TracedNodeBlock* block) { free(block); }
 
 TracedNodeBlock::TracedNodeBlock(TracedHandles& traced_handles,
                                  TracedNode::IndexType capacity)
-    : traced_handles_(traced_handles), capacity_(capacity) {
-  for (TracedNode::IndexType i = 0; i < (capacity_ - 1); i++) {
-    new (at(i)) TracedNode(i, i + 1);
-  }
-  new (at(capacity_ - 1)) TracedNode(capacity_ - 1, kInvalidFreeListNodeIndex);
-}
+    : traced_handles_(traced_handles), capacity_(capacity) {}
 
 // static
 TracedNodeBlock& TracedNodeBlock::From(TracedNode& node) {
@@ -94,8 +86,7 @@ void TracedNodeBlock::FreeNode(TracedNode* node) {
   DCHECK(node->is_in_use());
   node->Release();
   DCHECK(!node->is_in_use());
-  node->set_next_free(first_free_node_);
-  first_free_node_ = node->index();
+  used_nodes_ &= ~(1 << node->index());
   used_--;
 }
 
@@ -455,9 +446,10 @@ void TracedHandles::ProcessYoungObjects(
 
 void TracedHandles::Iterate(RootVisitor* visitor) {
   for (auto* block : blocks_) {
-    for (auto* node : *block) {
-      if (!node->is_in_use()) continue;
-
+    auto it = block->begin();
+    for (; it != block->end(); it++) {
+      TracedNode* node = *it;
+      DCHECK(node->is_in_use());
       visitor->VisitRootPointer(Root::kTracedHandles, nullptr,
                                 node->location());
     }

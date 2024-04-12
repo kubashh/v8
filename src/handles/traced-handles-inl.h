@@ -5,6 +5,7 @@
 #ifndef V8_HANDLES_TRACED_HANDLES_INL_H_
 #define V8_HANDLES_TRACED_HANDLES_INL_H_
 
+#include "src/base/bits.h"
 #include "src/handles/traced-handles.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects/slots-inl.h"
@@ -13,12 +14,14 @@ namespace v8::internal {
 
 TracedNode* TracedNodeBlock::AllocateNode() {
   DCHECK_NE(used_, capacity_);
-  DCHECK_NE(first_free_node_, kInvalidFreeListNodeIndex);
-  auto* node = at(first_free_node_);
-  first_free_node_ = node->next_free();
+  uint64_t idx = base::bits::CountTrailingZeros(~used_nodes_);
+  DCHECK_LT(idx, 64);
+  used_nodes_ |= 1 << idx;
   used_++;
-  DCHECK(!node->is_in_use());
-  return node;
+  TracedNode* result = at(idx);
+  result->index_ = idx;
+  result->flags_ = 0;
+  return at(idx);
 }
 
 TracedNode* TracedHandles::AllocateNode() {
@@ -87,7 +90,6 @@ FullObjectSlot TracedNode::Publish(Tagged<Object> object,
                                    bool needs_young_bit_update,
                                    bool needs_black_allocation,
                                    bool has_old_host, bool is_droppable_value) {
-  DCHECK(!is_in_use());
   DCHECK(!is_weak());
   DCHECK(!markbit());
   DCHECK(!is_droppable());
