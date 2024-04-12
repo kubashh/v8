@@ -35,6 +35,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c291b08_ac9d0937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "One potential bug (uint32 instead of Smi), one dangerous pattern (`pinned.clear`), some comments and ideas to make the code smaller and faster, otherwise LGTM.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e15ffc62_5bc81285",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Alternatively, we could explicitly trap here for values \u003e2^53, which looks a bit cleaner, but potentially costs a tiny bit of performance.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e109d49b_773c6ee3",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6185,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Is it correct to use `Uint32Constant` here? The runtime seems to expect a Smi.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e056931_85c8aa07",
@@ -48,6 +99,63 @@
       "writtenOn": "2024-04-12T10:46:03Z",
       "side": 1,
       "message": "Nit: Let\u0027s add a `DCHECK(imm.memory-\u003eis_memory64);` here and in the same places below.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fbceafc_d53b4bc5",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7107,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Just an idea to optimize this (optional):\nTo avoid this additional OOL code, we could have a variant of `MemTypeToVarState` which sets the returned register to `kMaxUint32` if any high word had bits set.",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f51d2042_082c29f1",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7162,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Why is this so different to `StringNewWtf8`?\nWhat\u0027s better here is that the memory index is not explicitly stored to a register, but kept as a constant.\nWhat\u0027s better above is that we only drop the values after the call, which gives a better debugging experience on a trap (because the values are still inspectable).\nEdit: You are switching more methods below to pop before the call. Any reason for that?",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bcff18c_0683c0fc",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7305,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Those two could also just be constants. Would avoid register moves and potentially spilling.",
+      "range": {
+        "startLine": 7297,
+        "startChar": 1,
+        "endLine": 7305,
+        "endChar": 51
+      },
       "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +179,70 @@
         "endLine": 7372,
         "endChar": 37
       },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e583c3d_06701fce",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7372,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "It\u0027s generally difficult to argue that clearing a pinned register is safe, because registers can often alias in interesting ways.\nWhat\u0027s generally better is having a more tightly scoped (\"inner\") pinned list, and reverting to the outer pinned list later.\nIf we are reasonable certain that clearing is safe here, then we should at least have a `DCHECK_IMPLIES(offset_var.is_reg(), pinned.has(offset_var.reg());`.\n(This applies to all methods with this pattern.)",
+      "parentUuid": "45a31755_f82786f4",
+      "range": {
+        "startLine": 7372,
+        "startChar": 6,
+        "endLine": 7372,
+        "endChar": 37
+      },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa25e7b_654edff1",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7382,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Another candidate for a constant.",
+      "range": {
+        "startLine": 7379,
+        "startChar": 0,
+        "endLine": 7382,
+        "endChar": 49
+      },
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3474561_a25b71d7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4091,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-12T11:22:44Z",
+      "side": 1,
+      "message": "Hm, \"memory index\" is a bit overloaded here. Sometimes it\u0027s an index into the memory, sometimes the index of the memory.\nMight be worth renaming one of those at some point, but I don\u0027t have a good idea for a new name right now.",
       "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
