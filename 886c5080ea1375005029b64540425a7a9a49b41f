@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f0c430_dfd4dda1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-12T10:51:32Z",
+      "side": 1,
+      "message": "Camillo, PTAL again -- I reverted the IsInMovingGC change because the symbolizer was relying on stacks being empty to annotate the GC state. I put it in a TODO instead.",
+      "revId": "886c5080ea1375005029b64540425a7a9a49b41f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
