@@ -16,6 +16,29 @@
       "message": "PTAL! :)",
       "revId": "be836ee97863126fc50c0df055a921c701df2c13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e3358c7_146d2464",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-12T08:22:36Z",
+      "side": 1,
+      "message": "Do we really need a separate operation for this? It feels like it should be merged into the other `StackCheckOp`, in particular this already has a `Kind::kLoopCheck`. I see that we have different inputs there, but I think it would be okay to make them optional, since this is a rather rare and special thing anyway. Wdyt?",
+      "range": {
+        "startLine": 3327,
+        "startChar": 7,
+        "endLine": 3327,
+        "endChar": 26
+      },
+      "revId": "be836ee97863126fc50c0df055a921c701df2c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
