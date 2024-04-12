@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "499c6366_74145c12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-12T08:41:30Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "be836ee97863126fc50c0df055a921c701df2c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e3358c7_146d2464",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "This operator has 2 inputs, while StackCheck has none. It also doesn\u0027t have the same effects. Furthermore, as you can see in StackCheckLoweringReducer, the lowerings of StackCheck and JSLoopStackCheck share basically nothing. So I thought that another op would make sense.\n\nWe could changing the Kinds and Origin in StackCheck to have JSEntry, WasmEntry and WasmIteration so that it\u0027s clear that it\u0027s not adapted to JS iteration stack checks.\n\nThoughts?",
       "parentUuid": "3e3358c7_146d2464",
+      "range": {
+        "startLine": 3327,
+        "startChar": 7,
+        "endLine": 3327,
+        "endChar": 26
+      },
+      "revId": "be836ee97863126fc50c0df055a921c701df2c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d12c3200_80c865fb",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3327,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-12T08:41:30Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "c9afbd9f_64ba6c32",
       "range": {
         "startLine": 3327,
         "startChar": 7,
