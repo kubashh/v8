@@ -1414,21 +1414,14 @@ std::ostream& operator<<(std::ostream& os,
   }
 }
 
-std::ostream& operator<<(std::ostream& os, StackCheckOp::CheckOrigin origin) {
-  switch (origin) {
-    case StackCheckOp::CheckOrigin::kFromJS:
-      return os << "JavaScript";
-    case StackCheckOp::CheckOrigin::kFromWasm:
-      return os << "WebAssembly";
-  }
-}
-
 std::ostream& operator<<(std::ostream& os, StackCheckOp::CheckKind kind) {
   switch (kind) {
-    case StackCheckOp::CheckKind::kFunctionHeaderCheck:
-      return os << "function-entry";
-    case StackCheckOp::CheckKind::kLoopCheck:
-      return os << "loop";
+    case StackCheckOp::CheckKind::kJSFunctionHeader:
+      return os << "JS function-entry";
+    case StackCheckOp::CheckKind::kWasmFunctionHeader:
+      return os << "Wasm function-entry";
+    case StackCheckOp::CheckKind::kWasmLoop:
+      return os << "Wasm loop";
   }
 }
 
