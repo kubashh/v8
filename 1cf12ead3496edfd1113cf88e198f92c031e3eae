@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aa5ac6f_03e0748b",
+        "filename": "src/wasm/DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T14:25:18Z",
+      "side": 1,
+      "message": "Alternatively we could in theory obviously introduce a new data structure that is independent of the compiler\u0027s representation of deoptimization literals. However that would involve one extra translation step and every single type we add to the literals we\u0027ll have to add to both representations. (We are going to need to add a bunch of types as wasm has e.g. `int32`, `float`, `double` and `s128` which JS doesn\u0027t have.)",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 69
+      },
+      "revId": "1cf12ead3496edfd1113cf88e198f92c031e3eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26911311_e96592c1",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T14:25:18Z",
+      "side": 1,
+      "message": "4 bytes for the deopt data size, up to 4 Bytes alignment / padding as `WasmCode` is pointer-aligned.",
+      "range": {
+        "startLine": 71,
+        "startChar": 34,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "1cf12ead3496edfd1113cf88e198f92c031e3eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

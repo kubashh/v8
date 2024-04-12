@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75f2059b_4b251a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T14:25:18Z",
+      "side": 1,
+      "message": "@clemensb@chromium.org: PTAL.\n@nicohartmann@chromium.org: Please component-review `src/deoptimizer`.",
+      "revId": "345d6b9cacb6a2eb03f4ae6a40e268bf6c48b93e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3229e8a7_23d6471a",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-12T14:25:18Z",
+      "side": 1,
+      "message": "This looks like this:\n(The last instruction at offset 170 is the call to the deopt builtin.)\n```\n[...]\n0x17a8bb96ab6e   16e  cc                   int3l\n0x17a8bb96ab6f   16f  90                   nop\n0x17a8bb96ab70   170  41ff55d0             call [r13-0x30]\n\nSource positions:\n pc offset  position\n        e0         0\n       144         0\n\nDeopt exits (entries \u003d 1, byte size \u003d 86)\n170: function offset \u003d 88, translation \u003d 0\n\nSafepoints (entries \u003d 3, byte size \u003d 17)\n0x17a8bb96ab10    110  slots (sp-\u003efp): 00000000\n[...]\n```\nAs you can see it only lists the deopt exits, it doesn\u0027t print the translations. However, given the size of them I think that\u0027s the right thing to do (and it might not be trivial to print the data as the translations have their own complex encoding implemented in `TranslatedState`.)",
+      "revId": "345d6b9cacb6a2eb03f4ae6a40e268bf6c48b93e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
