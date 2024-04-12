@@ -6127,12 +6127,14 @@ void WasmGraphBuilder::ArrayFillImpl(Node* array, Node* index, Node* value,
 //   must also set up control nodes for the throwing case, e.g. by using
 //   WasmGraphBuildingInterface::CheckForException().
 
-Node* WasmGraphBuilder::StringNewWtf8(uint32_t memory,
+Node* WasmGraphBuilder::StringNewWtf8(const wasm::WasmMemory* memory,
                                       unibrow::Utf8Variant variant,
-                                      Node* offset, Node* size) {
+                                      Node* offset, Node* size,
+                                      wasm::WasmCodePosition position) {
+  MemTypeToUintPtrOrOOBTrap(memory->is_memory64, {&offset}, position);
   return gasm_->CallBuiltin(Builtin::kWasmStringNewWtf8,
                             Operator::kNoDeopt | Operator::kNoThrow, offset,
-                            size, gasm_->SmiConstant(memory),
+                            size, gasm_->SmiConstant(memory->index),
                             gasm_->SmiConstant(static_cast<int32_t>(variant)));
 }
 
@@ -6174,11 +6176,13 @@ Node* WasmGraphBuilder::StringNewWtf8Array(unibrow::Utf8Variant variant,
       start, end, array, gasm_->SmiConstant(static_cast<int32_t>(variant)));
 }
 
-Node* WasmGraphBuilder::StringNewWtf16(uint32_t memory, Node* offset,
-                                       Node* size) {
+Node* WasmGraphBuilder::StringNewWtf16(const wasm::WasmMemory* memory,
+                                       Node* offset, Node* size,
+                                       wasm::WasmCodePosition position) {
+  MemTypeToUintPtrOrOOBTrap(memory->is_memory64, {&offset}, position);
   return gasm_->CallBuiltin(Builtin::kWasmStringNewWtf16,
                             Operator::kNoDeopt | Operator::kNoThrow,
-                            gasm_->Uint32Constant(memory), offset, size);
+                            gasm_->Uint32Constant(memory->index), offset, size);
 }
 
 Node* WasmGraphBuilder::StringNewWtf16Array(Node* array,
@@ -6226,7 +6230,7 @@ Node* WasmGraphBuilder::StringMeasureWtf16(Node* string,
   return gasm_->LoadStringLength(string);
 }
 
-Node* WasmGraphBuilder::StringEncodeWtf8(uint32_t memory,
+Node* WasmGraphBuilder::StringEncodeWtf8(const wasm::WasmMemory* memory,
                                          unibrow::Utf8Variant variant,
                                          Node* string, CheckForNull null_check,
                                          Node* offset,
@@ -6234,9 +6238,10 @@ Node* WasmGraphBuilder::StringEncodeWtf8(uint32_t memory,
   if (null_check == kWithNullCheck) {
     string = AssertNotNull(string, wasm::kWasmStringRef, position);
   }
+  MemTypeToUintPtrOrOOBTrap(memory->is_memory64, {&offset}, position);
   return gasm_->CallBuiltin(Builtin::kWasmStringEncodeWtf8,
                             Operator::kNoDeopt | Operator::kNoThrow, string,
-                            offset, gasm_->SmiConstant(memory),
+                            offset, gasm_->SmiConstant(memory->index),
                             gasm_->SmiConstant(static_cast<int32_t>(variant)));
 }
 
@@ -6265,15 +6270,17 @@ Node* WasmGraphBuilder::StringToUtf8Array(Node* string, CheckForNull null_check,
                             Operator::kNoDeopt | Operator::kNoThrow, string);
 }
 
-Node* WasmGraphBuilder::StringEncodeWtf16(uint32_t memory, Node* string,
-                                          CheckForNull null_check, Node* offset,
+Node* WasmGraphBuilder::StringEncodeWtf16(const wasm::WasmMemory* memory,
+                                          Node* string, CheckForNull null_check,
+                                          Node* offset,
                                           wasm::WasmCodePosition position) {
   if (null_check == kWithNullCheck) {
     string = AssertNotNull(string, wasm::kWasmStringRef, position);
   }
+  MemTypeToUintPtrOrOOBTrap(memory->is_memory64, {&offset}, position);
   return gasm_->CallBuiltin(Builtin::kWasmStringEncodeWtf16,
                             Operator::kNoDeopt | Operator::kNoThrow, string,
-                            offset, gasm_->SmiConstant(memory));
+                            offset, gasm_->SmiConstant(memory->index));
 }
 
 Node* WasmGraphBuilder::StringAsWtf16(Node* string, CheckForNull null_check,
@@ -6366,16 +6373,17 @@ Node* WasmGraphBuilder::StringViewWtf8Advance(Node* view,
 }
 
 void WasmGraphBuilder::StringViewWtf8Encode(
-    uint32_t memory, unibrow::Utf8Variant variant, Node* view,
+    const wasm::WasmMemory* memory, unibrow::Utf8Variant variant, Node* view,
     CheckForNull null_check, Node* addr, Node* pos, Node* bytes,
     Node** next_pos, Node** bytes_written, wasm::WasmCodePosition position) {
   if (null_check == kWithNullCheck) {
     view = AssertNotNull(view, wasm::kWasmStringRef, position);
   }
+  MemTypeToUintPtrOrOOBTrap(memory->is_memory64, {&addr}, position);
   Node* pair =
       gasm_->CallBuiltin(Builtin::kWasmStringViewWtf8Encode,
                          Operator::kNoDeopt | Operator::kNoThrow, addr, pos,
-                         bytes, view, gasm_->SmiConstant(memory),
+                         bytes, view, gasm_->SmiConstant(memory->index),
                          gasm_->SmiConstant(static_cast<int32_t>(variant)));
   *next_pos = gasm_->Projection(0, pair);
   *bytes_written = gasm_->Projection(1, pair);
@@ -6521,7 +6529,8 @@ Node* WasmGraphBuilder::StringCodePointAt(Node* string, CheckForNull null_check,
   return done.PhiAt(0);
 }
 
-Node* WasmGraphBuilder::StringViewWtf16Encode(uint32_t memory, Node* string,
+Node* WasmGraphBuilder::StringViewWtf16Encode(const wasm::WasmMemory* memory,
+                                              Node* string,
                                               CheckForNull null_check,
                                               Node* offset, Node* start,
                                               Node* codeunits,
@@ -6529,10 +6538,11 @@ Node* WasmGraphBuilder::StringViewWtf16Encode(uint32_t memory, Node* string,
   if (null_check == kWithNullCheck) {
     string = AssertNotNull(string, wasm::kWasmStringRef, position);
   }
+  MemTypeToUintPtrOrOOBTrap(memory->is_memory64, {&offset}, position);
   return gasm_->CallBuiltin(Builtin::kWasmStringViewWtf16Encode,
                             Operator::kNoDeopt | Operator::kNoThrow, offset,
                             start, codeunits, string,
-                            gasm_->SmiConstant(memory));
+                            gasm_->SmiConstant(memory->index));
 }
 
 Node* WasmGraphBuilder::StringViewWtf16Slice(Node* string,

@@ -3933,9 +3933,11 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     V<Smi> memory_smi = __ SmiConstant(Smi::FromInt(memory.index));
     V<Smi> variant_smi =
         __ SmiConstant(Smi::FromInt(static_cast<int>(variant)));
+    V<WordPtr> index =
+        MemoryIndexToUintPtrOrOOBTrap(memory.memory->is_memory64, offset.op);
     V<WasmStringRefNullable> result_value =
         CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmStringNewWtf8>(
-            decoder, {offset.op, size.op, memory_smi, variant_smi});
+            decoder, {index, size.op, memory_smi, variant_smi});
     result->op = __ AnnotateWasmType(result_value, result->type);
   }
 
@@ -4023,9 +4025,11 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
 
   void StringNewWtf16(FullDecoder* decoder, const MemoryIndexImmediate& imm,
                       const Value& offset, const Value& size, Value* result) {
+    V<WordPtr> index =
+        MemoryIndexToUintPtrOrOOBTrap(imm.memory->is_memory64, offset.op);
     V<String> result_value =
         CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmStringNewWtf16>(
-            decoder, {__ Word32Constant(imm.index), offset.op, size.op});
+            decoder, {__ Word32Constant(imm.index), index, size.op});
     result->op = __ AnnotateWasmType(result_value, result->type);
   }
 
@@ -4083,11 +4087,13 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                         const MemoryIndexImmediate& memory,
                         const unibrow::Utf8Variant variant, const Value& str,
                         const Value& offset, Value* result) {
+    V<WordPtr> address =
+        MemoryIndexToUintPtrOrOOBTrap(memory.memory->is_memory64, offset.op);
+    V<Smi> mem_index = __ SmiConstant(Smi::FromInt(memory.index));
+    V<Smi> utf8 = __ SmiConstant(Smi::FromInt(static_cast<int32_t>(variant)));
     result->op = CallBuiltinThroughJumptable<
         BuiltinCallDescriptor::WasmStringEncodeWtf8>(
-        decoder, {V<String>::Cast(NullCheck(str)), offset.op,
-                  __ SmiConstant(Smi::FromInt(memory.index)),
-                  __ SmiConstant(Smi::FromInt(static_cast<int32_t>(variant)))});
+        decoder, {V<String>::Cast(NullCheck(str)), address, mem_index, utf8});
   }
 
   void StringEncodeWtf8Array(FullDecoder* decoder,
@@ -4103,19 +4109,21 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                                     const unibrow::Utf8Variant variant,
                                     V<String> str, V<WasmArray> array,
                                     V<Word32> start) {
+    V<Smi> utf8 = __ SmiConstant(Smi::FromInt(static_cast<int32_t>(variant)));
     return CallBuiltinThroughJumptable<
         BuiltinCallDescriptor::WasmStringEncodeWtf8Array>(
-        decoder, {str, array, start,
-                  __ SmiConstant(Smi::FromInt(static_cast<int32_t>(variant)))});
+        decoder, {str, array, start, utf8});
   }
 
   void StringEncodeWtf16(FullDecoder* decoder, const MemoryIndexImmediate& imm,
                          const Value& str, const Value& offset, Value* result) {
+    V<WordPtr> address =
+        MemoryIndexToUintPtrOrOOBTrap(imm.memory->is_memory64, offset.op);
+    V<Smi> mem_index =
+        __ SmiConstant(Smi::FromInt(static_cast<int32_t>(imm.index)));
     result->op = CallBuiltinThroughJumptable<
         BuiltinCallDescriptor::WasmStringEncodeWtf16>(
-        decoder,
-        {V<String>::Cast(NullCheck(str)), offset.op,
-         __ SmiConstant(Smi::FromInt(static_cast<int32_t>(imm.index)))});
+        decoder, {V<String>::Cast(NullCheck(str)), address, mem_index});
   }
 
   void StringEncodeWtf16Array(FullDecoder* decoder, const Value& str,
@@ -4190,12 +4198,14 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                             const Value& view, const Value& addr,
                             const Value& pos, const Value& bytes,
                             Value* next_pos, Value* bytes_written) {
+    V<WordPtr> address =
+        MemoryIndexToUintPtrOrOOBTrap(memory.memory->is_memory64, addr.op);
+    V<Smi> mem_index = __ SmiConstant(Smi::FromInt(memory.index));
+    V<Smi> utf8 = __ SmiConstant(Smi::FromInt(static_cast<int32_t>(variant)));
     OpIndex result = CallBuiltinThroughJumptable<
         BuiltinCallDescriptor::WasmStringViewWtf8Encode>(
-        decoder,
-        {addr.op, pos.op, bytes.op, V<ByteArray>::Cast(NullCheck(view)),
-         __ SmiConstant(Smi::FromInt(memory.index)),
-         __ SmiConstant(Smi::FromInt(static_cast<int32_t>(variant)))});
+        decoder, {address, pos.op, bytes.op,
+                  V<ByteArray>::Cast(NullCheck(view)), mem_index, utf8});
     next_pos->op = __ Projection(result, 0, RepresentationFor(next_pos->type));
     bytes_written->op =
         __ Projection(result, 1, RepresentationFor(bytes_written->type));
@@ -4354,10 +4364,12 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                              const Value& offset, const Value& pos,
                              const Value& codeunits, Value* result) {
     V<String> string = V<String>::Cast(NullCheck(view));
+    V<WordPtr> address =
+        MemoryIndexToUintPtrOrOOBTrap(imm.memory->is_memory64, offset.op);
+    V<Smi> mem_index = __ SmiConstant(Smi::FromInt(imm.index));
     result->op = CallBuiltinThroughJumptable<
         BuiltinCallDescriptor::WasmStringViewWtf16Encode>(
-        decoder, {offset.op, pos.op, codeunits.op, string,
-                  __ SmiConstant(Smi::FromInt(imm.index))});
+        decoder, {address, pos.op, codeunits.op, string, mem_index});
   }
 
   void StringViewWtf16Slice(FullDecoder* decoder, const Value& view,
@@ -6144,6 +6156,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
 
     wasm::BoundsCheckStrategy bounds_checks = memory->bounds_checks;
     // Convert the index to uintptr.
+    // TODO(jkummerow): This should reuse MemoryIndexToUintPtrOrOOBTrap.
     V<WordPtr> converted_index = index;
     if (!memory->is_memory64) {
       converted_index = __ ChangeUint32ToUintPtr(index);

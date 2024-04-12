@@ -5735,6 +5735,12 @@ class LiftoffCompiler {
   // the ORed combination of all high words.
   VarState PopMemTypeToVarState(Register* high_word, LiftoffRegList* pinned) {
     VarState slot = __ PopVarState();
+    return MemTypeToVarState(slot, high_word, pinned);
+  }
+  // Same, but can take a VarState in the middle of the stack without
+  // popping it.
+  VarState MemTypeToVarState(VarState& slot, Register* high_word,
+                             LiftoffRegList* pinned) {
     const bool is_mem64 = slot.kind() == kI64;
     // For memory32 on a 32-bit system or memory64 on a 64-bit system, there is
     // nothing to do.
@@ -7088,17 +7094,29 @@ class LiftoffCompiler {
     LoadSmi(variant_reg, static_cast<int32_t>(variant));
     VarState variant_var(kSmiKind, variant_reg, 0);
 
-    CallBuiltin(
-        Builtin::kWasmStringNewWtf8,
-        MakeSig::Returns(kRefNull).Params(kI32, kI32, kSmiKind, kSmiKind),
-        {
-            __ cache_state()->stack_state.end()[-2],  // offset
-            __ cache_state()->stack_state.end()[-1],  // size
-            memory_var,
-            variant_var,
-        },
-        decoder->position());
-    __ cache_state()->stack_state.pop_back(2);
+    VarState& size_var = __ cache_state()->stack_state.end()[-1];
+
+    DCHECK_EQ(imm.memory->is_memory64 ? kI64 : kI32,
+              __ cache_state()->stack_state.end()[-2].kind());
+    Register address_high_word = no_reg;
+    VarState address = MemTypeToVarState(
+        __ cache_state()->stack_state.end()[-2], &address_high_word, &pinned);
+    if (address_high_word != no_reg) {
+      // If the high word has bits set, jump to the OOB trap.
+      Label* trap_label =
+          AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, address_high_word, no_reg,
+                        trapping);
+      pinned.clear(address_high_word);
+    }
+
+    CallBuiltin(Builtin::kWasmStringNewWtf8,
+                MakeSig::Returns(kRefNull).Params(kIntPtrKind, kI32, kSmiKind,
+                                                  kSmiKind),
+                {address, size_var, memory_var, variant_var},
+                decoder->position());
+    __ DropValues(2);
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
     LiftoffRegister result_reg(kReturnRegister0);
@@ -7143,15 +7161,25 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     VarState memory_var{kI32, static_cast<int32_t>(imm.index), 0};
 
+    VarState size_var = __ PopVarState();
+
+    LiftoffRegList pinned;
+    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
+    Register address_high_word = no_reg;
+    VarState address = PopMemTypeToVarState(&address_high_word, &pinned);
+    if (address_high_word != no_reg) {
+      // If the high word has bits set, jump to the OOB trap.
+      Label* trap_label =
+          AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, address_high_word, no_reg,
+                        trapping);
+      pinned.clear(address_high_word);
+    }
+
     CallBuiltin(Builtin::kWasmStringNewWtf16,
-                MakeSig::Returns(kRef).Params(kI32, kI32, kI32),
-                {
-                    memory_var,
-                    __ cache_state()->stack_state.end()[-2],  // offset
-                    __ cache_state()->stack_state.end()[-1]   // size
-                },
-                decoder->position());
-    __ cache_state()->stack_state.pop_back(2);
+                MakeSig::Returns(kRef).Params(kI32, kIntPtrKind, kI32),
+                {memory_var, address, size_var}, decoder->position());
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
     LiftoffRegister result_reg(kReturnRegister0);
@@ -7249,10 +7277,20 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
-    VarState& offset_var = __ cache_state()->stack_state.end()[-1];
+    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
+    Register offset_high_word = no_reg;
+    VarState offset_var = PopMemTypeToVarState(&offset_high_word, &pinned);
+    if (offset_high_word != no_reg) {
+      // If the high word has bits set, jump to the OOB trap.
+      Label* trap_label =
+          AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, offset_high_word, no_reg,
+                        trapping);
+      pinned.clear(offset_high_word);
+    }
 
-    LiftoffRegister string_reg = pinned.set(
-        __ LoadToRegister(__ cache_state()->stack_state.end()[-2], pinned));
+    LiftoffRegister string_reg = pinned.set(__ PopToRegister(pinned));
     MaybeEmitNullCheck(decoder, string_reg.gp(), pinned, str.type);
     VarState string_var(kRef, string_reg, 0);
 
@@ -7266,16 +7304,10 @@ class LiftoffCompiler {
     LoadSmi(variant_reg, static_cast<int32_t>(variant));
     VarState variant_var(kSmiKind, variant_reg, 0);
 
-    CallBuiltin(Builtin::kWasmStringEncodeWtf8,
-                MakeSig::Returns(kI32).Params(kRef, kI32, kSmiKind, kSmiKind),
-                {
-                    string_var,
-                    offset_var,
-                    memory_var,
-                    variant_var,
-                },
-                decoder->position());
-    __ DropValues(2);
+    CallBuiltin(
+        Builtin::kWasmStringEncodeWtf8,
+        MakeSig::Returns(kI32).Params(kRef, kIntPtrKind, kSmiKind, kSmiKind),
+        {string_var, offset_var, memory_var, variant_var}, decoder->position());
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
     LiftoffRegister result_reg(kReturnRegister0);
@@ -7327,10 +7359,20 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
-    VarState& offset_var = __ cache_state()->stack_state.end()[-1];
+    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
+    Register offset_high_word = no_reg;
+    VarState offset_var = PopMemTypeToVarState(&offset_high_word, &pinned);
+    if (offset_high_word != no_reg) {
+      // If the high word has bits set, jump to the OOB trap.
+      Label* trap_label =
+          AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, offset_high_word, no_reg,
+                        trapping);
+      pinned.clear(offset_high_word);
+    }
 
-    LiftoffRegister string_reg = pinned.set(
-        __ LoadToRegister(__ cache_state()->stack_state.end()[-2], pinned));
+    LiftoffRegister string_reg = pinned.set(__ PopToRegister(pinned));
     MaybeEmitNullCheck(decoder, string_reg.gp(), pinned, str.type);
     VarState string_var(kRef, string_reg, 0);
 
@@ -7340,14 +7382,8 @@ class LiftoffCompiler {
     VarState memory_var(kSmiKind, memory_reg, 0);
 
     CallBuiltin(Builtin::kWasmStringEncodeWtf16,
-                MakeSig::Returns(kI32).Params(kRef, kI32, kSmiKind),
-                {
-                    string_var,
-                    offset_var,
-                    memory_var,
-                },
-                decoder->position());
-    __ DropValues(2);
+                MakeSig::Returns(kI32).Params(kRef, kIntPtrKind, kSmiKind),
+                {string_var, offset_var, memory_var}, decoder->position());
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
     LiftoffRegister result_reg(kReturnRegister0);
@@ -7555,7 +7591,19 @@ class LiftoffCompiler {
 
     VarState& bytes_var = __ cache_state()->stack_state.end()[-1];
     VarState& pos_var = __ cache_state()->stack_state.end()[-2];
-    VarState& addr_var = __ cache_state()->stack_state.end()[-3];
+
+    Register address_high_word = no_reg;
+    VarState addr_var = MemTypeToVarState(
+        __ cache_state()->stack_state.end()[-3], &address_high_word, &pinned);
+    if (address_high_word != no_reg) {
+      // If the high word has bits set, jump to the OOB trap.
+      Label* trap_label =
+          AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, address_high_word, no_reg,
+                        trapping);
+      pinned.clear(address_high_word);
+    }
 
     LiftoffRegister view_reg = pinned.set(
         __ LoadToRegister(__ cache_state()->stack_state.end()[-4], pinned));
@@ -7572,18 +7620,12 @@ class LiftoffCompiler {
     LoadSmi(variant_reg, static_cast<int32_t>(variant));
     VarState variant_var(kSmiKind, variant_reg, 0);
 
-    CallBuiltin(Builtin::kWasmStringViewWtf8Encode,
-                MakeSig::Returns(kI32, kI32)
-                    .Params(kI32, kI32, kI32, kRef, kSmiKind, kSmiKind),
-                {
-                    addr_var,
-                    pos_var,
-                    bytes_var,
-                    view_var,
-                    memory_var,
-                    variant_var,
-                },
-                decoder->position());
+    CallBuiltin(
+        Builtin::kWasmStringViewWtf8Encode,
+        MakeSig::Returns(kI32, kI32)
+            .Params(kIntPtrKind, kI32, kI32, kRef, kSmiKind, kSmiKind),
+        {addr_var, pos_var, bytes_var, view_var, memory_var, variant_var},
+        decoder->position());
     __ DropValues(4);
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
@@ -7651,11 +7693,7 @@ class LiftoffCompiler {
     VarState pos_var(kI32, pos_reg, 0);
 
     CallBuiltin(Builtin::kWasmStringViewWtf16GetCodeUnit,
-                MakeSig::Returns(kI32).Params(kRef, kI32),
-                {
-                    view_var,
-                    pos_var,
-                },
+                MakeSig::Returns(kI32).Params(kRef, kI32), {view_var, pos_var},
                 decoder->position());
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
@@ -7672,7 +7710,21 @@ class LiftoffCompiler {
 
     VarState& codeunits_var = __ cache_state()->stack_state.end()[-1];
     VarState& pos_var = __ cache_state()->stack_state.end()[-2];
-    VarState& offset_var = __ cache_state()->stack_state.end()[-3];
+
+    DCHECK_EQ(imm.memory->is_memory64 ? kI64 : kI32,
+              __ cache_state()->stack_state.end()[-3].kind());
+    Register offset_high_word = no_reg;
+    VarState offset_var = MemTypeToVarState(
+        __ cache_state()->stack_state.end()[-3], &offset_high_word, &pinned);
+    if (offset_high_word != no_reg) {
+      // If the high word has bits set, jump to the OOB trap.
+      Label* trap_label =
+          AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, offset_high_word, no_reg,
+                        trapping);
+      pinned.clear(offset_high_word);
+    }
 
     LiftoffRegister view_reg = pinned.set(
         __ LoadToRegister(__ cache_state()->stack_state.end()[-4], pinned));
@@ -7684,16 +7736,11 @@ class LiftoffCompiler {
     LoadSmi(memory_reg, imm.index);
     VarState memory_var(kSmiKind, memory_reg, 0);
 
-    CallBuiltin(Builtin::kWasmStringViewWtf16Encode,
-                MakeSig::Returns(kI32).Params(kI32, kI32, kI32, kRef, kSmiKind),
-                {
-                    offset_var,
-                    pos_var,
-                    codeunits_var,
-                    view_var,
-                    memory_var,
-                },
-                decoder->position());
+    CallBuiltin(
+        Builtin::kWasmStringViewWtf16Encode,
+        MakeSig::Returns(kI32).Params(kIntPtrKind, kI32, kI32, kRef, kSmiKind),
+        {offset_var, pos_var, codeunits_var, view_var, memory_var},
+        decoder->position());
     __ DropValues(4);
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
