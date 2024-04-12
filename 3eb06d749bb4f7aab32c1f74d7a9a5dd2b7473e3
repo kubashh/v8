@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47e499d9_dc0a482c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-04-12T09:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f718450c_d475060c",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "3eb06d749bb4f7aab32c1f74d7a9a5dd2b7473e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dccb53ff_077080bb",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "556aaf3c_8f95d2a7",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-04-12T09:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dccb53ff_077080bb",
+      "range": {
+        "startLine": 85,
+        "startChar": 16,
+        "endLine": 85,
+        "endChar": 21
+      },
+      "revId": "3eb06d749bb4f7aab32c1f74d7a9a5dd2b7473e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88f568fc_49196386",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-04-12T08:56:22Z",
       "side": 1,
       "message": "Misplaced TODO",
+      "range": {
+        "startLine": 320,
+        "startChar": 6,
+        "endLine": 320,
+        "endChar": 70
+      },
+      "revId": "3eb06d749bb4f7aab32c1f74d7a9a5dd2b7473e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3381887e_8657c407",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2024-04-12T09:00:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88f568fc_49196386",
       "range": {
         "startLine": 320,
         "startChar": 6,
