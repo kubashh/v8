@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "df60a526_8413e09a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-04-12T12:49:45Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "a089213932932dfd27bc374734e3dc69b4c0f727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1fdf8ed3_eec4020e",
         "filename": "test/unittests/gen_fuzztest_configs.py",
         "patchSetId": 4
