@@ -452,11 +452,10 @@ constexpr uint64_t kAllExternalPointerTypeTags[] = {
   V(kWasmExportedFunctionDataSignatureTag,      TAG(18)) \
   V(kWasmContinuationJmpbufTag,                 TAG(19)) \
   V(kWasmIndirectFunctionTargetTag,             TAG(20)) \
-  V(kArrayBufferExtensionTag,                   TAG(21)) \
   /* Foreigns */ \
   V(kGenericForeignTag,                         TAG(30)) \
   /* Managed */ \
-  V(kFirstManagedTag,                           TAG(40)) \
+  V(kFirstManagedResourceTag,                   TAG(40)) \
   V(kGenericManagedTag,                         TAG(40)) \
   V(kWasmWasmStreamingTag,                      TAG(41)) \
   V(kWasmFuncDataTag,                           TAG(42)) \
@@ -474,7 +473,11 @@ constexpr uint64_t kAllExternalPointerTypeTags[] = {
   V(kIcuPluralRulesTag,                         TAG(54)) \
   V(kIcuCollatorTag,                            TAG(55)) \
   V(kDisplayNamesInternalTag,                   TAG(56)) \
-  V(kLastManagedTag,                            TAG(56))
+  /* External resources whose lifetime is tied to */     \
+  /* their entry in the external pointer table but */    \
+  /* which are not referenced via a Managed */           \
+  V(kArrayBufferExtensionTag,                   TAG(57)) \
+  V(kLastManagedResourceTag,                    TAG(57))
 
 // All external pointer tags.
 #define ALL_EXTERNAL_POINTER_TAGS(V) \
@@ -534,7 +537,15 @@ V8_INLINE static constexpr bool IsMaybeReadOnlyExternalPointerType(
 // object derived from ExternalPointerTable::ManagedResource.
 V8_INLINE static constexpr bool IsManagedExternalPointerType(
     ExternalPointerTag tag) {
-  return tag >= kFirstManagedTag && tag <= kLastManagedTag;
+#ifdef V8_ENABLE_SANDBOX
+  // Currently, the managed resource mechanism is only enabled when the sandbox
+  // is enabled. In particular, in pointer compression builds without the
+  // sandbox, where the external pointer is also used, the mechanism is
+  // currently not active.
+  return tag >= kFirstManagedResourceTag && tag <= kLastManagedResourceTag;
+#else
+  return false;
+#endif
 }
 
 // Sanity checks.
