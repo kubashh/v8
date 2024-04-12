@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03ffab89_292c64b6",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-04-12T13:48:20Z",
+      "side": 1,
+      "message": "FWIW I use this definition in https://chromium-review.googlesource.com/c/v8/v8/+/5185345.",
+      "revId": "9bbea5e3a52fb0fcc9bc62f37c76878c2b0abf06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
