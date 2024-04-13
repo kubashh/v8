@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b657854c_84cb22b5",
+        "filename": "src/heap/heap-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-13T09:45:08Z",
+      "side": 1,
+      "message": "If `v8_flags.sticky_mark_bits` is true, `new_space()` should be null, no?\nShouldn\u0027t this be `old_space()` if using sticky markbits?",
+      "range": {
+        "startLine": 31,
+        "startChar": 28,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "84585a1eb1bfc84ed25f1f68a43c4d8b67590ed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
