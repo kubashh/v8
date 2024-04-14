@@ -148,11 +148,18 @@ class MainAllocator {
   struct InGCTag {};
   static constexpr InGCTag kInGC{};
 
+  enum class BlackAllocation {
+    kAlwaysEnabled,
+    kAlwaysDisabled,
+    kEnabledOnMarking
+  };
+
   // Use this constructor on main/background threads. `allocation_info` can be
   // used for allocation support in generated code (currently new and old
   // space).
   V8_EXPORT_PRIVATE MainAllocator(
       LocalHeap* heap, SpaceWithLinearArea* space,
+      BlackAllocation black_allocation,
       LinearAllocationArea* allocation_info = nullptr);
 
   // Use this constructor for GC LABs/allocations.
@@ -348,6 +355,7 @@ class MainAllocator {
   std::unique_ptr<AllocatorPolicy> allocator_policy_;
 
   const bool supports_extending_lab_;
+  const BlackAllocation black_allocation_;
 
   friend class AllocatorPolicy;
   friend class PagedSpaceAllocatorPolicy;
