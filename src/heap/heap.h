@@ -1592,6 +1592,8 @@ class Heap final {
   // over all objects.
   V8_EXPORT_PRIVATE void MakeHeapIterable();
 
+  V8_EXPORT_PRIVATE void Unmark();
+
   // Free all LABs in the heap.
   V8_EXPORT_PRIVATE void FreeLinearAllocationAreas();
 
