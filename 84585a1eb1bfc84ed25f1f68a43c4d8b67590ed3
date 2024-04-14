@@ -22,6 +22,30 @@
       },
       "revId": "84585a1eb1bfc84ed25f1f68a43c4d8b67590ed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e70f724_7ac621bf",
+        "filename": "src/heap/heap-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-14T19:46:05Z",
+      "side": 1,
+      "message": "thanks for catching it, I missed it when copying from the prototype CL: https://chromium-review.googlesource.com/c/v8/v8/+/5439533/11/src/heap/heap-allocator.cc#31",
+      "parentUuid": "b657854c_84cb22b5",
+      "range": {
+        "startLine": 31,
+        "startChar": 28,
+        "endLine": 31,
+        "endChar": 37
+      },
+      "revId": "84585a1eb1bfc84ed25f1f68a43c4d8b67590ed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
