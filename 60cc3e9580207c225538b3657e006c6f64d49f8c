@@ -140,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfcb5b17_e85737c9",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6185,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T08:30:31Z",
+      "side": 1,
+      "message": "It\u0027s a tradeoff in this case:\n- for optimizing compilers, materializing the Smi constant is exactly as much work as materializing a Uint32Constant (that needs to be Smi-tagged by the builtin)\n- for Liftoff, materializing an untagged constant is easier and leads to shorter and more efficient code; this is because we haven\u0027t built the functionality that would allow us to materialize Smi constants directly.\n\nSo in the long run, it would be nice to improve Liftoff and switch (back) to Smi constants. In the short term, it probably doesn\u0027t matter much, as there\u0027s one argument pointing in either direction.",
+      "parentUuid": "ad2304bf_1ffb6c65",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e056931_85c8aa07",
