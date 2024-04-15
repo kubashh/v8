@@ -1052,10 +1052,18 @@ class OptimizedCodeCache : public AllStatic {
           feedback_vector->optimized_code(isolate)->kind() == code->kind()) {
         feedback_vector->ClearOptimizedCode();
       }
+      if (code->kind() == CodeKind::TURBOFAN) {
+        feedback_vector->set_has_function_context_specialized_turbofan_code(
+            true);
+      }
       return;
     }
 
     feedback_vector->SetOptimizedCode(isolate, code);
+    if (code->kind() == CodeKind::TURBOFAN) {
+      feedback_vector->set_has_function_context_specialized_turbofan_code(
+          false);
+    }
   }
 };
 

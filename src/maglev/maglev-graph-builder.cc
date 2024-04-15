@@ -5969,7 +5969,13 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     TRACE_CANNOT_INLINE("use unsupported expection handlers");
     return false;
   }
-  if (call_frequency < v8_flags.min_maglev_inlining_frequency) {
+  int weight = 1;
+  if (feedback_vector->object()->maybe_has_turbofan_code() ||
+      feedback_vector->object()
+          ->has_function_context_specialized_turbofan_code()) {
+    weight = 2;
+  }
+  if (call_frequency < v8_flags.min_maglev_inlining_frequency * weight) {
     TRACE_CANNOT_INLINE("call frequency ("
                         << call_frequency << ") < minimum threshold ("
                         << v8_flags.min_maglev_inlining_frequency << ")");

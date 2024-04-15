@@ -223,6 +223,16 @@ void FeedbackVector::set_interrupt_budget_reset_by_ic_change(bool value) {
   set_flags(InterruptBudgetResetByIcChangeBit::update(flags(), value));
 }
 
+bool FeedbackVector::has_function_context_specialized_turbofan_code() const {
+  return HasFunctionContextSpecializedTurbofanCodeBit::decode(flags());
+}
+
+void FeedbackVector::set_has_function_context_specialized_turbofan_code(
+    bool value) {
+  set_flags(
+      HasFunctionContextSpecializedTurbofanCodeBit::update(flags(), value));
+}
+
 base::Optional<Tagged<Code>> FeedbackVector::GetOptimizedOsrCode(
     Isolate* isolate, FeedbackSlot slot) {
   Tagged<MaybeObject> maybe_code = Get(isolate, slot);
