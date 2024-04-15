@@ -98,6 +98,24 @@
       "parentUuid": "534acb5e_a8a60d8f",
       "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8b0cc4d_298cda68",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-15T12:58:25Z",
+      "side": 1,
+      "message": "Ah right, that\u0027s what I missed... Wdyt of e.g. passing in a IsNewGeneration::kYes flag instead? That way from the outside we at least only need to think about new vs old generation. It might even make sense to use IsNewGeneration::kNo as default value for that argument (kYes is likely special due to e.g. concurrent marking).",
+      "parentUuid": "bfb3103b_c313e816",
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
