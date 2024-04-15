@@ -16,6 +16,92 @@
       "message": "PTAL",
       "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3724712_b9781b68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T12:41:19Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7df63dbf_a06163f5",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T12:41:19Z",
+      "side": 1,
+      "message": "We probably don\u0027t need this any more either?",
+      "range": {
+        "startLine": 3371,
+        "startChar": 2,
+        "endLine": 3374,
+        "endChar": 46
+      },
+      "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c984a6ac_cc444410",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3379,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T12:41:19Z",
+      "side": 1,
+      "message": "I think that\u0027s an exaggeration; e.g. we still need line 3384. Just drop this sentence? Or rephrase \"...we make sure we modify the original object, which is guaranteed to be a JSObject that doesn\u0027t need access checks\".",
+      "range": {
+        "startLine": 3378,
+        "startChar": 28,
+        "endLine": 3379,
+        "endChar": 54
+      },
+      "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4014fa01_43586d6e",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T12:41:19Z",
+      "side": 1,
+      "message": "We need similar lines four times in `InstallTypeReflection`. Repro:\n\n```\nd8.test.enableJSPI();\nObject.freeze(WebAssembly.Table.prototype);  // Also Global, etc\nd8.test.installConditionalFeatures();\n```",
+      "range": {
+        "startLine": 3384,
+        "startChar": 2,
+        "endLine": 3384,
+        "endChar": 51
+      },
+      "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
