@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e39355a_4f512e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "LGTM with a number of comments.\n\nAlso, we should (either in this CL or in a follow-up) add a counter similar to the wasm_generated_code_size and wasm_reloc_size to track the size of the deopt data.",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7c798fb_080a1e69",
+        "filename": "src/wasm/wasm-deopt-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "Please add the `#if !V8_ENABLE_WEBASSEMBLY` check that the other wasm headers have.",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a955328e_916d5d38",
+        "filename": "src/wasm/wasm-deopt-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "More `sizeof X` here and below.",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fc072f8_734b1215",
+        "filename": "src/wasm/wasm-deopt-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "Do we need to `memcpy` because the data is potentially unaligned?\nIf so, please add this as a comment.\nIf not, we can just return a `base::Vector` \"view\" of the reinterpret_cast\u0027ed raw bytes.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 73
+      },
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d4d3921_6553d704",
+        "filename": "src/wasm/wasm-deopt-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "nit: We usually use `sizeof(X)` instead of `sizeof X` (multiple more times below).",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a242f7dd_fb7bf454",
+        "filename": "src/wasm/wasm-deopt-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "This could be `base::ReadUnalignedValue`.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

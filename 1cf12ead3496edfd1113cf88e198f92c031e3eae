@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2877d885_17e11af6",
+        "filename": "src/wasm/DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "Moving DeoptimizationLiteral out of `src/compiler/backend` LGTM.",
+      "parentUuid": "3aa5ac6f_03e0748b",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 69
+      },
+      "revId": "1cf12ead3496edfd1113cf88e198f92c031e3eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26911311_e96592c1",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-12T14:25:18Z",
       "side": 1,
       "message": "4 bytes for the deopt data size, up to 4 Bytes alignment / padding as `WasmCode` is pointer-aligned.",
+      "range": {
+        "startLine": 71,
+        "startChar": 34,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "1cf12ead3496edfd1113cf88e198f92c031e3eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4ea0c83_444d5053",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T11:38:03Z",
+      "side": 1,
+      "message": "Ack. Unavoidable for now, but I get more and more the impression that we should have sub-classes of WasmCode (with dynamic dispatch) and only store the information we need per code object. Additionally, we could have an implementation which uses smaller data types per field.",
+      "parentUuid": "26911311_e96592c1",
       "range": {
         "startLine": 71,
         "startChar": 34,
