@@ -1973,6 +1973,24 @@ void Heap::CollectGarbage(AllocationSpace space,
   }
 }
 
+namespace {
+
+class IdleTaskOnContextDispose final : public CancelableIdleTask {
+ public:
+  explicit IdleTaskOnContextDispose(Isolate* isolate)
+      : CancelableIdleTask(isolate), isolate_(isolate) {}
+
+  void RunInternal(double deadline_in_seconds) override {
+    auto* heap = isolate_->heap();
+    heap->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting);
+  }
+
+ private:
+  Isolate* isolate_;
+};
+
+}  // namespace
+
 int Heap::NotifyContextDisposed(bool has_dependent_context) {
   if (!has_dependent_context) {
     tracer()->ResetSurvivalEvents();
@@ -1980,6 +1998,9 @@ int Heap::NotifyContextDisposed(bool has_dependent_context) {
     if (memory_reducer_) {
       memory_reducer_->NotifyPossibleGarbage();
     }
+  } else {
+    GetForegroundTaskRunner()->PostIdleTask(
+        std::make_unique<IdleTaskOnContextDispose>(isolate()));
   }
   isolate()->AbortConcurrentOptimization(BlockingBehavior::kDontBlock);
   if (!isolate()->context().is_null()) {
