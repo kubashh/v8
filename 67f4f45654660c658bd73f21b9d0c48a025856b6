@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "89daf87e_98be2df2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-15T22:14:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b4103132_bd57c808",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "53ce6f4c_28f6bd34",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9cecd3b_5451bfe3",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-15T22:14:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4e8329a9_cde6d1cc",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 25
+      },
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7026650f_7f13189f",
@@ -77,6 +119,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9827560_50d4054a",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-15T22:14:49Z",
+      "side": 1,
+      "message": "Should this be a `CHECK` instead ?",
+      "parentUuid": "7026650f_7f13189f",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "11f68ec4_2e25df33",
         "filename": "src/sandbox/external-buffer-table.cc",
         "patchSetId": 6
@@ -88,6 +148,24 @@
       "writtenOn": "2024-04-15T14:39:24Z",
       "side": 1,
       "message": "Nit: with the simplification in `SweepAndCompact` this can simply become `MigrateInto` now and doesn\u0027t have to do anything with the marking bit anymore.",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "169aede1_a92269fa",
+        "filename": "src/sandbox/external-buffer-table.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-15T22:14:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "11f68ec4_2e25df33",
       "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
