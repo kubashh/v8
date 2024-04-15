@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "247b5206_b54f1091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-15T06:53:43Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07fbb8e3_f9b7cee3",
+        "filename": "src/heap/heap-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-15T06:53:43Z",
+      "side": 1,
+      "message": "nit: Won\u0027t it work without the casts?",
+      "range": {
+        "startLine": 33,
+        "startChar": 14,
+        "endLine": 33,
+        "endChar": 25
+      },
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
