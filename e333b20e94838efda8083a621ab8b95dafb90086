@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc389c03_648dd674",
+        "filename": "src/heap/heap-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-15T12:08:38Z",
+      "side": 1,
+      "message": "No - the compiler doesn\u0027t look up for the first common base of the operands of the conditional operator. Technically, only a single cast would be enough though (the other one would convert to that), but having twos are more explicit imo.",
+      "parentUuid": "07fbb8e3_f9b7cee3",
+      "range": {
+        "startLine": 33,
+        "startChar": 14,
+        "endLine": 33,
+        "endChar": 25
+      },
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "534acb5e_a8a60d8f",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-04-15T07:34:17Z",
       "side": 1,
       "message": "I would prefer if we compute this here in MainAllocator. One goal with MainAllocator was to make it simple to create new LABs, right now it is really just `new MainAllocator(local_heap, space)`. Once we add that argument we need to pass in the right value in all uses. It looks like we could add this logic to `IsBlackAllocationEnabled()` and we wouldn\u0027t need to change anything else.",
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfb3103b_c313e816",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-15T12:08:38Z",
+      "side": 1,
+      "message": "The problem is that in `IsBlackAllocationEnabled()` we lack the information whether the main allocator refers to the new lab or the old lab (in other words, the `identity() \u003d\u003d NEW_SPACE` will always be false with sticky bits).",
+      "parentUuid": "534acb5e_a8a60d8f",
       "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
