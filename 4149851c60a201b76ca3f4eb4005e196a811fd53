@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "4149851c60a201b76ca3f4eb4005e196a811fd53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f171aafa_55252a52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T12:55:26Z",
+      "side": 1,
+      "message": "LGTM, nice catch!",
+      "revId": "4149851c60a201b76ca3f4eb4005e196a811fd53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a9e387_00cadeff",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2475,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T12:55:26Z",
+      "side": 1,
+      "message": "Idea for possible follow-up: add a `size_t code_metadata_size` near line 2452, increment it here and in line 2479, and report it in the block near line 2497. When we do manual investigations for \"why does this module need so much memory?\", getting that finer-grained attribution might be helpful.",
+      "range": {
+        "startLine": 2475,
+        "startChar": 6,
+        "endLine": 2475,
+        "endChar": 68
+      },
+      "revId": "4149851c60a201b76ca3f4eb4005e196a811fd53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
