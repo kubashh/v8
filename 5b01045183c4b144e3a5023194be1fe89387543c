@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d01efb6e_863eaecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T13:22:16Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.",
+      "revId": "5b01045183c4b144e3a5023194be1fe89387543c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c7b7269_762e2d13",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T13:22:16Z",
+      "side": 1,
+      "message": "Should we keep the `switch` as is or change it to a simple `CHECK_EQ(kind, kS128);` which is less extensible?",
+      "revId": "5b01045183c4b144e3a5023194be1fe89387543c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
