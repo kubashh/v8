@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace363fa_ce798618",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5788,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T18:24:27Z",
+      "side": 1,
+      "message": "Changing meaning: done.\n\nIntroducing an accessor: agreed, let\u0027s do that separately.",
+      "parentUuid": "cff6888b_915185ee",
+      "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd384d72_ca3f71d9",
@@ -82,6 +100,24 @@
       "writtenOn": "2024-04-15T09:42:36Z",
       "side": 1,
       "message": "Since the `VarState` is not popped yet, this will always allocate a new register. We should try to avoid that, but that would require introducing yet another variant of this method, or detecting if the `slot` is still on the stack or not...",
+      "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57ae232e_0b83e33e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5797,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-15T18:24:27Z",
+      "side": 1,
+      "message": "Ack, that\u0027d be nice but is nontrivial. For all call sites, the `VarState` is still on the stack, but will be dropped when the respective LiftoffCompiler function is done. It\u0027s not obvious how to capture that in a reusable and reasonably hard-to-use-incorrectly fashion... we don\u0027t want to pop the `VarState` quite yet, but we do want to mark it as \"about to be popped\", and enforce the accuracy of that annotation.",
+      "parentUuid": "cd384d72_ca3f71d9",
       "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
