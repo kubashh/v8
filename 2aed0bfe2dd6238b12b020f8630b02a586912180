@@ -51,6 +51,24 @@
       "parentUuid": "abcc33ad_6759264a",
       "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6402e6_bcf2cd00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3371466
+      },
+      "writtenOn": "2024-04-15T12:07:21Z",
+      "side": 1,
+      "message": "Thank you for your insightful reviews. Upon examination, we have identified an out-of-bound error concerning the `idx` variable.\n\nAs observed, the loop decrements `idx` by 1 in each iteration and only terminates when `remaining_uses` reaches 0. Additionally, the presence of a `continue` statement within the loop potentially prevents the decrement of `remaining_uses` indefinitely.\n\nDuring our testing phase, `remaining_uses` was initialized to 1, and `idx` was set to 327. The loop consistently executed the `continue` statement, maintaining `remaining_uses` at 1, while `idx` was reduced to 0. Subsequently, in the following iteration, `idx` experienced an integer overflow, resulting in a value of 4294967295. Given that this value exceeds `stack_height`, an access violation exception occurred at the line: `auto* slot \u003d \u0026cache_state_.stack_state[idx];`.\n\nThis situation would occur regardless of the value of `remaining_uses` since it was never decremented. In addition, it is an undefined behavior and it should be avoided as much as possible.\n\nMy knowledge of this code is very limited as I got here through debugging it from Node.js.",
+      "parentUuid": "67d6b7a6_6ed12381",
+      "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
