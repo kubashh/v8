@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4103132_bd57c808",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-15T14:39:24Z",
+      "side": 1,
+      "message": "Nit: \u0027Bytes\u0027 -\u003e \u0027bytes\u0027",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ce6f4c_28f6bd34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-15T14:39:24Z",
+      "side": 1,
+      "message": "Nice, just a few more nits, otherwise LGTM from my side!",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e8329a9_cde6d1cc",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-15T14:39:24Z",
+      "side": 1,
+      "message": "See my other comment above. This is no longer necessary now that we\u0027ve removed the shortcut in SweepAndCompact",
+      "range": {
+        "startLine": 100,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 25
+      },
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7026650f_7f13189f",
+        "filename": "src/sandbox/external-buffer-table-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-15T14:39:24Z",
+      "side": 1,
+      "message": "Nit: I think you can drop the `ifdef DEBUG` since the body is now a single `DCHECK`",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11f68ec4_2e25df33",
+        "filename": "src/sandbox/external-buffer-table.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-15T14:39:24Z",
+      "side": 1,
+      "message": "Nit: with the simplification in `SweepAndCompact` this can simply become `MigrateInto` now and doesn\u0027t have to do anything with the marking bit anymore.",
+      "revId": "67f4f45654660c658bd73f21b9d0c48a025856b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
