@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7317aff7_e26897a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T08:54:38Z",
+      "side": 1,
+      "message": "Andreas PTAL.\nDarius FYI, and it seems like returning `false` on `CanBeTaggedPointer` and `IsTagged` fixed the GC problems on this CL :) (before the rebase there were still errors, see PS2).",
+      "revId": "57c79333457450c207cc09139671d282268e0324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
