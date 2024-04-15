@@ -3373,11 +3373,14 @@ void WasmJs::InstallConditionalFeatures(Isolate* isolate,
   // we can't install any features (and would CHECK-fail if we tried).
   if (!global->map()->is_extensible()) return;
 
-  MaybeHandle<Object> maybe_wasm =
-      JSReceiver::GetProperty(isolate, global, "WebAssembly");
-  Handle<Object> wasm_obj;
-  if (!maybe_wasm.ToHandle(&wasm_obj) || !IsJSObject(*wasm_obj)) return;
-  Handle<JSObject> webassembly = Handle<JSObject>::cast(wasm_obj);
+  // We get the WebAssembly object here from the native context even though user
+  // code may have been executed already, and the `WebAssembly` object may have
+  // already been modified. By changing the `WebAssembly` object of the native
+  // context we make sure that it is in a valid state. If user code already
+  // replaced the WebAssembly object, then they will not have access to the
+  // features added with an origin trial, which is okay.
+  Handle<JSObject> webassembly(context->wasm_webassembly_object(), isolate);
+
   if (!webassembly->map()->is_extensible()) return;
 
   /*
