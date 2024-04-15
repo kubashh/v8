@@ -24,6 +24,7 @@ namespace v8 {
 namespace internal {
 
 MainAllocator::MainAllocator(LocalHeap* local_heap, SpaceWithLinearArea* space,
+                             IsNewGeneration is_new_generation,
                              LinearAllocationArea* allocation_info)
     : local_heap_(local_heap),
       isolate_heap_(local_heap->heap()),
@@ -31,7 +32,12 @@ MainAllocator::MainAllocator(LocalHeap* local_heap, SpaceWithLinearArea* space,
       allocation_info_(allocation_info != nullptr ? allocation_info
                                                   : &owned_allocation_info_),
       allocator_policy_(space->CreateAllocatorPolicy(this)),
-      supports_extending_lab_(allocator_policy_->SupportsExtendingLAB()) {
+      supports_extending_lab_(allocator_policy_->SupportsExtendingLAB()),
+      black_allocation_(is_new_generation == IsNewGeneration::kYes
+                            ? BlackAllocation::kAlwaysDisabled
+                            : (v8_flags.sticky_mark_bits
+                                   ? BlackAllocation::kAlwaysEnabled
+                                   : BlackAllocation::kEnabledOnMarking)) {
   CHECK_NOT_NULL(local_heap_);
   if (local_heap_->is_main_thread()) {
     allocation_counter_.emplace();
@@ -45,7 +51,8 @@ MainAllocator::MainAllocator(Heap* heap, SpaceWithLinearArea* space, InGCTag)
       space_(space),
       allocation_info_(&owned_allocation_info_),
       allocator_policy_(space->CreateAllocatorPolicy(this)),
-      supports_extending_lab_(false) {
+      supports_extending_lab_(false),
+      black_allocation_(BlackAllocation::kAlwaysDisabled) {
   DCHECK(!allocation_counter_.has_value());
   DCHECK(!linear_area_original_data_.has_value());
 }
@@ -77,10 +84,9 @@ AllocationResult MainAllocator::AllocateRawForceAlignmentForTesting(
 }
 
 bool MainAllocator::IsBlackAllocationEnabled() const {
-  // Use the space heap to check whether black allocation is enabled. For shared
-  // space this might be different from the LocalHeap's heap.
-  return identity() != NEW_SPACE && !in_gc() &&
-         space_heap()->incremental_marking()->black_allocation();
+  if (black_allocation_ == BlackAllocation::kAlwaysDisabled) return false;
+  if (black_allocation_ == BlackAllocation::kAlwaysEnabled) return true;
+  return space_heap()->incremental_marking()->black_allocation();
 }
 
 void MainAllocator::AddAllocationObserver(AllocationObserver* observer) {
