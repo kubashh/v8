@@ -122,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad2304bf_1ffb6c65",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6185,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T08:19:29Z",
+      "side": 1,
+      "message": "I mean, these are constants, there isn\u0027t any additional work in case of having a smi constant instead of an int32 constant.\nBut it doesn\u0027t really matter which one we pass around. 😊",
+      "parentUuid": "b138f75d_b09533b3",
+      "revId": "60cc3e9580207c225538b3657e006c6f64d49f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e056931_85c8aa07",
