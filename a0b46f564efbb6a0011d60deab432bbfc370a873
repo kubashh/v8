@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af66b113_b9b7b9ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-04-15T07:25:03Z",
+      "side": 1,
+      "message": "Removing myself from reviewer as Camillo is more qualified than me to review this.",
+      "revId": "a0b46f564efbb6a0011d60deab432bbfc370a873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
