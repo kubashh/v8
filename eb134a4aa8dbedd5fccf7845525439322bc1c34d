@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c036734_c26a4395",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Sounds like a good idea. For now, I just added a `TODO`. Given the 86 bytes that my very small unit test produces, this sounds like a very relevant metric to track. :)",
+      "parentUuid": "2e39355a_4f512e58",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93238593_a729b601",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-04-15T12:56:03Z",
       "side": 1,
       "message": "Nit: This naming looks weird.",
+      "range": {
+        "startLine": 1024,
+        "startChar": 27,
+        "endLine": 1024,
+        "endChar": 28
+      },
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5130a27b_90866692",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s a typo, done.",
+      "parentUuid": "93238593_a729b601",
       "range": {
         "startLine": 1024,
         "startChar": 27,
@@ -77,6 +119,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e02edb7d_221c8cde",
+        "filename": "src/wasm/wasm-deopt-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "This is not a header. The header has the `#if`. Other cc files don\u0027t seem to check for it either in `src/wasm`.",
+      "parentUuid": "e7c798fb_080a1e69",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a955328e_916d5d38",
         "filename": "src/wasm/wasm-deopt-data.cc",
         "patchSetId": 5
@@ -88,6 +148,24 @@
       "writtenOn": "2024-04-15T11:38:03Z",
       "side": 1,
       "message": "More `sizeof X` here and below.",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69efeeed_91b49f43",
+        "filename": "src/wasm/wasm-deopt-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a955328e_916d5d38",
       "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1acefc5e_283875c0",
+        "filename": "src/wasm/wasm-deopt-data.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Yes, this is just copied into the `WasmCode`\u0027s metadata. I added a comment.",
+      "parentUuid": "5fc072f8_734b1215",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 73
+      },
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d4d3921_6553d704",
@@ -132,6 +234,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a79c69_b9e332a9",
+        "filename": "src/wasm/wasm-deopt-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Done. I typically don\u0027t add parentheses if not needed to make it clearer that it isn\u0027t a type but an expression.",
+      "parentUuid": "8d4d3921_6553d704",
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a242f7dd_fb7bf454",
@@ -145,6 +265,30 @@
       "writtenOn": "2024-04-15T11:38:03Z",
       "side": 1,
       "message": "This could be `base::ReadUnalignedValue`.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 18
+      },
+      "revId": "eb134a4aa8dbedd5fccf7845525439322bc1c34d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d8e36fd_b019b8ad",
+        "filename": "src/wasm/wasm-deopt-data.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Done. More code but slightly clearer on the intent.",
+      "parentUuid": "a242f7dd_fb7bf454",
       "range": {
         "startLine": 63,
         "startChar": 0,

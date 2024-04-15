@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f0f83f_9bf08051",
+        "filename": "src/wasm/DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-15T12:59:59Z",
+      "side": 1,
+      "message": "Perfect. I\u0027ll just keep the `TODO` in this CL and follow-up on this later on.",
+      "parentUuid": "2877d885_17e11af6",
+      "range": {
+        "startLine": 46,
+        "startChar": 22,
+        "endLine": 46,
+        "endChar": 69
+      },
+      "revId": "1cf12ead3496edfd1113cf88e198f92c031e3eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26911311_e96592c1",
