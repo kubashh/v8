@@ -39,6 +39,23 @@
       },
       "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "534acb5e_a8a60d8f",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-15T07:34:17Z",
+      "side": 1,
+      "message": "I would prefer if we compute this here in MainAllocator. One goal with MainAllocator was to make it simple to create new LABs, right now it is really just `new MainAllocator(local_heap, space)`. Once we add that argument we need to pass in the right value in all uses. It looks like we could add this logic to `IsBlackAllocationEnabled()` and we wouldn\u0027t need to change anything else.",
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
