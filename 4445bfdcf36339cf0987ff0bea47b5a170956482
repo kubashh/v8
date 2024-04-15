@@ -33,6 +33,57 @@
       "message": "LGTM. I\u0027ll leave the `liftoff-compiler.cc` to @clemensb@chromium.org though, as I don\u0027t think I know enough about Liftoff to be able to properly review these changes. 😊",
       "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e5f2a5_efc88b99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T09:42:36Z",
+      "side": 1,
+      "message": "Very nice, this moves a lot of things in the right direction!\n\nTwo comments, the first one easy to fix, the second one maybe not so much, but we can also fix it later. For now it requires one more register and one more instruction than necessary.",
+      "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cff6888b_915185ee",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5788,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T09:42:36Z",
+      "side": 1,
+      "message": "The meaning of `stack_slot` (here and in `MatchingMemType`) is different to the addressing we use in other place (in Liftoff and the function body decoder). Usually `0` is the top-most stack slot, so anything in `[0, stack_size-1]` is allowed.\n\nThis would mean changing the access to `stack_state.end()[-1-stack_slot]` and having `DCHECK_LE(0, stack_slot);` and `DCHECK_LT(stack_slot, __ cache_state()-\u003estack_height());`.\n\nSince we access the `VarState`s so often now (mostly in WasmGC code), the LiftoffAssembler should probably have an acessor for getting the `VarState` at a certain depth instead of manually addressing relative to the `end()` pointer, but that\u0027s a separate refactoring.",
+      "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd384d72_ca3f71d9",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5797,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-04-15T09:42:36Z",
+      "side": 1,
+      "message": "Since the `VarState` is not popped yet, this will always allocate a new register. We should try to avoid that, but that would require introducing yet another variant of this method, or detecting if the `slot` is still on the stack or not...",
+      "revId": "4445bfdcf36339cf0987ff0bea47b5a170956482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
