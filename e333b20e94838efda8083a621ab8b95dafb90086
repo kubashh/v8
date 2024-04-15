@@ -116,6 +116,24 @@
       "parentUuid": "bfb3103b_c313e816",
       "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9bc1a36_25833a1f",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-15T13:22:29Z",
+      "side": 1,
+      "message": "Yeah, that would work as well, if we consider black-allocation as an implementation detail. I\u0027d personally prefer being explicit and avoid the default argument, since they are not alwyas intuitive (or hard to remember).",
+      "parentUuid": "e8b0cc4d_298cda68",
+      "revId": "e333b20e94838efda8083a621ab8b95dafb90086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
