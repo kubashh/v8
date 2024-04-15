@@ -16,6 +16,23 @@
       "message": "I have no concerns about the implementation. It looks good. However I think Toon should probably have the last word on whether this API change should be made.",
       "revId": "870163324978bf35dc1fa23c7fed39c3bdf960f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46540468_085405f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-04-15T08:28:35Z",
+      "side": 1,
+      "message": "lgtm from my side",
+      "revId": "870163324978bf35dc1fa23c7fed39c3bdf960f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
