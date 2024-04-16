@@ -39,6 +39,30 @@
       },
       "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ea83fc_ae5d2082",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-16T07:09:40Z",
+      "side": 1,
+      "message": "Thanks for bringing this up! I see the solution there was to half the reservation size.\n\n@saelo@chromium.org should we have a fallback for the buffer table case where failure to allocate subspace should use regular EPT ? Or just half the reservation for android as done for EPT ?",
+      "parentUuid": "7db24628_4380fea9",
+      "range": {
+        "startLine": 342,
+        "startChar": 55,
+        "endLine": 342,
+        "endChar": 58
+      },
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
