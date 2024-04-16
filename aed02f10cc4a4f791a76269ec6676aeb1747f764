@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22a3daf5_fbbf217b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-16T10:39:07Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "aed02f10cc4a4f791a76269ec6676aeb1747f764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff360d97_94c0dbc8",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-16T10:39:07Z",
+      "side": 1,
+      "message": "nit: I think this could be a constexpr method",
+      "range": {
+        "startLine": 269,
+        "startChar": 9,
+        "endLine": 269,
+        "endChar": 24
+      },
+      "revId": "aed02f10cc4a4f791a76269ec6676aeb1747f764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
