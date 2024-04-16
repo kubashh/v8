@@ -201,3 +201,26 @@ d8.file.execute("test/mjsunit/wasm/exceptions-utils.js");
   // Don't catch with implicit wrapping.
   assertThrowsEquals(() => instance.exports.test(obj), obj);
 })();
+
+(function TestThrowJSTag() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+  let js_tag = builder.addImportedTag("", "tag", kSig_v_r);
+
+  // Throw a JS object with WebAssembly.JSTag and check that we can catch
+  // it as-is from JavaScript.
+  builder.addFunction("test", kSig_v_r)
+    .addBody([
+      kExprLocalGet, 0,
+      kExprThrow, js_tag,
+    ])
+    .exportFunc();
+
+  let instance = builder.instantiate({"": {
+      tag: WebAssembly.JSTag,
+  }});
+
+  let obj = {};
+  assertThrowsEquals(() => instance.exports.test(obj), obj);
+  assertThrowsEquals(() => instance.exports.test(5), 5);
+})();
