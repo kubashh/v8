@@ -33,6 +33,24 @@
       "message": "Is this correct? Without it I\u0027m getting test failures, so I assume there is some mechanism that leads to nullptr derefs that are expected to be handled here",
       "revId": "a28247063aea1c94949b87a70b6489eca775d200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f767e35_9594b8f8",
+        "filename": "src/trap-handler/handler-inside.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-16T09:44:28Z",
+      "side": 1,
+      "message": "We should investigate where this access to `nullptr` is happening. In principle there should not be an access to `nullptr`. Maybe there is an optimization that does that, but in that case we should probably change the optimization.",
+      "parentUuid": "eaade8b0_f0fab0f8",
+      "revId": "a28247063aea1c94949b87a70b6489eca775d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
