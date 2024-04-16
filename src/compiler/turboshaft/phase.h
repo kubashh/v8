@@ -210,6 +210,10 @@ void PrintTurboshaftGraphForTurbolizer(std::ofstream& stream,
                                        NodeOriginTable* node_origins,
                                        Zone* temp_zone);
 
+struct Phase {
+  static constexpr bool outputs_printable_graph = true;
+};
+
 }  // namespace v8::internal::compiler::turboshaft
 
 #endif  // V8_COMPILER_TURBOSHAFT_PHASE_H_

@@ -34,6 +34,7 @@ namespace internal {
   V(AsyncFunctionStackParameter)                     \
   V(BaselineLeaveFrame)                              \
   V(BaselineOutOfLinePrologue)                       \
+  V(BigIntEqual)                                     \
   V(BigIntToI32Pair)                                 \
   V(BigIntToI64)                                     \
   V(BinaryOp)                                        \
@@ -2512,6 +2513,17 @@ class V8_EXPORT_PRIVATE BigIntToI32PairDescriptor final
                                     MachineType::Uint32(),     // result 2
                                     MachineType::AnyTagged())  // kArgument
   DECLARE_DESCRIPTOR(BigIntToI32PairDescriptor)
+};
+
+class V8_EXPORT_PRIVATE BigIntEqualDescriptor final
+    : public StaticCallInterfaceDescriptor<BigIntEqualDescriptor> {
+ public:
+  INTERNAL_DESCRIPTOR()
+  DEFINE_PARAMETERS(kLeft, kRight)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::TaggedPointer(),  // result 1
+                                    MachineType::TaggedPointer(),  // kLeft
+                                    MachineType::TaggedPointer())  // kRight
+  DECLARE_DESCRIPTOR(BigIntEqualDescriptor)
 };
 
 class CloneObjectWithVectorDescriptor final

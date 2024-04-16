@@ -21,6 +21,7 @@
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/turboshaft/reducer-traits.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/turboshaft/snapshot-table.h"
@@ -1005,9 +1006,9 @@ class TSAssembler;
 template <template <class> class... Reducers>
 class CopyingPhaseImpl {
  public:
-  static void Run(Graph& input_graph, Zone* phase_zone,
-                  bool trace_reductions = false) {
-    TSAssembler<GraphVisitor, Reducers...> phase(
+  static void Run(DataComponentProvider* data_provider, Graph& input_graph,
+    Zone* phase_zone, bool trace_reductions = false) {
+    TSAssembler<GraphVisitor, Reducers...> phase(data_provider,
         input_graph, input_graph.GetOrCreateCompanion(), phase_zone);
 #ifdef DEBUG
     if (trace_reductions) {
@@ -1027,8 +1028,14 @@ class CopyingPhase {
   static void Run(Zone* phase_zone) {
     PipelineData& data = PipelineData::Get();
     Graph& input_graph = data.graph();
-    CopyingPhaseImpl<Reducers...>::Run(
+    CopyingPhaseImpl<Reducers...>::Run(nullptr,
         input_graph, phase_zone, data.info()->turboshaft_trace_reduction());
+  }
+
+  static void Run(DataComponentProvider* data_provider, Zone* phase_zone) {
+    Graph* input_graph = data_provider->GetDataComponent<GraphData>().graph;
+    CopyingPhaseImpl<Reducers...>::Run(data_provider,
+      *input_graph, phase_zone, false); // TODO
   }
 };
 

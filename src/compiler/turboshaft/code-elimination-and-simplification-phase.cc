@@ -18,8 +18,11 @@
 #endif
 
 namespace v8::internal::compiler::turboshaft {
-
 void CodeEliminationAndSimplificationPhase::Run(Zone* temp_zone) {
+  Run(nullptr, temp_zone);
+}
+
+void CodeEliminationAndSimplificationPhase::Run(DataComponentProvider* data_provider, Zone* temp_zone) {
   UnparkedScopeIfNeeded scope(PipelineData::Get().broker(), DEBUG_BOOL);
 
   CopyingPhase<DeadCodeEliminationReducer, StackCheckLoweringReducer,
@@ -34,7 +37,7 @@ void CodeEliminationAndSimplificationPhase::Run(Zone* temp_zone) {
                // methods, but only calls Next::ReduceLoad/Store).
                DuplicationOptimizationReducer,
                InstructionSelectionNormalizationReducer,
-               ValueNumberingReducer>::Run(temp_zone);
+               ValueNumberingReducer>::Run(data_provider, temp_zone);
 }
 
 }  // namespace v8::internal::compiler::turboshaft

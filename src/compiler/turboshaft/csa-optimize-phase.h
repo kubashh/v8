@@ -9,34 +9,36 @@
 
 namespace v8::internal::compiler::turboshaft {
 
-struct CsaEarlyMachineOptimizationPhase {
+class DataComponentProvider;
+
+struct CsaEarlyMachineOptimizationPhase : public Phase {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(CsaEarlyMachineOptimization)
 
-  void Run(Zone* temp_zone);
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
 };
 
-struct CsaLoadEliminationPhase {
+struct CsaLoadEliminationPhase : public Phase {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(CsaLoadElimination)
 
-  void Run(Zone* temp_zone);
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
 };
 
-struct CsaLateEscapeAnalysisPhase {
+struct CsaLateEscapeAnalysisPhase : public Phase {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(CsaLateEscapeAnalysis)
 
-  void Run(Zone* temp_zone);
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
 };
 
-struct CsaBranchEliminationPhase {
+struct CsaBranchEliminationPhase : public Phase {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(CsaBranchElimination)
 
-  void Run(Zone* temp_zone);
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
 };
 
-struct CsaOptimizePhase {
+struct CsaOptimizePhase : public Phase {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(CsaOptimize)
 
-  void Run(Zone* temp_zone);
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
 };
 
 }  // namespace v8::internal::compiler::turboshaft

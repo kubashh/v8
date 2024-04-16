@@ -53,16 +53,25 @@ struct GraphBuilder {
   Schedule& schedule;
   Linkage* linkage;
 
-  Isolate* isolate = PipelineData::Get().isolate();
-  JSHeapBroker* broker = PipelineData::Get().broker();
-  Zone* graph_zone = PipelineData::Get().graph_zone();
+  Isolate* isolate; // = PipelineData::Get().isolate();
+  JSHeapBroker* broker; // = PipelineData::Get().broker();
+  Zone* graph_zone; // = PipelineData::Get().graph_zone();
   using AssemblerT = TSAssembler<ExplicitTruncationReducer>;
-  AssemblerT assembler{PipelineData::Get().graph(), PipelineData::Get().graph(),
-                       phase_zone};
-  SourcePositionTable* source_positions =
-      PipelineData::Get().source_positions();
-  NodeOriginTable* origins = PipelineData::Get().node_origins();
-  TurboshaftPipelineKind pipeline_kind = PipelineData::Get().pipeline_kind();
+  AssemblerT assembler;//{PipelineData::Get().graph(), PipelineData::Get().graph(),
+                       //phase_zone};
+  SourcePositionTable* source_positions; // =
+//      PipelineData::Get().source_positions();
+  NodeOriginTable* origins; // = PipelineData::Get().node_origins();
+  TurboshaftPipelineKind pipeline_kind; // = PipelineData::Get().pipeline_kind();
+
+  GraphBuilder(Zone* phase_zone, Schedule& schedule, Linkage* linkage,
+    Isolate* isolate, JSHeapBroker* broker, Zone* graph_zone,
+    Graph* graph, SourcePositionTable* source_positions, NodeOriginTable* origins,
+      TurboshaftPipelineKind pipeline_kind)
+    : phase_zone(phase_zone), schedule(schedule), linkage(linkage),
+      isolate(isolate), broker(broker), graph_zone(graph_zone),
+    assembler(*graph, *graph, phase_zone),
+    source_positions(source_positions), origins(origins), pipeline_kind(pipeline_kind) {}
 
   struct BlockData {
     Block* block;
@@ -2365,11 +2374,48 @@ OpIndex GraphBuilder::Process(
 
 }  // namespace
 
-base::Optional<BailoutReason> BuildGraph(Schedule* schedule, Zone* phase_zone,
+base::Optional<BailoutReason> BuildGraph(DataComponentProvider* data_provider,
+  Schedule* schedule, Zone* phase_zone,
                                          Linkage* linkage) {
-  GraphBuilder builder{phase_zone, *schedule, linkage};
+
+  Isolate* isolate; // = PipelineData::Get().isolate();
+  JSHeapBroker* broker; // = PipelineData::Get().broker();
+  Graph* graph;
+  Zone* graph_zone; // = PipelineData::Get().graph_zone();
+  SourcePositionTable* source_positions; // =
+//      PipelineData::Get().source_positions();
+  NodeOriginTable* origins; // = PipelineData::Get().node_origins();
+  TurboshaftPipelineKind pipeline_kind; // = PipelineData::Get().pipeline_kind();
+
+  if(data_provider) {
+    isolate = data_provider->GetDataComponent<ContextualData>().isolate;
+    broker = nullptr;
+    graph = data_provider->GetDataComponent<GraphData>().graph;
+    graph_zone = data_provider->GetDataComponent<GraphData>().graph_zone;
+    source_positions = nullptr;
+    origins = nullptr;
+    pipeline_kind = data_provider->GetDataComponent<CompilationData>().pipeline_kind;
+  } else {
+    isolate = PipelineData::Get().isolate();
+    broker = PipelineData::Get().broker();
+    graph = &PipelineData::Get().graph();
+    graph_zone = PipelineData::Get().graph_zone();
+    source_positions = PipelineData::Get().source_positions();
+    origins = PipelineData::Get().node_origins();
+    pipeline_kind = PipelineData::Get().pipeline_kind();
+  }
+
+//  GraphBuilder builder{phase_zone, *schedule, linkage};
+
+  UnparkedScopeIfNeeded scope(broker);
+
+  GraphBuilder builder{phase_zone, *schedule, linkage,
+    isolate, broker, graph_zone,
+    graph, source_positions, origins,
+      pipeline_kind};
+ 
 #if DEBUG
-  PipelineData::Get().graph().SetCreatedFromTurbofan();
+  graph->SetCreatedFromTurbofan();
 #endif
   return builder.Run();
 }
