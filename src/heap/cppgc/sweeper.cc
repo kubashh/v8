@@ -866,6 +866,7 @@ class Sweeper::SweeperImpl final {
 
   bool SweepForAllocationIfRunning(NormalPageSpace* space, size_t size,
                                    v8::base::TimeDelta max_duration) {
+#if 0
     if (!is_in_progress_) return false;
 
     // Bail out for recursive sweeping calls. This can happen when finalizers
@@ -919,6 +920,9 @@ class Sweeper::SweeperImpl final {
     }
 
     return false;
+#else
+    return false;
+#endif
   }
 
   bool FinishIfRunning() {
@@ -1109,6 +1113,17 @@ class Sweeper::SweeperImpl final {
     SweeperImpl& sweeper_;
   };
 
+  class IncrementalIdleTask final : public cppgc::IdleTask {
+   public:
+    explicit IncrementalIdleTask(std::unique_ptr<cppgc::Task> task)
+        : task_(std::move(task)) {}
+
+    void Run(double deadline_in_seconds) override { task_->Run(); }
+
+   private:
+    std::unique_ptr<cppgc::Task> task_;
+  };
+
   class IncrementalSweepTask final : public cppgc::Task {
    public:
     using Handle = SingleThreadedHandle;
@@ -1123,7 +1138,12 @@ class Sweeper::SweeperImpl final {
       if (delay.has_value()) {
         runner->PostDelayedTask(std::move(task), delay->InSecondsF());
       } else {
-        runner->PostTask(std::move(task));
+        if (runner->IdleTasksEnabled()) {
+          runner->PostIdleTask(
+              std::make_unique<IncrementalIdleTask>(std::move(task)));
+        } else {
+          runner->PostTask(std::move(task));
+        }
       }
 
       return handle;
