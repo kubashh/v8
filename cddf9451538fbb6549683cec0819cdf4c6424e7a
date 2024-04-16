@@ -16,6 +16,23 @@
       "message": "PTAL! :)",
       "revId": "cddf9451538fbb6549683cec0819cdf4c6424e7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a0b348_ee2d12c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-16T13:55:56Z",
+      "side": 1,
+      "message": "LGTM. Now you can drop the `which, by the way, should be removed by some other optimization` comment from the other CL 😊",
+      "revId": "cddf9451538fbb6549683cec0819cdf4c6424e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
