@@ -16,6 +16,29 @@
       "message": "ptal.\n\nThis is in preparation for the CL to stop sweeping promoted pages.",
       "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aebbcdf_f23eaad4",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-16T05:56:09Z",
+      "side": 1,
+      "message": "Wouldnt it be better to factor in the wasted bytes by default and only segregate them out where needed? Now all callers of old gen size need to manually add wasted bytes.",
+      "range": {
+        "startLine": 1385,
+        "startChar": 27,
+        "endLine": 1385,
+        "endChar": 53
+      },
+      "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
