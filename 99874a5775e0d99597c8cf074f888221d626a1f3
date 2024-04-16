@@ -111,6 +111,30 @@
       },
       "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54199172_1d375401",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-16T15:35:54Z",
+      "side": 1,
+      "message": "I think you commented on the wrong CL 😊\n\nAs for explicit vs default, I\u0027m not sure whether you\u0027re suggesting to always include wasted bytes and subtract them when not needed, or to have a seperate method that includes wasted bytes and call that instead of *SizeOfObjects.",
+      "parentUuid": "a7e5d82d_05407453",
+      "range": {
+        "startLine": 1385,
+        "startChar": 27,
+        "endLine": 1385,
+        "endChar": 53
+      },
+      "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
