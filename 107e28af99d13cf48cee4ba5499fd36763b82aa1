@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9bc4c5f_e190f945",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-16T08:13:05Z",
+      "side": 1,
+      "message": "I split the `SweepingJob` we had before (which wasn\u0027t really ac job) to a `SweepingState` and a `SweepingJob`. The state holds the \"persistent\" data we need to keep around after we finish sweeping, such as the lists of surviving array buffers. The job is the actual implementation of background sweeping and holds the data that we don\u0027t need to access outside of sweeping.",
+      "range": {
+        "startLine": 118,
+        "startChar": 41,
+        "endLine": 118,
+        "endChar": 52
+      },
+      "revId": "107e28af99d13cf48cee4ba5499fd36763b82aa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
