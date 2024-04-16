@@ -63,6 +63,30 @@
       },
       "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb36954e_798e4670",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-16T13:50:21Z",
+      "side": 1,
+      "message": "I think we can also make it explicit otherwise with different methods. I just wonder if the default is right here.\n\nIt looks like more calls want to add them up?",
+      "parentUuid": "cddd5caf_6c047c47",
+      "range": {
+        "startLine": 1385,
+        "startChar": 27,
+        "endLine": 1385,
+        "endChar": 53
+      },
+      "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
