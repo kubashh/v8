@@ -31,6 +31,7 @@
 #include "src/compiler/turboshaft/operation-matcher.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/turboshaft/reducer-traits.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/turboshaft/runtime-call-descriptors.h"
@@ -2736,6 +2737,10 @@ class TurboshaftAssemblerOpInterface
     }
     return cached_param;
   }
+  template <typename T>
+  V<T> Parameter(int index, const char* debug_name = nullptr) {
+    return Parameter(index, V<T>::rep, debug_name);
+  }
   OpIndex OsrValue(int index) { return ReduceIfReachableOsrValue(index); }
   void Return(V<Word32> pop_count, base::Vector<const OpIndex> return_values) {
     ReduceIfReachableReturn(pop_count, return_values);
@@ -4150,13 +4155,16 @@ class TurboshaftAssemblerOpInterface
 struct AssemblerData {
   // TODO(dmercadier): consider removing input_graph from this, and only having
   // it in GraphVisitor for Stacks that have it.
-  AssemblerData(Graph& input_graph, Graph& output_graph, Zone* phase_zone)
+  AssemblerData(DataComponentProvider* data_provider, Graph& input_graph,
+                Graph& output_graph, Zone* phase_zone)
       : phase_zone(phase_zone),
         input_graph(input_graph),
-        output_graph(output_graph) {}
+        output_graph(output_graph),
+        data_provider(data_provider) {}
   Zone* phase_zone;
   Graph& input_graph;
   Graph& output_graph;
+  DataComponentProvider* data_provider;
 };
 
 template <class Reducers>
@@ -4166,10 +4174,14 @@ class Assembler : public AssemblerData,
   using node_t = typename Stack::node_t;
 
  public:
-  explicit Assembler(Graph& input_graph, Graph& output_graph, Zone* phase_zone)
-      : AssemblerData(input_graph, output_graph, phase_zone), Stack() {
+  Assembler(DataComponentProvider* data_provider, Graph& input_graph,
+            Graph& output_graph, Zone* phase_zone)
+      : AssemblerData(data_provider, input_graph, output_graph, phase_zone),
+        Stack() {
     SupportedOperations::Initialize();
   }
+  Assembler(Graph& input_graph, Graph& output_graph, Zone* phase_zone)
+      : Assembler(nullptr, input_graph, output_graph, phase_zone) {}
 
   using Stack::Asm;
 

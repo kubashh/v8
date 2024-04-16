@@ -8,6 +8,7 @@
 #include "src/compiler/graph-visualizer.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/js-heap-broker.h"
 #include "test/unittests/test-utils.h"
 
 namespace v8::internal::compiler::turboshaft {
@@ -226,7 +227,7 @@ class ReducerTest : public TestWithNativeContextAndZone {
   OptimizedCompilationInfo* info_ = nullptr;
   Schedule* schedule_ = nullptr;
   Zone* graph_zone_ = this->zone();
-  JSHeapBroker* broker_ = nullptr;
+  std::unique_ptr<JSHeapBroker> broker_;
   Isolate* isolate_ = this->isolate();
   SourcePositionTable* source_positions_ = nullptr;
   NodeOriginTable* node_origins_ = nullptr;

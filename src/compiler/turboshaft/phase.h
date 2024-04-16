@@ -40,8 +40,8 @@ class V8_EXPORT_PRIVATE PipelineData
  public:
   explicit PipelineData(TurboshaftPipelineKind pipeline_kind,
                         OptimizedCompilationInfo* const& info,
-                        Schedule*& schedule, Zone*& graph_zone,
-                        Zone* shared_zone, JSHeapBroker*& broker,
+                        Schedule*& schedule, Zone* graph_zone,
+                        Zone* shared_zone, std::unique_ptr<JSHeapBroker>& broker,
                         Isolate* const& isolate,
                         SourcePositionTable*& source_positions,
                         NodeOriginTable*& node_origins,
@@ -81,7 +81,7 @@ class V8_EXPORT_PRIVATE PipelineData
   // between all phases (including code gen where the graph zone is gone
   // already).
   Zone* shared_zone() const { return shared_zone_; }
-  JSHeapBroker* broker() const { return broker_; }
+  JSHeapBroker* broker() const { return broker_.get(); }
   Isolate* isolate() const { return isolate_; }
   SourcePositionTable* source_positions() const { return source_positions_; }
   NodeOriginTable* node_origins() const { return node_origins_; }
@@ -171,9 +171,9 @@ class V8_EXPORT_PRIVATE PipelineData
   TurboshaftPipelineKind pipeline_kind_;
   OptimizedCompilationInfo* const& info_;
   Schedule*& schedule_;
-  Zone*& graph_zone_;
+  Zone* graph_zone_;
   Zone* shared_zone_;
-  JSHeapBroker*& broker_;
+  std::unique_ptr<JSHeapBroker>& broker_;
   Isolate* const& isolate_;
   SourcePositionTable*& source_positions_;
   NodeOriginTable*& node_origins_;
@@ -209,6 +209,10 @@ void PrintTurboshaftGraphForTurbolizer(std::ofstream& stream,
                                        const char* phase_name,
                                        NodeOriginTable* node_origins,
                                        Zone* temp_zone);
+
+struct Phase {
+  static constexpr bool outputs_printable_graph = true;
+};
 
 }  // namespace v8::internal::compiler::turboshaft
 

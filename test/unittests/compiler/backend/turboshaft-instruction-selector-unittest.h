@@ -17,6 +17,7 @@
 #include "src/compiler/turboshaft/load-store-simplification-reducer.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/representations.h"
+#include "src/compiler/js-heap-broker.h"
 #include "test/unittests/test-utils.h"
 
 namespace v8::internal::compiler::turboshaft {
@@ -548,7 +549,7 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
   OptimizedCompilationInfo* info_ = nullptr;
   Schedule* schedule_ = nullptr;
   Zone* graph_zone_ = this->zone();
-  JSHeapBroker* broker_ = nullptr;
+  std::unique_ptr<JSHeapBroker> broker_;
   Isolate* isolate_ = this->isolate();
   SourcePositionTable* source_positions_ = nullptr;
   NodeOriginTable* node_origins_ = nullptr;
