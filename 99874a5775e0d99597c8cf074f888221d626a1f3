@@ -87,6 +87,30 @@
       },
       "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7e5d82d_05407453",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-16T13:57:56Z",
+      "side": 1,
+      "message": "Either way is fine for me as long as it stays a pow2 interrupt: https://godbolt.org/z/dn345ssfb",
+      "parentUuid": "eb36954e_798e4670",
+      "range": {
+        "startLine": 1385,
+        "startChar": 27,
+        "endLine": 1385,
+        "endChar": 53
+      },
+      "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
