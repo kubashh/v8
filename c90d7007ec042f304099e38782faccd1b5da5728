@@ -162,6 +162,24 @@
       "message": "Now that we use two fields in the Entry struct, and set both in this function, I think this statement is no longer true. If we\u0027re unlucky, a `::Set` in one thread could interleave with a `::Get` in another thread and produce incorrect results. Maybe just update this comment to state that it is not atomic as it stores two fields?",
       "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feae3385_2bf3b91a",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-16T14:07:06Z",
+      "side": 1,
+      "message": "Would it be okay if I make the change as part of https://chromium-review.googlesource.com/c/v8/v8/+/5406741 or do you prefer it in a separate CL ?\n\nAlso QQ, is there any situation were we would need to access the getter and setter methods from multiple threads today ?",
+      "parentUuid": "02776a35_99e82ace",
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
