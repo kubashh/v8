@@ -2837,22 +2837,24 @@ void AccessorAssembler::GenericPropertyLoad(
   {
     // Try looking up the property on the lookup_start_object; if unsuccessful,
     // look for a handler in the stub cache.
-    TNode<DescriptorArray> descriptors =
-        LoadMapDescriptors(lookup_start_object_map);
+    Label try_stub_cache(this);
+    if (use_stub_cache == kUseStubCache) {
+      Goto(&try_stub_cache);
+    } else {
+      TNode<DescriptorArray> descriptors =
+          LoadMapDescriptors(lookup_start_object_map);
+      Label if_descriptor_found(this), try_stub_cache(this);
+      TVARIABLE(IntPtrT, var_name_index);
+      DescriptorLookup(name, descriptors, bitfield3, &if_descriptor_found,
+                       &var_name_index, &lookup_prototype_chain);
 
-    Label if_descriptor_found(this), try_stub_cache(this);
-    TVARIABLE(IntPtrT, var_name_index);
-    Label* notfound = use_stub_cache == kUseStubCache ? &try_stub_cache
-                                                      : &lookup_prototype_chain;
-    DescriptorLookup(name, descriptors, bitfield3, &if_descriptor_found,
-                     &var_name_index, notfound);
-
-    BIND(&if_descriptor_found);
-    {
-      LoadPropertyFromFastObject(lookup_start_object, lookup_start_object_map,
-                                 descriptors, var_name_index.value(),
-                                 &var_details, &var_value);
-      Goto(&if_found_on_lookup_start_object);
+      BIND(&if_descriptor_found);
+      {
+        LoadPropertyFromFastObject(lookup_start_object, lookup_start_object_map,
+                                   descriptors, var_name_index.value(),
+                                   &var_details, &var_value);
+        Goto(&if_found_on_lookup_start_object);
+      }
     }
 
     if (use_stub_cache == kUseStubCache) {
@@ -2861,13 +2863,14 @@ void AccessorAssembler::GenericPropertyLoad(
       BIND(&try_stub_cache);
       // When there is no feedback vector don't use stub cache.
       GotoIfNot(IsUndefined(p->vector()), &stub_cache);
+      TVARIABLE(MaybeObject, var_handler);
+      Label found_handler(this, &var_handler), stub_cache_miss(this);
       // Fall back to the slow path for private symbols.
-      Branch(IsPrivateSymbol(name), slow, &lookup_prototype_chain);
+      Branch(IsPrivateSymbol(name), slow, &stub_cache_miss);
 
       BIND(&stub_cache);
       Comment("stub cache probe for fast property load");
-      TVARIABLE(MaybeObject, var_handler);
-      Label found_handler(this, &var_handler), stub_cache_miss(this);
+
       TryProbeStubCache(isolate()->load_stub_cache(), lookup_start_object,
                         lookup_start_object_map, name, &found_handler,
                         &var_handler, &stub_cache_miss);

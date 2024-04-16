@@ -877,78 +877,83 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
   BIND(&fast_properties);
   {
     Comment("fast property store");
-    TNode<DescriptorArray> descriptors = LoadMapDescriptors(receiver_map);
     Label descriptor_found(this), lookup_transition(this);
     TVARIABLE(IntPtrT, var_name_index);
-    DescriptorLookup(name, descriptors, bitfield3,
-                     IsAnyDefineOwn() ? slow : &descriptor_found,
-                     &var_name_index, &lookup_transition);
+    if (use_stub_cache == kUseStubCache) {
+      Goto(&try_stub_cache);
+    } else {
+      TNode<DescriptorArray> descriptors = LoadMapDescriptors(receiver_map);
+      DescriptorLookup(name, descriptors, bitfield3,
+                       IsAnyDefineOwn() ? slow : &descriptor_found,
+                       &var_name_index, &lookup_transition);
 
-    // When dealing with class fields defined with DefineKeyedOwnIC or
-    // DefineNamedOwnIC, use the slow path to check the existing property.
-    if (!IsAnyDefineOwn()) {
-      BIND(&descriptor_found);
-      {
-        TNode<IntPtrT> name_index = var_name_index.value();
-        TNode<Uint32T> details = LoadDetailsByKeyIndex(descriptors, name_index);
-        Label data_property(this);
-        JumpIfDataProperty(details, &data_property,
-                           ShouldReconfigureExisting() ? nullptr : &readonly);
-
-        if (ShouldCallSetter()) {
-          // Accessor case.
-          // TODO(jkummerow): Implement a trimmed-down
-          // LoadAccessorFromFastObject.
-          LoadPropertyFromFastObject(receiver, receiver_map, descriptors,
-                                     name_index, details, &var_accessor_pair);
-          var_accessor_holder = receiver;
-          Goto(&accessor);
-        } else {
-          // Handle accessor to data property reconfiguration in runtime.
-          Goto(slow);
-        }
-
-        BIND(&data_property);
+      // When dealing with class fields defined with DefineKeyedOwnIC or
+      // DefineNamedOwnIC, use the slow path to check the existing property.
+      if (!IsAnyDefineOwn()) {
+        BIND(&descriptor_found);
         {
-          Label shared(this);
-          GotoIf(IsJSSharedStructInstanceType(instance_type), &shared);
+          TNode<IntPtrT> name_index = var_name_index.value();
+          TNode<Uint32T> details =
+              LoadDetailsByKeyIndex(descriptors, name_index);
+          Label data_property(this);
+          JumpIfDataProperty(details, &data_property,
+                             ShouldReconfigureExisting() ? nullptr : &readonly);
 
-          CheckForAssociatedProtector(name, slow);
-          OverwriteExistingFastDataProperty(receiver, receiver_map, descriptors,
-                                            name_index, details, p->value(),
-                                            slow, false);
-          exit_point->Return(p->value());
+          if (ShouldCallSetter()) {
+            // Accessor case.
+            // TODO(jkummerow): Implement a trimmed-down
+            // LoadAccessorFromFastObject.
+            LoadPropertyFromFastObject(receiver, receiver_map, descriptors,
+                                       name_index, details, &var_accessor_pair);
+            var_accessor_holder = receiver;
+            Goto(&accessor);
+          } else {
+            // Handle accessor to data property reconfiguration in runtime.
+            Goto(slow);
+          }
 
-          BIND(&shared);
+          BIND(&data_property);
           {
-            StoreJSSharedStructField(p->context(), receiver, receiver_map,
-                                     descriptors, name_index, details,
-                                     p->value());
+            Label shared(this);
+            GotoIf(IsJSSharedStructInstanceType(instance_type), &shared);
+
+            CheckForAssociatedProtector(name, slow);
+            OverwriteExistingFastDataProperty(receiver, receiver_map,
+                                              descriptors, name_index, details,
+                                              p->value(), slow, false);
             exit_point->Return(p->value());
+
+            BIND(&shared);
+            {
+              StoreJSSharedStructField(p->context(), receiver, receiver_map,
+                                       descriptors, name_index, details,
+                                       p->value());
+              exit_point->Return(p->value());
+            }
           }
         }
       }
-    }
 
-    BIND(&lookup_transition);
-    {
-      Comment("lookup transition");
-      CheckForAssociatedProtector(name, slow);
+      BIND(&lookup_transition);
+      {
+        Comment("lookup transition");
+        CheckForAssociatedProtector(name, slow);
 
-      DCHECK_IMPLIES(use_stub_cache == kUseStubCache, IsSet());
-      Label* if_not_found =
-          use_stub_cache == kUseStubCache ? &try_stub_cache : slow;
+        DCHECK_IMPLIES(use_stub_cache == kUseStubCache, IsSet());
+        Label* if_not_found =
+            use_stub_cache == kUseStubCache ? &try_stub_cache : slow;
 
-      TNode<Map> transition_map = FindCandidateStoreICTransitionMapHandler(
-          receiver_map, name, if_not_found);
+        TNode<Map> transition_map = FindCandidateStoreICTransitionMapHandler(
+            receiver_map, name, if_not_found);
 
-      // Validate the transition handler candidate and apply the transition.
-      StoreTransitionMapFlags flags = kValidateTransitionHandler;
-      if (ShouldCheckPrototypeValidity()) {
-        flags = StoreTransitionMapFlags(flags | kCheckPrototypeValidity);
+        // Validate the transition handler candidate and apply the transition.
+        StoreTransitionMapFlags flags = kValidateTransitionHandler;
+        if (ShouldCheckPrototypeValidity()) {
+          flags = StoreTransitionMapFlags(flags | kCheckPrototypeValidity);
+        }
+        HandleStoreICTransitionMapHandlerCase(p, transition_map, slow, flags);
+        exit_point->Return(p->value());
       }
-      HandleStoreICTransitionMapHandlerCase(p, transition_map, slow, flags);
-      exit_point->Return(p->value());
     }
   }
 
