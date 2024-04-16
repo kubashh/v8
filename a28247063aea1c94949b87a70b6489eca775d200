@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7574b24_e8708445",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-16T09:19:19Z",
+      "side": 1,
+      "message": "PTAL! This CL tries to stop the Wasm trap handler from potentially hiding other bugs that lead to wild read/writes originating in Wasm. See the linked bug for an example.\n\nThere was an attempt at something similar in the past: https://chromium-review.googlesource.com/c/v8/v8/+/2568272 but I think we can go with a simpler approach: instead of tracking the locations of all Wasm Memory objects, simply check if the access is inside the V8 sandbox.",
+      "revId": "a28247063aea1c94949b87a70b6489eca775d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaade8b0_f0fab0f8",
+        "filename": "src/trap-handler/handler-inside.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-16T09:19:19Z",
+      "side": 1,
+      "message": "Is this correct? Without it I\u0027m getting test failures, so I assume there is some mechanism that leads to nullptr derefs that are expected to be handled here",
+      "revId": "a28247063aea1c94949b87a70b6489eca775d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

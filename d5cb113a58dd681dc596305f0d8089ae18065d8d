@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a0a9b2c_f94ff328",
+        "filename": "src/trap-handler/trap-handler-internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-16T09:19:19Z",
+      "side": 1,
+      "message": "We could give these (and the exposed api `SetV8SandboxBaseAndSize`) a more generic name like `gWasmMemoriesRegionBegin` if we want to avoid mentioning the sandbox here. I\u0027m not sure if that would make it more or less confusing though. Let me know if you have a preference.",
+      "revId": "d5cb113a58dd681dc596305f0d8089ae18065d8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
