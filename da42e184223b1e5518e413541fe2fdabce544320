@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a1e44b2_7ee7ab26",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-16T15:36:49Z",
+      "side": 1,
+      "message": "It may be better to not use `auto` here to show clearly if `context` is handlified or not.",
+      "range": {
+        "startLine": 358,
+        "startChar": 2,
+        "endLine": 358,
+        "endChar": 6
+      },
+      "revId": "da42e184223b1e5518e413541fe2fdabce544320",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
