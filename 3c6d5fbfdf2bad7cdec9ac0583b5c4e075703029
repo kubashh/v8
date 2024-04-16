@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "366d7266_f6a9278f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-16T11:45:49Z",
+      "side": 1,
+      "message": "Hi Jakob, could you take a look at these very minor cleanups (and, if fine with you some follow-up changes for the call_indirect inlining)? Thanks!",
+      "revId": "3c6d5fbfdf2bad7cdec9ac0583b5c4e075703029",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
