@@ -16,6 +16,7 @@
 #include "src/base/virtual-address-space.h"
 #include "src/flags/flags.h"
 #include "src/sandbox/sandboxed-pointer.h"
+#include "src/trap-handler/trap-handler.h"
 #include "src/utils/allocation.h"
 
 namespace v8 {
@@ -135,6 +136,8 @@ void Sandbox::Initialize(v8::VirtualAddressSpace* vas) {
         nullptr,
         "Failed to reserve the virtual address space for the V8 sandbox");
   }
+
+  trap_handler::SetV8SandboxBaseAndSize(base(), size());
 
   DCHECK(initialized_);
 }

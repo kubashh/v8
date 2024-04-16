@@ -73,6 +73,13 @@ bool IsFaultAddressCovered(uintptr_t fault_addr) {
   }
   return false;
 }
+
+bool IsAccessedMemoryCovered(uintptr_t addr) {
+  if (gV8SandboxSize > 0) {
+    return addr >= gV8SandboxBase && addr < (gV8SandboxBase + gV8SandboxSize);
+  }
+  return true;
+}
 #endif  // V8_TRAP_HANDLER_SUPPORTED
 
 }  // namespace trap_handler
