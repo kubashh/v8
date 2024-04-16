@@ -180,6 +180,24 @@
       "parentUuid": "02776a35_99e82ace",
       "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ac20ac3_d0d9307c",
+        "filename": "src/sandbox/external-buffer-table.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-16T14:12:38Z",
+      "side": 1,
+      "message": "Yeah that\u0027s fine! And yeah, I\u0027m not sure this is currently needed at all (we probably only need AllocateAndInitialize), but I guess it\u0027s kind of awkward not to have a `Set` method? But I\u0027m also fine with deleting the method if it\u0027s not needed anywhere",
+      "parentUuid": "feae3385_2bf3b91a",
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
