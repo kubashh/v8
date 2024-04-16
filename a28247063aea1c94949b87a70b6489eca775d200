@@ -51,6 +51,24 @@
       "parentUuid": "eaade8b0_f0fab0f8",
       "revId": "a28247063aea1c94949b87a70b6489eca775d200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5deacd2_602eb649",
+        "filename": "src/trap-handler/handler-inside.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-16T10:01:45Z",
+      "side": 1,
+      "message": "It seems to be related to Wasm64 (it seems to require `--wasm-memory64-trap-handling`) so maybe Clemens will know more.\n\nWhat I\u0027m observing in gdb:\n```\n\u003e x/i $rip\nmov    %edx,(%rcx,%rax,1)\n\u003e i r rcx rax\nrax            0xf000000000000000  -1152921504606846976\nrcx            0x309300000000      53407918325760\n```\nSo it\u0027s not actually a nullptr deref but a deref of a non-canonical address.",
+      "parentUuid": "2f767e35_9594b8f8",
+      "revId": "a28247063aea1c94949b87a70b6489eca775d200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
