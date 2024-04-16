@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66537248_f664f896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-16T10:51:31Z",
+      "side": 1,
+      "message": "Thanks everyone. I\u0027ll proceed with the rest of the allocation logic for sticky mark bits.",
+      "revId": "aed02f10cc4a4f791a76269ec6676aeb1747f764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff360d97_94c0dbc8",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-04-16T10:39:07Z",
       "side": 1,
       "message": "nit: I think this could be a constexpr method",
+      "range": {
+        "startLine": 269,
+        "startChar": 9,
+        "endLine": 269,
+        "endChar": 24
+      },
+      "revId": "aed02f10cc4a4f791a76269ec6676aeb1747f764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3669e7d_31c9b0df",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-16T10:51:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff360d97_94c0dbc8",
       "range": {
         "startLine": 269,
         "startChar": 9,
