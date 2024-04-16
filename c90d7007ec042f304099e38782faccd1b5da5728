@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42bfda80_d637d305",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-16T11:41:16Z",
+      "side": 1,
+      "message": "Thanks for the review!",
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7db24628_4380fea9",
@@ -79,6 +96,30 @@
       "side": 1,
       "message": "I think a fallback case like that would add quite a bit of complexity and I\u0027m not sure if it\u0027d be secure, so I\u0027d like to avoid that. I think we could try halving the size on Android (as we do for the other tables) and then see if that\u0027s good enough.",
       "parentUuid": "87ea83fc_ae5d2082",
+      "range": {
+        "startLine": 342,
+        "startChar": 55,
+        "endLine": 342,
+        "endChar": 58
+      },
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa998224_d95b72d1",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-04-16T11:41:16Z",
+      "side": 1,
+      "message": "Sounds good. Addressed in https://chromium-review.googlesource.com/c/v8/v8/+/5456955",
+      "parentUuid": "03c47943_62df3e79",
       "range": {
         "startLine": 342,
         "startChar": 55,
