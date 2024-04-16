@@ -2509,6 +2509,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ AtomicStoreTaggedField(i.InputOrZeroRegister(index), mem);
       break;
     }
+    case kRiscvLoadDecompressProtected: {
+      RecordTrapInfoIfNeeded(zone(), this, opcode, instr, __ pc_offset());
+      __ DecompressProtected(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
 #endif
     case kRiscvRvvSt: {
       (__ VU).set(kScratchReg, VSew::E8, Vlmul::m1);
