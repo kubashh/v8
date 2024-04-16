@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c880ff2_5c949cdb",
+        "filename": "src/heap/main-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-16T07:51:23Z",
+      "side": 1,
+      "message": "Nit: I guess nested ?: operators is a bit tricky to read. What about moving this to a function (e.g. `BlackAllocation ComputeBlackAllocation(IsNewGeneration)`) and use proper if-else statements? Alternatively I suppose we could also just store IsNewGeneration directly as field (or as boolean) in MainAllocator and use this value together with v8_flags.sticky_mark_bits in `IsBlackAllocationEnabled`. Then we wouldn\u0027t need the BlackAllocation enum and the black allocation logic would all be contained in that method. Wdyt?",
+      "revId": "4203f43c1c1b0f5c2f54884464da16a4d7ba6248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec1b687e_c1f9829f",
+        "filename": "src/heap/main-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-16T07:51:23Z",
+      "side": 1,
+      "message": "Nit: If we decided to use the BlackAllocation enum we should `DCHECK_EQ(black_allocation_, BlackAllocation::kEnabledOnMarking)` here I guess.",
+      "revId": "4203f43c1c1b0f5c2f54884464da16a4d7ba6248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
