@@ -58,6 +58,32 @@ class CodeAssemblerState;
   }                                                                         \
   void Name##Assembler::Generate##Name##Impl()
 
+#define TS_BUILTIN(Name, Assembler)                                       \
+  class Name##Assembler {                                                 \
+    Assembler assembler_;                                                 \
+                                                                          \
+   public:                                                                \
+    using Descriptor = Builtin_##Name##_InterfaceDescriptor;              \
+    Name##Assembler(Isolate* isolate, compiler::turboshaft::Graph& graph, \
+                    Zone* phase_zone)                                     \
+        : assembler_(isolate, graph, phase_zone) {}                       \
+    Assembler& Asm() { return assembler_; }                               \
+    void Generate##Name##Impl();                                          \
+                                                                          \
+    template <typename T>                                                 \
+    V<T> Parameter(Descriptor::ParameterIndices index) {                  \
+      return assembler_.Parameter<T>(index);                              \
+    }                                                                     \
+  };                                                                      \
+  void Builtins::Generate_##Name(Isolate* isolate,                        \
+                                 compiler::turboshaft::Graph& graph,      \
+                                 Zone* phase_zone) {                      \
+    Name##Assembler assembler(isolate, graph, phase_zone);                \
+    assembler.Asm().Bind(assembler.Asm().NewBlock());                     \
+    assembler.Generate##Name##Impl();                                     \
+  }                                                                       \
+  void Name##Assembler::Generate##Name##Impl()
+
 }  // namespace internal
 }  // namespace v8
 

@@ -11,9 +11,14 @@
 
 namespace v8::internal::compiler::turboshaft {
 
-struct BuildGraphPhase {
+class DataComponentProvider;
+
+struct BuildGraphPhase : public Phase {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(BuildGraph)
 
+  base::Optional<BailoutReason> Run(DataComponentProvider* data_provider,
+                                    Zone* temp_zone, Schedule* schedule,
+                                    Linkage* linkage);
   base::Optional<BailoutReason> Run(Zone* temp_zone, Linkage* linkage);
 };
 

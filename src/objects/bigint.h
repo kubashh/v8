@@ -127,6 +127,7 @@ V8_OBJECT class BigIntBase : public PrimitiveHeapObject {
   friend class CodeStubAssembler;
   friend class maglev::MaglevAssembler;
   friend class compiler::AccessBuilder;
+  friend class TurboshaftBuiltinAssembler;
 
   using digit_t = uintptr_t;
 

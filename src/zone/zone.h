@@ -38,7 +38,7 @@ namespace internal {
 // Note: The implementation is inherently not thread safe. Do not use
 // from multi-threaded code.
 
-class V8_EXPORT_PRIVATE Zone final {
+class V8_EXPORT_PRIVATE Zone {
  public:
   Zone(AccountingAllocator* allocator, const char* name,
        bool support_compression = false);

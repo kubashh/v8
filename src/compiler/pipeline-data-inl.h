@@ -23,11 +23,13 @@
 #include "src/compiler/pipeline-statistics.h"
 #include "src/compiler/schedule.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/typer.h"
 #include "src/compiler/zone-stats.h"
 #include "src/execution/isolate.h"
 #include "src/handles/handles-inl.h"
 #include "src/objects/objects-inl.h"
+#include "src/compiler/turboshaft/zone-with-debug-name.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/wasm-engine.h"
@@ -69,7 +71,7 @@ class PipelineData {
         zone_stats_(zone_stats),
         pipeline_statistics_(pipeline_statistics),
         graph_zone_scope_(zone_stats_, kGraphZoneName, kCompressGraphZone),
-        graph_zone_(graph_zone_scope_.zone()),
+        graph_zone_(turboshaft::AttachDebugName<kGraphZoneName>(graph_zone_scope_.zone())),
         instruction_zone_scope_(zone_stats_, kInstructionZoneName),
         instruction_zone_(instruction_zone_scope_.zone()),
         codegen_zone_scope_(zone_stats_, kCodegenZoneName),
@@ -101,7 +103,7 @@ class PipelineData {
             ? graph_zone_->New<ObserveNodeManager>(graph_zone_)
             : nullptr;
     dependencies_ =
-        info_->zone()->New<CompilationDependencies>(broker_, info_->zone());
+        info_->zone()->New<CompilationDependencies>(broker_.get(), info_->zone());
   }
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -121,7 +123,7 @@ class PipelineData {
         zone_stats_(zone_stats),
         pipeline_statistics_(pipeline_statistics),
         graph_zone_scope_(zone_stats_, kGraphZoneName, kCompressGraphZone),
-        graph_zone_(graph_zone_scope_.zone()),
+        graph_zone_(turboshaft::AttachDebugName<kGraphZoneName>(graph_zone_scope_.zone())),
         graph_(mcgraph->graph()),
         source_positions_(source_positions),
         node_origins_(node_origins),
@@ -162,7 +164,7 @@ class PipelineData {
         debug_name_(info_->GetDebugName()),
         zone_stats_(zone_stats),
         graph_zone_scope_(zone_stats_, kGraphZoneName, kCompressGraphZone),
-        graph_zone_(graph_zone_scope_.zone()),
+        graph_zone_(turboshaft::AttachDebugName<kGraphZoneName>(graph_zone_scope_.zone())),
         graph_(graph),
         source_positions_(source_positions),
         node_origins_(node_origins),
@@ -214,6 +216,63 @@ class PipelineData {
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
         assembler_options_(AssemblerOptions::Default(isolate)) {}
+
+  // This constructs a PipelineData which is layered on top of a Turboshaft
+  // Pipeline which owns the actual data.
+  // TODO(nicohartmann@): This is a temporary solution as long as the pipeline
+  // is still split between TF and TS. This will be removed eventually.
+  PipelineData(turboshaft::PipelineBase* turboshaft_pipeline,
+               ZoneStats* zone_stats, AccountingAllocator* allocator,
+               Graph* graph, JSGraph* jsgraph, Schedule* schedule,
+               SourcePositionTable* source_positions,
+               NodeOriginTable* node_origins, JumpOptimizationInfo* jump_opt,
+               const AssemblerOptions& assembler_options,
+               const ProfileDataFromFile* profile_data)
+      : turboshaft_pipeline_(turboshaft_pipeline),
+        isolate_(turboshaft_pipeline->contextual_data()->isolate),
+#if V8_ENABLE_WEBASSEMBLY
+        // TODO(clemensb): Remove this field, use GetWasmEngine directly
+        // instead.
+        wasm_engine_(wasm::GetWasmEngine()),
+#endif  // V8_ENABLE_WEBASSEMBLY
+        allocator_(allocator),
+        info_(&turboshaft_pipeline->compilation_data()->info),
+        debug_name_(info_->GetDebugName()),
+        zone_stats_(zone_stats),
+        graph_zone_scope_(zone_stats_, kGraphZoneName, kCompressGraphZone),
+        graph_zone_(turboshaft::AttachDebugName<kGraphZoneName>(graph_zone_scope_.zone())),
+        graph_(graph),
+        source_positions_(source_positions),
+        node_origins_(node_origins),
+        schedule_(schedule),
+        instruction_zone_scope_(zone_stats_, kInstructionZoneName),
+        instruction_zone_(instruction_zone_scope_.zone()),
+        codegen_zone_scope_(zone_stats_, kCodegenZoneName),
+        codegen_zone_(codegen_zone_scope_.zone()),
+        register_allocation_zone_scope_(zone_stats_,
+                                        kRegisterAllocationZoneName),
+        register_allocation_zone_(register_allocation_zone_scope_.zone()),
+        jump_optimization_info_(jump_opt),
+        assembler_options_(assembler_options),
+        profile_data_(profile_data) {
+    if (jsgraph) {
+      jsgraph_ = jsgraph;
+      simplified_ = jsgraph->simplified();
+      machine_ = jsgraph->machine();
+      common_ = jsgraph->common();
+      javascript_ = jsgraph->javascript();
+    } else if (graph_) {
+      simplified_ = graph_zone_->New<SimplifiedOperatorBuilder>(graph_zone_);
+      machine_ = graph_zone_->New<MachineOperatorBuilder>(
+          graph_zone_, MachineType::PointerRepresentation(),
+          InstructionSelector::SupportedMachineOperatorFlags(),
+          InstructionSelector::AlignmentRequirements());
+      common_ = graph_zone_->New<CommonOperatorBuilder>(graph_zone_);
+      javascript_ = graph_zone_->New<JSOperatorBuilder>(graph_zone_);
+      jsgraph_ = graph_zone_->New<JSGraph>(isolate_, graph_, common_,
+                                           javascript_, simplified_, machine_);
+    }
+  }
 
   ~PipelineData() {
     // Must happen before zones are destroyed.
@@ -286,11 +345,9 @@ class PipelineData {
     return handle(info()->global_object(), isolate());
   }
 
-  JSHeapBroker* broker() const { return broker_; }
+  JSHeapBroker* broker() const { return broker_.get(); }
   std::unique_ptr<JSHeapBroker> ReleaseBroker() {
-    std::unique_ptr<JSHeapBroker> broker(broker_);
-    broker_ = nullptr;
-    return broker;
+    return std::move(broker_);
   }
 
   Schedule* schedule() const { return schedule_; }
@@ -409,7 +466,7 @@ class PipelineData {
     codegen_zone_scope_.Destroy();
     codegen_zone_ = nullptr;
     dependencies_ = nullptr;
-    delete broker_;
+    broker_.reset();
     broker_ = nullptr;
     frame_ = nullptr;
   }
@@ -503,9 +560,21 @@ class PipelineData {
   // TODO(delphick): Currently even during execution this can be nullptr, due to
   // JSToWasmWrapperCompilationUnit::Execute. Once a table can be extracted
   // there, this method can DCHECK that it is never nullptr.
-  RuntimeCallStats* runtime_call_stats() const { return runtime_call_stats_; }
+  RuntimeCallStats* runtime_call_stats() const {
+    if (turboshaft_pipeline_) {
+      DCHECK_NULL(runtime_call_stats_);
+      return turboshaft_pipeline_->runtime_call_stats();
+    } else {
+      return runtime_call_stats_;
+    }
+  }
   void set_runtime_call_stats(RuntimeCallStats* stats) {
-    runtime_call_stats_ = stats;
+    if (turboshaft_pipeline_) {
+      DCHECK_NULL(runtime_call_stats_);
+      turboshaft_pipeline_->set_runtime_call_stats(stats);
+    } else {
+      runtime_call_stats_ = stats;
+    }
   }
 
   // Used to skip the "wasm-inlining" phase when there are no JS-to-Wasm calls.
@@ -524,6 +593,7 @@ class PipelineData {
 #endif
 
  private:
+  turboshaft::PipelineBase* turboshaft_pipeline_ = nullptr;
   Isolate* const isolate_;
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmEngine* const wasm_engine_ = nullptr;
@@ -550,7 +620,7 @@ class PipelineData {
   // All objects in the following group of fields are allocated in graph_zone_.
   // They are all set to nullptr when the graph_zone_ is destroyed.
   ZoneStats::Scope graph_zone_scope_;
-  Zone* graph_zone_ = nullptr;
+  turboshaft::ZoneWithName<kGraphZoneName>* graph_zone_ = nullptr;
   Graph* graph_ = nullptr;
   SourcePositionTable* source_positions_ = nullptr;
   NodeOriginTable* node_origins_ = nullptr;
@@ -577,7 +647,7 @@ class PipelineData {
   ZoneStats::Scope codegen_zone_scope_;
   Zone* codegen_zone_;
   CompilationDependencies* dependencies_ = nullptr;
-  JSHeapBroker* broker_ = nullptr;
+  std::unique_ptr<JSHeapBroker> broker_;
   Frame* frame_ = nullptr;
 
   // All objects in the following group of fields are allocated in

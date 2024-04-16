@@ -22,27 +22,32 @@
 
 namespace v8::internal::compiler::turboshaft {
 
-void CsaEarlyMachineOptimizationPhase::Run(Zone* temp_zone) {
+void CsaEarlyMachineOptimizationPhase::Run(DataComponentProvider* data_provider,
+                                           Zone* temp_zone) {
   CopyingPhase<MachineOptimizationReducer, ValueNumberingReducer>::Run(
       temp_zone);
 }
 
-void CsaLoadEliminationPhase::Run(Zone* temp_zone) {
+void CsaLoadEliminationPhase::Run(DataComponentProvider* data_provider,
+                                  Zone* temp_zone) {
   CopyingPhase<LateLoadEliminationReducer, MachineOptimizationReducer,
                ValueNumberingReducer>::Run(temp_zone);
 }
 
-void CsaLateEscapeAnalysisPhase::Run(Zone* temp_zone) {
+void CsaLateEscapeAnalysisPhase::Run(DataComponentProvider* data_provider,
+                                     Zone* temp_zone) {
   CopyingPhase<LateEscapeAnalysisReducer, MachineOptimizationReducer,
                ValueNumberingReducer>::Run(temp_zone);
 }
 
-void CsaBranchEliminationPhase::Run(Zone* temp_zone) {
+void CsaBranchEliminationPhase::Run(DataComponentProvider* data_provider,
+                                    Zone* temp_zone) {
   CopyingPhase<MachineOptimizationReducer, BranchEliminationReducer,
                ValueNumberingReducer>::Run(temp_zone);
 }
 
-void CsaOptimizePhase::Run(Zone* temp_zone) {
+void CsaOptimizePhase::Run(DataComponentProvider* data_provider,
+                           Zone* temp_zone) {
   UnparkedScopeIfNeeded scope(PipelineData::Get().broker(),
                               v8_flags.turboshaft_trace_reduction);
 
