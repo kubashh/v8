@@ -39,6 +39,30 @@
       },
       "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cddd5caf_6c047c47",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-16T08:04:52Z",
+      "side": 1,
+      "message": "It\u0027s not all callers. I went over all callers when I implemented this and I think most callers don\u0027t need the wasted bytes. Also some callers that do need the wasted bytes, need them as a separate figure (e.g. the changes in incremental-marking.cc.\nI think it\u0027s better to leave it separate and explicitly add it where needed.",
+      "parentUuid": "1aebbcdf_f23eaad4",
+      "range": {
+        "startLine": 1385,
+        "startChar": 27,
+        "endLine": 1385,
+        "endChar": 53
+      },
+      "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
