@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49f729f_ad950e8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-16T06:25:27Z",
+      "side": 1,
+      "message": "lgtm, only looked at API, exuction, and heap",
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7db24628_4380fea9",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-16T06:25:27Z",
+      "side": 1,
+      "message": "Introducing the CppPointerTable (which is just an EPT) caused OOMs for virtual memory on Android. The additional reservation may cause similar issues here.",
+      "range": {
+        "startLine": 342,
+        "startChar": 55,
+        "endLine": 342,
+        "endChar": 58
+      },
+      "revId": "c90d7007ec042f304099e38782faccd1b5da5728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
