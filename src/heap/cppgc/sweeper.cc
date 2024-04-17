@@ -1109,6 +1109,20 @@ class Sweeper::SweeperImpl final {
     SweeperImpl& sweeper_;
   };
 
+  class IncrementalSweepTask;
+  class IncrementalIdleTask final : public cppgc::IdleTask {
+   public:
+    IncrementalIdleTask(cppgc::Platform* platform,
+                        std::unique_ptr<IncrementalSweepTask> task)
+        : platform_(platform), task_(std::move(task)) {}
+
+    void Run(double deadline_in_seconds) override;
+
+   private:
+    cppgc::Platform* platform_;
+    std::unique_ptr<IncrementalSweepTask> task_;
+  };
+
   class IncrementalSweepTask final : public cppgc::Task {
    public:
     using Handle = SingleThreadedHandle;
@@ -1123,7 +1137,12 @@ class Sweeper::SweeperImpl final {
       if (delay.has_value()) {
         runner->PostDelayedTask(std::move(task), delay->InSecondsF());
       } else {
-        runner->PostTask(std::move(task));
+        if (runner->IdleTasksEnabled()) {
+          runner->PostIdleTask(std::make_unique<IncrementalIdleTask>(
+              sweeper.platform_, std::move(task)));
+        } else {
+          runner->PostTask(std::move(task));
+        }
       }
 
       return handle;
@@ -1131,8 +1150,11 @@ class Sweeper::SweeperImpl final {
 
     Handle GetHandle() const { return handle_; }
 
-   private:
     void Run() override {
+      RunWithDeadline(v8::base::TimeDelta::FromMilliseconds(5));
+    }
+
+    void RunWithDeadline(v8::base::TimeDelta deadline) {
       if (handle_.IsCanceled()) return;
 
       MutatorThreadSweepingMode sweeping_mode =
@@ -1140,8 +1162,7 @@ class Sweeper::SweeperImpl final {
               ? MutatorThreadSweepingMode::kAll
               : MutatorThreadSweepingMode::kOnlyFinalizers;
       bool sweep_complete = sweeper_.PerformSweepOnMutatorThread(
-          v8::base::TimeDelta::FromMilliseconds(5),
-          StatsCollector::kSweepInTask, sweeping_mode);
+          deadline, StatsCollector::kSweepInTask, sweeping_mode);
       if (sweep_complete) {
         if (sweeping_mode != MutatorThreadSweepingMode::kAll) {
           // Throttle incremental sweeping while the concurrent Job is doing
@@ -1154,6 +1175,7 @@ class Sweeper::SweeperImpl final {
       }
     }
 
+   private:
     SweeperImpl& sweeper_;
     // TODO(chromium:1056170): Change to CancelableTask.
     Handle handle_;
@@ -1215,6 +1237,13 @@ class Sweeper::SweeperImpl final {
   // running on the main thread.
   bool is_sweeping_on_mutator_thread_ = false;
 };
+
+void Sweeper::SweeperImpl::IncrementalIdleTask::Run(
+    double deadline_in_seconds) {
+  const v8::base::TimeDelta idle_time = v8::base::TimeDelta::FromMillisecondsD(
+      (deadline_in_seconds * 1000) - platform_->MonotonicallyIncreasingTime());
+  task_->RunWithDeadline(idle_time);
+}
 
 Sweeper::Sweeper(HeapBase& heap)
     : heap_(heap),
