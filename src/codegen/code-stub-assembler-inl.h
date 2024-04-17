@@ -17,22 +17,67 @@ namespace internal {
 template <class... TArgs>
 TNode<Object> CodeStubAssembler::Call(TNode<Context> context,
                                       TNode<Object> callable,
+                                      ConvertReceiverMode mode,
+                                      TNode<Object> receiver, TArgs... args) {
+  if (IsUndefinedConstant(receiver) || IsNullConstant(receiver)) {
+    DCHECK_NE(mode, ConvertReceiverMode::kNotNullOrUndefined);
+    return CallJS(Builtins::Call(ConvertReceiverMode::kNullOrUndefined),
+                  context, callable, /* new_target */ {}, receiver, args...);
+  }
+  DCheckReceiver(mode, receiver);
+  return CallJS(Builtins::Call(mode), context, callable, /* new_target */ {},
+                receiver, args...);
+}
+
+template <class... TArgs>
+TNode<Object> CodeStubAssembler::Call(TNode<Context> context,
+                                      TNode<Object> callable,
                                       TNode<JSReceiver> receiver,
                                       TArgs... args) {
-  return CallJS(Builtins::Call(ConvertReceiverMode::kNotNullOrUndefined),
-                context, callable, /* new_target */ {}, receiver, args...);
+  return Call(context, callable, ConvertReceiverMode::kNotNullOrUndefined,
+              receiver, args...);
 }
 
 template <class... TArgs>
 TNode<Object> CodeStubAssembler::Call(TNode<Context> context,
                                       TNode<Object> callable,
                                       TNode<Object> receiver, TArgs... args) {
+  return Call(context, callable, ConvertReceiverMode::kAny, receiver, args...);
+}
+
+template <class... TArgs>
+TNode<Object> CodeStubAssembler::CallFunction(TNode<Context> context,
+                                              TNode<JSFunction> callable,
+                                              ConvertReceiverMode mode,
+                                              TNode<Object> receiver,
+                                              TArgs... args) {
   if (IsUndefinedConstant(receiver) || IsNullConstant(receiver)) {
-    return CallJS(Builtins::Call(ConvertReceiverMode::kNullOrUndefined),
+    DCHECK_NE(mode, ConvertReceiverMode::kNotNullOrUndefined);
+    return CallJS(Builtins::CallFunction(ConvertReceiverMode::kNullOrUndefined),
                   context, callable, /* new_target */ {}, receiver, args...);
   }
-  return CallJS(Builtins::Call(), context, callable, /* new_target */ {},
-                receiver, args...);
+  DCheckReceiver(mode, receiver);
+  return CallJS(Builtins::CallFunction(mode), context, callable,
+                /* new_target */ {}, receiver, args...);
+}
+
+template <class... TArgs>
+TNode<Object> CodeStubAssembler::CallFunction(TNode<Context> context,
+                                              TNode<JSFunction> callable,
+                                              TNode<JSReceiver> receiver,
+                                              TArgs... args) {
+  return CallFunction(context, callable,
+                      ConvertReceiverMode::kNotNullOrUndefined, receiver,
+                      args...);
+}
+
+template <class... TArgs>
+TNode<Object> CodeStubAssembler::CallFunction(TNode<Context> context,
+                                              TNode<JSFunction> callable,
+                                              TNode<Object> receiver,
+                                              TArgs... args) {
+  return CallFunction(context, callable, ConvertReceiverMode::kAny, receiver,
+                      args...);
 }
 
 }  // namespace internal
