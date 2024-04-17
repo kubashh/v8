@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "541b4e1179d9c7e60132cbef4cd2bb78d4d91ff4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a797c2c_bdf87fee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-17T11:49:49Z",
+      "side": 1,
+      "message": "lgtm, I think it would have been easier to review if the state split and other stylistic changes would get their own CL",
+      "revId": "541b4e1179d9c7e60132cbef4cd2bb78d4d91ff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
