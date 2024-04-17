@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f7e122b_d935e773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1310447
+      },
+      "writtenOn": "2024-04-17T20:02:16Z",
+      "side": 1,
+      "message": "We would like to revert this asap instead of fix forward as this is a CL that is causing two dev blockers for M126 ( i am cutting the RC build today and so need the revert to be merged before 3pm PST today) https://g-issues.chromium.org/issues/335398101 and https://g-issues.chromium.org/issues/335445727 are the two blockers",
+      "revId": "2a46359497e72c2ea16f1fef2491cb4baedb171c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
