@@ -200,6 +200,30 @@
       },
       "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "946bf49f_6e25358e",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-17T14:23:04Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5dfc7314_ece611c9",
+      "range": {
+        "startLine": 1385,
+        "startChar": 27,
+        "endLine": 1385,
+        "endChar": 53
+      },
+      "revId": "99874a5775e0d99597c8cf074f888221d626a1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

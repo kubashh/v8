@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7b4ead7_12f099e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-17T14:23:04Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "d1f398d63f1cd37277046bbf97892d20d7419416",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43673ada_f818a000",
@@ -14,6 +31,30 @@
       "writtenOn": "2024-04-17T14:12:03Z",
       "side": 1,
       "message": "Is this roughly what you had in mind?\nI\u0027m open to a different name if you have an idea (I already considered *AllocatedBytes, *UsedBytes or *UnavailableBytes, but I don\u0027t think these are a good match)",
+      "range": {
+        "startLine": 1389,
+        "startChar": 27,
+        "endLine": 1389,
+        "endChar": 53
+      },
+      "revId": "d1f398d63f1cd37277046bbf97892d20d7419416",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce59e37d_02778ff6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-17T14:23:04Z",
+      "side": 1,
+      "message": "Let\u0027s use what you have here.",
+      "parentUuid": "43673ada_f818a000",
       "range": {
         "startLine": 1389,
         "startChar": 27,
