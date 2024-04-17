@@ -123,6 +123,19 @@ JSSynchronizationPrimitive::SetWaiterQueueHead(Isolate* requester,
   return new_state;
 }
 
+// static
+void JSSynchronizationPrimitive::SetWaiterQueueStateOnly(
+    std::atomic<StateT>* state, StateT new_state) {
+  // Set the new state changing only the waiter queue bits.
+  DCHECK_EQ(new_state & ~kWaiterQueueMask, 0);
+  StateT expected = state->load(std::memory_order_relaxed);
+  StateT desired;
+  do {
+    desired = new_state | (expected & ~kWaiterQueueMask);
+  } while (!state->compare_exchange_weak(
+      expected, desired, std::memory_order_release, std::memory_order_relaxed));
+}
+
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSAtomicsMutex)
 
 CAST_ACCESSOR(JSAtomicsMutex)
