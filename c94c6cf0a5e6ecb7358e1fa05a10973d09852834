@@ -16,6 +16,24 @@
       "message": "How far have we narrowed down possible culprits for that crash? I will look into this tomorrow but I don\u0027t see how this would cause a double free in blink, and it\u0027s unclear this code is even touched.",
       "revId": "c94c6cf0a5e6ecb7358e1fa05a10973d09852834",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4ace245_86bc5a7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-04-17T18:03:56Z",
+      "side": 1,
+      "message": "Also, we have a cherry pick in process related to this CL:\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5463119\n\nIf this CL has caused a regression that will likely fix it.",
+      "parentUuid": "6872070a_c41ebecd",
+      "revId": "c94c6cf0a5e6ecb7358e1fa05a10973d09852834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
