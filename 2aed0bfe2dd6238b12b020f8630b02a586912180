@@ -105,6 +105,24 @@
       "parentUuid": "57a9b916_3cdb90e9",
       "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88762f03_4ed47617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-04-17T16:50:40Z",
+      "side": 1,
+      "message": "There are multiple ways. One is to write a small js wrapper, e.g.\n```\nconst buffer \u003d readbuffer(\u0027file.wasm\u0027);\nnew WebAssembly.Module(buffer);\n```\nand compile it with\n`./d8 --liftoff-only --no-wasm-lazy-compilation wrapper.js`\n\nThis assumes that you compiled d8, the js wrapper is saved as wrapper.js, and the wasm module is available as file.wasm.\n\nAn alternative would be to compile v8_simple_wasm_fuzzer, and call it with\n`v8_simple_wasm_fuzzer file.wasm`\n\nBut as I said, if you give me the .wasm file, I can investigate the issue as well.",
+      "parentUuid": "4fd1036b_3886ed65",
+      "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
