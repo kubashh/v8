@@ -87,6 +87,24 @@
       "parentUuid": "1e6402e6_bcf2cd00",
       "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd1036b_3886ed65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3371466
+      },
+      "writtenOn": "2024-04-17T15:33:11Z",
+      "side": 1,
+      "message": "Hi Andreas, \nIn Node, we create wasm files from the corresponding c files in Linux and use these created files on all platforms. For this case, I have a wasm file created from a c file that fails. I can provide you with both. I\u0027ve tested this in Node, not in V8. Is there some way to test this wasm file in V8 directly, and if yes, can you tell me how to do it?",
+      "parentUuid": "57a9b916_3cdb90e9",
+      "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
