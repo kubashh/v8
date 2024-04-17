@@ -34,6 +34,24 @@
       "parentUuid": "6872070a_c41ebecd",
       "revId": "c94c6cf0a5e6ecb7358e1fa05a10973d09852834",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c64a3e1_911b328a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549462
+      },
+      "writtenOn": "2024-04-17T19:39:13Z",
+      "side": 1,
+      "message": "I haven\u0027t found another promise related CL, so I decided it could be it.\nIf the fix is on the way I would wait for it then.",
+      "parentUuid": "b4ace245_86bc5a7b",
+      "revId": "c94c6cf0a5e6ecb7358e1fa05a10973d09852834",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
