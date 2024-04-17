@@ -1966,7 +1966,7 @@ DEFINE_INT(stress_scavenge, 0,
 DEFINE_VALUE_IMPLICATION(fuzzer_gc_analysis, stress_marking, 99)
 DEFINE_VALUE_IMPLICATION(fuzzer_gc_analysis, stress_scavenge, 99)
 DEFINE_BOOL(
-    reclaim_unmodified_wrappers, true,
+    reclaim_unmodified_wrappers, false,
     "reclaim otherwise unreachable unmodified wrapper objects when possible")
 
 // These flags will be removed after experiments. Do not rely on them.
