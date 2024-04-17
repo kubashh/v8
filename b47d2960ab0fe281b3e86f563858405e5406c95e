@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cc54312_9f5a759c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-17T17:52:24Z",
+      "side": 1,
+      "message": "PTAL.\n\nPassing the module bytes to the disassembler is opportunistic: in most cases (in particular, regular dynamic tiering), we\u0027ll have module bytes available, so we can use them to print more meaningful names. When running with streaming compilation and eager optimized compilation, they won\u0027t be available, and minor changes were required for the NamesProvider to account for that.",
+      "revId": "b47d2960ab0fe281b3e86f563858405e5406c95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
