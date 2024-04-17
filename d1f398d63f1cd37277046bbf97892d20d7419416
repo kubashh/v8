@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43673ada_f818a000",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-04-17T14:12:03Z",
+      "side": 1,
+      "message": "Is this roughly what you had in mind?\nI\u0027m open to a different name if you have an idea (I already considered *AllocatedBytes, *UsedBytes or *UnavailableBytes, but I don\u0027t think these are a good match)",
+      "range": {
+        "startLine": 1389,
+        "startChar": 27,
+        "endLine": 1389,
+        "endChar": 53
+      },
+      "revId": "d1f398d63f1cd37277046bbf97892d20d7419416",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
