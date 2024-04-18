@@ -768,7 +768,7 @@ struct NamedPropertyHandlerConfiguration {
         data(data),
         flags(WithNewSignatureFlag(flags)) {}
 
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Provide interceptor callbacks with new signatures instead "
       "(NamedPropertyXxxCallback)")
   NamedPropertyHandlerConfiguration(
@@ -809,7 +809,7 @@ struct NamedPropertyHandlerConfiguration {
         data(data),
         flags(WithNewSignatureFlag(flags)) {}
 
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Provide interceptor callbacks with new signatures instead "
       "(NamedPropertyXxxCallback)")
   explicit NamedPropertyHandlerConfiguration(
@@ -849,7 +849,7 @@ struct NamedPropertyHandlerConfiguration {
         data(data),
         flags(WithNewSignatureFlag(flags)) {}
 
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Provide interceptor callbacks with new signatures instead "
       "(NamedPropertyXxxCallback)")
   NamedPropertyHandlerConfiguration(
@@ -913,7 +913,7 @@ struct IndexedPropertyHandlerConfiguration {
         data(data),
         flags(WithNewSignatureFlag(flags)) {}
 
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Provide interceptor callbacks with new signatures instead "
       "(IndexedPropertyXxxCallbackV2)")
   IndexedPropertyHandlerConfiguration(
@@ -954,7 +954,7 @@ struct IndexedPropertyHandlerConfiguration {
         data(data),
         flags(WithNewSignatureFlag(flags)) {}
 
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Provide interceptor callbacks with new signatures instead "
       "(IndexedPropertyXxxCallbackV2)")
   explicit IndexedPropertyHandlerConfiguration(
@@ -994,7 +994,7 @@ struct IndexedPropertyHandlerConfiguration {
         data(data),
         flags(WithNewSignatureFlag(flags)) {}
 
-  V8_DEPRECATE_SOON(
+  V8_DEPRECATED(
       "Provide interceptor callbacks with new signatures instead "
       "(IndexedPropertyXxxCallbackV2)")
   IndexedPropertyHandlerConfiguration(
