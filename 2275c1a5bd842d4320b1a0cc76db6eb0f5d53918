@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b0c30f_d2365f0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 37
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T18:06:30Z",
+      "side": 1,
+      "message": "Added the code to deal with Isolate and realm termination (thinking about iframes), please take a look.",
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc137267_72ee5a5d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T18:06:30Z",
+      "side": 1,
+      "message": "Can you confirm that this is the right place to do this?",
+      "range": {
+        "startLine": 1986,
+        "startChar": 4,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddbf8020_187716f3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T18:06:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure if we want the `WaiterQueueNode` extensions here or in `waiter-queue-node.h`. We only need the `WaiterQueueNode` definition to be exposed to isolate.cc for the unique pointers.",
+      "range": {
+        "startLine": 167,
+        "startChar": 19,
+        "endLine": 167,
+        "endChar": 39
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d796a5d4_b3099298",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T18:06:30Z",
+      "side": 1,
+      "message": "I\u0027d like to get rid of these, but I need to get the synchronization primitive from the `Global` stored in the node. Is there a way to do this without passing through `Local` and hence needing a HandleScope?",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96c61bcc_bfe99636",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T18:06:30Z",
+      "side": 1,
+      "message": "I\u0027m not 100% sure that this class should be in this file or in a separate \"utils\" file.",
+      "range": {
+        "startLine": 437,
+        "startChar": 0,
+        "endLine": 437,
+        "endChar": 30
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4457c20_ce978020",
+        "filename": "src/roots/roots.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T18:06:30Z",
+      "side": 1,
+      "message": "There is an issue here. Declaring the roots here and populating them on bootstrapper.cc works, but mkgrokdump crashes on `DumpKnownObject` because the root is not populated and hence a lot of cctests fail. I could declare this as HeapObject and initialize it with undefined, but I\u0027m not sure if that is the right thing to do.",
+      "range": {
+        "startLine": 355,
+        "startChar": 2,
+        "endLine": 360,
+        "endChar": 37
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
