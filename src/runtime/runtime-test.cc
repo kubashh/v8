@@ -2082,6 +2082,23 @@ RUNTIME_FUNCTION(Runtime_AtomicsSynchronizationPrimitiveNumWaitersForTesting) {
   return primitive->NumWaitersForTesting(isolate);
 }
 
+RUNTIME_FUNCTION(
+    Runtime_AtomicsSychronizationNumAsyncUnlockedWaitersInIsolate) {
+  if (args.length() != 0) {
+    return CrashUnlessFuzzing(isolate);
+  }
+  return Smi::FromInt(static_cast<uint32_t>(
+      isolate->async_unlocked_waiter_queue_nodes().size()));
+}
+
+RUNTIME_FUNCTION(Runtime_AtomicsSychronizationNumAsyncLockedWaitersInIsolate) {
+  if (args.length() != 0) {
+    return CrashUnlessFuzzing(isolate);
+  }
+  return Smi::FromInt(
+      static_cast<uint32_t>(isolate->async_locked_waiter_queue_nodes().size()));
+}
+
 RUNTIME_FUNCTION(Runtime_GetWeakCollectionSize) {
   HandleScope scope(isolate);
   if (args.length() != 1) {
