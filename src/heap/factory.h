@@ -1148,6 +1148,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       return *this;
     }
 
+    CodeBuilder& set_parameter_count(uint16_t parameter_count) {
+      parameter_count_ = parameter_count;
+      return *this;
+    }
+
     CodeBuilder& set_profiler_data(BasicBlockProfilerData* profiler_data) {
       profiler_data_ = profiler_data;
       return *this;
@@ -1179,6 +1184,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     BasicBlockProfilerData* profiler_data_ = nullptr;
     bool is_turbofanned_ = false;
     int stack_slots_ = 0;
+    uint16_t parameter_count_ = 0;
   };
 
  private:
