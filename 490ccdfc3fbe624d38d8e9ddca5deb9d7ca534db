@@ -56,6 +56,30 @@
       },
       "revId": "490ccdfc3fbe624d38d8e9ddca5deb9d7ca534db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c424b223_362b9897",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-04-18T09:38:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4486a23c_13a35f1f",
+      "range": {
+        "startLine": 1527,
+        "startChar": 22,
+        "endLine": 1527,
+        "endChar": 36
+      },
+      "revId": "490ccdfc3fbe624d38d8e9ddca5deb9d7ca534db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
