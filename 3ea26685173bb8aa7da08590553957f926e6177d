@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0e38317_c1c4206c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-04-18T12:42:41Z",
+      "side": 1,
+      "message": "New behavior is all in isolate.cc; everything else is deleting dead code.",
+      "revId": "3ea26685173bb8aa7da08590553957f926e6177d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79333f54_62bdad3b",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2888,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-04-18T12:42:41Z",
+      "side": 1,
+      "message": "To keep this identical to current behavior, this would be `!\u003d HandlerTable::ASYNC_AWAIT`, however this code is consistent with what we predict when scanning the call stack (as opposed to promise reactions). Where they differ is in the case of `HandlerTable::UNCAUGHT_ASYNC_AWAIT`, which is used in top level awaits in repl mode. I would expect this to be not catching, as the new code predicts and the old code doesn\u0027t. In practice this has not changed any behavior, as there will be an additional rejection handler (I assume for the purpose of forwarding the result through the CDP API) that will cause us to see this as caught anyway. I will investigate that further in the future.",
+      "range": {
+        "startLine": 2886,
+        "startChar": 74,
+        "endLine": 2888,
+        "endChar": 0
+      },
+      "revId": "3ea26685173bb8aa7da08590553957f926e6177d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
