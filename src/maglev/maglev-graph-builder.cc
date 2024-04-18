@@ -8116,17 +8116,10 @@ void MaglevGraphBuilder::VisitIntrinsicGetImportMetaObject(
   SetAccumulator(BuildCallRuntime(Runtime::kGetImportMetaObject, {}));
 }
 
-void MaglevGraphBuilder::VisitIntrinsicAsyncFunctionAwaitCaught(
+void MaglevGraphBuilder::VisitIntrinsicAsyncFunctionAwait(
     interpreter::RegisterList args) {
   DCHECK_EQ(args.register_count(), 2);
-  SetAccumulator(BuildCallBuiltin<Builtin::kAsyncFunctionAwaitCaught>(
-      {GetTaggedValue(args[0]), GetTaggedValue(args[1])}));
-}
-
-void MaglevGraphBuilder::VisitIntrinsicAsyncFunctionAwaitUncaught(
-    interpreter::RegisterList args) {
-  DCHECK_EQ(args.register_count(), 2);
-  SetAccumulator(BuildCallBuiltin<Builtin::kAsyncFunctionAwaitUncaught>(
+  SetAccumulator(BuildCallBuiltin<Builtin::kAsyncFunctionAwait>(
       {GetTaggedValue(args[0]), GetTaggedValue(args[1])}));
 }
 
@@ -8151,17 +8144,10 @@ void MaglevGraphBuilder::VisitIntrinsicAsyncFunctionResolve(
       {GetTaggedValue(args[0]), GetTaggedValue(args[1])}));
 }
 
-void MaglevGraphBuilder::VisitIntrinsicAsyncGeneratorAwaitCaught(
+void MaglevGraphBuilder::VisitIntrinsicAsyncGeneratorAwait(
     interpreter::RegisterList args) {
   DCHECK_EQ(args.register_count(), 2);
-  SetAccumulator(BuildCallBuiltin<Builtin::kAsyncGeneratorAwaitCaught>(
-      {GetTaggedValue(args[0]), GetTaggedValue(args[1])}));
-}
-
-void MaglevGraphBuilder::VisitIntrinsicAsyncGeneratorAwaitUncaught(
-    interpreter::RegisterList args) {
-  DCHECK_EQ(args.register_count(), 2);
-  SetAccumulator(BuildCallBuiltin<Builtin::kAsyncGeneratorAwaitUncaught>(
+  SetAccumulator(BuildCallBuiltin<Builtin::kAsyncGeneratorAwait>(
       {GetTaggedValue(args[0]), GetTaggedValue(args[1])}));
 }
 
@@ -8184,8 +8170,7 @@ void MaglevGraphBuilder::VisitIntrinsicAsyncGeneratorYieldWithAwait(
     interpreter::RegisterList args) {
   DCHECK_EQ(args.register_count(), 3);
   SetAccumulator(BuildCallBuiltin<Builtin::kAsyncGeneratorYieldWithAwait>(
-      {GetTaggedValue(args[0]), GetTaggedValue(args[1]),
-       GetTaggedValue(args[2])}));
+      {GetTaggedValue(args[0]), GetTaggedValue(args[1])}));
 }
 
 ValueNode* MaglevGraphBuilder::BuildGenericConstruct(
