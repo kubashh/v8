@@ -8,6 +8,10 @@ extern class JSSynchronizationPrimitive extends AlwaysSharedSpaceJSObject {
   state: uint32;
 }
 
+extern class AsyncLockedWaiterWrapper extends Struct {
+  async_locked_waiter: ExternalPointer;
+}
+
 extern class JSAtomicsMutex extends JSSynchronizationPrimitive {
   owner_thread_id: int32;
 }

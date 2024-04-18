@@ -189,6 +189,17 @@ void Heap::SetBasicBlockProfilingData(Handle<ArrayList> list) {
   set_basic_block_profiling_data(*list);
 }
 
+void Heap::SetAtomicsMutexAsyncUnlockHandlersSFI(
+    Handle<SharedFunctionInfo> resolve_sfi,
+    Handle<SharedFunctionInfo> reject_sfi) {
+  set_atomics_mutex_async_unlock_resolve_handler_sfi(*resolve_sfi);
+  set_atomics_mutex_async_unlock_reject_handler_sfi(*reject_sfi);
+}
+
+void Heap::SetAtomicsConditionGetLockSFI(Handle<SharedFunctionInfo> sfi) {
+  set_atomics_condition_get_lock_sfi(*sfi);
+}
+
 class ScheduleMinorGCTaskObserver final : public AllocationObserver {
  public:
   explicit ScheduleMinorGCTaskObserver(Heap* heap)
@@ -1983,6 +1994,9 @@ int Heap::NotifyContextDisposed(bool has_dependent_context) {
   }
   isolate()->AbortConcurrentOptimization(BlockingBehavior::kDontBlock);
   if (!isolate()->context().is_null()) {
+    if (v8_flags.harmony_struct) {
+      JSSynchronizationPrimitive::RealmDisposed(isolate());
+    }
     RemoveDirtyFinalizationRegistriesOnContext(isolate()->raw_native_context());
     isolate()->raw_native_context()->set_retained_maps(
         ReadOnlyRoots(this).empty_weak_array_list());

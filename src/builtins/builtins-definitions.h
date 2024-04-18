@@ -1057,12 +1057,17 @@ namespace internal {
   CPP(AtomicsMutexConstructor)                                                 \
   CPP(AtomicsMutexIsMutex)                                                     \
   CPP(AtomicsMutexLock)                                                        \
+  CPP(AtomicsMutexLockAsync)                                                   \
   CPP(AtomicsMutexLockWithTimeout)                                             \
   CPP(AtomicsMutexTryLock)                                                     \
+  CPP(AtomicsMutexAsyncUnlockResolveHandler)                                   \
+  CPP(AtomicsMutexAsyncUnlockRejectHandler)                                    \
   CPP(AtomicsConditionConstructor)                                             \
+  CPP(AtomicsConditionGetLock)                                                 \
   CPP(AtomicsConditionIsCondition)                                             \
   CPP(AtomicsConditionWait)                                                    \
   CPP(AtomicsConditionNotify)                                                  \
+  CPP(AtomicsConditionWaitAsync)                                               \
                                                                                \
   /* AsyncGenerator */                                                         \
                                                                                \
