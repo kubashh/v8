@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee0f84bc_71c58f50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-18T17:51:19Z",
+      "side": 1,
+      "message": "PTAL! I think we currently have 16-bits of padding in Code objects, so storing the parameter count there shouldn\u0027t increase the in-memory size of Code objects.",
+      "revId": "18724757fe62d6adbd2878c605f5e775a894b336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
