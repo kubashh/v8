@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da5d19f7_b6572acf",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T23:04:16Z",
+      "side": 1,
+      "message": "That would work for the regular case. But if a there is a `lockAsync` call in this context that is currently holding the lock while waiting for other promise to resolve, we still need to access the primitive and release the lock, right? Otherwise the queue might stall.",
+      "parentUuid": "d65d0460_9c99c64a",
+      "range": {
+        "startLine": 1986,
+        "startChar": 4,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddbf8020_187716f3",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 37
@@ -125,6 +149,30 @@
       "side": 1,
       "message": "Do you still need this if we don\u0027t support the case to match-by-global as suggested above and only allow match-by-Isolate?",
       "parentUuid": "d796a5d4_b3099298",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bec73ed4_0b490779",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-18T23:04:16Z",
+      "side": 1,
+      "message": "Yes, we need access to the js synchronization promitive to grab the lock queue, safely remove waiter from the queue, and possibly unlock the js mutexes.",
+      "parentUuid": "82dca560_2113ebc6",
       "range": {
         "startLine": 442,
         "startChar": 2,
