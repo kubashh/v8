@@ -551,6 +551,8 @@ Deoptimizer::Deoptimizer(Isolate* isolate, Tagged<JSFunction> function,
   unsigned size = ComputeInputFrameSize();
   const int parameter_count =
       function->shared()->internal_formal_parameter_count_with_receiver();
+  const int parameter_count_from_code = compiled_code_->parameter_count();
+  CHECK_EQ(parameter_count, parameter_count_from_code);
   input_ = new (size) FrameDescription(size, parameter_count, isolate_);
 
   DCHECK_EQ(deopt_exit_index_, kFixedExitSizeMarker);
