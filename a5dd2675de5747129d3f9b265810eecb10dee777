@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e12aaab6_286a701d",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-18T22:20:33Z",
+      "side": 1,
+      "message": "I\u0027m not sure if a `std::list` is best here vs an intrusive list yet. Opinions?",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

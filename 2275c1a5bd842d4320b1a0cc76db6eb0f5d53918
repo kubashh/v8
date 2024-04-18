@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d65d0460_9c99c64a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-18T22:20:33Z",
+      "side": 1,
+      "message": "I\u0027d remove this and mirror what futex-emulation does and not eagerly clean up on context disposal. Since async waiter nodes\u0027 `native_context_` is already a weak pointer, it\u0027s memory safe to not eagerly dispose. When processing those async waiter nodes, you can lazily delete them if it turns out their context was already disposed.\n\nIsolates, by contrast, are not GC things so we have to eagerly clean up the list.",
+      "parentUuid": "cc137267_72ee5a5d",
+      "range": {
+        "startLine": 1986,
+        "startChar": 4,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddbf8020_187716f3",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 37
@@ -77,6 +101,30 @@
       "writtenOn": "2024-04-18T18:06:30Z",
       "side": 1,
       "message": "I\u0027d like to get rid of these, but I need to get the synchronization primitive from the `Global` stored in the node. Is there a way to do this without passing through `Local` and hence needing a HandleScope?",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82dca560_2113ebc6",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-18T22:20:33Z",
+      "side": 1,
+      "message": "Do you still need this if we don\u0027t support the case to match-by-global as suggested above and only allow match-by-Isolate?",
+      "parentUuid": "d796a5d4_b3099298",
       "range": {
         "startLine": 442,
         "startChar": 2,
