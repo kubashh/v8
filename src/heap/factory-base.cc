@@ -95,6 +95,7 @@ Handle<Code> FactoryBase<Impl>::NewCode(const NewCodeOptions& options) {
   code->set_constant_pool_offset(options.constant_pool_offset);
   code->set_code_comments_offset(options.code_comments_offset);
   code->set_unwinding_info_offset(options.unwinding_info_offset);
+  code->set_parameter_count(options.parameter_count);
 
   // Set bytecode/interpreter data or deoptimization data.
   if (CodeKindUsesBytecodeOrInterpreterData(options.kind)) {
@@ -346,6 +347,7 @@ Handle<BytecodeArray> FactoryBase<Impl>::NewBytecodeArray(
   instance->init_self_indirect_pointer(isolate());
   instance->set_length(length);
   instance->set_frame_size(frame_size);
+  DCHECK_LE(parameter_count, std::numeric_limits<uint16_t>::max());
   instance->set_parameter_count(parameter_count);
   instance->set_incoming_new_target_or_generator_register(
       interpreter::Register::invalid_value());

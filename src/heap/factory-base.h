@@ -76,6 +76,7 @@ struct NewCodeOptions {
   Builtin builtin;
   bool is_turbofanned;
   int stack_slots;
+  uint16_t parameter_count;
   int instruction_size;
   int metadata_size;
   unsigned int inlined_bytecode_size;
