@@ -390,7 +390,12 @@ class RootVisitor;
   V(FunctionTemplateInfo, error_stack_getter_fun_template,                  \
     ErrorStackGetterSharedFun)                                              \
   V(FunctionTemplateInfo, error_stack_setter_fun_template,                  \
-    ErrorStackSetterSharedFun)
+    ErrorStackSetterSharedFun)                                              \
+  V(SharedFunctionInfo, atomics_mutex_async_unlock_resolve_handler_sfi,     \
+    AtomicsMutexAsyncUnlockResolveHandlerSFI)                               \
+  V(SharedFunctionInfo, atomics_mutex_async_unlock_reject_handler_sfi,      \
+    AtomicsMutexAsyncUnlockRejectHandlerSFI)                                \
+  V(SharedFunctionInfo, atomics_condition_get_lock_sfi, AtomicsConditionGetLock)
 
 // Entries in this list are limited to Smis and are not visited during GC.
 #define SMI_ROOT_LIST(V)                                                       \

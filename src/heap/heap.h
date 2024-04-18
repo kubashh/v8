@@ -637,6 +637,11 @@ class Heap final {
 
   void SetBasicBlockProfilingData(Handle<ArrayList> list);
 
+  void SetAtomicsMutexAsyncUnlockHandlersSFI(
+      Handle<SharedFunctionInfo> resolve_sfi,
+      Handle<SharedFunctionInfo> reject_sfi);
+  void SetAtomicsConditionGetLockSFI(Handle<SharedFunctionInfo> sfi);
+
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);
 
