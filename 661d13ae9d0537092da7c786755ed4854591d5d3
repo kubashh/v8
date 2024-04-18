@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee99bd85_988625d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-04-18T15:27:27Z",
+      "side": 1,
+      "message": "Ready for review. Unchanged from first time other than static roots regen. Verified tests on official config.",
+      "revId": "661d13ae9d0537092da7c786755ed4854591d5d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
