@@ -887,6 +887,11 @@ class Heap final {
   void SetBuiltinsConstantsTable(Tagged<FixedArray> cache);
   void SetDetachedContexts(Tagged<WeakArrayList> detached_contexts);
 
+  void SetAtomicsMutexAsyncUnlockHandlersSFI(
+      Tagged<SharedFunctionInfo> resolve_sfi,
+      Tagged<SharedFunctionInfo> reject_sfi);
+  void SetAtomicsConditionGetLockSFI(Tagged<SharedFunctionInfo> sfi);
+
   void EnqueueDirtyJSFinalizationRegistry(
       Tagged<JSFinalizationRegistry> finalization_registry,
       std::function<void(Tagged<HeapObject> object, ObjectSlot slot,

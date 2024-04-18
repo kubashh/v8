@@ -1983,6 +1983,9 @@ int Heap::NotifyContextDisposed(bool has_dependent_context) {
   }
   isolate()->AbortConcurrentOptimization(BlockingBehavior::kDontBlock);
   if (!isolate()->context().is_null()) {
+    if (v8_flags.harmony_struct) {
+      JSSynchronizationPrimitive::RealmDisposed(isolate());
+    }
     RemoveDirtyFinalizationRegistriesOnContext(isolate()->raw_native_context());
     isolate()->raw_native_context()->set_retained_maps(
         ReadOnlyRoots(this).empty_weak_array_list());
@@ -6801,6 +6804,17 @@ void Heap::SetBuiltinsConstantsTable(Tagged<FixedArray> cache) {
 
 void Heap::SetDetachedContexts(Tagged<WeakArrayList> detached_contexts) {
   set_detached_contexts(detached_contexts);
+}
+
+void Heap::SetAtomicsMutexAsyncUnlockHandlersSFI(
+    Tagged<SharedFunctionInfo> resolve_sfi,
+    Tagged<SharedFunctionInfo> reject_sfi) {
+  set_atomics_mutex_async_unlock_resolve_handler_sfi(resolve_sfi);
+  set_atomics_mutex_async_unlock_reject_handler_sfi(reject_sfi);
+}
+
+void Heap::SetAtomicsConditionGetLockSFI(Tagged<SharedFunctionInfo> sfi) {
+  set_atomics_condition_get_lock_sfi(sfi);
 }
 
 void Heap::PostFinalizationRegistryCleanupTaskIfNeeded() {
