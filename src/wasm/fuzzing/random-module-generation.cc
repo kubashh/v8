@@ -925,8 +925,14 @@ class BodyGen {
       offset = data->getPseudoRandom<uint32_t>();
     }
 
+    // Get random memory index.
+    uint8_t memory_index =
+        data->get<uint8_t>() % builder_->builder()->NumMemories();
+
     // Generate the index and the arguments, if any.
-    Generate<kI32, arg_kinds...>(data);
+    builder_->builder()->IsMemory64(memory_index)
+        ? Generate<kI64, arg_kinds...>(data)
+        : Generate<kI32, arg_kinds...>(data);
 
     // Format of the instruction (supports multi-memory):
     // memory_op (align | 0x40) memory_index offset
@@ -937,11 +943,10 @@ class BodyGen {
       builder_->Emit(memory_op);
     }
     builder_->EmitU32V(align | 0x40);
-    // Get random memory index.
-    uint8_t memory_index =
-        data->get<uint8_t>() % builder_->builder()->NumMemories();
-    builder_->EmitU32V(memory_index);
-    builder_->EmitU32V(offset);
+    builder_->builder()->IsMemory64(memory_index)
+        ? builder_->EmitU64V(memory_index)
+        : builder_->EmitU32V(memory_index);
+    builder_->EmitU64V(offset);
   }
 
   template <WasmOpcode Op, ValueKind... Args>
@@ -3412,9 +3417,16 @@ class ModuleGen {
 
   // Generates and adds random number of memories.
   void GenerateRandomMemories() {
-    int num_memories = 1 + module_range_->get<uint8_t>() % kMaxMemories;
+    int random_uint8_t = module_range_->get<uint8_t>();
+    DCHECK_LE(kMaxMemories, 5);
+    // Use the lower 3 bits to get the number of memories.
+    int num_memories = 1 + ((random_uint8_t & 7) % kMaxMemories);
+    // Use the unused upper 5 bits to decide about each memory's type.
+    random_uint8_t >>= 3;
     for (int i = 0; i < num_memories; i++) {
-      builder_->AddMemory(0, 32);
+      (random_uint8_t & 1) ? builder_->AddMemory64(0, 32)
+                           : builder_->AddMemory(0, 32);
+      random_uint8_t >>= 1;
     }
   }
 
