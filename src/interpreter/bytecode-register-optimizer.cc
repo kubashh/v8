@@ -14,6 +14,15 @@ const uint32_t BytecodeRegisterOptimizer::kInvalidEquivalenceId = kMaxUInt32;
 
 using TypeHint = BytecodeRegisterOptimizer::TypeHint;
 
+// kActualVariable means that the variable is definitely in the register.
+// kMaybeVariable means that the variable might be in the register.
+enum class VariableHintMode { kActualVariable, kMaybeVariable };
+
+struct VariableHint {
+  Variable* variable;
+  VariableHintMode mode;
+};
+
 // A class for tracking the state of a register. This class tracks
 // which equivalence set a register is a member of and also whether a
 // register is materialized in the bytecode stream.
@@ -27,15 +36,14 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
         allocated_(allocated),
         needs_flush_(false),
         type_hint_(TypeHint::kAny),
-        var_in_reg_(nullptr),
+        variable_hint_({nullptr, VariableHintMode::kActualVariable}),
         next_(this),
         prev_(this) {}
   RegisterInfo(const RegisterInfo&) = delete;
   RegisterInfo& operator=(const RegisterInfo&) = delete;
 
   void AddToEquivalenceSetOf(RegisterInfo* info);
-  void MoveToNewEquivalenceSet(uint32_t equivalence_id, bool materialized,
-                               Variable* var = nullptr);
+  void MoveToNewEquivalenceSet(uint32_t equivalence_id, bool materialized);
   bool IsOnlyMemberOfEquivalenceSet() const;
   bool IsOnlyMaterializedMemberOfEquivalenceSet() const;
   bool IsInSameEquivalenceSet(RegisterInfo* info) const;
@@ -86,8 +94,13 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   TypeHint type_hint() const { return type_hint_; }
   void set_type_hint(TypeHint hint) { type_hint_ = hint; }
 
-  Variable* var_in_reg() const { return var_in_reg_; }
-  void set_var_in_reg(Variable* var) { var_in_reg_ = var; }
+  VariableHint variable_hint() const { return variable_hint_; }
+  void set_variable_hint(VariableHint hint) { variable_hint_ = hint; }
+  void flush_variable_hint() {
+    if (variable_hint_.variable != nullptr) {
+      variable_hint_.mode = VariableHintMode::kMaybeVariable;
+    }
+  }
 
   RegisterInfo* next() const { return next_; }
 
@@ -98,7 +111,7 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   bool allocated_;
   bool needs_flush_;
   TypeHint type_hint_;
-  Variable* var_in_reg_;
+  VariableHint variable_hint_;
 
   // Equivalence set pointers.
   RegisterInfo* next_;
@@ -118,18 +131,18 @@ void BytecodeRegisterOptimizer::RegisterInfo::AddToEquivalenceSetOf(
   next_->prev_ = this;
   set_equivalence_id(info->equivalence_id());
   set_materialized(false);
-  set_var_in_reg(info->var_in_reg());
+  set_variable_hint(info->variable_hint());
   type_hint_ = info->type_hint();
 }
 
 void BytecodeRegisterOptimizer::RegisterInfo::MoveToNewEquivalenceSet(
-    uint32_t equivalence_id, bool materialized, Variable* var) {
+    uint32_t equivalence_id, bool materialized) {
   next_->prev_ = prev_;
   prev_->next_ = next_;
   next_ = prev_ = this;
   equivalence_id_ = equivalence_id;
   materialized_ = materialized;
-  var_in_reg_ = var;
+  flush_variable_hint();
   type_hint_ = TypeHint::kAny;
 }
 
@@ -144,21 +157,29 @@ void BytecodeRegisterOptimizer::SetVariableInRegister(Variable* var,
   RegisterInfo* it = info;
   do {
     PushToRegistersNeedingFlush(it);
-    it->set_var_in_reg(var);
+    it->set_variable_hint({var, VariableHintMode::kActualVariable});
     it = it->next();
   } while (it != info);
 }
 
 Variable* BytecodeRegisterOptimizer::GetVariableInRegister(Register reg) {
   RegisterInfo* info = GetRegisterInfo(reg);
-  return info->var_in_reg();
+  VariableHint hint = info->variable_hint();
+  return hint.mode == VariableHintMode::kActualVariable ? hint.variable
+                                                        : nullptr;
+}
+
+Variable* BytecodeRegisterOptimizer::GetMaybeVariableInRegister(Register reg) {
+  RegisterInfo* info = GetRegisterInfo(reg);
+  return info->variable_hint().variable;
 }
 
 bool BytecodeRegisterOptimizer::IsVariableInRegister(Variable* var,
                                                      Register reg) {
   DCHECK_NOT_NULL(var);
   RegisterInfo* info = GetRegisterInfo(reg);
-  return info->var_in_reg() == var;
+  VariableHint hint = info->variable_hint();
+  return hint.mode == VariableHintMode::kActualVariable && hint.variable == var;
 }
 
 TypeHint BytecodeRegisterOptimizer::GetTypeHint(Register reg) {
@@ -348,7 +369,7 @@ void BytecodeRegisterOptimizer::Flush() {
   for (RegisterInfo* reg_info : registers_needing_flushed_) {
     if (!reg_info->needs_flush()) continue;
     reg_info->set_needs_flush(false);
-    reg_info->set_var_in_reg(nullptr);
+    reg_info->flush_variable_hint();
     reg_info->set_type_hint(TypeHint::kAny);
 
     RegisterInfo* materialized = reg_info->materialized()

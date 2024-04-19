@@ -122,9 +122,12 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   // Get the variable in the reg.
   Variable* GetVariableInRegister(Register reg);
 
+  // Get the variable that might be in the reg.
+  Variable* GetMaybeVariableInRegister(Register reg);
+
   // Get the variable in the accumulator.
-  Variable* GetVariableInAccumulator() {
-    return GetVariableInRegister(accumulator_);
+  Variable* GetMaybeVariableInAccumulator() {
+    return GetMaybeVariableInRegister(accumulator_);
   }
 
   // Return true if the var is in the reg.
