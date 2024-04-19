@@ -70,6 +70,8 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   void Flush();
   bool EnsureAllRegistersAreFlushed() const;
 
+  void ClearVariableBindings(Variable* variable);
+
   // Prepares for |bytecode|.
   template <Bytecode bytecode, ImplicitRegisterUse implicit_register_use>
   V8_INLINE void PrepareForBytecode() {

@@ -67,6 +67,9 @@ class Variable final : public ZoneObject {
   void set_mode(VariableMode mode) {
     bit_field_ = VariableModeField::update(bit_field_, mode);
   }
+  void set_kind(VariableKind kind) {
+    bit_field_ = VariableKindField::update(bit_field_, kind);
+  }
   void set_is_static_flag(IsStaticFlag is_static_flag) {
     bit_field_ = IsStaticFlagField::update(bit_field_, is_static_flag);
   }
@@ -256,6 +259,11 @@ class Variable final : public ZoneObject {
   bool is_parameter() const { return kind() == PARAMETER_VARIABLE; }
   bool is_sloppy_block_function() {
     return kind() == SLOPPY_BLOCK_FUNCTION_VARIABLE;
+  }
+
+  bool is_normal_variable() const { return kind() == NORMAL_VARIABLE; }
+  bool is_for_in_each_variable() const {
+    return kind() == FOR_IN_EACH_VARIABLE;
   }
 
   Variable* local_if_not_shadowed() const {
