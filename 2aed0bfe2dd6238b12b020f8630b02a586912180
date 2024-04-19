@@ -123,6 +123,24 @@
       "parentUuid": "4fd1036b_3886ed65",
       "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4baac943_a39764dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3371466
+      },
+      "writtenOn": "2024-04-19T12:04:47Z",
+      "side": 1,
+      "message": "Thank you for pointing me to open a new issue. I\u0027ve opened the issue:\nhttps://issues.chromium.org/issues/335744341. I\u0027m not able to assign you to the issue. Thanks for looking into this.",
+      "parentUuid": "88762f03_4ed47617",
+      "revId": "2aed0bfe2dd6238b12b020f8630b02a586912180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
