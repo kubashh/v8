@@ -1217,8 +1217,9 @@ class V8_NODISCARD BytecodeGenerator::ForInScope final {
       Expression* each = stmt->each();
       if (each->IsVariableProxy()) {
         Variable* each_var = each->AsVariableProxy()->var();
-        if (each_var->IsStackLocal()) {
+        if (each_var->IsStackLocal() && each_var->is_normal_variable()) {
           each_var_ = each_var;
+          each_var_->set_kind(VariableKind::FOR_IN_EACH_VARIABLE);
           bytecode_generator_->SetVariableInRegister(
               each_var_,
               bytecode_generator_->builder()->Local(each_var_->index()));
@@ -1230,6 +1231,10 @@ class V8_NODISCARD BytecodeGenerator::ForInScope final {
 
   ~ForInScope() {
     if (v8_flags.enable_enumerated_keyed_access_bytecode) {
+      if (each_var_ != nullptr) {
+        bytecode_generator_->ClearVariableInAllRegisters(each_var_);
+        each_var_->set_kind(VariableKind::NORMAL_VARIABLE);
+      }
       bytecode_generator_->set_current_for_in_scope(parent_for_in_scope_);
     }
   }
@@ -4048,6 +4053,13 @@ Variable* BytecodeGenerator::GetVariableInAccumulator() {
     return optimizer->GetVariableInAccumulator();
   }
   return nullptr;
+}
+
+void BytecodeGenerator::ClearVariableInAllRegisters(Variable* var) {
+  BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
+  if (optimizer) {
+    optimizer->ClearVariableBindings(var);
+  }
 }
 
 void BytecodeGenerator::BuildVariableLoad(Variable* variable,
