@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e75cc640_b67203a3",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-19T09:04:22Z",
+      "side": 1,
+      "message": "is it also worth adding something like this to the heap verifier? Maybe also to verify that the SFI parameter count matches the bytecode one.",
+      "range": {
+        "startLine": 559,
+        "startChar": 2,
+        "endLine": 559,
+        "endChar": 13
+      },
+      "revId": "fada703a9fd5f4f6c32f95361f1b0ad7e277f981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4593064c_535abf16",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-19T09:04:22Z",
+      "side": 1,
+      "message": "worth changing this to uint16_t also?",
+      "range": {
+        "startLine": 335,
+        "startChar": 4,
+        "endLine": 335,
+        "endChar": 7
+      },
+      "revId": "fada703a9fd5f4f6c32f95361f1b0ad7e277f981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
