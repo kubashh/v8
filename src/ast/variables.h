@@ -67,6 +67,7 @@ class Variable final : public ZoneObject {
   void set_mode(VariableMode mode) {
     bit_field_ = VariableModeField::update(bit_field_, mode);
   }
+
   void set_is_static_flag(IsStaticFlag is_static_flag) {
     bit_field_ = IsStaticFlagField::update(bit_field_, is_static_flag);
   }

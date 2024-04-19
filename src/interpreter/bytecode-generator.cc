@@ -4042,10 +4042,10 @@ void BytecodeGenerator::SetVariableInRegister(Variable* var, Register reg) {
   }
 }
 
-Variable* BytecodeGenerator::GetVariableInAccumulator() {
+Variable* BytecodeGenerator::GetMaybeVariableInAccumulator() {
   BytecodeRegisterOptimizer* optimizer = builder()->GetRegisterOptimizer();
   if (optimizer) {
-    return optimizer->GetVariableInAccumulator();
+    return optimizer->GetMaybeVariableInAccumulator();
   }
   return nullptr;
 }
@@ -4497,7 +4497,7 @@ void BytecodeGenerator::BuildLoadKeyedProperty(Register object,
                                                FeedbackSlot slot) {
   if (v8_flags.enable_enumerated_keyed_access_bytecode &&
       current_for_in_scope() != nullptr) {
-    Variable* key = GetVariableInAccumulator();
+    Variable* key = GetMaybeVariableInAccumulator();
     if (key != nullptr) {
       ForInScope* scope = current_for_in_scope()->GetForInScope(key);
       if (scope != nullptr) {
