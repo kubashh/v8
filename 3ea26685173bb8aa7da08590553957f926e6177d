@@ -56,6 +56,30 @@
       },
       "revId": "3ea26685173bb8aa7da08590553957f926e6177d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "041d098c_74cc8695",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2888,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-04-19T04:58:41Z",
+      "side": 1,
+      "message": "Your hunch is right. For REPL mode (and Runtime.evaluate in general where `awaitPromise: true`), we add a .then/.catch handler ourselves in C++ whose job it is to send back the result via CDP. You can find it in injected-script.cc",
+      "parentUuid": "79333f54_62bdad3b",
+      "range": {
+        "startLine": 2886,
+        "startChar": 74,
+        "endLine": 2888,
+        "endChar": 0
+      },
+      "revId": "3ea26685173bb8aa7da08590553957f926e6177d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
