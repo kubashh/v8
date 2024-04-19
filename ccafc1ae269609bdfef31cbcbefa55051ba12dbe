@@ -22,6 +22,30 @@
       },
       "revId": "ccafc1ae269609bdfef31cbcbefa55051ba12dbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "790f7c54_98086534",
+        "filename": "test/unittests/test-helpers.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-19T12:14:16Z",
+      "side": 1,
+      "message": "Yeah I guess so, but that could be a while. It\u0027s not too hard to force the tests to specify the actual parameter count and then we don\u0027t need this workaround. I\u0027ve done that now, WDYT?",
+      "parentUuid": "d5726515_6c6c75e6",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 31
+      },
+      "revId": "ccafc1ae269609bdfef31cbcbefa55051ba12dbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
