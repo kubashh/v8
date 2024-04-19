@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0636a2cc_748a2150",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-19T16:00:21Z",
+      "side": 1,
+      "message": "PTAL. Splitting this out of your CL because I just ran into it too.",
+      "revId": "e2950956169a602649cd1d13f774f330f62a84f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
