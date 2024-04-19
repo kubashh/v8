@@ -348,7 +348,15 @@ void BytecodeRegisterOptimizer::Flush() {
   for (RegisterInfo* reg_info : registers_needing_flushed_) {
     if (!reg_info->needs_flush()) continue;
     reg_info->set_needs_flush(false);
-    reg_info->set_var_in_reg(nullptr);
+    // We don't clear the variable binding for for-in-each variable. This is
+    // fine because we only use this variable binding for the for-in loop, and
+    // we will check the variable at runtime. We clear the binding when
+    // leaving the for-in loop.
+    Variable* var_in_reg = reg_info->var_in_reg();
+    if (var_in_reg != nullptr && !var_in_reg->is_for_in_each_variable()) {
+      reg_info->set_var_in_reg(nullptr);
+      var_in_reg = nullptr;
+    }
     reg_info->set_type_hint(TypeHint::kAny);
 
     RegisterInfo* materialized = reg_info->materialized()
@@ -364,7 +372,8 @@ void BytecodeRegisterOptimizer::Flush() {
         if (equivalent->allocated() && !equivalent->materialized()) {
           OutputRegisterTransfer(materialized, equivalent);
         }
-        equivalent->MoveToNewEquivalenceSet(NextEquivalenceId(), true);
+        equivalent->MoveToNewEquivalenceSet(NextEquivalenceId(), true,
+                                            var_in_reg);
         equivalent->set_needs_flush(false);
       }
     } else {
@@ -378,6 +387,14 @@ void BytecodeRegisterOptimizer::Flush() {
   DCHECK(EnsureAllRegistersAreFlushed());
 
   flush_required_ = false;
+}
+
+void BytecodeRegisterOptimizer::ClearVariableBindings(Variable* variable) {
+  for (RegisterInfo* reg_info : register_info_table_) {
+    if (reg_info->var_in_reg() == variable) {
+      reg_info->set_var_in_reg(nullptr);
+    }
+  }
 }
 
 void BytecodeRegisterOptimizer::OutputRegisterTransfer(
