@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e40b8019_bba26223",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-19T14:11:49Z",
+      "side": 1,
+      "message": "I think you can now remove this branch :) https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/objects-visiting-inl.h;l\u003d253;drc\u003d42debe0b0e6bf90175dd0d121eb0e7dc11a6d29c",
+      "revId": "c1e3665eed9a4b71bf6541a847d8ca598dd2f2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
