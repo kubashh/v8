@@ -41,6 +41,10 @@ Handle<SharedFunctionInfo> CreateSharedFunctionInfo(
           Builtin::kCompileLazy);
   int function_literal_id = 1;
   shared->set_function_literal_id(function_literal_id);
+  // This is just to make heap verification happy, where we check that the
+  // formal parameter count of the SFI matches that of the bytecode (unless it
+  // is set to don't adopt arguments).
+  shared->DontAdaptArguments();
   // Ensure that the function can be compiled lazily.
   shared->set_uncompiled_data(
       *isolate->factory()->NewUncompiledDataWithoutPreparseDataWithJob(
