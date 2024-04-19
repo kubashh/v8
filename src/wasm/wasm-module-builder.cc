@@ -203,6 +203,8 @@ void WasmFunctionBuilder::EmitI32V(int32_t val) { body_.write_i32v(val); }
 
 void WasmFunctionBuilder::EmitU32V(uint32_t val) { body_.write_u32v(val); }
 
+void WasmFunctionBuilder::EmitU64V(uint64_t val) { body_.write_u64v(val); }
+
 void WasmFunctionBuilder::SetSignature(const FunctionSig* sig) {
   DCHECK(!locals_.has_sig());
   locals_.set_sig(sig);
@@ -751,6 +753,11 @@ void WasmModuleBuilder::WriteTo(ZoneBuffer* buffer) const {
                             (memory.is_shared ? 2 : 0) |
                             (memory.has_max_size ? 1 : 0);
       buffer->write_u8(limits_byte);
+      // Note that the memory's min and max value can be more than 32 bits
+      // only if we specify it in the higher bits of the `limits_byte`.
+      // However, if we emit an up to 32-bit value in the LEB encoding, we
+      // get the same results for both cases if we emit is as a 32-bit value
+      // or a 64-bit value.
       auto WriteValToBuffer = [&](uintptr_t val) {
         if (memory.is_memory64) {
           buffer->write_u64v(val);
