@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1d618a7_614065a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-19T13:25:51Z",
+      "side": 1,
+      "message": "lgtm\n\nI wonder if this doesn\u0027t even fix a bug already today? If we don\u0027t visit the EPT for the full GC, then it\u0027s entry will not be marked and should crash on access (?)",
+      "revId": "d7edaea1c1d3fc088921bae7b9fbf8a4bc6ddb72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
