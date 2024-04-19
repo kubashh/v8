@@ -11,7 +11,7 @@ namespace v8 {
 namespace internal {
 
 namespace {
-DISABLE_CFI_PERF
+
 void IterateObjectCache(Isolate* isolate, std::vector<Tagged<Object>>* cache,
                         Root root_id, RootVisitor* visitor) {
   for (size_t i = 0;; ++i) {

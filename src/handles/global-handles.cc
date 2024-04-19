@@ -708,7 +708,7 @@ V8_INLINE bool GlobalHandles::ResetWeakNodeIfDead(
   return true;
 }
 
-DISABLE_CFI_PERF
+
 void GlobalHandles::IterateWeakRootsForPhantomHandles(
     WeakSlotCallbackWithHeap should_reset_handle) {
   for (Node* node : *regular_nodes_) {
@@ -916,7 +916,7 @@ void GlobalHandles::IterateWeakRoots(RootVisitor* v) {
   }
 }
 
-DISABLE_CFI_PERF
+
 void GlobalHandles::IterateAllRoots(RootVisitor* v) {
   for (Node* node : *regular_nodes_) {
     if (node->IsWeakOrStrongRetainer()) {
@@ -926,7 +926,7 @@ void GlobalHandles::IterateAllRoots(RootVisitor* v) {
   }
 }
 
-DISABLE_CFI_PERF
+
 void GlobalHandles::IterateAllYoungRoots(RootVisitor* v) {
   for (Node* node : young_nodes_) {
     if (node->IsWeakOrStrongRetainer()) {
@@ -936,7 +936,7 @@ void GlobalHandles::IterateAllYoungRoots(RootVisitor* v) {
   }
 }
 
-DISABLE_CFI_PERF
+
 void GlobalHandles::ApplyPersistentHandleVisitor(
     v8::PersistentHandleVisitor* visitor, GlobalHandles::Node* node) {
   v8::Value* value = ToApi<v8::Value>(node->handle());

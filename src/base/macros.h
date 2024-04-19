@@ -148,9 +148,6 @@ V8_INLINE Dest bit_cast(Source const& source) {
 #endif
 #endif
 
-// DISABLE_CFI_PERF -- Disable Control Flow Integrity checks for Perf reasons.
-#define DISABLE_CFI_PERF V8_CLANG_NO_SANITIZE("cfi")
-
 // DISABLE_CFI_ICALL -- Disable Control Flow Integrity indirect call checks,
 // useful because calls into JITed code can not be CFI verified. Same for
 // UBSan's function pointer type checks.

@@ -164,7 +164,7 @@ class JSAPIObjectWithEmbedderSlots::BodyDescriptor
 };
 
 template <typename ObjectVisitor>
-DISABLE_CFI_PERF void BodyDescriptorBase::IteratePointers(
+void BodyDescriptorBase::IteratePointers(
     Tagged<HeapObject> obj, int start_offset, int end_offset,
     ObjectVisitor* v) {
   if (start_offset == HeapObject::kMapOffset) {
@@ -182,7 +182,7 @@ void BodyDescriptorBase::IteratePointer(Tagged<HeapObject> obj, int offset,
 }
 
 template <typename ObjectVisitor>
-DISABLE_CFI_PERF void BodyDescriptorBase::IterateMaybeWeakPointers(
+void BodyDescriptorBase::IterateMaybeWeakPointers(
     Tagged<HeapObject> obj, int start_offset, int end_offset,
     ObjectVisitor* v) {
   v->VisitPointers(obj, obj->RawMaybeWeakField(start_offset),
@@ -197,7 +197,7 @@ void BodyDescriptorBase::IterateMaybeWeakPointer(Tagged<HeapObject> obj,
 }
 
 template <typename ObjectVisitor>
-DISABLE_CFI_PERF void BodyDescriptorBase::IterateCustomWeakPointers(
+void BodyDescriptorBase::IterateCustomWeakPointers(
     Tagged<HeapObject> obj, int start_offset, int end_offset,
     ObjectVisitor* v) {
   v->VisitCustomWeakPointers(obj, obj->RawField(start_offset),
@@ -205,7 +205,7 @@ DISABLE_CFI_PERF void BodyDescriptorBase::IterateCustomWeakPointers(
 }
 
 template <typename ObjectVisitor>
-DISABLE_CFI_PERF void BodyDescriptorBase::IterateEphemeron(
+void BodyDescriptorBase::IterateEphemeron(
     Tagged<HeapObject> obj, int index, int key_offset, int value_offset,
     ObjectVisitor* v) {
   v->VisitEphemeron(obj, index, obj->RawField(key_offset),
