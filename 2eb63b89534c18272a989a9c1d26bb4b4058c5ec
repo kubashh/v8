@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b90ca6_608e1f45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-19T18:07:55Z",
+      "side": 1,
+      "message": "Could you please take a look, Jakob?",
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1943702d_ae0a8733",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-19T18:07:55Z",
+      "side": 1,
+      "message": "I forgot to add multi-memory support for `atomic_op()`s previously. It\u0027s similar to `memop()` above.",
+      "range": {
+        "startLine": 954,
+        "startChar": 7,
+        "endLine": 954,
+        "endChar": 16
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69b06df6_0acff801",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-19T18:07:55Z",
+      "side": 1,
+      "message": "This function is among the instructions that return I32s.\n\nWe generate at least 1 and up to 4 memories. We don\u0027t know which or have many are  memory32s or memory64s during compile-time. Therefore, I cannot add the memory_size() to the list of alternatives in the Generate function.\n\nTo make the function simple, I just always convert the returned memory size to an I32, if we operated on memory64 (i.e. 64 bit).\n\nSame for grow_memory()`",
+      "range": {
+        "startLine": 1284,
+        "startChar": 7,
+        "endLine": 1284,
+        "endChar": 18
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

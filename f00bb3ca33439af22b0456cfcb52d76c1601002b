@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b915bf1_0cde5ee9",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-19T18:07:55Z",
+      "side": 0,
+      "message": "This is removed for every `atomic_op` . I believe it is the index, and it can be 64bits now. The value is generated inside the generic atomic_op.",
+      "range": {
+        "startLine": 2348,
+        "startChar": 47,
+        "endLine": 2348,
+        "endChar": 51
+      },
+      "revId": "f00bb3ca33439af22b0456cfcb52d76c1601002b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
