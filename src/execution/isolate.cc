@@ -478,7 +478,8 @@ size_t Isolate::HashIsolateForEmbeddedBlob() {
     static_assert(Code::kConstantPoolOffsetOffsetEnd + 1 ==
                   Code::kCodeCommentsOffsetOffset);
     static_assert(Code::kCodeCommentsOffsetOffsetEnd + 1 ==
-                  Code::kBuiltinIdOffset);
+                  Code::kParameterCountOffset);
+    static_assert(Code::kParameterCountOffsetEnd + 1 == Code::kBuiltinIdOffset);
     static_assert(Code::kBuiltinIdOffsetEnd + 1 == Code::kUnalignedSize);
     static constexpr int kStartOffset = Code::kFlagsOffset;
 
@@ -755,6 +756,15 @@ bool IsBuiltinAsyncRejectHandler(Isolate* isolate, Tagged<HeapObject> object) {
                            Builtin::kAsyncFunctionAwaitRejectClosure) ||
          IsBuiltinFunction(isolate, object,
                            Builtin::kAsyncGeneratorAwaitRejectClosure);
+}
+
+// Check if the function is one of the known builtin rejection handlers that
+// rethrows the exception instead of catching it.
+bool IsBuiltinForwardingRejectHandler(Isolate* isolate,
+                                      Tagged<HeapObject> object) {
+  return IsBuiltinFunction(isolate, object, Builtin::kPromiseCatchFinally) ||
+         IsBuiltinFunction(isolate, object,
+                           Builtin::kAsyncFromSyncIteratorCloseSyncAndRethrow);
 }
 
 MaybeHandle<JSGeneratorObject> TryGetAsyncGenerator(
@@ -2549,7 +2559,7 @@ void Isolate::PrintCurrentStackTrace(std::ostream& out) {
     if (i != frames->length() - 1) builder.AppendCharacter('\n');
   }
 
-  DirectHandle<String> stack_trace = builder.Finish().ToHandleChecked();
+  Handle<String> stack_trace = builder.Finish().ToHandleChecked();
   stack_trace->PrintOn(out);
 }
 
@@ -2858,8 +2868,7 @@ bool WalkPromiseTreeInternal(
           reject_handler =
               handle(JSReceiver::cast(reaction->reject_handler()), isolate);
           if (!ReceiverIsForwardingHandler(isolate, reject_handler) &&
-              !IsBuiltinFunction(isolate, reaction->reject_handler(),
-                                 Builtin::kPromiseCatchFinally)) {
+              !IsBuiltinForwardingRejectHandler(isolate, *reject_handler)) {
             caught = true;
           }
         }

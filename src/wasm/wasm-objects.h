@@ -81,8 +81,6 @@ class V8_EXPORT_PRIVATE FunctionTargetAndRef {
 };
 
 namespace wasm {
-enum Suspend : bool { kSuspend = true, kNoSuspend = false };
-enum Promise : bool { kPromise = true, kNoPromise = false };
 enum class OnResume : int { kContinue, kThrow };
 }  // namespace wasm
 
@@ -855,8 +853,8 @@ class WasmFunctionData
       StackedBodyDescriptor<FixedBodyDescriptorFor<WasmFunctionData>,
                             WithStrongCodePointer<kWrapperCodeOffset>>;
 
-  using SuspendField = base::BitField<wasm::Suspend, 0, 1>;
-  using PromiseField = base::BitField<wasm::Promise, 1, 1>;
+  using SuspendField = base::BitField<wasm::Suspend, 0, 2>;
+  using PromiseField = base::BitField<wasm::Promise, 2, 2>;
 
   TQ_OBJECT_CONSTRUCTORS(WasmFunctionData)
 };
@@ -1244,6 +1242,16 @@ class WasmSuspenderObject
   static Handle<WasmSuspenderObject> New(Isolate* isolate);
   DECL_PRINTER(WasmSuspenderObject)
   TQ_OBJECT_CONSTRUCTORS(WasmSuspenderObject)
+};
+
+class WasmSuspendingObject
+    : public TorqueGeneratedWasmSuspendingObject<WasmSuspendingObject,
+                                                 JSObject> {
+ public:
+  V8_EXPORT_PRIVATE static Handle<WasmSuspendingObject> New(
+      Isolate* isolate, Handle<JSReceiver> callable);
+  DECL_PRINTER(WasmSuspendingObject)
+  TQ_OBJECT_CONSTRUCTORS(WasmSuspendingObject)
 };
 
 class WasmNull : public TorqueGeneratedWasmNull<WasmNull, HeapObject> {

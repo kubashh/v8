@@ -54,6 +54,7 @@ enum InstanceType : uint16_t;
   V(ExternalPointerArray)              \
   V(ExternalString)                    \
   V(FeedbackCell)                      \
+  V(Foreign)                           \
   V(FreeSpace)                         \
   V(FunctionTemplateInfo)              \
   V(Hole)                              \
@@ -102,6 +103,7 @@ enum InstanceType : uint16_t;
   IF_WASM(V, WasmResumeData)           \
   IF_WASM(V, WasmStruct)               \
   IF_WASM(V, WasmSuspenderObject)      \
+  IF_WASM(V, WasmSuspendingObject)     \
   IF_WASM(V, WasmTypeInfo)             \
   V(WeakCell)                          \
   SIMPLE_HEAP_OBJECT_LIST1(V)

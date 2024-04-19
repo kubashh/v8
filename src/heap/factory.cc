@@ -170,6 +170,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
         builtin_,
         is_turbofanned_,
         stack_slots_,
+        parameter_count_,
         code_desc_.instruction_size(),
         code_desc_.metadata_size(),
         inlined_bytecode_size_,
@@ -914,7 +915,7 @@ Handle<String> Factory::NewInternalizedStringImpl(DirectHandle<String> string,
 }
 
 StringTransitionStrategy Factory::ComputeInternalizationStrategyForString(
-    DirectHandle<String> string, MaybeDirectHandle<Map>* internalized_map) {
+    DirectHandle<String> string, MaybeHandle<Map>* internalized_map) {
   // The serializer requires internalized strings to be in ReadOnlySpace s.t.
   // other objects referencing the string can be allocated in RO space
   // themselves.
@@ -951,7 +952,7 @@ StringTransitionStrategy Factory::ComputeInternalizationStrategyForString(
 template <class StringClass>
 Handle<StringClass> Factory::InternalizeExternalString(
     DirectHandle<String> string) {
-  DirectHandle<Map> map =
+  Handle<Map> map =
       GetInPlaceInternalizedStringMap(string->map()).ToHandleChecked();
   Tagged<StringClass> external_string =
       Tagged<StringClass>::cast(New(map, AllocationType::kOld));
@@ -971,7 +972,7 @@ template Handle<ExternalTwoByteString> Factory::InternalizeExternalString<
     ExternalTwoByteString>(DirectHandle<String>);
 
 StringTransitionStrategy Factory::ComputeSharingStrategyForString(
-    DirectHandle<String> string, MaybeDirectHandle<Map>* shared_map) {
+    DirectHandle<String> string, MaybeHandle<Map>* shared_map) {
   DCHECK(v8_flags.shared_string_table);
   // TODO(pthier): Avoid copying LO-space strings. Update page flags instead.
   if (!InAnySharedSpace(*string)) {
@@ -2704,6 +2705,7 @@ Handle<Code> Factory::NewCodeObjectForEmbeddedBuiltin(DirectHandle<Code> code,
       code->builtin_id(),
       code->is_turbofanned(),
       code->stack_slots(),
+      code->parameter_count(),
       code->instruction_size(),
       code->metadata_size(),
       code->inlined_bytecode_size(),

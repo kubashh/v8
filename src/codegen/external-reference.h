@@ -89,7 +89,6 @@ class StatsCounter;
   V(address_of_static_offsets_vector, "OffsetsVector::static_offsets_vector")  \
   V(thread_in_wasm_flag_address_address,                                       \
     "Isolate::thread_in_wasm_flag_address_address")                            \
-  V(javascript_execution_assert, "javascript_execution_assert")                \
   EXTERNAL_REFERENCE_LIST_WITH_ISOLATE_SANDBOX(V)
 
 #ifdef V8_ENABLE_SANDBOX
@@ -339,6 +338,7 @@ class StatsCounter;
           "wasm::WebAssemblyModuleCustomSections")                             \
   IF_WASM(V, wasm_WebAssemblyModuleExports, "wasm::WebAssemblyModuleExports")  \
   IF_WASM(V, wasm_WebAssemblyModuleImports, "wasm::WebAssemblyModuleImports")  \
+  IF_WASM(V, wasm_WebAssemblySuspending, "wasm::WebAssemblySuspending")        \
   IF_WASM(V, wasm_WebAssemblyTable, "wasm::WebAssemblyTable")                  \
   IF_WASM(V, wasm_WebAssemblyTableGet, "wasm::WebAssemblyTableGet")            \
   IF_WASM(V, wasm_WebAssemblyTableGetLength,                                   \

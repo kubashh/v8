@@ -627,6 +627,16 @@ void WasmTableObject::GetFunctionTableEntry(
   *is_valid = false;
 }
 
+Handle<WasmSuspendingObject> WasmSuspendingObject::New(
+    Isolate* isolate, Handle<JSReceiver> callable) {
+  Handle<JSFunction> suspending_ctor(
+      isolate->native_context()->wasm_suspending_constructor(), isolate);
+  auto suspending_obj = Handle<WasmSuspendingObject>::cast(
+      isolate->factory()->NewJSObject(suspending_ctor));
+  suspending_obj->set_callable(*callable);
+  return suspending_obj;
+}
+
 namespace {
 
 void SetInstanceMemory(Tagged<WasmTrustedInstanceData> trusted_instance_data,
@@ -1625,8 +1635,9 @@ void WasmTrustedInstanceData::ImportWasmJSFunctionIntoTable(
   wasm::ImportCallKind kind = resolved.kind();
   callable = resolved.callable();  // Update to ultimate target.
   DCHECK_NE(wasm::ImportCallKind::kLinkError, kind);
+  int num_suspender = resolved.suspend() == wasm::kSuspendWithSuspender ? 1 : 0;
   int expected_arity =
-      static_cast<int>(sig->parameter_count()) - resolved.suspend();
+      static_cast<int>(sig->parameter_count()) - num_suspender;
   if (kind == wasm::ImportCallKind ::kJSFunctionArityMismatch) {
     expected_arity = Handle<JSFunction>::cast(callable)
                          ->shared()
@@ -2040,7 +2051,7 @@ bool UseGenericWasmToJSWrapper(wasm::ImportCallKind kind,
     !V8_TARGET_ARCH_S390X && !V8_TARGET_ARCH_LOONG64 && !V8_TARGET_ARCH_MIPS64
   return false;
 #else
-  if (suspend == wasm::kSuspend) return false;
+  if (suspend != wasm::Suspend::kNoSuspend) return false;
 
   return v8_flags.wasm_to_js_generic_wrapper;
 #endif
@@ -2160,7 +2171,8 @@ bool WasmExportedFunction::IsWasmExportedFunction(Tagged<Object> object) {
   Tagged<Code> code = js_function->code(GetIsolateForSandbox(js_function));
   if (CodeKind::JS_TO_WASM_FUNCTION != code->kind() &&
       code->builtin_id() != Builtin::kJSToWasmWrapper &&
-      code->builtin_id() != Builtin::kWasmReturnPromiseOnSuspend) {
+      code->builtin_id() != Builtin::kWasmPromising &&
+      code->builtin_id() != Builtin::kWasmPromisingWithSuspender) {
     return false;
   }
   DCHECK(js_function->shared()->HasWasmExportedFunctionData());
@@ -2221,7 +2233,8 @@ Handle<WasmExportedFunction> WasmExportedFunction::New(
       CodeKind::JS_TO_WASM_FUNCTION == export_wrapper->kind() ||
       (export_wrapper->is_builtin() &&
        (export_wrapper->builtin_id() == Builtin::kJSToWasmWrapper ||
-        export_wrapper->builtin_id() == Builtin::kWasmReturnPromiseOnSuspend)));
+        export_wrapper->builtin_id() == Builtin::kWasmPromising ||
+        export_wrapper->builtin_id() == Builtin::kWasmPromisingWithSuspender)));
   Factory* factory = isolate->factory();
   Handle<WasmInstanceObject> instance_object{instance_data->instance_object(),
                                              isolate};
@@ -2229,8 +2242,9 @@ Handle<WasmExportedFunction> WasmExportedFunction::New(
   const wasm::FunctionSig* sig = module->functions[func_index].sig;
   Handle<Map> rtt;
   wasm::Promise promise =
-      export_wrapper->builtin_id() == Builtin::kWasmReturnPromiseOnSuspend
-          ? wasm::kPromise
+      export_wrapper->builtin_id() == Builtin::kWasmPromising ? wasm::kPromise
+      : export_wrapper->builtin_id() == Builtin::kWasmPromisingWithSuspender
+          ? wasm::kPromiseWithSuspender
           : wasm::kNoPromise;
   uint32_t sig_index = module->functions[func_index].sig_index;
   uint32_t canonical_type_index =
@@ -2402,14 +2416,15 @@ Handle<WasmJSFunction> WasmJSFunction::New(Isolate* isolate,
     internal_function->set_call_target(
         Builtins::EntryOf(Builtin::kWasmToJsWrapperAsm, isolate));
   } else {
-    int expected_arity = parameter_count - suspend;
+    int suspender_count = suspend == wasm::kSuspendWithSuspender ? 1 : 0;
+    int expected_arity = parameter_count - suspender_count;
     wasm::ImportCallKind kind = wasm::kDefaultImportCallKind;
     if (IsJSFunction(*callable)) {
       Tagged<SharedFunctionInfo> shared =
           Handle<JSFunction>::cast(callable)->shared();
       expected_arity =
           shared->internal_formal_parameter_count_without_receiver();
-      if (expected_arity != parameter_count - suspend) {
+      if (expected_arity != parameter_count - suspender_count) {
         kind = wasm::ImportCallKind::kJSFunctionArityMismatch;
       }
     }

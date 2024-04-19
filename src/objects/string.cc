@@ -107,7 +107,7 @@ Handle<String> String::SlowShare(Isolate* isolate, Handle<String> source) {
   // Do not recursively call Share, so directly compute the sharing strategy for
   // the flat string, which could already be a copy or an existing string from
   // e.g. a shortcut ConsString.
-  MaybeDirectHandle<Map> new_map;
+  MaybeHandle<Map> new_map;
   switch (isolate->factory()->ComputeSharingStrategyForString(flat, &new_map)) {
     case StringTransitionStrategy::kCopy:
       break;
@@ -1382,7 +1382,7 @@ MaybeHandle<String> String::GetSubstitution(Isolate* isolate, Match* match,
     const int peek_ix = next_dollar_ix + 1;
     if (peek_ix >= replacement_length) {
       builder.AppendCharacter('$');
-      return indirect_handle(builder.Finish(), isolate);
+      return builder.Finish();
     }
 
     int continue_from_ix = -1;
@@ -1499,7 +1499,7 @@ MaybeHandle<String> String::GetSubstitution(Isolate* isolate, Match* match,
         builder.AppendString(factory->NewSubString(
             replacement, continue_from_ix, replacement_length));
       }
-      return indirect_handle(builder.Finish(), isolate);
+      return builder.Finish();
     }
 
     // Append substring between the previous and the next $ character.

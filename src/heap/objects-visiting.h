@@ -39,6 +39,7 @@ namespace internal {
   V(ExternalString)                    \
   V(FeedbackCell)                      \
   V(FeedbackMetadata)                  \
+  V(Foreign)                           \
   V(FunctionTemplateInfo)              \
   V(Hole)                              \
   V(JSArrayBuffer)                     \
@@ -86,6 +87,7 @@ namespace internal {
   IF_WASM(V, WasmResumeData)           \
   IF_WASM(V, WasmStruct)               \
   IF_WASM(V, WasmSuspenderObject)      \
+  IF_WASM(V, WasmSuspendingObject)     \
   IF_WASM(V, WasmTypeInfo)             \
   SIMPLE_HEAP_OBJECT_LIST1(V)
 
