@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_TURBOSHAFT_PHASE_H_
 #define V8_COMPILER_TURBOSHAFT_PHASE_H_
 
+#include <memory>
 #include <type_traits>
 
 #include "src/base/contextual.h"
@@ -149,17 +150,6 @@ class V8_EXPORT_PRIVATE PipelineData
     }
   }
 
-  void set_loop_unrolling_analyzer(
-      LoopUnrollingAnalyzer* loop_unrolling_analyzer) {
-    DCHECK_NULL(loop_unrolling_analyzer_);
-    loop_unrolling_analyzer_ = loop_unrolling_analyzer;
-  }
-  void clear_loop_unrolling_analyzer() { loop_unrolling_analyzer_ = nullptr; }
-  LoopUnrollingAnalyzer* loop_unrolling_analyzer() const {
-    DCHECK_NOT_NULL(loop_unrolling_analyzer_);
-    return loop_unrolling_analyzer_;
-  }
-
   bool graph_has_special_rpo() const { return graph_has_special_rpo_; }
   void set_graph_has_special_rpo() { graph_has_special_rpo_ = true; }
 
@@ -194,8 +184,6 @@ class V8_EXPORT_PRIVATE PipelineData
   WasmRevecAnalyzer* wasm_revec_analyzer_ = nullptr;
 #endif  // V8_ENABLE_WASM_SIMD256_REVEC
 #endif  // V8_ENABLE_WEBASSEMBLY
-
-  LoopUnrollingAnalyzer* loop_unrolling_analyzer_ = nullptr;
 
   bool graph_has_special_rpo_ = false;
 
