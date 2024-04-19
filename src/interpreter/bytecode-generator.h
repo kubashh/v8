@@ -285,6 +285,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   void SetVariableInRegister(Variable* var, Register reg);
 
+  void ClearVariableInAllRegisters(Variable* var);
+
   Variable* GetVariableInAccumulator();
 
   void BuildVariableLoad(Variable* variable, HoleCheckMode hole_check_mode,
