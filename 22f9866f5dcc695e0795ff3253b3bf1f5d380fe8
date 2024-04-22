@@ -63,6 +63,30 @@
       },
       "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eb672d6_c46c71c3",
+        "filename": "src/parsing/keywords-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-22T22:18:53Z",
+      "side": 1,
+      "message": "The 128 value is hardcoded do I changed it to 129, even tho we should never reach it. I still wonder why there was not an issue the last time this script was run, since the C++ naturally won\u0027t let you initialize an array of size 128 with 129 values.",
+      "parentUuid": "3ce31456_a7518a5f",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
