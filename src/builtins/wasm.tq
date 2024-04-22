@@ -577,7 +577,7 @@ builtin WasmI64AtomicWait(
 
 // Vector format:
 // Two slots per call_ref instruction. These slots' values can be:
-// - uninitialized: (0, <unused>). Note: we use {0} as the sentinel because
+// - uninitialized: (<unused>, 0). Note: we use {0} as the sentinel because
 //   it also works as default for vector slots used as counts.
 // - monomorphic: (funcref, count (smi)). The second slot is a counter for how
 //   often the funcref in the first slot has been seen.
@@ -609,7 +609,7 @@ macro UpdateCallRefIC(
     }
   }
   // All other cases are some sort of miss.
-  if (TaggedEqual(value, SmiConstant(0))) {
+  if (TaggedEqual(vector.objects[index + 1], SmiConstant(0))) {
     // Was uninitialized.
     vector.objects[index] = funcref;
     vector.objects[index + 1] = SmiConstant(1);
@@ -641,9 +641,8 @@ macro UpdateCallRefIC(
     newEntries.objects[2] = funcref;
     newEntries.objects[3] = SmiConstant(1);
     vector.objects[index] = newEntries;
-    // Clear the first entry's counter; the specific value we write doesn't
-    // matter.
-    vector.objects[index + 1] = Undefined;
+    // Clear the first entry's counter, but keep the slot a Smi.
+    vector.objects[index + 1] = SmiConstant(0);
   } else {
     // The "ic::IsMegamorphic(value)" case doesn't need to do anything.
     dcheck(value == ic::kMegamorphicSymbol);
