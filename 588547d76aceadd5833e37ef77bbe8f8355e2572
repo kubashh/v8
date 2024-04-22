@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c04d98d_7817dc34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2024-04-22T17:49:27Z",
+      "side": 1,
+      "message": "Spun off from https://chromium-review.googlesource.com/c/v8/v8/+/5352288, it seemed useful for writing a test case.\n\nSince it\u0027s really simple and possibly good for some other cctests in this train, I thought I\u0027d split it out.",
+      "revId": "588547d76aceadd5833e37ef77bbe8f8355e2572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
