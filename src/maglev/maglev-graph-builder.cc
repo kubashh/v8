@@ -23,6 +23,7 @@
 #include "src/compiler/feedback-source.h"
 #include "src/compiler/heap-refs.h"
 #include "src/compiler/js-heap-broker-inl.h"
+#include "src/compiler/js-heap-broker.h"
 #include "src/compiler/processed-feedback.h"
 #include "src/deoptimizer/deoptimize-reason.h"
 #include "src/flags/flags.h"
@@ -198,6 +199,12 @@ class CallArguments {
     }
   }
 
+  ValueNode* array_like_argument() {
+    DCHECK_EQ(mode_, kWithArrayLike);
+    DCHECK_GT(count(), 0);
+    return args_[args_.size() - 1];
+  }
+
   size_t count() const {
     if (receiver_mode_ == ConvertReceiverMode::kNullOrUndefined) {
       return args_.size();
@@ -233,6 +240,12 @@ class CallArguments {
     for (size_t i = 0; i < args_to_pop; i++) {
       args_.pop_back();
     }
+  }
+
+  void PopArrayLikeArgument() {
+    DCHECK_EQ(mode_, kWithArrayLike);
+    DCHECK_GT(count(), 0);
+    args_.pop_back();
   }
 
   void PopReceiver(ConvertReceiverMode new_receiver_mode) {
@@ -6725,6 +6738,26 @@ ReduceResult MaglevGraphBuilder::TryReduceFunctionPrototypeCall(
   return ReduceCall(receiver, args, source, call_feedback.speculation_mode());
 }
 
+ReduceResult MaglevGraphBuilder::TryReduceFunctionPrototypeApply(
+    compiler::JSFunctionRef target, CallArguments& args) {
+  SpeculationMode speculation_mode = SpeculationMode::kDisallowSpeculation;
+  compiler::OptionalHeapObjectRef maybe_receiver;
+  if (current_speculation_feedback_.IsValid()) {
+    const compiler::ProcessedFeedback& processed_feedback =
+        broker()->GetFeedbackForCall(current_speculation_feedback_);
+    DCHECK_EQ(processed_feedback.kind(), compiler::ProcessedFeedback::kCall);
+    const compiler::CallFeedback& call_feedback = processed_feedback.AsCall();
+    speculation_mode = call_feedback.speculation_mode();
+    compiler::OptionalHeapObjectRef maybe_receiver;
+    if (call_feedback.call_feedback_content() ==
+        CallFeedbackContent::kReceiver) {
+      maybe_receiver = call_feedback.target();
+    }
+  }
+  return ReduceFunctionPrototypeApplyCallWithReceiver(
+      maybe_receiver, args, current_speculation_feedback_, speculation_mode);
+}
+
 namespace {
 
 template <size_t MaxKindCount, typename KindsToIndexFunc>
@@ -7820,26 +7853,25 @@ ReduceResult MaglevGraphBuilder::ReduceCallForNewClosure(
 }
 
 ReduceResult MaglevGraphBuilder::ReduceFunctionPrototypeApplyCallWithReceiver(
-    ValueNode* function_apply_node, compiler::JSFunctionRef function,
-    CallArguments& args, const compiler::FeedbackSource& feedback_source,
+    compiler::OptionalHeapObjectRef maybe_receiver, CallArguments& args,
+    const compiler::FeedbackSource& feedback_source,
     SpeculationMode speculation_mode) {
-  compiler::NativeContextRef native_context = broker()->target_native_context();
-  compiler::JSFunctionRef function_apply =
-      native_context.function_prototype_apply(broker());
-  RETURN_IF_ABORT(BuildCheckValue(function_apply_node, function_apply));
-  ValueNode* function_apply_receiver = GetTaggedOrUndefined(args.receiver());
-  RETURN_IF_ABORT(BuildCheckValue(function_apply_receiver, function));
   if (args.mode() != CallArguments::kDefault) return ReduceResult::Fail();
+
+  ValueNode* function = GetTaggedOrUndefined(args.receiver());
+  if (maybe_receiver.has_value()) {
+    RETURN_IF_ABORT(BuildCheckValue(function, maybe_receiver.value()));
+    function = GetConstant(maybe_receiver.value());
+  }
+
   if (args.count() == 0) {
     CallArguments empty_args(ConvertReceiverMode::kNullOrUndefined);
-    return ReduceCall(GetConstant(function), empty_args, feedback_source,
-                      speculation_mode);
+    return ReduceCall(function, empty_args, feedback_source, speculation_mode);
   }
   ValueNode* new_receiver = GetTaggedValue(args[0]);
   auto build_call_only_with_new_receiver = [&] {
     CallArguments new_args(ConvertReceiverMode::kAny, {new_receiver});
-    return ReduceCall(GetConstant(function), new_args, feedback_source,
-                      speculation_mode);
+    return ReduceCall(function, new_args, feedback_source, speculation_mode);
   };
   if (args.count() == 1 || IsNullValue(args[1]) || IsUndefinedValue(args[1])) {
     return build_call_only_with_new_receiver();
@@ -7848,8 +7880,8 @@ ReduceResult MaglevGraphBuilder::ReduceFunctionPrototypeApplyCallWithReceiver(
   auto build_call_with_array_like = [&] {
     CallArguments new_args(ConvertReceiverMode::kAny, {new_receiver, arg_list},
                            CallArguments::kWithArrayLike);
-    return ReduceCall(GetConstant(function), new_args, feedback_source,
-                      speculation_mode);
+    return ReduceCallWithArrayLike(function, new_args, feedback_source,
+                                   speculation_mode);
   };
   if (!MayBeNullOrUndefined(args[1])) {
     return build_call_with_array_like();
@@ -7878,15 +7910,16 @@ void MaglevGraphBuilder::BuildCallWithFeedback(
     compiler::JSFunctionRef feedback_target =
         call_feedback.target()->AsJSFunction();
     if (content == CallFeedbackContent::kReceiver) {
-      PROCESS_AND_RETURN_IF_DONE(
-          ReduceFunctionPrototypeApplyCallWithReceiver(
-              target_node, feedback_target, args, feedback_source,
-              call_feedback.speculation_mode()),
-          SetAccumulator);
-      // Fallback call to Function.prototype.apply.
       compiler::NativeContextRef native_context =
           broker()->target_native_context();
-      feedback_target = native_context.function_prototype_apply(broker());
+      compiler::JSFunctionRef apply_function =
+          native_context.function_prototype_apply(broker());
+      RETURN_VOID_IF_ABORT(BuildCheckValue(target_node, apply_function));
+      PROCESS_AND_RETURN_IF_DONE(ReduceFunctionPrototypeApplyCallWithReceiver(
+                                     feedback_target, args, feedback_source,
+                                     call_feedback.speculation_mode()),
+                                 SetAccumulator);
+      feedback_target = apply_function;
     } else {
       DCHECK_EQ(CallFeedbackContent::kTarget, content);
     }
@@ -7896,6 +7929,108 @@ void MaglevGraphBuilder::BuildCallWithFeedback(
   PROCESS_AND_RETURN_IF_DONE(ReduceCall(target_node, args, feedback_source,
                                         call_feedback.speculation_mode()),
                              SetAccumulator);
+}
+
+ReduceResult MaglevGraphBuilder::ReduceCallWithArrayLikeForArgumentsObject(
+    ValueNode* target_node, CallArguments& args,
+    const CapturedObject& arguments_object,
+    const compiler::FeedbackSource& feedback_source,
+    SpeculationMode speculation_mode) {
+  DCHECK_EQ(args.mode(), CallArguments::kWithArrayLike);
+
+  // Although the argumens obejct has not been changed so far, since it is not
+  // escaping, the arguments object could be modified after this bytecode if it
+  // is inside a loop.
+  if (bytecode_analysis().GetLoopOffsetFor(iterator_.current_offset()) != -1) {
+    return ReduceResult::Fail();
+  }
+
+  args.PopArrayLikeArgument();
+
+  if (is_inline()) {
+    base::SmallVector<ValueNode*, 8> arg_list;
+    DCHECK_NOT_NULL(args.receiver());
+    arg_list.push_back(args.receiver());
+    for (int i = 0; i < static_cast<int>(args.count()); i++) {
+      arg_list.push_back(args[i]);
+    }
+    for (int i = 1; i < static_cast<int>(inlined_arguments_.size()); i++) {
+      arg_list.push_back(inlined_arguments_[i]);
+    }
+    CallArguments new_args(ConvertReceiverMode::kAny, std::move(arg_list));
+    return ReduceCall(target_node, new_args, feedback_source, speculation_mode);
+  }
+
+  Call::TargetType target_type = Call::TargetType::kAny;
+  if (compiler::OptionalHeapObjectRef maybe_constant =
+          TryGetConstant(target_node)) {
+    if (maybe_constant->IsJSFunction()) {
+      target_type = Call::TargetType::kJSFunction;
+    }
+  }
+  return AddNewCallNode<CallForwardVarargs>(args, target_node, GetContext(), 0,
+                                            target_type);
+}
+
+std::optional<CapturedObject>
+MaglevGraphBuilder::TryGetNonEscapingArgumentsObject(ValueNode* value) {
+  if (!value->Is<InlinedAllocation>()) return {};
+  InlinedAllocation* alloc = value->Cast<InlinedAllocation>();
+  // TODO(victorgomes): We can probably loose the IsNotEscaping requirement here
+  // if we keep track of the arguments object changes so far.
+  if (alloc->IsEscaping()) return {};
+  if (alloc->captured_allocation().type != CapturedAllocation::kObject) {
+    return {};
+  }
+  CapturedObject object = alloc->captured_allocation().object;
+  compiler::MapRef map = object.GetMap();
+  // Check if the object is an arguments object.
+  if (!map.IsJSArgumentsObjectMap()) return {};
+  // No restrictions for strict arguments.
+  compiler::NativeContextRef native_context = broker()->target_native_context();
+  if (native_context.strict_arguments_map(broker()).equals(map)) {
+    return object;
+  }
+  // TODO(victorgomes): We can loose the mapped_count == 0 requirement if there
+  // is no stores to  the mapped arguments.
+  CapturedValue elements_value = object.get(JSArgumentsObject::kElementsOffset);
+  // If the elements array is not an allocation, then it is an unmapped
+  // elements array (either CoW or ArgumentsElements node).
+  if (elements_value.type != CapturedValue::kRuntimeValue) return object;
+  if (!elements_value.runtime_value->Is<InlinedAllocation>()) return {};
+  InlinedAllocation* elements_node =
+      elements_value.runtime_value->Cast<InlinedAllocation>();
+  DCHECK_EQ(elements_node->captured_allocation().type,
+            CapturedAllocation::kObject);
+  const CapturedObject& elements = elements_node->captured_allocation().object;
+  compiler::MapRef elements_map = elements.GetMap();
+  // If we have a sloppy arguments elements map, then mapped count must be
+  // different than zero.
+  if (!elements_map.IsSloppyArgumentsElementsMap()) return object;
+#ifdef DEBUG
+  CapturedValue length = elements.get(SloppyArgumentsElements::kLengthOffset);
+  DCHECK_EQ(length.type, CapturedValue::kSmi);
+  DCHECK_GT(length.smi, 0);
+#endif  // DEBUG
+  return {};
+}
+
+ReduceResult MaglevGraphBuilder::ReduceCallWithArrayLike(
+    ValueNode* target_node, CallArguments& args,
+    const compiler::FeedbackSource& feedback_source,
+    SpeculationMode speculation_mode) {
+  DCHECK_EQ(args.mode(), CallArguments::kWithArrayLike);
+
+  // TODO(victorgomes): Add the case for JSArrays and Rest parameter.
+  if (auto incoming_arguments =
+          TryGetNonEscapingArgumentsObject(args.array_like_argument())) {
+    RETURN_IF_DONE(ReduceCallWithArrayLikeForArgumentsObject(
+        target_node, args, incoming_arguments.value(), feedback_source,
+        speculation_mode));
+  }
+
+  // On fallthrough, create a generic call.
+  return BuildGenericCall(target_node, Call::TargetType::kAny, args);
 }
 
 ReduceResult MaglevGraphBuilder::ReduceCall(
