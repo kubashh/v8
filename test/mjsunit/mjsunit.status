@@ -1391,6 +1391,9 @@
 
   # Slow TF compilation.
   'wasm/large-struct': [SKIP],
+
+  # Requires tier-up.
+  'regress/wasm/regress-334687959': [SKIP],
 }],  # variant == stress
 
 ##############################################################################
@@ -1441,6 +1444,14 @@
   'wasm/wasm-dynamic-tiering': [SKIP],
   'wasm/speculative-inlining': [SKIP],
   'regress/wasm/regress-1179065': [SKIP],
+<<<<<<< HEAD   (d7d135 Version 12.5.227.5)
+=======
+  'regress/wasm/regress-334687959': [SKIP],
+
+  # Only implemented in turboshaft for now.
+  # TODO(14616): Enable again when implemented in liftoff.
+  'wasm/shared-everything/basic': [SKIP],
+>>>>>>> CHANGE (012190 [wasm][turboshaft] Emit tail call for invalid functions)
 }],  # variant == nooptimization
 
 ##############################################################################
