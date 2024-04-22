@@ -16,6 +16,207 @@
       "message": "PTAL! :)",
       "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea349511_85f77acb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "LGTM with comments. I have to admit that the `FrameState` building business is not trivial, so it\u0027s hard for me to review that properly and therefore I might miss stuff as I\u0027m not very familiar with how these things work in JS. 😊",
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e26b641_937c0e8b",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "This doesn\u0027t sound very stable (and you didn\u0027t specify a version), 13.2.2 seems to be `Identifier Reference` in version 13.0 and I\u0027m not sure that\u0027s what you are referring to. 😊",
+      "range": {
+        "startLine": 108,
+        "startChar": 64,
+        "endLine": 109,
+        "endChar": 17
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2caa7342_ef0a53ef",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "I assume you wanted to extract this into its own function for reuse but I don\u0027t see a second user? Did I miss anything?\n(Not wrong to factor it out, I\u0027m just confused.)",
+      "range": {
+        "startLine": 147,
+        "startChar": 12,
+        "endLine": 147,
+        "endChar": 36
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab040d71_3680ac18",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1780,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "This seems to be handled in line 1770? And if not, then we are missing some body or an `UNIMPLEMENTED();` here. 😊",
+      "range": {
+        "startLine": 1778,
+        "startChar": 4,
+        "endLine": 1780,
+        "endChar": 5
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd3905d_b9ea026c",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "Yes, this would be great!\nSame issue: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/turboshaft-graph-interface.cc;l\u003d5084?q\u003dturboshaft-graph-int\u0026ss\u003dchromium\nI guess, I should use a smi as well instead of the dummy value, that would be a bit cleaner.",
+      "range": {
+        "startLine": 1809,
+        "startChar": 15,
+        "endLine": 1811,
+        "endChar": 30
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee06f2d5_54288268",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1834,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "So the parent frame always has `Ignore`? Why?",
+      "range": {
+        "startLine": 1834,
+        "startChar": 27,
+        "endLine": 1834,
+        "endChar": 60
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e36594_615e8396",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1919,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "What\u0027s the parameter? The stub to be invoked? Maybe add a comment?",
+      "range": {
+        "startLine": 1919,
+        "startChar": 56,
+        "endLine": 1919,
+        "endChar": 57
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d539d03_c934bea2",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "This is just a literal I guess. maybe change it to `{ \"a\" : 42, c }`, then you\u0027d have both literals as well as \"dynamic\" values.",
+      "range": {
+        "startLine": 1088,
+        "startChar": 12,
+        "endLine": 1088,
+        "endChar": 24
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "060b4512_4b93278e",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T14:53:51Z",
+      "side": 1,
+      "message": "Is there some reason to not use booleans for conditions in JS? 😄",
+      "range": {
+        "startLine": 1134,
+        "startChar": 15,
+        "endLine": 1134,
+        "endChar": 16
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
