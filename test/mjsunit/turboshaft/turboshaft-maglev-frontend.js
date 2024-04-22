@@ -1079,3 +1079,68 @@ assertOptimized(simple_loop);
   assertEquals(58, truncate_number_to_int32(1.253, 0));
   assertOptimized(truncate_number_to_int32);
 }
+
+// Testing construct (= new).
+{
+  function A() { this.x = 42; return 42; }
+
+  function create(c) {
+    let x = { "a" : 42 }; // Creating an object before the Construct call so
+                          // that the frame state has more interesting data.
+    let y = new A(c);
+    return [x, y];
+  }
+
+  %PrepareFunctionForOptimization(create);
+  create();
+  let o1 = create();
+
+  %OptimizeFunctionOnNextCall(create);
+  let o2 = create();
+  assertEquals(o1, o2);
+  assertOptimized(create);
+
+  // Triggering deopt (before the construction) by changing the target.
+  let new_A_called = false;
+  A = function() { new_A_called = true; }
+  let o3 = create();
+  assertUnoptimized(create);
+  assertTrue(new_A_called);
+
+  // Falling back to generic Construct call.
+  %OptimizeFunctionOnNextCall(create);
+  let o4 = create();
+  assertEquals(o3, o4);
+  assertOptimized(create);
+}
+
+// Testing construct (= new).
+{
+  function A(c) {
+    if (c) {
+      %DeoptimizeFunction(create_deopt);
+    }
+    this.x = "abc";
+  }
+
+  function create_deopt(c) {
+    let x = { "a" : 42 }; // Creating an object before the Construct call so
+                          // that the frame state has more interesting data.
+    let y = new A(c);
+    return [x, y];
+  }
+
+  %PrepareFunctionForOptimization(create_deopt);
+  create_deopt(0);
+  let o1 = create_deopt(0);
+
+  %OptimizeFunctionOnNextCall(create_deopt);
+  let o2 = create_deopt(0);
+  assertEquals(o1, o2);
+  assertOptimized(create_deopt);
+
+  // Triggering deopt during the construction
+  let o3 = create_deopt(1);
+  assertUnoptimized(create_deopt);
+  assertEquals(o1, o3);
+}
