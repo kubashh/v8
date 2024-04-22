@@ -233,7 +233,7 @@ class LoopUnrollingReducer : public Next {
     goto no_change;
   }
 
-  OpIndex REDUCE_INPUT_GRAPH(Branch)(OpIndex ig_idx, const BranchOp& branch) {
+  V<None> REDUCE_INPUT_GRAPH(Branch)(V<None> ig_idx, const BranchOp& branch) {
     LABEL_BLOCK(no_change) {
       return Next::ReduceInputGraphBranch(ig_idx, branch);
     }
@@ -250,10 +250,10 @@ class LoopUnrollingReducer : public Next {
 
       if (is_true_in_loop && !is_false_in_loop) {
         __ Goto(__ MapToNewGraph(branch.if_false));
-        return OpIndex::Invalid();
+        return {};
       } else if (is_false_in_loop && !is_true_in_loop) {
         __ Goto(__ MapToNewGraph(branch.if_true));
-        return OpIndex::Invalid();
+        return {};
       } else {
         // Both the true and false destinations of this block are in the loop,
         // which means that the exit of the loop is later down the graph. We

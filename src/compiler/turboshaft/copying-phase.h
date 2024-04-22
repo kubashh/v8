@@ -795,7 +795,7 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
   // These functions take an operation from the old graph and use the assembler
   // to emit a corresponding operation in the new graph, translating inputs and
   // blocks accordingly.
-  V8_INLINE OpIndex AssembleOutputGraphGoto(const GotoOp& op) {
+  V8_INLINE V<None> AssembleOutputGraphGoto(const GotoOp& op) {
     Block* destination = MapToNewGraph(op.destination);
     if (op.is_backedge) {
       DCHECK(destination->IsBound());
@@ -807,9 +807,9 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
     // modify affect the SnapshotTable of `VariableReducer`, which is also used
     // by `FixLoopPhis()`.
     Asm().ReduceGoto(destination, op.is_backedge);
-    return OpIndex::Invalid();
+    return {};
   }
-  V8_INLINE OpIndex AssembleOutputGraphBranch(const BranchOp& op) {
+  V8_INLINE V<None> AssembleOutputGraphBranch(const BranchOp& op) {
     Block* if_true = MapToNewGraph(op.if_true);
     Block* if_false = MapToNewGraph(op.if_false);
     return Asm().ReduceBranch(MapToNewGraph(op.condition()), if_true, if_false,

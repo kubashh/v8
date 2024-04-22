@@ -234,7 +234,7 @@ class BranchEliminationReducer : public Next {
     }
   }
 
-  OpIndex REDUCE(Branch)(OpIndex cond, Block* if_true, Block* if_false,
+  V<None> REDUCE(Branch)(V<Word32> cond, Block* if_true, Block* if_false,
                          BranchHint hint) {
     LABEL_BLOCK(no_change) {
       return Next::ReduceBranch(cond, if_true, if_false, hint);
@@ -257,7 +257,7 @@ class BranchEliminationReducer : public Next {
           if (!merge_block->HasPhis(__ input_graph())) {
             // Using `ReduceInputGraphGoto()` here enables more optimizations.
             __ Goto(__ MapToNewGraph(merge_block));
-            return OpIndex::Invalid();
+            return {};
           }
         }
       }
@@ -268,8 +268,9 @@ class BranchEliminationReducer : public Next {
       // the "first" optimization in the documentation at the top of this
       // module).
       __ Goto(*cond_value ? if_true : if_false);
-      return OpIndex::Invalid();
+      return {};
     }
+
     // We can't optimize this branch.
     goto no_change;
   }

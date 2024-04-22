@@ -78,12 +78,15 @@
 
 namespace v8::internal::compiler::turboshaft {
 
+#include "src/compiler/turboshaft/define-assembler-macros.inc"
+
 template <class Next>
 class StructuralOptimizationReducer : public Next {
  public:
   TURBOSHAFT_REDUCER_BOILERPLATE(StructuralOptimization)
 
-  OpIndex ReduceInputGraphBranch(OpIndex input_index, const BranchOp& branch) {
+  V<None> REDUCE_INPUT_GRAPH(Branch)(V<None> input_index,
+                                     const BranchOp& branch) {
     LABEL_BLOCK(no_change) {
       return Next::ReduceInputGraphBranch(input_index, branch);
     }
@@ -286,6 +289,8 @@ class StructuralOptimizationReducer : public Next {
     }
   }
 };
+
+#include "src/compiler/turboshaft/undef-assembler-macros.inc"
 
 }  // namespace v8::internal::compiler::turboshaft
 

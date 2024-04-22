@@ -13,6 +13,8 @@
 
 namespace v8::internal::compiler::turboshaft {
 
+#include "src/compiler/turboshaft/define-assembler-macros.inc"
+
 template <typename>
 class TypeInferenceReducer;
 
@@ -29,13 +31,14 @@ class TypedOptimizationsReducer
 
   using Adapter = UniformReducerAdapter<TypedOptimizationsReducer, Next>;
 
-  OpIndex ReduceInputGraphBranch(OpIndex ig_index, const BranchOp& operation) {
+  V<None> REDUCE_INPUT_GRAPH(Branch)(V<None> ig_index,
+                                     const BranchOp& operation) {
     if (!ShouldSkipOptimizationStep()) {
       Type condition_type = GetType(operation.condition());
       if (!condition_type.IsInvalid()) {
         if (condition_type.IsNone()) {
           Asm().Unreachable();
-          return OpIndex::Invalid();
+          return {};
         }
         condition_type = Typer::TruncateWord32Input(condition_type, true,
                                                     Asm().graph_zone());
@@ -43,7 +46,7 @@ class TypedOptimizationsReducer
         if (auto c = condition_type.AsWord32().try_get_constant()) {
           Block* goto_target = *c == 0 ? operation.if_false : operation.if_true;
           Asm().Goto(Asm().MapToNewGraph(goto_target));
-          return OpIndex::Invalid();
+          return {};
         }
       }
     }
@@ -125,6 +128,8 @@ class TypedOptimizationsReducer
     return Asm().GetInputGraphType(index);
   }
 };
+
+#include "src/compiler/turboshaft/undef-assembler-macros.inc"
 
 }  // namespace v8::internal::compiler::turboshaft
 
