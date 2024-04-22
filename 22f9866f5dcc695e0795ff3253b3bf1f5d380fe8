@@ -87,6 +87,30 @@
       },
       "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e236277a_6e29725c",
+        "filename": "src/parsing/keywords-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-22T22:21:32Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t clear. I originally meant that we should keep at it 128, leave the current table completely unchanged.\n\nBut this change to 129 also seems fine. We don\u0027t use anything beyond the first 32 items of the table anyway.\n\nLeszek, WDYT?",
+      "parentUuid": "5eb672d6_c46c71c3",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
