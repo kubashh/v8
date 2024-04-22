@@ -827,7 +827,7 @@ class Sweeper::SweeperImpl final {
   SweeperImpl(RawHeap& heap, StatsCollector* stats_collector)
       : heap_(heap), stats_collector_(stats_collector) {}
 
-  ~SweeperImpl() { CancelSweepers(); }
+  ~SweeperImpl() { CancelAllSweepers(); }
 
   void Start(SweepingConfig config, cppgc::Platform* platform) {
     StatsCollector::EnabledScope stats_scope(stats_collector_,
@@ -864,8 +864,70 @@ class Sweeper::SweeperImpl final {
     }
   }
 
+  static constexpr auto kDelayWhileIdleSweepingMakesProgress =
+      v8::base::TimeDelta::FromMilliseconds(32);
+
+  static constexpr auto kDelayWhileConcurrentSweepingMakesProgress =
+      v8::base::TimeDelta::FromMilliseconds(5);
+
+  void SweepForTask(v8::base::TimeDelta max_duration) {
+    if (schedule_idle_task_in_regular_task_) {
+      // Idle task asked for delayed schedule.
+      schedule_idle_task_in_regular_task_ = false;
+      ScheduleIdleIncrementalSweeping();
+      ScheduleIncrementalSweeping(kDelayWhileIdleSweepingMakesProgress);
+      return;
+    }
+    if (saved_idle_task_count_ != idle_task_count_) {
+      // Idle task made progress. Reschedule with delay.
+      ScheduleIncrementalSweeping(kDelayWhileIdleSweepingMakesProgress);
+      return;
+    }
+
+    // Idle sweeping is not running or not being invoked on time.
+    const bool concurrent_sweep_complete = IsConcurrentSweepingDone();
+    const bool main_thread_sweep_complete = PerformSweepOnMutatorThread(
+        max_duration, StatsCollector::kSweepInTask,
+        concurrent_sweep_complete ? MutatorThreadSweepingMode::kAll
+                                  : MutatorThreadSweepingMode::kOnlyFinalizers);
+    if (main_thread_sweep_complete) {
+      if (!concurrent_sweep_complete) {
+        // Throttle incremental sweeping while the concurrent Job is still
+        // making progress.
+        ScheduleIncrementalSweeping(kDelayWhileConcurrentSweepingMakesProgress);
+      } else {
+        CHECK(!is_in_progress_);
+      }
+    } else {
+      ScheduleIncrementalSweeping();
+    }
+  }
+
+  void SweepForIdleTask(v8::base::TimeDelta max_duration) {
+    idle_task_count_++;
+    const bool concurrent_sweep_complete = IsConcurrentSweepingDone();
+    const bool main_thread_sweep_complete = PerformSweepOnMutatorThread(
+        max_duration, StatsCollector::kSweepInTask,
+        concurrent_sweep_complete ? MutatorThreadSweepingMode::kAll
+                                  : MutatorThreadSweepingMode::kOnlyFinalizers);
+    if (main_thread_sweep_complete) {
+      if (!concurrent_sweep_complete) {
+        // We cannot schedule delayed idle tasks. Instead schedule a regular
+        // delayed task that should reschedule idle work again.
+        schedule_idle_task_in_regular_task_ = true;
+        ScheduleIncrementalSweeping(kDelayWhileIdleSweepingMakesProgress);
+      } else {
+        CHECK(!is_in_progress_);
+      }
+    } else {
+      // More work to do. Continue idle sweeping.
+      ScheduleIdleIncrementalSweeping();
+    }
+  }
+
   bool SweepForAllocationIfRunning(NormalPageSpace* space, size_t size,
                                    v8::base::TimeDelta max_duration) {
+#if 0
     if (!is_in_progress_) return false;
 
     // Bail out for recursive sweeping calls. This can happen when finalizers
@@ -917,8 +979,10 @@ class Sweeper::SweeperImpl final {
         }
       }
     }
-
     return false;
+#else
+    return false;
+#endif
   }
 
   bool FinishIfRunning() {
@@ -1004,7 +1068,7 @@ class Sweeper::SweeperImpl final {
 
   void FinalizeSweep() {
     // Synchronize with the concurrent sweeper and call remaining finalizers.
-    SynchronizeAndFinalizeConcurrentSweeping();
+    SynchronizeAndFinalizeConcurrentAndIncrementalSweeping();
 
     // Clear space taken up by sweeper metadata.
     prioritized_space_states_.clear();
@@ -1109,6 +1173,46 @@ class Sweeper::SweeperImpl final {
     SweeperImpl& sweeper_;
   };
 
+  class IncrementalSweepIdleTask final : public cppgc::IdleTask {
+   public:
+    using Handle = SingleThreadedHandle;
+
+    static Handle Post(SweeperImpl& sweeper, cppgc::Platform* platform,
+                       cppgc::TaskRunner* runner) {
+      std::unique_ptr<IncrementalSweepIdleTask> task(
+          new IncrementalSweepIdleTask(platform, sweeper));
+      auto handle = task->handle_;
+      runner->PostIdleTask(std::move(task));
+      return handle;
+    }
+
+    void Run(double deadline_in_seconds) override {
+      if (handle_.IsCanceled()) {
+        return;
+      }
+      const v8::base::TimeDelta idle_time =
+          v8::base::TimeDelta::FromMillisecondsD(
+              (deadline_in_seconds * 1000) -
+              platform_->MonotonicallyIncreasingTime());
+      // Only use up a fraction of idle time to allow other components to use
+      // idle as well.
+      constexpr double kIdleTimeFraction = 0.5;
+      sweeper_.SweepForIdleTask(idle_time * kIdleTimeFraction);
+    }
+
+   private:
+    explicit IncrementalSweepIdleTask(cppgc::Platform* platform,
+                                      SweeperImpl& sweeper)
+        : platform_(platform),
+          sweeper_(sweeper),
+          handle_(Handle::NonEmptyTag{}) {}
+
+    cppgc::Platform* platform_;
+    SweeperImpl& sweeper_;
+    // TODO(chromium:1056170): Change to CancelableTask.
+    Handle handle_;
+  };
+
   class IncrementalSweepTask final : public cppgc::Task {
    public:
     using Handle = SingleThreadedHandle;
@@ -1119,41 +1223,23 @@ class Sweeper::SweeperImpl final {
     static Handle Post(SweeperImpl& sweeper, cppgc::TaskRunner* runner,
                        std::optional<v8::base::TimeDelta> delay) {
       auto task = std::make_unique<IncrementalSweepTask>(sweeper);
-      auto handle = task->GetHandle();
+      auto handle = task->handle_;
       if (delay.has_value()) {
         runner->PostDelayedTask(std::move(task), delay->InSecondsF());
       } else {
         runner->PostTask(std::move(task));
       }
-
       return handle;
     }
 
-    Handle GetHandle() const { return handle_; }
-
-   private:
     void Run() override {
-      if (handle_.IsCanceled()) return;
-
-      MutatorThreadSweepingMode sweeping_mode =
-          sweeper_.IsConcurrentSweepingDone()
-              ? MutatorThreadSweepingMode::kAll
-              : MutatorThreadSweepingMode::kOnlyFinalizers;
-      bool sweep_complete = sweeper_.PerformSweepOnMutatorThread(
-          v8::base::TimeDelta::FromMilliseconds(5),
-          StatsCollector::kSweepInTask, sweeping_mode);
-      if (sweep_complete) {
-        if (sweeping_mode != MutatorThreadSweepingMode::kAll) {
-          // Throttle incremental sweeping while the concurrent Job is doing
-          // progress.
-          sweeper_.ScheduleIncrementalSweeping(
-              v8::base::TimeDelta::FromMilliseconds(5));
-        }
-      } else {
-        sweeper_.ScheduleIncrementalSweeping();
+      if (handle_.IsCanceled()) {
+        return;
       }
+      sweeper_.SweepForTask(v8::base::TimeDelta::FromMilliseconds(5));
     }
 
+   private:
     SweeperImpl& sweeper_;
     // TODO(chromium:1056170): Change to CancelableTask.
     Handle handle_;
@@ -1166,10 +1252,29 @@ class Sweeper::SweeperImpl final {
               SweepingConfig::SweepingType::kIncremental);
 
     auto runner = platform_->GetForegroundTaskRunner();
-    if (!runner) return;
+    if (!runner) {
+      return;
+    }
 
+    saved_idle_task_count_ = idle_task_count_;
     incremental_sweeper_handle_ =
         IncrementalSweepTask::Post(*this, runner.get(), delay);
+  }
+
+  void ScheduleIdleIncrementalSweeping() {
+    DCHECK(platform_);
+    DCHECK_GE(config_.sweeping_type,
+              SweepingConfig::SweepingType::kIncremental);
+
+    auto runner = platform_->GetForegroundTaskRunner();
+    if (!runner) {
+      return;
+    }
+
+    if (!incremental_sweeper_idle_handle_ && runner->IdleTasksEnabled()) {
+      incremental_sweeper_idle_handle_ =
+          IncrementalSweepIdleTask::Post(*this, platform_, runner.get());
+    }
   }
 
   void ScheduleConcurrentSweeping() {
@@ -1184,14 +1289,20 @@ class Sweeper::SweeperImpl final {
             platform_, config_.free_memory_handling));
   }
 
-  void CancelSweepers() {
-    if (incremental_sweeper_handle_) incremental_sweeper_handle_.Cancel();
-    if (concurrent_sweeper_handle_ && concurrent_sweeper_handle_->IsValid())
+  void CancelAllSweepers() {
+    if (incremental_sweeper_handle_) {
+      incremental_sweeper_handle_.Cancel();
+    }
+    if (incremental_sweeper_idle_handle_) {
+      incremental_sweeper_idle_handle_.Cancel();
+    }
+    if (concurrent_sweeper_handle_ && concurrent_sweeper_handle_->IsValid()) {
       concurrent_sweeper_handle_->Cancel();
+    }
   }
 
-  void SynchronizeAndFinalizeConcurrentSweeping() {
-    CancelSweepers();
+  void SynchronizeAndFinalizeConcurrentAndIncrementalSweeping() {
+    CancelAllSweepers();
 
     SweepFinalizer finalizer(platform_, config_.free_memory_handling,
                              SweepFinalizer::EmptyPageHandling::kDestroy);
@@ -1205,6 +1316,10 @@ class Sweeper::SweeperImpl final {
   cppgc::Platform* platform_;
   SweepingConfig config_;
   IncrementalSweepTask::Handle incremental_sweeper_handle_;
+  IncrementalSweepIdleTask::Handle incremental_sweeper_idle_handle_;
+  size_t idle_task_count_{0};
+  size_t saved_idle_task_count_{0};
+  bool schedule_idle_task_in_regular_task_{false};
   std::unique_ptr<cppgc::JobHandle> concurrent_sweeper_handle_;
   std::vector<Sweeper::SweepingOnMutatorThreadObserver*>
       mutator_thread_sweeping_observers_;
