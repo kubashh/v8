@@ -1848,6 +1848,11 @@ class WasmModuleBuilder {
           let limits_byte =
               (is_memory64 ? 4 : 0) | (is_shared ? 2 : 0) | (has_max ? 1 : 0);
           section.emit_u8(limits_byte);
+          // Note that even though we use the proper emit function, the memory's
+          // min and max value can be more than 32 bits only if we specify it in
+          // the higher bits of the `limits_byte`. However, if we emit an up to
+          // 32-bit value in the LEB encoding, we get the same results for both
+          // cases if we emit it as a 32-bit value or a 64-bit value.
           let emit = val =>
               is_memory64 ? section.emit_u64v(val) : section.emit_u32v(val);
           emit(memory.min);
