@@ -39,6 +39,30 @@
       },
       "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ce31456_a7518a5f",
+        "filename": "src/parsing/keywords-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-22T20:46:39Z",
+      "side": 1,
+      "message": "Interesting. Removing the last one is right. Given that this shouldn\u0027t change at all, could you undo the formatting change here?\n\nI did a little digging why there\u0027s a difference, and AFAICT what\u0027s happening is that the `gperf` output _should_ be 129, because the actual hash function below is `len + asso_values[str[1]+1] + asso_values[str[0]]`. Since the max 7bit ASCII value is 127, the max value for `str[1]+1` would be 128, which means you need a 129-long table. I don\u0027t know why `gperf` does that instead of `asso_values[str[1]]`.\n\nBut we can never go out of bounds in the V8 usage because ASCII 127 (DEL) is a non-identifier character and so wouldn\u0027t hit the perfect keyword hash lookup path, since it can\u0027t be a character in a keyword.",
+      "parentUuid": "b0a2c936_5d1fa5f5",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
