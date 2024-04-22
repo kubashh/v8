@@ -1317,9 +1317,9 @@ class MachineOptimizationReducer : public Next {
     return Next::ReduceOverflowCheckedBinop(left, right, kind, rep);
   }
 
-  OpIndex REDUCE(Comparison)(OpIndex left, OpIndex right,
-                             ComparisonOp::Kind kind,
-                             RegisterRepresentation rep) {
+  V<Word32> REDUCE(Comparison)(V<Any> left, V<Any> right,
+                               ComparisonOp::Kind kind,
+                               RegisterRepresentation rep) {
     if (ShouldSkipOptimizationStep()) {
       return Next::ReduceComparison(left, right, kind, rep);
     }
@@ -1327,8 +1327,8 @@ class MachineOptimizationReducer : public Next {
       return ReduceCompareEqual(left, right, rep);
     }
     if (rep == WordRepresentation::Word32()) {
-      left = TryRemoveWord32ToWord64Conversion(left);
-      right = TryRemoveWord32ToWord64Conversion(right);
+      left = TryRemoveWord32ToWord64Conversion(V<Word>::Cast(left));
+      right = TryRemoveWord32ToWord64Conversion(V<Word>::Cast(right));
     }
     using Kind = ComparisonOp::Kind;
     if (left == right &&
@@ -1556,17 +1556,18 @@ class MachineOptimizationReducer : public Next {
                   UNREACHABLE();
               }
             };
-            return __ Comparison(UndoWord32ToWord64Conversion(left),
-                                 UndoWord32ToWord64Conversion(right),
-                                 SetSigned(kind, false),
-                                 WordRepresentation::Word32());
+            return __ Comparison(
+                UndoWord32ToWord64Conversion(V<Word64>::Cast(left)),
+                UndoWord32ToWord64Conversion(V<Word64>::Cast(right)),
+                SetSigned(kind, false), WordRepresentation::Word32());
           } else if (left_sign_extended != false &&
                      right_sign_extended != false) {
             // Both sides were sign-extended, this preserves both signed and
             // unsigned comparisons.
-            return __ Comparison(UndoWord32ToWord64Conversion(left),
-                                 UndoWord32ToWord64Conversion(right), kind,
-                                 WordRepresentation::Word32());
+            return __ Comparison(
+                UndoWord32ToWord64Conversion(V<Word64>::Cast(left)),
+                UndoWord32ToWord64Conversion(V<Word64>::Cast(right)), kind,
+                WordRepresentation::Word32());
           }
         }
       }
@@ -1714,7 +1715,7 @@ class MachineOptimizationReducer : public Next {
     return Next::ReduceShift(left, right, kind, rep);
   }
 
-  OpIndex REDUCE(Branch)(OpIndex condition, Block* if_true, Block* if_false,
+  V<None> REDUCE(Branch)(V<Word32> condition, Block* if_true, Block* if_false,
                          BranchHint hint) {
     LABEL_BLOCK(no_change) {
       return Next::ReduceBranch(condition, if_true, if_false, hint);
@@ -1724,7 +1725,7 @@ class MachineOptimizationReducer : public Next {
     // Try to replace the Branch by a Goto.
     if (base::Optional<bool> decision = MatchBoolConstant(condition)) {
       __ Goto(*decision ? if_true : if_false);
-      return OpIndex::Invalid();
+      return {};
     }
 
     // Try to simplify the Branch's condition (eg, `if (x == 0) A else B` can
@@ -1995,14 +1996,14 @@ class MachineOptimizationReducer : public Next {
   }
 
  private:
-  OpIndex ReduceCompareEqual(OpIndex left, OpIndex right,
-                             RegisterRepresentation rep) {
+  V<Word32> ReduceCompareEqual(V<Any> left, V<Any> right,
+                               RegisterRepresentation rep) {
     if (left == right && !rep.IsFloat()) {
       return __ Word32Constant(1);
     }
     if (rep == WordRepresentation::Word32()) {
-      left = TryRemoveWord32ToWord64Conversion(left);
-      right = TryRemoveWord32ToWord64Conversion(right);
+      left = TryRemoveWord32ToWord64Conversion(V<Word>::Cast(left));
+      right = TryRemoveWord32ToWord64Conversion(V<Word>::Cast(right));
     }
     if (matcher.Is<ConstantOp>(left) && !matcher.Is<ConstantOp>(right)) {
       return ReduceCompareEqual(right, left, rep);
@@ -2097,9 +2098,10 @@ class MachineOptimizationReducer : public Next {
           if (IsWord32ConvertedToWord64(left, &left_sign_extended) &&
               IsWord32ConvertedToWord64(right, &right_sign_extended)) {
             if (left_sign_extended == right_sign_extended) {
-              return __ Equal(UndoWord32ToWord64Conversion(left),
-                              UndoWord32ToWord64Conversion(right),
-                              WordRepresentation::Word32());
+              return __ Equal(
+                  UndoWord32ToWord64Conversion(V<Word64>::Cast(left)),
+                  UndoWord32ToWord64Conversion(V<Word64>::Cast(right)),
+                  WordRepresentation::Word32());
             }
           }
         }
@@ -2495,8 +2497,7 @@ class MachineOptimizationReducer : public Next {
     while (true) {
       // x == 0  =>  x with flipped branches
       if (V<Word32> left, right;
-          matcher.MatchEqual(condition, &left, &right,
-                             WordRepresentation::Word32()) &&
+          matcher.MatchEqual<Word32>(condition, &left, &right) &&
           matcher.MatchZero(right)) {
         reduced = true;
         condition = left;
@@ -2512,8 +2513,8 @@ class MachineOptimizationReducer : public Next {
         continue;
       }
       // x & (1 << k) == (1 << k)  =>  x & (1 << k)
-      if (V<Word32> left, right; matcher.MatchEqual(
-              condition, &left, &right, WordRepresentation::Word32())) {
+      if (V<Word32> left, right;
+          matcher.MatchEqual<Word32>(condition, &left, &right)) {
         V<Word32> x, mask;
         uint32_t k1, k2;
         if (matcher.MatchBitwiseAnd(left, &x, &mask,
