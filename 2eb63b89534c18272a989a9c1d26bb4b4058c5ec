@@ -20,6 +20,92 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "abb6e865_6300f4a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "LGTM with some nits.",
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d839786_14e63315",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "nit: useless comment\n\n(Rule of thumb: comments should explain why, not what. When the code says `memory_index \u003d get(...)`, a comment saying \"get the memory index\" doesn\u0027t add any value.)",
+      "range": {
+        "startLine": 929,
+        "startChar": 4,
+        "endLine": 929,
+        "endChar": 31
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "956e57a1_39679f27",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "AFAICS the `memory_index` is always specified to be a 32-bit ULEB, so this comment seems to be a misunderstanding. Perhaps it was meant to refer to `offset`?",
+      "range": {
+        "startLine": 947,
+        "startChar": 7,
+        "endLine": 948,
+        "endChar": 52
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "653ba5e1_13606127",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "This can remain `EmitU32V`, as `offset` is a `uint32_t`.\n\nThat said, perhaps a `TODO(evih): For memory64, we should sometimes generate offsets outside uint32 range` would be appropriate? Or you could extend the block in line 926 right away: change the type of `offset`, and if it\u0027s a memory64, make the rare very large pseudo-random offset be up to `0x1\u0027ffff\u0027ffff`.",
+      "range": {
+        "startLine": 950,
+        "startChar": 14,
+        "endLine": 950,
+        "endChar": 22
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1943702d_ae0a8733",
         "filename": "src/wasm/fuzzing/random-module-generation.cc",
         "patchSetId": 8
@@ -36,6 +122,29 @@
         "startChar": 7,
         "endLine": 954,
         "endChar": 16
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bd288b8_a113d355",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "nit: also useless",
+      "range": {
+        "startLine": 962,
+        "startChar": 4,
+        "endLine": 962,
+        "endChar": 31
       },
       "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -59,6 +168,121 @@
         "startChar": 7,
         "endLine": 1284,
         "endChar": 18
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "442b4b63_30a70a37",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1285,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "same, and again on line 1298",
+      "range": {
+        "startLine": 1285,
+        "startChar": 4,
+        "endLine": 1285,
+        "endChar": 31
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c314678_0e37eca2",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "I think this should be `kExprMemorySize`, and `kExprMemoryGrow` in line 1306.",
+      "range": {
+        "startLine": 1290,
+        "startChar": 51,
+        "endLine": 1290,
+        "endChar": 66
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09fa7893_d9b929a9",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3452,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "nit: this could be a `static_assert`.\n\nDue to the `1 +` trick to avoid ending up with zero memories, `kMaxMemories \u003d\u003d 5` could in fact lead to `num_memories \u003d\u003d 6`, in which case the loop below won\u0027t have enough input bits and the last memory will always be a 32-bit memory. That\u0027s probably just fine though?",
+      "range": {
+        "startLine": 3452,
+        "startChar": 28,
+        "endLine": 3452,
+        "endChar": 29
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53acf30e_05ac65f7",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "nit: `it`\n\nThat said, considering that we do go to the trouble of selecting the right `emit` function below, what is this comment trying to explain?",
+      "range": {
+        "startLine": 759,
+        "startChar": 56,
+        "endLine": 759,
+        "endChar": 58
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "636ed697_0041db83",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T13:28:53Z",
+      "side": 1,
+      "message": "nit: `it`\n\nThat said, considering that we do go to the trouble of selecting the right `emit` function below, what is this comment trying to explain?",
+      "range": {
+        "startLine": 1854,
+        "startChar": 60,
+        "endLine": 1854,
+        "endChar": 62
       },
       "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
