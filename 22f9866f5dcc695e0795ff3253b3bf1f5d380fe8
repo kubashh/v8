@@ -16,6 +16,29 @@
       "message": "@syg@chromium.org PTAL. This fixes the regular expression issue but for some reason my script is generating 129 entries in the `asso_values` array and I don\u0027t know why. Could you check if this is also happening for you?",
       "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0a2c936_5d1fa5f5",
+        "filename": "src/parsing/keywords-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-22T18:43:03Z",
+      "side": 1,
+      "message": "There shouldn\u0027t be any changes here, but `gperf` is generating an array with 129 entries, removing the last one shouldto work fine but I don\u0027t know if this is expected.",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
