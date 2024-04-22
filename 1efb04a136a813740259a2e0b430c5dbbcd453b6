@@ -16,6 +16,23 @@
       "message": "Updating test262.status after upstream fixes were merged.",
       "revId": "1efb04a136a813740259a2e0b430c5dbbcd453b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4af74e_6f50798d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-04-22T21:56:59Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "1efb04a136a813740259a2e0b430c5dbbcd453b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
