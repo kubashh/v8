@@ -39,8 +39,8 @@ def checked_sub(pattern: Union[str, re.Pattern[str]],
                 flags: int = 0) -> str:
   out, n = re.subn(pattern, sub, out, flags=flags)
   if n != count:
-    raise Exception("Didn't get exactly %d replacement(s) for pattern: %s" %
-                    (count, pattern))
+    raise Exception("Expected %d and got %d replacement(s) for pattern: %s" %
+                    (count, n, pattern))
   return out
 
 
@@ -124,7 +124,7 @@ def pad_tables(out: str) -> str:
   # Pad the word list.
   single_wordlist_entry = r"""
       (?:\#line\ \d+\ ".*"$\s*)?
-      \{\s*"[a-z]*"\s*,\s*Token::[A-Z_]+\}
+      \{\s*"[a-z]*"\s*,\s*Token::[a-zA-Z_]+\}
     """
   out = checked_sub(
       r"""
