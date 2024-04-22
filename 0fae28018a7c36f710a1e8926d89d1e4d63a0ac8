@@ -16,6 +16,23 @@
       "message": "This was submitted to the commit queue but nothing happened. It would be good to get this into beta.",
       "revId": "0fae28018a7c36f710a1e8926d89d1e4d63a0ac8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7af94da1_95bc2950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-22T10:23:53Z",
+      "side": 1,
+      "message": "this is submitted to a canary branch, you want to merge it to a release branch (like 12.6 or similar). See https://v8.dev/docs/merge-patch#how-to-create-the-merge-cl",
+      "revId": "0fae28018a7c36f710a1e8926d89d1e4d63a0ac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
