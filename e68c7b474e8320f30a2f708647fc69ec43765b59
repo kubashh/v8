@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "332672d8_3c535e05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "Why does `call_indirect` care what `call_ref` does with its vector slots? Generally, each type of operation can use its two vector slots however it wants.",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbaa5075_c4337058",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "Why is that a benefit?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 51
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0125be68_0a6bcf2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "I\u0027m afraid I have rather intrusive comments. But the good news is that I think there are actually fewer constraints here than this CL appears to assume, so these changes are largely just not necessary.",
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a753f49_6b200b93",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "This contradicts the claim in the CL description and in the table in module-compiler.cc, and the DCHECK in module-compiler.cc:1494. (I guess we either lack test coverage for megamorphic situations, or the issue below is hiding it by making the megamorphic case unreachable.)",
+      "range": {
+        "startLine": 622,
+        "startChar": 6,
+        "endLine": 622,
+        "endChar": 57
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36c0917d_8cc764aa",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "This isn\u0027t semantics-preserving. Consider the following transition path:\n```\ninitial/uninitialized state:\n  [Smi(0), Smi(0)]\n\nfuncref \u003d\u003d funcA:\n  line 593 doesn\u0027t match\n  line 600 doesn\u0027t match\n  line 612 matches\n  new vector: [funcA, Smi(1)]\n\nfuncref \u003d\u003d funcB:\n  line 593 doesn\u0027t match\n  line 600 doesn\u0027t match\n  line 612 doesn\u0027t match\n  line 616 doesn\u0027t match\n  line 635 matches\n  new vector: [[funcA, Smi(1), funcB, Smi(1)], Smi(0)]\n\nfuncref \u003d\u003d funcC:\n  line 593 doesn\u0027t match\n  line 600 matches\n  line 603 doesn\u0027t match (twice)\n  line 612 matches\n  new vector: [funcC, Smi(1)]  // funcA, funcB are lost :-(\n```",
+      "range": {
+        "startLine": 645,
+        "startChar": 32,
+        "endLine": 645,
+        "endChar": 47
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c853f8a_84a4aa76",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "Since we already have this mechanism, we could split `FunctionTypeFeedback::kNonDirectCall` into `FTF::kCallRef` and `FTF::kCallIndirect` (as long as `kV8MaxWasmFunctions \u003d 1\u0027000\u0027000`, we have room for encoding billions of sentinel values), and use that to decide how to decode vector contents here (cf. my comment on the CL description about different operations having the freedom to use vector slots any way they want without caring what other operations do).",
+      "range": {
+        "startLine": 1458,
+        "startChar": 4,
+        "endLine": 1458,
+        "endChar": 54
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4aba254_403c403a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "This will fail on counter overflow (see wasm.tq lines 588, 595, 605), which is very unlikely but not impossible to happen.",
+      "range": {
+        "startLine": 1466,
+        "startChar": 6,
+        "endLine": 1466,
+        "endChar": 26
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cc454f5_aaebc54f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1476,
+        "startChar": 8,
+        "endLine": 1476,
+        "endChar": 28
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd97744_07260d02",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-22T18:35:23Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment. Isn\u0027t zero the uninitialized call count for direct calls?",
+      "range": {
+        "startLine": 1488,
+        "startChar": 8,
+        "endLine": 1489,
+        "endChar": 40
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
