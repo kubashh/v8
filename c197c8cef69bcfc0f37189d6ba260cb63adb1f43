@@ -16,6 +16,24 @@
       "message": "btw, after moving pytype to a different builder/recipe, could we remove this cache again?\n\nThe problem of builder caches is that for very fast and mostly stateless builders, they\u0027d waste an additional few minutes waiting for the cache, while then the cache might not really lead to much speed-up.",
       "revId": "c197c8cef69bcfc0f37189d6ba260cb63adb1f43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfa794a_20edcd96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-04-22T12:24:44Z",
+      "side": 1,
+      "message": "Yes – removed in https://crrev.com/c/5471970",
+      "parentUuid": "6bf23593_2fd33684",
+      "revId": "c197c8cef69bcfc0f37189d6ba260cb63adb1f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
