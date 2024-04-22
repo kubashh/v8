@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fefd2f11_4ebf0ea2",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-22T16:43:39Z",
+      "side": 1,
+      "message": "Deleted the comment!",
+      "parentUuid": "f704b73c_378b769c",
+      "range": {
+        "startLine": 947,
+        "startChar": 7,
+        "endLine": 948,
+        "endChar": 52
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "653ba5e1_13606127",
@@ -214,6 +238,30 @@
       "side": 1,
       "message": "My thinking was \"a few more bits than 32\", so e.g. 33 or 34 bits. Going too high doesn\u0027t make sense because we can\u0027t allocate truly huge memories anyway.",
       "parentUuid": "48191e5f_362a98cb",
+      "range": {
+        "startLine": 950,
+        "startChar": 14,
+        "endLine": 950,
+        "endChar": 22
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60326c89_681b39bd",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-22T16:43:39Z",
+      "side": 1,
+      "message": "Makes sense :) Thanks",
+      "parentUuid": "7e920150_51f8f9c5",
       "range": {
         "startLine": 950,
         "startChar": 14,
@@ -519,6 +567,30 @@
       "side": 1,
       "message": "Yes, I find it misleading. Having that comment would make sense if we always used `write_u64v`: then the comment would explain why that\u0027s okay. So seeing that we actually choose the right emit function is surprising after reading the comment, and means that the comment only says that we wouldn\u0027t really need to do what we are doing.\nWe do set the right bit in the `limits_byte` (the `4` bit).",
       "parentUuid": "43b33f18_3b245539",
+      "range": {
+        "startLine": 759,
+        "startChar": 56,
+        "endLine": 759,
+        "endChar": 58
+      },
+      "revId": "2eb63b89534c18272a989a9c1d26bb4b4058c5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15448ac9_a7e8351d",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-22T16:43:39Z",
+      "side": 1,
+      "message": "Thanks! Now I understand, I remove the comments from both builders.",
+      "parentUuid": "50fa3f43_4c02c02c",
       "range": {
         "startLine": 759,
         "startChar": 56,
