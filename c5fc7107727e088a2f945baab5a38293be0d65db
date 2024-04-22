@@ -16,6 +16,23 @@
       "message": "Thank you!",
       "revId": "c5fc7107727e088a2f945baab5a38293be0d65db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7b9152d_1886591d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-22T16:49:18Z",
+      "side": 1,
+      "message": "I lost the +1 for code review, could you take another look, please?",
+      "revId": "c5fc7107727e088a2f945baab5a38293be0d65db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
