@@ -223,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03fe541b_19c149d0",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T17:45:40Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s just worse for me as I also don\u0027t have a context. 😊",
+      "parentUuid": "0e8a1c13_78e7a846",
+      "range": {
+        "startLine": 1809,
+        "startChar": 15,
+        "endLine": 1811,
+        "endChar": 30
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee06f2d5_54288268",
@@ -401,6 +425,30 @@
       "side": 1,
       "message": "Whups, I guess I\u0027m just too used to working on Turboshaft\u0027s backend, I forgot that we were actually coming from JS where booleans are a thing.",
       "parentUuid": "060b4512_4b93278e",
+      "range": {
+        "startLine": 1134,
+        "startChar": 15,
+        "endLine": 1134,
+        "endChar": 16
+      },
+      "revId": "79010a1c91dcc7a45e16c8e48feebfc0a6e14c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e999602_aae4a146",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-22T17:45:40Z",
+      "side": 1,
+      "message": "😄",
+      "parentUuid": "9555e573_e4031de4",
       "range": {
         "startLine": 1134,
         "startChar": 15,
