@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27e8576a_e20a321b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 38
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-22T23:38:30Z",
+      "side": 1,
+      "message": "Nit: It is verbose, but we should spell out `SharedFunctionInfo(s)`.",
+      "range": {
+        "startLine": 890,
+        "startChar": 7,
+        "endLine": 890,
+        "endChar": 44
+      },
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e12aaab6_286a701d",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 38
@@ -32,6 +55,24 @@
       "side": 1,
       "message": "I think the ownership looks cleaner with `std::list` but an intrusive list has a constant dequeue time (and we dequeue everytime the lock is asynchronously taken and released). The ownership with the intrusive list would look like this:\n```\nclass AsycWaiterQueueNodeBase : public WaiterQueueNode {\nstd::unique_ptr\u003cAsycWaiterQueueNodeBase\u003e next_async_node_;\nAsycWaiterQueueNodeBase* prev_async_node_;\n}\n```\nBoth types of AsyncWaiterQueueNodes would inherit from this because the queue is shared and if there is a single async node in the queue it would keep itself alive.\n\n\nDo you think this is a better approach?",
       "parentUuid": "e12aaab6_286a701d",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b3d306e_8144e3d3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-22T23:38:30Z",
+      "side": 1,
+      "message": "I\u0027m happy with `std::list` for now. We can optimize as needed, but this won\u0027t be a performance critical part for the time being.",
+      "parentUuid": "1a6cb507_0330bbb2",
       "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

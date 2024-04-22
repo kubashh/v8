@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d99c20f_8a70bd32",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-22T23:38:30Z",
+      "side": 1,
+      "message": "That behavior exists today for Atomics.waitAsync on page navigation. If user code was depending on the navigated-away realm to do the unlocking, there\u0027s no specced behavior to do any special unlocking.\n\nWhile well-intentioned, I don\u0027t think we need to do special handling here and unlock stuff, for two main reasons.\n\n1. How do we (as the engine) know that unlocking those locks is the intended behavior? I can believe that\u0027s the intended behavior like 99% of the time, but it\u0027s possible to synchronously pass the unlock promise to another realm and expect that realm to do the unlocking. Navigating a page might create a lot of garbage by virtue of making things unreachable, but it doesn\u0027t nuke them -- if objects otherwise reachable, their creation realm might have been navigated away but they\u0027re still usable objects.\n\n2. NotifyContextDisposed is a hint to the GC, not for triggering teardown logic. The reason FinalizationRegistries are in here is that they exist only for exposing GC logic. In general I don\u0027t think there\u0027s a norm of doing things on realm \"teardown\", in that it\u0027s not a teardown, but like a close or a navigation event.",
+      "parentUuid": "da5d19f7_b6572acf",
+      "range": {
+        "startLine": 1986,
+        "startChar": 4,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddbf8020_187716f3",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 37
@@ -173,6 +197,30 @@
       "side": 1,
       "message": "Yes, we need access to the js synchronization promitive to grab the lock queue, safely remove waiter from the queue, and possibly unlock the js mutexes.",
       "parentUuid": "82dca560_2113ebc6",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20755a1c_30cbc6a9",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-22T23:38:30Z",
+      "side": 1,
+      "message": "If no GC can happen, we can just take raw pointers to those, no?",
+      "parentUuid": "bec73ed4_0b490779",
       "range": {
         "startLine": 442,
         "startChar": 2,
