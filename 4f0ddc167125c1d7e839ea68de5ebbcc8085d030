@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2285939c_2659944b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T08:29:43Z",
+      "side": 1,
+      "message": "I misunderstood the previous bug. It was not because ArgumentsElements needed to be deduplicated, but it was because the deoptimizer gives it a fresh object id.\nI mimic TF\u0027s behaviour here. PTAL!",
+      "revId": "4f0ddc167125c1d7e839ea68de5ebbcc8085d030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
