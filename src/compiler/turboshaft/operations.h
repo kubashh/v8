@@ -1914,11 +1914,10 @@ struct ComparisonOp : FixedArityOperationT<2, ComparisonOp> {
 
   static bool IsCommutative(Kind kind) { return kind == Kind::kEqual; }
 
-  OpIndex left() const { return input(0); }
-  OpIndex right() const { return input(1); }
+  V<Any> left() const { return input<Any>(0); }
+  V<Any> right() const { return input<Any>(1); }
 
-  ComparisonOp(OpIndex left, OpIndex right, Kind kind,
-               RegisterRepresentation rep)
+  ComparisonOp(V<Any> left, V<Any> right, Kind kind, RegisterRepresentation rep)
       : Base(left, right), kind(kind), rep(rep) {}
 
   void Validate(const Graph& graph) const {
@@ -4089,13 +4088,13 @@ struct BranchOp : FixedArityOperationT<1, BranchOp> {
     return MaybeRepVector<MaybeRegisterRepresentation::Word32()>();
   }
 
-  OpIndex condition() const { return input(0); }
+  V<Word32> condition() const { return input<Word32>(0); }
 
-  BranchOp(OpIndex condition, Block* if_true, Block* if_false, BranchHint hint)
+  BranchOp(V<Word32> condition, Block* if_true, Block* if_false,
+           BranchHint hint)
       : Base(condition), hint(hint), if_true(if_true), if_false(if_false) {}
 
-  void Validate(const Graph& graph) const {
-  }
+  void Validate(const Graph& graph) const {}
   auto options() const { return std::tuple{if_true, if_false, hint}; }
 };
 

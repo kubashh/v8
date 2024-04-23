@@ -954,7 +954,7 @@ class GenericReducerBase : public ReducerBaseForwarder<Next> {
     return new_opindex;
   }
 
-  OpIndex REDUCE(Branch)(OpIndex condition, Block* if_true, Block* if_false,
+  V<None> REDUCE(Branch)(V<Word32> condition, Block* if_true, Block* if_false,
                          BranchHint hint) {
     // There should never be a good reason to generate a Branch where both the
     // {if_true} and {if_false} are the same Block. If we ever decide to lift
@@ -962,7 +962,7 @@ class GenericReducerBase : public ReducerBaseForwarder<Next> {
     // accordingly.
     DCHECK_NE(if_true, if_false);
     Block* saved_current_block = Asm().current_block();
-    OpIndex new_opindex =
+    V<None> new_opindex =
         Base::ReduceBranch(condition, if_true, if_false, hint);
     Asm().AddPredecessor(saved_current_block, if_true, true);
     Asm().AddPredecessor(saved_current_block, if_false, true);
@@ -1480,7 +1480,7 @@ class TurboshaftAssemblerOpInterface
     return ShiftLeft(left, this->Word32Constant(right), rep);
   }
 
-  V<Word32> Equal(OpIndex left, OpIndex right, RegisterRepresentation rep) {
+  V<Word32> Equal(V<Any> left, V<Any> right, RegisterRepresentation rep) {
     return Comparison(left, right, ComparisonOp::Kind::kEqual, rep);
   }
 
