@@ -146,4 +146,10 @@
   'wasm-recognize-imports': [FAIL],
 }],  # variant == future
 
+##############################################################################
+['variant == nooptimization', {
+  # Tests that require wasm tier up.
+  'wasm-speculative-inlining': [SKIP],
+}],  # variant == nooptimization
+
 ]
