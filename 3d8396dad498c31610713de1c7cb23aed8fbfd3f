@@ -16,6 +16,23 @@
       "message": "Patrick, PTAL and don\u0027t tell anyone that I would fail an \"implement binary search\" coding interview if I had to do one \u003c.\u003c",
       "revId": "3d8396dad498c31610713de1c7cb23aed8fbfd3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "554b604c_b560018c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-23T08:20:01Z",
+      "side": 1,
+      "message": "Oli, PTAL since Patrick is out",
+      "revId": "3d8396dad498c31610713de1c7cb23aed8fbfd3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
