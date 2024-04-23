@@ -16,6 +16,46 @@
       "message": "PTAL! :)",
       "revId": "13bb8532dd8ed5b661d2ba4578ef9850515500aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da2ebed0_8ed9c989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-23T09:41:03Z",
+      "side": 1,
+      "message": "LGTM with an unrelated question. 😊",
+      "revId": "13bb8532dd8ed5b661d2ba4578ef9850515500aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3ba527b_017cca9a",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-23T09:41:03Z",
+      "side": 1,
+      "message": "So what\u0027s the generic part of `SetNamedGeneric` if it isn\u0027t the name as it\u0027s constant? 😊\nThe type of the assigned value?",
+      "range": {
+        "startLine": 584,
+        "startChar": 27,
+        "endLine": 584,
+        "endChar": 66
+      },
+      "revId": "13bb8532dd8ed5b661d2ba4578ef9850515500aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
