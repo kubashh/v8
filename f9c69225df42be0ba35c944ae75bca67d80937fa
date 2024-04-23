@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab2f6b8e_053a0707",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6728,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "Correct. Thanks!",
+      "parentUuid": "05fb9ba3_4d69698d",
+      "range": {
+        "startLine": 6728,
+        "startChar": 2,
+        "endLine": 6728,
+        "endChar": 4
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9e61dba_1f6c66ee",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8012ac92_67a5bc8a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7318,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "It happens when we inline a builtin that calls apply. So we have:\n\nTryReduceBuiltin -\u003e TryReduceFunctionPrototypeApply -\u003e ReduceFunctionPrototypeApplyCallWithReceiver -\u003e ReduceCall -\u003e ReduceCallForConstant- \u003e TryReduceBuiltin\n\nThe first TryReduceBuiltin created CallSpeculationScope to save the current_speculation. The second one would crash in a DCHECK.\n\nI think there are many ways to solve the issue, my solution re-used the SaveCallSpeculationScope and removed CallSpeculationScope. \n\nThe leak doesn\u0027t happen, because the ReduceCall in that chain has a default empty value for the feedback and specualation \u003d false.\n\nHowever I am happy to revert my changes. Since I think the previous approach had the advantage of checking that the speculation_scope was invalid before\ncreating a CallSpeculationScope. Basically DCHECKing the leak.",
+      "parentUuid": "e9e61dba_1f6c66ee",
+      "range": {
+        "startLine": 7318,
+        "startChar": 2,
+        "endLine": 7318,
+        "endChar": 26
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "975a4df2_1691866a",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-04-23T09:21:20Z",
       "side": 1,
       "message": "this is not actually used, is that intentional?",
+      "range": {
+        "startLine": 7916,
+        "startChar": 26,
+        "endLine": 7916,
+        "endChar": 42
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb85fc4_8ede81f2",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7916,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "Left over. I ended it up doing all the necessary checks in the caller. I\u0027ll remove it. Thanks.",
+      "parentUuid": "975a4df2_1691866a",
       "range": {
         "startLine": 7916,
         "startChar": 26,

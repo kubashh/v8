@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c07b5899_9ec4f95e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7941,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d358c04_d18d0033",
+      "range": {
+        "startLine": 7941,
+        "startChar": 18,
+        "endLine": 7941,
+        "endChar": 26
+      },
+      "revId": "a3908eff57f2c83729fa39abd2ae30f65daa9ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45a9ed07_60dc19a3",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-04-23T09:21:20Z",
       "side": 1,
       "message": "I guess we could add a pre-pass that checks whether the arguments object is used outside this call.... probably not useful though, and something a Turboshaft pass can fix up for peak performance.",
+      "range": {
+        "startLine": 7942,
+        "startChar": 15,
+        "endLine": 7943,
+        "endChar": 22
+      },
+      "revId": "a3908eff57f2c83729fa39abd2ae30f65daa9ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90113cfa_21c02bf4",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7943,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "Honestly, I don\u0027t think this is needed. +1 for the turbshaft pass.",
+      "parentUuid": "45a9ed07_60dc19a3",
       "range": {
         "startLine": 7942,
         "startChar": 15,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e27aff9a_f6de753c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7966,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "I\u0027ve added a TODO, since we would need to add a new node type to known-node-aspects. We currently only have Callable.",
+      "parentUuid": "69d4cd0e_18748c9d",
+      "range": {
+        "startLine": 7966,
+        "startChar": 24,
+        "endLine": 7966,
+        "endChar": 36
+      },
+      "revId": "a3908eff57f2c83729fa39abd2ae30f65daa9ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85048276_c2511896",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "561ad1b9_a118da68",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7978,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85048276_c2511896",
+      "range": {
+        "startLine": 7978,
+        "startChar": 40,
+        "endLine": 7978,
+        "endChar": 45
+      },
+      "revId": "a3908eff57f2c83729fa39abd2ae30f65daa9ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc36ee17_a6afd556",
@@ -123,6 +219,30 @@
       "writtenOn": "2024-04-23T09:21:20Z",
       "side": 1,
       "message": "why compare the elements map here, but the object map against `native_context.strict_arguments_map()` above?",
+      "range": {
+        "startLine": 8005,
+        "startChar": 19,
+        "endLine": 8005,
+        "endChar": 31
+      },
+      "revId": "a3908eff57f2c83729fa39abd2ae30f65daa9ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a685b20_49f7d26e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8005,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T11:05:33Z",
+      "side": 1,
+      "message": "I guess we could elide the strict_arguments_map() check.\n\nThe reason I did this was for simplicity. We first check if we have a strict arguments object. If not, the rest of the code assume a sloppy arguments object, that can contain 2 possible elements map: an unmapped one and a mapped one (V8 terminology is actually SloppyArgumentsElementsMap, but it is confusing since a SloppyArgumentsObject can point to StrictArgumentsElementsMap when the number of mapped arguments is zero).\n\nAlso note that the DEBUG part later assumes a SloppyArgumentsObject.",
+      "parentUuid": "dc36ee17_a6afd556",
       "range": {
         "startLine": 8005,
         "startChar": 19,
