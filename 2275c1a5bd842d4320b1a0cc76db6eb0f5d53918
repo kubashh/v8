@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7cd42b1_4756a088",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-23T21:00:52Z",
+      "side": 1,
+      "message": "I think leaving it unexposed inside this `.cc` until we need it is the right move.",
+      "parentUuid": "ddbf8020_187716f3",
+      "range": {
+        "startLine": 167,
+        "startChar": 19,
+        "endLine": 167,
+        "endChar": 39
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d796a5d4_b3099298",
