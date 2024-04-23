@@ -1070,7 +1070,7 @@ class MarkCompactCollector::SharedHeapObjectVisitor final
     MemoryChunk* host_chunk = MemoryChunk::FromHeapObject(host);
     MutablePageMetadata* host_page_metadata =
         MutablePageMetadata::cast(host_chunk->Metadata());
-    DCHECK(host_chunk->InYoungGeneration());
+    DCHECK(Heap::InYoungGeneration(host));
     RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::NON_ATOMIC>(
         host_page_metadata, host_chunk->Offset(slot.address()));
     collector_->MarkRootObject(Root::kClientHeap, heap_object);
@@ -1325,7 +1325,7 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
     if (value.IsStrongOrWeak()) {
       MemoryChunk* value_chunk = MemoryChunk::FromAddress(value.ptr());
       MemoryChunk* host_chunk = MemoryChunk::FromHeapObject(host);
-      if (value_chunk->InYoungGeneration()) {
+      if (Heap::InYoungGeneration(value)) {
         MutablePageMetadata* host_metadata =
             MutablePageMetadata::cast(host_chunk->Metadata());
         DCHECK_IMPLIES(value_chunk->IsToPage(),
@@ -2927,6 +2927,12 @@ void MarkCompactCollector::ClearNonLiveReferences() {
   {
     TRACE_GC(heap_->tracer(), GCTracer::Scope::MC_CLEAR_JOIN_JOB);
     clearing_job_handle->Join();
+  }
+
+  if (v8_flags.sticky_mark_bits) {
+    // TODO(333906585): Consider adjusting the dchecks that happen on clearing
+    // and move this phase into MarkingBarrier::DeactivateAll.
+    heap()->DeactivateMajorGCInProgressFlag();
   }
 
   DCHECK(weak_objects_.transition_arrays.IsEmpty());
@@ -5421,6 +5427,10 @@ void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
 
     sweeper->AddPage(space->identity(), p);
     will_be_swept++;
+  }
+
+  if (v8_flags.sticky_mark_bits && space->identity() == OLD_SPACE) {
+    static_cast<StickySpace*>(space)->set_old_objects_size(space->Size());
   }
 
   if (v8_flags.gc_verbose) {
