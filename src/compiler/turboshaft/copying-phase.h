@@ -94,6 +94,8 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
         current_input_block_(nullptr),
         op_mapping_(Asm().input_graph().op_id_count(), OpIndex::Invalid(),
                     Asm().phase_zone(), &Asm().input_graph()),
+        visited_(Asm().input_graph().op_id_count(), false, Asm().phase_zone(),
+                 &Asm().input_graph()),
         block_mapping_(Asm().input_graph().block_count(), nullptr,
                        Asm().phase_zone()),
         blocks_needing_variables_(Asm().input_graph().block_count(),
@@ -215,6 +217,26 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
     ScopedModification<bool> set_true(&current_block_needs_variables_, true);
     VisitBlockBody<CanHavePhis::kYes, ForCloning::kYes, false>(
         input_block, added_block_phi_input);
+  }
+
+  void EnsureReady(OpIndex input_index) {
+    if (visited_[input_index]) return;
+
+    base::SmallVector<OpIndex, 16> to_visit;
+    to_visit.push_back(input_index);
+    while (!to_visit.empty()) {
+      OpIndex curr = to_visit.back();
+      bool has_to_visit_input = false;
+      for (OpIndex input : Asm().input_graph().Get(index).inputs()) {
+        if (!visited_[input]) {
+          has_to_visit_input = true;
+          to_visit.push_back(input);
+        }
+      }
+      if (has_to_visit_input) continue;
+      to_visit.pop_back();
+      VisitOpAndUpdateMapping<false>(curr, current_input_block_);
+    }
   }
 
   // {InlineOp} introduces two limitations unlike {CloneAndInlineBlock}:
@@ -639,6 +661,10 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
 
   template <bool trace_reduction>
   OpIndex VisitOpNoMappingUpdate(OpIndex index, const Block* input_block) {
+    if (visited_[index]) {
+      return MapToNewGraph(index);
+    }
+    visited_[index] = true;
     Block* current_block = Asm().current_block();
     DCHECK_NOT_NULL(current_block);
     Asm().SetCurrentOrigin(index);
@@ -962,6 +988,8 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
 
   // Mappings from old OpIndices to new OpIndices.
   FixedOpIndexSidetable<OpIndex> op_mapping_;
+
+  FixedOpIndexSidetable<bool> visited_;
 
   // Mappings from old blocks to new blocks.
   FixedBlockSidetable<Block*> block_mapping_;
