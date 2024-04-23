@@ -135,6 +135,30 @@
       },
       "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e26bd4b_a91a2fd6",
+        "filename": "src/parsing/keywords-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-23T09:32:39Z",
+      "side": 1,
+      "message": "`asso_values[str[1]]` would give a different value than `asso_values[str[1]+1]`, and so would be a different (likely non-perfect) hash function.\n\nChanging to 129 is the correct length, so let\u0027s do it.",
+      "parentUuid": "b72e953b_8f670b1e",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
