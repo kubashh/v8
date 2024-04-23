@@ -66,8 +66,17 @@ class V8_EXPORT_PRIVATE Sweeper final {
   bool PerformSweepOnMutatorThread(v8::base::TimeDelta max_duration,
                                    StatsCollector::ScopeId);
 
+  template <typename Callback>
+  void UpdateHeapLimitPercentageIfRunning(Callback get_heap_limit_percent) {
+    if (IsSweepingInProgress()) {
+      UpdateHeapLimitPercentageImpl(get_heap_limit_percent());
+    }
+  }
+
  private:
   void WaitForConcurrentSweepingForTesting();
+
+  void UpdateHeapLimitPercentageImpl(double heap_limit_percent);
 
   class SweeperImpl;
 

@@ -1003,6 +1003,11 @@ void CppHeap::ReportBufferedAllocationSizeIfPossible() {
                          std::memory_order_relaxed);
     allocated_size_ += bytes_to_report;
 
+    // Potentially update the sweeper with the latest limit to adjust its
+    // sweeping strategy.
+    sweeper_.UpdateHeapLimitPercentageIfRunning(
+        [this]() { return heap_->PercentToGlobalMemoryLimit(); });
+
     if (v8_flags.incremental_marking) {
       if (allocated_size_ > allocated_size_limit_for_check_) {
         Heap* heap = isolate_->heap();
