@@ -93,6 +93,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6372421_da71d465",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-23T22:10:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f27adc0b_b9703843",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6eab4359_4ac3d6c8",
@@ -234,6 +252,24 @@
       "side": 1,
       "message": "This removes ambiguity since the callback will always run in a microtask regardless if the lock was acquired synchronously or not, also I\u0027m reusing the `atomics_waitasync_promises` map to keep everything alive without using strong global handles, this way I can put `lock_promise` in the map without adding extra machinery to the native context.",
       "parentUuid": "53214662_abc83a74",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "826f1886_c205ecd0",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-23T22:10:10Z",
+      "side": 1,
+      "message": "Good point about always running `run_under_lock` in a microtask, that is an important invariant to keep for async APIs. The other way to do that would be to always run it in a (macro)task by posting a non-nestable task if the lock could be synchronously acquired. That means having a special synchronously acquired lock task which keeps `run_under_lock` alive, which is extra complexity. I\u0027m convinced \nnow it\u0027s fine to have this internal promise.",
+      "parentUuid": "960f4e05_0a6e7459",
       "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
