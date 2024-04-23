@@ -16,6 +16,75 @@
       "message": "Finally passed all tests. PTAL!",
       "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05fb9ba3_4d69698d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6728,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-23T09:21:20Z",
+      "side": 1,
+      "message": "left over code?",
+      "range": {
+        "startLine": 6728,
+        "startChar": 2,
+        "endLine": 6728,
+        "endChar": 4
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e61dba_1f6c66ee",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7318,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-23T09:21:20Z",
+      "side": 1,
+      "message": "when does this have an external call speculation that needs saving? I wouldn\u0027t have expected to see one -- maybe rather `TryReduceFunctionPrototypeApply` needs an (old) `SaveCallSpeculationScope`, similar to the one for the callback in `TryReduceArrayForEach`? Otherwise, the call speculation of the inlined function will \"leak\" into the parent function.prototype.apply call IC",
+      "range": {
+        "startLine": 7318,
+        "startChar": 2,
+        "endLine": 7318,
+        "endChar": 26
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "975a4df2_1691866a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7916,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-23T09:21:20Z",
+      "side": 1,
+      "message": "this is not actually used, is that intentional?",
+      "range": {
+        "startLine": 7916,
+        "startChar": 26,
+        "endLine": 7916,
+        "endChar": 42
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
