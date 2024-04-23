@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f27adc0b_b9703843",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-23T21:23:04Z",
+      "side": 1,
+      "message": "I tried, but `std::make_unique` doesn\u0027t work with private constructors.",
+      "parentUuid": "17f20194_0db20594",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6eab4359_4ac3d6c8",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 38
@@ -198,6 +216,24 @@
       "writtenOn": "2024-04-23T21:00:52Z",
       "side": 1,
       "message": "Do we need `lock_promise`? AFAICT it\u0027s an internal promise whose purpose is to enqueue the `run_under_lock` microtask when the lock is acquired. Can we directly call `run_under_lock` without the need for this internal promise? Perhaps I\u0027m missing something.",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "960f4e05_0a6e7459",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-23T21:23:04Z",
+      "side": 1,
+      "message": "This removes ambiguity since the callback will always run in a microtask regardless if the lock was acquired synchronously or not, also I\u0027m reusing the `atomics_waitasync_promises` map to keep everything alive without using strong global handles, this way I can put `lock_promise` in the map without adding extra machinery to the native context.",
+      "parentUuid": "53214662_abc83a74",
       "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
