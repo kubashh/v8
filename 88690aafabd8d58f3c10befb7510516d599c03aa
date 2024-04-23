@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76fc32c7_745ee284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-23T10:39:30Z",
+      "side": 1,
+      "message": "Please review this enormous CL carefully. Thanks",
+      "revId": "88690aafabd8d58f3c10befb7510516d599c03aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
