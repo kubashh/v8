@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a5a9c1a_6c10fbb5",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7318,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-23T12:42:06Z",
+      "side": 1,
+      "message": "I think once we know that we have a call to `Function.proto.apply` and use this information, we should use an empty speculation for the rest of the reduction. Since the feedback/speculation is for the apply fnuction. That\u0027s why I call SaveCallSpeculationScope in ReduceFunctionPrototypeApplyCallWithReceiver.",
+      "parentUuid": "29498d31_d76908ec",
+      "range": {
+        "startLine": 7318,
+        "startChar": 2,
+        "endLine": 7318,
+        "endChar": 26
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "975a4df2_1691866a",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 3
