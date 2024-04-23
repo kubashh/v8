@@ -33,6 +33,24 @@
       "message": "I lost the +1 for code review, could you take another look, please?",
       "revId": "c5fc7107727e088a2f945baab5a38293be0d65db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "563600bc_43c6a96e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-23T07:57:33Z",
+      "side": 1,
+      "message": "marking as resolved",
+      "parentUuid": "d7b9152d_1886591d",
+      "revId": "c5fc7107727e088a2f945baab5a38293be0d65db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
