@@ -56,6 +56,30 @@
       },
       "revId": "13bb8532dd8ed5b661d2ba4578ef9850515500aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81073850_548e8523",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-04-23T10:06:44Z",
+      "side": 1,
+      "message": "It\u0027s a generic Store (to StoreIC itself), rather than a \"specific\" store (like say a store to a typed array, or an object, where feedback allows us to emit a \"specific\" store rather than a builtin call to the generic StoreIC builtin).",
+      "parentUuid": "c3ba527b_017cca9a",
+      "range": {
+        "startLine": 584,
+        "startChar": 27,
+        "endLine": 584,
+        "endChar": 66
+      },
+      "revId": "13bb8532dd8ed5b661d2ba4578ef9850515500aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
