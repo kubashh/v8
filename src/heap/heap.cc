@@ -531,7 +531,8 @@ GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
                                               GarbageCollectionReason gc_reason,
                                               const char** reason) const {
   if (gc_reason == GarbageCollectionReason::kFinalizeConcurrentMinorMS) {
-    DCHECK(new_space());
+    DCHECK_NE(static_cast<bool>(new_space()),
+              v8_flags.sticky_mark_bits.value());
     DCHECK(!ShouldReduceMemory());
     *reason = "Concurrent MinorMS needs finalization";
     return GarbageCollector::MINOR_MARK_SWEEPER;
@@ -544,7 +545,8 @@ GarbageCollector Heap::SelectGarbageCollector(AllocationSpace space,
     return GarbageCollector::MARK_COMPACTOR;
   }
 
-  if (v8_flags.gc_global || ShouldStressCompaction() || !new_space()) {
+  if (v8_flags.gc_global || ShouldStressCompaction() ||
+      (!new_space() && !v8_flags.sticky_mark_bits)) {
     *reason = "GC in old space forced by flags";
     return GarbageCollector::MARK_COMPACTOR;
   }
@@ -1192,7 +1194,7 @@ void Heap::GarbageCollectionPrologue(
   // evacuation of a non-full new space (or if we are on the last page) there
   // may be uninitialized memory behind top. We fill the remainder of the page
   // with a filler.
-  if (new_space()) {
+  if (new_space() || v8_flags.sticky_mark_bits) {
     DCHECK_NOT_NULL(minor_gc_job());
     minor_gc_job()->CancelTaskIfScheduled();
   }
@@ -2338,13 +2340,20 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
                                     GarbageCollectionReason gc_reason,
                                     const char* collector_reason) {
   if (IsYoungGenerationCollector(collector)) {
-    CompleteSweepingYoung();
-    if (v8_flags.verify_heap) {
-      // If heap verification is enabled, we want to ensure that sweeping is
-      // completed here, as it will be triggered from Heap::Verify anyway.
-      // In this way, sweeping finalization is accounted to the corresponding
-      // full GC cycle.
+    if (v8_flags.sticky_mark_bits) {
+      DCHECK_EQ(GarbageCollector::MINOR_MARK_SWEEPER, collector);
+      // TODO(333906585): It's not necessary to complete full sweeping here.
+      // Make sure that only the OLD_SPACE is swept.
       CompleteSweepingFull();
+    } else {
+      CompleteSweepingYoung();
+      if (v8_flags.verify_heap) {
+        // If heap verification is enabled, we want to ensure that sweeping is
+        // completed here, as it will be triggered from Heap::Verify anyway.
+        // In this way, sweeping finalization is accounted to the corresponding
+        // full GC cycle.
+        CompleteSweepingFull();
+      }
     }
   } else {
     DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
@@ -2738,7 +2747,7 @@ void Heap::MarkCompact() {
 void Heap::MinorMarkSweep() {
   DCHECK(v8_flags.minor_ms);
   CHECK_EQ(NOT_IN_GC, gc_state());
-  DCHECK(new_space());
+  DCHECK_NE(static_cast<bool>(new_space()), v8_flags.sticky_mark_bits.value());
   DCHECK(!incremental_marking()->IsMajorMarking());
 
   TRACE_GC(tracer(), GCTracer::Scope::MINOR_MS);
@@ -7596,14 +7605,17 @@ void Heap::EnsureSweepingCompleted(SweepingForcedFinalizationMode mode) {
       trusted_space()->RefillFreeList();
     }
 
-    if (v8_flags.minor_ms && new_space() && was_minor_sweeping_in_progress) {
+    if (v8_flags.minor_ms && (new_space() || v8_flags.sticky_mark_bits) &&
+        was_minor_sweeping_in_progress) {
       TRACE_GC_EPOCH_WITH_FLOW(
           tracer(), GCTracer::Scope::MINOR_MS_COMPLETE_SWEEPING,
           ThreadKind::kMain,
           sweeper_->GetTraceIdForFlowEvent(
               GCTracer::Scope::MINOR_MS_COMPLETE_SWEEPING),
           TRACE_EVENT_FLAG_FLOW_IN | TRACE_EVENT_FLAG_FLOW_OUT);
-      paged_new_space()->paged_space()->RefillFreeList();
+      if (!v8_flags.sticky_mark_bits) {
+        paged_new_space()->paged_space()->RefillFreeList();
+      }
       // Refill OLD_SPACE's freelist again for swept promoted pages.
       old_space()->RefillFreeList();
     }
@@ -7640,7 +7652,9 @@ void Heap::EnsureYoungSweepingCompleted() {
       TRACE_EVENT_FLAG_FLOW_IN);
 
   sweeper()->EnsureMinorCompleted();
-  paged_new_space()->paged_space()->RefillFreeList();
+  if (!v8_flags.sticky_mark_bits) {
+    paged_new_space()->paged_space()->RefillFreeList();
+  }
   old_space()->RefillFreeList();
 
   tracer()->NotifyYoungSweepingCompleted();

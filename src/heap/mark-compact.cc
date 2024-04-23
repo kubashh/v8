@@ -697,7 +697,7 @@ void MarkCompactCollector::Prepare() {
 #endif  // V8_COMPRESS_POINTERS
   }
 
-  if (heap_->new_space()) {
+  if (heap_->new_space() || v8_flags.sticky_mark_bits) {
     DCHECK_EQ(
         heap_->allocator()->new_space_allocator()->top(),
         heap_->allocator()->new_space_allocator()->original_top_acquire());
@@ -4612,6 +4612,16 @@ void MarkCompactCollector::Evacuate() {
     verifier.Run();
   }
 #endif  // VERIFY_HEAP
+
+#if DEBUG
+  if (v8_flags.sticky_mark_bits) {
+    OldGenerationMemoryChunkIterator::ForAll(
+        heap_, [](MutablePageMetadata* chunk) {
+          DCHECK(!chunk->ContainsSlots<OLD_TO_NEW>());
+          DCHECK(!chunk->ContainsSlots<OLD_TO_NEW_BACKGROUND>());
+        });
+  }
+#endif
 }
 
 class UpdatingItem : public ParallelWorkItem {
@@ -4786,6 +4796,12 @@ class RememberedSetUpdatingItem : public UpdatingItem {
   void UpdateUntypedOldToNewPointers() {
     if (!chunk_->slot_set<old_to_new_type, AccessMode::NON_ATOMIC>()) return;
 
+    if (v8_flags.sticky_mark_bits) {
+      // TODO(333906585): Handle old->shared promotion.
+      chunk_->ReleaseSlotSet(old_to_new_type);
+      return;
+    }
+
     const PtrComprCageBase cage_base = heap_->isolate();
     // Marking bits are cleared already when the page is already swept. This
     // is fine since in that case the sweeper has already removed dead invalid
@@ -4942,6 +4958,11 @@ class RememberedSetUpdatingItem : public UpdatingItem {
   void UpdateTypedOldToNewPointers(WritableJitPage& jit_page) {
     if (chunk_->typed_slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>() == nullptr)
       return;
+    if (v8_flags.sticky_mark_bits) {
+      // TODO(333906585): Handle old->shared promotion.
+      chunk_->ReleaseTypedSlotSet(OLD_TO_NEW);
+      return;
+    }
     const PtrComprCageBase cage_base = heap_->isolate();
     const auto check_and_update_old_to_new_slot_fn =
         [this, cage_base](FullMaybeObjectSlot slot) {
@@ -5163,6 +5184,11 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
 }
 
 void MarkCompactCollector::UpdatePointersInClientHeaps() {
+  if (v8_flags.sticky_mark_bits) {
+    // TODO(333906585): Shared heap is currently not supported with sticky mark
+    // bits.
+    return;
+  }
   Isolate* const isolate = heap_->isolate();
   if (!isolate->is_shared_space_isolate()) return;
 
