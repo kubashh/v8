@@ -114,6 +114,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29498d31_d76908ec",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7318,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-23T12:35:01Z",
+      "side": 1,
+      "message": "So the case you\u0027re solving is re-using the same call speculation bit for two nested builtins? Maybe then the invariant should be that inlined functions create a new `SaveCallSpeculationScope`, so that nothing leaks out of them, and otherwise `CallSpeculationScope` is guaranteed to either be overwriting an empty speculation, or the exact same speculation for the case of two nested builtins?",
+      "parentUuid": "8012ac92_67a5bc8a",
+      "range": {
+        "startLine": 7318,
+        "startChar": 2,
+        "endLine": 7318,
+        "endChar": 26
+      },
+      "revId": "f9c69225df42be0ba35c944ae75bca67d80937fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "975a4df2_1691866a",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 3
