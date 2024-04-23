@@ -600,6 +600,8 @@ DEFINE_WEAK_VALUE_IMPLICATION(turbofan, max_maglev_inlined_bytecode_size, 100)
 DEFINE_WEAK_VALUE_IMPLICATION(turbofan,
                               max_maglev_inlined_bytecode_size_cumulative, 920)
 DEFINE_WEAK_VALUE_IMPLICATION(turbofan, min_maglev_inlining_frequency, 0.95)
+DEFINE_INT(maglev_inline_turbofanned_candidate_weight, 2,
+           "Maglev inline turbofanned candidate weight")
 DEFINE_BOOL(maglev_reuse_stack_slots, true,
             "reuse stack slots in the maglev optimizing compiler")
 DEFINE_BOOL(maglev_untagged_phis, true,

@@ -5924,6 +5924,7 @@ ReduceResult MaglevGraphBuilder::BuildInlined(ValueNode* context,
   TRACE_INLINING("  cannot inline " << shared << ": " << __VA_ARGS__)
 
 bool MaglevGraphBuilder::ShouldInlineCall(
+    compiler::OptionalJSFunctionRef callee,
     compiler::SharedFunctionInfoRef shared,
     compiler::OptionalFeedbackVectorRef feedback_vector, float call_frequency) {
   if (graph()->total_inlined_bytecode_size() >
@@ -5969,7 +5970,12 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     TRACE_CANNOT_INLINE("use unsupported expection handlers");
     return false;
   }
-  if (call_frequency < v8_flags.min_maglev_inlining_frequency) {
+  int weight = 1;
+  if (callee.has_value() &&
+      callee->object()->ActiveTierIsTurbofan(local_isolate_)) {
+    weight = v8_flags.maglev_inline_turbofanned_candidate_weight;
+  }
+  if (call_frequency < v8_flags.min_maglev_inlining_frequency * weight) {
     TRACE_CANNOT_INLINE("call frequency ("
                         << call_frequency << ") < minimum threshold ("
                         << v8_flags.min_maglev_inlining_frequency << ")");
@@ -6009,14 +6015,18 @@ ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
     const compiler::FeedbackSource& feedback_source) {
   DCHECK_EQ(args.mode(), CallArguments::kDefault);
   float feedback_frequency = 0.0f;
+  compiler::OptionalJSFunctionRef callee;
   if (feedback_source.IsValid()) {
-    compiler::ProcessedFeedback const& feedback =
-        broker()->GetFeedbackForCall(feedback_source);
+    const compiler::CallFeedback& feedback =
+        broker()->GetFeedbackForCall(feedback_source).AsCall();
     feedback_frequency =
-        feedback.IsInsufficient() ? 0.0f : feedback.AsCall().frequency();
+        feedback.IsInsufficient() ? 0.0f : feedback.frequency();
+    if (feedback.target().has_value() && feedback.target()->IsJSFunction()) {
+      callee = feedback.target()->AsJSFunction();
+    }
   }
   float call_frequency = feedback_frequency * call_frequency_;
-  if (!ShouldInlineCall(shared, feedback_vector, call_frequency)) {
+  if (!ShouldInlineCall(callee, shared, feedback_vector, call_frequency)) {
     return ReduceResult::Fail();
   }
 
