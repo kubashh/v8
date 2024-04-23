@@ -16,6 +16,46 @@
       "message": "@jkummerow@chromium.org: PTAL.",
       "revId": "a41b88f7603a3b932e9d865e1361a99195a85f65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9682f7f_517b3550",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-23T10:20:39Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "a41b88f7603a3b932e9d865e1361a99195a85f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "532b0e78_1af82c36",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-23T10:20:39Z",
+      "side": 1,
+      "message": "nit: outdated comments",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 36
+      },
+      "revId": "a41b88f7603a3b932e9d865e1361a99195a85f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
