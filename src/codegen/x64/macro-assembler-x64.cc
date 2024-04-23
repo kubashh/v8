@@ -877,7 +877,36 @@ void MacroAssembler::RecordWrite(Register object, Register slot_address,
   }
 
 #if V8_ENABLE_STICKY_MARK_BITS_BOOL
-  // TODO(333906585): Implement sticky barrier.
+  Label stub_call, check_value, pop_slot_address_and_exit,
+      pop_value_and_slot_address_and_exit, pop_object_and_slot_address_and_exit;
+  Register scratch0 = slot_address, scratch1 = value;
+
+  Push(slot_address);
+  scratch0 = slot_address;
+  CheckPageFlag(object, scratch0, MemoryChunk::kIncrementalMarking, not_zero,
+                &stub_call, Label::kFar);
+
+  CheckPageFlag(object, scratch0,
+                MemoryChunk::kIsInReadOnlyHeapOrMajorGCInProgressMask, not_zero,
+                &check_value, v8_flags.debug_code ? Label::kFar : Label::kNear);
+  Push(value);
+  scratch1 = value;
+  CheckMarkBit(object, scratch0, scratch1, carry,
+               &pop_value_and_slot_address_and_exit);
+  Pop(value);
+
+  bind(&check_value);  // |slot_address| is clobbered.
+  CheckPageFlag(value, scratch0,
+                MemoryChunk::kIsInReadOnlyHeapOrMajorGCInProgressMask, not_zero,
+                &pop_slot_address_and_exit, Label::kFar);
+  Push(object);
+  scratch1 = object;
+  CheckMarkBit(value, scratch0, scratch1, carry,
+               &pop_object_and_slot_address_and_exit);
+  Pop(object);
+
+  bind(&stub_call);  // |slot_address| is clobbered.
+  Pop(slot_address);
 #else   // !V8_ENABLE_STICKY_MARK_BITS_BOOL
   CheckPageFlag(value,
                 value,  // Used as scratch.
@@ -899,6 +928,16 @@ void MacroAssembler::RecordWrite(Register object, Register slot_address,
                                slot.indirect_pointer_tag());
   }
 
+#if V8_ENABLE_STICKY_MARK_BITS_BOOL
+  jmp(&done);
+  bind(&pop_object_and_slot_address_and_exit);
+  Pop(object);
+  jmp(&pop_slot_address_and_exit);
+  bind(&pop_value_and_slot_address_and_exit);
+  Pop(value);
+  bind(&pop_slot_address_and_exit);
+  Pop(slot_address);
+#endif  // V8_ENABLE_STICKY_MARK_BITS_BOOL
   bind(&done);
 
   // Clobber clobbered registers when running with the debug-code flag
@@ -4159,6 +4198,54 @@ void MacroAssembler::CheckPageFlag(Register object, Register scratch, int mask,
   } else {
     testl(Operand(scratch, MemoryChunkLayout::kFlagsOffset), Immediate(mask));
   }
+  j(cc, condition_met, condition_met_distance);
+}
+
+void MacroAssembler::CheckMarkBit(Register object, Register scratch0,
+                                  Register scratch1, Condition cc,
+                                  Label* condition_met,
+                                  Label::Distance condition_met_distance) {
+  ASM_CODE_COMMENT(this);
+  DCHECK(cc == carry || cc == not_carry);
+  DCHECK(!AreAliased(object, scratch0, scratch1));
+
+  // Computing cell.
+  MemoryChunkHeaderFromObject(object, scratch0);
+#ifdef V8_ENABLE_SANDBOX
+  movl(scratch0, Operand(scratch0, MemoryChunkLayout::kMetadataIndexOffset));
+  andl(scratch0, Immediate(MemoryChunk::kMetadataPointerTableSizeMask));
+  shll(scratch0, Immediate(kSystemPointerSizeLog2));
+  LoadAddress(scratch1,
+              ExternalReference::memory_chunk_metadata_table_address());
+  movq(scratch0, Operand(scratch1, scratch0, times_1, 0));
+#else   // !V8_ENABLE_SANDBOX
+  movq(scratch0, Operand(scratch0, MemoryChunkLayout::kMetadataOffset));
+#endif  // !V8_ENABLE_SANDBOX
+  if (v8_flags.debug_code) {
+    Push(object);
+    movq(scratch1, Operand(scratch0, MemoryChunkLayout::kAreaStartOffset));
+    MemoryChunkHeaderFromObject(scratch1, scratch1);
+    MemoryChunkHeaderFromObject(object, object);
+    cmpq(object, scratch1);
+    Check(equal, AbortReason::kMetadataAreaStartDoesNotMatch);
+    Pop(object);
+  }
+  addq(scratch0, Immediate(MemoryChunkLayout::kMarkingBitmapOffset));
+
+  movq(scratch1, object);
+  andq(scratch1, Immediate(MemoryChunk::GetAlignmentMaskForAssembler()));
+  // It's important not to fold the next two shifts.
+  shrq(scratch1, Immediate(kTaggedSizeLog2 + MarkingBitmap::kBitsPerCellLog2));
+  shlq(scratch1, Immediate(kBitsPerByteLog2));
+  addq(scratch0, scratch1);
+
+  // Computing mask.
+  movq(scratch1, object);
+  andq(scratch1, Immediate(MemoryChunk::GetAlignmentMaskForAssembler()));
+  shrq(scratch1, Immediate(kTaggedSizeLog2));
+  andq(scratch1, Immediate(MarkingBitmap::kBitIndexMask));
+  btq(Operand(scratch0, 0), scratch1);
+
   j(cc, condition_met, condition_met_distance);
 }
 
