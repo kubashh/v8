@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "bafd1c1e_bee98645",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-23T08:27:03Z",
+      "side": 1,
+      "message": "Is this empty line intended? It should probably be before the `Change-Id` line. 😊",
+      "revId": "b7d469186413f65a10cfb447575e4bbee30db4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8f28d991_049db38d",
@@ -14,6 +31,23 @@
       "writtenOn": "2024-04-23T08:25:01Z",
       "side": 1,
       "message": "Thanks! Could you take another look, please?",
+      "revId": "b7d469186413f65a10cfb447575e4bbee30db4f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ab29712_f012fa88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-23T08:27:03Z",
+      "side": 1,
+      "message": "LGTM with nit",
       "revId": "b7d469186413f65a10cfb447575e4bbee30db4f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
