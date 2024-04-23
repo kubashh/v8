@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0309dcc6_99991abd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-04-23T09:27:01Z",
+      "side": 1,
+      "message": "nit: some typos and parse errors in the commit message.",
+      "revId": "588547d76aceadd5833e37ef77bbe8f8355e2572",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8c04d98d_7817dc34",
