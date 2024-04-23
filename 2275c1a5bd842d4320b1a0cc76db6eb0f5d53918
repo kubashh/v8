@@ -233,6 +233,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a266e0c_05a711b9",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-23T20:59:52Z",
+      "side": 1,
+      "message": "Yes, but I don\u0027t know how to code it. `ptr` is a protected member of `IndirectHandleBase` and `Utils::OpenDirectHandle` requires a `HandleScope`. I think it\u0027s fine to leave it like this, am I missing another way to do it?",
+      "parentUuid": "20755a1c_30cbc6a9",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96c61bcc_bfe99636",
         "filename": "src/objects/js-atomics-synchronization.h",
         "patchSetId": 37
@@ -267,6 +291,30 @@
       "writtenOn": "2024-04-18T18:06:30Z",
       "side": 1,
       "message": "There is an issue here. Declaring the roots here and populating them on bootstrapper.cc works, but mkgrokdump crashes on `DumpKnownObject` because the root is not populated and hence a lot of cctests fail. I could declare this as HeapObject and initialize it with undefined, but I\u0027m not sure if that is the right thing to do.",
+      "range": {
+        "startLine": 355,
+        "startChar": 2,
+        "endLine": 360,
+        "endChar": 37
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70de0271_f65d41d7",
+        "filename": "src/roots/roots.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-23T20:59:52Z",
+      "side": 1,
+      "message": "@syg@chromium.org would you mind taking a look at this while I address the other comments?",
+      "parentUuid": "b4457c20_ce978020",
       "range": {
         "startLine": 355,
         "startChar": 2,
