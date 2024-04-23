@@ -284,7 +284,9 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
   }
   bool another_ephemeron_iteration = false;
   MainAllocator* const new_space_allocator =
-      heap_->new_space() ? heap_->allocator()->new_space_allocator() : nullptr;
+      (heap_->new_space() || v8_flags.sticky_mark_bits)
+          ? heap_->allocator()->new_space_allocator()
+          : nullptr;
 
   {
     TimedScope scope(&time_ms);
@@ -491,7 +493,8 @@ V8_INLINE size_t ConcurrentMarking::RunMinorImpl(JobDelegate* delegate,
 }
 
 void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
-  DCHECK_NOT_NULL(heap_->new_space());
+  DCHECK_NE(v8_flags.sticky_mark_bits.value(),
+            static_cast<bool>(heap_->new_space()));
   DCHECK_NOT_NULL(heap_->new_lo_space());
   uint8_t task_id = delegate->GetTaskId() + 1;
   DCHECK_LT(task_id, task_state_.size());

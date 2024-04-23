@@ -79,6 +79,7 @@ class YoungGenerationRememberedSetsMarkingWorklist {
     template <typename Visitor>
     void Process(Visitor* visitor);
     void MergeAndDeleteRememberedSets();
+    void DeleteRememberedSets();
 
     void DeleteSetsOnTearDown();
 
