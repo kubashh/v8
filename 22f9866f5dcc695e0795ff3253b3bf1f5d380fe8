@@ -111,6 +111,30 @@
       },
       "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b72e953b_8f670b1e",
+        "filename": "src/parsing/keywords-gen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 3401386
+      },
+      "writtenOn": "2024-04-23T01:22:20Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t know why `gperf` does that instead of `asso_values[str[1]]`.\n\nIt\u0027s so that `\"else\"` (`asso_values[\u0027e\u0027] + asso_values[\u0027l\u0027 + 1]`) has a different hash than `\"let\"` (`asso_values[\u0027l\u0027] + asso_values[\u0027e\u0027 + 1]`). The 129 is correct, though I agree that 128 looks prettier on the screen and it definitely doesn\u0027t make a difference in this particular case because as you say, DEL _can\u0027t_ show up here. (And even if it did, it\u0027s _technically_ a buffer overread but it can\u0027t actually cause errors in this case other than a possible-though-unlikely segfault.)\n\nThen again, when I was diving this code it did take me a little while to realize that the `128` in `asso_values[128]` was not the same `128` as in `kPerfectKeywordLengthTable[128]` and `kPerfectKeywordHashTable[128]`. I thought those were three parallel arrays; it\u0027s not, it\u0027s two parallel arrays and an unrelated array. Changing it (back) to 129 might make the code easier to understand at first glance.",
+      "parentUuid": "e236277a_6e29725c",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 79,
+        "endChar": 46
+      },
+      "revId": "22f9866f5dcc695e0795ff3253b3bf1f5d380fe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
