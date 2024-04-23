@@ -962,7 +962,7 @@ void CppHeap::FinishMarkingAndStartSweeping() {
                   kDoNotDiscard};
     DCHECK_IMPLIES(!isolate_,
                    SweepingType::kAtomic == sweeping_config.sweeping_type);
-    sweeper().Start(sweeping_config);
+    sweeper().Start(sweeping_config, heap_->PercentToGlobalMemoryLimit());
   }
 
   in_atomic_pause_ = false;
@@ -1002,6 +1002,11 @@ void CppHeap::ReportBufferedAllocationSizeIfPossible() {
     used_size_.fetch_add(static_cast<size_t>(bytes_to_report),
                          std::memory_order_relaxed);
     allocated_size_ += bytes_to_report;
+
+    // Potentially update the sweeper with the latest limit to adjust its
+    // sweeping strategy.
+    sweeper_.UpdateHeapLimitPercentageIfRunning(
+        [this]() { return heap_->PercentToGlobalMemoryLimit(); });
 
     if (v8_flags.incremental_marking) {
       if (allocated_size_ > allocated_size_limit_for_check_) {
