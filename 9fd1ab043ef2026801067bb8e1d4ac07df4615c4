@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe307d6_e5e0a232",
+        "filename": "test/mjsunit/wasm/multi-memory64-wrong-offset.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-23T08:25:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90307471_cc4b59d0",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 42
+      },
+      "revId": "9fd1ab043ef2026801067bb8e1d4ac07df4615c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06d098b4_463d2757",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-04-22T16:54:35Z",
       "side": 1,
       "message": "Have you considered adding an `_` or multiple, e.g. `0x1_ffff_ffff`? Or alternatively, you could do sth. like `0x1n \u003c\u003c 33n`. 😊",
+      "range": {
+        "startLine": 19,
+        "startChar": 61,
+        "endLine": 19,
+        "endChar": 72
+      },
+      "revId": "9fd1ab043ef2026801067bb8e1d4ac07df4615c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a4125bc_b77ccefc",
+        "filename": "test/mjsunit/wasm/multi-memory64-wrong-offset.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-04-23T08:25:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06d098b4_463d2757",
       "range": {
         "startLine": 19,
         "startChar": 61,
