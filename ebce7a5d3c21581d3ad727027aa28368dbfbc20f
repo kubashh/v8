@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cec8c0a_50a9dbeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-24T09:50:53Z",
+      "side": 1,
+      "message": "Nice! LGTM with a question.",
+      "revId": "ebce7a5d3c21581d3ad727027aa28368dbfbc20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8e98f70_0e2b6c27",
+        "filename": "test/message/wasm-speculative-inlining.out",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-24T09:50:53Z",
+      "side": 1,
+      "message": "Interesting, what causes #3 to be considered before #2 here?",
+      "range": {
+        "startLine": 13,
+        "startChar": 49,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "ebce7a5d3c21581d3ad727027aa28368dbfbc20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
