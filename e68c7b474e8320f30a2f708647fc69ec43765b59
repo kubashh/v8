@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b41aa65f_a9500988",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "`call_ref` and `call_indirect` will have the same layout and transitions (at least that seemed simplest for an initial implementation, and also because they are conceptually quite similar). The only difference is that `call_ref` identifies the target (in the first slot) as a `WasmFuncRef` vs. for `call_indirect` as a `Smi(lower_bits_of_target_address)`. Then we can, e.g., reuse the code in `UpdateCallRefIC` for both (of course fixing the issues you brought up below and renaming it), simply by generifying the second argument to `Object`.\n\nNow with that setup, the problem is that a value of `Smi(0)` in the first slot for `call_indirect` is not enough to determine that this is an uninitialized entry, since there could be genuinely a call target address whose lower 31 bits are all zero. Hence the idea of using instead a call count of 0 (i.e., `Smi(0)` in the second slot) as the discriminator for an uninitialized feedback entry. Since I wanted to keep `call_ref` and `call_indirect` consistent and share some code, I thought it made sense to change it for `call_ref` as well.",
+      "parentUuid": "332672d8_3c535e05",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbaa5075_c4337058",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-22T18:35:23Z",
       "side": 1,
       "message": "Why is that a benefit?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 51
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9623c47_625bd43c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "One could pull the conversion of the count Smi in front of the switching over the feedback entry type. Also I liked the consistency across all call feedback entry types (i.e., all monomorphic feedback entries have the count in the second slot). But fair enough, both are very minor points.",
+      "parentUuid": "dbaa5075_c4337058",
       "range": {
         "startLine": 14,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c70af1f0_28bd92c0",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "Oh, right. We did lack test coverage for the megamorphic case, so I added a test in https://crrev.com/c/5473608, which shows that because of the issue below we don\u0027t reach this. If we want to always have a Smi in the second slot, I fixed the polymorphic and megamorphic cases to write `Smi(1)` and updated the table in module-compiler.cc and description above the Torque macro.",
+      "parentUuid": "1a753f49_6b200b93",
+      "range": {
+        "startLine": 622,
+        "startChar": 6,
+        "endLine": 622,
+        "endChar": 57
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36c0917d_8cc764aa",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-04-22T18:35:23Z",
       "side": 1,
       "message": "This isn\u0027t semantics-preserving. Consider the following transition path:\n```\ninitial/uninitialized state:\n  [Smi(0), Smi(0)]\n\nfuncref \u003d\u003d funcA:\n  line 593 doesn\u0027t match\n  line 600 doesn\u0027t match\n  line 612 matches\n  new vector: [funcA, Smi(1)]\n\nfuncref \u003d\u003d funcB:\n  line 593 doesn\u0027t match\n  line 600 doesn\u0027t match\n  line 612 doesn\u0027t match\n  line 616 doesn\u0027t match\n  line 635 matches\n  new vector: [[funcA, Smi(1), funcB, Smi(1)], Smi(0)]\n\nfuncref \u003d\u003d funcC:\n  line 593 doesn\u0027t match\n  line 600 matches\n  line 603 doesn\u0027t match (twice)\n  line 612 matches\n  new vector: [funcC, Smi(1)]  // funcA, funcB are lost :-(\n```",
+      "range": {
+        "startLine": 645,
+        "startChar": 32,
+        "endLine": 645,
+        "endChar": 47
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ef6d74c_519c4a00",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "Right, sorry about that. Fixed and now also found by the test added in https://crrev.com/c/5473608.",
+      "parentUuid": "36c0917d_8cc764aa",
       "range": {
         "startLine": 645,
         "startChar": 32,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16244d98_6052090f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "That\u0027s actually what I do in the follow-up code. I suppose uploading that together would have been better than keeping the CLs small.",
+      "parentUuid": "3c853f8a_84a4aa76",
+      "range": {
+        "startLine": 1458,
+        "startChar": 4,
+        "endLine": 1458,
+        "endChar": 54
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4aba254_403c403a",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-04-22T18:35:23Z",
       "side": 1,
       "message": "This will fail on counter overflow (see wasm.tq lines 588, 595, 605), which is very unlikely but not impossible to happen.",
+      "range": {
+        "startLine": 1466,
+        "startChar": 6,
+        "endLine": 1466,
+        "endChar": 26
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afdaddb8_86f5b779",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "Done (removed).",
+      "parentUuid": "e4aba254_403c403a",
       "range": {
         "startLine": 1466,
         "startChar": 6,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b47c28e_6bdf55da",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cc454f5_aaebc54f",
+      "range": {
+        "startLine": 1476,
+        "startChar": 8,
+        "endLine": 1476,
+        "endChar": 28
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffd97744_07260d02",
@@ -192,6 +360,30 @@
       "writtenOn": "2024-04-22T18:35:23Z",
       "side": 1,
       "message": "I don\u0027t understand this comment. Isn\u0027t zero the uninitialized call count for direct calls?",
+      "range": {
+        "startLine": 1488,
+        "startChar": 8,
+        "endLine": 1489,
+        "endChar": 40
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5034e02b_a393ae0e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T09:09:37Z",
+      "side": 1,
+      "message": "I also thought so, but we currently add an entry via `fm.AddCall()` even when the direct call count is zero. There is an explicit DCHECK for always having an entry for direct calls in https://crsrc.org/c/v8/src/wasm/graph-builder-interface.cc;drc\u003d57aac21be883b232bb0a2133f6c8871330172bd4;l\u003d1006, hence I assumed this is an invariant we rely on (possibly elsewhere, although I didn\u0027t check that). I only briefly tried _not_ adding zero-count entries and modifying the linked code in TurboFan to match it, but that had further test failures, hence I went with documenting this here.",
+      "parentUuid": "ffd97744_07260d02",
       "range": {
         "startLine": 1488,
         "startChar": 8,
