@@ -1437,34 +1437,60 @@ void TransitiveTypeFeedbackProcessor::ProcessFunction(int func_index) {
       module_->type_feedback.feedback_for_function[func_index]
           .call_targets.as_vector();
 
+  // For each entry in {calls}, there is a pair of {Object}s in {feedback}:
+  // +-----------------------+-------------------------+-------------------+
+  // |       Call Type       |    Feedback: Entry 1    |      Entry 2      |
+  // +-----------------------+-------------------------+-------------------+
+  // | direct                | Smi(0), unused          | Smi(count)        |
+  // +-----------------------+-------------------------+-------------------+
+  // | ref, uninitialized    | Smi(0), unused          | Smi(0)            |
+  // | ref, monomorphic      | WasmFuncRef(target)     | Smi(count>0)      |
+  // | ref, polymorphic      | FixedArray              | Smi(1)            |
+  // | ref, megamoprhic      | MegamorphicSymbol       | Smi(1)            |
+  // +-----------------------+-------------------------+-------------------+
+  // The FixedArray entries for the polymorphic cases look like the monomorphic
+  // entries in the feedback vector itself.
+  // See the `UpdateCallRefIC` builtin in `wasm.tq` for how this is written.
   DCHECK_EQ(feedback->length(), call_targets.size() * 2);
   FeedbackMaker fm(isolate_, instance_data_, func_index,
                    feedback->length() / 2);
   for (int i = 0; i < feedback->length(); i += 2) {
+    uint32_t sentinel_or_target = call_targets[i / 2];
     Tagged<Object> value = feedback->get(i);
+    // The second entry is always a Smi (the call count or an unused zero).
+    int count = Smi::ToInt(feedback->get(i + 1));
+
     if (IsWasmFuncRef(value)) {
       // Monomorphic.
-      int count = Smi::cast(feedback->get(i + 1)).value();
+      DCHECK_EQ(sentinel_or_target, FunctionTypeFeedback::kNonDirectCall);
       fm.AddCallRefCandidate(WasmFuncRef::cast(value), count);
     } else if (IsFixedArray(value)) {
       // Polymorphic.
+      DCHECK_EQ(sentinel_or_target, FunctionTypeFeedback::kNonDirectCall);
+      DCHECK_EQ(count, 1);
       Tagged<FixedArray> polymorphic = FixedArray::cast(value);
       for (int j = 0; j < polymorphic->length(); j += 2) {
         Tagged<Object> func_ref = polymorphic->get(j);
-        int count = Smi::cast(polymorphic->get(j + 1)).value();
+        int count = Smi::ToInt(polymorphic->get(j + 1));
         fm.AddCallRefCandidate(WasmFuncRef::cast(func_ref), count);
       }
     } else if (IsSmi(value)) {
       // Uninitialized, or a direct call collecting call count.
-      uint32_t target = call_targets[i / 2];
-      if (target != FunctionTypeFeedback::kNonDirectCall) {
-        int count = Smi::cast(value).value();
-        fm.AddCall(static_cast<int>(target), count);
-      } else if (v8_flags.trace_wasm_inlining) {
-        PrintF("[function %d: call #%d: uninitialized]\n", func_index, i / 2);
+      if (sentinel_or_target == FunctionTypeFeedback::kNonDirectCall) {
+        DCHECK_EQ(Smi::ToInt(value), 0);
+        DCHECK_EQ(count, 0);
+        if (v8_flags.trace_wasm_inlining) {
+          PrintF("[function %d: call #%d: uninitialized]\n", func_index, i / 2);
+        }
+      } else {
+        // NOTE: The count may be zero, there is conceptually no "uninitialized
+        // call count" for direct calls.
+        fm.AddCall(static_cast<int>(sentinel_or_target), count);
       }
-    } else if (v8_flags.trace_wasm_inlining) {
-      if (value == ReadOnlyRoots{isolate_}.megamorphic_symbol()) {
+    } else {
+      DCHECK_EQ(value, ReadOnlyRoots{isolate_}.megamorphic_symbol());
+      DCHECK_EQ(count, 1);
+      if (v8_flags.trace_wasm_inlining) {
         PrintF("[function %d: call #%d: megamorphic]\n", func_index, i / 2);
       }
     }

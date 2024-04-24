@@ -7918,7 +7918,7 @@ class LiftoffCompiler {
 
     // One slot would be enough for call_direct, but would make index
     // computations much more complicated.
-    size_t vector_slot = encountered_call_instructions_.size() * 2;
+    size_t vector_slot = encountered_call_instructions_.size() * 2 + 1;
     if (inlining_enabled(decoder)) {
       encountered_call_instructions_.push_back(imm.index);
     }
