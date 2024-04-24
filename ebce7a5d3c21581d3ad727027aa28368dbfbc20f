@@ -39,6 +39,30 @@
       },
       "revId": "ebce7a5d3c21581d3ad727027aa28368dbfbc20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dcf76de_1be2a373",
+        "filename": "test/message/wasm-speculative-inlining.out",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T10:08:46Z",
+      "side": 1,
+      "message": "That\u0027s because the `std::priority_queue\u003cInliningTree*\u003e` is not stable, i.e., for elements with the same priority (`InliningTree::score` in our case, which is the same for all four callees here), it doesn\u0027t guarantee that elements are popped in insertion order. If we want to make this test not depend on such an implementation detail (and to make it less surprising), I could make the ordering stricter, namely lexicographic over `(score, function_index)`. WDYT?",
+      "parentUuid": "a8e98f70_0e2b6c27",
+      "range": {
+        "startLine": 13,
+        "startChar": 49,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "ebce7a5d3c21581d3ad727027aa28368dbfbc20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
