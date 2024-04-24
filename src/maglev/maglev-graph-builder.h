@@ -907,6 +907,16 @@ class MaglevGraphBuilder {
     static_assert(!NodeT::kProperties.can_lazy_deopt());
     static_assert(!NodeT::kProperties.can_throw());
     static_assert(!NodeT::kProperties.can_write());
+    if (has_graph_labeller()) {
+      graph_labeller()->RegisterNode(node, compilation_unit_,
+                                     BytecodeOffset(iterator_.current_offset()),
+                                     current_source_position_);
+    }
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cout << "  " << node << "  "
+                << PrintNodeLabel(graph_labeller(), node) << ": "
+                << PrintNode(graph_labeller(), node) << std::endl;
+    }
     return node;
   }
 
