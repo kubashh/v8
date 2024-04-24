@@ -121,9 +121,6 @@ void SharedFunctionInfo::SetData(Tagged<Object> value, ReleaseStoreTag tag,
 #ifdef V8_ENABLE_SANDBOX
   if (type == DataType::kTrusted) {
     DCHECK(IsExposedTrustedObject(value));
-    // Currently we only support BytecodeArray, InterpreterData, and Code.
-    // HasBytecodeArray relies on that.
-    DCHECK(IsBytecodeArray(value) || IsInterpreterData(value) || IsCode(value));
     // Only one of trusted_function_data and function_data can be in use.
     set_trusted_function_data(ExposedTrustedObject::cast(value), tag, mode);
     clear_function_data(kReleaseStore);
@@ -694,21 +691,21 @@ DEF_GETTER(SharedFunctionInfo, api_func_data, Tagged<FunctionTemplateInfo>) {
 
 DEF_GETTER(SharedFunctionInfo, HasBytecodeArray, bool) {
 #ifdef V8_ENABLE_SANDBOX
-  // The trusted_function_data field contains one of BytecodeArray, Code or
-  // InterpreterData (there is a DCHECK in SetData that guards this), so if it
-  // is set, we know that we have bytecode. If this ever changes, we could
-  // consider introducing a new flag to indicate whether bytecode is available.
-  return trusted_function_data_handle(kAcquireLoad) !=
-         kNullIndirectPointerHandle;
+  // For builtin SFIs in read-only space, we cannot get the isolate.
+  if (HasBuiltinId()) return false;
+  Tagged<Object> data = GetData(GetIsolateForSandbox(*this));
+  if (IsSmi(data)) return false;
+  InstanceType instance_type =
+      HeapObject::cast(data)->map(cage_base)->instance_type();
 #else
   Tagged<Object> data = function_data(kAcquireLoad);
   if (!IsHeapObject(data)) return false;
   InstanceType instance_type =
       HeapObject::cast(data)->map(cage_base)->instance_type();
+#endif
   return InstanceTypeChecker::IsBytecodeArray(instance_type) ||
          InstanceTypeChecker::IsInterpreterData(instance_type) ||
          InstanceTypeChecker::IsCode(instance_type);
-#endif
 }
 
 template <typename IsolateT>
@@ -877,19 +874,27 @@ bool SharedFunctionInfo::HasAsmWasmData() const {
 }
 
 bool SharedFunctionInfo::HasWasmFunctionData() const {
-  return IsWasmFunctionData(function_data(kAcquireLoad));
+  // For builtin SFIs in read-only space, we cannot get the isolate.
+  if (HasBuiltinId()) return false;
+  return IsWasmFunctionData(GetData(GetIsolateForSandbox(*this)));
 }
 
 bool SharedFunctionInfo::HasWasmExportedFunctionData() const {
-  return IsWasmExportedFunctionData(function_data(kAcquireLoad));
+  // For builtin SFIs in read-only space, we cannot get the isolate.
+  if (HasBuiltinId()) return false;
+  return IsWasmExportedFunctionData(GetData(GetIsolateForSandbox(*this)));
 }
 
 bool SharedFunctionInfo::HasWasmJSFunctionData() const {
-  return IsWasmJSFunctionData(function_data(kAcquireLoad));
+  // For builtin SFIs in read-only space, we cannot get the isolate.
+  if (HasBuiltinId()) return false;
+  return IsWasmJSFunctionData(GetData(GetIsolateForSandbox(*this)));
 }
 
 bool SharedFunctionInfo::HasWasmCapiFunctionData() const {
-  return IsWasmCapiFunctionData(function_data(kAcquireLoad));
+  // For builtin SFIs in read-only space, we cannot get the isolate.
+  if (HasBuiltinId()) return false;
+  return IsWasmCapiFunctionData(GetData(GetIsolateForSandbox(*this)));
 }
 
 bool SharedFunctionInfo::HasWasmResumeData() const {
@@ -937,25 +942,29 @@ int SharedFunctionInfo::wasm_function_index() const {
 
 DEF_GETTER(SharedFunctionInfo, wasm_function_data, Tagged<WasmFunctionData>) {
   DCHECK(HasWasmFunctionData());
-  return WasmFunctionData::cast(function_data(cage_base, kAcquireLoad));
+  return WasmFunctionData::cast(
+      trusted_function_data(GetIsolateForSandbox(*this), kAcquireLoad));
 }
 
 DEF_GETTER(SharedFunctionInfo, wasm_exported_function_data,
            Tagged<WasmExportedFunctionData>) {
   DCHECK(HasWasmExportedFunctionData());
-  return WasmExportedFunctionData::cast(function_data(cage_base, kAcquireLoad));
+  return WasmExportedFunctionData::cast(
+      trusted_function_data(GetIsolateForSandbox(*this), kAcquireLoad));
 }
 
 DEF_GETTER(SharedFunctionInfo, wasm_js_function_data,
            Tagged<WasmJSFunctionData>) {
   DCHECK(HasWasmJSFunctionData());
-  return WasmJSFunctionData::cast(function_data(cage_base, kAcquireLoad));
+  return WasmJSFunctionData::cast(
+      trusted_function_data(GetIsolateForSandbox(*this), kAcquireLoad));
 }
 
 DEF_GETTER(SharedFunctionInfo, wasm_capi_function_data,
            Tagged<WasmCapiFunctionData>) {
   DCHECK(HasWasmCapiFunctionData());
-  return WasmCapiFunctionData::cast(function_data(cage_base, kAcquireLoad));
+  return WasmCapiFunctionData::cast(
+      trusted_function_data(GetIsolateForSandbox(*this), kAcquireLoad));
 }
 
 DEF_GETTER(SharedFunctionInfo, wasm_resume_data, Tagged<WasmResumeData>) {

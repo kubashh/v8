@@ -440,9 +440,11 @@ Node* WasmGraphAssembler::LoadContextFromJSFunction(Node* js_function) {
 
 Node* WasmGraphAssembler::LoadFunctionDataFromJSFunction(Node* js_function) {
   Node* shared = LoadSharedFunctionInfo(js_function);
-  return LoadFromObject(
-      MachineType::TaggedPointer(), shared,
-      wasm::ObjectAccess::ToTagged(SharedFunctionInfo::kFunctionDataOffset));
+  return LoadTrustedPointerFromObject(
+      shared,
+      wasm::ObjectAccess::ToTagged(
+          SharedFunctionInfo::kTrustedFunctionDataOffset),
+      kWasmFunctionDataIndirectPointerTag);
 }
 
 Node* WasmGraphAssembler::LoadExportedFunctionIndexAsSmi(
