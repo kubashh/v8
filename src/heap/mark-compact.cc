@@ -3105,6 +3105,9 @@ bool MarkCompactCollector::ProcessOldBytecodeSFI(
   Isolate* const isolate = heap_->isolate();
   const bool bytecode_already_decompiled =
       flushing_candidate->HasUncompiledData();
+
+  // TODO(jkummerow): pretty sure I need to update this.
+
   const bool is_bytecode_live =
       !bytecode_already_decompiled &&
       non_atomic_marking_state_->IsMarked(
