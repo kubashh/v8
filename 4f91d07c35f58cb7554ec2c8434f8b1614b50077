@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d91bbe_d0e4b276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2024-04-24T09:03:51Z",
+      "side": 1,
+      "message": "Hi @Leszek, I found there are some missing nodes in the maglev graph building log. These missing nodes are created by the `CreateNewConstantNode` function. Here is an example of the output log:\n\n----------------------------------------\n\nBefore:\n  0x561516520418  n1: InitialValue(\u003cthis\u003e) → (x), 0 uses 🪦\n  0x5615165204b0  n2: InitialValue(a0) → (x), 0 uses 🪦\n  0x561516520910  n6: FunctionEntryStackCheck\n- Creating loop merge state at @19\n\n----------------------------------------\n\nAfter:\n  0x5a832a190668  n1: InitialValue(\u003cthis\u003e) → (x), 0 uses 🪦\n  0x5a832a190700  n2: InitialValue(a0) → (x), 0 uses 🪦\n  0x5a832a190978  n3: Constant(0x358400198acd \u003cJSFunction foo (sfi \u003d 0x3584001989b9)\u003e) → (x), 0 uses 🪦\n  0x5a832a1909f8  n4: Constant(0x358400198ab5 \u003cScriptContext[4]\u003e) → (x), 0 uses 🪦\n  0x5a832a190a78  n5: RootConstant(undefined_value) → (x), 0 uses 🪦\n  0x5a832a190b60  n6: FunctionEntryStackCheck\n- Creating loop merge state at @19\n\n----------------------------------------\n\nPlease take a look, thanks!",
+      "revId": "4f91d07c35f58cb7554ec2c8434f8b1614b50077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
