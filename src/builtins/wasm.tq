@@ -577,13 +577,13 @@ builtin WasmI64AtomicWait(
 
 // Vector format:
 // Two slots per call_ref instruction. These slots' values can be:
-// - uninitialized: (0, <unused>). Note: we use {0} as the sentinel because
-//   it also works as default for vector slots used as counts.
+// - uninitialized: (<unused>, 0 (smi)). Note: we use {0} as the sentinel
+//   because it also works as default for vector slots used as counts.
 // - monomorphic: (funcref, count (smi)). The second slot is a counter for how
 //   often the funcref in the first slot has been seen.
-// - polymorphic: (fixed_array, <unused>). In this case, the array
+// - polymorphic: (fixed_array, 1 (smi)). In this case, the array
 //   contains 2..kMaxPolymorphism pairs (funcref, count (smi))
-// - megamorphic: ("megamorphic" sentinel, <unused>)
+// - megamorphic: ("megamorphic" sentinel, 1 (smi))
 //
 // TODO(rstz): The counter might overflow if it exceeds the range of a Smi.
 // This can lead to incorrect inlining decisions.
@@ -609,7 +609,7 @@ macro UpdateCallRefIC(
     }
   }
   // All other cases are some sort of miss.
-  if (TaggedEqual(value, SmiConstant(0))) {
+  if (TaggedEqual(vector.objects[index + 1], SmiConstant(0))) {
     // Was uninitialized.
     vector.objects[index] = funcref;
     vector.objects[index + 1] = SmiConstant(1);
@@ -619,7 +619,7 @@ macro UpdateCallRefIC(
     const kMaxSlots = kMaxPolymorphism * 2;  // 2 slots per entry.
     if (entries.length == SmiConstant(kMaxSlots)) {
       vector.objects[index] = ic::kMegamorphicSymbol;
-      vector.objects[index + 1] = ic::kMegamorphicSymbol;
+      dcheck(TaggedEqual(vector.objects[index + 1], SmiConstant(1)));
     } else {
       const newEntries = UnsafeCast<FixedArray>(AllocateFixedArray(
           ElementsKind::PACKED_ELEMENTS, entries.length_intptr + 2,
@@ -641,12 +641,12 @@ macro UpdateCallRefIC(
     newEntries.objects[2] = funcref;
     newEntries.objects[3] = SmiConstant(1);
     vector.objects[index] = newEntries;
-    // Clear the first entry's counter; the specific value we write doesn't
-    // matter.
-    vector.objects[index + 1] = Undefined;
+    // Clear the first entry's counter, and make sure it is not a Smi(0).
+    vector.objects[index + 1] = SmiConstant(1);
   } else {
     // The "ic::IsMegamorphic(value)" case doesn't need to do anything.
     dcheck(value == ic::kMegamorphicSymbol);
+    dcheck(TaggedEqual(vector.objects[index + 1], SmiConstant(1)));
   }
 }
 
