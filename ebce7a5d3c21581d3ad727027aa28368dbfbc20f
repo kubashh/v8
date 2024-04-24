@@ -87,6 +87,30 @@
       },
       "revId": "ebce7a5d3c21581d3ad727027aa28368dbfbc20f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ee13de_2573448b",
+        "filename": "test/message/wasm-speculative-inlining.out",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-24T10:35:00Z",
+      "side": 1,
+      "message": "I think it\u0027s worth making the test case more stable; I don\u0027t think it\u0027s worth making production code more complicated for that (because I\u0027d expect any real-world performance fluctuations that could be caused by this to be lost in the noise).\n\nSo my suggestion would be to slightly tune the feedback-collecting `for`-loops in lines 46-51 to give earlier callees a few more calls:\n```\n  for (let i \u003d 0; i \u003c 10; i++) {\n    // Call each of the `callee`s except the last one to collect feedback.\n    // Let the call count depend on the callee index to make their ordering\n    // (and hence the test\u0027s tracing output) stable over std::priority_queue\n    // internals.\n    for (let j \u003d 0; j \u003c callee_count; j++) {\n      if (i + j \u003e\u003d 10) continue;\n      assertEquals(10 + j, instance.exports.main(10, j));\n    }\n  }\n```",
+      "parentUuid": "4dcf76de_1be2a373",
+      "range": {
+        "startLine": 13,
+        "startChar": 49,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "ebce7a5d3c21581d3ad727027aa28368dbfbc20f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
