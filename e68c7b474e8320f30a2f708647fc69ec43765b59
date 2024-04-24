@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "231c528d_f49b62b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T11:24:06Z",
+      "side": 1,
+      "message": "I think the commit message and title were adding to the confusion, since they munched together three mostly orthogonal points. I hope the edited one makes more sense.",
+      "parentUuid": "b41aa65f_a9500988",
+      "range": {
+        "startLine": 10,
+        "startChar": 3,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbaa5075_c4337058",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -108,6 +132,24 @@
       "writtenOn": "2024-04-22T18:35:23Z",
       "side": 1,
       "message": "I\u0027m afraid I have rather intrusive comments. But the good news is that I think there are actually fewer constraints here than this CL appears to assume, so these changes are largely just not necessary.",
+      "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b38501b_24c9211d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-04-24T11:24:06Z",
+      "side": 1,
+      "message": "Thanks for the review! I think you are right, especially points 2 and 3 in the updated commit message are not essential. Let me put this refactoring on hold and just upload a CL with the call_indirect feedback collection/processing.",
+      "parentUuid": "0125be68_0a6bcf2e",
       "revId": "e68c7b474e8320f30a2f708647fc69ec43765b59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
