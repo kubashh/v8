@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a86905d7_2ad95ef2",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-24T11:45:30Z",
+      "side": 1,
+      "message": "I guess an alternative directory layout would have been to have `sandbox/regress/...`. No strong opinion here though.",
+      "range": {
+        "startLine": 292,
+        "startChar": 3,
+        "endLine": 292,
+        "endChar": 10
+      },
+      "revId": "d7ffed5a4d73a47039a9cc31aade87a6e888d182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
