@@ -148,6 +148,8 @@ namespace internal {
   IF_WASM(V, _, ASM_WASM_DATA_TYPE, AsmWasmData, asm_wasm_data)               \
   V(_, ASYNC_GENERATOR_REQUEST_TYPE, AsyncGeneratorRequest,                   \
     async_generator_request)                                                  \
+  V(_, ASYNC_LOCKED_WAITER_WRAPPER_TYPE, AsyncLockedWaiterWrapper,            \
+    async_locked_waiter_wrapper)                                              \
   V(_, BREAK_POINT_TYPE, BreakPoint, break_point)                             \
   V(_, BREAK_POINT_INFO_TYPE, BreakPointInfo, break_point_info)               \
   V(_, BYTECODE_WRAPPER_TYPE, BytecodeWrapper, bytecode_wrapper)              \
