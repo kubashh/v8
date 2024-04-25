@@ -16,6 +16,75 @@
       "message": "PTAL!",
       "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b5bdd5d_7839c153",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7998,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-25T09:14:34Z",
+      "side": 1,
+      "message": "could you instead base this off the elements type? For top-level it should be `CapturedValue::kArgumentsElements`, otherwise it\u0027ll be a fixed array",
+      "range": {
+        "startLine": 7998,
+        "startChar": 23,
+        "endLine": 7998,
+        "endChar": 48
+      },
+      "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42f4ada5_74e38a41",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8027,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-25T09:14:34Z",
+      "side": 1,
+      "message": "wait, so the elements of the inlined arguments object is a runtime value which points to an InlinedAllocation with a captured FixedArray object? Why isn\u0027t it the FixedArray directly?",
+      "range": {
+        "startLine": 8027,
+        "startChar": 21,
+        "endLine": 8027,
+        "endChar": 44
+      },
+      "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c9d7420_a3cda1af",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-25T09:14:34Z",
+      "side": 1,
+      "message": "base::IsInRange",
+      "range": {
+        "startLine": 909,
+        "startChar": 4,
+        "endLine": 909,
+        "endChar": 10
+      },
+      "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
