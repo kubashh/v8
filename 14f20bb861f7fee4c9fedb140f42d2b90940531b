@@ -16,6 +16,23 @@
       "message": "The trybot now works with specifying the deployment target.",
       "revId": "14f20bb861f7fee4c9fedb140f42d2b90940531b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "decd7253_2647976f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2024-04-25T21:57:45Z",
+      "side": 1,
+      "message": "lgtm (no +1 permissions though)",
+      "revId": "14f20bb861f7fee4c9fedb140f42d2b90940531b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
