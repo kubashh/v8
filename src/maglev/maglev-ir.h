@@ -7,6 +7,7 @@
 
 #include "src/base/bit-field.h"
 #include "src/base/bits.h"
+#include "src/base/bounds.h"
 #include "src/base/discriminated-union.h"
 #include "src/base/enum-set.h"
 #include "src/base/logging.h"
@@ -869,6 +870,15 @@ struct CapturedValue;
 
 class CapturedObject {
  public:
+  enum Tag {
+    kDefault,
+    kFixedArray,
+    kStrictArgumentsObject,
+    kSloppyUnmappedArgumentsObject,
+    kSloppyMappedArgumentsObject,
+    kRestParameter,
+  };
+
   static CapturedObject CreateJSObject(Zone* zone, compiler::MapRef map);
   static CapturedObject CreateJSArray(Zone* zone, compiler::MapRef map,
                                       ValueNode* length);
@@ -882,7 +892,7 @@ class CapturedObject {
       compiler::ScopeInfoRef scope_info, ValueNode* previous_context,
       base::Optional<ValueNode*> extension = {});
   static CapturedObject CreateArgumentsObject(
-      Zone* zone, compiler::MapRef map, CapturedValue length,
+      Zone* zone, Tag tag, compiler::MapRef map, CapturedValue length,
       CapturedValue elements, base::Optional<ValueNode*> callee = {});
   static CapturedObject CreateMappedArgumentsElements(
       Zone* zone, compiler::MapRef map, int mapped_count, ValueNode* context,
@@ -890,6 +900,16 @@ class CapturedObject {
   static CapturedObject CreateRegExpLiteral(
       Zone* zone, compiler::JSHeapBroker* broker, compiler::MapRef map,
       compiler::RegExpBoilerplateDescriptionRef literal);
+
+  bool IsArgumentsObject() const {
+    return base::IsInRange(tag_, kStrictArgumentsObject, kRestParameter);
+  }
+
+  bool IsSloppyMappedArgumentsObject() const {
+    return tag_ == kSloppyMappedArgumentsObject;
+  }
+  bool IsRestParameter() const { return tag_ == kRestParameter; }
+  bool IsFixedArray() const { return tag_ == kFixedArray; }
 
   template <typename T>
   inline void set(int offset, T value);
@@ -917,13 +937,15 @@ class CapturedObject {
   inline Iterator end() const;
 
  private:
-  CapturedObject(Zone* zone, int slot_count)
-      : slot_count_(slot_count),
+  CapturedObject(Zone* zone, int slot_count, Tag tag = kDefault)
+      : tag_(tag),
+        slot_count_(slot_count),
         slots_(zone->AllocateArray<CapturedValue>(slot_count)) {}
 
   void ClearSlots(int last_init_slot);
   void set(int offset, CapturedValue&& value);
 
+  Tag tag_;
   int slot_count_;
   CapturedValue* slots_;
 };
@@ -960,6 +982,7 @@ struct CapturedValue {
 
   bool IsValidRuntimeValue() const;
   size_t InputLocationSizeNeeded() const;
+  std::optional<CapturedObject> GetObjectFromAllocation() const;
 
   enum Type {
     kUninitalized,
@@ -8131,7 +8154,7 @@ class CallForwardVarargs : public ValueNodeT<CallForwardVarargs> {
   int MaxCallStackArgs() const;
   void SetValueLocationConstraints();
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
-  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
  private:
   int start_index_;
