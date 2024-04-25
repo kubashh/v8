@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f98ebf62_dc90cf98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-25T11:53:27Z",
+      "side": 1,
+      "message": "PTAL.\n\nSamuel: main review please. Reviewer\u0027s guidance: start with `wasm-objects.tq`, then `shared-function-info*`.\n\nMichael: for src/heap/OWNERS (trivial; those types get their visitors defined via the `TRUSTED_VISITOR_ID_LIST` now).",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
