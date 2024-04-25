@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5a8212c_8325d542",
+        "filename": "test/mjsunit/shared-memory/condition-async-wait-realm-disposed.js",
+        "patchSetId": 47
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "I was hoping that the realm\u0027s native context was collected after these calls, but it seems like that\u0027s not always the case. Is there a way to guarantee this?",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 11
+      },
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b8dfaec_c0bc1129",
+        "filename": "test/mjsunit/shared-memory/mutex-async-lock-realm-disposed.js",
+        "patchSetId": 47
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "ditto from `test/mjsunit/shared-memory/condition-async-wait-realm-disposed.js`",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 9
+      },
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e34f8b02_ec6a3563",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 1988,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Got it, added code to lazily handle them in the \u0027HandleAsyncNotify` and `HandleAsyncTimeout` functions. Also changed the realm-related tests.",
+      "parentUuid": "8d99c20f_8a70bd32",
+      "range": {
+        "startLine": 1986,
+        "startChar": 4,
+        "endLine": 1988,
+        "endChar": 5
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddbf8020_187716f3",
@@ -363,6 +387,30 @@
       "side": 1,
       "message": "The norm right now is to unconditionally create SFIs in `setup-heap-internal.cc`, even for flagged features. For example, `shadow_realm_import_value_fulfilled_sfi`.",
       "parentUuid": "70de0271_f65d41d7",
+      "range": {
+        "startLine": 355,
+        "startChar": 2,
+        "endLine": 360,
+        "endChar": 37
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b49806a3_992fa5d4",
+        "filename": "src/roots/roots.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Done, removed the code setup code from `bootstrapper.cc`.",
+      "parentUuid": "2ce6c415_3c8b77d5",
       "range": {
         "startLine": 355,
         "startChar": 2,

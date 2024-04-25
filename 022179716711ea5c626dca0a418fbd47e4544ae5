@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb4042c_ea5c5b13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "@syg@chromium.org Can you take another look? here is a summary of what changed since your last review:\n\n1.Replaced the realm teardown logic with code inside the HandleAsyncTimeout and HandleAsyncNotify functions which lazily handles nodes whose native context as deleted. Modified the related test.\n2.Remove the AsyncLockedWaiterWrapper class that I introduced so promises could keep a references to the waiters in the isolate’s asyncLockedWaitersQueue by JSExternalPointers.\n3.Made the async lock reject and resolve handlers reuse code, fixing an issue caused because I updated one and not the other.\n4.Remove waiters from the corresponding lists on timeout.\n\nAdditionally, both realm-disposed tests are flaky, but it feels like the test itself is not correct, I’d appreciate some help to get it to tests what I want.\nLink to the flakes: https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_asan_rel/b8749655192590801105/test-results?sortby\u003d\u0026groupby\u003d",
+      "revId": "022179716711ea5c626dca0a418fbd47e4544ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ab92c61_70a27707",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 38
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27e8576a_e20a321b",
+      "range": {
+        "startLine": 890,
+        "startChar": 7,
+        "endLine": 890,
+        "endChar": 44
+      },
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b6a9796_6c5fb8cb",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-04-23T21:00:52Z",
       "side": 1,
       "message": "This shouldn\u0027t be needed, as `~Global()` already does a `Reset()`.",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6edf9866_0d807cf7",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b6a9796_6c5fb8cb",
       "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b268bbdd_5fdf7de1",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6eab4359_4ac3d6c8",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e12aaab6_286a701d",
@@ -198,6 +258,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7594fed_7e4931e4",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "It\u0027s already marked with `V8_INLINE`",
+      "parentUuid": "cb6e1d16_4d25e8b2",
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33527c3c_7fc10c86",
@@ -211,6 +289,30 @@
       "writtenOn": "2024-04-23T21:00:52Z",
       "side": 1,
       "message": "```suggestion\nHandle\u003cJSPromise\u003e JSAtomicsMutex::LockOrEnqueuePromise(\n```",
+      "range": {
+        "startLine": 824,
+        "startChar": 34,
+        "endLine": 824,
+        "endChar": 52
+      },
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08900a20_f5dd46cb",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33527c3c_7fc10c86",
       "range": {
         "startLine": 824,
         "startChar": 34,
@@ -287,6 +389,30 @@
       "writtenOn": "2024-04-23T21:00:52Z",
       "side": 1,
       "message": "```suggestion\n  // node in the C++ heap. Its lifetime is managed by the requester\u0027s\n```",
+      "range": {
+        "startLine": 894,
+        "startChar": 27,
+        "endLine": 894,
+        "endChar": 31
+      },
+      "revId": "a5dd2675de5747129d3f9b265810eecb10dee777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ee15156_ea941a32",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-04-25T20:46:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b0ba3f8_30e7b24e",
       "range": {
         "startLine": 894,
         "startChar": 27,
