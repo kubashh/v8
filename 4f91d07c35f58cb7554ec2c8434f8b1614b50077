@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef7e9b0_8e4586fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2024-04-25T03:20:44Z",
+      "side": 1,
+      "message": "Thanks, I moved the register node operation into `CreateNewConstantNode`.",
+      "parentUuid": "836b13a0_6f11e411",
+      "revId": "4f91d07c35f58cb7554ec2c8434f8b1614b50077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27029662_16f98971",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-04-24T09:09:11Z",
       "side": 1,
       "message": "don\u0027t attach positions to constant nodes, constants conceptually don\u0027t have a location.",
+      "range": {
+        "startLine": 912,
+        "startChar": 37,
+        "endLine": 913,
+        "endChar": 61
+      },
+      "revId": "4f91d07c35f58cb7554ec2c8434f8b1614b50077",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28fab7f5_21183efb",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2024-04-25T03:20:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27029662_16f98971",
       "range": {
         "startLine": 912,
         "startChar": 37,
