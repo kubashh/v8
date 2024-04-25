@@ -11,6 +11,7 @@
 
 #include "src/base/utils/random-number-generator.h"
 #include "src/compiler/backend/instruction-selector.h"
+#include "src/compiler/js-heap-broker.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/instruction-selection-normalization-reducer.h"
@@ -116,11 +117,12 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
   ~TurboshaftInstructionSelectorTest() override;
 
   void SetUp() override {
-    pipeline_data_.emplace(TurboshaftPipelineKind::kJS, info_, schedule_,
-                           graph_zone_, this->zone(), broker_, isolate_,
-                           source_positions_, node_origins_, sequence_, frame_,
-                           assembler_options_, &max_unoptimized_frame_height_,
-                           &max_pushed_argument_count_, instruction_zone_);
+    UNIMPLEMENTED();
+    // pipeline_data_.emplace(TurboshaftPipelineKind::kJS, info_, schedule_,
+    //                        graph_zone_, this->zone(), broker_, isolate_,
+    //                        source_positions_, node_origins_, sequence_, frame_,
+    //                        assembler_options_, &max_unoptimized_frame_height_,
+    //                        &max_pushed_argument_count_, instruction_zone_);
   }
   void TearDown() override { pipeline_data_.reset(); }
 
@@ -548,16 +550,17 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
   OptimizedCompilationInfo* info_ = nullptr;
   Schedule* schedule_ = nullptr;
   Zone* graph_zone_ = this->zone();
-  JSHeapBroker* broker_ = nullptr;
+  std::unique_ptr<JSHeapBroker> broker_;
   Isolate* isolate_ = this->isolate();
-  SourcePositionTable* source_positions_ = nullptr;
-  NodeOriginTable* node_origins_ = nullptr;
-  InstructionSequence* sequence_ = nullptr;
-  Frame* frame_ = nullptr;
+  ZoneWithNamePointer<SourcePositionTable, kGraphZoneName> source_positions_ = nullptr;
+  ZoneWithNamePointer<NodeOriginTable, kGraphZoneName> node_origins_ = nullptr;
+  ZoneWithNamePointer<InstructionSequence, kInstructionZoneName> sequence_ =
+      nullptr;
+  ZoneWithNamePointer<Frame, kCodegenZoneName> frame_ = nullptr;
   AssemblerOptions assembler_options_;
   size_t max_unoptimized_frame_height_ = 0;
   size_t max_pushed_argument_count_ = 0;
-  Zone* instruction_zone_ = this->zone();
+  ZoneWithName<kInstructionZoneName> instruction_zone_ = this->zone();
 
   base::Optional<turboshaft::PipelineData::Scope> pipeline_data_;
 };

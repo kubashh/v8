@@ -105,10 +105,14 @@ class V8_EXPORT_PRIVATE TurboshaftSpecialRPONumberer {
 
 V8_EXPORT_PRIVATE void PropagateDeferred(Graph& graph);
 
-struct InstructionSelectionPhase {
+struct InstructionSelectionPhase : public Phase<false> {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(InstructionSelection)
 
   base::Optional<BailoutReason> Run(Zone* temp_zone,
+                                    const CallDescriptor* call_descriptor,
+                                    Linkage* linkage, CodeTracer* code_tracer);
+  base::Optional<BailoutReason> Run(DataComponentProvider* data_provider,
+                                    Zone* temp_zone,
                                     const CallDescriptor* call_descriptor,
                                     Linkage* linkage, CodeTracer* code_tracer);
 };
