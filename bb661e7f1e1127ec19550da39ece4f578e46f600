@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d03e46_c258439a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7998,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-25T10:26:09Z",
+      "side": 1,
+      "message": "Yes. Done.\n\nAs discussed offline, tag is a cache map of the object. I also simplified the tags and added FixedArray (removed TopLevel and Inlined versions of the arguments).",
+      "parentUuid": "3b5bdd5d_7839c153",
+      "range": {
+        "startLine": 7998,
+        "startChar": 23,
+        "endLine": 7998,
+        "endChar": 48
+      },
+      "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42f4ada5_74e38a41",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd4c4efb_d5267242",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8027,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-25T10:26:09Z",
+      "side": 1,
+      "message": "After \"allocation\", we wrap every CapturedObject in an InlinedAllocation.",
+      "parentUuid": "42f4ada5_74e38a41",
+      "range": {
+        "startLine": 8027,
+        "startChar": 21,
+        "endLine": 8027,
+        "endChar": 44
+      },
+      "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c9d7420_a3cda1af",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-04-25T09:14:34Z",
       "side": 1,
       "message": "base::IsInRange",
+      "range": {
+        "startLine": 909,
+        "startChar": 4,
+        "endLine": 909,
+        "endChar": 10
+      },
+      "revId": "bb661e7f1e1127ec19550da39ece4f578e46f600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cff1acd7_5d354e48",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-04-25T10:26:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c9d7420_a3cda1af",
       "range": {
         "startLine": 909,
         "startChar": 4,
