@@ -16,6 +16,46 @@
       "message": "Marja, PTAL, thanks!",
       "revId": "83791b5ee24136a9518c6177360ae95aea0ba0cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56446a41_79fe2eca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-04-25T06:38:45Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "83791b5ee24136a9518c6177360ae95aea0ba0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8adbc16d_209ec39a",
+        "filename": "src/builtins/typed-array.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-04-25T06:38:45Z",
+      "side": 1,
+      "message": "Should this now be a check instead of dcheck, since you\u0027re replacing \"StoreJSAny(...) otherwise unreachable\" (which I hope is a release-mode thing) with calling this func?",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 37
+      },
+      "revId": "83791b5ee24136a9518c6177360ae95aea0ba0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
