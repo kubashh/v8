@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad115a6c_9a3a4aa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T12:16:59Z",
+      "side": 1,
+      "message": "Should be ready for review, but I\u0027ll wait until Monday before landing it :)",
+      "revId": "f33a987355402a06495c17b8924c7ddded85d370",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
