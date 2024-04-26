@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "270f8322_10747b72",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T09:31:04Z",
+      "side": 1,
+      "message": "The counter is in theory allowed to overflow as it\u0027s really just used as a snapshot.",
+      "parentUuid": "27198d76_0af99ccf",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb972594_bf900a9b",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f3c4fe_e4cce263",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T09:31:04Z",
+      "side": 1,
+      "message": "Unfortunately we are in `cppgc` land, so we only have access to `base/` which doesn\u0027t have the cancelable primitives. We also have different task handles here with a TODO being left that we should try to migrate/convert this somehow.\n\nI don\u0027t think I can fix this for now.",
+      "parentUuid": "eb972594_bf900a9b",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11d804b3_a7741d98",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-04-26T08:53:43Z",
       "side": 1,
       "message": "Nit: Maybe mention motivation as well.",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba28a791_232bd0e7",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T09:31:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11d804b3_a7741d98",
       "revId": "6f14a42351142e251c036213e8270125a93925c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
