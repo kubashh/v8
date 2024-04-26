@@ -82,14 +82,10 @@ class FrameDescription {
     }
   }
 
-  void* operator new(size_t size, uint32_t frame_size) {
-    // Subtracts kSystemPointerSize, as the member frame_content_ already
-    // supplies the first element of the area to store the frame.
-    return base::Malloc(size + frame_size - kSystemPointerSize);
-  }
-
-  void operator delete(void* pointer, uint32_t frame_size) {
-    base::Free(pointer);
+  static FrameDescription* Create(uint32_t frame_size, int parameter_count,
+                                  Isolate* isolate) {
+    return new (frame_size)
+        FrameDescription(frame_size, parameter_count, isolate);
   }
 
   void operator delete(void* description) { base::Free(description); }
@@ -188,6 +184,12 @@ class FrameDescription {
   }
 
  private:
+  void* operator new(size_t size, uint32_t frame_size) {
+    // Subtracts kSystemPointerSize, as the member frame_content_ already
+    // supplies the first element of the area to store the frame.
+    return base::Malloc(size + frame_size - kSystemPointerSize);
+  }
+
   static const uint32_t kZapUint32 = 0xbeeddead;
 
   // Frame_size_ must hold a uint32_t value.  It is only a uintptr_t to
