@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "845c9011_50eb7b73",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "Good question: I switched this back and forth and landed on using the idle delay simply because we are running with \"idle tasks\". \n\nUsing the smaller delay, we\u0027d switch to prioritizing regular tasks again (because we likely don\u0027t get idle tasks in 5ms).\n\nI added this as comment.",
+      "parentUuid": "a65694ec_aa954268",
+      "range": {
+        "startLine": 924,
+        "startChar": 36,
+        "endLine": 924,
+        "endChar": 72
+      },
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91a19c89_ad12b1f5",
@@ -88,6 +112,24 @@
       "writtenOn": "2024-04-26T10:27:34Z",
       "side": 1,
       "message": "I don\u0027t remember, but why should do we null this out (and the platform_) above? Seems like this state should never change across sweeper invocations.",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26719bd3_b12acdac",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "platform is a raw pointer here. I agree that we should keep the handles across sweeper invocations. \n\nWill adjust this in a follow up.",
+      "parentUuid": "91a19c89_ad12b1f5",
       "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +157,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f97a996c_653c7383",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "I agree and removed it.\n\nFrom local experiments we always seem to get the full remaining idle time...",
+      "parentUuid": "35491321_e3845b57",
+      "range": {
+        "startLine": 1210,
+        "startChar": 0,
+        "endLine": 1210,
+        "endChar": 77
+      },
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fadaf9d_d724237a",
@@ -128,6 +194,24 @@
       "writtenOn": "2024-04-26T10:27:34Z",
       "side": 1,
       "message": "shall it be a dcheck instead that this never happens?",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b25052b_3d833477",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fadaf9d_d724237a",
       "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -149,6 +233,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e7793be_f6508cfe",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f87f14e1_4458deca",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "addb7851_9926454d",
@@ -162,6 +264,30 @@
       "writtenOn": "2024-04-26T10:27:34Z",
       "side": 1,
       "message": "Now accounting ignores `AllocatedExternalMemorySinceMarkCompact()`. I guess this is intentional since cppgc wants to ignore the external memory percent for the new sweeper heuristics?",
+      "range": {
+        "startLine": 5499,
+        "startChar": 24,
+        "endLine": 5499,
+        "endChar": 50
+      },
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e423e7d7_3717fb86",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "The counter that takes the snapshot (`global_memory_at_last_gc_`) doesn\u0027t account for `AllocatedExternalMemorySinceMarkCompact()`. So, the current value shouldn\u0027t consider it either, otherwise, we mix up counters.\n\n(This was all very wrong...)",
+      "parentUuid": "addb7851_9926454d",
       "range": {
         "startLine": 5499,
         "startChar": 24,

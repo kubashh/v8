@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6a2621_925cd747",
+        "filename": "src/heap/cppgc/sweeper.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d483c85_6a316b10",
+      "range": {
+        "startLine": 56,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 29
+      },
+      "revId": "a8b3323a045d867ea90a39059eedbd31482e3479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c13a513_75caee44",
@@ -101,6 +125,30 @@
       "writtenOn": "2024-04-24T15:22:59Z",
       "side": 1,
       "message": "This is necessary as Oilpan limit computation is currently buggy and is based on the live+dead memory. I will fix this in a followup. At the same time it seems like a good idea to establish bounds.",
+      "range": {
+        "startLine": 5483,
+        "startChar": 14,
+        "endLine": 5483,
+        "endChar": 15
+      },
+      "revId": "a8b3323a045d867ea90a39059eedbd31482e3479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5063cb65_10024dfe",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 5483,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-04-26T10:49:55Z",
+      "side": 1,
+      "message": "Resolving.",
+      "parentUuid": "4c13a513_75caee44",
       "range": {
         "startLine": 5483,
         "startChar": 14,
