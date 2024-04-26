@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8928d41b_6fe822d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-04-26T06:55:45Z",
+      "side": 1,
+      "message": "Ah, the link in CL desc was helful, thanks!",
+      "revId": "6189131c4d04868010eba5d6b538e2d0f5f9afb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
