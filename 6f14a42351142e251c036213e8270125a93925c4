@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b86398_94f30011",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-26T08:53:43Z",
+      "side": 1,
+      "message": "Cool! LGTM with comment",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27198d76_0af99ccf",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-26T08:53:43Z",
+      "side": 1,
+      "message": "Nit: DCHECK here that idle_task_count_ is \u003e\u003d saved_idle_task_count_?",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb972594_bf900a9b",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-26T08:53:43Z",
+      "side": 1,
+      "message": "The logic around `regular_task_is_delayed_idle_task_` was quite hard for me to follow. We kinda add this logic to the regular sweeping task. Could we get rid of this field and that logic if we would post a separate task like this here:\n\n(The lambda syntax likely doesn\u0027t work but MakeCancelableTask should I think)\n\n```\nforeground_task_runner_.PostDelayedTask([]() {\n        ScheduleIdleIncrementalSweeping();\n        ScheduleIncrementalSweeping(kDelayWhileIdleSweepingMakesProgress);\n});\n```",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11d804b3_a7741d98",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-04-26T08:53:43Z",
+      "side": 1,
+      "message": "Nit: Maybe mention motivation as well.",
+      "revId": "6f14a42351142e251c036213e8270125a93925c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
