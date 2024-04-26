@@ -16,6 +16,24 @@
       "message": "@syg@chromium.org Can you take another look? here is a summary of what changed since your last review:\n\n1.Replaced the realm teardown logic with code inside the HandleAsyncTimeout and HandleAsyncNotify functions which lazily handles nodes whose native context as deleted. Modified the related test.\n2.Remove the AsyncLockedWaiterWrapper class that I introduced so promises could keep a references to the waiters in the isolate’s asyncLockedWaitersQueue by JSExternalPointers.\n3.Made the async lock reject and resolve handlers reuse code, fixing an issue caused because I updated one and not the other.\n4.Remove waiters from the corresponding lists on timeout.\n\nAdditionally, both realm-disposed tests are flaky, but it feels like the test itself is not correct, I’d appreciate some help to get it to tests what I want.\nLink to the flakes: https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_asan_rel/b8749655192590801105/test-results?sortby\u003d\u0026groupby\u003d",
       "revId": "022179716711ea5c626dca0a418fbd47e4544ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f9190c4_445dfc9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 46
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-26T21:26:13Z",
+      "side": 1,
+      "message": "Thanks!\n\nThe flake took quite a while to track down, but I *think* it\u0027s because of a race between a background lazy compile and the notify. There might be a background lazy compile task enqueued to compile the function inside `realmScript`. This task has a `PersistentHandles` which ends up (ultimately) rooting that Realm\u0027s `NativeContext`, keeping everything alive. If this task is still active during the major GC, then the Realm\u0027s `NativeContext` ends up being live.\n\nThe tests that depend on GC timing + Realm disposal should pass `--no-lazy-compile-dispatcher`.\n\nI guess technically the same thing can happen with background optimization tasks, so maybe also `--no-concurrent-recompilation`?",
+      "parentUuid": "ddb4042c_ea5c5b13",
+      "revId": "022179716711ea5c626dca0a418fbd47e4544ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

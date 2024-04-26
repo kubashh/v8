@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5db34c6d_e7258975",
+        "filename": "test/mjsunit/shared-memory/condition-async-wait-realm-disposed.js",
+        "patchSetId": 47
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-26T21:26:13Z",
+      "side": 1,
+      "message": "Instead of calling synchronous gc, you should do `gc({ type: \u0027major\u0027, execution: \u0027async\u0027 })`, which returns a promise you can `.then` or `await`.",
+      "parentUuid": "c5a8212c_8325d542",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 62,
+        "endChar": 11
+      },
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5b8dfaec_c0bc1129",
         "filename": "test/mjsunit/shared-memory/mutex-async-lock-realm-disposed.js",
         "patchSetId": 47
