@@ -9,9 +9,12 @@
 
 namespace v8::internal::compiler::turboshaft {
 
-struct DecompressionOptimizationPhase {
+class DataComponentProvider;
+
+struct DecompressionOptimizationPhase : public Phase<true> {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(DecompressionOpt)
 
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
   void Run(Zone* temp_zone);
 };
 

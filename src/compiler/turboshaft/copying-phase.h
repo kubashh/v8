@@ -21,6 +21,7 @@
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/turboshaft/reducer-traits.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/turboshaft/snapshot-table.h"
@@ -138,7 +139,8 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
       }
     }
     // Updating the operation origins.
-    NodeOriginTable* origins = PipelineData::Get().node_origins();
+
+    NodeOriginTable* origins = Asm().node_origins();
     if (origins) {
       for (OpIndex index : Asm().output_graph().AllOperationIndices()) {
         OpIndex origin = Asm().output_graph().operation_origins()[index];
@@ -1005,10 +1007,11 @@ class TSAssembler;
 template <template <class> class... Reducers>
 class CopyingPhaseImpl {
  public:
-  static void Run(Graph& input_graph, Zone* phase_zone,
-                  bool trace_reductions = false) {
+  static void Run(DataComponentProvider* data_provider, Graph& input_graph,
+                  Zone* phase_zone, bool trace_reductions = false) {
     TSAssembler<GraphVisitor, Reducers...> phase(
-        input_graph, input_graph.GetOrCreateCompanion(), phase_zone);
+        data_provider, input_graph, input_graph.GetOrCreateCompanion(),
+        phase_zone);
 #ifdef DEBUG
     if (trace_reductions) {
       phase.template VisitGraph<true>();
@@ -1028,7 +1031,16 @@ class CopyingPhase {
     PipelineData& data = PipelineData::Get();
     Graph& input_graph = data.graph();
     CopyingPhaseImpl<Reducers...>::Run(
-        input_graph, phase_zone, data.info()->turboshaft_trace_reduction());
+        nullptr, input_graph, phase_zone,
+        data.info()->turboshaft_trace_reduction());
+  }
+
+  static void Run(DataComponentProvider* data_provider, Zone* phase_zone) {
+    Graph* input_graph =
+        data_provider ? data_provider->GetDataComponent<GraphData>().graph
+                      : &PipelineData::Get().graph();
+    CopyingPhaseImpl<Reducers...>::Run(data_provider, *input_graph, phase_zone,
+                                       false);  // TODO
   }
 };
 

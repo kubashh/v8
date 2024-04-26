@@ -132,6 +132,10 @@
   # to verify this tests assumptions (static_assert). We should improve it and
   # reenable this test.
   'test-torque/TestLoadEliminationVariable': [SKIP],
+
+  # TODO(nicohartmann@): Currently not supported. Reenable once Turboshaft pipeline is ready.
+  'turboshaft-test-branch-combine/*': [SKIP],
+  'turboshaft-test-select-combine/*': [SKIP],
 }],  # ALWAYS
 
 ##############################################################################
