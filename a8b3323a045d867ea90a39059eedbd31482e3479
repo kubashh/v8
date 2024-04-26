@@ -67,6 +67,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d483c85_6a316b10",
+        "filename": "src/heap/cppgc/sweeper.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "nit: since we already pass the config param, should it perhaps be part of it?",
+      "range": {
+        "startLine": 56,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 29
+      },
+      "revId": "a8b3323a045d867ea90a39059eedbd31482e3479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c13a513_75caee44",
         "filename": "src/heap/heap.cc",
         "patchSetId": 13

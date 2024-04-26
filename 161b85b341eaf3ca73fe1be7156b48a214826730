@@ -16,6 +16,143 @@
       "message": "Thanks",
       "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee233c76_0f56614d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "Sorry for the delay.",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a65694ec_aa954268",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "why is it not `kDelayWhileConcurrentSweepingMakesProgress`?",
+      "range": {
+        "startLine": 924,
+        "startChar": 36,
+        "endLine": 924,
+        "endChar": 72
+      },
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91a19c89_ad12b1f5",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "I don\u0027t remember, but why should do we null this out (and the platform_) above? Seems like this state should never change across sweeper invocations.",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35491321_e3845b57",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "I guess we want to be generous here, but shouldn\u0027t conceptually it be better handled by the scheduler?",
+      "range": {
+        "startLine": 1210,
+        "startChar": 0,
+        "endLine": 1210,
+        "endChar": 77
+      },
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fadaf9d_d724237a",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "shall it be a dcheck instead that this never happens?",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f87f14e1_4458deca",
+        "filename": "src/heap/cppgc/sweeper.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "nit: imminent",
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "addb7851_9926454d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-04-26T10:27:34Z",
+      "side": 1,
+      "message": "Now accounting ignores `AllocatedExternalMemorySinceMarkCompact()`. I guess this is intentional since cppgc wants to ignore the external memory percent for the new sweeper heuristics?",
+      "range": {
+        "startLine": 5499,
+        "startChar": 24,
+        "endLine": 5499,
+        "endChar": 50
+      },
+      "revId": "161b85b341eaf3ca73fe1be7156b48a214826730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
