@@ -16,6 +16,69 @@
       "message": "PTAL 😊",
       "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb006961_50040b40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-26T09:58:50Z",
+      "side": 1,
+      "message": "Thanks for taking a look into that already!",
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c908ff8_b09b264b",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-26T09:58:50Z",
+      "side": 1,
+      "message": "I think we should actually get rid of the user defined `operator new` entirely. I was thinking of this (which should have the same behavior, if I don\u0027t miss anything):\n```\nvoid* memory \u003d base::Malloc(size + frame_size - kSystemPointerSize);\nreturn new (memory) FrameDescriptor(frame_size, parameter_count, isolate);\n```\nThe advantages I see is that it doesn\u0027t require the additional `new` implementation and instead uses a \"simple\" placement new, which is a more established pattern imho. Wdyt?",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 63
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "458f1437_f85b0889",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-04-26T09:58:50Z",
+      "side": 1,
+      "message": "What do we do with the delete?\n\nWe can either keep it (which is kind of okay imho) or provide another function to destroy the instance.\n\nWho/how are they actually deleted? Could it make sense to have the `Create` return a `std::unique_ptr\u003c\u003e` to have proper ownership?",
+      "range": {
+        "startLine": 91,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 22
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
