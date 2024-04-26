@@ -3,6 +3,63 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d76b8b2e_8d43c4e8",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 47
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-26T22:30:18Z",
+      "side": 1,
+      "message": "Can this be a `Foreign`? I think `JSExternalObject`s are API-exposed things, which waiter nodes aren\u0027t.",
+      "range": {
+        "startLine": 36,
+        "startChar": 26,
+        "endLine": 36,
+        "endChar": 42
+      },
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56b3e36c_069c3975",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 47
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-26T22:30:18Z",
+      "side": 1,
+      "message": "Do I understand correctly that the state machine is that waiter nodes can start either locked or unlocked, but except due to teardown, the waiter nodes ultimately move to the locked list, which the unlock resolve handler ultimately removes from the list, freeing the node.",
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfb88d12_bdac1970",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 47
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-26T22:30:18Z",
+      "side": 1,
+      "message": "When is `waiter_node \u003d\u003d nullptr` here? AFAICT when `LockAsync` leaves `waiter_node` as `nullptr` when it returns `true`, but then the `if` block above makes a new `waiter_node`.",
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5a8212c_8325d542",
         "filename": "test/mjsunit/shared-memory/condition-async-wait-realm-disposed.js",
         "patchSetId": 47
