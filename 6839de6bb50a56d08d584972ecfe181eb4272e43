@@ -34,6 +34,24 @@
       "parentUuid": "44206772_65b9451d",
       "revId": "6839de6bb50a56d08d584972ecfe181eb4272e43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b618c2_59995aaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-04-26T07:21:45Z",
+      "side": 1,
+      "message": "Short crrev.com links don\u0027t seem to properly forward the query args, here\u0027s the direct link: https://chromium-review.googlesource.com/c/v8/v8/+/5492420?checksRunsSelected\u003dv8_ios_simulator\u0026tab\u003dchecks",
+      "parentUuid": "d026929e_06e1466a",
+      "revId": "6839de6bb50a56d08d584972ecfe181eb4272e43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
