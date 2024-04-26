@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc423ca2_1aedac25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "Should we wait with marking this as fixed until we also have the i32 parameter checking?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f98ebf62_dc90cf98",
@@ -14,6 +37,142 @@
       "writtenOn": "2024-04-25T11:53:27Z",
       "side": 1,
       "message": "PTAL.\n\nSamuel: main review please. Reviewer\u0027s guidance: start with `wasm-objects.tq`, then `shared-function-info*`.\n\nMichael: for src/heap/OWNERS (trivial; those types get their visitors defined via the `TRUSTED_VISITOR_ID_LIST` now).",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dab5ed9_b4a401d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "Very nice, thanks! Just a couple of suggestions",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "720d7548_641fc6ef",
+        "filename": "src/compiler/wasm-graph-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "I think you could just use `LoadTrustedPointerFromObject` here as that will become a `LoadFromObject` when the sandbox is off. Probably you still need to select the correct field offset though.",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78d59f48_cd0ace15",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "The fact that we now need `HasBuiltinId()` checks here and below isn\u0027t super nice. I anyway want to refactor this again once we are done moving things to trusted space (hopefully that point will come). Could you maybe leave a `TODO(saelo)` comment here to investigate whether these can be removed",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3687d3f9_ac287262",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "It would be nicer if the caller provided a `IsolateForSandbox`. Feel free to just leave a `TODO(saelo)` comment for that :)",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e5809bb_b0d1d682",
+        "filename": "src/sandbox/indirect-pointer-tag.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "I wonder if we\u0027ll need to support inheritance hierarchies in our type checking mechanism (i.e. the table entry would get the specific `kWasmJSFunctionDataTag`, but loading it with the generic `kWasmFunctionDataTag` would succeed). Would probably be possible with AND-based type checks. Feel free to leave a TODO here such as the following AI generated one :)\n```suggestion\n    // TODO(saelo): consider adding support for inheritance hierarchies in our\n    // type checking mechanism.\n    case WASM_EXPORTED_FUNCTION_DATA_TYPE:\n```",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f90f10e4_d2250ff3",
+        "filename": "src/wasm/wasm-objects.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "Is this comment still accurate since the `canonical_type_index` has moved up?",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb3a9e0c_db704ef5",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "Same thing as above, `LoadTrustedPointerField` should already turn into a simple `Load` when the sandbox is off.",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18e9415b_a1057287",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-26T09:09:41Z",
+      "side": 1,
+      "message": "Ditto.",
       "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
