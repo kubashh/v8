@@ -38,6 +38,13 @@
 
   # BUG(13660): Flaky test.
   'OS.RemapPages': [SKIP],
+
+  # TODO(nicohartmann@): Currently not supported. Reenable once Turboshaft pipeline is ready.
+  'TurboshaftInstructionSelectorTest*': [SKIP],
+  'ControlFlowTest.*': [SKIP],
+  'LateLoadEliminationReducerTest.*': [SKIP],
+  'StoreStoreEliminationReducerTest.*': [SKIP],
+  'SimplifiedLoweringReducerTest.*': [SKIP],
 }],  # ALWAYS
 
 ##############################################################################

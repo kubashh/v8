@@ -5,13 +5,22 @@
 #include "src/compiler/turboshaft/decompression-optimization-phase.h"
 
 #include "src/compiler/turboshaft/decompression-optimization.h"
+#include "src/compiler/turboshaft/pipelines.h"
 
 namespace v8::internal::compiler::turboshaft {
 
 void DecompressionOptimizationPhase::Run(Zone* temp_zone) {
+  Run(nullptr, temp_zone);
+}
+
+void DecompressionOptimizationPhase::Run(DataComponentProvider* data_provider,
+                                         Zone* temp_zone) {
   if (!COMPRESS_POINTERS_BOOL) return;
-  turboshaft::RunDecompressionOptimization(PipelineData::Get().graph(),
-                                           temp_zone);
+
+  Graph& graph = data_provider
+                     ? *data_provider->GetDataComponent<GraphData>().graph
+                     : PipelineData::Get().graph();
+  turboshaft::RunDecompressionOptimization(graph, temp_zone);
 }
 
 }  // namespace v8::internal::compiler::turboshaft

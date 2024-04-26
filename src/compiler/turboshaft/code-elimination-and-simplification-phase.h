@@ -9,9 +9,12 @@
 
 namespace v8::internal::compiler::turboshaft {
 
-struct CodeEliminationAndSimplificationPhase {
+class DataComponentProvider;
+
+struct CodeEliminationAndSimplificationPhase : public Phase<true> {
   DECL_TURBOSHAFT_PHASE_CONSTANTS(CodeEliminationAndSimplification)
 
+  void Run(DataComponentProvider* data_provider, Zone* temp_zone);
   void Run(Zone* temp_zone);
 };
 

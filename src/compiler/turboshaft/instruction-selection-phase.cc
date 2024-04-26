@@ -12,6 +12,7 @@
 #include "src/compiler/pipeline.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/turboshaft/sidetable.h"
 #include "src/diagnostics/code-tracer.h"
 
@@ -344,6 +345,93 @@ base::Optional<BailoutReason> InstructionSelectionPhase::Run(
   }
   TraceSequence(data->info(), data->sequence(), data->broker(), code_tracer,
                 "after instruction selection");
+  return base::nullopt;
+}
+
+base::Optional<BailoutReason> InstructionSelectionPhase::Run(
+    DataComponentProvider* data_provider, Zone* temp_zone,
+    const CallDescriptor* call_descriptor, Linkage* linkage,
+    CodeTracer* code_tracer) {
+  //  PipelineData* data = &PipelineData::Get();
+  Graph& graph = *data_provider->GetDataComponent<GraphData>().graph;
+
+  CodegenData& codegen_data = data_provider->GetDataComponent<CodegenData>();
+
+  // Compute special RPO order....
+  TurboshaftSpecialRPONumberer numberer(graph, temp_zone);
+  if (codegen_data.has_special_rpo) {
+    auto schedule = numberer.ComputeSpecialRPO();
+    graph.ReorderBlocks(base::VectorOf(schedule));
+    codegen_data.has_special_rpo = true;
+  }
+
+  // Determine deferred blocks.
+  PropagateDeferred(graph);
+
+  // Print graph once before instruction selection.
+  PrintTurboshaftGraph(data_provider, temp_zone, code_tracer,
+                       "before instruction selection");
+
+  // Initialize an instruction sequence.
+  auto& contextual_data = data_provider->GetDataComponent<ContextualData>();
+  auto& compilation_data = data_provider->GetDataComponent<CompilationData>();
+  InstructionSequenceData& instruction_data =
+      data_provider->InitializeDataComponent<InstructionSequenceData>(
+          &compilation_data.zone_stats, contextual_data.isolate, &graph,
+          call_descriptor);
+
+  // Run the actual instruction selection.
+  OptimizedCompilationInfo* info = compilation_data.info;
+  InstructionSelector selector = InstructionSelector::ForTurboshaft(
+      temp_zone, graph.op_id_count(), linkage, instruction_data.sequence,
+      &graph, codegen_data.frame,
+      info->switch_jump_table() ? InstructionSelector::kEnableSwitchJumpTable
+                                : InstructionSelector::kDisableSwitchJumpTable,
+      &info->tick_counter(), compilation_data.broker.get(),
+      &instruction_data.max_unoptimized_frame_height,
+      &instruction_data.max_pushed_argument_count,
+      info->source_positions() ? InstructionSelector::kAllSourcePositions
+                               : InstructionSelector::kCallSourcePositions,
+      InstructionSelector::SupportedFeatures(),
+      v8_flags.turbo_instruction_scheduling
+          ? InstructionSelector::kEnableScheduling
+          : InstructionSelector::kDisableScheduling,
+      codegen_data.assembler_options.enable_root_relative_access
+          ? InstructionSelector::kEnableRootsRelativeAddressing
+          : InstructionSelector::kDisableRootsRelativeAddressing,
+      info->trace_turbo_json() ? InstructionSelector::kEnableTraceTurboJson
+                               : InstructionSelector::kDisableTraceTurboJson);
+
+#if 0
+  // Run the actual instruction selection.
+  InstructionSelector selector = InstructionSelector::ForTurboshaft(
+      temp_zone, graph.op_id_count(), linkage, data->sequence(), &graph,
+      data->frame(),
+      data->info()->switch_jump_table()
+          ? InstructionSelector::kEnableSwitchJumpTable
+          : InstructionSelector::kDisableSwitchJumpTable,
+      &data->info()->tick_counter(), data->broker(),
+      data->address_of_max_unoptimized_frame_height(),
+      data->address_of_max_pushed_argument_count(),
+      data->info()->source_positions()
+          ? InstructionSelector::kAllSourcePositions
+          : InstructionSelector::kCallSourcePositions,
+      InstructionSelector::SupportedFeatures(),
+      v8_flags.turbo_instruction_scheduling
+          ? InstructionSelector::kEnableScheduling
+          : InstructionSelector::kDisableScheduling,
+      data->assembler_options().enable_root_relative_access
+          ? InstructionSelector::kEnableRootsRelativeAddressing
+          : InstructionSelector::kDisableRootsRelativeAddressing,
+      data->info()->trace_turbo_json()
+          ? InstructionSelector::kEnableTraceTurboJson
+          : InstructionSelector::kDisableTraceTurboJson);
+#endif
+  if (base::Optional<BailoutReason> bailout = selector.SelectInstructions()) {
+    return bailout;
+  }
+  TraceSequence(info, instruction_data.sequence, compilation_data.broker.get(),
+                code_tracer, "after instruction selection");
   return base::nullopt;
 }
 

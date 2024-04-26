@@ -641,11 +641,15 @@ class V8_EXPORT_PRIVATE LateLoadEliminationAnalyzer {
 
   LateLoadEliminationAnalyzer(Graph& graph, Zone* phase_zone,
                               JSHeapBroker* broker,
-                              RawBaseAssumption raw_base_assumption)
+                              RawBaseAssumption raw_base_assumption,
+                              bool is_wasm)
       : graph_(graph),
         phase_zone_(phase_zone),
         broker_(broker),
         raw_base_assumption_(raw_base_assumption),
+        // #if V8_ENABLE_WEBASSEMBLY
+        //         is_wasm_(is_wasm),
+        // #endif
         replacements_(graph.op_id_count(), phase_zone, &graph),
         non_aliasing_objects_(phase_zone),
         object_maps_(phase_zone),
@@ -695,9 +699,10 @@ class V8_EXPORT_PRIVATE LateLoadEliminationAnalyzer {
   JSHeapBroker* broker_;
   RawBaseAssumption raw_base_assumption_;
 
-#if V8_ENABLE_WEBASSEMBLY
-  bool is_wasm_ = PipelineData::Get().is_wasm();
-#endif
+  // #if V8_ENABLE_WEBASSEMBLY
+  //   bool is_wasm_; //__ is_wasm();
+  //   //bool is_wasm_ = PipelineData::Get().is_wasm();
+  // #endif
 
   FixedOpIndexSidetable<Replacement> replacements_;
   // We map: Load-index -> Change-index -> Bitcast-index
@@ -813,15 +818,16 @@ class V8_EXPORT_PRIVATE LateLoadEliminationReducer : public Next {
   }
 
  private:
-  const bool is_wasm_ = PipelineData::Get().is_wasm();
+  const bool is_wasm_ = __ is_wasm();  // PipelineData::Get().is_wasm();
   using RawBaseAssumption = LateLoadEliminationAnalyzer::RawBaseAssumption;
   RawBaseAssumption raw_base_assumption_ =
-      PipelineData::Get().pipeline_kind() == TurboshaftPipelineKind::kCSA
+      __ pipeline_kind() == TurboshaftPipelineKind::kCSA
+          // PipelineData::Get().pipeline_kind() == TurboshaftPipelineKind::kCSA
           ? RawBaseAssumption::kMaybeInnerPointer
           : RawBaseAssumption::kNoInnerPointer;
   LateLoadEliminationAnalyzer analyzer_{
-      Asm().modifiable_input_graph(), Asm().phase_zone(),
-      PipelineData::Get().broker(), raw_base_assumption_};
+      Asm().modifiable_input_graph(), Asm().phase_zone(), __ broker(),
+      /*PipelineData::Get().broker(),*/ raw_base_assumption_, is_wasm_};
 };
 
 #include "src/compiler/turboshaft/undef-assembler-macros.inc"

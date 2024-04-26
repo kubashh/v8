@@ -35,10 +35,12 @@ class DataHolder {
         graph_zone_(zone),
         info_(zone->New<OptimizedCompilationInfo>(base::ArrayVector("testing"),
                                                   zone, CodeKind::FOR_TESTING)),
-        zone_stats_(isolate->allocator()),
-        pipeline_data_(&zone_stats_, info_, isolate, isolate->allocator(),
-                       nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                       AssemblerOptions::Default(isolate), nullptr),
+        //        zone_stats_(isolate->allocator()),
+        // pipeline_data_(/*&zone_stats_, */ info_, isolate, isolate->allocator(),
+        //                nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        //                AssemblerOptions::Default(isolate), nullptr),
+        pipeline_data_(isolate, nullptr, isolate->allocator(), info_, {},
+          turboshaft::TurboshaftPipelineKind::kJS, AssemblerOptions::Default(isolate)),
         ts_pipeline_data_(pipeline_data_.GetTurboshaftPipelineData(
             turboshaft::TurboshaftPipelineKind::kJS)),
         ts_data_scope_(ts_pipeline_data_),
@@ -62,7 +64,7 @@ class DataHolder {
   Zone* zone() { return graph_zone_; }
   Graph& graph() { return ts_pipeline_data_.graph(); }
   CallDescriptor* call_descriptor() { return descriptor_; }
-  OptimizedCompilationInfo* info() { return info_; }
+//  OptimizedCompilationInfo* info() { return info_; }
 
  private:
   Isolate* isolate_;
@@ -70,7 +72,7 @@ class DataHolder {
   OptimizedCompilationInfo* info_;
   // zone_stats_ must be destroyed after pipeline_data_, so it's declared
   // before.
-  ZoneStats zone_stats_;
+  //  ZoneStats zone_stats_;
   compiler::PipelineData pipeline_data_;
   turboshaft::PipelineData& ts_pipeline_data_;
   turboshaft::PipelineData::Scope ts_data_scope_;

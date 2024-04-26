@@ -1955,8 +1955,7 @@ class MachineOptimizationReducer : public Next {
           // HeapObject, so unparking the JSHeapBroker here rather than before
           // the optimization pass itself it probably more efficient.
 
-          DCHECK_IMPLIES(PipelineData::Get().pipeline_kind() !=
-                             TurboshaftPipelineKind::kCSA,
+          DCHECK_IMPLIES(__ pipeline_kind() != TurboshaftPipelineKind::kCSA,
                          broker != nullptr);
           if (broker != nullptr) {
             UnparkedScopeIfNeeded scope(broker);
@@ -2609,10 +2608,14 @@ class MachineOptimizationReducer : public Next {
     return base::bits::CountLeadingSignBits(c) - (64 - rep.bit_width());
   }
 
-  JSHeapBroker* broker = PipelineData::Get().broker();
+  JSHeapBroker* broker = __ broker();
+
+  //  JSHeapBroker* broker = PipelineData::Get().broker();
   const OperationMatcher& matcher = __ matcher();
 #if V8_ENABLE_WEBASSEMBLY
-  const bool signalling_nan_possible = PipelineData::Get().is_wasm();
+  // TODO:
+  const bool signalling_nan_possible = false;
+  // const bool signalling_nan_possible = PipelineData::Get().is_wasm();
 #else
   static constexpr bool signalling_nan_possible = false;
 #endif  // V8_ENABLE_WEBASSEMBLY
