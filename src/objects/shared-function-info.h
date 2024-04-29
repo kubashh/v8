@@ -305,6 +305,9 @@ class SharedFunctionInfo
   // For subclass constructors, also includes new.target.
   // The size of function's frame is
   // internal_formal_parameter_count_with_receiver.
+  // DEPRECATED: please obtain the parameter count from the Code or
+  // BytecodeArray object instead as an attacker can modify the parameter count
+  // stored in a SharedFunctionInfo object.
   inline void set_internal_formal_parameter_count(int value);
   inline uint16_t internal_formal_parameter_count_with_receiver() const;
   inline uint16_t internal_formal_parameter_count_without_receiver() const;

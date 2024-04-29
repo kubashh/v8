@@ -1661,19 +1661,17 @@ Address TranslatedState::DecompressIfNeeded(intptr_t value) {
 TranslatedState::TranslatedState(const JavaScriptFrame* frame)
     : purpose_(kFrameInspection) {
   int deopt_index = SafepointEntry::kNoDeoptIndex;
+  Tagged<Code> code = frame->LookupCode();
   Tagged<DeoptimizationData> data =
       static_cast<const OptimizedFrame*>(frame)->GetDeoptimizationData(
-          &deopt_index);
+          code, &deopt_index);
   DCHECK(!data.is_null() && deopt_index != SafepointEntry::kNoDeoptIndex);
   DeoptimizationFrameTranslation::Iterator it(
       data->FrameTranslation(), data->TranslationIndex(deopt_index).value());
   int actual_argc = frame->GetActualArgumentCount();
   Init(frame->isolate(), frame->fp(), frame->fp(), &it, data->LiteralArray(),
        nullptr /* registers */, nullptr /* trace file */,
-       frame->function()
-           ->shared()
-           ->internal_formal_parameter_count_without_receiver(),
-       actual_argc);
+       code->parameter_count_without_receiver(), actual_argc);
 }
 
 void TranslatedState::Init(Isolate* isolate, Address input_frame_pointer,
