@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2730ef16_a8e71b0f",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-29T17:54:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure this `if` still makes much sense. I guess I can replace it with a DCHECK that if we don\u0027t have a `function_` then `compiled_code_-\u003eparameter_count() \u003d\u003d 0)`?",
+      "revId": "266f3297ffed5de1f0df541a549a9b62e0ffbbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f440c376_30536d88",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-04-29T17:54:54Z",
+      "side": 1,
+      "message": "I wonder if we want some sort of \"code lookup cache\"? I could imagine that we\u0027ll need to get the `Code` corresponding a frame in some more places now that we\u0027re moving away from using the SFI.\nIs it the case that each frame must always have a corresponding `Code` object that we\u0027re executing in? Or is that not true for e.g. Wasm frames?",
+      "range": {
+        "startLine": 1664,
+        "startChar": 0,
+        "endLine": 1664,
+        "endChar": 42
+      },
+      "revId": "266f3297ffed5de1f0df541a549a9b62e0ffbbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
