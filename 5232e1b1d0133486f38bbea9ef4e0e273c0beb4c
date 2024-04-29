@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9df68694_9e595046",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc423ca2_1aedac25",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 16
+      },
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f98ebf62_dc90cf98",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b3bc1f1_09572108",
+        "filename": "src/compiler/wasm-graph-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "720d7548_641fc6ef",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78d59f48_cd0ace15",
@@ -88,6 +130,24 @@
       "writtenOn": "2024-04-26T09:09:41Z",
       "side": 1,
       "message": "The fact that we now need `HasBuiltinId()` checks here and below isn\u0027t super nice. I anyway want to refactor this again once we are done moving things to trusted space (hopefully that point will come). Could you maybe leave a `TODO(saelo)` comment here to investigate whether these can be removed",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a313d84b_52d2bf76",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78d59f48_cd0ace15",
       "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +169,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "508fda9b_eaebbe18",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3687d3f9_ac287262",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e5809bb_b0d1d682",
@@ -122,6 +200,24 @@
       "writtenOn": "2024-04-26T09:09:41Z",
       "side": 1,
       "message": "I wonder if we\u0027ll need to support inheritance hierarchies in our type checking mechanism (i.e. the table entry would get the specific `kWasmJSFunctionDataTag`, but loading it with the generic `kWasmFunctionDataTag` would succeed). Would probably be possible with AND-based type checks. Feel free to leave a TODO here such as the following AI generated one :)\n```suggestion\n    // TODO(saelo): consider adding support for inheritance hierarchies in our\n    // type checking mechanism.\n    case WASM_EXPORTED_FUNCTION_DATA_TYPE:\n```",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e0c45b2_8edc2236",
+        "filename": "src/sandbox/indirect-pointer-tag.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done.\n(I suspect that with the manually-assigned tags we\u0027ll need for AND-based checks, we\u0027ll need to switch over instance types here anyway; but do feel free to exhaustively contemplate the possibilities 😊)",
+      "parentUuid": "7e5809bb_b0d1d682",
       "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +239,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cf2965a_d84ebd44",
+        "filename": "src/wasm/wasm-objects.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Yes; in fact I restored its accuracy by moving `canonical_type_index`. Rephrased the comment to make it more robust to future changes.",
+      "parentUuid": "f90f10e4_d2250ff3",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb3a9e0c_db704ef5",
@@ -160,6 +274,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fc6be78_6d390176",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb3a9e0c_db704ef5",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18e9415b_a1057287",
@@ -173,6 +305,24 @@
       "writtenOn": "2024-04-26T09:09:41Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2048276f_27cb58ed",
+        "filename": "src/wasm/wrappers.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-04-29T12:37:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18e9415b_a1057287",
       "revId": "5232e1b1d0133486f38bbea9ef4e0e273c0beb4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
