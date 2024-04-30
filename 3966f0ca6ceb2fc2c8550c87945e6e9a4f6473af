@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fb77c48_8d047e4e",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-30T08:07:05Z",
+      "side": 1,
+      "message": "Hm, I\u0027m not convinced. I think having the custom `operator new` is a feature, not a bug.\nIf anybody wrote `new FrameDescription(x, 42, isolate);` this would create a compiler error due to the overloaded `operator new` (even inside the FrameDescription).\nWith the same reason let\u0027s make the `FrameDescription` constructor private, so this whole allocation issues don\u0027t leak outside of the class.",
+      "parentUuid": "8c908ff8_b09b264b",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 63
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "458f1437_f85b0889",
         "filename": "src/deoptimizer/frame-description.h",
         "patchSetId": 1
@@ -71,6 +95,30 @@
       "writtenOn": "2024-04-26T09:58:50Z",
       "side": 1,
       "message": "What do we do with the delete?\n\nWe can either keep it (which is kind of okay imho) or provide another function to destroy the instance.\n\nWho/how are they actually deleted? Could it make sense to have the `Create` return a `std::unique_ptr\u003c\u003e` to have proper ownership?",
+      "range": {
+        "startLine": 91,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 22
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b033389_8cb7d61e",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-04-30T08:07:05Z",
+      "side": 1,
+      "message": "They are deleted via the delete operator here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/deoptimizer/deoptimizer.cc;l\u003d668\nWe can\u0027t use `unique_ptr` as the pointer is accessed from builtins.",
+      "parentUuid": "458f1437_f85b0889",
       "range": {
         "startLine": 91,
         "startChar": 2,
