@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a84037b_5d1a914a",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-04-30T14:36:31Z",
+      "side": 1,
+      "message": "do you want to use a real attribute (V8_DEPRECATE_SOON maybe)?",
+      "range": {
+        "startLine": 308,
+        "startChar": 5,
+        "endLine": 308,
+        "endChar": 15
+      },
+      "revId": "d0e0b413a50ab0a19d594fe412f28fbe2b815083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
