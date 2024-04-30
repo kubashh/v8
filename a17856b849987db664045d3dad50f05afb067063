@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38c9eb20_88bfdd21",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7fc6f3c6_e2375bfe",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 60
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5543bd08_e2ed9b96",
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "With the V8 sandboxing effort, there is an invariant that V8 heap objects (which `JSSynchronizationPrimitive`s are) should not directly point to things outside of the heap sandbox. `WaiterQueueNode`s before this CL are always allocated on the C stack, which is outside of the heap sandbox, and so must be indirected through an external pointer table when stored as the `state` field in a mutex or condvar. Moreover, external pointers in the table are GCed: they must be marked like other GC things, and unmarked entries are removed during GC.\n\nBefore this CL, a `WaiterQueueNode` is in at most one `state` field of a mutex or condvar, and there is exactly one per isolate, so its external pointer is unconditionally marked when marking the isolate.\n\nThis CL changes that, so we need to think more carefully how to proceed.\n\n- There is still exactly 1 synchronous `WaiterQueueNode` per isolate.\n- Each `JSSynchronizationPrimitive` may have an async waiter list head now, so there is at most 1 external pointer needed _per_ `JSSynchronizationPrimitive`.\n- Marking of the external pointer needs to be implemented as well to avoid it being swept. The liveness of the state is the same as the liveness of the owner `JSSynchronizationPrimitive`.\n\nThis makes me think this CL should implement having an external pointer per `JSSynchronizationPrimitive` that is marked (like a normal external reference) instead of the current, more fixed scheme.",
       "parentUuid": "1d36cd2a_bfe78f94",
+      "range": {
+        "startLine": 6536,
+        "startChar": 0,
+        "endLine": 6542,
+        "endChar": 1
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e98cb301_1921c4e9",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 6542,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "068e3342_1940e6b9",
       "range": {
         "startLine": 6536,
         "startChar": 0,
@@ -346,6 +394,30 @@
       "writtenOn": "2023-11-16T22:54:32Z",
       "side": 1,
       "message": "I know we discussed about not allocating in the heap in this code, but I\u0027m not sure how we would store this node in other case.\n\nThe `shared_ptr` logic is a little convoluted here, but I wanted to avoid any explicit `delete`.",
+      "range": {
+        "startLine": 1287,
+        "startChar": 21,
+        "endLine": 1287,
+        "endChar": 62
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bfda123_94adb987",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "162b61eb_d6d7ff5f",
       "range": {
         "startLine": 1287,
         "startChar": 21,

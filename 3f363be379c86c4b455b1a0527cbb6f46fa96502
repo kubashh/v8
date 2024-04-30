@@ -85,6 +85,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "956642fa_97d77882",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 47
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "As chatted about off-line, let\u0027s try merging these two lists into one.",
+      "parentUuid": "1e928373_9526fa56",
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfb88d12_bdac1970",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 47
@@ -202,6 +220,30 @@
       "writtenOn": "2024-04-25T20:46:24Z",
       "side": 1,
       "message": "ditto from `test/mjsunit/shared-memory/condition-async-wait-realm-disposed.js`",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 9
+      },
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ce569b2_ed1a6fda",
+        "filename": "test/mjsunit/shared-memory/mutex-async-lock-realm-disposed.js",
+        "patchSetId": 47
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b8dfaec_c0bc1129",
       "range": {
         "startLine": 45,
         "startChar": 2,

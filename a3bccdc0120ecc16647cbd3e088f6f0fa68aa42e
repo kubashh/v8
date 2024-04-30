@@ -282,6 +282,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d299fea_ef33f867",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da0c4ffe_025d174a",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "188b93dc_f4680b90",
@@ -559,6 +577,24 @@
       "side": 1,
       "message": "2 reasons:\n1. I want to have smart pointers to handle the lifetime of the WaiterQueueNodes, so creating both tasks here let me use the same shared pointer in both tasks. I could store a reference to the `shared_ptr` in the WaiterQueueNode and use it to create the notify task right before it is posted. Alternatively, we could handle the lifetime of the WaiterQueueNodes manually, let me know if you think that is something worth pursuing.\n2. Doing it like this I can store both the timeout task id and notify task id and cancel each one from the other. We could take care of this in other ways, like something using the `should_wait` boolean in the node, but I think this is easier to understand.",
       "parentUuid": "4408628f_5bc659dd",
+      "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b9c8399_b3142b4c",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 31
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b39c3096_b6f5fc3e",
       "revId": "a3bccdc0120ecc16647cbd3e088f6f0fa68aa42e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

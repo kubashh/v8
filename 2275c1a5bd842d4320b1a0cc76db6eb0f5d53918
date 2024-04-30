@@ -303,6 +303,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d567f025_c896b052",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Acknowledged, fine to leave as is.",
+      "parentUuid": "2a266e0c_05a711b9",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 36
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96c61bcc_bfe99636",
@@ -316,6 +340,30 @@
       "writtenOn": "2024-04-18T18:06:30Z",
       "side": 1,
       "message": "I\u0027m not 100% sure that this class should be in this file or in a separate \"utils\" file.",
+      "range": {
+        "startLine": 437,
+        "startChar": 0,
+        "endLine": 437,
+        "endChar": 30
+      },
+      "revId": "2275c1a5bd842d4320b1a0cc76db6eb0f5d53918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "977cf99c_ddfff5c4",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "96c61bcc_bfe99636",
       "range": {
         "startLine": 437,
         "startChar": 0,

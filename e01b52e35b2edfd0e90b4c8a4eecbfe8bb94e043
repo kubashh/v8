@@ -1,0 +1,323 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bbd00a_1ddbd77c",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Naming nit: I think `UnlockAsyncLockedMutexFromPromiseHandler` is clearer than `FromHandlerContext`.",
+      "range": {
+        "startLine": 24,
+        "startChar": 51,
+        "endLine": 24,
+        "endChar": 58
+      },
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63e999bb_239e8d41",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Typo: obk",
+      "range": {
+        "startLine": 30,
+        "startChar": 32,
+        "endLine": 30,
+        "endChar": 35
+      },
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e7842ac_a71edb4b",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "GetLock is a confusing name, since it sounds like a getter for an underlying `lock`. `AcquireLock`?",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9175c975_cfb4d55c",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "As a follow up, let\u0027s move this to a static method `JSPromise::PerformThen` so that the other callsites like the module one can also use it.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a50350f5_080c4509",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "These promises should get clearer names since the semantics here are complicated. See comment below about using consistent names for these promises.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "137bd346_b728b4e8",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Please elaborate a bit more that using the shared table is unnecessary here (rather than incorrect, which I read this comment to imply).",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace45eb2_4c088aab",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "`NewUnlockedWaiterInIsolate` is a confusing name even if we end consolidate the two isolate lists. It contains both waiters that are waiting for a mutex to be locked and for a condition variable to be notified, right?",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7e062bd_0dd22dd0",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Ditto here on consistent promise naming.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e49a531a_1d045e3f",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "I\u0027m not understanding the cleanup logic. Why are there two loops? `SynchronizationPrimitive::CleanupAsyncWaiterLists` loops through all waiter nodes, and then there\u0027s another loop here on the mutex\u0027s waiter list.\n\nThat is, what\u0027s the situation where there are async waiter nodes that need to be cleaned up that aren\u0027t already in the isolate-wide list?",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89d71ac8_66995fbb",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "I think clearer promise names help a lot with understanding the promises here. We should define them clearly in this comment, and use them consistently everywhere (here, in the parameter names for `SetAsyncUnlockHandlers`, and the context slots). \n\nWDYT about the following definitions, which mirrors the \"waiting promise\" and \"released promise\" naming from the Web Locks spec.\n\n`internal_locked_promise`: A promise that settles when the mutex is locked. When this promise is resolved, the callback is run. Not exposed to user code.\n`waiting_for_callback_promise`: A promise that settles when the callback completes. When this promise settles, the mutex is unlocked.\n`unlocked_promise`: A promise that settles when the mutex is unlocked, either explicitly or by timeout. Returned by `lockAsync`.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc70754c_7465b5b6",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "```suggestion\n  return !MaybeEnqueueNode(isolate, mutex, state, waiter);\n```",
+      "range": {
+        "startLine": 919,
+        "startChar": 0,
+        "endLine": 923,
+        "endChar": 15
+      },
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aeff94e_48bc6603",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Should this be `if (waiter-\u003ewaiting_promise_.IsEmpty())`?",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90329d33_e98a324d",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Typo: release",
+      "range": {
+        "startLine": 1028,
+        "startChar": 31,
+        "endLine": 1028,
+        "endChar": 39
+      },
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38842df4_a4d0a4bd",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Wrong comment here.",
+      "range": {
+        "startLine": 1257,
+        "startChar": 0,
+        "endLine": 1259,
+        "endChar": 41
+      },
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1587099b_980e6fb4",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 51
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "Please add a comment above `LockAsync` describing what it does.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb14f60f_402e51e9",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 51
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "`let count` seems unused.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d609acfd_43da5182",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 51
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 1,
+      "message": "To check my understanding, the 12 is 2 blocking waits in `workerWait1` and `workerWait2`, plus 10 async waits in `workerAsync`.",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

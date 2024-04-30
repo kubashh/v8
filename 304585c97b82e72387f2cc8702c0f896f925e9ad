@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80847c3c_338a5b5f",
+        "filename": "src/objects/waiter-queue-node.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-04-30T23:59:25Z",
+      "side": 0,
+      "message": "Thanks for the cleanup here.",
+      "revId": "304585c97b82e72387f2cc8702c0f896f925e9ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
