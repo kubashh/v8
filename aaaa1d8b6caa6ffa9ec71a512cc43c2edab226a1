@@ -16,6 +16,23 @@
       "message": "Hi Camillo, would you please review this small change? Thanks!",
       "revId": "aaaa1d8b6caa6ffa9ec71a512cc43c2edab226a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b859bb1_63d6ee8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-04-30T12:53:07Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "aaaa1d8b6caa6ffa9ec71a512cc43c2edab226a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
