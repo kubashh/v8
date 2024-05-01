@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8982c71_f83508dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 54
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2024-05-01T18:49:46Z",
+      "side": 1,
+      "message": "Only looked at code related to the Isolate and lifetime management.",
+      "revId": "b6a0f09b7745606ad54ac30fbed1d5154dd9d0dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
