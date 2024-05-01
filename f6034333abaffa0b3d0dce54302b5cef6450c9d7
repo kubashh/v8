@@ -16,6 +16,109 @@
       "message": "Addressed feedback.",
       "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b3ed49e_cf78b9ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 53
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "lgtm % nits! Long journey.\n\n+adamk@ for OWNER stamps",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d7221c_741232a7",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 53
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Nit: unlocked_promise",
+      "range": {
+        "startLine": 400,
+        "startChar": 6,
+        "endLine": 400,
+        "endChar": 25
+      },
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feabb32c_f710abd0",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Nit: old name",
+      "range": {
+        "startLine": 286,
+        "startChar": 24,
+        "endLine": 286,
+        "endChar": 46
+      },
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46270bcb_6b18334b",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 53
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Typo: might",
+      "range": {
+        "startLine": 44,
+        "startChar": 26,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b4d7971_69e24c32",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 53
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Half-finished comment?",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

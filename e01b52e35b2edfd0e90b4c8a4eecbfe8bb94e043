@@ -270,6 +270,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc363a8e_a37e92f3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ea1b82e_c8d32e39",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7e062bd_0dd22dd0",
@@ -336,6 +354,24 @@
       "side": 1,
       "message": "All the nodes in the isolate-wide list need to be removed from the regular shared waiter queue list. This logic eagerly removes them from the shared waiter queue list and mark them as ready for async cleanup, this way the subsequent nodes are deleted from the isolate\u0027s list without taking the waiter queue lock multiple times, potentially slowing other threads that are not being terminated.",
       "parentUuid": "e49a531a_1d045e3f",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d78957_4ef21ca3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Got it. Would be good to add a comment about the optimization.",
+      "parentUuid": "43c4c281_c6d40c50",
       "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -453,6 +489,24 @@
       "side": 1,
       "message": "No. What I meant with this comment is that we don\u0027t explicitly remove the promise from the map because it was already removed with the native context. But the synchronization primitive might or might not be alive because the waiter node only holds a weak handle. If it\u0027s still alive we must notify the next node in the waiter queue.",
       "parentUuid": "2aeff94e_48bc6603",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80db856b_38d0458f",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 51
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9315c81e_5139bbda",
       "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -652,6 +706,24 @@
       "side": 1,
       "message": "Yes.",
       "parentUuid": "d609acfd_43da5182",
+      "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e466afd3_8239ba8e",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 51
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-01T17:33:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a17fb0e6_9f6a3e01",
       "revId": "e01b52e35b2edfd0e90b4c8a4eecbfe8bb94e043",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
