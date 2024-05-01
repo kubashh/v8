@@ -101,6 +101,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71c1b38_af9cb8c5",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 47
+      },
+      "lineNbr": 2250,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T13:18:38Z",
+      "side": 1,
+      "message": "Done. Sorry, any reasons I initially had for the 2 lists disappeared when I refined the implementation.",
+      "parentUuid": "956642fa_97d77882",
+      "revId": "3f363be379c86c4b455b1a0527cbb6f46fa96502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfb88d12_bdac1970",
