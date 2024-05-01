@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "428225fd_abe9ddce",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 53
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T18:07:48Z",
+      "side": 1,
+      "message": "Renamed this and a couple other members within this class.",
+      "parentUuid": "d4d7221c_741232a7",
+      "range": {
+        "startLine": 400,
+        "startChar": 6,
+        "endLine": 400,
+        "endChar": 25
+      },
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "feabb32c_f710abd0",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-05-01T17:33:21Z",
       "side": 1,
       "message": "Nit: old name",
+      "range": {
+        "startLine": 286,
+        "startChar": 24,
+        "endLine": 286,
+        "endChar": 46
+      },
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51913f0a_61a2719f",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T18:07:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feabb32c_f710abd0",
       "range": {
         "startLine": 286,
         "startChar": 24,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d28fc612_6dd95a30",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 53
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T18:07:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46270bcb_6b18334b",
+      "range": {
+        "startLine": 44,
+        "startChar": 26,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b4d7971_69e24c32",
@@ -117,6 +189,24 @@
       "writtenOn": "2024-05-01T17:33:21Z",
       "side": 1,
       "message": "Half-finished comment?",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eeaf9ca_95d38e23",
+        "filename": "test/mjsunit/shared-memory/async-synchronization-workers-terminated.js",
+        "patchSetId": 53
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T18:07:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b4d7971_69e24c32",
       "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
