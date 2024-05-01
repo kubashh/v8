@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3624d72e_a8232a37",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 53
+      },
+      "lineNbr": 4113,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T20:42:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27f99dc8_fd1d2ff6",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4d7221c_741232a7",
@@ -112,6 +130,24 @@
       "writtenOn": "2024-05-01T18:49:46Z",
       "side": 1,
       "message": "Nit: this HandleScope could go inside the if-statement below, so we\u0027d only create it if there\u0027s cleanup work to do.",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d208367a_161484a3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 53
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T20:42:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10b0df42_ec76a3e0",
       "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -180,6 +216,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18874e46_42f16bd4",
+        "filename": "src/objects/waiter-queue-node.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T20:42:45Z",
+      "side": 1,
+      "message": "Good catch, thanks!",
+      "parentUuid": "e4c0bb02_a3b1ba1a",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d379291a_63cff139",
@@ -197,6 +251,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "490034c4_88deb010",
+        "filename": "src/objects/waiter-queue-node.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T20:42:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d379291a_63cff139",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70147c8b_7374b5b9",
@@ -210,6 +282,24 @@
       "writtenOn": "2024-05-01T18:49:46Z",
       "side": 1,
       "message": "Member variables should be private or protected; if it\u0027s needed to be accessed externally, please add a getter.",
+      "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb38893_534ac39a",
+        "filename": "src/objects/waiter-queue-node.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-01T20:42:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70147c8b_7374b5b9",
       "revId": "f6034333abaffa0b3d0dce54302b5cef6450c9d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
