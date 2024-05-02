@@ -17,6 +17,31 @@
 
 namespace v8::internal::wasm {
 
+#if V8_WASM_INTERPRETER
+// We replace macro WASM_EXEC_TEST (defined in wasm-run-utils.h) with the new
+// macro WASM_RELAXED_SIMD_TEST that also takes care to run the tests in
+// jitless mode with the Wasm interpreter.
+// We undefine the old macro to make sure that we don't forget to update this
+// for new tests that could be created upstream.
+#undef WASM_EXEC_TEST
+
+#define WASM_RELAXED_SIMD_TEST(name)                                           \
+  void RunWasm_##name(TestExecutionTier execution_tier);                       \
+  TEST(RunWasmTurbofan_##name) {                                               \
+    RunWasm_##name(TestExecutionTier::kTurbofan);                              \
+  }                                                                            \
+  TEST(RunWasmLiftoff_##name) { RunWasm_##name(TestExecutionTier::kLiftoff); } \
+  TEST(RunWasmInterpreter_##name) {                                            \
+    FLAG_SCOPE(wasm_jitless);                                                  \
+    WasmInterpreterThread::Initialize();                                       \
+    RunWasm_##name(TestExecutionTier::kInterpreter);                           \
+    WasmInterpreterThread::Terminate();                                        \
+  }                                                                            \
+  void RunWasm_##name(TestExecutionTier execution_tier)
+#else
+#define WASM_RELAXED_SIMD_TEST WASM_EXEC_TEST
+#endif  // V8_WASM_INTERPRETER
+
 // Only used for qfma and qfms tests below.
 
 // FMOperation holds the params (a, b, c) for a Multiply-Add or
@@ -111,7 +136,7 @@ bool ExpectFused(TestExecutionTier tier) {
 #endif  // V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_IA32
 }
 
-WASM_EXEC_TEST(F32x4Qfma) {
+WASM_RELAXED_SIMD_TEST(F32x4Qfma) {
   WasmRunner<int32_t, float, float, float> r(execution_tier);
   // Set up global to hold mask output.
   float* g = r.builder().AddGlobal<float>(kWasmS128);
@@ -135,7 +160,7 @@ WASM_EXEC_TEST(F32x4Qfma) {
   }
 }
 
-WASM_EXEC_TEST(F32x4Qfms) {
+WASM_RELAXED_SIMD_TEST(F32x4Qfms) {
   WasmRunner<int32_t, float, float, float> r(execution_tier);
   // Set up global to hold mask output.
   float* g = r.builder().AddGlobal<float>(kWasmS128);
@@ -159,7 +184,7 @@ WASM_EXEC_TEST(F32x4Qfms) {
   }
 }
 
-WASM_EXEC_TEST(F64x2Qfma) {
+WASM_RELAXED_SIMD_TEST(F64x2Qfma) {
   WasmRunner<int32_t, double, double, double> r(execution_tier);
   // Set up global to hold mask output.
   double* g = r.builder().AddGlobal<double>(kWasmS128);
@@ -183,7 +208,7 @@ WASM_EXEC_TEST(F64x2Qfma) {
   }
 }
 
-WASM_EXEC_TEST(F64x2Qfms) {
+WASM_RELAXED_SIMD_TEST(F64x2Qfms) {
   WasmRunner<int32_t, double, double, double> r(execution_tier);
   // Set up global to hold mask output.
   double* g = r.builder().AddGlobal<double>(kWasmS128);
@@ -270,7 +295,7 @@ void RelaxedLaneSelectTest(TestExecutionTier execution_tier, const T v1[kElems],
 
 }  // namespace
 
-WASM_EXEC_TEST(I8x16RelaxedLaneSelect) {
+WASM_RELAXED_SIMD_TEST(I8x16RelaxedLaneSelect) {
   constexpr int kElems = 16;
   constexpr uint8_t v1[kElems] = {0, 1, 2,  3,  4,  5,  6,  7,
                                   8, 9, 10, 11, 12, 13, 14, 15};
@@ -284,7 +309,7 @@ WASM_EXEC_TEST(I8x16RelaxedLaneSelect) {
                                          kExprI8x16RelaxedLaneSelect);
 }
 
-WASM_EXEC_TEST(I16x8RelaxedLaneSelect) {
+WASM_RELAXED_SIMD_TEST(I16x8RelaxedLaneSelect) {
   constexpr int kElems = 8;
   uint16_t v1[kElems] = {0, 1, 2, 3, 4, 5, 6, 7};
   uint16_t v2[kElems] = {8, 9, 10, 11, 12, 13, 14, 15};
@@ -294,7 +319,7 @@ WASM_EXEC_TEST(I16x8RelaxedLaneSelect) {
                                           kExprI16x8RelaxedLaneSelect);
 }
 
-WASM_EXEC_TEST(I32x4RelaxedLaneSelect) {
+WASM_RELAXED_SIMD_TEST(I32x4RelaxedLaneSelect) {
   constexpr int kElems = 4;
   uint32_t v1[kElems] = {0, 1, 2, 3};
   uint32_t v2[kElems] = {4, 5, 6, 7};
@@ -304,7 +329,7 @@ WASM_EXEC_TEST(I32x4RelaxedLaneSelect) {
                                           kExprI32x4RelaxedLaneSelect);
 }
 
-WASM_EXEC_TEST(I64x2RelaxedLaneSelect) {
+WASM_RELAXED_SIMD_TEST(I64x2RelaxedLaneSelect) {
   constexpr int kElems = 2;
   uint64_t v1[kElems] = {0, 1};
   uint64_t v2[kElems] = {2, 3};
@@ -314,19 +339,19 @@ WASM_EXEC_TEST(I64x2RelaxedLaneSelect) {
                                           kExprI64x2RelaxedLaneSelect);
 }
 
-WASM_EXEC_TEST(F32x4RelaxedMin) {
+WASM_RELAXED_SIMD_TEST(F32x4RelaxedMin) {
   RunF32x4BinOpTest(execution_tier, kExprF32x4RelaxedMin, Minimum);
 }
 
-WASM_EXEC_TEST(F32x4RelaxedMax) {
+WASM_RELAXED_SIMD_TEST(F32x4RelaxedMax) {
   RunF32x4BinOpTest(execution_tier, kExprF32x4RelaxedMax, Maximum);
 }
 
-WASM_EXEC_TEST(F64x2RelaxedMin) {
+WASM_RELAXED_SIMD_TEST(F64x2RelaxedMin) {
   RunF64x2BinOpTest(execution_tier, kExprF64x2RelaxedMin, Minimum);
 }
 
-WASM_EXEC_TEST(F64x2RelaxedMax) {
+WASM_RELAXED_SIMD_TEST(F64x2RelaxedMax) {
   RunF64x2BinOpTest(execution_tier, kExprF64x2RelaxedMax, Maximum);
 }
 
@@ -365,27 +390,27 @@ void IntRelaxedTruncFloatTest(TestExecutionTier execution_tier,
 }
 }  // namespace
 
-WASM_EXEC_TEST(I32x4RelaxedTruncF64x2SZero) {
+WASM_RELAXED_SIMD_TEST(I32x4RelaxedTruncF64x2SZero) {
   IntRelaxedTruncFloatTest<int32_t, double>(
       execution_tier, kExprI32x4RelaxedTruncF64x2SZero, kExprF64x2Splat);
 }
 
-WASM_EXEC_TEST(I32x4RelaxedTruncF64x2UZero) {
+WASM_RELAXED_SIMD_TEST(I32x4RelaxedTruncF64x2UZero) {
   IntRelaxedTruncFloatTest<uint32_t, double>(
       execution_tier, kExprI32x4RelaxedTruncF64x2UZero, kExprF64x2Splat);
 }
 
-WASM_EXEC_TEST(I32x4RelaxedTruncF32x4S) {
+WASM_RELAXED_SIMD_TEST(I32x4RelaxedTruncF32x4S) {
   IntRelaxedTruncFloatTest<int32_t, float>(
       execution_tier, kExprI32x4RelaxedTruncF32x4S, kExprF32x4Splat);
 }
 
-WASM_EXEC_TEST(I32x4RelaxedTruncF32x4U) {
+WASM_RELAXED_SIMD_TEST(I32x4RelaxedTruncF32x4U) {
   IntRelaxedTruncFloatTest<uint32_t, float>(
       execution_tier, kExprI32x4RelaxedTruncF32x4U, kExprF32x4Splat);
 }
 
-WASM_EXEC_TEST(I8x16RelaxedSwizzle) {
+WASM_RELAXED_SIMD_TEST(I8x16RelaxedSwizzle) {
   // Output is only defined for indices in the range [0,15].
   WasmRunner<int32_t> r(execution_tier);
   static const int kElems = kSimd128Size / sizeof(uint8_t);
@@ -406,7 +431,7 @@ WASM_EXEC_TEST(I8x16RelaxedSwizzle) {
   }
 }
 
-WASM_EXEC_TEST(I16x8RelaxedQ15MulRS) {
+WASM_RELAXED_SIMD_TEST(I16x8RelaxedQ15MulRS) {
   WasmRunner<int32_t, int16_t, int16_t> r(execution_tier);
   // Global to hold output.
   int16_t* g = r.builder().template AddGlobal<int16_t>(kWasmS128);
@@ -439,7 +464,7 @@ WASM_EXEC_TEST(I16x8RelaxedQ15MulRS) {
   }
 }
 
-WASM_EXEC_TEST(I16x8DotI8x16I7x16S) {
+WASM_RELAXED_SIMD_TEST(I16x8DotI8x16I7x16S) {
   WasmRunner<int32_t, int8_t, int8_t> r(execution_tier);
   int16_t* g = r.builder().template AddGlobal<int16_t>(kWasmS128);
   uint8_t value1 = 0, value2 = 1;
@@ -464,7 +489,7 @@ WASM_EXEC_TEST(I16x8DotI8x16I7x16S) {
   }
 }
 
-WASM_EXEC_TEST(I32x4DotI8x16I7x16AddS) {
+WASM_RELAXED_SIMD_TEST(I32x4DotI8x16I7x16AddS) {
   WasmRunner<int32_t, int8_t, int8_t, int32_t> r(execution_tier);
   int32_t* g = r.builder().template AddGlobal<int32_t>(kWasmS128);
   uint8_t value1 = 0, value2 = 1, value3 = 2;
