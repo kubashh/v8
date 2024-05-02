@@ -37,6 +37,9 @@ using WasmName = base::Vector<const char>;
 
 struct AsmJsOffsets;
 class ErrorThrower;
+#if V8_WASM_INTERPRETER
+class WasmInterpreterRuntime;
+#endif  // V8_WASM_INTERPRETER
 class WellKnownImportsList;
 
 // Reference to a string in the wire bytes.
@@ -288,6 +291,9 @@ enum class WasmCompilationHintTier : uint8_t {
   kDefault = 0,
   kBaseline = 1,
   kOptimized = 2,
+#if V8_WASM_INTERPRETER
+  kInterpreter = 3,
+#endif  // V8_WASM_INTERPRETER
 };
 
 // Static representation of a wasm compilation hint
@@ -828,6 +834,16 @@ struct V8_EXPORT_PRIVATE WasmModule {
   base::Vector<const WasmFunction> declared_functions() const {
     return base::VectorOf(functions) + num_imported_functions;
   }
+
+#if V8_WASM_INTERPRETER
+  void SetWasmInterpreter(
+      std::shared_ptr<WasmInterpreterRuntime> interpreter) const {
+    base::MutexGuard lock(&interpreter_mutex_);
+    interpreter_ = interpreter;
+  }
+  mutable std::weak_ptr<WasmInterpreterRuntime> interpreter_;
+  mutable base::Mutex interpreter_mutex_;
+#endif  // V8_WASM_INTERPRETER
 
   size_t EstimateStoredSize() const;                // No tracing.
   size_t EstimateCurrentMemoryConsumption() const;  // With tracing.

@@ -404,6 +404,18 @@ bool is_inbounds(float_t v) {
 #define IF_WASM(V, ...)
 #endif  // V8_ENABLE_WEBASSEMBLY
 
+#ifdef V8_WASM_INTERPRETER
+#define IF_WASM_DRUMBRAKE(V, ...) EXPAND(V(__VA_ARGS__))
+#else
+#define IF_WASM_DRUMBRAKE(V, ...)
+#endif  // V8_WASM_INTERPRETER
+
+#if defined(V8_WASM_INTERPRETER) && !defined(V8_DRUMBRAKE_BOUNDS_CHECKS)
+#define IF_WASM_DRUMBRAKE_INSTR_HANDLER(V, ...) EXPAND(V(__VA_ARGS__))
+#else
+#define IF_WASM_DRUMBRAKE_INSTR_HANDLER(V, ...)
+#endif  // V8_WASM_INTERPRETER && !V8_DRUMBRAKE_BOUNDS_CHECKS
+
 // Defines IF_TSAN, to be used in macro lists for elements that should only be
 // there if TSAN is enabled.
 #ifdef V8_IS_TSAN
