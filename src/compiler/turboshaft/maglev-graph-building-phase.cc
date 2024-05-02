@@ -94,10 +94,10 @@ class GraphBuilder {
                   VariableReducer, RequiredOptimizationReducer,
                   ValueNumberingReducer>;
 
-  GraphBuilder(Graph& graph, Zone* temp_zone,
+  GraphBuilder(DataComponentProvider* data_provider, Graph& graph, Zone* temp_zone,
                maglev::MaglevCompilationUnit* maglev_compilation_unit)
       : temp_zone_(temp_zone),
-        assembler_(graph, graph, temp_zone),
+        assembler_(data_provider, graph, graph, temp_zone),
         maglev_compilation_unit_(maglev_compilation_unit),
         node_mapping_(temp_zone),
         block_mapping_(temp_zone),
@@ -2740,7 +2740,7 @@ void MaglevGraphBuildingPhase::Run(Zone* temp_zone) {
     PrintMaglevGraph(data, compilation_info.get(), maglev_graph);
   }
 
-  maglev::GraphProcessor<GraphBuilder, true> builder(
+  maglev::GraphProcessor<GraphBuilder, true> builder(nullptr, // TODO
       data.graph(), temp_zone, compilation_info->toplevel_compilation_unit());
   builder.ProcessGraph(maglev_graph);
 }

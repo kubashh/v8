@@ -7702,12 +7702,13 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
 };
 
 V8_EXPORT_PRIVATE bool BuildTSGraph(
+    compiler::turboshaft::DataComponentProvider* data_provider,
     AccountingAllocator* allocator, CompilationEnv* env, WasmFeatures* detected,
     Graph& graph, const FunctionBody& func_body,
     const WireBytesStorage* wire_bytes, AssumptionsJournal* assumptions,
     ZoneVector<WasmInliningPosition>* inlining_positions, int func_index) {
   Zone zone(allocator, ZONE_NAME);
-  WasmGraphBuilderBase::Assembler assembler(graph, graph, &zone);
+  WasmGraphBuilderBase::Assembler assembler(data_provider, graph, graph, &zone);
   WasmFullDecoder<Decoder::FullValidationTag, TurboshaftGraphBuildingInterface>
       decoder(&zone, env->module, env->enabled_features, detected, func_body,
               &zone, env, assembler, assumptions, inlining_positions,

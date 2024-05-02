@@ -15,6 +15,7 @@
 #include "src/compiler/phase.h"
 #include "src/compiler/turboshaft/graph.h"
 #include "src/compiler/turboshaft/sidetable.h"
+#include "src/compiler/turboshaft/zone-with-name.h"
 
 #define DECL_TURBOSHAFT_PHASE_CONSTANTS(Name)                  \
   DECL_PIPELINE_PHASE_CONSTANTS_HELPER(Turboshaft##Name,       \
@@ -22,6 +23,7 @@
                                        RuntimeCallStats::kThreadSpecific)
 
 namespace v8::internal::compiler {
+class PipelineData;
 class Schedule;
 }  // namespace v8::internal::compiler
 
@@ -38,35 +40,38 @@ class WasmRevecAnalyzer;
 class V8_EXPORT_PRIVATE PipelineData
     : public base::ContextualClass<PipelineData> {
  public:
-  explicit PipelineData(TurboshaftPipelineKind pipeline_kind,
-                        OptimizedCompilationInfo* const& info,
-                        Schedule*& schedule, Zone*& graph_zone,
-                        Zone* shared_zone, JSHeapBroker*& broker,
-                        Isolate* const& isolate,
-                        SourcePositionTable*& source_positions,
-                        NodeOriginTable*& node_origins,
-                        InstructionSequence*& sequence, Frame*& frame,
-                        AssemblerOptions& assembler_options,
-                        size_t* address_of_max_unoptimized_frame_height,
-                        size_t* address_of_max_pushed_argument_count,
-                        Zone*& instruction_zone, Graph* graph = nullptr)
-      : pipeline_kind_(pipeline_kind),
+  explicit PipelineData(
+      compiler::PipelineData* turbofan_data,
+      TurboshaftPipelineKind pipeline_kind,
+      OptimizedCompilationInfo* const& info,
+      ZoneWithName<kGraphZoneName>& graph_zone, Zone* shared_zone,
+      std::unique_ptr<JSHeapBroker>& broker, Isolate* const& isolate,
+      ZoneWithNamePointer<SourcePositionTable, kGraphZoneName>& source_positions,
+      ZoneWithNamePointer<NodeOriginTable, kGraphZoneName>& node_origins,
+//      ZoneWithNamePointer<InstructionSequence, kInstructionZoneName>& sequence,
+//      ZoneWithNamePointer<Frame, kCodegenZoneName>& frame,
+      AssemblerOptions& assembler_options,
+      size_t* address_of_max_unoptimized_frame_height,
+      size_t* address_of_max_pushed_argument_count,
+//      ZoneWithName<kInstructionZoneName>& instruction_zone,
+      Graph* graph = nullptr)
+      : turbofan_data_(turbofan_data),
+        pipeline_kind_(pipeline_kind),
         info_(info),
-        schedule_(schedule),
         graph_zone_(graph_zone),
         shared_zone_(shared_zone),
         broker_(broker),
         isolate_(isolate),
         source_positions_(source_positions),
         node_origins_(node_origins),
-        sequence_(sequence),
-        frame_(frame),
+//        sequence_(sequence),
+ //       frame_(frame),
         assembler_options_(assembler_options),
         address_of_max_unoptimized_frame_height_(
             address_of_max_unoptimized_frame_height),
         address_of_max_pushed_argument_count_(
             address_of_max_pushed_argument_count),
-        instruction_zone_(instruction_zone),
+//        instruction_zone_(instruction_zone),
         graph_(graph ? graph
                      : graph_zone_->New<turboshaft::Graph>(graph_zone_)) {}
 
@@ -75,18 +80,19 @@ class V8_EXPORT_PRIVATE PipelineData
 
   TurboshaftPipelineKind pipeline_kind() const { return pipeline_kind_; }
   OptimizedCompilationInfo* info() const { return info_; }
-  Schedule* schedule() const { return schedule_; }
+  Schedule* schedule() const;
   Zone* graph_zone() const { return graph_zone_; }
   // The {shared_zone_} outlives the entire compilation pipeline. It is shared
   // between all phases (including code gen where the graph zone is gone
   // already).
   Zone* shared_zone() const { return shared_zone_; }
-  JSHeapBroker* broker() const { return broker_; }
+  JSHeapBroker* broker() const { return broker_.get(); }
   Isolate* isolate() const { return isolate_; }
   SourcePositionTable* source_positions() const { return source_positions_; }
   NodeOriginTable* node_origins() const { return node_origins_; }
-  InstructionSequence* sequence() const { return sequence_; }
-  Frame* frame() const { return frame_; }
+  ZoneWithNamePointer<InstructionSequence, kInstructionZoneName> sequence()
+      const;
+  ZoneWithNamePointer<Frame, kCodegenZoneName> frame() const; // { return frame_; }
   AssemblerOptions& assembler_options() const { return assembler_options_; }
   size_t* address_of_max_unoptimized_frame_height() const {
     return address_of_max_unoptimized_frame_height_;
@@ -94,7 +100,7 @@ class V8_EXPORT_PRIVATE PipelineData
   size_t* address_of_max_pushed_argument_count() const {
     return address_of_max_pushed_argument_count_;
   }
-  Zone* instruction_zone() const { return instruction_zone_; }
+  ZoneWithName<kInstructionZoneName>& instruction_zone();
   CodeTracer* GetCodeTracer() const { return isolate_->GetCodeTracer(); }
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -138,20 +144,9 @@ class V8_EXPORT_PRIVATE PipelineData
     return pipeline_kind() == TurboshaftPipelineKind::kJSToWasm;
   }
 
-  void reset_schedule() { schedule_ = nullptr; }
+  void reset_schedule();
 
-  void InitializeInstructionSequence(const CallDescriptor* call_descriptor) {
-    DCHECK_NULL(sequence_);
-    InstructionBlocks* instruction_blocks =
-        InstructionSequence::InstructionBlocksFor(instruction_zone(), *graph_);
-    sequence_ = instruction_zone()->New<InstructionSequence>(
-        isolate(), instruction_zone(), instruction_blocks);
-    if (call_descriptor && call_descriptor->RequiresFrameAsIncoming()) {
-      sequence_->instruction_blocks()[0]->mark_needs_frame();
-    } else {
-      DCHECK(call_descriptor->CalleeSavedFPRegisters().is_empty());
-    }
-  }
+  void InitializeInstructionSequence(const CallDescriptor* call_descriptor);
 
   void set_loop_unrolling_analyzer(
       LoopUnrollingAnalyzer* loop_unrolling_analyzer) {
@@ -168,25 +163,25 @@ class V8_EXPORT_PRIVATE PipelineData
   void set_graph_has_special_rpo() { graph_has_special_rpo_ = true; }
 
  private:
+  compiler::PipelineData* turbofan_data_;
   // Turbofan's PipelineData owns most of these objects. We only hold references
   // to them.
   // TODO(v8:12783, nicohartmann@): Change this once Turbofan pipeline is fully
   // replaced.
   TurboshaftPipelineKind pipeline_kind_;
   OptimizedCompilationInfo* const& info_;
-  Schedule*& schedule_;
-  Zone*& graph_zone_;
+  ZoneWithName<kGraphZoneName>& graph_zone_;
   Zone* shared_zone_;
-  JSHeapBroker*& broker_;
+  std::unique_ptr<JSHeapBroker>& broker_;
   Isolate* const& isolate_;
-  SourcePositionTable*& source_positions_;
-  NodeOriginTable*& node_origins_;
-  InstructionSequence*& sequence_;
-  Frame*& frame_;
+  ZoneWithNamePointer<SourcePositionTable, kGraphZoneName>& source_positions_;
+  ZoneWithNamePointer<NodeOriginTable, kGraphZoneName>& node_origins_;
+//  ZoneWithNamePointer<InstructionSequence, kInstructionZoneName>& sequence_;
+//  ZoneWithNamePointer<Frame, kCodegenZoneName>& frame_;
   AssemblerOptions& assembler_options_;
   size_t* address_of_max_unoptimized_frame_height_;
   size_t* address_of_max_pushed_argument_count_;
-  Zone*& instruction_zone_;
+//  ZoneWithName<kInstructionZoneName>& instruction_zone_;
 
 #if V8_ENABLE_WEBASSEMBLY
   // TODO(14108): Consider splitting wasm members into its own WasmPipelineData
@@ -207,13 +202,22 @@ class V8_EXPORT_PRIVATE PipelineData
   turboshaft::Graph* graph_;
 };
 
+class DataComponentProvider;
 void PrintTurboshaftGraph(Zone* temp_zone, CodeTracer* code_tracer,
                           const char* phase_name);
+void PrintTurboshaftGraph(DataComponentProvider* data_provider, Zone* temp_zone,
+                          CodeTracer* code_tracer, const char* phase_name);
+
 void PrintTurboshaftGraphForTurbolizer(std::ofstream& stream,
                                        const Graph& graph,
                                        const char* phase_name,
                                        NodeOriginTable* node_origins,
                                        Zone* temp_zone);
+
+template <bool OutputsPrintableGraph = true>
+struct Phase {
+  static constexpr bool outputs_printable_graph = OutputsPrintableGraph;
+};
 
 }  // namespace v8::internal::compiler::turboshaft
 

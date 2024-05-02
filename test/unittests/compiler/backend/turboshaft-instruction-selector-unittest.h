@@ -11,11 +11,13 @@
 
 #include "src/base/utils/random-number-generator.h"
 #include "src/compiler/backend/instruction-selector.h"
+#include "src/compiler/js-heap-broker.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/instruction-selection-normalization-reducer.h"
 #include "src/compiler/turboshaft/load-store-simplification-reducer.h"
 #include "src/compiler/turboshaft/operations.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "test/unittests/test-utils.h"
 
@@ -115,16 +117,21 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
   TurboshaftInstructionSelectorTest();
   ~TurboshaftInstructionSelectorTest() override;
 
+#if 0
   void SetUp() override {
-    pipeline_data_.emplace(TurboshaftPipelineKind::kJS, info_, schedule_,
-                           graph_zone_, this->zone(), broker_, isolate_,
-                           source_positions_, node_origins_, sequence_, frame_,
-                           assembler_options_, &max_unoptimized_frame_height_,
-                           &max_pushed_argument_count_, instruction_zone_);
+    // TODO(nicohartmann@): Reenable this.
+    UNIMPLEMENTED();
+    // pipeline_data_.emplace(TurboshaftPipelineKind::kJS, info_, schedule_,
+    //                        graph_zone_, this->zone(), broker_, isolate_,
+    //                        source_positions_, node_origins_, sequence_, frame_,
+    //                        assembler_options_, &max_unoptimized_frame_height_,
+    //                        &max_pushed_argument_count_, instruction_zone_);
   }
   void TearDown() override { pipeline_data_.reset(); }
+#endif
 
   base::RandomNumberGenerator* rng() { return &rng_; }
+  DataComponentProvider* data_provider() { return &data_provider_; }
 
   class Stream;
 
@@ -138,7 +145,7 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
    public:
     StreamBuilder(TurboshaftInstructionSelectorTest* test,
                   MachineType return_type)
-        : BaseAssembler(test->graph(), test->graph(), test->zone()),
+        : BaseAssembler(test->data_provider(), test->graph(), test->graph(), test->zone()),
           test_(test),
           call_descriptor_(MakeCallDescriptor(test->zone(), return_type)) {
       Init();
@@ -146,7 +153,7 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
 
     StreamBuilder(TurboshaftInstructionSelectorTest* test,
                   MachineType return_type, MachineType parameter0_type)
-        : BaseAssembler(test->graph(), test->graph(), test->zone()),
+        : BaseAssembler(test->data_provider(), test->graph(), test->graph(), test->zone()),
           test_(test),
           call_descriptor_(
               MakeCallDescriptor(test->zone(), return_type, parameter0_type)) {
@@ -156,7 +163,7 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
     StreamBuilder(TurboshaftInstructionSelectorTest* test,
                   MachineType return_type, MachineType parameter0_type,
                   MachineType parameter1_type)
-        : BaseAssembler(test->graph(), test->graph(), test->zone()),
+        : BaseAssembler(test->data_provider(), test->graph(), test->graph(), test->zone()),
           test_(test),
           call_descriptor_(MakeCallDescriptor(
               test->zone(), return_type, parameter0_type, parameter1_type)) {
@@ -166,7 +173,7 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
     StreamBuilder(TurboshaftInstructionSelectorTest* test,
                   MachineType return_type, MachineType parameter0_type,
                   MachineType parameter1_type, MachineType parameter2_type)
-        : BaseAssembler(test->graph(), test->graph(), test->zone()),
+        : BaseAssembler(test->data_provider(), test->graph(), test->graph(), test->zone()),
           test_(test),
           call_descriptor_(MakeCallDescriptor(test->zone(), return_type,
                                               parameter0_type, parameter1_type,
@@ -367,7 +374,8 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
       return Projection(input, index, input_op.outputs_rep()[index]);
     }
     V<Undefined> UndefinedConstant() {
-      return HeapConstant(test_->isolate_->factory()->undefined_value());
+      return HeapConstant(isolate()->factory()->undefined_value());
+      // test_->isolate_->factory()->undefined_value());
     }
 
 #ifdef V8_ENABLE_WEBASSEMBLY
@@ -539,27 +547,31 @@ class TurboshaftInstructionSelectorTest : public TestWithNativeContextAndZone {
     std::deque<FrameStateDescriptor*> deoptimization_entries_;
   };
 
+  DataComponentProvider data_provider_;
   base::RandomNumberGenerator rng_;
 
   Graph& graph() { return PipelineData::Get().graph(); }
 
+#if 0
   // We use some dummy data to initialize the PipelineData::Scope.
   // TODO(nicohartmann@): Clean this up once PipelineData is reorganized.
   OptimizedCompilationInfo* info_ = nullptr;
   Schedule* schedule_ = nullptr;
   Zone* graph_zone_ = this->zone();
-  JSHeapBroker* broker_ = nullptr;
+  std::unique_ptr<JSHeapBroker> broker_;
   Isolate* isolate_ = this->isolate();
-  SourcePositionTable* source_positions_ = nullptr;
-  NodeOriginTable* node_origins_ = nullptr;
-  InstructionSequence* sequence_ = nullptr;
-  Frame* frame_ = nullptr;
+  ZoneWithNamePointer<SourcePositionTable, kGraphZoneName> source_positions_ = nullptr;
+  ZoneWithNamePointer<NodeOriginTable, kGraphZoneName> node_origins_ = nullptr;
+  ZoneWithNamePointer<InstructionSequence, kInstructionZoneName> sequence_ =
+      nullptr;
+  ZoneWithNamePointer<Frame, kCodegenZoneName> frame_ = nullptr;
   AssemblerOptions assembler_options_;
   size_t max_unoptimized_frame_height_ = 0;
   size_t max_pushed_argument_count_ = 0;
-  Zone* instruction_zone_ = this->zone();
+  ZoneWithName<kInstructionZoneName> instruction_zone_ = this->zone();
 
   base::Optional<turboshaft::PipelineData::Scope> pipeline_data_;
+#endif
 };
 
 template <typename T>

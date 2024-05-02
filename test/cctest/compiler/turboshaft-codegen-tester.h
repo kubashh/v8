@@ -16,6 +16,7 @@
 #include "src/compiler/turboshaft/instruction-selection-phase.h"
 #include "src/compiler/turboshaft/load-store-simplification-reducer.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/pipelines.h"
 #include "src/compiler/turboshaft/representations.h"
 #include "src/compiler/zone-stats.h"
 #include "src/objects/code-inl.h"
@@ -35,13 +36,20 @@ class DataHolder {
         graph_zone_(zone),
         info_(zone->New<OptimizedCompilationInfo>(base::ArrayVector("testing"),
                                                   zone, CodeKind::FOR_TESTING)),
-        zone_stats_(isolate->allocator()),
-        pipeline_data_(&zone_stats_, info_, isolate, isolate->allocator(),
-                       nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-                       AssemblerOptions::Default(isolate), nullptr),
+        data_provider_(),
+        //        zone_stats_(isolate->allocator()),
+        // pipeline_data_(/*&zone_stats_, */ info_, isolate, isolate->allocator(),
+        //                nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+        //                AssemblerOptions::Default(isolate), nullptr),
+#if 0
+        pipeline_data_(/*isolate, nullptr, isolate->allocator(), info_, {},
+          turboshaft::TurboshaftPipelineKind::kJS, AssemblerOptions::Default(isolate)*/
+          compiler::PipelineData::ForJSMainEntryPoint(isolate, info_, {})
+          ),
         ts_pipeline_data_(pipeline_data_.GetTurboshaftPipelineData(
             turboshaft::TurboshaftPipelineKind::kJS)),
         ts_data_scope_(ts_pipeline_data_),
+#endif
         descriptor_(Linkage::GetSimplifiedCDescriptor(
             zone, CSignature::New(zone, return_type, p...),
             CallDescriptor::kInitializeRootRegister)) {
@@ -52,28 +60,40 @@ class DataHolder {
     // which uses the Turboshaft instruction selector without even checking
     // v8_flags.turboshaft_instruction_selection).
     v8_flags.turboshaft_instruction_selection = true;
+    data_provider_.InitializeDataComponent<ContextualData>(isolate_);
+    auto& compilation_data = data_provider_.InitializeDataComponent<CompilationData>(info_,
+      std::unique_ptr<JSHeapBroker>{}, TurboshaftPipelineKind::kJS, isolate->allocator());
+    data_provider_.InitializeDataComponent<GraphData>(&compilation_data.zone_stats, nullptr);
   }
 
+#if 0
   compiler::PipelineData* pipeline_data() { return &pipeline_data_; }
 
   PipelineData& ts_pipeline_data() { return ts_pipeline_data_; }
+#endif
+
+  DataComponentProvider* data_provider() { return &data_provider_; }
 
   Isolate* isolate() { return isolate_; }
   Zone* zone() { return graph_zone_; }
-  Graph& graph() { return ts_pipeline_data_.graph(); }
+//  Graph& graph() { UNIMPLEMENTED(); } //return ts_pipeline_data_.graph(); }
+  Graph& graph() { return *data_provider_.GetDataComponent<GraphData>().graph; }
   CallDescriptor* call_descriptor() { return descriptor_; }
-  OptimizedCompilationInfo* info() { return info_; }
+//  OptimizedCompilationInfo* info() { return info_; }
 
  private:
   Isolate* isolate_;
   Zone* graph_zone_;
   OptimizedCompilationInfo* info_;
+  DataComponentProvider data_provider_;
   // zone_stats_ must be destroyed after pipeline_data_, so it's declared
   // before.
-  ZoneStats zone_stats_;
+  //  ZoneStats zone_stats_;
+#if 0
   compiler::PipelineData pipeline_data_;
   turboshaft::PipelineData& ts_pipeline_data_;
   turboshaft::PipelineData::Scope ts_data_scope_;
+#endif
   CallDescriptor* descriptor_;
 };
 
@@ -91,7 +111,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
             CSignature::New(main_zone(), MachineTypeForC<ReturnType>(), p...)),
         DataHolder(main_isolate(), main_zone(), MachineTypeForC<ReturnType>(),
                    p...),
-        BaseAssembler(graph(), graph(), zone()) {
+        BaseAssembler(DataHolder::data_provider(), graph(), graph(), zone()) {
     Init();
   }
 
@@ -103,7 +123,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
             CSignature::New(main_zone(), MachineTypeForC<ReturnType>(), p...)),
         DataHolder(main_isolate(), main_zone(), MachineTypeForC<ReturnType>(),
                    p...),
-        BaseAssembler(graph(), graph(), zone()),
+        BaseAssembler(DataHolder::data_provider(), graph(), graph(), zone()),
         kind_(kind) {
     Init();
   }
@@ -182,7 +202,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
   Address Generate() override {
     if (code_.is_null()) {
       code_ = Pipeline::GenerateTurboshaftCodeForTesting(
-          info(), main_isolate(), call_descriptor(), pipeline_data(),
+          info(), main_isolate(), call_descriptor(), nullptr, //pipeline_data(),
           AssemblerOptions::Default(main_isolate()));
     }
     return code_.ToHandleChecked()->instruction_start();
