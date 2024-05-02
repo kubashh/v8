@@ -16,6 +16,69 @@
       "message": "sorry for the slow review, I\u0027m still looking at this but want to make sure I understand the consequences of this design.",
       "revId": "e0c023164fcc1a49b65441f22b462c52d9159241",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e616441_06c7492b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-05-02T12:10:24Z",
+      "side": 1,
+      "message": "After thinking about this a bit, I think an approach like this is reasonable, since we are anyway checking during execution whether the name actually matches -- we\u0027re overestimating variables here, but that\u0027s safe to do. There would be a way of doing more precise tracking by doing real merges of register state, but I don\u0027t think it\u0027s necessary for this optimisation.\n\nSome comments on the specific implementation as follows.",
+      "revId": "e0c023164fcc1a49b65441f22b462c52d9159241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "547ba18a_2fe25d3f",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-05-02T12:10:24Z",
+      "side": 1,
+      "message": "nit: \"Maybe\" is a bit overloaded in our codebase, we usually use it to mean \"might or might not contain a value\", like Maybe\u003cT\u003e or MaybeHandle\u003cT\u003e. How about `kDefinitelyHasVariable` and `kMightHaveVariable`, or similar?",
+      "range": {
+        "startLine": 19,
+        "startChar": 30,
+        "endLine": 19,
+        "endChar": 45
+      },
+      "revId": "e0c023164fcc1a49b65441f22b462c52d9159241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841eff96_ecd1244e",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-05-02T12:10:24Z",
+      "side": 1,
+      "message": "a flush that (partially) keeps a variable hint is a bit too weak here. `MoveToNewEquivalenceSet` is used for `Flush`ing, but also for `PrepareOutputRegister`, which should clear both \"actual\" and \"maybe\" variables since it\u0027s a whole new value. Please introduce an appropriate new concept here.",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 24
+      },
+      "revId": "e0c023164fcc1a49b65441f22b462c52d9159241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
