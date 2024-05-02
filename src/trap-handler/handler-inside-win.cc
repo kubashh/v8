@@ -34,6 +34,10 @@
 #include "src/trap-handler/trap-handler-simulator.h"
 #endif
 
+#if V8_WASM_INTERPRETER
+#include "src/wasm/interpreter/wasm-interpreter.h"
+#endif  // V8_WASM_INTERPRETER
+
 namespace v8 {
 namespace internal {
 namespace trap_handler {
@@ -115,11 +119,27 @@ bool TryHandleWasmTrap(EXCEPTION_POINTERS* exception) {
   exception->ContextRecord->Rip =
       reinterpret_cast<uintptr_t>(&probe_memory_continuation);
 #else
+
+#if V8_WASM_INTERPRETER
+  uintptr_t landing_pad = gLandingPad;
+  if (v8_flags.wasm_jitless) {
+    if (!wasm::WasmInterpreter::HandleWasmTrap(fault_addr, &landing_pad)) {
+      return false;
+    }
+  } else {
+    if (!IsFaultAddressCovered(fault_addr)) return false;
+  }
+
+  TH_DCHECK(landing_pad != 0);
+  // Tell the caller to return to the landing pad.
+  exception->ContextRecord->Rip = landing_pad;
+#else   // V8_WASM_INTERPRETER
   if (!IsFaultAddressCovered(fault_addr)) return false;
 
   TH_DCHECK(gLandingPad != 0);
   // Tell the caller to return to the landing pad.
   exception->ContextRecord->Rip = gLandingPad;
+#endif  // V8_WASM_INTERPRETER
   exception->ContextRecord->R10 = fault_addr;
 #endif
   // We will return to wasm code, so restore the g_thread_in_wasm_code flag.

@@ -70,7 +70,7 @@ include_rules = [
   "+src/regexp/regexp-flags.h",
   "+src/regexp/regexp-stack.h",
   "+src/regexp/regexp-utils.h",
-  "-src/trap-handler",
+  # "-src/trap-handler", # Disabled for Wasm interpreter
   "+src/trap-handler/handler-inside-posix.h",
   "+src/trap-handler/handler-inside-win.h",
   "+src/trap-handler/trap-handler.h",

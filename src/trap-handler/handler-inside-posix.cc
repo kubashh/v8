@@ -43,6 +43,10 @@
 #include "src/trap-handler/trap-handler-simulator.h"
 #endif
 
+#if V8_WASM_INTERPRETER
+#include "src/wasm/interpreter/wasm-interpreter.h"
+#endif  // V8_WASM_INTERPRETER
+
 namespace v8 {
 namespace internal {
 namespace trap_handler {
@@ -182,10 +186,26 @@ bool TryHandleSignal(int signum, siginfo_t* info, void* context) {
     // Continue at the memory probing continuation.
     *context_ip = reinterpret_cast<uintptr_t>(&probe_memory_continuation);
 #else
+
+#if V8_WASM_INTERPRETER
+    uintptr_t landing_pad = gLandingPad;
+    if (v8_flags.wasm_jitless) {
+      if (!wasm::WasmInterpreter::HandleWasmTrap(fault_addr, &landing_pad)) {
+        return false;
+      }
+    } else {
+      if (!IsFaultAddressCovered(fault_addr)) return false;
+    }
+    TH_DCHECK(landing_pad != 0);
+
+    // Tell the caller to return to the landing pad.
+    *context_ip = landing_pad;
+#else   // V8_WASM_INTERPRETER
     if (!IsFaultAddressCovered(fault_addr)) return false;
     TH_DCHECK(gLandingPad != 0);
     // Tell the caller to return to the landing pad.
     *context_ip = gLandingPad;
+#endif  // V8_WASM_INTERPRETER
 
 #if V8_HOST_ARCH_X64
     auto* fault_address_reg = CONTEXT_REG(r10, R10);

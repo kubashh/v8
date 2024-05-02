@@ -183,6 +183,10 @@ class Recorder;
 }  // namespace metrics
 
 namespace wasm {
+
+#if V8_WASM_INTERPRETER
+class WasmExecutionTimer;
+#endif  // V8_WASM_INTERPRETER
 class WasmCodeLookupCache;
 class WasmOrphanedGlobalHandle;
 }
@@ -2148,6 +2152,14 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   GlobalSafepoint* global_safepoint() const { return global_safepoint_.get(); }
 
+#if V8_WASM_INTERPRETER
+  void initialize_wasm_execution_timer();
+
+  wasm::WasmExecutionTimer* wasm_execution_timer() const {
+    return wasm_execution_timer_.get();
+  }
+#endif  // V8_WASM_INTERPRETER
+
   bool owns_shareable_data() { return owns_shareable_data_; }
 
   bool log_object_relocation() const { return log_object_relocation_; }
@@ -2712,6 +2724,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 #ifdef V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeLookupCache* wasm_code_look_up_cache_ = nullptr;
   wasm::StackMemory* wasm_stacks_ = nullptr;
+
+#if V8_WASM_INTERPRETER
+  std::unique_ptr<wasm::WasmExecutionTimer> wasm_execution_timer_;
+#endif  // V8_WASM_INTERPRETER
   wasm::WasmOrphanedGlobalHandle* wasm_orphaned_handle_ = nullptr;
 #endif
 

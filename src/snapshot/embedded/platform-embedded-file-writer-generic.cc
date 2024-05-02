@@ -114,7 +114,11 @@ void PlatformEmbeddedFileWriterGeneric::SourceInfo(int fileid,
 
 void PlatformEmbeddedFileWriterGeneric::DeclareFunctionBegin(const char* name,
                                                              uint32_t size) {
-  if (ENABLE_CONTROL_FLOW_INTEGRITY_BOOL) {
+  if (ENABLE_CONTROL_FLOW_INTEGRITY_BOOL
+#if V8_WASM_INTERPRETER
+      || IsDrumBrakeInstructionHandler(name)
+#endif  // V8_WASM_INTERPRETER
+  ) {
     DeclareSymbolGlobal(name);
   }
 

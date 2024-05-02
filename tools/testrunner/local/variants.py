@@ -13,7 +13,7 @@ ALL_VARIANT_FLAGS = {
     "infra_staging": [[]],
     "interpreted_regexp": [["--regexp-interpret-all"]],
     "experimental_regexp": [["--default-to-experimental-regexp-engine"]],
-    "jitless": [["--jitless"]],
+    "jitless": [["--jitless", "--wasm-jitless"]],
     "sparkplug": [["--sparkplug"]],
     "maglev": [["--maglev"]],
     "maglev_future": [["--maglev", "--maglev-future"]],
