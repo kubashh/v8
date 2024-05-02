@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d68b4c2c_ba46419a",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-05-02T06:42:35Z",
+      "side": 1,
+      "message": "Right, but if we make the constructor private, such that the only way to create a new `FrameDescriptor` is using `FrameDescriptor::Create`, there is no point in having this overloaded `operator new` or am I missing something?",
+      "parentUuid": "8fb77c48_8d047e4e",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 63
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "458f1437_f85b0889",
         "filename": "src/deoptimizer/frame-description.h",
         "patchSetId": 1
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "They are deleted via the delete operator here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/deoptimizer/deoptimizer.cc;l\u003d668\nWe can\u0027t use `unique_ptr` as the pointer is accessed from builtins.",
       "parentUuid": "458f1437_f85b0889",
+      "range": {
+        "startLine": 91,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 22
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b4477e_3936711f",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-05-02T06:42:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5b033389_8cb7d61e",
       "range": {
         "startLine": 91,
         "startChar": 2,
