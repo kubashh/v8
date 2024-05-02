@@ -2215,9 +2215,8 @@ void DescriptorArray::GeneralizeAllFields(TransitionKindFlag transition_kind) {
     if (details.location() == PropertyLocation::kField) {
       // Since constness is not propagated across proto transitions we must
       // clear the flag here.
-      // TODO(olivf): Evaluate if we should apply field updates over proto
-      // transitions (either forward only, or forward and backwards).
-      if (transition_kind == PROTOTYPE_TRANSITION) {
+      if (!V8_MOVE_PROTOYPE_TRANSITIONS_FIRST_BOOL &&
+          transition_kind == PROTOTYPE_TRANSITION) {
         details = details.CopyWithConstness(PropertyConstness::kMutable);
       }
       DCHECK_EQ(PropertyKind::kData, details.kind());
