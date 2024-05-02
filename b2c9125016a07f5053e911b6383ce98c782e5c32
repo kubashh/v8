@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8241d4b0_6075623e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2024-05-02T18:56:08Z",
+      "side": 1,
+      "message": "Tryjob failure is due to a stale Chromium revision. Chromium uses were removed in https://crrev.com/c/5503829.",
+      "revId": "b2c9125016a07f5053e911b6383ce98c782e5c32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
