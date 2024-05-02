@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6481ab49_ec8b6ea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-02T14:51:45Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd54eb4a_28ad3272",
@@ -48,6 +65,24 @@
       "writtenOn": "2024-05-02T08:59:39Z",
       "side": 1,
       "message": "Nit: Should we have a method for `new_space() || sticky_mark_bits`? There are uses of this pattern already in the code base and this CL seems to add quite some more.",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "532d3810_4e2a99ff",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-02T14:51:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd54eb4a_28ad3272",
       "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fd6d158_7ad5b167",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4801,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-02T14:51:45Z",
+      "side": 1,
+      "message": "Actually I think we still need to update the slot with sticky bits. It used to work I guess because the compaction was disabled. I removed the branch.",
+      "parentUuid": "80567986_3d27bb3a",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "123a330d_67684430",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 3
@@ -88,6 +141,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "525f736f_7b27b50e",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5186,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-02T14:51:45Z",
+      "side": 1,
+      "message": "We need to bail out currently with sticky bits. I guess we can either do it here or in the parent frame.",
+      "parentUuid": "123a330d_67684430",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc0f1643_83118d84",
         "filename": "src/heap/minor-mark-sweep.cc",
         "patchSetId": 3
@@ -99,6 +170,24 @@
       "writtenOn": "2024-05-02T08:59:39Z",
       "side": 1,
       "message": "Nit: DCHECK_NULL?",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "679ddd56_f4d8f531",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-02T14:51:45Z",
+      "side": 1,
+      "message": "It actually returns a bool, so I believe it better be a dcheck.",
+      "parentUuid": "fc0f1643_83118d84",
       "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
