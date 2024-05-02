@@ -16,6 +16,108 @@
       "message": "friendly ping",
       "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a4e854_e9ad7af6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T08:59:39Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd54eb4a_28ad3272",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T08:59:39Z",
+      "side": 1,
+      "message": "Nit: Should we have a method for `new_space() || sticky_mark_bits`? There are uses of this pattern already in the code base and this CL seems to add quite some more.",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80567986_3d27bb3a",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4801,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T08:59:39Z",
+      "side": 1,
+      "message": "Can you add a comment here why we bail out early here? I understand that OLD_TO_NEW is empty after the full GC but that\u0027s already the case now.",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123a330d_67684430",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5186,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T08:59:39Z",
+      "side": 1,
+      "message": "Can we DCHECK this instead?",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc0f1643_83118d84",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T08:59:39Z",
+      "side": 1,
+      "message": "Nit: DCHECK_NULL?",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af34728_96d8035b",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T08:59:39Z",
+      "side": 1,
+      "message": "Nit: This also seems like a common pattern that we could add a method for.",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
