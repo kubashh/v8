@@ -699,7 +699,7 @@ void MarkCompactCollector::Prepare() {
     }
   }
 
-  if (heap_->new_space()) {
+  if (heap_->new_space_present()) {
     DCHECK_EQ(
         heap_->allocator()->new_space_allocator()->top(),
         heap_->allocator()->new_space_allocator()->original_top_acquire());
@@ -3774,7 +3774,7 @@ static inline void UpdateSlot(PtrComprCageBase cage_base, TSlot slot,
   // word which we update while loading the map word for updating the slot
   // on another page.
   slot.Relaxed_Store(target);
-  DCHECK(!Heap::InFromPage(target));
+  DCHECK_IMPLIES(!v8_flags.sticky_mark_bits, !Heap::InFromPage(target));
   DCHECK(!MarkCompactCollector::IsOnEvacuationCandidate(target));
 }
 
@@ -4615,6 +4615,16 @@ void MarkCompactCollector::Evacuate() {
     verifier.Run();
   }
 #endif  // VERIFY_HEAP
+
+#if DEBUG
+  if (v8_flags.sticky_mark_bits) {
+    OldGenerationMemoryChunkIterator::ForAll(
+        heap_, [](MutablePageMetadata* chunk) {
+          DCHECK(!chunk->ContainsSlots<OLD_TO_NEW>());
+          DCHECK(!chunk->ContainsSlots<OLD_TO_NEW_BACKGROUND>());
+        });
+  }
+#endif
 }
 
 class UpdatingItem : public ParallelWorkItem {
@@ -4765,10 +4775,12 @@ class RememberedSetUpdatingItem : public UpdatingItem {
     if (!(*slot).GetHeapObject(&heap_object)) return;
     if (!Heap::InYoungGeneration(heap_object)) return;
 
-    DCHECK_IMPLIES(v8_flags.minor_ms && !Heap::IsLargeObject(heap_object),
-                   Heap::InToPage(heap_object));
-    DCHECK_IMPLIES(!v8_flags.minor_ms || Heap::IsLargeObject(heap_object),
-                   Heap::InFromPage(heap_object));
+    if (!v8_flags.sticky_mark_bits) {
+      DCHECK_IMPLIES(v8_flags.minor_ms && !Heap::IsLargeObject(heap_object),
+                     Heap::InToPage(heap_object));
+      DCHECK_IMPLIES(!v8_flags.minor_ms || Heap::IsLargeObject(heap_object),
+                     Heap::InFromPage(heap_object));
+    }
 
     // OLD_TO_NEW slots are recorded in dead memory, so they might point to
     // dead objects.
@@ -5166,6 +5178,11 @@ void MarkCompactCollector::UpdatePointersAfterEvacuation() {
 }
 
 void MarkCompactCollector::UpdatePointersInClientHeaps() {
+  if (v8_flags.sticky_mark_bits) {
+    // TODO(333906585): Shared heap is currently not supported with sticky mark
+    // bits.
+    return;
+  }
   Isolate* const isolate = heap_->isolate();
   if (!isolate->is_shared_space_isolate()) return;
 
