@@ -108,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb27061c_bfdd11e9",
+        "filename": "src/deoptimizer/frame-description.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-02T08:07:10Z",
+      "side": 1,
+      "message": "I mean, not until someone adds a second way. It\u0027s a separation of concerns to have the allocation done by `new` as that\u0027s the concept that should be used for allocating memory for an object.\nMaybe the clearer argument: We also need a custom `operator delete` so that allocation and deallocation are in sync. So we should overload both `operator new` and `operator delete`.\nSo, if this blocks this CL otherwise, I can remove the `operator new` (in the end it\u0027s just a one-liner implementation) but I\u0027m still convinced that it\u0027s existence has its merit and I wouldn\u0027t feel inclined to remove it.",
+      "parentUuid": "d68b4c2c_ba46419a",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 63
+      },
+      "revId": "3966f0ca6ceb2fc2c8550c87945e6e9a4f6473af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "458f1437_f85b0889",
         "filename": "src/deoptimizer/frame-description.h",
         "patchSetId": 1
