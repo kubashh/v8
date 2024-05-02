@@ -194,6 +194,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74ec014d_a23bc475",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-02T15:20:57Z",
+      "side": 1,
+      "message": "Yes, for similar checks we often use `DCHECK_NULL(chunk-\u003eslot_set\u003cOLD_TO_NEW\u003e())` which ensures that the SlotSet is not even allocated. Not sure about `ContainsSlot()` but the null check would make that more explicit.",
+      "parentUuid": "679ddd56_f4d8f531",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0af34728_96d8035b",
         "filename": "src/heap/sweeper.cc",
         "patchSetId": 3
