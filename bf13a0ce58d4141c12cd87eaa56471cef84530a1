@@ -16,6 +16,23 @@
       "message": "This is a large and horrible patch but which is mostly mechanical, as discussed on https://issues.chromium.org/issues/337580006.",
       "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f298c63_d7b92d33",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-03T13:46:25Z",
+      "side": 1,
+      "message": "This dcheck fails on multi-cage mode.  Have to figure out a solution.",
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
