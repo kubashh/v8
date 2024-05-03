@@ -228,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13b730c1_46bbdb5a",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-03T09:12:42Z",
+      "side": 1,
+      "message": "Ah okay, that makes sense. Whatever seems better to you then.",
+      "parentUuid": "c24ec790_8fcc525b",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0af34728_96d8035b",
