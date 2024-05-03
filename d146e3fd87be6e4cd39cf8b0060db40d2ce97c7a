@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdc67b1e_4a9e03f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-03T16:55:48Z",
+      "side": 1,
+      "message": "LGTM with minor comments.\n\nHigh-level concern: maybe we do want some metrics in place before shipping this. What if, for example, there turns out to be a large number of machines that regularly gets memory pressure callbacks and hence keeps flushing all code every couple of seconds? I think we\u0027d want to learn about that; e.g. we might then want to build some heuristics/limits into the system to avoid flushing code too often.",
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04995028_046fdfe3",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10280,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-03T16:55:48Z",
+      "side": 1,
+      "message": "Probably don\u0027t want to do this when `level \u003d\u003d kNone`? Looking at the descriptions of the enum values, it\u0027s probably the right choice to flush code only at critical pressure level.",
+      "range": {
+        "startLine": 10280,
+        "startChar": 2,
+        "endLine": 10280,
+        "endChar": 47
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8048105_f8c33967",
@@ -36,6 +76,76 @@
         "startChar": 6,
         "endLine": 339,
         "endChar": 8
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "882e140d_245a3318",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-03T16:55:48Z",
+      "side": 1,
+      "message": "Wrap the `return true;` in `{}`, or leave an empty line after the `if`?",
+      "parentUuid": "e8048105_f8c33967",
+      "range": {
+        "startLine": 339,
+        "startChar": 6,
+        "endLine": 339,
+        "endChar": 8
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05cce41c_9035bf1c",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-03T16:55:48Z",
+      "side": 1,
+      "message": "We\u0027re inside a loop that runs three times here. Flushing code three times probably doesn\u0027t make sense? So let\u0027s put this behind `if (i \u003d\u003d 0)` (or perhaps `if (i \u003d\u003d 1)` if you want to first try whether GC (without code flushing) is enough to free up sufficient memory.",
+      "range": {
+        "startLine": 341,
+        "startChar": 6,
+        "endLine": 341,
+        "endChar": 51
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95beafd2_aba3bba4",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26845,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-03T16:55:48Z",
+      "side": 1,
+      "message": "Better use `kCritical` here. See related comment in `api.cc`.",
+      "range": {
+        "startLine": 26845,
+        "startChar": 63,
+        "endLine": 26845,
+        "endChar": 68
       },
       "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
