@@ -150,10 +150,6 @@ void YoungGenerationMarkingVisitor<marking_mode>::VisitExternalPointer(
   DCHECK_NE(slot.tag(), kExternalPointerNullTag);
   DCHECK(!IsSharedExternalPointerType(slot.tag()));
 
-  // TODO(chromium:337580006): Remove when pointer compression always uses
-  // EPT.
-  if (!slot.HasExternalPointerHandle()) return;
-
   ExternalPointerHandle handle = slot.Relaxed_LoadHandle();
   ExternalPointerTable& table = isolate_->external_pointer_table();
   auto* space = isolate_->heap()->young_external_pointer_space();

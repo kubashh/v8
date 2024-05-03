@@ -89,7 +89,7 @@ void JSArrayBuffer::SetBackingStoreRefForSerialization(uint32_t ref) {
 }
 
 void JSArrayBuffer::init_extension() {
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
   // The extension field is lazily-initialized, so set it to null initially.
   base::AsAtomic32::Release_Store(extension_handle_location(),
                                   kNullExternalPointerHandle);
@@ -99,7 +99,7 @@ void JSArrayBuffer::init_extension() {
 }
 
 ArrayBufferExtension* JSArrayBuffer::extension() const {
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
   // We need Acquire semantics here when loading the entry, see below.
   // Consider adding respective external pointer accessors if non-relaxed
   // ordering semantics are ever needed in other places as well.
@@ -114,7 +114,7 @@ ArrayBufferExtension* JSArrayBuffer::extension() const {
 }
 
 void JSArrayBuffer::set_extension(ArrayBufferExtension* extension) {
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
   // TODO(saelo): if we ever use the external pointer table for all external
   // pointer fields in the no-sandbox-ptr-compression config, replace this code
   // here and above with the respective external pointer accessors.
@@ -139,7 +139,7 @@ void JSArrayBuffer::set_extension(ArrayBufferExtension* extension) {
   WriteBarrier::Marking(*this, extension);
 }
 
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
 ExternalPointerHandle* JSArrayBuffer::extension_handle_location() const {
   Address location = field_address(kExtensionOffset);
   return reinterpret_cast<ExternalPointerHandle*>(location);

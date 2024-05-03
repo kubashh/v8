@@ -788,15 +788,15 @@ void HeapObject::WriteBoundedSizeField(size_t offset, size_t value) {
 
 template <ExternalPointerTag tag>
 void HeapObject::InitExternalPointerField(size_t offset,
-                                          IsolateForSandbox isolate,
+                                          IsolateForPointerCompression isolate,
                                           Address value) {
   i::InitExternalPointerField<tag>(address(), field_address(offset), isolate,
                                    value);
 }
 
 template <ExternalPointerTag tag>
-Address HeapObject::ReadExternalPointerField(size_t offset,
-                                             IsolateForSandbox isolate) const {
+Address HeapObject::ReadExternalPointerField(
+    size_t offset, IsolateForPointerCompression isolate) const {
   return i::ReadExternalPointerField<tag>(field_address(offset), isolate);
 }
 
@@ -814,14 +814,14 @@ Address HeapObject::TryReadCppHeapPointerField(
 
 template <ExternalPointerTag tag>
 void HeapObject::WriteExternalPointerField(size_t offset,
-                                           IsolateForSandbox isolate,
+                                           IsolateForPointerCompression isolate,
                                            Address value) {
   i::WriteExternalPointerField<tag>(field_address(offset), isolate, value);
 }
 
 template <ExternalPointerTag tag>
 void HeapObject::WriteLazilyInitializedExternalPointerField(
-    size_t offset, IsolateForSandbox isolate, Address value) {
+    size_t offset, IsolateForPointerCompression isolate, Address value) {
   i::WriteLazilyInitializedExternalPointerField<tag>(
       address(), field_address(offset), isolate, value);
 }

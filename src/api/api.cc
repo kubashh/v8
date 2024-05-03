@@ -6034,7 +6034,7 @@ String::ExternalStringResource* String::GetExternalStringResourceSlow() const {
   }
 
   if (i::StringShape(str).IsExternalTwoByte()) {
-    Isolate* isolate = i::Internals::GetIsolateForSandbox(str.ptr());
+    Isolate* isolate = i::Internals::GetIsolateForPointerCompression(str.ptr());
     i::Address value =
         i::Internals::ReadExternalPointerField<i::kExternalStringResourceTag>(
             isolate, str.ptr(), i::Internals::kStringResourceOffset);
@@ -6088,7 +6088,7 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBaseSlow(
       static_cast<Encoding>(type & i::Internals::kStringEncodingMask);
   if (i::StringShape(str).IsExternalOneByte() ||
       i::StringShape(str).IsExternalTwoByte()) {
-    Isolate* isolate = i::Internals::GetIsolateForSandbox(string);
+    Isolate* isolate = i::Internals::GetIsolateForPointerCompression(string);
     i::Address value =
         i::Internals::ReadExternalPointerField<i::kExternalStringResourceTag>(
             isolate, string, i::Internals::kStringResourceOffset);
