@@ -16,6 +16,24 @@
       "message": "Here (and below) I am not sure whether these are external pointers with EPT entries or sandboxed pointers (indirectpointer).",
       "revId": "e7a86607d95a24231d5ae8e71c7aca625431351c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38ca52cc_ddf6a8c7",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-03T14:24:21Z",
+      "side": 0,
+      "message": "Hmm maybe the method name is wrong here. It looks like these are \"Sandboxed Pointers\" (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/sandbox/GLOSSARY.md;l\u003d74;drc\u003da78860780c0eebd129ff70772a81a546991055ac), used e.g. for referencing ArrayBuffer backing stores inside the sandbox.",
+      "parentUuid": "d9471700_2f305514",
+      "revId": "e7a86607d95a24231d5ae8e71c7aca625431351c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

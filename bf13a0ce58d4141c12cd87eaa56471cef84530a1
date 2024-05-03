@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2af4449c_b904e009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-03T14:24:21Z",
+      "side": 1,
+      "message": "Wohoo!",
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e22d05a_f7b0a790",
+        "filename": "src/execution/isolate-utils-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-03T14:24:21Z",
+      "side": 1,
+      "message": "Should this be `GetIsolateForPointerCompression`?",
+      "range": {
+        "startLine": 61,
+        "startChar": 43,
+        "endLine": 61,
+        "endChar": 63
+      },
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eae5343_46eb3ca9",
+        "filename": "src/objects/js-array-buffer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-03T14:24:21Z",
+      "side": 1,
+      "message": "Can we do this now? I.e. use `WriteInitializedExternalPointerField` here and `SetupLazilyInitializedExternalPointerField` in `init_extension`? If it doesn\u0027t work for some reason, feel free to just leave the TODO though",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 67
+      },
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f298c63_d7b92d33",
@@ -31,6 +94,24 @@
       "writtenOn": "2024-05-03T13:46:25Z",
       "side": 1,
       "message": "This dcheck fails on multi-cage mode.  Have to figure out a solution.",
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f19c0d1_3f5a2c14",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-03T14:24:21Z",
+      "side": 1,
+      "message": "Ah hmm not sure how exactly this works, but I guess the problem is the this code currently assumes a shared RO space and a shared EPT RO space. If this isn\u0027t the case, we probably need one EPT RO space per heap or something like that?\nMaybe worth checking if we even have any external pointers in the RO snapshot in that case though.",
+      "parentUuid": "0f298c63_d7b92d33",
       "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
