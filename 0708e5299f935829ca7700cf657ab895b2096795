@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "0708e5299f935829ca7700cf657ab895b2096795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5dfa2a_62b32fb2",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-05-03T13:55:04Z",
+      "side": 1,
+      "message": "should we also instead pass in just the current known_node_aspects, rather than the current frame?",
+      "range": {
+        "startLine": 324,
+        "startChar": 4,
+        "endLine": 324,
+        "endChar": 36
+      },
+      "revId": "0708e5299f935829ca7700cf657ab895b2096795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
