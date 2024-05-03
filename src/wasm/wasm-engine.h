@@ -234,6 +234,8 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   void FlushCode();
 
+  size_t GetLiftoffCodeSize();
+
   AccountingAllocator* allocator() { return &allocator_; }
 
   // Compilation statistics for TurboFan compilations. Returns a shared_ptr

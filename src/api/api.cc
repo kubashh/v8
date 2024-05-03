@@ -10276,6 +10276,9 @@ void Isolate::IsolateInBackgroundNotification() {
 }
 
 void Isolate::MemoryPressureNotification(MemoryPressureLevel level) {
+#if V8_ENABLE_WEBASSEMBLY
+  internal::wasm::GetWasmEngine()->FlushCode();
+#endif  // V8_ENABLE_WEBASSEMBLY
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
   bool on_isolate_thread =
       i_isolate->was_locker_ever_used()

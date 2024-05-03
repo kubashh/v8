@@ -740,6 +740,8 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // {CompileLazy} builtins.
   void RemoveCompiledCode(RemoveFilter filter);
 
+  size_t SumLiftoffCodeSize();
+
   // Free a set of functions of this module. Uncommits whole pages if possible.
   // The given vector must be ordered by the instruction start address, and all
   // {WasmCode} objects must not be used any more.
@@ -1027,6 +1029,8 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   size_t committed_code_space() const {
     return total_committed_code_space_.load();
   }
+
+  size_t EstimateSize();
 
   // Estimate the needed code space for a Liftoff function based on the size of
   // the function body (wasm byte code).
