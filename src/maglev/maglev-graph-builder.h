@@ -270,7 +270,7 @@ class MaglevGraphBuilder {
     }
   }
 
-  SmiConstant* GetSmiConstant(int constant) {
+  SmiConstant* GetSmiConstant(int constant) const {
     DCHECK(Smi::IsValid(constant));
     auto it = graph_->smi().find(constant);
     if (it == graph_->smi().end()) {
@@ -916,7 +916,7 @@ class MaglevGraphBuilder {
   }
 
   template <typename NodeT, typename... Args>
-  NodeT* CreateNewConstantNode(Args&&... args) {
+  NodeT* CreateNewConstantNode(Args&&... args) const {
     static_assert(IsConstantNode(Node::opcode_of<NodeT>));
     NodeT* node = NodeBase::New<NodeT>(zone(), std::forward<Args>(args)...);
     static_assert(!NodeT::kProperties.can_eager_deopt());
@@ -984,12 +984,19 @@ class MaglevGraphBuilder {
     if constexpr (NodeT::kProperties.can_throw()) {
       CatchBlockDetails catch_block = GetCurrentTryCatchBlock();
       if (catch_block.ref) {
+        const MaglevGraphBuilder* builder = this;
+        int depth = 0;
+        if (catch_block_stack_.size() == 0) {
+          for (; depth < parent_catch_deopt_frame_distance_; depth++) {
+            builder = builder->parent();
+          }
+        }
         new (node->exception_handler_info())
-            ExceptionHandlerInfo(catch_block.ref);
+            ExceptionHandlerInfo(catch_block.ref, depth);
 
         // Merge the current state into the handler state.
         DCHECK_NOT_NULL(catch_block.state);
-        catch_block.state->MergeThrow(this, catch_block.unit,
+        catch_block.state->MergeThrow(builder, catch_block.unit,
                                       current_interpreter_frame_);
       } else {
         // Patch no exception handler marker.
@@ -2340,6 +2347,7 @@ class MaglevGraphBuilder {
   MaglevGraphBuilder* const parent_;
   DeoptFrame* parent_deopt_frame_ = nullptr;
   CatchBlockDetails parent_catch_;
+  int parent_catch_deopt_frame_distance_ = 0;
   // Cache the heap broker since we access it a bunch.
   compiler::JSHeapBroker* broker_ = compilation_unit_->broker();
 

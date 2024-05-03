@@ -561,10 +561,8 @@ class ExceptionHandlerTrampolineBuilder {
     // values are tagged and b) the stack walk treats unknown stack slots as
     // tagged.
 
-    // TODO(victorgomes): Update this once we support exceptions in inlined
-    // functions. Currently, only the bottom frame can contain a catch block.
     const DeoptFrame* bottom_frame = &deopt_info->top_frame();
-    while (bottom_frame->parent() != nullptr) {
+    for (int i = 0; i < handler_info->depth; i++) {
       bottom_frame = bottom_frame->parent();
     }
     const InterpretedDeoptFrame& lazy_frame = bottom_frame->as_interpreted();
