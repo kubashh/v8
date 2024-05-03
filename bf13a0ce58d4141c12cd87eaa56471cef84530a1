@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f5fb5e7_643dc260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-03T13:39:30Z",
+      "side": 1,
+      "message": "This is a large and horrible patch but which is mostly mechanical, as discussed on https://issues.chromium.org/issues/337580006.",
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
