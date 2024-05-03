@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ae9ccd0_eb993974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-03T16:37:30Z",
+      "side": 1,
+      "message": "Jakob, could you please take a look?",
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8048105_f8c33967",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-03T16:37:30Z",
+      "side": 1,
+      "message": "how do I remove this indent?",
+      "range": {
+        "startLine": 339,
+        "startChar": 6,
+        "endLine": 339,
+        "endChar": 8
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
