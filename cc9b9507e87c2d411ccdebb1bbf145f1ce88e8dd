@@ -212,6 +212,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c24ec790_8fcc525b",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-03T09:04:13Z",
+      "side": 1,
+      "message": "With `DCHECK_NULL` we would have to check both `slot_set` and `typed_slot_set`:\n```\nDCHECK_NULL(chunk-\u003eslot_set\u003cOLD_TO_NEW\u003e());\nDCHECK_NULL(chunk-\u003etyped_slot_set\u003cOLD_TO_NEW\u003e());\n```\nwhere `Page::ContainsSlots()` already handles them both. Do you still think that checking both would be preferable (to me `ContainsSlots()` feels more descriptive, but since it\u0027s stylistic, it doesn\u0027t matter to me).",
+      "parentUuid": "74ec014d_a23bc475",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0af34728_96d8035b",
         "filename": "src/heap/sweeper.cc",
         "patchSetId": 3
