@@ -446,10 +446,11 @@ class InspectorExtension : public InspectorIsolateData::SetupGlobalTask {
     v8::Isolate* isolate = info.GetIsolate();
     v8::Local<v8::ObjectTemplate> templ = v8::ObjectTemplate::New(isolate);
     if (info[1].As<v8::Boolean>()->Value()) {
-      templ->SetAccessor(v8::Local<v8::String>::Cast(info[0]), AccessorGetter,
-                         AccessorSetter);
+      templ->SetNativeDataProperty(v8::Local<v8::String>::Cast(info[0]),
+                                   AccessorGetter, AccessorSetter);
     } else {
-      templ->SetAccessor(v8::Local<v8::String>::Cast(info[0]), AccessorGetter);
+      templ->SetNativeDataProperty(v8::Local<v8::String>::Cast(info[0]),
+                                   AccessorGetter);
     }
     info.GetReturnValue().Set(
         templ->NewInstance(isolate->GetCurrentContext()).ToLocalChecked());
