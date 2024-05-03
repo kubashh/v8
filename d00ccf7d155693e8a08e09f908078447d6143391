@@ -33,6 +33,121 @@
       "message": "Thanks, Dominik!",
       "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adee4946_e4f32142",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-03T09:38:00Z",
+      "side": 1,
+      "message": "nit: Maybe `use_new_space()`?",
+      "range": {
+        "startLine": 1657,
+        "startChar": 7,
+        "endLine": 1657,
+        "endChar": 24
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62f08b41_917fe02d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-03T09:38:00Z",
+      "side": 1,
+      "message": "Why is this not behind verify heap? Don\u0027t we have a better place to put this for debugging purposes? I wonder if this gets lost in future.",
+      "range": {
+        "startLine": 4620,
+        "startChar": 6,
+        "endLine": 4620,
+        "endChar": 14
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d308ed6_03a4ab50",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-03T09:38:00Z",
+      "side": 1,
+      "message": "Since this method is cluttered with `if(sticky)`, would it make sense to create a separate version?",
+      "range": {
+        "startLine": 901,
+        "startChar": 30,
+        "endLine": 901,
+        "endChar": 48
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36318fa2_8da28f4f",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-03T09:38:00Z",
+      "side": 1,
+      "message": "Why don\u0027t we use this remembered set anymore?",
+      "range": {
+        "startLine": 501,
+        "startChar": 16,
+        "endLine": 501,
+        "endChar": 22
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f253f70_3bbc4431",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-03T09:38:00Z",
+      "side": 1,
+      "message": "Same here: Why are we not using this anymore?",
+      "range": {
+        "startLine": 543,
+        "startChar": 18,
+        "endLine": 543,
+        "endChar": 34
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
