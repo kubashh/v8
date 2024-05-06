@@ -200,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "677d32bc_68c9029a",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-06T09:01:35Z",
+      "side": 1,
+      "message": "Actually agree now, after changing 😊",
+      "parentUuid": "d8ddaa92_a1d7eac4",
+      "range": {
+        "startLine": 901,
+        "startChar": 30,
+        "endLine": 901,
+        "endChar": 48
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7cadbbd_32daffaf",
@@ -213,6 +237,30 @@
       "writtenOn": "2024-05-06T07:52:46Z",
       "side": 1,
       "message": "This needs a comment why we cannot remove the page. We only know liveness of young gen and as such are not guaranteed to have an empty page.",
+      "range": {
+        "startLine": 929,
+        "startChar": 0,
+        "endLine": 929,
+        "endChar": 45
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd3f5d4_a2398842",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-06T09:01:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7cadbbd_32daffaf",
       "range": {
         "startLine": 929,
         "startChar": 0,
@@ -284,6 +332,30 @@
       "side": 1,
       "message": "Please add a comment for the \"young\" reasoning. (I missed in which class we were which made this hard to understand.)",
       "parentUuid": "11088bc5_692de240",
+      "range": {
+        "startLine": 501,
+        "startChar": 16,
+        "endLine": 501,
+        "endChar": 22
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d37a101_51342673",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-06T09:01:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04887361_468cb360",
       "range": {
         "startLine": 501,
         "startChar": 16,
