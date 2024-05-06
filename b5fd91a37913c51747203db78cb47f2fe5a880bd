@@ -16,6 +16,92 @@
       "message": "PTAL! :)",
       "revId": "b5fd91a37913c51747203db78cb47f2fe5a880bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bea118c_c5638d0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-05-06T08:45:17Z",
+      "side": 1,
+      "message": "LGTM % nits",
+      "revId": "b5fd91a37913c51747203db78cb47f2fe5a880bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "357ccb52_88cc7fe3",
+        "filename": "src/compiler/turboshaft/loop-unrolling-phase.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-05-06T08:45:17Z",
+      "side": 1,
+      "message": "Maybe put a 1 line comment here why we expect those to not be set anymore.",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 31
+      },
+      "revId": "b5fd91a37913c51747203db78cb47f2fe5a880bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a039ab7_36cdf336",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-05-06T08:45:17Z",
+      "side": 1,
+      "message": "we set a count with the `Approx` constructor, but it\u0027s invalid to access the `count` for it? I recommend to rename it to `excact_count()` then.",
+      "range": {
+        "startLine": 49,
+        "startChar": 9,
+        "endLine": 49,
+        "endChar": 15
+      },
+      "revId": "b5fd91a37913c51747203db78cb47f2fe5a880bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28ed1a27_299bf7ed",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-05-06T08:45:17Z",
+      "side": 1,
+      "message": "nit: `IterationCount::Unknown()` to be more clear here.",
+      "range": {
+        "startLine": 203,
+        "startChar": 50,
+        "endLine": 203,
+        "endChar": 52
+      },
+      "revId": "b5fd91a37913c51747203db78cb47f2fe5a880bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
