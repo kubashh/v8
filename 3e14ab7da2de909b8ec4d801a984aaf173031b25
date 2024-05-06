@@ -16,6 +16,24 @@
       "message": "PTAL, thanks!\n\nThe last CL doesn\u0027t work for the hot loop in React-TodoMVC because the type hint in bytecode doesn\u0027t survive across branches:\n\n```\n  function createElement(config) {\n    const props \u003d {};\n    for (var propName in config) {\n      if (!RESERVE_PROPS.hasOwnProperty(propName)) {\n        props[propName] \u003d config[propName]\n      }\n    }\n    return props;\n  }\n```\n\nThis CL solves this issue and we can found the bytecodes are optimized. According to our recent profiling, the megamorphic keyed load in Sparkplug is a hotspot in some Speedometer3 cases, so I think this optimization would be beneficial.",
       "revId": "3e14ab7da2de909b8ec4d801a984aaf173031b25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baffdbf1_51122e21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-05-06T08:50:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a7f54dd_c1a92820",
+      "revId": "3e14ab7da2de909b8ec4d801a984aaf173031b25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
