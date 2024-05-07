@@ -126,6 +126,10 @@
 #include "src/heap/conservative-stack-visitor.h"
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/wasm/wasm-engine.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
 
@@ -4407,6 +4411,12 @@ void Heap::CollectGarbageOnMemoryPressure() {
                     GarbageCollectionReason::kMemoryPressure,
                     kGCCallbackFlagCollectAllAvailableGarbage);
   EagerlyFreeExternalMemory();
+  // Flush all Liftoff code.
+#if V8_ENABLE_WEBASSEMBLY
+  if (v8_flags.flush_liftoff_code) {
+    wasm::GetWasmEngine()->FlushCode();
+  }
+#endif  // V8_ENABLE_WEBASSEMBLY
   double end = MonotonicallyIncreasingTimeInMs();
 
   // Estimate how much memory we can free.
