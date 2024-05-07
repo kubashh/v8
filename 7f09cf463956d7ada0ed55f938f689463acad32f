@@ -33,6 +33,46 @@
       "message": "Hi Matthias, could you please take a look at the wasm compiler part?",
       "revId": "7f09cf463956d7ada0ed55f938f689463acad32f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b4b1a26_8a807f89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-07T08:09:35Z",
+      "side": 1,
+      "message": "LGTM with a clarification question.",
+      "revId": "7f09cf463956d7ada0ed55f938f689463acad32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf3f77e_6aac13bf",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5454,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-07T08:09:35Z",
+      "side": 1,
+      "message": "If `AVX_VNNI` is supported, these two registers will both be `xmm15` if I don\u0027t miss anything. Is that desired?",
+      "range": {
+        "startLine": 5454,
+        "startChar": 10,
+        "endLine": 5454,
+        "endChar": 32
+      },
+      "revId": "7f09cf463956d7ada0ed55f938f689463acad32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
