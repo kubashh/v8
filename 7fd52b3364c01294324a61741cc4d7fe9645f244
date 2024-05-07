@@ -90,6 +90,30 @@
       },
       "revId": "7fd52b3364c01294324a61741cc4d7fe9645f244",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d207e1_4e3874d7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4413,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-07T14:17:55Z",
+      "side": 1,
+      "message": "`CollectAllAvailableGarbage()` is for emergency GCs on allocation. We crash with OOM if we don\u0027t reclaim enough memoryi in those.\n\nI think it would make sense to put it in the function to cover also these allocation cases in addition to OS memory pressure. They could even be more important than the OS signals.",
+      "parentUuid": "65e1fa88_e048482f",
+      "range": {
+        "startLine": 4413,
+        "startChar": 0,
+        "endLine": 4413,
+        "endChar": 30
+      },
+      "revId": "7fd52b3364c01294324a61741cc4d7fe9645f244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
