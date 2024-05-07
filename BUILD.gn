@@ -429,6 +429,9 @@ declare_args() {
 
   # Use sticky mark-bits for separating object generations.
   v8_enable_sticky_mark_bits = false
+
+  # Move prototype transitions first
+  v8_move_prototype_transitions_first = true
 }
 
 # Derived defaults.
@@ -1294,6 +1297,9 @@ config("features") {
   }
   if (v8_enable_sticky_mark_bits) {
     defines += [ "V8_ENABLE_STICKY_MARK_BITS" ]
+  }
+  if (v8_move_prototype_transitions_first) {
+    defines += [ "V8_MOVE_PROTOYPE_TRANSITIONS_FIRST" ]
   }
 }
 
