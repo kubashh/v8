@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e159d54c_88d185de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-07T14:11:30Z",
+      "side": 1,
+      "message": "ptal,\n\n* the previous attempt is patchset 1\n* the whole implementation is behind a flag now. I will enable it in a follow-up",
+      "revId": "6c9e1a0352e11ec120f3fd6162a8762d3919e580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
