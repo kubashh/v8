@@ -4972,6 +4972,7 @@ v8::Intercepted InterceptorICExceptionGetter(
     // Side effects are allowed only when the property is present or throws.
     ApiTestFuzzer::Fuzz();
     info.GetReturnValue().Set(call_ic_function3_global);
+    return v8::Intercepted::kYes;
   }
   if (interceptor_ic_exception_get_count == 20) {
     // Side effects are allowed only when the property is present or throws.
