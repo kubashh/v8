@@ -1646,6 +1646,11 @@ class Heap final {
 
   HeapAllocator* allocator() { return heap_allocator_; }
 
+  bool use_new_space() const {
+    DCHECK_IMPLIES(new_space(), !v8_flags.sticky_mark_bits);
+    return new_space() || v8_flags.sticky_mark_bits;
+  }
+
  private:
   class AllocationTrackerForDebugging;
 

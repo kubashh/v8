@@ -187,9 +187,23 @@ void MarkingVisitorBase<ConcreteVisitor>::VisitExternalPointer(
       space = shared_external_pointer_space_;
     } else {
       table = external_pointer_table_;
-      space = Heap::InYoungGeneration(host)
-                  ? heap_->young_external_pointer_space()
-                  : heap_->old_external_pointer_space();
+      const bool host_is_young = Heap::InYoungGeneration(host);
+      if (v8_flags.sticky_mark_bits) {
+        // Everything is considered old during major GC.
+        DCHECK(!host_is_young);
+        if (handle == kNullExternalPointerHandle) return;
+        // The object may either be in young or old EPT.
+        if (table->Contains(heap_->young_external_pointer_space(), handle)) {
+          space = heap_->young_external_pointer_space();
+        } else {
+          DCHECK(table->Contains(heap_->old_external_pointer_space(), handle));
+          space = heap_->old_external_pointer_space();
+        }
+      } else {
+        space = Heap::InYoungGeneration(host)
+                    ? heap_->young_external_pointer_space()
+                    : heap_->old_external_pointer_space();
+      }
     }
     table->Mark(space, handle, slot.address());
   }
