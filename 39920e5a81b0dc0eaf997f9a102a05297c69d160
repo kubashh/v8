@@ -16,6 +16,46 @@
       "message": "Thanks!",
       "revId": "39920e5a81b0dc0eaf997f9a102a05297c69d160",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "044038eb_8777f3ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-07T16:18:36Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "39920e5a81b0dc0eaf997f9a102a05297c69d160",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abe19a14_9376d50d",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-07T16:18:36Z",
+      "side": 1,
+      "message": "Imho, you can remove the TODO. This is all very old code and we have settled on using the notifications.",
+      "range": {
+        "startLine": 341,
+        "startChar": 31,
+        "endLine": 341,
+        "endChar": 67
+      },
+      "revId": "39920e5a81b0dc0eaf997f9a102a05297c69d160",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
