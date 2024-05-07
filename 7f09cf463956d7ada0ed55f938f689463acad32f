@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dc2cfae_26c072e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1234292
+      },
+      "writtenOn": "2024-05-07T07:32:27Z",
+      "side": 1,
+      "message": "Hi Igor, this is the 2nd patch of using AVX-VNNI to speed up a Wasm relaxed simd integer dot product operation.\nPTAL. Thanks!",
+      "revId": "7f09cf463956d7ada0ed55f938f689463acad32f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
