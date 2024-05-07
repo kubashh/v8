@@ -754,6 +754,17 @@ void SharedMacroAssemblerBase::I32x4DotI8x16I7x16AddS(
     XMMRegister dst, XMMRegister src1, XMMRegister src2, XMMRegister src3,
     XMMRegister scratch, XMMRegister splat_reg) {
   ASM_CODE_COMMENT(this);
+  if (CpuFeatures::IsSupported(AVX_VNNI)) {
+    CpuFeatureScope avx_scope(this, AVX_VNNI);
+    if (dst == src3) {
+      vpdpbusd(dst, src2, src1);
+    } else {
+      Movdqa(dst, src3);
+      vpdpbusd(dst, src2, src1);
+    }
+    return;
+  }
+
   // k = i16x8.splat(1)
   Pcmpeqd(splat_reg, splat_reg);
   Psrlw(splat_reg, splat_reg, uint8_t{15});
