@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "696d53b4_ac269aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1381588
+      },
+      "writtenOn": "2024-05-07T12:47:37Z",
+      "side": 1,
+      "message": "I think we should add an `OWNERS` file to `src/wasm/interpreter` to make ownership of this code transparent.",
+      "revId": "6b7a5e60582aefa0d190d517c3ed0fb3ca8918e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
