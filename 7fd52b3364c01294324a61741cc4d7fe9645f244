@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7fd1ae_64bff7ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T13:37:41Z",
+      "side": 1,
+      "message": "Could you take another look please? I moved the logic to heap.cc and removed it from api.cc and backing-store.cc",
+      "revId": "7fd52b3364c01294324a61741cc4d7fe9645f244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e1fa88_e048482f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4413,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T13:37:41Z",
+      "side": 1,
+      "message": "I first wanted to put the flush call inside this function, but it\u0027s called by [CollectAllAvailableGarbage()](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/heap.cc;l\u003d1607;bpv\u003d1;bpt\u003d1?q\u003dCollectAllAvailableGarbage\u0026ss\u003dchromium%2Fchromium%2Fsrc) which is called from a lot of places.",
+      "range": {
+        "startLine": 4413,
+        "startChar": 0,
+        "endLine": 4413,
+        "endChar": 30
+      },
+      "revId": "7fd52b3364c01294324a61741cc4d7fe9645f244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
