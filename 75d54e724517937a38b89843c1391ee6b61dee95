@@ -16,6 +16,40 @@
       "message": "Thanks, addressed the comments!",
       "revId": "75d54e724517937a38b89843c1391ee6b61dee95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c284b98_8b61216a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-07T08:46:11Z",
+      "side": 1,
+      "message": "Still LGTM with nits",
+      "revId": "75d54e724517937a38b89843c1391ee6b61dee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59afdf9f_241204ac",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-07T08:46:11Z",
+      "side": 1,
+      "message": "Nit: Can we compute  this condition somewhere before instead of nesting ?:.",
+      "revId": "75d54e724517937a38b89843c1391ee6b61dee95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

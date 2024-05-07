@@ -131,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05f0f923_b51b1608",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-07T08:46:11Z",
+      "side": 1,
+      "message": "Maybe these checks here can be integrated in VerifyRememberedSetsAfterEvacuation in [0].\n\n0: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/mark-sweep-utilities.cc;l\u003d144;drc\u003de09826065bb5964f247be565890dcabda54ac9e3;bpv\u003d1;bpt\u003d1?q\u003dVerifyRememberedS\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "parentUuid": "651ad57e_666cb976",
+      "range": {
+        "startLine": 4620,
+        "startChar": 6,
+        "endLine": 4620,
+        "endChar": 14
+      },
+      "revId": "d00ccf7d155693e8a08e09f908078447d6143391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d308ed6_03a4ab50",
         "filename": "src/heap/minor-mark-sweep.cc",
         "patchSetId": 5
