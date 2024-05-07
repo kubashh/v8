@@ -703,6 +703,10 @@ class Heap final {
   V8_EXPORT_PRIVATE void ClearWasmCanonicalRttsForTesting();
 #endif
 
+#if V8_WASM_INTERPRETER
+  V8_EXPORT_PRIVATE void ClearJsToWasmWrappersForTesting();
+#endif  // V8_WASM_INTERPRETER
+
   // ===========================================================================
   // Initialization. ===========================================================
   // ===========================================================================
