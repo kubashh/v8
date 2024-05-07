@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "debf9862_24dc703c",
+        "filename": "test/inspector/inspector-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-05-07T06:21:09Z",
+      "side": 1,
+      "message": "Can you also rename this to `createObjectWithNativeDataProperty` (here and in tests)?\n\nAll of this predates ES5, thats why this is a C++ binding and not implemented in JS.",
+      "range": {
+        "startLine": 523,
+        "startChar": 29,
+        "endLine": 523,
+        "endChar": 53
+      },
+      "revId": "a7aebc7330879e656f990406913f7da269dc5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f4bd421_669a814f",
         "filename": "test/inspector/inspector-test.cc",
         "patchSetId": 1
