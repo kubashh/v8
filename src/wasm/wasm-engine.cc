@@ -35,6 +35,10 @@
 #include "src/wasm/wasm-limits.h"
 #include "src/wasm/wasm-objects-inl.h"
 
+#if V8_WASM_INTERPRETER
+#include "src/wasm/interpreter/wasm-interpreter-inl.h"
+#endif  // V8_WASM_INTERPRETER
+
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 #include "src/debug/wasm/gdb-server/gdb-server.h"
 #endif  // V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
@@ -695,9 +699,17 @@ MaybeHandle<WasmModuleObject> WasmEngine::SyncCompile(
       isolate->GetOrRegisterRecorderContextId(isolate->native_context());
   std::shared_ptr<WasmModule> module;
   {
+#if !V8_WASM_INTERPRETER
     ModuleResult result = DecodeWasmModule(
         enabled, bytes.module_bytes(), false, kWasmOrigin, isolate->counters(),
         isolate->metrics_recorder(), context_id, DecodingMethod::kSync);
+#else   // !V8_WASM_INTERPRETER
+    bool validate_module = v8_flags.wasm_jitless;
+    ModuleResult result = DecodeWasmModule(
+        enabled, bytes.module_bytes(), validate_module, kWasmOrigin,
+        isolate->counters(), isolate->metrics_recorder(), context_id,
+        DecodingMethod::kSync);
+#endif  // !V8_WASM_INTERPRETER
     if (result.failed()) {
       thrower->CompileFailed(result.error());
       return {};
@@ -801,7 +813,11 @@ void WasmEngine::AsyncCompile(
     bool is_shared, const char* api_method_name_for_errors) {
   int compilation_id = next_compilation_id_.fetch_add(1);
   TRACE_EVENT1("v8.wasm", "wasm.AsyncCompile", "id", compilation_id);
-  if (!v8_flags.wasm_async_compilation) {
+  if (!v8_flags.wasm_async_compilation
+#if V8_WASM_INTERPRETER
+      || v8_flags.wasm_jitless
+#endif  // V8_WASM_INTERPRETER
+  ) {
     // Asynchronous compilation disabled; fall back on synchronous compilation.
     ErrorThrower thrower(isolate, api_method_name_for_errors);
     MaybeHandle<WasmModuleObject> module_object;
@@ -889,6 +905,10 @@ std::shared_ptr<StreamingDecoder> WasmEngine::StartStreamingCompilation(
 void WasmEngine::CompileFunction(Counters* counters,
                                  NativeModule* native_module,
                                  uint32_t function_index, ExecutionTier tier) {
+#if V8_WASM_INTERPRETER
+  DCHECK(!v8_flags.wasm_jitless);
+#endif  // V8_WASM_INTERPRETER
+
   // Note we assume that "one-off" compilations can discard detected features.
   WasmFeatures detected = WasmFeatures::None();
   WasmCompilationUnit::CompileWasmFunction(
@@ -897,6 +917,10 @@ void WasmEngine::CompileFunction(Counters* counters,
 }
 
 void WasmEngine::EnterDebuggingForIsolate(Isolate* isolate) {
+#if V8_WASM_INTERPRETER
+  if (v8_flags.wasm_jitless) return;
+#endif  // V8_WASM_INTERPRETER
+
   std::vector<std::shared_ptr<NativeModule>> native_modules;
   // {mutex_} gets taken both here and in {RemoveCompiledCode} in
   // {AddPotentiallyDeadCode}. Therefore {RemoveCompiledCode} has to be
@@ -1952,10 +1976,22 @@ GlobalWasmState* global_wasm_state = nullptr;
 void WasmEngine::InitializeOncePerProcess() {
   DCHECK_NULL(global_wasm_state);
   global_wasm_state = new GlobalWasmState();
+
+#ifdef V8_WASM_INTERPRETER
+  if (v8_flags.wasm_jitless) {
+    WasmInterpreter::InitializeOncePerProcess();
+  }
+#endif  // V8_WASM_INTERPRETER
 }
 
 // static
 void WasmEngine::GlobalTearDown() {
+#ifdef V8_WASM_INTERPRETER
+  if (v8_flags.wasm_jitless) {
+    WasmInterpreter::GlobalTearDown();
+  }
+#endif  // V8_WASM_INTERPRETER
+
   // Note: This can be called multiple times in a row (see
   // test-api/InitializeAndDisposeMultiple). This is fine, as
   // {global_wasm_engine} will be nullptr then.

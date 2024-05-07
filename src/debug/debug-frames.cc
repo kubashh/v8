@@ -77,6 +77,15 @@ Handle<Object> FrameInspector::GetContext() {
 Handle<String> FrameInspector::GetFunctionName() {
 #if V8_ENABLE_WEBASSEMBLY
   if (IsWasm()) {
+#if V8_WASM_INTERPRETER
+    if (IsWasmInterpreter()) {
+      auto wasm_frame = WasmInterpreterEntryFrame::cast(frame_);
+      auto wasm_instance = handle(wasm_frame->wasm_instance(), isolate_);
+      return GetWasmFunctionDebugName(
+          isolate_, wasm_instance,
+          wasm_frame->function_index(inlined_frame_index_));
+    }
+#endif  // V8_WASM_INTERPRETER
     auto wasm_frame = WasmFrame::cast(frame_);
     auto wasm_instance = handle(wasm_frame->wasm_instance(), isolate_);
     return GetWasmFunctionDebugName(isolate_, wasm_instance,
@@ -88,6 +97,11 @@ Handle<String> FrameInspector::GetFunctionName() {
 
 #if V8_ENABLE_WEBASSEMBLY
 bool FrameInspector::IsWasm() { return frame_->is_wasm(); }
+#if V8_WASM_INTERPRETER
+bool FrameInspector::IsWasmInterpreter() {
+  return frame_->is_wasm_interpreter_entry();
+}
+#endif  // V8_WASM_INTERPRETER
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 bool FrameInspector::IsJavaScript() { return frame_->is_java_script(); }
