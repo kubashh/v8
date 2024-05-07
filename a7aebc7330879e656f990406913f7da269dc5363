@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eb05d0e_bce91f17",
+        "filename": "test/fuzzer/inspector-fuzzer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-07T08:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "314831e8_68931278",
+      "revId": "a7aebc7330879e656f990406913f7da269dc5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "debf9862_24dc703c",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae978f3f_ec1c9dd8",
+        "filename": "test/inspector/inspector-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-07T08:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "debf9862_24dc703c",
+      "range": {
+        "startLine": 523,
+        "startChar": 29,
+        "endLine": 523,
+        "endChar": 53
+      },
+      "revId": "a7aebc7330879e656f990406913f7da269dc5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f4bd421_669a814f",
@@ -71,6 +113,24 @@
       "writtenOn": "2024-05-06T08:56:01Z",
       "side": 1,
       "message": "same as above",
+      "revId": "a7aebc7330879e656f990406913f7da269dc5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb3864b9_e12b259e",
+        "filename": "test/inspector/inspector-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-07T08:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f4bd421_669a814f",
       "revId": "a7aebc7330879e656f990406913f7da269dc5363",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -106,6 +166,24 @@
       "side": 1,
       "message": "Good point re expected behaviour of `Runtime.getProperties` for native data properties. It also doesn\u0027t seem to return get/set values for regular accessor properties.\nI\u0027ll ask DevTools folks.",
       "parentUuid": "c4b52cf3_6d540221",
+      "revId": "a7aebc7330879e656f990406913f7da269dc5363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85cffc1d_4a8c5146",
+        "filename": "test/inspector/runtime/runtime-get-properties-and-accessor-expected.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-07T08:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e590e3d6_fa5017d6",
       "revId": "a7aebc7330879e656f990406913f7da269dc5363",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
