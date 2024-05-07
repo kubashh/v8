@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "054801cf_4f918adc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T08:33:04Z",
+      "side": 1,
+      "message": "Thank you! Could you take another look please?\nPatchset 3 resolves comments, Patchset 5 puts the flushing behind a flag.",
+      "parentUuid": "bdc67b1e_4a9e03f4",
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04995028_046fdfe3",
         "filename": "src/api/api.cc",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2024-05-03T16:55:48Z",
       "side": 1,
       "message": "Probably don\u0027t want to do this when `level \u003d\u003d kNone`? Looking at the descriptions of the enum values, it\u0027s probably the right choice to flush code only at critical pressure level.",
+      "range": {
+        "startLine": 10280,
+        "startChar": 2,
+        "endLine": 10280,
+        "endChar": 47
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a84b64a_25755850",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 10280,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T08:33:04Z",
+      "side": 1,
+      "message": "Right, good point.",
+      "parentUuid": "04995028_046fdfe3",
       "range": {
         "startLine": 10280,
         "startChar": 2,
@@ -105,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2583182_56bd3eee",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T08:33:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "882e140d_245a3318",
+      "range": {
+        "startLine": 339,
+        "startChar": 6,
+        "endLine": 339,
+        "endChar": 8
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05cce41c_9035bf1c",
@@ -128,6 +194,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d14037b_906157d2",
+        "filename": "src/objects/backing-store.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T08:33:04Z",
+      "side": 1,
+      "message": "Agreed about the loop. \n\nAlso I like the idea of not flushing right away, but waiting for GC to see if it\u0027s enough. What I don\u0027t like in this case is that it\u0027s not consistent with the other MemoryPressure notification called from api.cc: If we call it from the backing-store, we don\u0027t necessarily flush; otherwise we flush. I wonder if this would make the measurements on the histograms worse to interpret (maybe harder to decide whether we want to limit flushing more or less.) \n\nBut I guess in most cases (based on the experiments) it\u0027s not that much Liftoff code to worry about, so I try the `if (i \u003d\u003d 1)` option.",
+      "parentUuid": "05cce41c_9035bf1c",
+      "range": {
+        "startLine": 341,
+        "startChar": 6,
+        "endLine": 341,
+        "endChar": 51
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95beafd2_aba3bba4",
@@ -141,6 +231,30 @@
       "writtenOn": "2024-05-03T16:55:48Z",
       "side": 1,
       "message": "Better use `kCritical` here. See related comment in `api.cc`.",
+      "range": {
+        "startLine": 26845,
+        "startChar": 63,
+        "endLine": 26845,
+        "endChar": 68
+      },
+      "revId": "d146e3fd87be6e4cd39cf8b0060db40d2ce97c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d61b80c_41fb6e11",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26845,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-07T08:33:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95beafd2_aba3bba4",
       "range": {
         "startLine": 26845,
         "startChar": 63,
