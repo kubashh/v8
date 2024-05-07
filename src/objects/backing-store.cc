@@ -335,8 +335,15 @@ std::unique_ptr<BackingStore> BackingStore::TryAllocateAndPartiallyCommitMemory(
   // if the first and second attempts failed.
   auto gc_retry = [&](const std::function<bool()>& fn) {
     for (int i = 0; i < 3; i++) {
-      if (fn()) return true;
-      // Collect garbage and retry.
+      if (fn()) {
+        return true;
+      }
+      // Flush out wasm code, collect garbage and retry.
+#if V8_ENABLE_WEBASSEMBLY
+      if (i::v8_flags.flush_liftoff_code && i == 1) {
+        internal::wasm::GetWasmEngine()->FlushCode();
+      }
+#endif  // V8_ENABLE_WEBASSEMBLY
       did_retry = true;
       // TODO(wasm): try Heap::EagerlyFreeExternalMemory() first?
       if (isolate != nullptr) {
