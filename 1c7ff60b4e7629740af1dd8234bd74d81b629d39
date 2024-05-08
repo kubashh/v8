@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e4651f5_dfb44f03",
+        "filename": "src/trap-handler/handler-inside-posix.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-05-08T07:53:35Z",
+      "side": 1,
+      "message": "This is not the right way to extend src/trap-handler.  This directory is not supposed to have dependencies on the rest of V8.  The trap handler itself should definitely not be calling out to functions defined elsewhere in V8.\n\nThe way to do this is to have the interpreter register the addresses that might fault with src/trap-handler using the existing API.\n\nThis CL is so large that maybe you didn\u0027t intend for it to be reviewed?  If that\u0027s the case I would suggest indicating that in the commit message, or marking the CL as WIP, or both.",
+      "revId": "1c7ff60b4e7629740af1dd8234bd74d81b629d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
