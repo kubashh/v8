@@ -346,12 +346,6 @@ config_setting(
     },
 )
 
-# Enable VTune jit profiling
-v8_flag(
-    name = "v8_enable_vtunejit",
-    default = False,
-)
-
 # Default setting for v8_enable_short_builtin_calls when target is x64.
 # Disable short calls when pointer compression is not enabled.
 selects.config_setting_group(
@@ -422,7 +416,6 @@ v8_config(
         "v8_enable_verify_predictable": "VERIFY_PREDICTABLE",
         "v8_enable_webassembly": "V8_ENABLE_WEBASSEMBLY",
         "v8_jitless": "V8_JITLESS",
-        "v8_enable_vtunejit": "ENABLE_VTUNE_JIT_INTERFACE",
     },
     defines = [
         "GOOGLE3",
@@ -4231,12 +4224,7 @@ v8_library(
     copts = ["-Wno-implicit-fallthrough"],
     strip_include_prefix = "third_party",
     visibility = ["//visibility:public"],
-    deps = [":noicu/v8"] + select({
-        ":is_v8_enable_vtunejit": [
-            ":v8_vtune",
-        ],
-        "//conditions:default": [],
-    }),
+    deps = [":noicu/v8"],
 )
 
 alias(
@@ -4247,20 +4235,6 @@ alias(
 alias(
     name = "core_lib_icu",
     actual = "icu/v8",
-)
-
-v8_library(
-    name = "v8_vtune",
-    srcs = [
-        "src/third_party/vtune/v8-vtune.h",
-        "src/third_party/vtune/vtune-jit.cc",
-        "src/third_party/vtune/vtune-jit.h",
-    ],
-    copts = ["-I"],
-    deps = [
-        ":core_lib_noicu",
-        "@intel_ittapi//:lib_ittapi",
-    ],
 )
 
 # =================================================
