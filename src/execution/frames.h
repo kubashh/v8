@@ -54,6 +54,7 @@
 //       - WasmToJsFrame
 //     - WasmDebugBreakFrame
 //     - WasmLiftoffSetupFrame
+//     - WasmInterpreterEntryFrame (#if V8_WASM_INTERPRETER)
 //     - IrregexpFrame
 
 namespace v8 {
@@ -78,6 +79,10 @@ class StringStream;
 class ThreadLocalTop;
 class WasmInstanceObject;
 class WasmModuleObject;
+
+#if V8_WASM_INTERPRETER
+class Tuple2;
+#endif  // V8_WASM_INTERPRETER
 
 class StackHandlerConstants : public AllStatic {
  public:
@@ -116,6 +121,7 @@ class StackHandler {
   IF_WASM(V, WASM_TO_JS_FUNCTION, WasmToJsFunctionFrame)                  \
   IF_WASM(V, JS_TO_WASM, JsToWasmFrame)                                   \
   IF_WASM(V, STACK_SWITCH, StackSwitchFrame)                              \
+  IF_WASM_DRUMBRAKE(V, WASM_INTERPRETER_ENTRY, WasmInterpreterEntryFrame) \
   IF_WASM(V, WASM_DEBUG_BREAK, WasmDebugBreakFrame)                       \
   IF_WASM(V, C_WASM_ENTRY, CWasmEntryFrame)                               \
   IF_WASM(V, WASM_EXIT, WasmExitFrame)                                    \
@@ -243,9 +249,20 @@ class StackFrame {
   bool is_maglev() const { return type() == MAGLEV; }
   bool is_turbofan() const { return type() == TURBOFAN; }
 #if V8_ENABLE_WEBASSEMBLY
-  bool is_wasm() const { return this->type() == WASM; }
+  bool is_wasm() const {
+    return this->type() == WASM
+#ifdef V8_WASM_INTERPRETER
+           || this->type() == WASM_INTERPRETER_ENTRY
+#endif  // V8_WASM_INTERPRETER
+        ;
+  }
   bool is_c_wasm_entry() const { return type() == C_WASM_ENTRY; }
   bool is_wasm_liftoff_setup() const { return type() == WASM_LIFTOFF_SETUP; }
+#if V8_WASM_INTERPRETER
+  bool is_wasm_interpreter_entry() const {
+    return type() == WASM_INTERPRETER_ENTRY;
+  }
+#endif  // V8_WASM_INTERPRETER
   bool is_wasm_debug_break() const { return type() == WASM_DEBUG_BREAK; }
   bool is_wasm_to_js() const {
     return type() == WASM_TO_JS || type() == WASM_TO_JS_FUNCTION;
@@ -392,6 +409,8 @@ class V8_EXPORT_PRIVATE FrameSummary {
   F(JAVA_SCRIPT, JavaScriptFrameSummary, java_script_summary_, JavaScript) \
   IF_WASM(F, BUILTIN, BuiltinFrameSummary, builtin_summary_, Builtin)      \
   IF_WASM(F, WASM, WasmFrameSummary, wasm_summary_, Wasm)                  \
+  IF_WASM_DRUMBRAKE(F, WASM_INTERPRETED, WasmInterpretedFrameSummary,      \
+                    wasm_interpreted_summary_, WasmInterpreted)            \
   IF_WASM(F, WASM_INLINED, WasmInlinedFrameSummary, wasm_inlined_summary_, \
           WasmInlined)
 
@@ -520,6 +539,32 @@ class V8_EXPORT_PRIVATE FrameSummary {
    private:
     Builtin builtin_;
   };
+
+#if V8_WASM_INTERPRETER
+  class WasmInterpretedFrameSummary : public FrameSummaryBase {
+   public:
+    WasmInterpretedFrameSummary(Isolate*, Handle<WasmInstanceObject>,
+                                uint32_t function_index, int byte_offset);
+    Handle<WasmInstanceObject> wasm_instance() const { return wasm_instance_; }
+    uint32_t function_index() const { return function_index_; }
+    int byte_offset() const { return byte_offset_; }
+
+    Handle<Object> receiver() const;
+    int code_offset() const { return byte_offset_; }
+    bool is_constructor() const { return false; }
+    bool is_subject_to_debugging() const { return true; }
+    int SourcePosition() const;
+    int SourceStatementPosition() const { return SourcePosition(); }
+    Handle<Script> script() const;
+    Handle<Context> native_context() const;
+    Handle<StackFrameInfo> CreateStackFrameInfo() const;
+
+   private:
+    Handle<WasmInstanceObject> wasm_instance_;
+    uint32_t function_index_;
+    int byte_offset_;
+  };
+#endif  // V8_WASM_INTERPRETER
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 #define FRAME_SUMMARY_CONS(kind, type, field, desc) \
@@ -1171,7 +1216,11 @@ class WasmFrame : public TypedFrame {
   void Summarize(std::vector<FrameSummary>* frames) const override;
 
   static WasmFrame* cast(StackFrame* frame) {
-    DCHECK(frame->is_wasm());
+    DCHECK(frame->is_wasm()
+#ifdef V8_WASM_INTERPRETER
+           && !frame->is_wasm_interpreter_entry()
+#endif  // V8_WASM_INTERPRETER
+    );
     return static_cast<WasmFrame*>(frame);
   }
 
@@ -1194,6 +1243,48 @@ class WasmExitFrame : public WasmFrame {
  private:
   friend class StackFrameIteratorBase;
 };
+
+#if V8_WASM_INTERPRETER
+class WasmInterpreterEntryFrame final : public CommonFrame {
+ public:
+  Type type() const override { return WASM_INTERPRETER_ENTRY; }
+
+  // GC support.
+  void Iterate(RootVisitor* v) const override;
+
+  // Printing support.
+  void Print(StringStream* accumulator, PrintMode mode,
+             int index) const override;
+
+  void Summarize(std::vector<FrameSummary>* frames) const override;
+
+  // Determine the code for the frame.
+  Tagged<HeapObject> unchecked_code() const override;
+
+  // Accessors.
+  Tagged<Tuple2> interpreter_object() const;
+  Tagged<WasmInstanceObject> wasm_instance() const;
+
+  int function_index(int inlined_function_index) const;
+  Tagged<Script> script() const;
+  int position() const override;
+  Tagged<Object> context() const override;
+
+  static WasmInterpreterEntryFrame* cast(StackFrame* frame) {
+    DCHECK(frame->is_wasm_interpreter_entry());
+    return static_cast<WasmInterpreterEntryFrame*>(frame);
+  }
+
+ protected:
+  inline explicit WasmInterpreterEntryFrame(StackFrameIteratorBase* iterator);
+
+  Address GetCallerStackPointer() const override;
+
+ private:
+  friend class StackFrameIteratorBase;
+  Tagged<WasmModuleObject> module_object() const;
+};
+#endif  // V8_WASM_INTERPRETER
 
 class WasmDebugBreakFrame final : public TypedFrame {
  public:
@@ -1220,6 +1311,10 @@ class WasmDebugBreakFrame final : public TypedFrame {
 class WasmToJsFrame : public WasmFrame {
  public:
   Type type() const override { return WASM_TO_JS; }
+
+#if V8_WASM_INTERPRETER
+  void Iterate(RootVisitor* v) const override;
+#endif  // V8_WASM_INTERPRETER
 
   int position() const override { return 0; }
   Tagged<WasmInstanceObject> wasm_instance() const override;
@@ -1272,6 +1367,10 @@ class StackSwitchFrame : public ExitFrame {
 class CWasmEntryFrame : public StubFrame {
  public:
   Type type() const override { return C_WASM_ENTRY; }
+
+#if V8_WASM_INTERPRETER
+  void Iterate(RootVisitor* v) const override;
+#endif  // V8_WASM_INTERPRETER
 
  protected:
   inline explicit CWasmEntryFrame(StackFrameIteratorBase* iterator);
@@ -1576,6 +1675,9 @@ class V8_EXPORT_PRIVATE DebuggableStackFrameIterator {
   inline bool is_javascript() const;
 #if V8_ENABLE_WEBASSEMBLY
   inline bool is_wasm() const;
+#if V8_WASM_INTERPRETER
+  inline bool is_wasm_interpreter_entry() const;
+#endif  // V8_WASM_INTERPRETER
 #endif  // V8_ENABLE_WEBASSEMBLY
   inline JavaScriptFrame* javascript_frame() const;
 

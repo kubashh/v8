@@ -31,6 +31,9 @@ class WasmValue;
 class ArrayList;
 class WasmFrame;
 class WasmInstanceObject;
+#if V8_WASM_INTERPRETER
+class WasmInterpreterEntryFrame;
+#endif  // V8_WASM_INTERPRETER
 class WasmModuleObject;
 class WasmTableObject;
 
@@ -69,6 +72,11 @@ class WasmValueObject : public JSObject {
 Handle<JSObject> GetWasmDebugProxy(WasmFrame* frame);
 
 std::unique_ptr<debug::ScopeIterator> GetWasmScopeIterator(WasmFrame* frame);
+
+#if V8_WASM_INTERPRETER
+std::unique_ptr<debug::ScopeIterator> GetWasmInterpreterScopeIterator(
+    WasmInterpreterEntryFrame* frame);
+#endif  // V8_WASM_INTERPRETER
 
 Handle<String> GetWasmFunctionDebugName(Isolate* isolate,
                                         Handle<WasmInstanceObject> instance,

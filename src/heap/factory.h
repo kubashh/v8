@@ -81,6 +81,10 @@ class WeakCell;
 
 #if V8_ENABLE_WEBASSEMBLY
 namespace wasm {
+#if V8_WASM_INTERPRETER
+class WasmInterpreterRuntime;
+#endif  // V8_WASM_INTERPRETER
+
 class ArrayType;
 class StructType;
 struct WasmElemSegment;
@@ -1324,6 +1328,15 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // {DisallowGarbageCollection} scope until initialization.
   Tagged<WasmArray> NewWasmArrayUninitialized(uint32_t length,
                                               DirectHandle<Map> map);
+
+#if V8_WASM_INTERPRETER
+  Handle<WasmStruct> NewWasmStructUninitialized(const wasm::StructType* type,
+                                                Handle<Map> map);
+
+  // WasmInterpreterRuntime needs to call NewWasmStructUninitialized and
+  // NewWasmArrayUninitialized.
+  friend class wasm::WasmInterpreterRuntime;
+#endif  // V8_WASM_INTERPRETER
 #endif  // V8_ENABLE_WEBASSEMBLY
 };
 

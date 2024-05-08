@@ -75,9 +75,17 @@ class V8_EXPORT_PRIVATE FunctionTargetAndRef {
   Handle<ExposedTrustedObject> ref() { return ref_; }
   Address call_target() { return call_target_; }
 
+#if V8_WASM_INTERPRETER
+  int target_func_index() { return target_func_index_; }
+#endif  // V8_WASM_INTERPRETER
+
  private:
   Handle<ExposedTrustedObject> ref_;
   Address call_target_;
+
+#if V8_WASM_INTERPRETER
+  int target_func_index_;
+#endif  // V8_WASM_INTERPRETER
 };
 
 namespace wasm {
@@ -110,14 +118,23 @@ class ImportedFunctionEntry {
                                      const wasm::FunctionSig* sig);
 
   // Initialize this entry as a Wasm to Wasm call.
-  void SetWasmToWasm(Tagged<WasmTrustedInstanceData> target_instance_data,
-                     Address call_target);
+  void SetWasmToWasm(Tagged<WasmTrustedInstanceData> target_instance_object,
+                     Address call_target
+#if V8_WASM_INTERPRETER
+                     ,
+                     int exported_function_index
+#endif  // V8_WASM_INTERPRETER
+  );
 
   Tagged<JSReceiver> callable();
   Tagged<Object> maybe_callable();
   Tagged<Object> object_ref();
   Address target();
   void set_target(Address new_target);
+
+#if V8_WASM_INTERPRETER
+  int function_index_in_called_module();
+#endif  // V8_WASM_INTERPRETER
 
  private:
   // TODO(14499): Less back-and-forth between trusted and untrusted data.
@@ -227,7 +244,12 @@ class WasmTableObject
   static void UpdateDispatchTables(
       Isolate* isolate, Handle<WasmTableObject> table, int entry_index,
       const wasm::WasmFunction* func,
-      Handle<WasmTrustedInstanceData> target_instance);
+      Handle<WasmTrustedInstanceData> target_instance
+#if V8_WASM_INTERPRETER
+      ,
+      int target_func_index
+#endif  // V8_WASM_INTERPRETER
+  );
   static void UpdateDispatchTables(Isolate* isolate,
                                    Handle<WasmTableObject> table,
                                    int entry_index,
@@ -352,6 +374,9 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
   DECL_ACCESSORS(instance_object, Tagged<WasmInstanceObject>)
   DECL_ACCESSORS(native_context, Tagged<Context>)
   DECL_ACCESSORS(memory_objects, Tagged<FixedArray>)
+#if V8_WASM_INTERPRETER
+  DECL_OPTIONAL_ACCESSORS(interpreter_object, Tagged<Tuple2>)
+#endif  // V8_WASM_INTERPRETER
   DECL_OPTIONAL_ACCESSORS(untagged_globals_buffer, Tagged<JSArrayBuffer>)
   DECL_OPTIONAL_ACCESSORS(tagged_globals_buffer, Tagged<FixedArray>)
   DECL_OPTIONAL_ACCESSORS(imported_mutable_globals_buffers, Tagged<FixedArray>)
@@ -360,6 +385,12 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
   DECL_PROTECTED_POINTER_ACCESSORS(dispatch_table_for_imports,
                                    WasmDispatchTable)
   DECL_ACCESSORS(imported_mutable_globals, Tagged<FixedAddressArray>)
+#if V8_WASM_INTERPRETER
+  // Points to an array that contains the function index for each imported Wasm
+  // function. This is required to call imported functions from the Wasm
+  // interpreter.
+  DECL_ACCESSORS(imported_function_indexes, Tagged<FixedInt32Array>)
+#endif  // V8_WASM_INTERPRETER
   DECL_PROTECTED_POINTER_ACCESSORS(shared_part, WasmTrustedInstanceData)
   DECL_PROTECTED_POINTER_ACCESSORS(dispatch_table0, WasmDispatchTable)
   DECL_PROTECTED_POINTER_ACCESSORS(dispatch_tables, ProtectedFixedArray)
@@ -408,6 +439,7 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
   V(kProtectedDispatchTable0Offset, kTaggedSize)                          \
   V(kProtectedDispatchTableForImportsOffset, kTaggedSize)                 \
   V(kImportedMutableGlobalsOffset, kTaggedSize)                           \
+  V(kImportedFunctionIndexesOffset, kTaggedSize)                          \
   /* Optional padding to align system pointer size fields */              \
   V(kOptionalPaddingOffset, POINTER_SIZE_PADDING(kOptionalPaddingOffset)) \
   V(kMemory0StartOffset, kSystemPointerSize)                              \
@@ -435,6 +467,7 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
   V(kUntaggedGlobalsBufferOffset, kTaggedSize)                            \
   V(kTaggedGlobalsBufferOffset, kTaggedSize)                              \
   V(kImportedMutableGlobalsBuffersOffset, kTaggedSize)                    \
+  V(kInterpreterObjectOffset, kTaggedSize)                                \
   V(kTablesOffset, kTaggedSize)                                           \
   V(kProtectedDispatchTablesOffset, kTaggedSize)                          \
   V(kTagsTableOffset, kTaggedSize)                                        \
@@ -471,6 +504,7 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
   V(kUntaggedGlobalsBufferOffset, "untagged_globals_buffer")                  \
   V(kTaggedGlobalsBufferOffset, "tagged_globals_buffer")                      \
   V(kImportedMutableGlobalsBuffersOffset, "imported_mutable_globals_buffers") \
+  V(kInterpreterObjectOffset, "interpreter_object")                           \
   V(kTablesOffset, "tables")                                                  \
   V(kTagsTableOffset, "tags_table")                                           \
   V(kFuncRefsOffset, "func_refs")                                             \
@@ -478,6 +512,7 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
   V(kFeedbackVectorsOffset, "feedback_vectors")                               \
   V(kWellKnownImportsOffset, "well_known_imports")                            \
   V(kImportedMutableGlobalsOffset, "imported_mutable_globals")                \
+  V(kImportedFunctionIndexesOffset, "imported_function_indexes")              \
   V(kDataSegmentStartsOffset, "data_segment_starts")                          \
   V(kDataSegmentSizesOffset, "data_segment_sizes")                            \
   V(kElementSegmentsOffset, "element_segments")
@@ -491,9 +526,9 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
 #define WASM_INSTANCE_FIELD_OFFSET(offset, _) offset,
 #define WASM_INSTANCE_FIELD_NAME(_, name) name,
 
-  static constexpr std::array<uint16_t, 16> kTaggedFieldOffsets = {
+  static constexpr std::array<uint16_t, 18> kTaggedFieldOffsets = {
       WASM_TAGGED_INSTANCE_DATA_FIELDS(WASM_INSTANCE_FIELD_OFFSET)};
-  static constexpr std::array<const char*, 16> kTaggedFieldNames = {
+  static constexpr std::array<const char*, 18> kTaggedFieldNames = {
       WASM_TAGGED_INSTANCE_DATA_FIELDS(WASM_INSTANCE_FIELD_NAME)};
   static constexpr std::array<uint16_t, 5> kProtectedFieldOffsets = {
       WASM_PROTECTED_INSTANCE_DATA_FIELDS(WASM_INSTANCE_FIELD_OFFSET)};
@@ -517,6 +552,14 @@ class V8_EXPORT_PRIVATE WasmTrustedInstanceData : public ExposedTrustedObject {
       int table_index, int minimum_size);
 
   void SetRawMemory(int memory_index, uint8_t* mem_start, size_t mem_size);
+
+#if V8_WASM_INTERPRETER
+  // Get the interpreter object associated with the given wasm object.
+  // If no interpreter object exists yet, it is created automatically.
+  static Handle<Tuple2> GetOrCreateInterpreterObject(
+      Handle<WasmInstanceObject>);
+  static Handle<Tuple2> GetInterpreterObject(Handle<WasmInstanceObject>);
+#endif  // V8_WASM_INTERPRETER
 
   static Handle<WasmTrustedInstanceData> New(Isolate*,
                                              Handle<WasmModuleObject>);
@@ -620,6 +663,9 @@ class WasmTagObject
 // <ref, target, sig>.
 class WasmDispatchTable : public TrustedObject {
  public:
+#if V8_WASM_INTERPRETER
+  static const uint32_t kInvalidFunctionIndex = UINT_MAX;
+#endif  // V8_WASM_INTERPRETER
   class BodyDescriptor;
 
   static constexpr size_t kLengthOffset = kHeaderSize;
@@ -630,10 +676,18 @@ class WasmDispatchTable : public TrustedObject {
   // - target (pointer)
   // - ref (protected pointer, tagged sized)
   // - sig (int32_t); unused for imports which check the signature statically.
+#if V8_WASM_INTERPRETER
+  // - function_index (uint32_t)
+#endif  // V8_WASM_INTERPRETER
   static constexpr size_t kTargetBias = 0;
   static constexpr size_t kRefBias = kTargetBias + kSystemPointerSize;
   static constexpr size_t kSigBias = kRefBias + kTaggedSize;
+#if !V8_WASM_INTERPRETER
   static constexpr size_t kEntryPaddingOffset = kSigBias + kInt32Size;
+#else   // !V8_WASM_INTERPRETER
+  static constexpr size_t kFunctionIndexBias = kSigBias + kTaggedSize;
+  static constexpr size_t kEntryPaddingOffset = kFunctionIndexBias + kInt32Size;
+#endif  // !V8_WASM_INTERPRETER
   static constexpr size_t kEntryPaddingBytes =
       kEntryPaddingOffset % kTaggedSize;
   static_assert(kEntryPaddingBytes == 4 || kEntryPaddingBytes == 0);
@@ -680,10 +734,18 @@ class WasmDispatchTable : public TrustedObject {
   inline Address target(int index) const;
   inline int sig(int index) const;
 
+#if !V8_WASM_INTERPRETER
   // Set an entry for indirect calls.
   // {ref} has to be a WasmApiFunctionRef, a WasmInstanceObject, or Smi::zero().
   void V8_EXPORT_PRIVATE Set(int index, Tagged<Object> ref, Address call_target,
                              int sig_id);
+#else   // =!V8_WASM_INTERPRETER
+  inline uint32_t function_index(int index) const;
+
+  // {ref} has to be a WasmApiFunctionRef, a WasmInstanceObject, or Smi::zero().
+  void V8_EXPORT_PRIVATE Set(int index, Tagged<Object> ref, Address call_target,
+                             int sig_id, uint32_t function_index);
+#endif  // !V8_WASM_INTERPRETER
 
   // Set an entry for an import. We check signatures statically there, so the
   // signature is not updated in the dispatch table.

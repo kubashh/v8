@@ -9,6 +9,10 @@
 #include <cstdio>  // For FILE.
 #include <memory>
 
+#if V8_WASM_INTERPRETER
+#include <string>
+#endif  // V8_WASM_INTERPRETER
+
 namespace v8 {
 namespace internal {
 
@@ -99,6 +103,16 @@ class PlatformEmbeddedFileWriterBase {
 // The factory function. Returns the appropriate platform-specific instance.
 std::unique_ptr<PlatformEmbeddedFileWriterBase> NewPlatformEmbeddedFileWriter(
     const char* target_arch, const char* target_os);
+
+#if V8_WASM_INTERPRETER
+inline bool IsDrumBrakeInstructionHandler(const char* name) {
+  std::string builtin_name(name);
+  return builtin_name.find("Builtins_r2r_") == 0 ||
+         builtin_name.find("Builtins_r2s_") == 0 ||
+         builtin_name.find("Builtins_s2r_") == 0 ||
+         builtin_name.find("Builtins_s2s_") == 0;
+}
+#endif  // V8_WASM_INTERPRETER
 
 }  // namespace internal
 }  // namespace v8
