@@ -3687,10 +3687,13 @@ void CreateArrayLiteral::SetValueLocationConstraints() {
 }
 void CreateArrayLiteral::GenerateCode(MaglevAssembler* masm,
                                       const ProcessingState& state) {
-  __ Move(kContextRegister, masm->native_context().object());
-  __ Push(feedback().vector, TaggedIndex::FromIntptr(feedback().index()),
-          constant_elements().object(), Smi::FromInt(flags()));
-  __ CallRuntime(Runtime::kCreateArrayLiteral, 4);
+  __ CallBuiltin<Builtin::kCreateArrayFromSlowBoilerplate>(
+      masm->native_context().object(),              // context
+      feedback().vector,                            // feedback vector
+      TaggedIndex::FromIntptr(feedback().index()),  // feedback slot
+      constant_elements().object(),                 // boilerplate descriptor
+      Smi::FromInt(flags())                         // flags
+  );
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
 }
 
