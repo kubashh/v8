@@ -655,7 +655,11 @@ void PlatformEmbeddedFileWriterWin::DeclareFunctionBegin(const char* name,
                                                          uint32_t size) {
   DeclareLabel(name);
 
-  if (target_arch_ == EmbeddedTargetArch::kArm64) {
+  if (target_arch_ == EmbeddedTargetArch::kArm64
+#if V8_WASM_INTERPRETER
+      || IsDrumBrakeInstructionHandler(name)
+#endif  // V8_WASM_INTERPRETER
+  ) {
     // Windows ARM64 assembly is in GAS syntax, but ".type" is invalid directive
     // in PE/COFF for Windows.
     DeclareSymbolGlobal(name);

@@ -473,6 +473,14 @@ CodeEntrypointTag Builtins::EntrypointTagFor(Builtin builtin) {
     return kDefaultCodeEntrypointTag;
   }
 
+#if V8_WASM_INTERPRETER
+  if (builtin == Builtin::kGenericJSToWasmInterpreterWrapper) {
+    return kJSEntrypointTag;
+  } else if (builtin == Builtin::kGenericWasmToJSInterpreterWrapper) {
+    return kWasmEntrypointTag;
+  }
+#endif  // V8_WASM_INTERPRETER
+
   Kind kind = Builtins::KindOf(builtin);
   switch (kind) {
     case CPP:

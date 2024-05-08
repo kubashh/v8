@@ -7655,6 +7655,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       return;
     }
 
+#if V8_WASM_INTERPRETER
+    if (v8_flags.wasm_enable_exec_time_histograms && v8_flags.slow_histograms &&
+        !v8_flags.wasm_jitless) {
+      Node* runtime_call = BuildCallToRuntimeWithContext(
+          Runtime::kWasmTraceBeginExecution, js_context, nullptr, 0);
+      SetControl(runtime_call);
+    }
+#endif  // V8_WASM_INTERPRETER
+
     const int args_count = wasm_param_count + 1;  // +1 for wasm_code.
 
     // Check whether the signature of the function allows for a fast
@@ -7688,6 +7697,16 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       Node* jsval =
           BuildCallAndReturn(is_import, js_context, function_data, args,
                              do_conversion, frame_state, set_in_wasm_flag);
+
+#if V8_WASM_INTERPRETER
+      if (v8_flags.wasm_enable_exec_time_histograms &&
+          v8_flags.slow_histograms && !v8_flags.wasm_jitless) {
+        Node* runtime_call = BuildCallToRuntimeWithContext(
+            Runtime::kWasmTraceEndExecution, js_context, nullptr, 0);
+        SetControl(runtime_call);
+      }
+#endif  // V8_WASM_INTERPRETER
+
       gasm_->Goto(&done, jsval);
       gasm_->Bind(&slow_path);
     }
@@ -7716,6 +7735,16 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* jsval =
         BuildCallAndReturn(is_import, js_context, function_data, args,
                            do_conversion, frame_state, set_in_wasm_flag);
+
+#if V8_WASM_INTERPRETER
+    if (v8_flags.wasm_enable_exec_time_histograms && v8_flags.slow_histograms &&
+        !v8_flags.wasm_jitless) {
+      Node* runtime_call = BuildCallToRuntimeWithContext(
+          Runtime::kWasmTraceEndExecution, js_context, nullptr, 0);
+      SetControl(runtime_call);
+    }
+#endif  // V8_WASM_INTERPRETER
+
     // If both the default and a fast transformation paths are present,
     // get the return value based on the path used.
     if (include_fast_path) {
@@ -7939,6 +7968,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       return false;
     }
 
+#if V8_WASM_INTERPRETER
+    if (v8_flags.wasm_enable_exec_time_histograms && v8_flags.slow_histograms &&
+        !v8_flags.wasm_jitless) {
+      Node* runtime_call = BuildCallToRuntimeWithContext(
+          Runtime::kWasmTraceEndExecution, native_context, nullptr, 0);
+      SetControl(runtime_call);
+    }
+#endif  // V8_WASM_INTERPRETER
+
     Node* callable_node = gasm_->Load(
         MachineType::TaggedPointer(), Param(0),
         wasm::ObjectAccess::ToTagged(WasmApiFunctionRef::kCallableOffset));
@@ -8021,6 +8059,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         UNREACHABLE();
     }
     DCHECK_NOT_NULL(call);
+
+#if V8_WASM_INTERPRETER
+    if (v8_flags.wasm_enable_exec_time_histograms && v8_flags.slow_histograms &&
+        !v8_flags.wasm_jitless) {
+      Node* runtime_call = BuildCallToRuntimeWithContext(
+          Runtime::kWasmTraceBeginExecution, native_context, nullptr, 0);
+      SetControl(runtime_call);
+    }
+#endif  // V8_WASM_INTERPRETER
 
     if (suspend == wasm::kSuspend) {
       Node* active_suspender = LOAD_ROOT(ActiveSuspender, active_suspender);
@@ -8781,6 +8828,9 @@ MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                          wasm::ImportCallKind kind,
                                          int expected_arity,
                                          wasm::Suspend suspend) {
+#if V8_WASM_INTERPRETER
+  DCHECK(!v8_flags.wasm_jitless);
+#endif  // V8_WASM_INTERPRETER
   // Build a name in the form "wasm-to-js-<kind>-<signature>".
   constexpr size_t kMaxNameLen = 128;
   constexpr size_t kNamePrefixLen = 11;
@@ -8856,6 +8906,10 @@ MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
 
 Handle<Code> CompileCWasmEntry(Isolate* isolate, const wasm::FunctionSig* sig,
                                const wasm::WasmModule* module) {
+#if V8_WASM_INTERPRETER
+  DCHECK(!v8_flags.wasm_jitless);
+#endif  // V8_WASM_INTERPRETER
+
   std::unique_ptr<Zone> zone = std::make_unique<Zone>(
       isolate->allocator(), ZONE_NAME, kCompressGraphZone);
   Graph* graph = zone->New<Graph>(zone.get());
