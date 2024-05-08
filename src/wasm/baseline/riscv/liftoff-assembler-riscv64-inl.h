@@ -1278,8 +1278,8 @@ void LiftoffAssembler::emit_u32_to_uintptr(Register dst, Register src) {
   ZeroExtendWord(dst, src);
 }
 
-void LiftoffAssembler::emit_u32_to_uintptr_unconditional(Register dst) {
-  ZeroExtendWord(dst, dst);
+void LiftoffAssembler::clear_i32_upper_half(Register dst) {
+  SignExtendWord(dst, dst);
 }
 
 #define FP_UNOP_RETURN_TRUE(name, instruction)                                 \

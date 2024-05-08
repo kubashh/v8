@@ -1381,8 +1381,8 @@ void LiftoffAssembler::emit_u32_to_uintptr(Register dst, Register src) {
   bstrpick_d(dst, src, 31, 0);
 }
 
-void LiftoffAssembler::emit_u32_to_uintptr_unconditional(Register dst) {
-  bstrpick_d(dst, dst, 31, 0);
+void LiftoffAssembler::clear_i32_upper_half(Register dst) {
+  slli_w(dst, dst, 0);
 }
 
 void LiftoffAssembler::emit_f32_neg(DoubleRegister dst, DoubleRegister src) {

@@ -764,7 +764,7 @@ class LiftoffCompiler {
         // registers.
         static_assert(kSystemPointerSize == 8);
         if (kind_ == kI32 && location_.IsRegister()) {
-          compiler_->asm_.emit_u32_to_uintptr_unconditional(reg.gp());
+          compiler_->asm_.clear_i32_upper_half(reg.gp());
         }
 #endif
         if (needs_gp_pair_) {
