@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27d19f7b_aef2154e",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-08T10:33:04Z",
+      "side": 1,
+      "message": "Please wrap this line to fit into 80 chars.",
+      "revId": "49a272eceb891be7ad8eb81b48ff633c3257c478",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

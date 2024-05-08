@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "705cdd42_9a971244",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-08T10:33:04Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "a5b703d7e963a58615e219648537db2ec26b54f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc9d7fde_0960ae19",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-08T10:33:04Z",
+      "side": 1,
+      "message": "Let\u0027s play safe and always copy descriptors in case of prototype transitions.\n\nAlso, it\u0027s confusing to see `CopyForElementsTransition` here.",
+      "revId": "a5b703d7e963a58615e219648537db2ec26b54f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
