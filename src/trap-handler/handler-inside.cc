@@ -59,6 +59,10 @@ bool IsFaultAddressCovered(uintptr_t fault_addr) {
       // ProtectedInstructionData::instr_offset.
       TH_DCHECK(base + offset == fault_addr);
 
+#ifdef V8_WASM_INTERPRETER
+      if (data->num_protected_instructions == 0) return true;
+#endif  // V8_WASM_INTERPRETER
+
       for (unsigned j = 0; j < data->num_protected_instructions; ++j) {
         if (data->instructions[j].instr_offset == offset) {
           // Hurray again, we found the actual instruction.

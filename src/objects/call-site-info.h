@@ -29,6 +29,9 @@ class CallSiteInfo : public TorqueGeneratedCallSiteInfo<CallSiteInfo, Struct> {
   inline bool IsWasm() const;
   inline bool IsAsmJsWasm() const;
   inline bool IsAsmJsAtNumberConversion() const;
+#if V8_WASM_INTERPRETER
+  inline bool IsWasmInterpretedFrame() const;
+#endif  // V8_WASM_INTERPRETER
   inline bool IsBuiltin() const;
 #endif  // V8_ENABLE_WEBASSEMBLY
 

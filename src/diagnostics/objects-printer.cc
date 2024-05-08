@@ -2469,6 +2469,9 @@ void WasmTrustedInstanceData::WasmTrustedInstanceDataPrint(std::ostream& os) {
   PRINT_OPTIONAL_WASM_INSTANCE_FIELD(untagged_globals_buffer, Brief);
   PRINT_OPTIONAL_WASM_INSTANCE_FIELD(tagged_globals_buffer, Brief);
   PRINT_OPTIONAL_WASM_INSTANCE_FIELD(imported_mutable_globals_buffers, Brief);
+#if V8_WASM_INTERPRETER
+  PRINT_OPTIONAL_WASM_INSTANCE_FIELD(interpreter_object, Brief);
+#endif  // V8_WASM_INTERPRETER
   PRINT_OPTIONAL_WASM_INSTANCE_FIELD(tables, Brief);
   PRINT_WASM_INSTANCE_FIELD(dispatch_table0, Brief);
   PRINT_WASM_INSTANCE_FIELD(dispatch_tables, Brief);
@@ -2484,6 +2487,9 @@ void WasmTrustedInstanceData::WasmTrustedInstanceDataPrint(std::ostream& os) {
   PRINT_WASM_INSTANCE_FIELD(new_allocation_top_address, to_void_ptr);
   PRINT_WASM_INSTANCE_FIELD(old_allocation_limit_address, to_void_ptr);
   PRINT_WASM_INSTANCE_FIELD(old_allocation_top_address, to_void_ptr);
+#if V8_WASM_INTERPRETER
+  PRINT_WASM_INSTANCE_FIELD(imported_function_indexes, Brief);
+#endif  // V8_WASM_INTERPRETER
   PRINT_WASM_INSTANCE_FIELD(globals_start, to_void_ptr);
   PRINT_WASM_INSTANCE_FIELD(imported_mutable_globals, Brief);
   PRINT_WASM_INSTANCE_FIELD(isorecursive_canonical_types,
@@ -2535,6 +2541,9 @@ void WasmExportedFunctionData::WasmExportedFunctionDataPrint(std::ostream& os) {
   os << "\n - function_index: " << function_index();
   os << "\n - signature: " << reinterpret_cast<const void*>(sig());
   os << "\n - wrapper_budget: " << wrapper_budget()->value();
+#if V8_WASM_INTERPRETER
+  os << "\n - packed_args_size: " << packed_args_size();
+#endif  // V8_WASM_INTERPRETER
   os << "\n";
 }
 
