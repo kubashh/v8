@@ -175,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ab58d2c_19a22643",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5186,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-08T08:34:58Z",
+      "side": 1,
+      "message": "Done (asserting this in Heap::SetUpSpaces()).",
+      "parentUuid": "3cb2306c_a96c77b5",
+      "revId": "cc9b9507e87c2d411ccdebb1bbf145f1ce88e8dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc0f1643_83118d84",
