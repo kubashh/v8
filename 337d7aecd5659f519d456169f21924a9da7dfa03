@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0ca6b3d_51facc3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-08T11:18:08Z",
+      "side": 1,
+      "message": "Thanks a lot!",
+      "revId": "337d7aecd5659f519d456169f21924a9da7dfa03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00e8a6ca_6d7ba5a1",
@@ -48,6 +65,30 @@
       "writtenOn": "2024-05-08T11:03:51Z",
       "side": 1,
       "message": "nit: const",
+      "range": {
+        "startLine": 182,
+        "startChar": 37,
+        "endLine": 182,
+        "endChar": 38
+      },
+      "revId": "337d7aecd5659f519d456169f21924a9da7dfa03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d7f9bb_a1d5729f",
+        "filename": "src/sandbox/external-entity-table.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-08T11:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00e8a6ca_6d7ba5a1",
       "range": {
         "startLine": 182,
         "startChar": 37,
