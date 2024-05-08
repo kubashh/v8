@@ -2816,14 +2816,22 @@ IGNITION_HANDLER(CreateRestParameter, InterpreterAssembler) {
   Dispatch();
 }
 
-// SetPendingMessage
+// ClearPendingMessage
 //
-// Sets the pending message to the value in the accumulator, and returns the
-// previous pending message in the accumulator.
-IGNITION_HANDLER(SetPendingMessage, InterpreterAssembler) {
+// Sets the pending message to the hole, and returns the previous pending
+// message in the accumulator.
+IGNITION_HANDLER(ClearPendingMessage, InterpreterAssembler) {
   TNode<HeapObject> previous_message = GetPendingMessage();
-  SetPendingMessage(CAST(GetAccumulator()));
+  SetPendingMessage(TheHoleConstant());
   SetAccumulator(previous_message);
+  Dispatch();
+}
+
+// RestorePendingMessage
+//
+// Sets the pending message to the value in the accumulator.
+IGNITION_HANDLER(RestorePendingMessage, InterpreterAssembler) {
+  SetPendingMessage(CAST(GetAccumulator()));
   Dispatch();
 }
 
