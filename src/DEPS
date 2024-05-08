@@ -124,4 +124,8 @@ specific_include_rules = {
   "snapshot\.cc": [
     "+src/heap/read-only-promotion.h",
   ],
+  # Wasm interpreter
+  "wasm-interpreter-runtime\.cc": [
+    "+src/trap-handler/trap-handler-internal.h",
+  ],
 }

@@ -15,8 +15,15 @@ namespace wasm {
 // static
 WasmFeatures WasmFeatures::FromFlags() {
   WasmFeatures features = WasmFeatures::None();
+#if V8_WASM_INTERPRETER
+  features.Add(kFeature_legacy_eh);
+#define FLAG_REF(feat, ...)                                        \
+  if (!v8_flags.wasm_jitless && v8_flags.experimental_wasm_##feat) \
+    features.Add(kFeature_##feat);
+#else  // V8_WASM_INTERPRETER
 #define FLAG_REF(feat, ...) \
   if (v8_flags.experimental_wasm_##feat) features.Add(kFeature_##feat);
+#endif  // V8_WASM_INTERPRETER
   FOREACH_WASM_FEATURE_FLAG(FLAG_REF)
 #undef FLAG_REF
 #define NON_FLAG_REF(feat, ...) features.Add(kFeature_##feat);
@@ -34,15 +41,23 @@ WasmFeatures WasmFeatures::FromIsolate(Isolate* isolate) {
 WasmFeatures WasmFeatures::FromContext(Isolate* isolate,
                                        Handle<NativeContext> context) {
   WasmFeatures features = WasmFeatures::FromFlags();
-  if (isolate->IsWasmStringRefEnabled(context)) {
-    features.Add(kFeature_stringref);
+
+#if V8_WASM_INTERPRETER
+  if (!v8_flags.wasm_jitless) {
+    features.Add(kFeature_legacy_eh);
+#endif  // V8_WASM_INTERPRETER
+    if (isolate->IsWasmStringRefEnabled(context)) {
+      features.Add(kFeature_stringref);
+    }
+    if (isolate->IsWasmInliningEnabled(context)) {
+      features.Add(kFeature_inlining);
+    }
+    if (isolate->IsWasmImportedStringsEnabled(context)) {
+      features.Add(kFeature_imported_strings);
+    }
+#if V8_WASM_INTERPRETER
   }
-  if (isolate->IsWasmInliningEnabled(context)) {
-    features.Add(kFeature_inlining);
-  }
-  if (isolate->IsWasmImportedStringsEnabled(context)) {
-    features.Add(kFeature_imported_strings);
-  }
+#endif  // V8_WASM_INTERPRETER
   if (isolate->IsWasmJSPIEnabled(context)) {
     features.Add(kFeature_jspi);
     features.Add(kFeature_type_reflection);
