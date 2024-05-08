@@ -34,6 +34,24 @@
       "parentUuid": "8e4651f5_dfb44f03",
       "revId": "1c7ff60b4e7629740af1dd8234bd74d81b629d39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "349fbb42_a96d228c",
+        "filename": "src/trap-handler/handler-inside-posix.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-08T14:12:10Z",
+      "side": 1,
+      "message": "Good point! I modified the logic for the trap handler support in the interpreter to eliminate src/trap-handler dependencies on the rest of V8, by registering the addresses of the instruction handlers that can cause OOB accesses. These are all ASM builtins, and I don\u0027t know how to retrieve the offsets of the protected instructions, but I think we can just skip the offset check for the interpreter. It is much cleaner now.\n\n\nRegarding the size of the CL, it is certainly huge, and we should decide what is the best way to submit this code for review, keeping present that all this code is behind a build flag and therefore not compiled by default.\n\nFrom what I have understood from our last meeting, the idea would be that all the code under src/wasm/interpreter, which contains most of the interpreter, would be under our ownership, and there would be little interest on your part for reviewing it (even though, your reviews and opinions would certainly be very precious!)\n\nThe rest of the changes, needed to interface the interpreter with the rest of v8, are relatively smaller but spread across many files. All these changes are also behind a build flag, and definitely need review.",
+      "parentUuid": "e1d18055_ddc85e9e",
+      "revId": "1c7ff60b4e7629740af1dd8234bd74d81b629d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
