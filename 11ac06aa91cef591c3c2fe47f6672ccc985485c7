@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd7a3b9_560c2c66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-08T12:57:10Z",
+      "side": 1,
+      "message": "Hi Jakob,\ncan you take a look please? As I say in the commit message, I want to add only this histogram.",
+      "revId": "11ac06aa91cef591c3c2fe47f6672ccc985485c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
