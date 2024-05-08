@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44276712_bc131303",
+        "filename": "src/DEPS",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-05-08T17:18:20Z",
+      "side": 1,
+      "message": "This #include shouldn\u0027t be used because this header is supposed to be internal to src/trap-handler.  See other comment...",
+      "revId": "1213dec769273c131d330643766cb864a1c66a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df550a74_75b46874",
+        "filename": "src/wasm/interpreter/wasm-interpreter-runtime.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2809,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-05-08T17:18:20Z",
+      "side": 1,
+      "message": "gRecoveredTrapCount shouldn\u0027t be used directly because it is internal to src/trap-handler.\n\nI see that this increment was apparently done before because the code was bypassing trap_handler::IsFaultAddressCovered() then.  Now that the code is not bypassing that function, it would not be necessary to do the increment outside of src/trap-handler.",
+      "revId": "1213dec769273c131d330643766cb864a1c66a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
