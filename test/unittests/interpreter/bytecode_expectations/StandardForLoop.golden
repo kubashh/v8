@@ -357,7 +357,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 67
+bytecode array length: 66
 bytecodes: [
                 B(Mov), R(closure), R(3),
                 B(Mov), R(this), R(4),
@@ -382,8 +382,7 @@ bytecodes: [
                 B(Star4),
                 B(CreateCatchContext), R(4), U8(0),
                 B(Star3),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(3),
                 B(PushContext), R(4),
                 B(LdaImmutableCurrentContextSlot), U8(2),
@@ -408,7 +407,7 @@ snippet: "
 "
 frame size: 6
 parameter count: 1
-bytecode array length: 101
+bytecode array length: 100
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(1),
                 B(Mov), R(closure), R(2),
@@ -446,8 +445,7 @@ bytecodes: [
                 B(Star3),
                 B(CreateCatchContext), R(3), U8(1),
                 B(Star2),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(2),
                 B(PushContext), R(3),
                 B(LdaImmutableCurrentContextSlot), U8(2),

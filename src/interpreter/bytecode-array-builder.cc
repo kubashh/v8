@@ -1346,8 +1346,13 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::SwitchOnSmiNoFeedback(
   return *this;
 }
 
-BytecodeArrayBuilder& BytecodeArrayBuilder::SetPendingMessage() {
-  OutputSetPendingMessage();
+BytecodeArrayBuilder& BytecodeArrayBuilder::RestorePendingMessage() {
+  OutputRestorePendingMessage();
+  return *this;
+}
+
+BytecodeArrayBuilder& BytecodeArrayBuilder::ClearPendingMessage() {
+  OutputClearPendingMessage();
   return *this;
 }
 

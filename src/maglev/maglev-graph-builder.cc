@@ -11129,9 +11129,17 @@ void MaglevGraphBuilder::VisitForInStep() {
   }
 }
 
-void MaglevGraphBuilder::VisitSetPendingMessage() {
+void MaglevGraphBuilder::VisitRestorePendingMessage() {
   ValueNode* message = GetAccumulatorTagged();
-  SetAccumulator(AddNewNode<SetPendingMessage>({message}));
+  if (RootConstant* constant = message->TryCast<RootConstant>()) {
+    if (constant->index() == RootIndex::kTheHoleValue) return;
+  }
+  AddNewNode<SetPendingMessage>({message});
+}
+
+void MaglevGraphBuilder::VisitClearPendingMessage() {
+  SetAccumulator(AddNewNode<SetPendingMessage>(
+      {GetRootConstant(RootIndex::kTheHoleValue)}));
 }
 
 void MaglevGraphBuilder::VisitThrow() {

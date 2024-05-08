@@ -417,7 +417,8 @@ namespace interpreter {
   V(ForInStep, ImplicitRegisterUse::kNone, OperandType::kRegInOut)             \
                                                                                \
   /* Update the pending message */                                             \
-  V(SetPendingMessage, ImplicitRegisterUse::kReadWriteAccumulator)             \
+  V(ClearPendingMessage, ImplicitRegisterUse::kWriteAccumulator)               \
+  V(RestorePendingMessage, ImplicitRegisterUse::kReadAccumulator)              \
                                                                                \
   /* Non-local flow control */                                                 \
   V(Throw, ImplicitRegisterUse::kReadAccumulator)                              \

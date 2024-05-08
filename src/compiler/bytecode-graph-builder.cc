@@ -3657,10 +3657,14 @@ void BytecodeGraphBuilder::VisitSwitchOnSmiNoFeedback() {
   BuildSwitchOnSmi(acc_smi);
 }
 
-void BytecodeGraphBuilder::VisitSetPendingMessage() {
+void BytecodeGraphBuilder::VisitClearPendingMessage() {
   Node* previous_message = NewNode(javascript()->LoadMessage());
-  NewNode(javascript()->StoreMessage(), environment()->LookupAccumulator());
+  NewNode(javascript()->StoreMessage(), jsgraph()->TheHoleConstant());
   environment()->BindAccumulator(previous_message);
+}
+
+void BytecodeGraphBuilder::VisitRestorePendingMessage() {
+  NewNode(javascript()->StoreMessage(), environment()->LookupAccumulator());
 }
 
 void BytecodeGraphBuilder::BuildReturn(const BytecodeLivenessState* liveness) {

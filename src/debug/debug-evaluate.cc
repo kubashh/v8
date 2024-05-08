@@ -529,7 +529,8 @@ bool BytecodeHasNoSideEffect(interpreter::Bytecode bytecode) {
     case Bytecode::kIllegal:
     case Bytecode::kCallJSRuntime:
     case Bytecode::kReturn:
-    case Bytecode::kSetPendingMessage:
+    case Bytecode::kClearPendingMessage:
+    case Bytecode::kRestorePendingMessage:
       return true;
     default:
       return false;
