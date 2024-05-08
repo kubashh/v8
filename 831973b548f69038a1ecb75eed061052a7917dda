@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f3bbcc2_d6804043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-08T15:29:15Z",
+      "side": 1,
+      "message": "Thanks!\nWhat was the access pattern in React-x? what kind of objects did those megamorphic ICs observe?\n\nIt would be nice if you could do a couple of more experiments (see the comments below).\nPlease try it also on linux-perf and mac-m1_mini_2020-perf and on JetStream2.",
+      "revId": "831973b548f69038a1ecb75eed061052a7917dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1378287d_aea42172",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-08T15:29:15Z",
+      "side": 1,
+      "message": "What if we go even further and try your idea this way\n```\n  if (use_stub_cache \u003d\u003d kUseStubCache) {\n    GotoIf(BoolConstant(true), \u0026try_stub_cache);\n  }\n```\nIf we skip the lookup for fast objects why don\u0027t we skip it for slow objects too and avoid additional bit field checks.\n\n\nIIRC we tried something like this before, so I\u0027d not be surprised if it regress things somewhere else. In order to simplify the experiments, could you please try to minimize the amount of changes below in a way that could allow us to enable-disable the new logic by just flipping a compile-time/read-only flag:\n```\n  GotoIf(BoolConstant(v8_flag.skip_lookups_when_megamorphic), ...);  \n```\nCSA will be able to eliminate unreachable code and I think that this approach might make it easy to track the changes.",
+      "revId": "831973b548f69038a1ecb75eed061052a7917dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
