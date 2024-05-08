@@ -372,8 +372,8 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
   BytecodeJumpTable* jump_table = builder.AllocateJumpTable(1, 0);
   builder.SwitchOnSmiNoFeedback(jump_table).Bind(jump_table, 0);
 
-  // Emit set pending message bytecode.
-  builder.SetPendingMessage();
+  // Emit clear pending message bytecode.
+  builder.ClearPendingMessage();
 
   // Emit throw and re-throw in it's own basic block so that the rest of the
   // code isn't omitted due to being dead.

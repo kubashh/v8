@@ -11,7 +11,7 @@ snippet: "
 "
 frame size: 2
 parameter count: 1
-bytecode array length: 20
+bytecode array length: 19
 bytecodes: [
                 B(Mov), R(context), R(0),
   /*   40 S> */ B(LdaSmi), I8(1),
@@ -19,8 +19,7 @@ bytecodes: [
                 B(Star1),
                 B(CreateCatchContext), R(1), U8(0),
                 B(Star0),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(0),
                 B(PushContext), R(1),
   /*   63 S> */ B(LdaSmi), I8(2),
@@ -41,29 +40,27 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 47
+bytecode array length: 45
 bytecodes: [
                 B(Mov), R(context), R(1),
   /*   47 S> */ B(LdaSmi), I8(1),
                 B(Star0),
-                B(Jump), U8(15),
+                B(Jump), U8(14),
                 B(Star2),
   /*   49 E> */ B(CreateCatchContext), R(2), U8(0),
                 B(Star1),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(1),
                 B(PushContext), R(2),
                 B(PopContext), R(2),
                 B(Mov), R(context), R(1),
   /*   75 S> */ B(LdaSmi), I8(2),
                 B(Star0),
-                B(Jump), U8(18),
+                B(Jump), U8(17),
                 B(Star2),
   /*   77 E> */ B(CreateCatchContext), R(2), U8(1),
                 B(Star1),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(1),
                 B(PushContext), R(2),
   /*   95 S> */ B(LdaSmi), I8(3),
@@ -78,6 +75,6 @@ constant pool: [
 ]
 handlers: [
   [3, 6, 8],
-  [24, 27, 29],
+  [23, 26, 28],
 ]
 

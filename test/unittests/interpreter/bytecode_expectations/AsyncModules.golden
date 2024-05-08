@@ -13,7 +13,7 @@ snippet: "
 "
 frame size: 6
 parameter count: 1
-bytecode array length: 112
+bytecode array length: 111
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(2),
@@ -54,8 +54,7 @@ bytecodes: [
                 B(Star3),
                 B(CreateCatchContext), R(3), U8(4),
                 B(Star2),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(2),
                 B(PushContext), R(3),
                 B(LdaImmutableCurrentContextSlot), U8(2),
@@ -81,7 +80,7 @@ snippet: "
 "
 frame size: 6
 parameter count: 1
-bytecode array length: 121
+bytecode array length: 120
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(2),
@@ -125,8 +124,7 @@ bytecodes: [
                 B(Star3),
                 B(CreateCatchContext), R(3), U8(5),
                 B(Star2),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(2),
                 B(PushContext), R(3),
                 B(LdaImmutableCurrentContextSlot), U8(2),
@@ -157,7 +155,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 122
+bytecode array length: 121
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(3),
@@ -202,8 +200,7 @@ bytecodes: [
                 B(Star4),
                 B(CreateCatchContext), R(4), U8(5),
                 B(Star3),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(3),
                 B(PushContext), R(4),
                 B(LdaImmutableCurrentContextSlot), U8(2),
@@ -231,7 +228,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 131
+bytecode array length: 130
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(3),
@@ -280,8 +277,7 @@ bytecodes: [
                 B(Star4),
                 B(CreateCatchContext), R(4), U8(5),
                 B(Star3),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Ldar), R(3),
                 B(PushContext), R(4),
                 B(LdaImmutableCurrentContextSlot), U8(2),

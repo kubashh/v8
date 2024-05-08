@@ -98,7 +98,7 @@ snippet: "
 "
 frame size: 13
 parameter count: 1
-bytecode array length: 201
+bytecode array length: 206
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(4),
@@ -130,7 +130,7 @@ bytecodes: [
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(10), U8(1),
                 B(GetNamedProperty), R(10), U8(6), U8(9),
-                B(JumpIfToBooleanTrue), U8(56),
+                B(JumpIfToBooleanTrue), U8(58),
                 B(GetNamedProperty), R(10), U8(7), U8(11),
                 B(Star10),
                 B(LdaFalse),
@@ -149,19 +149,22 @@ bytecodes: [
   /*   36 E> */ B(Throw),
                 B(LdaSmi), I8(1),
                 B(Star7),
+                B(LdaTheHole),
+                B(Star9),
                 B(Mov), R(10), R(8),
-                B(Jump), U8(17),
+                B(Jump), U8(23),
                 B(Ldar), R(10),
-  /*   16 E> */ B(JumpLoop), U8(70), I8(0), U8(13),
+  /*   16 E> */ B(JumpLoop), U8(72), I8(0), U8(13),
                 B(LdaSmi), I8(-1),
-                B(Star8),
                 B(Star7),
-                B(Jump), U8(5),
+                B(LdaTheHole),
+                B(Mov), R(7), R(8),
+                B(Star9),
+                B(Jump), U8(7),
                 B(Star8),
                 B(LdaZero),
                 B(Star7),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Star9),
                 B(Ldar), R(6),
                 B(JumpIfToBooleanTrue), U8(35),
@@ -181,7 +184,7 @@ bytecodes: [
                 B(Ldar), R(10),
                 B(ReThrow),
                 B(Ldar), R(9),
-                B(SetPendingMessage),
+                B(RestorePendingMessage),
                 B(Ldar), R(7),
                 B(SwitchOnSmiNoFeedback), U8(11), U8(2), I8(0),
                 B(Jump), U8(8),
@@ -201,15 +204,15 @@ constant pool: [
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["next"],
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["done"],
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["value"],
-  Smi [15],
+  Smi [17],
   Smi [7],
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["return"],
   Smi [6],
   Smi [9],
 ]
 handlers: [
-  [59, 133, 139],
-  [152, 171, 173],
+  [59, 135, 145],
+  [157, 176, 178],
 ]
 
 ---

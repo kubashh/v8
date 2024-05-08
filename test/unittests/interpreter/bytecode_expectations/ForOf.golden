@@ -11,7 +11,7 @@ snippet: "
 "
 frame size: 11
 parameter count: 1
-bytecode array length: 121
+bytecode array length: 124
 bytecodes: [
   /*   48 S> */ B(CreateArrayLiteral), U8(0), U8(0), U8(37),
                 B(Star4),
@@ -39,14 +39,15 @@ bytecodes: [
                 B(Ldar), R(8),
   /*   34 E> */ B(JumpLoop), U8(35), I8(0), U8(13),
                 B(LdaSmi), I8(-1),
-                B(Star6),
                 B(Star5),
-                B(Jump), U8(5),
+                B(LdaTheHole),
+                B(Mov), R(5), R(6),
+                B(Star7),
+                B(Jump), U8(7),
                 B(Star6),
                 B(LdaZero),
                 B(Star5),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Star7),
                 B(Ldar), R(4),
                 B(JumpIfToBooleanTrue), U8(35),
@@ -66,7 +67,7 @@ bytecodes: [
                 B(Ldar), R(8),
                 B(ReThrow),
                 B(Ldar), R(7),
-                B(SetPendingMessage),
+                B(RestorePendingMessage),
                 B(LdaZero),
                 B(TestReferenceEqual), R(5),
                 B(JumpIfFalse), U8(5),
@@ -83,8 +84,8 @@ constant pool: [
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["return"],
 ]
 handlers: [
-  [20, 59, 65],
-  [78, 97, 99],
+  [20, 59, 69],
+  [81, 100, 102],
 ]
 
 ---
@@ -94,7 +95,7 @@ snippet: "
 "
 frame size: 12
 parameter count: 1
-bytecode array length: 127
+bytecode array length: 132
 bytecodes: [
   /*   42 S> */ B(LdaConstant), U8(0),
                 B(Star0),
@@ -112,7 +113,7 @@ bytecodes: [
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(9), U8(1),
                 B(GetNamedProperty), R(9), U8(2), U8(8),
-                B(JumpIfToBooleanTrue), U8(23),
+                B(JumpIfToBooleanTrue), U8(25),
                 B(GetNamedProperty), R(9), U8(3), U8(10),
                 B(Star9),
                 B(LdaFalse),
@@ -120,18 +121,21 @@ bytecodes: [
                 B(Mov), R(9), R(2),
   /*   63 S> */ B(Mov), R(2), R(1),
   /*   73 S> */ B(LdaSmi), I8(1),
+                B(Star6),
+                B(LdaTheHole),
                 B(Mov), R(9), R(7),
-                B(Star6),
-                B(Jump), U8(11),
+                B(Star8),
+                B(Jump), U8(17),
                 B(LdaSmi), I8(-1),
-                B(Star7),
                 B(Star6),
-                B(Jump), U8(5),
+                B(LdaTheHole),
+                B(Mov), R(6), R(7),
+                B(Star8),
+                B(Jump), U8(7),
                 B(Star7),
                 B(LdaZero),
                 B(Star6),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Star8),
                 B(Ldar), R(5),
                 B(JumpIfToBooleanTrue), U8(35),
@@ -151,7 +155,7 @@ bytecodes: [
                 B(Ldar), R(9),
                 B(ReThrow),
                 B(Ldar), R(8),
-                B(SetPendingMessage),
+                B(RestorePendingMessage),
                 B(Ldar), R(6),
                 B(SwitchOnSmiNoFeedback), U8(5), U8(2), I8(0),
                 B(Jump), U8(8),
@@ -172,8 +176,8 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [18, 59, 65],
-  [78, 97, 99],
+  [18, 61, 71],
+  [83, 102, 104],
 ]
 
 ---
@@ -185,7 +189,7 @@ snippet: "
 "
 frame size: 11
 parameter count: 1
-bytecode array length: 137
+bytecode array length: 140
 bytecodes: [
   /*   48 S> */ B(CreateArrayLiteral), U8(0), U8(0), U8(37),
                 B(Star4),
@@ -220,14 +224,15 @@ bytecodes: [
   /*  104 S> */ B(Jump), U8(6),
   /*   34 E> */ B(JumpLoop), U8(51), I8(0), U8(15),
                 B(LdaSmi), I8(-1),
-                B(Star6),
                 B(Star5),
-                B(Jump), U8(5),
+                B(LdaTheHole),
+                B(Mov), R(5), R(6),
+                B(Star7),
+                B(Jump), U8(7),
                 B(Star6),
                 B(LdaZero),
                 B(Star5),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Star7),
                 B(Ldar), R(4),
                 B(JumpIfToBooleanTrue), U8(35),
@@ -247,7 +252,7 @@ bytecodes: [
                 B(Ldar), R(8),
                 B(ReThrow),
                 B(Ldar), R(7),
-                B(SetPendingMessage),
+                B(RestorePendingMessage),
                 B(LdaZero),
                 B(TestReferenceEqual), R(5),
                 B(JumpIfFalse), U8(5),
@@ -264,8 +269,8 @@ constant pool: [
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["return"],
 ]
 handlers: [
-  [20, 75, 81],
-  [94, 113, 115],
+  [20, 75, 85],
+  [97, 116, 118],
 ]
 
 ---
@@ -275,7 +280,7 @@ snippet: "
 "
 frame size: 10
 parameter count: 1
-bytecode array length: 136
+bytecode array length: 141
 bytecodes: [
   /*   42 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
                 B(Star0),
@@ -295,7 +300,7 @@ bytecodes: [
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(7), U8(1),
                 B(GetNamedProperty), R(7), U8(3), U8(10),
-                B(JumpIfToBooleanTrue), U8(25),
+                B(JumpIfToBooleanTrue), U8(27),
                 B(GetNamedProperty), R(7), U8(4), U8(12),
                 B(Star7),
                 B(LdaFalse),
@@ -306,16 +311,19 @@ bytecodes: [
                 B(Star5),
                 B(LdaSmi), I8(1),
                 B(Star4),
-                B(Jump), U8(11),
+                B(LdaTheHole),
+                B(Star6),
+                B(Jump), U8(17),
                 B(LdaSmi), I8(-1),
-                B(Star5),
                 B(Star4),
-                B(Jump), U8(5),
+                B(LdaTheHole),
+                B(Mov), R(4), R(5),
+                B(Star6),
+                B(Jump), U8(7),
                 B(Star5),
                 B(LdaZero),
                 B(Star4),
-                B(LdaTheHole),
-                B(SetPendingMessage),
+                B(ClearPendingMessage),
                 B(Star6),
                 B(Ldar), R(3),
                 B(JumpIfToBooleanTrue), U8(35),
@@ -335,7 +343,7 @@ bytecodes: [
                 B(Ldar), R(7),
                 B(ReThrow),
                 B(Ldar), R(6),
-                B(SetPendingMessage),
+                B(RestorePendingMessage),
                 B(Ldar), R(4),
                 B(SwitchOnSmiNoFeedback), U8(7), U8(2), I8(0),
                 B(Jump), U8(8),
@@ -358,7 +366,7 @@ constant pool: [
   Smi [9],
 ]
 handlers: [
-  [25, 68, 74],
-  [87, 106, 108],
+  [25, 70, 80],
+  [92, 111, 113],
 ]
 

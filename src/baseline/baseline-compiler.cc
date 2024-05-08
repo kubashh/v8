@@ -2220,15 +2220,23 @@ void BaselineCompiler::VisitForInStep() {
   __ IncrementSmi(__ RegisterFrameOperand(RegisterOperand(0)));
 }
 
-void BaselineCompiler::VisitSetPendingMessage() {
+void BaselineCompiler::VisitClearPendingMessage() {
   BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
   Register pending_message = scratch_scope.AcquireScratch();
   __ Move(pending_message,
           ExternalReference::address_of_pending_message(local_isolate_));
   Register tmp = scratch_scope.AcquireScratch();
-  __ Move(tmp, kInterpreterAccumulatorRegister);
   __ Move(kInterpreterAccumulatorRegister, MemOperand(pending_message, 0));
+  __ LoadRoot(tmp, RootIndex::kTheHoleValue);
   __ Move(MemOperand(pending_message, 0), tmp);
+}
+
+void BaselineCompiler::VisitRestorePendingMessage() {
+  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
+  Register pending_message = scratch_scope.AcquireScratch();
+  __ Move(pending_message,
+          ExternalReference::address_of_pending_message(local_isolate_));
+  __ Move(MemOperand(pending_message, 0), kInterpreterAccumulatorRegister);
 }
 
 void BaselineCompiler::VisitThrow() {
