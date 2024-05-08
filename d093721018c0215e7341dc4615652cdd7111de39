@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87249617_e7b97ac4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-08T13:32:26Z",
+      "side": 1,
+      "message": "Microbenchmark results on x64:\n\n* Without inlining: `out/x64.release/d8 --turboshaft-wasm indirect-calls.js`\n```\nindirectCrossModule            553.07 ms\nindirectSameModule             551.92 ms\ncallRefDirectRefSameModule     602.42 ms\ncallRefTableGetCastSameModule  1011.98 ms\ndirectCrossModule              431.79 ms\ndirectSameModule               403.61 ms\nindirectJS                     1376.16 ms\ndirectJS                       1271.35 ms\nnoCall                         52.44 ms\n```\n* With: `out/x64.release/d8 --turboshaft-wasm --experimental-wasm-inlining-call-indirect indirect-calls.js`\n```\nindirectCrossModule            575.64 ms\nindirectSameModule             173.66 ms\ncallRefDirectRefSameModule     172.86 ms\ncallRefTableGetCastSameModule  301.48 ms\ndirectCrossModule              439.99 ms\ndirectSameModule               53.33 ms\nindirectJS                     1419.21 ms\ndirectJS                       1310.23 ms\nnoCall                         52.83 ms\n```",
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
