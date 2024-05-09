@@ -39,9 +39,16 @@
 #include "test/common/value-helper.h"
 #include "test/common/wasm/flag-utils.h"
 
+#if V8_WASM_INTERPRETER
+#include "src/wasm/interpreter/wasm-interpreter.h"
+#endif  // V8_WASM_INTERPRETER
+
 namespace v8::internal::wasm {
 
 enum class TestExecutionTier : int8_t {
+#if V8_WASM_INTERPRETER
+  kInterpreter = static_cast<int8_t>(ExecutionTier::kInterpreter),
+#endif  // V8_WASM_INTERPRETER
   kLiftoff = static_cast<int8_t>(ExecutionTier::kLiftoff),
   kTurbofan = static_cast<int8_t>(ExecutionTier::kTurbofan),
   kLiftoffForFuzzing
@@ -258,6 +265,10 @@ class TestingModuleBuilder {
 
   ExecutionTier execution_tier() const {
     switch (execution_tier_) {
+#if V8_WASM_INTERPRETER
+      case TestExecutionTier::kInterpreter:
+        return ExecutionTier::kInterpreter;
+#endif  // V8_WASM_INTERPRETER
       case TestExecutionTier::kTurbofan:
         return ExecutionTier::kTurbofan;
       case TestExecutionTier::kLiftoff:
