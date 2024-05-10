@@ -813,6 +813,40 @@ class GraphBuilder {
     }
     return maglev::ProcessResult::kContinue;
   }
+  maglev::ProcessResult Process(maglev::CheckMapsWithMigration* node,
+                                const maglev::ProcessingState& state) {
+    Label<> done(this);
+    V<FrameState> frame_state = BuildFrameState(node->eager_deopt_info());
+    if (node->check_type() == maglev::CheckType::kCheckHeapObject) {
+      OpIndex is_smi = __ IsSmi(Map(node->receiver_input()));
+      if (AnyMapIsHeapNumber(node->maps())) {
+        // Smis count as matching the HeapNumber map, so we're done.
+        GOTO_IF(is_smi, done);
+      } else {
+        __ DeoptimizeIf(is_smi, frame_state, DeoptimizeReason::kWrongMap,
+                        node->eager_deopt_info()->feedback_to_update());
+      }
+    }
+
+    bool has_migration_targets = false;
+    for (auto map : node->maps()) {
+      if (map.object()->is_migration_target()) {
+        has_migration_targets = true;
+        break;
+      }
+    }
+
+    __ CheckMaps(Map(node->receiver_input()), frame_state, node->maps(),
+                 has_migration_targets ? CheckMapsFlag::kTryMigrateInstance
+                                       : CheckMapsFlag::kNone,
+                 node->eager_deopt_info()->feedback_to_update());
+
+    if (done.has_incoming_jump()) {
+      GOTO(done);
+      BIND(done);
+    }
+    return maglev::ProcessResult::kContinue;
+  }
   maglev::ProcessResult Process(maglev::CheckValue* node,
                                 const maglev::ProcessingState& state) {
     V<FrameState> frame_state = BuildFrameState(node->eager_deopt_info());
