@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a11683c5_fea70b55",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-10T08:30:44Z",
+      "side": 1,
+      "message": "I think we also need a `\u0026\u0026 i \u003e\u003d std::numeric_limits\u003cint32_t\u003e::min()` since it\u0027s signed.\n\nOr you can check `i` against `[I::kSmiMinValue, I::kSmiMaxValue]` interval here and do `SetInternal(I::IntToSmi(i));` below.\nYou could have used `I::IsValidSmi(i)` but it might not compile on 32-bit architectures since `IsValidSmi` expects `intptr_t`.",
+      "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56b22360_38b18c07",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-10T08:30:44Z",
+      "side": 1,
+      "message": "How about \n```\n  if (i \u003c\u003d static_cast\u003cuint32_t\u003e(I::kSmiMaxValue)) {\n    SetInternal(I::IntToSmi(i));\n    return;\n  }\n```\nassuming that\n`static_assert(I::kSmiMaxValue \u003c\u003d std::numeric_limits\u003cint32_t\u003e::max());`.",
+      "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cd113d0_6083162c",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-10T08:30:44Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
