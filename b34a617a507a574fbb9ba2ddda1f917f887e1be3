@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0f7d636_de3a7428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-10T11:11:11Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "b34a617a507a574fbb9ba2ddda1f917f887e1be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "786a0347_e66e3104",
@@ -41,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df4b8942_f99c3edb",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-10T11:11:11Z",
+      "side": 1,
+      "message": "Please ignore this comment. I confused myself.",
+      "parentUuid": "786a0347_e66e3104",
+      "range": {
+        "startLine": 446,
+        "startChar": 62,
+        "endLine": 446,
+        "endChar": 70
+      },
+      "revId": "b34a617a507a574fbb9ba2ddda1f917f887e1be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdb9f17e_b31c840b",
@@ -54,6 +95,30 @@
       "writtenOn": "2024-05-10T09:49:28Z",
       "side": 1,
       "message": "Ditto: `int32_t`.",
+      "range": {
+        "startLine": 457,
+        "startChar": 62,
+        "endLine": 457,
+        "endChar": 70
+      },
+      "revId": "b34a617a507a574fbb9ba2ddda1f917f887e1be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9665cfd3_046c8338",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-10T11:11:11Z",
+      "side": 1,
+      "message": "Ditto: please ignore it.",
+      "parentUuid": "fdb9f17e_b31c840b",
       "range": {
         "startLine": 457,
         "startChar": 62,
