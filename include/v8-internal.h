@@ -96,6 +96,16 @@ struct SmiTagging<4> {
            (static_cast<uintptr_t>(kSmiMaxValue) -
             static_cast<uintptr_t>(kSmiMinValue));
   }
+#ifndef V8_HOST_ARCH_64_BIT
+  // Same as the `intptr_t` version but works with int64_t on 32-bit builds
+  // without slowing down anything else.
+  V8_INLINE static constexpr bool IsValidSmi(int64_t value) {
+    return (static_cast<uint64_t>(value) -
+            static_cast<uint64_t>(kSmiMinValue)) <=
+           (static_cast<uint64_t>(kSmiMaxValue) -
+            static_cast<uint64_t>(kSmiMinValue));
+  }
+#endif
 };
 
 // Smi constants for systems where tagged pointer is a 64-bit value.
