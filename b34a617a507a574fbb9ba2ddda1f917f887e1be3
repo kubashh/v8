@@ -144,6 +144,24 @@
       "message": "I think need to add the `IsValidSmi(int64_t value)` version here too, since we don\u0027t call `PlatformSmiTagging::IsValidSmi()` directly.",
       "revId": "b34a617a507a574fbb9ba2ddda1f917f887e1be3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c6b27b_05a9883c",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-10T12:00:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76032e99_8652f78f",
+      "revId": "b34a617a507a574fbb9ba2ddda1f917f887e1be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
