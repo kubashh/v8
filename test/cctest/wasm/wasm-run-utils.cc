@@ -111,7 +111,8 @@ TestingModuleBuilder::~TestingModuleBuilder() {
 }
 
 uint8_t* TestingModuleBuilder::AddMemory(uint32_t size, SharedFlag shared,
-                                         TestingModuleMemoryType mem_type) {
+                                         TestingModuleMemoryType mem_type,
+                                         std::optional<size_t> max_size) {
   // The TestingModuleBuilder only supports one memory currently.
   CHECK_EQ(0, test_module_->memories.size());
   CHECK_NULL(mem0_start_);
@@ -119,7 +120,11 @@ uint8_t* TestingModuleBuilder::AddMemory(uint32_t size, SharedFlag shared,
   CHECK_EQ(0, trusted_instance_data_->memory_objects()->length());
 
   uint32_t initial_pages = RoundUp(size, kWasmPageSize) / kWasmPageSize;
-  uint32_t maximum_pages = initial_pages;
+  uint32_t maximum_pages =
+      max_size.has_value()
+          ? static_cast<uint32_t>(RoundUp(max_size.value(), kWasmPageSize) /
+                                  kWasmPageSize)
+          : initial_pages;
   test_module_->memories.resize(1);
   WasmMemory* memory = &test_module_->memories[0];
   memory->initial_pages = initial_pages;
@@ -161,6 +166,12 @@ uint8_t* TestingModuleBuilder::AddMemory(uint32_t size, SharedFlag shared,
   // two lines is used to shrink the memory for testing purposes.
   trusted_instance_data_->SetRawMemory(0, mem0_start_, mem0_size_);
   return mem0_start_;
+}
+
+uint8_t* TestingModuleBuilder::AddMemory(uint32_t size, size_t max_size,
+                                         SharedFlag shared,
+                                         TestingModuleMemoryType mem_type) {
+  return AddMemory(size, shared, mem_type, max_size);
 }
 
 uint32_t TestingModuleBuilder::AddFunction(const FunctionSig* sig,
