@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "60c2d215_d23fad4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-10T08:36:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae6b8343_58468a3c",
+      "range": {
+        "startLine": 9,
+        "startChar": 41,
+        "endLine": 9,
+        "endChar": 44
+      },
+      "revId": "11ac06aa91cef591c3c2fe47f6672ccc985485c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4bd7a3b9_560c2c66",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a487fe12_af455f78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-10T08:36:47Z",
+      "side": 1,
+      "message": "Oopsie. Thank you!",
+      "parentUuid": "51c27e7d_efbab022",
+      "revId": "11ac06aa91cef591c3c2fe47f6672ccc985485c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84de3137_3ff66051",
@@ -71,6 +113,30 @@
       "writtenOn": "2024-05-10T08:02:41Z",
       "side": 1,
       "message": "nit: `liftoff_codesize`",
+      "range": {
+        "startLine": 4465,
+        "startChar": 8,
+        "endLine": 4465,
+        "endChar": 24
+      },
+      "revId": "11ac06aa91cef591c3c2fe47f6672ccc985485c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09855dce_25ea49e9",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4465,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-10T08:36:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84de3137_3ff66051",
       "range": {
         "startLine": 4465,
         "startChar": 8,
