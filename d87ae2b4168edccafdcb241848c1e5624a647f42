@@ -16,6 +16,24 @@
       "message": "We might still want skip the stub cache lookup for non-Api objects.",
       "revId": "d87ae2b4168edccafdcb241848c1e5624a647f42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7133591e_d0e5866c",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2024-05-10T08:19:00Z",
+      "side": 0,
+      "message": "For this point, I\u0027m a little confused about why v8 just try stub cache lookup for `JSApiObject` now, the comment seems to say there is a trade-off,  did it mean v8 is concerning about that `JSObject` or something else will run out stub cache, is my understand correct?\n\nIf we still skip stub cache lookup for `non-Api objects` here, it will bring regression to benchmarks, because the majority receiver which is the argumemnt for this builtin was non-Api objects, and we removed `DescriptorArray` and `TransitionArray` lookup previously, so if we skip them we will call `kKeyedStoreIC_Miss` directly.",
+      "parentUuid": "1fa3efce_882cc122",
+      "revId": "d87ae2b4168edccafdcb241848c1e5624a647f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
