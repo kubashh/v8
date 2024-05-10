@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd16e55_15435f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-10T14:40:21Z",
+      "side": 1,
+      "message": "PTAL! :)",
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b93fb91a_1b76dbb4",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-10T14:40:21Z",
+      "side": 1,
+      "message": "Inspired by https://source.chromium.org/chromium/chromium/src/+/main:v8/src/maglev/maglev-ir.cc;l\u003d6142-6164;drc\u003d18572f3fb0166b11adaaaa1399bec30618ca8639.",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 3
+      },
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
