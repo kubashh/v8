@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36fa7c85_981550d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-10T11:27:58Z",
+      "side": 1,
+      "message": "Rebased, fixed some nits, still working on read-only spaces",
+      "revId": "d8dde236929093779a9aea6d0c27f79ce4265130",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
