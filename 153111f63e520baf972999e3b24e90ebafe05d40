@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "153111f63e520baf972999e3b24e90ebafe05d40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b1309d6_634e48c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-05-10T07:50:18Z",
+      "side": 1,
+      "message": "As discussed, no need to remove this.",
+      "revId": "153111f63e520baf972999e3b24e90ebafe05d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
