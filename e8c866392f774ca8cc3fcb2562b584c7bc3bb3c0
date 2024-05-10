@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96e60ff9_9550e312",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-10T14:05:49Z",
+      "side": 1,
+      "message": "Nothing too exciting here, mostly just cleaning up. PTAL.\n\nFor the record, this is the result of grepping for all occurences of:\n- (Handle...)`JSObject\u003e::cast`\n- `JSObject::cast`\n- (PrototypeIterator...)`GetCurrent\u003cJSObject\u003e`\n\nand updating any search hits that looked suspicious or redundant.",
+      "revId": "e8c866392f774ca8cc3fcb2562b584c7bc3bb3c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fdc7dcf_fbd7efce",
+        "filename": "src/objects/objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-10T14:05:49Z",
+      "side": 1,
+      "message": "This only needs to read the map, so loosening the type in the signature avoids the need for casts at call sites.",
+      "range": {
+        "startLine": 679,
+        "startChar": 43,
+        "endLine": 679,
+        "endChar": 53
+      },
+      "revId": "e8c866392f774ca8cc3fcb2562b584c7bc3bb3c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
