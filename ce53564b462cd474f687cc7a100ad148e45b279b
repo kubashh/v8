@@ -33,6 +33,23 @@
       "message": "LGTM, thanks!",
       "revId": "ce53564b462cd474f687cc7a100ad148e45b279b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "734018ce_5cc89edc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-05-10T03:44:37Z",
+      "side": 1,
+      "message": "Hi Qiu Ji, could you help to review the riscv64 part? Thanks!",
+      "revId": "ce53564b462cd474f687cc7a100ad148e45b279b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
