@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2703f3e_9673f3ac",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-10T09:17:18Z",
+      "side": 1,
+      "message": "I added a `IsValidSmi(int64_t)` for 32bit builds and used that from here.",
+      "parentUuid": "a11683c5_fea70b55",
+      "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56b22360_38b18c07",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85438aa4_7442d15d",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-10T09:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56b22360_38b18c07",
+      "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3cd113d0_6083162c",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-05-10T08:30:44Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7bd4d71_40454dc1",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-10T09:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cd113d0_6083162c",
       "revId": "5d45ef1ecfef92cf8a699c2f3694e8ec88c4b895",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
