@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fec703f7_f16914e4",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-05-10T09:45:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebc4b1a9_c6573748",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1142,
+        "endChar": 14
+      },
+      "revId": "3d834d6f08745e80cd3bb84ef261691aad72a8de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24df5890_1f7ebfb2",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f25662f_a16001c5",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-05-10T09:45:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24df5890_1f7ebfb2",
+      "range": {
+        "startLine": 1161,
+        "startChar": 58,
+        "endLine": 1161,
+        "endChar": 68
+      },
+      "revId": "3d834d6f08745e80cd3bb84ef261691aad72a8de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68c698a3_54669d73",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-05-10T07:46:05Z",
       "side": 1,
       "message": "The same here!",
+      "range": {
+        "startLine": 1165,
+        "startChar": 49,
+        "endLine": 1165,
+        "endChar": 61
+      },
+      "revId": "3d834d6f08745e80cd3bb84ef261691aad72a8de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79cde2ba_9e6da397",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-05-10T09:45:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68c698a3_54669d73",
       "range": {
         "startLine": 1165,
         "startChar": 49,
