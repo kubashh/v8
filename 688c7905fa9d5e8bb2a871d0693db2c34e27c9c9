@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "54df33ee_72bc41fc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-10T16:14:10Z",
+      "side": 1,
+      "message": "nit: clang-format. Different from clang, which still has its own update script.",
+      "range": {
+        "startLine": 21,
+        "startChar": 41,
+        "endLine": 21,
+        "endChar": 46
+      },
+      "revId": "688c7905fa9d5e8bb2a871d0693db2c34e27c9c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3f9abf4f_914eda39",
@@ -14,6 +37,23 @@
       "writtenOn": "2024-05-10T16:04:35Z",
       "side": 1,
       "message": "ptal",
+      "revId": "688c7905fa9d5e8bb2a871d0693db2c34e27c9c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1550b128_a2e16125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-10T16:14:10Z",
+      "side": 1,
+      "message": "Note that this will work well in V8, because V8 itself isn\u0027t recursed into in Chromium.\n\nBut as a side note, I wonder how it will be for projects with recurse_deps in Chrome\u0027s DEPS. If they add more recursive deps to their own DEPS that are not needed in a Chromium context, that\u0027d lead to duplicate deps in Chrome. E.g. the original //build and //buildtools in Chrome and then a nested copy of it. Something that we already have for openscreen with buildtools.",
       "revId": "688c7905fa9d5e8bb2a871d0693db2c34e27c9c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
