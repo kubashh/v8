@@ -228,7 +228,7 @@ deps = {
     'dep_type': 'cipd',
   },
   'third_party/boringssl': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/boringssl.git' + '@' + '0c02157621782572403132d1033230f050099118',
+    'url': Var('chromium_url') + '/chromium/src/third_party/boringssl.git' + '@' + '711f324bf9fa1f09a3f81cc424d94d1efdc03695',
     'condition': "checkout_centipede_deps",
   },
   'third_party/boringssl/src': {
@@ -290,7 +290,7 @@ deps = {
   'third_party/ittapi': {
     # Force checkout ittapi libraries to pass v8 header includes check on
     # bots that has check_v8_header_includes enabled.
-    'url': Var('chromium_url') + '/external/github.com/intel/ittapi' + '@' + 'a3911fff01a775023a06af8754f9ec1e5977dd97',
+    'url': Var('chromium_url') + '/external/github.com/intel/ittapi' + '@' + '5aaa4b0ec4136690b3376244b3e56464c1127d5e',
     'condition': "checkout_ittapi or check_v8_header_includes",
   },
   'third_party/jinja2':
