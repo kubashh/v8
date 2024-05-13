@@ -39,6 +39,30 @@
       },
       "revId": "4ad57ca9a9da63f25d6fda72b137706d8a729a10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "959f535f_06c924de",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-13T14:02:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cc156ae3_a52e7669",
+      "range": {
+        "startLine": 195,
+        "startChar": 24,
+        "endLine": 195,
+        "endChar": 42
+      },
+      "revId": "4ad57ca9a9da63f25d6fda72b137706d8a729a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
