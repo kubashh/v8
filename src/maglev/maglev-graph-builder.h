@@ -1817,7 +1817,8 @@ class MaglevGraphBuilder {
       compiler::SharedFunctionInfoRef shared,
       compiler::OptionalFeedbackVectorRef feedback_vector, CallArguments& args,
       const compiler::FeedbackSource& feedback_source);
-  bool ShouldInlineCall(compiler::SharedFunctionInfoRef shared,
+  bool ShouldInlineCall(compiler::OptionalJSFunctionRef callee,
+                        compiler::SharedFunctionInfoRef shared,
                         compiler::OptionalFeedbackVectorRef feedback_vector,
                         float call_frequency);
   ReduceResult TryBuildInlinedCall(
