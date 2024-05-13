@@ -522,11 +522,11 @@ inline constexpr bool IsDoubleRepresentation(ValueRepresentation repr) {
  * Here is a diagram of the relations between the types, where (*) means that
  * they have the kAnyHeapObject bit set.
  *
- *    NumberOrOddball            JsReceiver*            Name*
- *     /         \                /       \             /    \
- *  Oddball*     Number       Callable*  JSArray*   String*  Symbol*
- *    |          /    \                               |
- *  Boolean*    Smi   HeapNumber*              InternalizedString*
+ *    NumberOrOddball                 JsReceiver*                Name*
+ *     /         \                  /       |     \             /    \
+ *  Oddball*     Number      DocumentAll Callable* JSArray*   String*  Symbol*
+ *    |          /    \                                         |
+ *  Boolean*    Smi   HeapNumber*                       InternalizedString*
  *
  */
 
@@ -545,6 +545,7 @@ inline constexpr bool IsDoubleRepresentation(ValueRepresentation repr) {
   V(JSReceiver, (1 << 12) | kAnyHeapObject)                \
   V(JSArray, (1 << 13) | kJSReceiver)                      \
   V(Callable, (1 << 14) | kJSReceiver)                     \
+  V(DocumentAll, (1 << 15) | kJSReceiver)                  \
   V(HeapNumber, kAnyHeapObject | kNumber)
 
 enum class NodeType : uint16_t {
@@ -571,7 +572,13 @@ inline NodeType StaticTypeForMap(compiler::MapRef map) {
   if (map.IsInternalizedStringMap()) return NodeType::kInternalizedString;
   if (map.IsStringMap()) return NodeType::kString;
   if (map.IsJSArrayMap()) return NodeType::kJSArray;
-  if (map.IsJSReceiverMap()) return NodeType::kJSReceiver;
+  if (map.IsOddballMap()) return NodeType::kOddball;
+  if (map.IsJSReceiverMap()) {
+    // Only null, undefined and document.all have the undetectable bit set,
+    // since it is a JSReceiver, it must be document.all.
+    if (map.is_undetectable()) return NodeType::kDocumentAll;
+    return NodeType::kJSReceiver;
+  }
   return NodeType::kAnyHeapObject;
 }
 
@@ -608,6 +615,8 @@ inline bool IsInstanceOfNodeType(compiler::MapRef map, NodeType type,
       return map.IsInternalizedStringMap();
     case NodeType::kSymbol:
       return map.IsSymbolMap();
+    case NodeType::kDocumentAll:
+      return map.IsJSReceiverMap() && map.is_undetectable();
     case NodeType::kJSReceiver:
       return map.IsJSReceiverMap();
     case NodeType::kJSArray:
