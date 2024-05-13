@@ -52,8 +52,8 @@ enum ExceptionBreakType {
 // below inside BreakLocation, so be careful when adding / removing.
 enum DebugBreakType {
   NOT_DEBUG_BREAK,
-  DEBUGGER_STATEMENT,
   DEBUG_BREAK_AT_ENTRY,
+  DEBUGGER_STATEMENT,
   DEBUG_BREAK_SLOT,
   DEBUG_BREAK_SLOT_AT_CALL,
   DEBUG_BREAK_SLOT_AT_RETURN,
@@ -88,6 +88,8 @@ class BreakLocation {
 
   int generator_suspend_id() { return generator_suspend_id_; }
   int position() const { return position_; }
+  Tagged<AbstractCode> abstract_code() const { return *abstract_code_; }
+  int code_offset() const { return code_offset_; }
 
   debug::BreakLocationType type() const;
 
@@ -529,12 +531,18 @@ class V8_EXPORT_PRIVATE Debug {
                         bool returns_only = false);
   // Clear all one-shot instrumentations, but restore break points.
   void ClearOneShot();
+  // Clear information pertaining to break location muting.
+  void ClearMutedLocation();
+  void SetMutedLocation(Handle<SharedFunctionInfo> function,
+                        const BreakLocation& location);
 
   bool IsFrameBlackboxed(JavaScriptFrame* frame);
 
   void ActivateStepOut(StackFrame* frame);
   bool IsBreakOnInstrumentation(Handle<DebugInfo> debug_info,
                                 const BreakLocation& location);
+  bool IsBreakOnDebuggerStatement(Handle<SharedFunctionInfo> function,
+                                  const BreakLocation& location);
   MaybeHandle<FixedArray> CheckBreakPoints(Handle<DebugInfo> debug_info,
                                            BreakLocation* location,
                                            bool* has_break_points);
@@ -542,10 +550,8 @@ class V8_EXPORT_PRIVATE Debug {
       Handle<DebugInfo> debug_info, std::vector<BreakLocation>& break_locations,
       bool* has_break_points);
 
-  MaybeHandle<FixedArray> GetHitBreakpointsAtCurrentStatement(
-      JavaScriptFrame* frame, bool* hasBreakpoints);
-
-  bool IsMutedAtCurrentLocation(JavaScriptFrame* frame);
+  bool IsMutedAtBreakLocation(Handle<SharedFunctionInfo> function,
+                              const BreakLocation& location);
   // Check whether a BreakPoint object is hit. Evaluate condition depending
   // on whether this is a regular break location or a break at function entry.
   bool CheckBreakPoint(Handle<BreakPoint> break_point, bool is_break_at_entry);
@@ -655,6 +661,18 @@ class V8_EXPORT_PRIVATE Debug {
     // deoptimizer uses the info to materialize and drop execution into the
     // right frame.
     int restart_inline_frame_index_;
+
+    // This flag is true when the most recent breakpoint did not result in
+    // a break because its condition did not evaluate to true. We will mute
+    // other break reasons if we are still at the same location.
+    bool muted_at_location_;
+
+    // If the preceding flag is true, this points to the SharedFunctionInfo of
+    // the location where stopping has been muted.
+    Tagged<Object> muted_code_;
+
+    // The offset at which breaking is muted.
+    int muted_offset_;
   };
 
   static void Iterate(RootVisitor* v, ThreadLocal* thread_local_data);
