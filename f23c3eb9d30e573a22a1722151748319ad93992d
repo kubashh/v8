@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36c6f505_2e242770",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-13T08:25:33Z",
+      "side": 1,
+      "message": "Thanks for clarifying, sounds reasonable, I missed the `GOTO` in line 229 skipping this deopt check. 😊",
+      "parentUuid": "75f0ee2e_e5735162",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 234,
+        "endChar": 62
+      },
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93fb91a_1b76dbb4",
@@ -95,6 +119,30 @@
       "writtenOn": "2024-05-10T14:40:21Z",
       "side": 1,
       "message": "Inspired by https://source.chromium.org/chromium/chromium/src/+/main:v8/src/maglev/maglev-ir.cc;l\u003d6142-6164;drc\u003d18572f3fb0166b11adaaaa1399bec30618ca8639.",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 3
+      },
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "558bc587_71b955c4",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-13T08:25:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b93fb91a_1b76dbb4",
       "range": {
         "startLine": 194,
         "startChar": 0,
