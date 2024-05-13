@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eb0a642_d14c95b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-13T14:39:47Z",
+      "side": 1,
+      "message": "Hi, thanks for reminding me. Due to the bug I commented below I think this CL essentially just disables inlining TF compiled functions. We used to have this but decided against it since, as you mention, inlining can still be beneficial.",
+      "revId": "e1b5436a3e82d6e5e240ad50b553280da8e6dc47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cdc53f3_9bee7129",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6132,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-13T14:39:47Z",
+      "side": 1,
+      "message": "this sets the value to 2*0.95, but the frequency is between 0 and 1",
+      "revId": "e1b5436a3e82d6e5e240ad50b553280da8e6dc47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
