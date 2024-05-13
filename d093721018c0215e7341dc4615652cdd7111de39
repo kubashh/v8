@@ -16,6 +16,184 @@
       "message": "Microbenchmark results on x64:\n\n* Without inlining: `out/x64.release/d8 --turboshaft-wasm indirect-calls.js`\n```\nindirectCrossModule            553.07 ms\nindirectSameModule             551.92 ms\ncallRefDirectRefSameModule     602.42 ms\ncallRefTableGetCastSameModule  1011.98 ms\ndirectCrossModule              431.79 ms\ndirectSameModule               403.61 ms\nindirectJS                     1376.16 ms\ndirectJS                       1271.35 ms\nnoCall                         52.44 ms\n```\n* With: `out/x64.release/d8 --turboshaft-wasm --experimental-wasm-inlining-call-indirect indirect-calls.js`\n```\nindirectCrossModule            575.64 ms\nindirectSameModule             173.66 ms\ncallRefDirectRefSameModule     172.86 ms\ncallRefTableGetCastSameModule  301.48 ms\ndirectCrossModule              439.99 ms\ndirectSameModule               53.33 ms\nindirectJS                     1419.21 ms\ndirectJS                       1310.23 ms\nnoCall                         52.83 ms\n```",
       "revId": "d093721018c0215e7341dc4615652cdd7111de39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e782ca9d_13a9789c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "LGTM with nits. Nice work!",
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc3cfa37_438cd893",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2510,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "Editing artifact?",
+      "range": {
+        "startLine": 2510,
+        "startChar": 44,
+        "endLine": 2510,
+        "endChar": 46
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cdce74f_1ea3d633",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "nit: if you use `%zu` here, you can skip the `static_cast\u003cint\u003e` for `i` below.",
+      "range": {
+        "startLine": 2541,
+        "startChar": 23,
+        "endLine": 2541,
+        "endChar": 25
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4db4218d_500a0769",
+        "filename": "test/mjsunit/wasm/speculative-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "nit: `on its`",
+      "range": {
+        "startLine": 10,
+        "startChar": 37,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b358480_66046927",
+        "filename": "test/mjsunit/wasm/speculative-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "This is unused AFAICT. If it\u0027s useful to have it, please add a short comment explaining why, otherwise drop it.",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 259,
+        "endChar": 20
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003562ff_187f172c",
+        "filename": "test/mjsunit/wasm/speculative-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "This also appears to be unused.",
+      "range": {
+        "startLine": 272,
+        "startChar": 4,
+        "endLine": 274,
+        "endChar": 20
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22f4c648_7489a1a2",
+        "filename": "test/mjsunit/wasm/speculative-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "nit: weird indentation",
+      "range": {
+        "startLine": 297,
+        "startChar": 36,
+        "endLine": 297,
+        "endChar": 48
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7795c49b_9db561b3",
+        "filename": "test/mjsunit/wasm/speculative-inlining.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-13T14:33:06Z",
+      "side": 1,
+      "message": "This also appears to be unused.",
+      "range": {
+        "startLine": 307,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 20
+      },
+      "revId": "d093721018c0215e7341dc4615652cdd7111de39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
