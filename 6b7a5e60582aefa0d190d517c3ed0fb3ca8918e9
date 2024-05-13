@@ -16,6 +16,46 @@
       "message": "I think we should add an `OWNERS` file to `src/wasm/interpreter` to make ownership of this code transparent.",
       "revId": "6b7a5e60582aefa0d190d517c3ed0fb3ca8918e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be84a8a5_968dc8bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Thanks for rebasing and separating it/putting it behind a build flag. (Sorry for the late reply, was OOO due to several public holidays.)\n\nI left a first round of comments, mostly only checking that the interpreter is well separated from the rest of the code. In particular, I didn\u0027t review the files in `interpreter/`, as discussed. I still have ~30-35 files ahead of me that I will look at in the next days.\n\nIf multiple rounds of reviewing becomes too slow, we could also schedule a call, but let\u0027s first see if we can do without. In a later round, we will have to add more people to review files where I\u0027m not an OWNER or not familiar.\n\nI also briefly checked `d8` binary size, x64 non-component release build:\n```\nlast commit before this CL:           38671608 bytes\nthis CL, v8_wasm_interpreter \u003d false: 38671872 bytes\nthis CL, v8_wasm_interpreter \u003d true:  39318000 bytes\n```\nThat looks fine to me (I would be interested to know where the slight difference is coming from, but no biggie).\n\n@Michael Achenbach: Do we already have an (fyi?) bot which we could run this on?",
+      "revId": "6b7a5e60582aefa0d190d517c3ed0fb3ca8918e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ed2d6d9_c9c4a7d9",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Comment disagrees with check below, possibly remove this sentence (or do we even want compilation hints for the interpreter tier? If not and they are never serialized, then we also wouldn\u0027t need to touch this file at all, right?)",
+      "range": {
+        "startLine": 1471,
+        "startChar": 9,
+        "endLine": 1471,
+        "endChar": 43
+      },
+      "revId": "6b7a5e60582aefa0d190d517c3ed0fb3ca8918e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

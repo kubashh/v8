@@ -1,0 +1,334 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f6fbc57_40c0de16",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "nit: should be `DrumBrake` for consistency, I suppose (at least it\u0027s the only place where it\u0027s written this way)",
+      "range": {
+        "startLine": 387,
+        "startChar": 29,
+        "endLine": 387,
+        "endChar": 38
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aadb5624_092c663e",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "What\u0027s the purpose of `v8_wasm_interpreter` if we already have `is_drumbrake_enabled`? Could we get rid of the former?\n\nAlso nit: For consistency with, e.g., Maglev, I would name this build flag `v8_enable_drumbrake` and then name the macro accordingly `V8_ENABLE_DRUMBRAKE`.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465f8ca5_c0cff1cf",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "So DrumBrake is silently disabled if `is_drumbrake_supported` is false? How about `assert`-ing instead that `v8_enable_drumbrake` cannot be true in that case?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eff72765_805fe76b",
+        "filename": "gni/v8.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Maybe a naive question, but how does the interpreter depend on pointer compression? In particular, would the interpreter break in other (non-Chrome) V8 embedders that don\u0027t use pointer compression, say, Node.js?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c82ea857_1d648071",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "nit: This is a pretty generic name, can we come up with something that makes a bit clearer that this is for tracking performance of the interpreter somehow? (I am not fully sure what it\u0027s purpose is.) Maybe `WasmModuleSlowInterpreterEvent` or something?",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 31
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c024f91e_71c36484",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Just to clarify: You have your own interpreted JS-to-Wasm and Wasm-to-JS wrappers (\"generic wrappers\"), independent of the `kJSToWasmWrapperAsm` wrapper that Andreas added last year, correct?\n\nIf yes, how much work would it be to use the latter instead? (In order to avoid having two things that do have a very similar purpose.)",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2302d5e7_0159f90a",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "nit: Add comment why this doesn\u0027t hold any longer with the interpreter.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74187c64_4a335de7",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "nit: `indexes` -\u003e `indices`.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9b16900_9e023f89",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "This seems to be independent of the interpreter (i.e., the `packed_args_size` field existed already). Should this _not_ be behind the `#if` guard?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ce78678_ad92b3c7",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Note to self: I will need help reviewing this from someone more familiar with this part of the code base.",
+      "range": {
+        "startLine": 79,
+        "startChar": 29,
+        "endLine": 79,
+        "endChar": 42
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc542496_c41565d8",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "typo: any?",
+      "range": {
+        "startLine": 99,
+        "startChar": 9,
+        "endLine": 99,
+        "endChar": 11
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3e7c53f_c61ade37",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "nit: instead of exposing this internal field, why not have two ctors (or static factory methods), one for the case where you are wrapping a `WasmCode` object, and one where not? I.e., `DrumBrakeWasmCode::Interpreter()` sets it to `nullptr` and `DrumBrakeWasmCode::Compiled(WasmCode*)` wraps it?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "858a040e_144f1bc2",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2801,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "nit: indent one out",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b320ea_db31a060",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Given that we (as in the overall V8/Wasm team) haven\u0027t reviewed the interpreter in-depth, we should make the interpreter imply `--experimental`, i.e., change this to\n```\nDEFINE_EXPERIMENTAL_FEATURE(wasm_jitless, \"Use DrumBrake, a rewriting Wasm interpreter\")\n``` or something",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d154a44_55f158a0",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Why is the overall Wasm interpreter dependent on `slow_histograms`? I do understand that it\u0027s needed for `wasm_enable_exec_time_histograms`, but wouldn\u0027t an implication just for this suffice? Or just require users to explicitly set `--slow-histograms`, and enforce that via a `DEFINE_NEG_NEG_IMPLICATION`? (AFAIK there are other expensive histograms that have nothing to do with Wasm or the interpreter that would be enabled by this, which I\u0027d rather not.)",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "672f8bfb_971bb4dc",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "Security: (Why) is this safe?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af481e75_4e10a826",
+        "filename": "src/wasm/interpreter/wasm-interpreter.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 7500,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "compile error with `v8_wasm_interpreter\u003dtrue` in `args.gn`:\n```\n../../src/wasm/interpreter/wasm-interpreter.cc:7501:1: error: static declaration of \u0027TrapMemOutOfBounds\u0027 follows non-static declaration\n 7501 | TrapMemOutOfBounds(const uint8_t* code, uint32_t* sp,\n      | ^\n../../src/wasm/interpreter/wasm-interpreter.cc:471:50: note: previous declaration is here\n  471 | DISABLE_CFI_ICALL InstrHandlerRetType VECTORCALL TrapMemOutOfBounds(\n      |                                                  ^\n```\nI suppose you want a non-static variant of the `INSTRUCTION_HANDLER_FUNC` macro.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88bcf69e_a8e1b3d5",
+        "filename": "src/wasm/interpreter/wasm-interpreter.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 1,
+      "message": "(Disclosure: I haven\u0027t reviewed files in `interpreter/` in depth, but just stumbled over this due to the compile error below.)\n`DISABLE_CFI_ICALL` means the interpreter instruction handlers are callable (and ROP-able) from everywhere, i.e., this could be pretty detrimental for security, no?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e05bc157_4228f93d",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-13T14:06:53Z",
+      "side": 0,
+      "message": "Could you please update `BUILD.bazel` as well, i.e. check if it builds with `bazel build :icu/d8`? (@Andreas Haas: please correct me if that\u0027s the wrong build command)",
+      "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
