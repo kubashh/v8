@@ -300,11 +300,12 @@ class HeapObject : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // ExternalPointer_t field accessors.
   //
   template <ExternalPointerTag tag>
-  inline void InitExternalPointerField(size_t offset, IsolateForSandbox isolate,
+  inline void InitExternalPointerField(size_t offset,
+                                       IsolateForPointerCompression isolate,
                                        Address value);
   template <ExternalPointerTag tag>
-  inline Address ReadExternalPointerField(size_t offset,
-                                          IsolateForSandbox isolate) const;
+  inline Address ReadExternalPointerField(
+      size_t offset, IsolateForPointerCompression isolate) const;
   // Same as `ReadExternalPointerField()` with returning kNullAddress on
   // encountering a 0-handle (instead of crashing). Will use the
   // CppHeapPointerTable for access.
@@ -316,12 +317,12 @@ class HeapObject : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
       ExternalPointerTag tag) const;
   template <ExternalPointerTag tag>
   inline void WriteExternalPointerField(size_t offset,
-                                        IsolateForSandbox isolate,
+                                        IsolateForPointerCompression isolate,
                                         Address value);
 
   template <ExternalPointerTag tag>
   inline void WriteLazilyInitializedExternalPointerField(
-      size_t offset, IsolateForSandbox isolate, Address value);
+      size_t offset, IsolateForPointerCompression isolate, Address value);
 
   inline void SetupLazilyInitializedExternalPointerField(size_t offset);
   inline void SetupLazilyInitializedCppHeapPointerField(size_t offset);
