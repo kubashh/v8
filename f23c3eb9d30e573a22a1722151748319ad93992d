@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c605c0ae_d1903f6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-13T08:11:13Z",
+      "side": 1,
+      "message": "LGTM with two nits",
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad151abf_f244f709",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-13T08:11:13Z",
+      "side": 1,
+      "message": "Why is the deopt at the end and not at line 211? Not sure if that could reduce the lifetime for any of the values?",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 234,
+        "endChar": 62
+      },
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b93fb91a_1b76dbb4",
@@ -36,6 +76,29 @@
         "startChar": 0,
         "endLine": 238,
         "endChar": 3
+      },
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdf7f61b_49f43db5",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 1640,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-13T08:11:13Z",
+      "side": 1,
+      "message": "Typo",
+      "range": {
+        "startLine": 1640,
+        "startChar": 5,
+        "endLine": 1640,
+        "endChar": 13
       },
       "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
