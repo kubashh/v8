@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b44c04e5_3e69f35e",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2834,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-05-13T09:45:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e78a3f1_d94abb86",
+      "range": {
+        "startLine": 2833,
+        "startChar": 0,
+        "endLine": 2834,
+        "endChar": 59
+      },
+      "revId": "301ac5ffb095c7be74ba0d34bde53b8a859f98dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd44a4b6_09904f16",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-05-13T08:38:39Z",
       "side": 1,
       "message": "Not having looked at the impl yet, do we need the flag? Or could we check whether `muted_code_` is a nullptr/`undefined`?\n\nIf the flag can be false with `muted_code_` set to an SFI or something else, we should document that here.",
+      "range": {
+        "startLine": 668,
+        "startChar": 9,
+        "endLine": 668,
+        "endChar": 27
+      },
+      "revId": "301ac5ffb095c7be74ba0d34bde53b8a859f98dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49810930_4822467e",
+        "filename": "src/debug/debug.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-05-13T09:45:09Z",
+      "side": 1,
+      "message": "Done. I also notice that I am still using names from when I thought using bytecode+offset would work, so I\u0027ve updated the names.",
+      "parentUuid": "dd44a4b6_09904f16",
       "range": {
         "startLine": 668,
         "startChar": 9,
