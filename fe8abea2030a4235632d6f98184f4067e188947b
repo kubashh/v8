@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "fe8abea2030a4235632d6f98184f4067e188947b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be49932_028fd126",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 9272,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-13T14:25:35Z",
+      "side": 1,
+      "message": "So if we end up in this case, we:\n\n1. couldn\u0027t show that the value is a kDocumentAll\n2. could show that the value is a kJSReceiver\n\nthe way you described `kJSReceiver` in the type lattice this does not imply it isn\u0027t a `kDocumentAll`, since kJSReceiver still includes kDocumentAll as a sub-property.\n\n(I know the way you currently use the property it probably works...)\n\nI think what you wanted is a `kNotUndetectable` property.",
+      "revId": "fe8abea2030a4235632d6f98184f4067e188947b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
