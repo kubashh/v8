@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75f0ee2e_e5735162",
+        "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-13T08:22:54Z",
+      "side": 1,
+      "message": "Basically, `map` can be either one of `transition_source` or `target_map`. If it\u0027s one of `transition_source`, it should be transitioned (which will make it become `target_map`). Otherwise, it has to be `target_map`, and if it\u0027s not, we deopt. The deopt thus has to happen only after we\u0027ve checked the transitions. Line 211 could have been `GotoIf(__ TaggedEqual(map, target_map), end)`, and then line 233 an unconditional deopt, but I preferred to keep Maglev\u0027s order (because I assumed that they thought about it and it makes sense, although to be honest, I personally don\u0027t know whether this is really the best order).",
+      "parentUuid": "ad151abf_f244f709",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 234,
+        "endChar": 62
+      },
+      "revId": "f23c3eb9d30e573a22a1722151748319ad93992d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b93fb91a_1b76dbb4",
         "filename": "src/compiler/turboshaft/maglev-early-lowering-reducer-inl.h",
         "patchSetId": 1
