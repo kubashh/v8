@@ -16,6 +16,120 @@
       "message": "@syg@chromium.org PTAL. This still doesn\u0027t fix the flakiness reported on bug 339021674, but should get rid of the use after free, and hopefully throw a better error.",
       "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0f797a3_9b9f1b6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-13T23:01:26Z",
+      "side": 1,
+      "message": "I presented two options in notes below, both of which I think would be cleaner. What\u0027s your preference?",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803c051f_2c317b94",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-13T23:01:26Z",
+      "side": 1,
+      "message": "Nit: stray \u0027s?",
+      "range": {
+        "startLine": 800,
+        "startChar": 58,
+        "endLine": 800,
+        "endChar": 60
+      },
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01806252_67377c99",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-13T23:01:26Z",
+      "side": 1,
+      "message": "I\u0027m wondering if we can always allocate async waiter at this point, instead of sometimes being passed in and sometimes allocating here.\n\nThe reason to avoid allocations inside critical sections inside locks is that it makes them more flexible, as otherwise they cannot be used inside allocators without deadlock.\n\nIn our case, no one will use this implementation inside a `malloc` implementation. It has a very slim chance to be used inside V8\u0027s own allocators, so it seems wiser to avoid doing V8 heap allocations inside to avoid ever having to think about weird reentrancy cases.\n\nGiven the above, there may be a way to structure this such that we can allocate a `WaiterQueueNode` as late as possible, because that\u0027s a `malloc` allocation, but preallocate all the Promise and handler stuff.\n\nLet\u0027s call this Option B, which is mutually exclusive with Option A.",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a2e781_ac933355",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-13T23:01:26Z",
+      "side": 1,
+      "message": "To make sure I understand, it\u0027s the destructor on `waiter_node` that is racing, because a waiter node is enqueued _before_ setting promise handlers, and if setting the handlers fail, cleanup logic is done on the waiter node that\u0027s now in the queue without taking the queue lock.\n\nI don\u0027t understand the `AddWaitingData` and `ClearWaitingData` dance though.",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66727599_888bb452",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-13T23:01:26Z",
+      "side": 1,
+      "message": "It feels off for `SetAsyncUnlockHandlers` to be also doing lifetime management in case of failure. Can `NewAsyncWaiterStoredInIsolate` take an initialization lambda so that it doesn\u0027t add the waiter to the queue list at all if `PerformPromiseThen` fails? Also in that case do we still need the `ClearWaitingData` dance?\n\nLet\u0027s call this Option A, which is in conflict with Option B which is about moving the allocation of `WaiterQueueNode` entirely.",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cb5166b_f9846bb3",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-13T23:01:26Z",
+      "side": 1,
+      "message": "It\u0027s the C++ heap, not stack.",
+      "range": {
+        "startLine": 235,
+        "startChar": 46,
+        "endLine": 235,
+        "endChar": 51
+      },
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
