@@ -228,15 +228,16 @@ class JSAtomicsMutex
 
   V8_WARN_UNUSED_RESULT inline bool TryLock();
 
-  // Try to lock the mutex, if it's currently owned by another thread, creates
-  // a LockAsyncWaiterQueueNode and enqueue it in the mutex's waiter queue.
-  // The `internal_locked_promise` is resolved when the node is notified.
-  // Returns true if the lock was acquired, false otherwise.
-  static bool LockAsync(
+  // Try to lock the mutex, if it's currently owned by another thread.
+  // `waiter_node` shoul be nullptr only when this is called by a waitAsync call
+  // returning control to the lockAsync callback. In this case, a new waiter
+  // node will be allocated on the C++ stack if the lock is not acquired.
+  // The `internal_locked_promise` is resolved when the lock is taken, either
+  // in this call or when the node is notified.
+  static void LockAsync(
       Isolate* requester, Handle<JSAtomicsMutex> mutex,
       Handle<JSPromise> internal_locked_promise,
-      MaybeHandle<JSPromise> unlocked_promise,
-      AsyncWaiterNodeType** waiter_node,
+      MaybeHandle<JSPromise> unlocked_promise, AsyncWaiterNodeType* waiter_node,
       base::Optional<base::TimeDelta> timeout = base::nullopt);
 
   // A wrapper for LockAsync called when an asyncWait call returns control
@@ -317,8 +318,13 @@ class JSAtomicsMutex
                                 std::atomic<StateT>* state,
                                 Handle<JSPromise> internal_locked_promise,
                                 MaybeHandle<JSPromise> unlocked_promise,
-                                AsyncWaiterNodeType** waiter_node,
+                                AsyncWaiterNodeType* waiter_node,
                                 base::Optional<base::TimeDelta> timeout);
+  static MaybeHandle<JSPromise> SetAsyncUnlockHandlers(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+      Handle<JSPromise> waiting_for_callback_promise,
+      Handle<JSPromise> unlocked_promise,
+      AsyncWaiterNodeType* async_locked_waiter);
 
   V8_EXPORT_PRIVATE void UnlockSlowPath(Isolate* requester,
                                         std::atomic<StateT>* state);
