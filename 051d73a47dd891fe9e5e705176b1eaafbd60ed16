@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd3a3196_51a98e6e",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-13T23:54:12Z",
+      "side": 1,
+      "message": "This is what I\u0027d like to do, and what we were doing before this change. The issue is that we need to store a reference to the `WaiterQueueNode` in the handlers\u0027 context. So the options I thought were to:\n1. Preallocate the `WaiterQueueNode` (this solution).\n2. Allocate a `WaiterQueueNode**` in the heap, store it in the context and then change its content to the `WaiterQueueNode*` created here. Which seemed less clean.\n\nAn alternative solution that I just thought is for `SetAsyncUnlockHandlers` to return the async unlock handlers\u0027 context, and add the node to the context slot after the `AsyncLock` call. It seems a little weird to update the context after setting the handlers but it may end up being cleaner that this. WDYT?",
+      "parentUuid": "01806252_67377c99",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66a2e781_ac933355",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 2
@@ -88,6 +106,24 @@
       "writtenOn": "2024-05-13T23:01:26Z",
       "side": 1,
       "message": "To make sure I understand, it\u0027s the destructor on `waiter_node` that is racing, because a waiter node is enqueued _before_ setting promise handlers, and if setting the handlers fail, cleanup logic is done on the waiter node that\u0027s now in the queue without taking the queue lock.\n\nI don\u0027t understand the `AddWaitingData` and `ClearWaitingData` dance though.",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b776f79_52269250",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-13T23:54:12Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the race. `ClearWaitingData` is clearing unnecessary information. The task runner must be set before making the node visible to other threads, so that\u0027s why I\u0027m setting the data right before `MaybeEnqueNode`, ideally we could do it inside `MaybeEnqueueNode` but then we couldn\u0027t reuse the code. TL;DR I don\u0027t have a strong argument to keep it this wait and hopefully we can remove it with the solution I explained above.",
+      "parentUuid": "66a2e781_ac933355",
       "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -111,6 +147,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ced1e997_9dde05c9",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-13T23:54:12Z",
+      "side": 1,
+      "message": "I\u0027d like to keep `NewAsyncWaiterStoredInIsolate` as a simple wrapper of the constructor which also adds the node to the isolate\u0027s list, maybe we don\u0027t need this if the option I explained above works.",
+      "parentUuid": "66727599_888bb452",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6cb5166b_f9846bb3",
         "filename": "src/objects/js-atomics-synchronization.h",
         "patchSetId": 2
@@ -122,6 +176,30 @@
       "writtenOn": "2024-05-13T23:01:26Z",
       "side": 1,
       "message": "It\u0027s the C++ heap, not stack.",
+      "range": {
+        "startLine": 235,
+        "startChar": 46,
+        "endLine": 235,
+        "endChar": 51
+      },
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39a45375_4e741e11",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-13T23:54:12Z",
+      "side": 1,
+      "message": "Woops, this one is feels bad 😂",
+      "parentUuid": "6cb5166b_f9846bb3",
       "range": {
         "startLine": 235,
         "startChar": 46,
