@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e3e721_beb34ef4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-05-13T08:38:39Z",
+      "side": 1,
+      "message": "Very nice and easy to follow! lgtm with suggestions.",
+      "revId": "301ac5ffb095c7be74ba0d34bde53b8a859f98dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e78a3f1_d94abb86",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2834,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-05-13T08:38:39Z",
+      "side": 1,
+      "message": "2 nits: I think we want a `const BreakLocation\u0026` here, otherwise we\u0027ll create a copy of each `BreakLocation` while iterating. Since `IsMutedAtBreakLocation` also takes a const ref, I think thats the intention?\n\nWe could extract this into a tiny `IsMutedAtAnyBreakLocation` helper (in an anonymous namespace) and re-use it above.",
+      "range": {
+        "startLine": 2833,
+        "startChar": 0,
+        "endLine": 2834,
+        "endChar": 59
+      },
+      "revId": "301ac5ffb095c7be74ba0d34bde53b8a859f98dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd44a4b6_09904f16",
+        "filename": "src/debug/debug.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-05-13T08:38:39Z",
+      "side": 1,
+      "message": "Not having looked at the impl yet, do we need the flag? Or could we check whether `muted_code_` is a nullptr/`undefined`?\n\nIf the flag can be false with `muted_code_` set to an SFI or something else, we should document that here.",
+      "range": {
+        "startLine": 668,
+        "startChar": 9,
+        "endLine": 668,
+        "endChar": 27
+      },
+      "revId": "301ac5ffb095c7be74ba0d34bde53b8a859f98dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
