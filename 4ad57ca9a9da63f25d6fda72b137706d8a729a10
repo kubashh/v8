@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf2a375_6cc725de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-13T13:27:57Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "4ad57ca9a9da63f25d6fda72b137706d8a729a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc156ae3_a52e7669",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-13T13:27:57Z",
+      "side": 1,
+      "message": "I forgot annotating this getter but I think it\u0027s okay to do this now as the getter is useless without the type (that is deprecated).",
+      "range": {
+        "startLine": 195,
+        "startChar": 24,
+        "endLine": 195,
+        "endChar": 42
+      },
+      "revId": "4ad57ca9a9da63f25d6fda72b137706d8a729a10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
