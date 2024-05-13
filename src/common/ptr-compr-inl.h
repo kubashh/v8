@@ -317,12 +317,15 @@ V8_INLINE PtrComprCageBase GetPtrComprCageBase(Tagged<HeapObject> object) {
 #ifdef V8_COMPRESS_POINTERS_IN_MULTIPLE_CAGES
 
 PtrComprCageAccessScope::PtrComprCageAccessScope(Isolate* isolate)
-    : cage_base_(V8HeapCompressionScheme::base()) {
+    : cage_base_(V8HeapCompressionScheme::base()),
+      code_cage_base_(ExternalCodeCompressionScheme::base()) {
   V8HeapCompressionScheme::InitBase(isolate->cage_base());
+  ExternalCodeCompressionScheme::InitBase(isolate->code_cage_base());
 }
 
 PtrComprCageAccessScope::~PtrComprCageAccessScope() {
   V8HeapCompressionScheme::InitBase(cage_base_);
+  ExternalCodeCompressionScheme::InitBase(code_cage_base_);
 }
 
 #endif  // V8_COMPRESS_POINTERS_IN_MULTIPLE_CAGES
