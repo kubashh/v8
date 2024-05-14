@@ -16,6 +16,24 @@
       "message": "It seems the node CI doesn\u0027t manage to build addons: see end of https://logs.chromium.org/logs/node-ci/buildbucket/cr-buildbucket/8748068638469800017/+/u/build/compile/stdout.  No idea why as it doesn\u0027t seem to expose the logs!",
       "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "643cbefc_ce35aed1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2024-05-14T06:28:39Z",
+      "side": 1,
+      "message": "Drive-by comment: Incase it helps, addon build step happens via the target https://chromium.googlesource.com/v8/node-ci/+/refs/heads/main/node_tests/BUILD.gn#104 and it relies on node binary built from this change https://github.com/v8/node/blob/b5a7a8ad3b09405e5523f8da35bc3f393db79dcc/tools/build_addons.py#L30. There is a crash on startup of the binary. You can repro the issue by setting up https://chromium.googlesource.com/v8/node-ci/+/refs/heads/main#checking-out-source and replacing v8 checkout with this change, followed by\n\n```\n\u003e ./tools/gn-gen.py out/Release \n\u003e ninja -C out/Release node_tests:node_test_addons_build\n```",
+      "parentUuid": "19180d34_3b776288",
+      "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
