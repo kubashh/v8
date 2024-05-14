@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c48513_051e20e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-14T07:57:54Z",
+      "side": 1,
+      "message": "Note, the reverted CL had several failures on numfuzz, solved by the revert:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20NumFuzz%20-%20debug/25494/overview\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20NumFuzz%20-%20debug/25487/overview",
+      "revId": "a6f783e5d8e4c6c0b30fc20404837bbf57ce514a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
