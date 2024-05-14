@@ -33,6 +33,24 @@
       "message": "this sets the value to 2*0.95, but the frequency is between 0 and 1",
       "revId": "e1b5436a3e82d6e5e240ad50b553280da8e6dc47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2bb1866_b9b58f7d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 6132,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2024-05-14T01:23:10Z",
+      "side": 1,
+      "message": "No, the frequency can be greater than 1.\n````\ncall_frequency \u003d call_count / caller_invocation_count.\n````\nThe example call_frequency is between 0 and 1:\n````\nfunction caller(condition) {\n  if (condition) {\n    callee();\n  }\n}\n````\nThe example call_frequency is greater 1:\n````\nfunction caller(count) {\n  for (let i \u003d 0; i \u003c count; i++) {\n    callee();\n  }\n}\n````",
+      "parentUuid": "3cdc53f3_9bee7129",
+      "revId": "e1b5436a3e82d6e5e240ad50b553280da8e6dc47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
