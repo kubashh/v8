@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dd2d34b_25769a43",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-14T11:40:01Z",
+      "side": 1,
+      "message": "There is a `DCHECK_EQ(dst, src3)` 3 lines above, so this should always be true.",
+      "range": {
+        "startLine": 2098,
+        "startChar": 8,
+        "endLine": 2098,
+        "endChar": 19
+      },
+      "revId": "510dd9fba5495b6d8a604fa8a0b6fc34ae6fb58f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8934fe39_3399f35d",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-14T11:40:01Z",
+      "side": 1,
+      "message": "Could you `DCHECK_NE(scratch, splat_reg)` here?",
+      "revId": "510dd9fba5495b6d8a604fa8a0b6fc34ae6fb58f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
