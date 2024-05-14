@@ -45,11 +45,6 @@ class MarkCompactCollector final {
     kTrackNewlyDiscoveredObjects
   };
 
-  enum class CallOrigin {
-    kIncrementalMarkingStep,
-    kAtomicGC,
-  };
-
   // Callback function for telling whether the object *p is an unmarked
   // heap object.
   static bool IsUnmarkedHeapObject(Heap* heap, FullObjectSlot p);
@@ -165,7 +160,7 @@ class MarkCompactCollector final {
     return use_background_threads_in_cycle_;
   }
 
-  void MaybeEnableBackgroundThreadsInCycle(CallOrigin origin);
+  void MaybeEnableBackgroundThreadsInCycle();
 
   Heap* heap() { return heap_; }
 
