@@ -16,6 +16,24 @@
       "message": "Could you please update `BUILD.bazel` as well, i.e. check if it builds with `bazel build :icu/d8`? (@Andreas Haas: please correct me if that\u0027s the wrong build command)",
       "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f96732e6_702b325b",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 0,
+      "message": "I have not been able to run a bazel build... I installed bazel on my Linux Ubuntu VM and ran `bazel build :icu/d8` but I got errors:\n```\npaolosev@TDC554593874:~/v8/v8/v8$ bazel build :icu/d8\nERROR: /home/paolosev/v8/v8/v8/WORKSPACE:62:21: fetching new_local_repository rule //external:com_googlesource_chromium_icu: /home/paolosev/v8/v8/v8/external/bazel/BUILD.icu is not a regular file; if you\u0027re using a relative or absolute path for `build_file` in your `new_local_repository` rule, please switch to using a label instead\nERROR: no such package \u0027@@com_googlesource_chromium_icu//\u0027: /home/paolosev/v8/v8/v8/external/bazel/BUILD.icu is not a regular file; if you\u0027re using a relative or absolute path for `build_file` in your `new_local_repository` rule, please switch to using a label instead\nERROR: /home/paolosev/v8/v8/v8/WORKSPACE:68:5: //external:icu depends on @@com_googlesource_chromium_icu//:icu in repository @@com_googlesource_chromium_icu which failed to fetch. no such package \u0027@@com_googlesource_chromium_icu//\u0027: /home/paolosev/v8/v8/v8/external/bazel/BUILD.icu is not a regular file; if you\u0027re using a relative or absolute path for `build_file` in your `new_local_repository` rule, please switch to using a label instead\nERROR: Analysis of target \u0027//:icu/d8\u0027 failed; build aborted: Analysis failed\nINFO: Elapsed time: 0.428s, Critical Path: 0.00s\n```\nAre there instructions for V8 Bazel builds that I should follow?",
+      "parentUuid": "e05bc157_4228f93d",
+      "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

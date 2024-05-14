@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f80d8c4_cd2b471a",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f6fbc57_40c0de16",
+      "range": {
+        "startLine": 387,
+        "startChar": 29,
+        "endLine": 387,
+        "endChar": 38
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aadb5624_092c663e",
@@ -72,6 +96,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "What\u0027s the purpose of `v8_wasm_interpreter` if we already have `is_drumbrake_enabled`? Could we get rid of the former?\n\nAlso nit: For consistency with, e.g., Maglev, I would name this build flag `v8_enable_drumbrake` and then name the macro accordingly `V8_ENABLE_DRUMBRAKE`.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dc72197_5a5b8273",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aadb5624_092c663e",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -112,6 +154,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb1f9325_e81e0c19",
+        "filename": "gni/v8.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "That was just done for simplicity, to reduce the implementation/testing effort, given that we were not really interested in the other case. Probably supporting pointer compression would require very limited changes, I think there is some ASM builtin for the interpreter that expects compressed pointers. But I would postpone this work to a future CL, if it is useful for some other embedder.",
+      "parentUuid": "eff72765_805fe76b",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c82ea857_1d648071",
         "filename": "include/v8-metrics.h",
         "patchSetId": 10
@@ -123,6 +183,30 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "nit: This is a pretty generic name, can we come up with something that makes a bit clearer that this is for tracking performance of the interpreter somehow? (I am not fully sure what it\u0027s purpose is.) Maybe `WasmModuleSlowInterpreterEvent` or something?",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 31
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7947b62a_707cba2f",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done, renamed as WasmInterpreterSlowExecution. (Usually the main thread events declared in v8-metrics.h don\u0027t have a suffix -Event). Also renamed WasmModuleJitStatus -\u003e WasmInterpreterJitStatus.",
+      "parentUuid": "c82ea857_1d648071",
       "range": {
         "startLine": 160,
         "startChar": 7,
@@ -152,6 +236,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3042792_08f2c170",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "It would be very nice to reuse the existing wrappers, but it would be also a lot of work because there are differences. The two Wasm interpreter builtins `kGenericJSToWasmInterpreterWrapper` and `kGenericWasmToJSInterpreterWrapper` where written before Andreas added `kJSToWasmWrapperAsm`, there was already a GenericJsToWasmWrapper ASM builtin which did not support all the fn signatures, and that I used as inspiration.",
+      "parentUuid": "c024f91e_71c36484",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2302d5e7_0159f90a",
         "filename": "src/diagnostics/objects-debug.cc",
         "patchSetId": 10
@@ -163,6 +265,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "nit: Add comment why this doesn\u0027t hold any longer with the interpreter.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9af50877_570890e8",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2302d5e7_0159f90a",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -184,6 +304,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5648ced_f4403d2f",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74187c64_4a335de7",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9b16900_9e023f89",
@@ -197,6 +335,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "This seems to be independent of the interpreter (i.e., the `packed_args_size` field existed already). Should this _not_ be behind the `#if` guard?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c26d244e_5710eef2",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Right. And currently v8 is not printing this field, so there is no reason to print it with the interpreter.",
+      "parentUuid": "f9b16900_9e023f89",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -247,6 +403,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e710640f_20df01d8",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc542496_c41565d8",
+      "range": {
+        "startLine": 99,
+        "startChar": 9,
+        "endLine": 99,
+        "endChar": 11
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3e7c53f_c61ade37",
@@ -260,6 +440,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "nit: instead of exposing this internal field, why not have two ctors (or static factory methods), one for the case where you are wrapping a `WasmCode` object, and one where not? I.e., `DrumBrakeWasmCode::Interpreter()` sets it to `nullptr` and `DrumBrakeWasmCode::Compiled(WasmCode*)` wraps it?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70b422c6_259166d2",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3e7c53f_c61ade37",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -281,6 +479,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f22f6ac_950bcd50",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2801,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "`git cl format` modifies the file with this indentation, probably because it expects a `case` or `default`.",
+      "parentUuid": "858a040e_144f1bc2",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5daf7c90_ff9c2826",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2801,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "858a040e_144f1bc2",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3b320ea_db31a060",
@@ -298,6 +532,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9580afc5_29ba90bc",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3b320ea_db31a060",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d154a44_55f158a0",
@@ -311,6 +563,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "Why is the overall Wasm interpreter dependent on `slow_histograms`? I do understand that it\u0027s needed for `wasm_enable_exec_time_histograms`, but wouldn\u0027t an implication just for this suffice? Or just require users to explicitly set `--slow-histograms`, and enforce that via a `DEFINE_NEG_NEG_IMPLICATION`? (AFAIK there are other expensive histograms that have nothing to do with Wasm or the interpreter that would be enabled by this, which I\u0027d rather not.)",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8eb510a_4a593719",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "You are right, an implication from `wasm_enable_exec_time_histograms` should be sufficient.",
+      "parentUuid": "0d154a44_55f158a0",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -334,6 +604,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e944967e_334bfe84",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "There is the same implication for jitless:\n```\nDEFINE_NEG_IMPLICATION(jitless, validate_asm)\n```\nAnd since `wasm-jitless` always and only work with `jitless` asm validation would be disabled anyway. What should we do here?",
+      "parentUuid": "672f8bfb_971bb4dc",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af481e75_4e10a826",
         "filename": "src/wasm/interpreter/wasm-interpreter.cc",
         "patchSetId": 10
@@ -345,6 +633,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "compile error with `v8_wasm_interpreter\u003dtrue` in `args.gn`:\n```\n../../src/wasm/interpreter/wasm-interpreter.cc:7501:1: error: static declaration of \u0027TrapMemOutOfBounds\u0027 follows non-static declaration\n 7501 | TrapMemOutOfBounds(const uint8_t* code, uint32_t* sp,\n      | ^\n../../src/wasm/interpreter/wasm-interpreter.cc:471:50: note: previous declaration is here\n  471 | DISABLE_CFI_ICALL InstrHandlerRetType VECTORCALL TrapMemOutOfBounds(\n      |                                                  ^\n```\nI suppose you want a non-static variant of the `INSTRUCTION_HANDLER_FUNC` macro.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca0dbb7_d034916f",
+        "filename": "src/wasm/interpreter/wasm-interpreter.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 7500,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af481e75_4e10a826",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -362,6 +668,24 @@
       "writtenOn": "2024-05-13T14:06:53Z",
       "side": 1,
       "message": "(Disclosure: I haven\u0027t reviewed files in `interpreter/` in depth, but just stumbled over this due to the compile error below.)\n`DISABLE_CFI_ICALL` means the interpreter instruction handlers are callable (and ROP-able) from everywhere, i.e., this could be pretty detrimental for security, no?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48a77ea7_cf5a2b86",
+        "filename": "src/wasm/interpreter/wasm-interpreter.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-14T21:15:19Z",
+      "side": 1,
+      "message": "There are two reasons for this.\nThe first is that a few of the interpreter instruction handlers (those that can trap with an out-of-bounds memory access) are not C++ compiled functions, but are instead ASM builtins, and I don\u0027t know how to declare them as valid CFI targets.\nBut even if all handlers were valid targets, the last instruction of each handler is a tail call to the next instruction handler, like:\n\n```\n[[clang::musttail]] return kInstructionTable[\n    ReadFnId(code) \u0026 kInstructionTableMask](code, sp, wasm_runtime, r0, fp0)\n```\n\nAnd for the sake of speed, we cannot make a CFI check after every single handler call.\n\nHow does the JS interpreter solve this issue?",
+      "parentUuid": "88bcf69e_a8e1b3d5",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
