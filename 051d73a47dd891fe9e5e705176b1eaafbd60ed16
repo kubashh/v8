@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d337c847_daefb754",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-14T01:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "803c051f_2c317b94",
+      "range": {
+        "startLine": 800,
+        "startChar": 58,
+        "endLine": 800,
+        "endChar": 60
+      },
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01806252_67377c99",
@@ -89,6 +113,24 @@
       "side": 1,
       "message": "This is what I\u0027d like to do, and what we were doing before this change. The issue is that we need to store a reference to the `WaiterQueueNode` in the handlers\u0027 context. So the options I thought were to:\n1. Preallocate the `WaiterQueueNode` (this solution).\n2. Allocate a `WaiterQueueNode**` in the heap, store it in the context and then change its content to the `WaiterQueueNode*` created here. Which seemed less clean.\n\nAn alternative solution that I just thought is for `SetAsyncUnlockHandlers` to return the async unlock handlers\u0027 context, and add the node to the context slot after the `AsyncLock` call. It seems a little weird to update the context after setting the handlers but it may end up being cleaner that this. WDYT?",
       "parentUuid": "01806252_67377c99",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5c6872_7f4083f2",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-14T01:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd3a3196_51a98e6e",
       "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35af77e1_7257592a",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 879,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-14T01:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b776f79_52269250",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66727599_888bb452",
@@ -159,6 +219,24 @@
       "side": 1,
       "message": "I\u0027d like to keep `NewAsyncWaiterStoredInIsolate` as a simple wrapper of the constructor which also adds the node to the isolate\u0027s list, maybe we don\u0027t need this if the option I explained above works.",
       "parentUuid": "66727599_888bb452",
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c603924_d244310a",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-14T01:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ced1e997_9dde05c9",
       "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -200,6 +278,30 @@
       "side": 1,
       "message": "Woops, this one is feels bad 😂",
       "parentUuid": "6cb5166b_f9846bb3",
+      "range": {
+        "startLine": 235,
+        "startChar": 46,
+        "endLine": 235,
+        "endChar": 51
+      },
+      "revId": "051d73a47dd891fe9e5e705176b1eaafbd60ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae08f143_47af7045",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-05-14T01:37:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39a45375_4e741e11",
       "range": {
         "startLine": 235,
         "startChar": 46,
