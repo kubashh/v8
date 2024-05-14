@@ -7262,12 +7262,12 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     return array;
   }
 
-  V<WasmStruct> StructNewImpl(FullDecoder* decoder,
+  V<HeapObject> StructNewImpl(FullDecoder* decoder,
                               const StructIndexImmediate& imm, OpIndex args[]) {
     bool shared = decoder->module_->types[imm.index].is_shared;
     V<Map> rtt = __ RttCanon(managed_object_maps(shared), imm.index);
 
-    V<WasmStruct> struct_value = __ WasmAllocateStruct(rtt, imm.struct_type);
+    V<HeapObject> struct_value = __ WasmAllocateStruct(rtt, imm.struct_type);
     for (uint32_t i = 0; i < imm.struct_type->field_count(); ++i) {
       __ StructSet(struct_value, args[i], imm.struct_type, imm.index, i,
                    compiler::kWithoutNullCheck);
