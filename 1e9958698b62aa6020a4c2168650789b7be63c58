@@ -70,6 +70,24 @@
       "parentUuid": "9e36f089_079ba5d6",
       "revId": "1e9958698b62aa6020a4c2168650789b7be63c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e120877_24952cc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-14T11:53:41Z",
+      "side": 1,
+      "message": "Your are right about the frequency!\n\nIf we should or should not inline turbofanned functions is indeed a tricky question. I am not convinced by this solution. Just because we call the function often does not mean that maglev will be good at optimizing it or vice-versa.\n\nMaybe if we would look at the functions that this CL has an effect on, it could hint at optimizations missing in maglev.",
+      "parentUuid": "f17bbb88_64ef5ce6",
+      "revId": "1e9958698b62aa6020a4c2168650789b7be63c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
