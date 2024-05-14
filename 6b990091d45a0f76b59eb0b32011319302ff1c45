@@ -16,6 +16,23 @@
       "message": "@syg@chromium.org I think this approach is much better, sorry about the last one. PTAL.",
       "revId": "6b990091d45a0f76b59eb0b32011319302ff1c45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f327a009_fd01fc77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-05-14T22:23:12Z",
+      "side": 1,
+      "message": "lgtm! I like this new solution a lot.",
+      "revId": "6b990091d45a0f76b59eb0b32011319302ff1c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
