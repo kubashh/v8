@@ -522,11 +522,11 @@ inline constexpr bool IsDoubleRepresentation(ValueRepresentation repr) {
  * Here is a diagram of the relations between the types, where (*) means that
  * they have the kAnyHeapObject bit set.
  *
- *    NumberOrOddball               JSReceiver*                 Name*
- *     /         \                  /       \                  /    \
- *  Oddball*     Number      UndetecJSRecv* DetecJSRecv*     String*  Symbol*
- *    |          /    \                     |      \           |
- *  Boolean*    Smi   HeapNumber*       Callable*  JSArray* InternalizedString*
+ *    NumberOrOddball            JsReceiver*            Name*
+ *     /         \                /       \             /    \
+ *  Oddball*     Number       Callable*  JSArray*   String*  Symbol*
+ *    |          /    \                               |
+ *  Boolean*    Smi   HeapNumber*              InternalizedString*
  *
  */
 
@@ -543,13 +543,11 @@ inline constexpr bool IsDoubleRepresentation(ValueRepresentation repr) {
   V(InternalizedString, (1 << 10) | kString)               \
   V(Symbol, (1 << 11) | kName)                             \
   V(JSReceiver, (1 << 12) | kAnyHeapObject)                \
-  V(DetectableJSReceiver, (1 << 13) | kJSReceiver)         \
-  V(UndetectableJSReceiver, (1 << 14) | kJSReceiver)       \
-  V(JSArray, (1 << 15) | kDetectableJSReceiver)            \
-  V(Callable, (1 << 16) | kDetectableJSReceiver)           \
+  V(JSArray, (1 << 13) | kJSReceiver)                      \
+  V(Callable, (1 << 14) | kJSReceiver)                     \
   V(HeapNumber, kAnyHeapObject | kNumber)
 
-enum class NodeType : uint32_t {
+enum class NodeType : uint16_t {
 #define DEFINE_NODE_TYPE(Name, Value) k##Name = Value,
   NODE_TYPE_LIST(DEFINE_NODE_TYPE)
 #undef DEFINE_NODE_TYPE
@@ -573,11 +571,7 @@ inline NodeType StaticTypeForMap(compiler::MapRef map) {
   if (map.IsInternalizedStringMap()) return NodeType::kInternalizedString;
   if (map.IsStringMap()) return NodeType::kString;
   if (map.IsJSArrayMap()) return NodeType::kJSArray;
-  if (map.IsOddballMap()) return NodeType::kOddball;
-  if (map.IsJSReceiverMap()) {
-    if (map.is_undetectable()) return NodeType::kUndetectableJSReceiver;
-    return NodeType::kDetectableJSReceiver;
-  }
+  if (map.IsJSReceiverMap()) return NodeType::kJSReceiver;
   return NodeType::kAnyHeapObject;
 }
 
@@ -616,10 +610,6 @@ inline bool IsInstanceOfNodeType(compiler::MapRef map, NodeType type,
       return map.IsSymbolMap();
     case NodeType::kJSReceiver:
       return map.IsJSReceiverMap();
-    case NodeType::kUndetectableJSReceiver:
-      return map.IsJSReceiverMap() && map.is_undetectable();
-    case NodeType::kDetectableJSReceiver:
-      return map.IsJSReceiverMap() && !map.is_undetectable();
     case NodeType::kJSArray:
       return map.IsJSArrayMap();
     case NodeType::kCallable:
@@ -8493,8 +8483,6 @@ class CallKnownJSFunction : public ValueNodeT<CallKnownJSFunction> {
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
-  int expected_parameter_count() const { return expected_parameter_count_; }
-
  private:
   const compiler::SharedFunctionInfoRef shared_function_info_;
   // Cache the expected parameter count so that we can access it in
@@ -9089,12 +9077,12 @@ class TerminalControlNode : public ControlNode {
 };
 
 template <size_t InputCount, class Derived>
-class TerminalControlNodeT
+class TeminalControlNodeT
     : public FixedInputNodeTMixin<InputCount, TerminalControlNode, Derived> {
   static_assert(IsTerminalControlNode(NodeBase::opcode_of<Derived>));
 
  protected:
-  explicit TerminalControlNodeT(uint64_t bitfield)
+  explicit TeminalControlNodeT(uint64_t bitfield)
       : FixedInputNodeTMixin<InputCount, TerminalControlNode, Derived>(
             bitfield) {}
 };
@@ -9162,8 +9150,8 @@ class JumpLoop : public UnconditionalControlNodeT<JumpLoop> {
   base::Vector<Input> used_node_locations_;
 };
 
-class Abort : public TerminalControlNodeT<0, Abort> {
-  using Base = TerminalControlNodeT<0, Abort>;
+class Abort : public TeminalControlNodeT<0, Abort> {
+  using Base = TeminalControlNodeT<0, Abort>;
 
  public:
   explicit Abort(uint64_t bitfield, AbortReason reason)
@@ -9184,8 +9172,8 @@ class Abort : public TerminalControlNodeT<0, Abort> {
   const AbortReason reason_;
 };
 
-class Return : public TerminalControlNodeT<1, Return> {
-  using Base = TerminalControlNodeT<1, Return>;
+class Return : public TeminalControlNodeT<1, Return> {
+  using Base = TeminalControlNodeT<1, Return>;
 
  public:
   explicit Return(uint64_t bitfield) : Base(bitfield) {
@@ -9202,8 +9190,8 @@ class Return : public TerminalControlNodeT<1, Return> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
 };
 
-class Deopt : public TerminalControlNodeT<0, Deopt> {
-  using Base = TerminalControlNodeT<0, Deopt>;
+class Deopt : public TeminalControlNodeT<0, Deopt> {
+  using Base = TeminalControlNodeT<0, Deopt>;
 
  public:
   explicit Deopt(uint64_t bitfield, DeoptimizeReason reason)
