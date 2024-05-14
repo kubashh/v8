@@ -4060,12 +4060,12 @@ class TurboshaftAssemblerOpInterface
     return ReduceIfReachableWasmAllocateArray(rtt, resolve(length), array_type);
   }
 
-  V<WasmStruct> WasmAllocateStruct(V<Map> rtt,
+  V<HeapObject> WasmAllocateStruct(V<Map> rtt,
                                    const wasm::StructType* struct_type) {
     return ReduceIfReachableWasmAllocateStruct(rtt, struct_type);
   }
 
-  V<WasmFuncRef> WasmRefFunc(V<Object> wasm_instance, uint32_t function_index) {
+  V<Object> WasmRefFunc(V<Object> wasm_instance, uint32_t function_index) {
     return ReduceIfReachableWasmRefFunc(wasm_instance, function_index);
   }
 
