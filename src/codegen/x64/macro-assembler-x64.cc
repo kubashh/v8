@@ -2093,6 +2093,16 @@ void MacroAssembler::I32x8DotI8x32I7x32AddS(YMMRegister dst, YMMRegister src1,
   DCHECK(CpuFeatures::IsSupported(AVX) && CpuFeatures::IsSupported(AVX2));
   DCHECK_EQ(dst, src3);
   CpuFeatureScope avx_scope(this, AVX);
+  if (CpuFeatures::IsSupported(AVX_VNNI)) {
+    CpuFeatureScope avx_scope(this, AVX_VNNI);
+    if (dst == src3) {
+      vpdpbusd(dst, src2, src1);
+    } else {
+      vmovdqa(dst, src3);
+      vpdpbusd(dst, src2, src1);
+    }
+    return;
+  }
   CpuFeatureScope avx2_scope(this, AVX2);
   // splat_reg = i16x16.splat(1)
   vpcmpeqd(splat_reg, splat_reg, splat_reg);
