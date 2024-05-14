@@ -72,7 +72,11 @@
 # TODO(v8:7777): Change this once wasm is supported in jitless mode.
 ['not has_webassembly or variant == jitless', {
   'mjsunit/fail/assert-promise-result-wasm-compile-fail': [SKIP],
-  'mjsunit/fail/assert-in-promise-fail-recursive': [FAIL],
+
+  # Skip this test because it is supposed to fail and would pass with the Wasm
+  # interpreter.
+  'mjsunit/fail/assert-in-promise-fail-recursive': [SKIP],
+
   'fail/wasm-*': [SKIP],
   'wasm-*': [SKIP],
   'asm-*': [SKIP],

@@ -285,6 +285,12 @@ inline WasmFrame::WasmFrame(StackFrameIteratorBase* iterator)
 inline WasmExitFrame::WasmExitFrame(StackFrameIteratorBase* iterator)
     : WasmFrame(iterator) {}
 
+#if V8_ENABLE_DRUMBRAKE
+inline WasmInterpreterEntryFrame::WasmInterpreterEntryFrame(
+    StackFrameIteratorBase* iterator)
+    : CommonFrame(iterator) {}
+#endif  // V8_ENABLE_DRUMBRAKE
+
 inline WasmDebugBreakFrame::WasmDebugBreakFrame(
     StackFrameIteratorBase* iterator)
     : TypedFrame(iterator) {}
@@ -358,6 +364,13 @@ bool DebuggableStackFrameIterator::is_javascript() const {
 bool DebuggableStackFrameIterator::is_wasm() const {
   return frame()->is_wasm();
 }
+
+#if V8_ENABLE_DRUMBRAKE
+bool DebuggableStackFrameIterator::is_wasm_interpreter_entry() const {
+  return frame()->is_wasm_interpreter_entry();
+}
+#endif  // V8_ENABLE_DRUMBRAKE
+
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 JavaScriptFrame* DebuggableStackFrameIterator::javascript_frame() const {
@@ -373,6 +386,9 @@ inline bool StackFrameIteratorForProfiler::IsValidFrameType(
 #if V8_ENABLE_WEBASSEMBLY
          type == StackFrame::WASM || type == StackFrame::WASM_TO_JS ||
          type == StackFrame::JS_TO_WASM ||
+#if V8_ENABLE_DRUMBRAKE
+         type == StackFrame::WASM_INTERPRETER_ENTRY ||
+#endif  // V8_ENABLE_DRUMBRAKE
 #endif  // V8_ENABLE_WEBASSEMBLY
          false;
 }
