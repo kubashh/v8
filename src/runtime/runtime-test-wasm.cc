@@ -235,6 +235,9 @@ RUNTIME_FUNCTION(Runtime_WasmTraceEnter) {
   DebuggableStackFrameIterator it(isolate);
   DCHECK(!it.done());
   DCHECK(it.is_wasm());
+#if V8_ENABLE_DRUMBRAKE
+  DCHECK(!it.is_wasm_interpreter_entry());
+#endif  // V8_ENABLE_DRUMBRAKE
   WasmFrame* frame = WasmFrame::cast(it.frame());
 
   // Find the function name.
@@ -272,6 +275,9 @@ RUNTIME_FUNCTION(Runtime_WasmTraceExit) {
   DebuggableStackFrameIterator it(isolate);
   DCHECK(!it.done());
   DCHECK(it.is_wasm());
+#if V8_ENABLE_DRUMBRAKE
+  DCHECK(!it.is_wasm_interpreter_entry());
+#endif  // V8_ENABLE_DRUMBRAKE
   WasmFrame* frame = WasmFrame::cast(it.frame());
   int func_index = frame->function_index();
   const wasm::WasmModule* module = frame->trusted_instance_data()->module();
@@ -358,6 +364,14 @@ RUNTIME_FUNCTION(Runtime_IsWasmCode) {
   Tagged<Code> code = function->code(isolate);
   bool is_js_to_wasm = code->kind() == CodeKind::JS_TO_WASM_FUNCTION ||
                        (code->builtin_id() == Builtin::kJSToWasmWrapper);
+#if V8_ENABLE_DRUMBRAKE
+  // TODO(paolosev@microsoft.com) - Implement an empty
+  // GenericJSToWasmInterpreterWrapper also when V8_ENABLE_DRUMBRAKE is not
+  // defined to get rid of these #ifdefs.
+  is_js_to_wasm =
+      is_js_to_wasm ||
+      (code->builtin_id() == Builtin::kGenericJSToWasmInterpreterWrapper);
+#endif  // V8_ENABLE_DRUMBRAKE
   return isolate->heap()->ToBoolean(is_js_to_wasm);
 }
 
@@ -523,6 +537,9 @@ RUNTIME_FUNCTION(Runtime_WasmTraceMemory) {
   DebuggableStackFrameIterator it(isolate);
   DCHECK(!it.done());
   DCHECK(it.is_wasm());
+#if V8_ENABLE_DRUMBRAKE
+  DCHECK(!it.is_wasm_interpreter_entry());
+#endif  // V8_ENABLE_DRUMBRAKE
   WasmFrame* frame = WasmFrame::cast(it.frame());
 
   // TODO(14259): Fix for multi-memory.
@@ -539,6 +556,10 @@ RUNTIME_FUNCTION(Runtime_WasmTraceMemory) {
 }
 
 RUNTIME_FUNCTION(Runtime_WasmTierUpFunction) {
+#if V8_ENABLE_DRUMBRAKE
+  DCHECK(!v8_flags.wasm_jitless);
+#endif  // V8_ENABLE_DRUMBRAKE
+
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   Handle<JSFunction> function = args.at<JSFunction>(0);

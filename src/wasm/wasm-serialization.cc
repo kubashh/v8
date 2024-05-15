@@ -520,8 +520,15 @@ bool NativeModuleSerializer::Write(Writer* writer) {
   for (WasmCode* code : code_table_) {
     WriteCode(code, writer);
   }
-  // If not a single function was written, serialization was not successful.
-  if (num_turbofan_functions_ == 0) return false;
+#if V8_ENABLE_DRUMBRAKE
+  // No TurboFan-compiled functions in jitless mode.
+  if (!v8_flags.wasm_jitless) {
+#endif  // V8_ENABLE_DRUMBRAKE
+    // If not a single function was written, serialization was not successful.
+    if (num_turbofan_functions_ == 0) return false;
+#if V8_ENABLE_DRUMBRAKE
+  }
+#endif  // V8_ENABLE_DRUMBRAKE
 
   // Make sure that the serialized total code size was correct.
   CHECK_EQ(total_written_code_, total_code_size);

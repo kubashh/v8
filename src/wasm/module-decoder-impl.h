@@ -1475,13 +1475,19 @@ class ModuleDecoderImpl : public Decoder {
               static_cast<int>(WasmCompilationHintTier::kOptimized) == 2,
           "The check below assumes that 0x03 is the only invalid 2-bit number "
           "for a compilation tier");
-      if (((hint_byte >> 2) & 0x03) == 0x03 ||
-          ((hint_byte >> 4) & 0x03) == 0x03) {
-        decoder.errorf(decoder.pc(),
-                       "Invalid compilation hint %#04x (invalid tier 0x03)",
-                       hint_byte);
-        break;
+#if V8_ENABLE_DRUMBRAKE
+      if (!v8_flags.wasm_jitless) {
+#endif  // V8_ENABLE_DRUMBRAKE
+        if (((hint_byte >> 2) & 0x03) == 0x03 ||
+            ((hint_byte >> 4) & 0x03) == 0x03) {
+          decoder.errorf(decoder.pc(),
+                         "Invalid compilation hint %#04x (invalid tier 0x03)",
+                         hint_byte);
+          break;
+        }
+#if V8_ENABLE_DRUMBRAKE
       }
+#endif  // V8_ENABLE_DRUMBRAKE
 
       // Decode compilation hint.
       WasmCompilationHint hint;
