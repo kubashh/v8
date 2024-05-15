@@ -88,6 +88,24 @@
       "parentUuid": "f17bbb88_64ef5ce6",
       "revId": "1e9958698b62aa6020a4c2168650789b7be63c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d9b999_389d1b11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2024-05-15T06:16:11Z",
+      "side": 1,
+      "message": "Thanks for your analysis!\nI would like to state my understanding, if you have any questions, please feel free to correct them.\nWe call the function often means that maglev will be good at ***inlining*** it or vice-versa.\nThe influence of inline is complex, includes:\n1. Traditional inline benefit: make more inter-function optimization possible, avoid context switch, etc.\n2. Change code quality of the callee part. (from {unoptimized|maglevved|turbofanned} code to maglevved code)\n3. More compilation time and more memory consumption.\n\nThe overall influence can be calculated by: (1 + 2) * ***call_frequency*** + 3\n1 is always positive.\n2 is case by case, positive if unoptimized callee, zero if maglevved callee, negative if turbofanned callee.\n3 is always negative.\n\nAccording to my tuning test, if callee is turbofanned.\n\"1 + 2\" is positive\n\"1 + 2 + 3\" is negative\n\"(1 + 2) * n + 3\" is positive if n \u003e\u003e 1\n\n\"Optimizations missing in maglev\" （2 is negative when callee is turbofanned) is caused by our tiering policy, maglev is intendedly less compilation time and slower code quality than turbofan.\nThe main benefit of this CL comes from reducing compilation time. This CL also includes a potential benefit that the saved inlined bytecode size budget make non-turbofanned callee whose call frequency is a little lower be inlined if have.\nI also added more description in message.",
+      "parentUuid": "5e120877_24952cc9",
+      "revId": "1e9958698b62aa6020a4c2168650789b7be63c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
