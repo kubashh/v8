@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fb78ec2_01012b55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2024-05-15T18:47:06Z",
+      "side": 1,
+      "message": "Hi Frank, I was doing some OWNERS file cleanup and was surprised to find this line. I assume you\u0027re fine with this, but please let me know if I\u0027m missing a reason it makes sense for you to be in this OWNERS file!",
+      "revId": "b52d1219333f21ed4cf8f45e0e02c25fcb611c6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
