@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7874db00_20b4fc84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1263743
+      },
+      "writtenOn": "2024-05-15T03:16:14Z",
+      "side": 1,
+      "message": "Thanks! New CL is uploaded, PTAL",
+      "revId": "0c363d8631a57a4aa4313c9f1ce34e858f8718d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
