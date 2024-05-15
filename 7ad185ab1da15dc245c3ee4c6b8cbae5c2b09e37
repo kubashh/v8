@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7c3d8fb_9531ea56",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-15T11:22:10Z",
+      "side": 1,
+      "message": "Yep, the intention is to keep it off in all configurations.",
+      "parentUuid": "e74393c2_299259e0",
+      "range": {
+        "startLine": 388,
+        "startChar": 2,
+        "endLine": 388,
+        "endChar": 29
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "92cc9bee_7ab125cc",
         "filename": "BUILD.gn",
         "patchSetId": 11
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-15T06:50:39Z",
       "side": 1,
       "message": "Isn\u0027t this logic here somehow inverted? Shouldn\u0027t it be:\nCheck if v8_enable_drumbrake is true, if so, assert is_drumbrake_supported.\n\nThe is_drumbrake_enabled variable might not be needed. Can not just v8_enable_drumbrake be used below instead?",
+      "range": {
+        "startLine": 490,
+        "startChar": 8,
+        "endLine": 490,
+        "endChar": 27
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c613c177_e8ca97d7",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-15T11:22:10Z",
+      "side": 1,
+      "message": "I need to clean this up. The original idea was to have `is_drumbrake_enabled` that says whether we are running in a platform/architecture supported by the interpreter and `v8_enable_drumbrake` as build flag, to not compile the interpreter by default, and `is_drumbrake_enabled` was supposed to be the `and` of these two flags.\n\nBut `v8_enable_drumbrake` should only be true on supported platforms, so yes, is_drumbrake_enabled is probably useless, we just need the assert.",
+      "parentUuid": "92cc9bee_7ab125cc",
       "range": {
         "startLine": 490,
         "startChar": 8,
