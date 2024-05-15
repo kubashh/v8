@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c5724f5_5249813f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Another round of comments, still ~10-15 files remaining.\n\n@sroettger: Could you comment on CFI questions in https://chromium-review.googlesource.com/c/v8/v8/+/5509903/comment/88bcf69e_a8e1b3d5/, i.e., whether we are fine with disabling forward-edge CFI for interpreter handlers, what alternatives there are, and how the JS interpreter does it instead?",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

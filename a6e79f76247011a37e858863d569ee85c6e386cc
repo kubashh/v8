@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aeeecb64_7f2ce027",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Sure, see https://crbug.com/340822364. My first intuition would be:\n* FYI bot, possibly only triggered every 5th commit or even only manually (the V8/Wasm team at Google would invest little time to keep it green, but it\u0027s good to have an early indication if things break, hence the bot)\n* Windows (most useful for Microsoft folks as an early heads-up?)\n* x64 (since most of the development happens there)\n* definitely running tests (at least the `jitless` variant, possibly all)\n* debug (DCHECKs, more coverage, easier to debug; if slow tests are a problem, release would be fine as well)\n\n@Paolo and @Andreas, WDYT?",
+      "parentUuid": "77325c65_e4e7d75b",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f6fbc57_40c0de16",
         "filename": "BUILD.gn",
         "patchSetId": 10
@@ -170,6 +188,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8afac579_366edb0d",
+        "filename": "gni/v8.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Sure, postponing it until some embedder asks for it makes sense, just wanted to understand why the restriction. (Minor correction: You probably meant to write \"supporting _non_ pointer compression builds would require limited changes\").",
+      "parentUuid": "fb1f9325_e81e0c19",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c82ea857_1d648071",
@@ -248,6 +284,24 @@
       "side": 1,
       "message": "It would be very nice to reuse the existing wrappers, but it would be also a lot of work because there are differences. The two Wasm interpreter builtins `kGenericJSToWasmInterpreterWrapper` and `kGenericWasmToJSInterpreterWrapper` where written before Andreas added `kJSToWasmWrapperAsm`, there was already a GenericJsToWasmWrapper ASM builtin which did not support all the fn signatures, and that I used as inspiration.",
       "parentUuid": "c024f91e_71c36484",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "946bbbfe_cf44521d",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Sure, your call (we just won\u0027t update the `kGenericJSToWasmInterpreterWrapper` so it might save maintenance in the long term to unify.)",
+      "parentUuid": "b3042792_08f2c170",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -353,6 +407,23 @@
       "side": 1,
       "message": "Right. And currently v8 is not printing this field, so there is no reason to print it with the interpreter.",
       "parentUuid": "f9b16900_9e023f89",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a255c9b6_eaa25a52",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Is the C_WASM_ENTRY intentionally missing here? (No in-depth understanding, but I saw a change with the interpreter enabled in `SafeStackFrameType` in `frames.cc`)",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -517,6 +588,97 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a4e74f17_22d1e2ff",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "At least according to the class definition `WasmInterpreterEntryFrame` would need to be below `CommonFrame`, not `TypedFrame`.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26a79ce1_16daaa48",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "This seems to be unused, i.e., I commented it out and it still compiles fine? Is this possibly a copying artifact from `WasmFrameSummary`? If yes, remove + rename the field to `code_offset` to make clearer what this offset points to.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e45749_c3f35bb7",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "I believe this is undefined behavior, since `WasmFrame` and `WasmInterpreterEntryFrame` are unrelated classes (even though they have a common ancestor). I suppose the only safe way would be to derive `WasmInterpreterEntryFrame` from `WasmFrame`.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fc21c0_feeca4e8",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "nit: ...we\u0027ll _leave_ it as is...",
+      "range": {
+        "startLine": 824,
+        "startChar": 39,
+        "endLine": 824,
+        "endChar": 41
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e8e94f9_f2fdd545",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "I don\u0027t know much about the (existing) trap handler implementation and `C_WASM_ENTRY`, so maybe a naive question: Why can the `IsThreadInWasm` flag not be set at this point? I thought this is (so far, before the interpreter) an entry from embedder code (\"C\") to Wasm, i.e., the thread in wasm flag should not be set?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3b320ea_db31a060",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 10
@@ -587,6 +749,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "095bf5dd_99a31658",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Please add a very short description what this flag does (I assume it\u0027s insecure/for testing only?)",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "672f8bfb_971bb4dc",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 10
@@ -616,6 +795,58 @@
       "side": 1,
       "message": "There is the same implication for jitless:\n```\nDEFINE_NEG_IMPLICATION(jitless, validate_asm)\n```\nAnd since `wasm-jitless` always and only work with `jitless` asm validation would be disabled anyway. What should we do here?",
       "parentUuid": "672f8bfb_971bb4dc",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "434b0043_87e1a4af",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Ah thanks, that lead me to read a bit more about `validate_asm`: If I understand correctly (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/compiler.cc;l\u003d657?q\u003dvalidate_asm), formerly with `--jitless`, we would _not_ compile asm.js to Wasm internally, but instead just fall through at https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/compiler.cc;l\u003d830;drc\u003d7e088bf159ef779ea494dd55bb48916be569b06a;bpv\u003d1;bpt\u003d1?q\u003dvalidate_asm and interpret it with Ignition as \"regular JS\" instead.\n\nThe question now is: With `--wasm-jitless`, do we want to generate Wasm code from asm.js and interpret that, or interpret as JS directly? I suppose you want to do the latter, which I am fine with, but then the comment `--jitless also implies --no-expose-wasm` is no longer true and needs to be changed. How about something like\n```\n// Directly interpret asm.js code as regular JavaScript code, instead of \n// translating it to Wasm bytecode first and then interpreting that with DrumBrake.\n// (validate_asm\u003dfalse turns off asm.js to Wasm compilation.)\n```\n\nCould you also update the comment above the implication from --jitless to `--no-validate-asm`?",
+      "parentUuid": "e944967e_334bfe84",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa252cf4_7a8df665",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "I only briefly checked, but it seems the new call sites of `NewWasmStructUninitialized` and `NewWasmStructUninitialized` inside `WasmInterpreterRuntime` do not create a `DisallowGarbageCollection` scope until initialization, unlike what the comment advises. Why is this safe?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "515ec355_276ac252",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "Could you copy over the comment from `NewWasmArrayUninitialized`, since it seems it would apply here as well (see also previous comment).",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -686,6 +917,24 @@
       "side": 1,
       "message": "There are two reasons for this.\nThe first is that a few of the interpreter instruction handlers (those that can trap with an out-of-bounds memory access) are not C++ compiled functions, but are instead ASM builtins, and I don\u0027t know how to declare them as valid CFI targets.\nBut even if all handlers were valid targets, the last instruction of each handler is a tail call to the next instruction handler, like:\n\n```\n[[clang::musttail]] return kInstructionTable[\n    ReadFnId(code) \u0026 kInstructionTableMask](code, sp, wasm_runtime, r0, fp0)\n```\n\nAnd for the sake of speed, we cannot make a CFI check after every single handler call.\n\nHow does the JS interpreter solve this issue?",
       "parentUuid": "88bcf69e_a8e1b3d5",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0511765e_95d5fe92",
+        "filename": "src/wasm/interpreter/wasm-interpreter.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-15T15:21:31Z",
+      "side": 1,
+      "message": "* Regarding how to make ASM builtins valid CFI targets, let\u0027s ask sroettger@ (Stephen Roettger). On x64 it should essentially be an `endbr64` instruction at handler entry, right? (At least for the \"coarse-grained\" CET, no idea about more strict CFI that takes signatures into account, e.g., FineIBT.)\n* More generally, Stephen, is it fine to disable CFI for interpreter handlers? (As long as the interpreter is not enabled/used by Chrome, I think we are indifferent, but just wanted to get your OK as the CFI expert.)\n* Regarding how the JS interpreter does dispatch + efficient CFI (if at all): sroettger@ and leszeks@ (Leszek Swirski) probably know more as well.",
+      "parentUuid": "48a77ea7_cf5a2b86",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
