@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e74393c2_299259e0",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-15T06:50:39Z",
+      "side": 1,
+      "message": "Is the intention of this CL to keep it off on most configurations?",
+      "range": {
+        "startLine": 388,
+        "startChar": 2,
+        "endLine": 388,
+        "endChar": 29
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92cc9bee_7ab125cc",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-15T06:50:39Z",
+      "side": 1,
+      "message": "Isn\u0027t this logic here somehow inverted? Shouldn\u0027t it be:\nCheck if v8_enable_drumbrake is true, if so, assert is_drumbrake_supported.\n\nThe is_drumbrake_enabled variable might not be needed. Can not just v8_enable_drumbrake be used below instead?",
+      "range": {
+        "startLine": 490,
+        "startChar": 8,
+        "endLine": 490,
+        "endChar": 27
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
