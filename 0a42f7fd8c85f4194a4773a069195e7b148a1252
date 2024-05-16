@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8f64f5e_ad187449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:47:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c5724f5_5249813f",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc49bb72_f2ac8de1",
@@ -184,6 +202,24 @@
       "writtenOn": "2024-05-16T12:34:43Z",
       "side": 1,
       "message": "We might have to think of privacy implications if error messages differ between having the interpreter enabled vs. not.",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6dc037e_9c7fbbe2",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:47:42Z",
+      "side": 1,
+      "message": "I chatted with folks on the team, and the consensus is: If the interpreter were used in Chromium by default, we would certainly want error messages to _not_ differ, e.g., to avoid fingerprinting, and for differential testing/fuzzing.\n\nSo if it\u0027s easy to fix and not skip the tests, please do. If it\u0027s very difficult, could you at least add a `# TODO(wasm): ...` comment here explaining why it is hard/what needs to be done to align the messages? Do you plan (for your DrumBrake users) to align error messages?",
+      "parentUuid": "8fa5e6b5_85c37a63",
       "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

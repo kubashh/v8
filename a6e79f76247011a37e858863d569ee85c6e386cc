@@ -991,6 +991,24 @@
       "parentUuid": "0511765e_95d5fe92",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce3e88a7_903854cd",
+        "filename": "src/wasm/interpreter/wasm-interpreter.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:47:42Z",
+      "side": 1,
+      "message": "Thanks for the information Stephen!\n\nPaolo, does it answer your question?\n\nI think this means for the time being `DISABLE_CFI_ICALL` is fine and certainly not a blocker to landing the interpreter behind a flag.",
+      "parentUuid": "d9c7bed3_ab8afe13",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
