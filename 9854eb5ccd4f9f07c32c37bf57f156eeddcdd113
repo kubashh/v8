@@ -56,6 +56,30 @@
       },
       "revId": "9854eb5ccd4f9f07c32c37bf57f156eeddcdd113",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9285d190_9250ceb0",
+        "filename": "builders/try_ng.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-16T12:26:04Z",
+      "side": 1,
+      "message": "No, this means that that bot that compiles should block the CQ. You can always double check in the generated code under \"generated/\" which bot is affected. And here it is the v8_linux64_sticky_mark_bits_compile_dbg bot that\u0027s now not experimental any longer, i.e. it will block.",
+      "parentUuid": "9fd59063_6ce0c639",
+      "range": {
+        "startLine": 311,
+        "startChar": 36,
+        "endLine": 311,
+        "endChar": 41
+      },
+      "revId": "9854eb5ccd4f9f07c32c37bf57f156eeddcdd113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
