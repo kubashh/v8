@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "9854eb5ccd4f9f07c32c37bf57f156eeddcdd113",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e404e5f_a64019e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-05-16T10:19:21Z",
+      "side": 1,
+      "message": "FYI, example green CI run:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20sticky%20mark%20bits%20-%20debug%20builder/1/overview\nGreen try run:\nhttps://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_sticky_mark_bits_compile_dbg/b8747790036509705729/overview",
+      "revId": "9854eb5ccd4f9f07c32c37bf57f156eeddcdd113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
