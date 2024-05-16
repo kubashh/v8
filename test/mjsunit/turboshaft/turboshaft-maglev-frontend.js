@@ -2022,3 +2022,23 @@ let glob_b = 3.35;
   assertEquals(o, to_name());
   assertOptimized(to_name);
 }
+
+// Testing CheckInt32IsSmi.
+{
+  function check_int32_is_smi (a, b) {
+    let v1 = a + 2;
+    let phi = b ? v1 : 42; // Int32 inputs for the Smi, which means that it can
+                           // be untagged to Int32 if it has Int32 uses.
+    let v2 = +phi; // This produces a ToNumber in the bytecode, for which Maglev
+                   // inserts a CheckSmi (because of the Smi feedback). If its
+                   // input is an untagged Int32 phi, this will become a
+                   // CheckInt32IsSmi.
+    return phi + v2; // Int32 use for the Phi so that it's untagged to Int32.
+  }
+
+  %PrepareFunctionForOptimization(check_int32_is_smi);
+  assertEquals(84, check_int32_is_smi(1));
+  %OptimizeFunctionOnNextCall(check_int32_is_smi);
+  assertEquals(84, check_int32_is_smi(1));
+  assertOptimized(check_int32_is_smi);
+}
