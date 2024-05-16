@@ -16,6 +16,244 @@
       "message": "Another round of comments, still ~10-15 files remaining.\n\n@sroettger: Could you comment on CFI questions in https://chromium-review.googlesource.com/c/v8/v8/+/5509903/comment/88bcf69e_a8e1b3d5/, i.e., whether we are fine with disabling forward-edge CFI for interpreter handlers, what alternatives there are, and how the JS interpreter does it instead?",
       "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f2d3691_219680aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "I think I\u0027m through with all files. I hope most of the comments are small+easy to address.",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc49bb72_f2ac8de1",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "This implication seems to be unnecessary, since the `jitless` variant manually sets `--jitless` anyway. (And I\u0027d rather keep \"somehwat magic\" implications to a minimum.)",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebb27f63_ed787919",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "remove #if guard",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eca1598_77389b1c",
+        "filename": "test/cctest/wasm/test-run-wasm-relaxed-simd.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make more sense to modify the `WASM_EXEC_TEST` macro to include the interpreter tier inside an `#if V8_ENABLE_DRUMBRAKE` guard? (I don\u0027t understand why this is specific to relaxed SIMD.)\n\nAlso, the comment talks about `tests that could be created upstream`. Now that the interpreter is going to be upstream itself, this comment should be updated.",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b67cf45_7209c950",
+        "filename": "test/cctest/wasm/wasm-run-utils.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "no #if guard",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6843fa6e_14c726d6",
+        "filename": "test/common/wasm/wasm-macro-gen.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "The compilation hints defined here are from an older experiment that is no longer pursued (ecmziegler@ knows more details). In particular, there is an in-progress proposal (https://github.com/WebAssembly/compilation-hints/blob/main/proposals/compilation-hints/Overview.md) that will have a different format anyway.\n\nLet\u0027s thus not make any changes for the interpreter here.",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b238bfc_19edcf94",
+        "filename": "test/message/message.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "I looked at the test, but don\u0027t understand how the interpreter makes this pass instead of fail. It\u0027s a JavaScript test, and the observable behavior of `WebAssembly.compile()` shouldn\u0027t change because of executing in an interpreter, should it not?",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25ccfef_fc1f8314",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "very minor nit, but could we have the build option first (my thought process: if `has_wasm_interpreter` is false, it doesn\u0027t matter whether the jitless variant is set, i.e., the static build option \"comes before\" the dynamic flag)",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f8563aa_41869c09",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "Do you plan on eventually supporting the new exception handling proposal? Given that it\u0027s already in Chromium (without DrumBrake) and Firefox (see https://github.com/WebAssembly/exception-handling/issues/280), I would expect it to become relevant pretty soon.",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fa5e6b5_85c37a63",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "We might have to think of privacy implications if error messages differ between having the interpreter enabled vs. not.",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9deab111_37f7aa68",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "Does that mean the interpreter could miss interrupts if in long-running loop without calls?",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6adc3a0_9cc48961",
+        "filename": "test/mjsunit/wasm/compilation-hints-decoder.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "Let\u0027s not comment this out. If we don\u0027t modify compilation hints at all (see earlier comment), this should still work in non-DrumBrake configurations (and otherwise may be just skipped).",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c75241b_dcaa3677",
+        "filename": "test/mjsunit/wasm/wasm-interpreter.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "I suspect these regression bugs are not public, but in case they are, could you link them in a comment?",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d42b5fb_1e07e314",
+        "filename": "tools/testrunner/local/variants.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "Just so I understand this correctly: If the DrumBrake build flag is on, this will enable (via a flag implication) also `--wasm-jitless`, but in the case interpreter support is not compiled in, it will do nothing?\n\nAnd this is the main reason for the existence of the `--wasm-jitless-test` flag, right? (Since we cannot just pass `--wasm-jitless`, as that would fail on the (default) non-DrumBrake build configuration.)\n\nI don\u0027t particularly like that it seems like it would activate DrumBrake but then actually does nothing in many cases, but maybe we can solve that with renaming the flag to something like `--wasm-jitless-if-available-for-testing`?\n\n@Michael Achenbach: Or can we conditionally define a test variant just if a certain build flag is set?",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

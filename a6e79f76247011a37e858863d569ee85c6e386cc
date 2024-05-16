@@ -784,6 +784,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f50415a9_0690bc64",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-16T12:34:43Z",
+      "side": 1,
+      "message": "After reading the `variants.py` below (see comment there), I think I know why this flag exists: It\u0027s so that we can unconditionally set it, but it doesn\u0027t have any effect in case DrumBrake-support is not compiled in. Correct?\n\nIs there a nicer way to solve this (ideally in the test runner), without introducing a flag? In any case, the description/comment string should be filled with something meaningfull.",
+      "parentUuid": "095bf5dd_99a31658",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "672f8bfb_971bb4dc",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 10
