@@ -937,6 +937,24 @@
       "parentUuid": "48a77ea7_cf5a2b86",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c7bed3_ab8afe13",
+        "filename": "src/wasm/interpreter/wasm-interpreter.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-05-16T09:29:00Z",
+      "side": 1,
+      "message": "The forward edge CFI is work in progress so I think it\u0027s fine to have the disable here for the time being.\n\n\u003e `DISABLE_CFI_ICALL` means the interpreter instruction handlers are callable (and ROP-able) from everywhere.\nI think this should just disable the icall protections for the calls from inside the annotated functions, so the tail calls will not enforce CFI.\n\nThe current plan for JS interpreter handlers is to have the fn ptrs in read-only memory.",
+      "parentUuid": "0511765e_95d5fe92",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
