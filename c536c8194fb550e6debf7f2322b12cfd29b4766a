@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24c66290_1265d326",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-16T11:00:14Z",
+      "side": 1,
+      "message": "In Maglev: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/maglev/maglev-ir.cc;l\u003d1743-1754;drc\u003d1e23407edb55e72dc7c45019dd58194c2878804f",
+      "range": {
+        "startLine": 931,
+        "startChar": 0,
+        "endLine": 935,
+        "endChar": 3
+      },
+      "revId": "c536c8194fb550e6debf7f2322b12cfd29b4766a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
