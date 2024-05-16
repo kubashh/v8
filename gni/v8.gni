@@ -151,7 +151,7 @@ declare_args() {
 
   # Enable advanced BigInt algorithms, costing about 10-30 KB binary size
   # depending on platform. Disabled on Android to save binary size.
-  v8_advanced_bigint_algorithms = !is_android
+  v8_advanced_bigint_algorithms = false
 
   # TODO: macros for determining endian type are clang specific.
   v8_use_libm_trig_functions = is_clang
