@@ -50,6 +50,24 @@
       "message": "If we call this with `check_int32_is_smi(smi_max, true)`, I\u0027d assume `v1` produces the int32, phi is int32 and `+phi` then triggers exactly the deopt we care about in this CL?\nMaybe we should add this as a test case? (If it isn\u0027t as easy as there are more deopts that trigger already earlier, feel free to disregard my comment. 😊)",
       "revId": "ec1e9e51a4f4007f09379ffd476f00b3cc9ddfd1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a76212f3_7df88018",
+        "filename": "test/mjsunit/turboshaft/turboshaft-maglev-frontend.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-05-16T12:03:18Z",
+      "side": 1,
+      "message": "Right definitely, I wanted to add this but forgot. Done :)",
+      "parentUuid": "0b740fa6_83e25f62",
+      "revId": "ec1e9e51a4f4007f09379ffd476f00b3cc9ddfd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
