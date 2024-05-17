@@ -33,7 +33,9 @@ bool CheckObjectComparisonAllowed(Address a, Address b) {
   // happen is comparing two AbstractCode objects. If that's the case one must
   // use AbstractCode's == operator instead of Object's one or SafeEquals().
   CHECK_EQ(IsCodeSpaceObject(obj_a), IsCodeSpaceObject(obj_b));
+#ifdef V8_ENABLE_SANDBOX
   CHECK_EQ(IsTrustedSpaceObject(obj_a), IsTrustedSpaceObject(obj_b));
+#endif
   return true;
 }
 #endif  // V8_EXTERNAL_CODE_SPACE
