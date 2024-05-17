@@ -34,6 +34,24 @@
       "parentUuid": "19180d34_3b776288",
       "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc09ab1c_40609bcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-17T13:23:01Z",
+      "side": 1,
+      "message": "Firstly -- thank you Deepak !!!  A very helpful hint.  I can reproduce this locally now.  The issue is basic, that calling toString on a node buffer fails somewhere, causing a segfault.  Probably has to do with one-byte external strings.\n\nStill figuring out how to get a debug build; passing --debug to gn-gen.py does residualize is_debug\u003dtrue but somehow that doesn\u0027t translate to the binaries.  Will keep at it.",
+      "parentUuid": "643cbefc_ce35aed1",
+      "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
