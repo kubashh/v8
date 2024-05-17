@@ -18,9 +18,9 @@ namespace internal {
 #if defined(V8_EXTERNAL_CODE_SPACE) || defined(V8_ENABLE_SANDBOX)
 // When V8_EXTERNAL_CODE_SPACE or V8_ENABLE_SANDBOX is enabled, comparing
 // objects in the code- or trusted space with "regular" objects by looking only
-// at compressed values it not correct. Full pointers must be compared instead.
+// at compressed values is not correct. Full pointers must be compared instead.
 bool V8_EXPORT_PRIVATE CheckObjectComparisonAllowed(Address a, Address b);
-#endif
+#endif  // defined(V8_EXTERNAL_CODE_SPACE) || defined(V8_ENABLE_SANDBOX)
 
 // An TaggedImpl is a base class for Object (which is either a Smi or a strong
 // reference to a HeapObject) and Tagged<MaybeObject> (which is either a Smi, a
