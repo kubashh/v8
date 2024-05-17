@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "765c58bb_a69cf901",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3435824
+      },
+      "writtenOn": "2024-05-17T10:21:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "511ba83c_7c82867e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "2ece8164aaca006801d193271470355af83dae41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0a44d2f0_1d042076",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73d78a9a_621134f3",
+        "filename": "src/objects/tagged-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3435824
+      },
+      "writtenOn": "2024-05-17T10:21:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2be41175_29d15f8d",
+      "revId": "2ece8164aaca006801d193271470355af83dae41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a054b284_2b05226f",
@@ -71,6 +113,30 @@
       "writtenOn": "2024-05-17T09:23:56Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 33
+      },
+      "revId": "2ece8164aaca006801d193271470355af83dae41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25a8eca9_0da2438a",
+        "filename": "src/objects/tagged-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 3435824
+      },
+      "writtenOn": "2024-05-17T10:21:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a054b284_2b05226f",
       "range": {
         "startLine": 41,
         "startChar": 11,
