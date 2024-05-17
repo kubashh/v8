@@ -16,6 +16,46 @@
       "message": "PTAL, thanks!",
       "revId": "da6a4dcf2fcd484b376c09f8777f5752c3fc28a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a0c09d_45d2c967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-17T08:23:29Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "da6a4dcf2fcd484b376c09f8777f5752c3fc28a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edbbec0a_0285946d",
+        "filename": "src/builtins/loong64/builtins-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-17T08:23:29Z",
+      "side": 1,
+      "message": "Just FYI, it\u0027ll be some more time until we need SIMD support. More context can be found here: https://chromium-review.googlesource.com/c/v8/v8/+/5513446/comments/40b44145_c50b2ea7\nSo, until the feature `--wasm-deopt` is implemented, there isn\u0027t much that can be tested yet, so I think it makes sense to just adapt to the bigger slot size in the `FrameDescription` (as done in this change) and wait before adding proper SIMD handling. (For wasm deopts, this builtin will anyways need further modifications as wasm works slightly different.)",
+      "range": {
+        "startLine": 3762,
+        "startChar": 5,
+        "endLine": 3762,
+        "endChar": 17
+      },
+      "revId": "da6a4dcf2fcd484b376c09f8777f5752c3fc28a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
