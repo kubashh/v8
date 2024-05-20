@@ -171,6 +171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead91192_07caaaed",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "465f8ca5_c0cff1cf",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eff72765_805fe76b",
@@ -220,6 +238,24 @@
       "side": 1,
       "message": "Sure, postponing it until some embedder asks for it makes sense, just wanted to understand why the restriction. (Minor correction: You probably meant to write \"supporting _non_ pointer compression builds would require limited changes\").",
       "parentUuid": "fb1f9325_e81e0c19",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba3aa01_be6ba96f",
+        "filename": "gni/v8.gni",
+        "patchSetId": 10
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Yes sorry, I wrote it wrongly.",
+      "parentUuid": "8afac579_366edb0d",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -446,6 +482,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9f360c4_08b5fd10",
+        "filename": "src/execution/frames-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "That is intentionally missing here because StackFrameIteratorForProfiler::Advance() ignores C_WASM_ENTRY frames. We can add a DCHECK.",
+      "parentUuid": "a255c9b6_eaa25a52",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ce78678_ad92b3c7",
@@ -621,6 +675,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e117a8_ed8b37ef",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4e74f17_22d1e2ff",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26a79ce1_16daaa48",
@@ -638,6 +710,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "add10634_89c19880",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "This is used by `AppendWasmInterpretedFrame` in file isolate.cc, the build breaks if I remove the function `byte_offset()`.",
+      "parentUuid": "26a79ce1_16daaa48",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0e45749_c3f35bb7",
@@ -651,6 +741,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "I believe this is undefined behavior, since `WasmFrame` and `WasmInterpreterEntryFrame` are unrelated classes (even though they have a common ancestor). I suppose the only safe way would be to derive `WasmInterpreterEntryFrame` from `WasmFrame`.",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b051b574_84e42780",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "True. `WasmInterpreterEntryFrame` was not inheriting from `WasmFrame` because there are functions implemented by WasmFrame (`generated_code_offset()`, `is_inspectable()`, `LookExceptionHandlerInTable()` that are not used and would not work for a WasmInterpreterEntryFrame, given that `wasm_code()` is null.\nBut it\u0027s true that this is undefined behavior, and it should be ok if we make `WasmInterpreterEntryFrame::wasm_code()` fail with UNREACHABLE().",
+      "parentUuid": "a0e45749_c3f35bb7",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -678,6 +786,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00ee37ce_347fc042",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32fc21c0_feeca4e8",
+      "range": {
+        "startLine": 824,
+        "startChar": 39,
+        "endLine": 824,
+        "endChar": 41
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e8e94f9_f2fdd545",
@@ -691,6 +823,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "I don\u0027t know much about the (existing) trap handler implementation and `C_WASM_ENTRY`, so maybe a naive question: Why can the `IsThreadInWasm` flag not be set at this point? I thought this is (so far, before the interpreter) an entry from embedder code (\"C\") to Wasm, i.e., the thread in wasm flag should not be set?",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaad3f65_7da427da",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "`C_WASM_ENTRY`s are just skipped in `StackFrameIteratorForProfiler::Advance()`, that\u0027s why we can ignore them here.",
+      "parentUuid": "2e8e94f9_f2fdd545",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -800,6 +950,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4f5b763_5bc9b86f",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Renamed as `wasm_jitless_if_available_for_testing`.",
+      "parentUuid": "f50415a9_0690bc64",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "672f8bfb_971bb4dc",
@@ -853,6 +1021,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22486554_0b1c6e4b",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "434b0043_87e1a4af",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa252cf4_7a8df665",
@@ -883,6 +1069,42 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "Could you copy over the comment from `NewWasmArrayUninitialized`, since it seems it would apply here as well (see also previous comment).",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5789c121_5d06fe67",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Ops, I ignored that comment and did not consider GC...",
+      "parentUuid": "aa252cf4_7a8df665",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e7e06d1_ecaf5b10",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "515ec355_276ac252",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1007,6 +1229,24 @@
       "side": 1,
       "message": "Thanks for the information Stephen!\n\nPaolo, does it answer your question?\n\nI think this means for the time being `DISABLE_CFI_ICALL` is fine and certainly not a blocker to landing the interpreter behind a flag.",
       "parentUuid": "d9c7bed3_ab8afe13",
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b84e08e2_2b971a28",
+        "filename": "src/wasm/interpreter/wasm-interpreter.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Yes, thanks for the info!\n\n\u003e The current plan for JS interpreter handlers is to have the fn ptrs in read-only memory.\n\nsroettger@ Can you tell me more about this? I could use the same mechanism for the Wasm interpreter.",
+      "parentUuid": "ce3e88a7_903854cd",
       "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aff06ee_6dad7c6e",
+        "filename": "BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c613c177_e8ca97d7",
+      "range": {
+        "startLine": 490,
+        "startChar": 8,
+        "endLine": 490,
+        "endChar": 27
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdc8ac31_98c98956",
@@ -108,6 +132,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "In this instance, I think it\u0027s actually more readable without the #if guard, since it\u0027s such a small delta. \nHowever, before removing the #if guard, could you rename `kInvalidSignatureIndex` to `kInlineSignatureSentinel` (otherwise it could be misunderstood as \"this signature is invalid\" instead of \"this is not a valid index, since the signature is stored in `single_return_sig_storage`\").",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "125eeb7f_968f03a2",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdc8ac31_98c98956",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -129,6 +171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56085a6d_6ccbb316",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "We have not noticed that all these `#if V8_ENABLE_DRUMBRAKE` changes have become useless and this code now never runs in jitless mode. Which solves this problem. Sorry for the confusion.",
+      "parentUuid": "cd40e5d2_3b4f8f75",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b23a08b7_99ef8d8d",
@@ -142,6 +202,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "Could one unify the DrumBrake path (using `result_tier`) and the non-DrumBrake path (using `result.result_tier`) by making the DrumBrake part also produce a (mostly dummy) `WasmCompilationResult`?",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de9c1ae_d0bacf31",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1925,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Code removed.",
+      "parentUuid": "b23a08b7_99ef8d8d",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -163,6 +241,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd6a938_36df6802",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Code removed.",
+      "parentUuid": "85a9b85c_1616e8b7",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a9ef3f5_027fa501",
@@ -176,6 +272,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "This is the only #if guard with an inverted condition in here, could you just flip it for consistency?",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b42c62_c8430e78",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Code removed.",
+      "parentUuid": "3a9ef3f5_027fa501",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -197,6 +311,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40122a1b_3284d0b9",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Code removed.",
+      "parentUuid": "0c9828b1_2a8bf13f",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a06c4681_83ef368b",
@@ -210,6 +342,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "General comment about all places where the `#if V8_ENABLE_DRUMBRAKE` guards only this single `v8_flags.wasm_jitless` (and there is no use of other interpreter-only code): I don\u0027t think this guard is necessary, since it will not affect performance and is a bit cumbersome to read. In `flag-definitons.h`, when `!V8_ENABLE_DRUMBRAKE`, the `wasm_jitless` flag is added as a `DEFINE_BOOL_READONLY(wasm_jitless, false, ...)`, so it should be simply optimized out. I would thus propose to simplify this to\n```\nint num_import_wrappers \u003d \n    (v8_flags.wasm_jitless || v8_flags.wasm_to_js_generic_wrapper)\n    ? 0\n    : ...\n```\nand similarly for the other places where the #if only guards the flag check.",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a429e3_d9f8029b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2101,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Yes, it makes a lot of sense. My feeling was that all DrumBrake-related code should be hidden by the build flag, with no exceptions, but if it is not a problem to add `v8_flags.wasm_jitless || ...` then the result will certainly be more readable.",
+      "parentUuid": "a06c4681_83ef368b",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -231,6 +381,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d49e38a_f4763319",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfc54125_fb988cc7",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "071563e6_2ac7881a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfc54125_fb988cc7",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "121dc9ce_04e2c660",
@@ -244,6 +430,42 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "In other words: there is no support for lazy validation with DrumBrake, correct? If so, should you simply `CHECK_IMPLIES(v8_flags.wasm_jitless, !v8_flags.wasm_lazy_validation)?`",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f38b49_f2651591",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3449,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "121dc9ce_04e2c660",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc894d8b_ffe34aed",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3449,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "121dc9ce_04e2c660",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -265,6 +487,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2bd3ee9_14de5891",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3851,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68a9cceb_4a0d2845",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "282d9ca0_fb522da6",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3851,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68a9cceb_4a0d2845",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1eab4440_6bcbe4e0",
@@ -278,6 +536,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "I suppose we can put the explicit initialization in the non-DrumBrake path and get rid of the #if.",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b0170d3_c320ed41",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3960,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1eab4440_6bcbe4e0",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -299,6 +575,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99a01997_f427133a",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f66f3276_afc23f5d",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "687fdc13_6356d66b",
@@ -312,6 +606,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "#if not needed (see comment above).",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079a7d80_fa6b13b4",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "687fdc13_6356d66b",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -333,6 +645,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5b71ede_542a2205",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1df9e9a8_6ebbb300",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71921f4e_4601ad40",
@@ -346,6 +676,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "Could you just scop the `#if V8_ENABLE_DRUMBRAKE` to the added variant?",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e615d532_3066a5fb",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71921f4e_4601ad40",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -373,6 +721,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5717399d_7030ff28",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e4fe53d_fd2f569a",
+      "range": {
+        "startLine": 433,
+        "startChar": 5,
+        "endLine": 433,
+        "endChar": 7
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf889748_df20cb6a",
@@ -386,6 +758,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "Add comment why we have to validate with interpreter, but not without.",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc32c534_d55e8a14",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf889748_df20cb6a",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -407,6 +797,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b39a342d_e8b7a0af",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5d25b2f_c3310076",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "896c532a_f98349b6",
@@ -420,6 +828,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "#if not needed (see comment above).",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41760b55_f46bf705",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "896c532a_f98349b6",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -441,6 +867,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "591ac042_ae8e40be",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49e29d50_47bb7d87",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd6200cc_2096786a",
@@ -454,6 +898,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "For the `wasm_jitless` flag the `#if V8_ENABLE_DRUMBRAKE` is not needed, but it might be for the `features.Add(kFeature_legacy_eh)` (not sure, does it mean the interpreter only implements the \"old\" exception proposal?)",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5e8b0c_3189e3fc",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd6200cc_2096786a",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -475,6 +937,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87bf0bfb_af0a6aa7",
+        "filename": "src/wasm/wasm-features.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79d4adc2_73564693",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57c61697_d7486937",
@@ -488,6 +968,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "this #if and following #else can be unified since `v8_flags.wasm_jitless` is available even in non-DrumBrake builds",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72569ab7_47eb79db",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57c61697_d7486937",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -509,6 +1007,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3702c03e_e6ee4850",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28621715_05379747",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d83384a0_ddde0908",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28621715_05379747",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79e3d842_222883bf",
@@ -522,6 +1056,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "Is this function ever called in jitless mode (I would have assumed not, since I thought it\u0027s only needed by compilers, but probably there\u0027s a reason for this change)? If no, can this be a `DCHECK(!v8_flags.wasm_jitless)`?\n\nAlso, we could get rid of the #if, see above.",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b393e9c_710eab85",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "`WasmTrustedInstanceData::GetCallTarget` is called here:\n```\nv8::internal::WasmTrustedInstanceData::GetCallTarget(unsigned int func_index)\nv8::internal::WasmTrustedInstanceData::GetOrCreateFuncRef(...)\nV8::internal::wasm::InstanceBuilder::ProcessExports(...)\n```\nIf `func_index \u003c native_module-\u003enum_imported_functions()` the call target might be a builtin like `Builtins_WasmToJsWrapperAsm`.",
+      "parentUuid": "79e3d842_222883bf",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -543,6 +1095,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a67819_0a37f4de",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "The comment was not correct, in jitless mode `call_target` can be non-zero in some cases.",
+      "parentUuid": "abe9324b_1987b066",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2393ea50_0b1d747d",
@@ -556,6 +1126,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "#if guard not needed, `if (v8_flags.wasm_jitless) { DCHECK ... }` instead",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cea2cd82_21ba9b10",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2393ea50_0b1d747d",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -577,6 +1165,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27695752_456795d5",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Oh, this probably explains the small increase in the executable size also with the flag disabled.",
+      "parentUuid": "fcf1db9c_a2a1f081",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5abd2aaa_feb822ee",
@@ -590,6 +1196,42 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "same",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3a2a6c3_ec13677d",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5abd2aaa_feb822ee",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69d8a3fa_36da579c",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5abd2aaa_feb822ee",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -611,6 +1253,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87298b32_3cce531a",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3760c306_6b3bea99",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d19c638e_2381001b",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3760c306_6b3bea99",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eca8c721_1f9b2e07",
@@ -628,6 +1306,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe02eed0_abcf0f65",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eca8c721_1f9b2e07",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c00ec4e_d8171b65",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eca8c721_1f9b2e07",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f9eb71f_b0471099",
@@ -641,6 +1355,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "same",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e27fc1e_16847b1f",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f9eb71f_b0471099",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -675,6 +1407,30 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "typo?",
+      "range": {
+        "startLine": 742,
+        "startChar": 11,
+        "endLine": 742,
+        "endChar": 12
+      },
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30205fad_d7b22bb1",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-20T20:17:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc128897_2f92cd66",
       "range": {
         "startLine": 742,
         "startChar": 11,
