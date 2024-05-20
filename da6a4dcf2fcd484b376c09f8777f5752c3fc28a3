@@ -56,6 +56,30 @@
       },
       "revId": "da6a4dcf2fcd484b376c09f8777f5752c3fc28a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6ed8601_385e44e9",
+        "filename": "src/builtins/loong64/builtins-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3762,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-05-20T07:36:53Z",
+      "side": 1,
+      "message": "Okay, and thanks for your review and detailed information!",
+      "parentUuid": "edbbec0a_0285946d",
+      "range": {
+        "startLine": 3762,
+        "startChar": 5,
+        "endLine": 3762,
+        "endChar": 17
+      },
+      "revId": "da6a4dcf2fcd484b376c09f8777f5752c3fc28a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
