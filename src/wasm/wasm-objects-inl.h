@@ -28,6 +28,10 @@
 #include "src/wasm/wasm-module.h"
 #include "src/wasm/wasm-objects.h"
 
+#if V8_ENABLE_DRUMBRAKE
+#include "src/wasm/interpreter/wasm-interpreter-objects.h"
+#endif  // V8_ENABLE_DRUMBRAKE
+
 // Has to be the last include (doesn't have include guards)
 #include "src/objects/object-macros.h"
 
@@ -194,6 +198,10 @@ PRIMITIVE_ACCESSORS(WasmTrustedInstanceData, globals_start, uint8_t*,
                     kGlobalsStartOffset)
 ACCESSORS(WasmTrustedInstanceData, imported_mutable_globals,
           Tagged<FixedAddressArray>, kImportedMutableGlobalsOffset)
+#if V8_ENABLE_DRUMBRAKE
+ACCESSORS(WasmTrustedInstanceData, imported_function_indices,
+          Tagged<FixedInt32Array>, kImportedFunctionIndicesOffset)
+#endif  // V8_ENABLE_DRUMBRAKE
 PRIMITIVE_ACCESSORS(WasmTrustedInstanceData, jump_table_start, Address,
                     kJumpTableStartOffset)
 PRIMITIVE_ACCESSORS(WasmTrustedInstanceData, hook_on_function_call_address,
@@ -226,6 +234,10 @@ OPTIONAL_ACCESSORS(WasmTrustedInstanceData, imported_mutable_globals_buffers,
                    Tagged<FixedArray>, kImportedMutableGlobalsBuffersOffset)
 OPTIONAL_ACCESSORS(WasmTrustedInstanceData, tables, Tagged<FixedArray>,
                    kTablesOffset)
+#if V8_ENABLE_DRUMBRAKE
+OPTIONAL_ACCESSORS(WasmTrustedInstanceData, interpreter_object, Tagged<Tuple2>,
+                   kInterpreterObjectOffset)
+#endif  // V8_ENABLE_DRUMBRAKE
 PROTECTED_POINTER_ACCESSORS(WasmTrustedInstanceData, shared_part,
                             WasmTrustedInstanceData, kProtectedSharedPartOffset)
 PROTECTED_POINTER_ACCESSORS(WasmTrustedInstanceData, dispatch_table0,
@@ -354,6 +366,13 @@ inline int WasmDispatchTable::sig(int index) const {
   DCHECK_LT(index, length());
   return ReadField<int>(OffsetOf(index) + kSigBias);
 }
+
+#if V8_ENABLE_DRUMBRAKE
+inline uint32_t WasmDispatchTable::function_index(int index) const {
+  DCHECK_LT(index, length());
+  return ReadField<uint32_t>(OffsetOf(index) + kFunctionIndexBias);
+}
+#endif  // V8_ENABLE_DRUMBRAKE
 
 // WasmExceptionPackage
 OBJECT_CONSTRUCTORS_IMPL(WasmExceptionPackage, JSObject)
