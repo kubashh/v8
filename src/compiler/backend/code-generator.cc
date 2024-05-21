@@ -202,10 +202,12 @@ void CodeGenerator::MaybeEmitOutOfLineConstantPool() {
 
 void CodeGenerator::AssembleCode() {
   OptimizedCompilationInfo* info = this->info();
+  auto call_descriptor = linkage()->GetIncomingDescriptor();
 
   // Open a frame scope to indicate that there is a frame on the stack.  The
   // MANUAL indicates that the scope shouldn't actually generate code to set up
-  // the frame (that is done in AssemblePrologue).
+  // the frame (that is done in AssemblePrologue). TODO(saelo) seems to no
+  // longer exist?).
   FrameScope frame_scope(masm(), StackFrame::MANUAL);
 
   if (info->source_positions()) {
@@ -225,9 +227,27 @@ void CodeGenerator::AssembleCode() {
   // We want to bailout only from JS functions, which are the only ones
   // that are optimized.
   if (info->IsOptimizing()) {
-    DCHECK(linkage()->GetIncomingDescriptor()->IsJSFunctionCall());
+    DCHECK(call_descriptor->IsJSFunctionCall());
     masm()->RecordComment("-- Prologue: check for deoptimization --");
     BailoutIfDeoptimized();
+  }
+
+  Label signature_verification_failed;
+  if (call_descriptor->IsJSFunctionCall()) {
+    uint16_t expected_parameter_count = call_descriptor->ParameterSlotCount();
+    if (!Builtins::IsBuiltinId(info->builtin())) {
+      masm()->SignatureCheck(expected_parameter_count,
+                             &signature_verification_failed);
+    }
+#ifdef DEBUG
+    if (Builtins::IsBuiltinId(info->builtin())) {
+      DCHECK_EQ(expected_parameter_count,
+                Builtins::GetStackParameterCount(info->builtin()));
+    } else if (info->has_bytecode_array()) {
+      DCHECK_EQ(expected_parameter_count,
+                info->bytecode_array()->parameter_count());
+    }
+#endif  // DEBUG
   }
 
   // Define deoptimization literals for all inlined functions.
@@ -309,7 +329,7 @@ void CodeGenerator::AssembleCode() {
       // avoid clobbering callee saved registers in case of C linkage and
       // using the roots.
       // TODO(mtrofin): investigate how we can avoid doing this repeatedly.
-      if (linkage()->GetIncomingDescriptor()->InitializeRootRegister()) {
+      if (call_descriptor->InitializeRootRegister()) {
         masm()->InitializeRootRegister();
       }
     }
@@ -401,6 +421,9 @@ void CodeGenerator::AssembleCode() {
   // the safepoint table, handler table, constant pool, and code comments, in
   // that order.
   FinishCode();
+
+  masm()->bind(&signature_verification_failed);
+  masm()->Trap();
 
   offsets_info_.jump_tables = masm()->pc_offset();
   // Emit the jump tables.

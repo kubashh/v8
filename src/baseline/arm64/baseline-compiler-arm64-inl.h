@@ -23,6 +23,7 @@ void BaselineCompiler::Prologue() {
   // Enter the frame here, since CallBuiltin will override lr.
   __ masm()->EnterFrame(StackFrame::BASELINE);
   DCHECK_EQ(kJSFunctionRegister, kJavaScriptCallTargetRegister);
+  __ masm() -> SignatureCheck(bytecode_->parameter_count());
   int max_frame_size =
       bytecode_->frame_size() + max_call_args_ * kSystemPointerSize;
   CallBuiltin<Builtin::kBaselineOutOfLinePrologue>(

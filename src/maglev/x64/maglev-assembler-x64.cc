@@ -443,6 +443,8 @@ void MaglevAssembler::Prologue(Graph* graph) {
 
   CodeEntry();
 
+  SignatureCheck(graph->parameters().size());
+
   BailoutIfDeoptimized(rbx);
 
   if (graph->has_recursive_calls()) {
@@ -455,7 +457,8 @@ void MaglevAssembler::Prologue(Graph* graph) {
     Register feedback_vector = D::GetRegisterParameter(D::kFeedbackVector);
     DCHECK(!AreAliased(feedback_vector, kJavaScriptCallArgCountRegister,
                        kJSFunctionRegister, kContextRegister,
-                       kJavaScriptCallNewTargetRegister));
+                       kJavaScriptCallNewTargetRegister,
+                       kJavaScriptCallSignatureRegister));
     Move(feedback_vector,
          compilation_info()->toplevel_compilation_unit()->feedback().object());
     TailCallBuiltin(Builtin::kMaglevOptimizeCodeOrTailCallOptimizedCodeSlot,

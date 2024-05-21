@@ -138,6 +138,9 @@ void MaglevAssembler::Prologue(Graph* graph) {
   DCHECK(!graph->is_osr());
 
   CallTarget();
+
+  SignatureCheck(graph->parameters().size());
+
   BailoutIfDeoptimized();
 
   if (graph->has_recursive_calls()) {
@@ -151,7 +154,8 @@ void MaglevAssembler::Prologue(Graph* graph) {
     Register feedback_vector = D::GetRegisterParameter(D::kFeedbackVector);
     DCHECK(!AreAliased(flags, feedback_vector, kJavaScriptCallArgCountRegister,
                        kJSFunctionRegister, kContextRegister,
-                       kJavaScriptCallNewTargetRegister));
+                       kJavaScriptCallNewTargetRegister,
+                       kJavaScriptCallSignatureRegister));
     DCHECK(!temps.Available().has(flags));
     DCHECK(!temps.Available().has(feedback_vector));
     Move(feedback_vector,

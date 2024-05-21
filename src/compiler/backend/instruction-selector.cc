@@ -1471,6 +1471,8 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
           : call_use_fixed_target_reg
               ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
               : g.UseRegister(callee));
+      // buffer->instruction_args.push_back(g.UseFixed(g.TempImmediate(0xffff),
+      // kJavaScriptCallSignatureRegister));
       break;
     case CallDescriptor::kCallAddress:
       buffer->instruction_args.push_back(
