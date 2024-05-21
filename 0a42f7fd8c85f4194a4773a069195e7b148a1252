@@ -160,6 +160,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8bc7fc08_a20e75f2",
+        "filename": "test/cctest/wasm/test-run-wasm-relaxed-simd.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-21T12:03:13Z",
+      "side": 1,
+      "message": "My previous comment/question was maybe not quite clear: Is there a reason for not modifying `WASM_EXEC_TEST` to include the interpreter tier in all cctests for Wasm using this macro? In other words, the current patchset will only add interpreter coverage for this one cctest of relaxed SIMD instructions, but why not cctest _all_ Wasm instructions with the interpreter? Or do you assume other instructions are already covered enough by mjsunit tests? (I personally would prefer having the cctests in the interpreter as well, unless there is a good reason I am missing.)",
+      "parentUuid": "f4b54258_dfe5a737",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b67cf45_7209c950",
         "filename": "test/cctest/wasm/wasm-run-utils.cc",
         "patchSetId": 12
@@ -263,6 +281,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8e2dc68_9fe87024",
+        "filename": "test/message/message.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-21T12:03:13Z",
+      "side": 1,
+      "message": "I don\u0027t have any context on this test, but git blame / code search tells me it was introduced (and skipped) in https://chromium-review.googlesource.com/c/v8/v8/+/2270231. If it works now, let\u0027s avoid the skip, all the better.",
+      "parentUuid": "7f7c7a12_d869f640",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c25ccfef_fc1f8314",
@@ -335,6 +371,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bdeee9f_a4c2f430",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-21T12:03:13Z",
+      "side": 1,
+      "message": "Sure, no worries. Let\u0027s leave this unresolved here for future readers of the CL.",
+      "parentUuid": "f7d0041d_b35d7ffd",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8fa5e6b5_85c37a63",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 12
@@ -399,6 +453,24 @@
       "side": 1,
       "message": "Unfortunately yes, it is a still missing feature.",
       "parentUuid": "9deab111_37f7aa68",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27e46dbc_cdca04c0",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-21T12:03:13Z",
+      "side": 1,
+      "message": "Sure, let\u0027s keep this unresolved for future readers of the CL.",
+      "parentUuid": "f3c18cc7_6dcf22e7",
       "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
