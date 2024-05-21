@@ -98,6 +98,7 @@ namespace internal {
   V(InterpreterPushArgsThenCall)                     \
   V(InterpreterPushArgsThenConstruct)                \
   V(JSTrampoline)                                    \
+  V(JSTrampolineWithSignature)                       \
   V(KeyedHasICBaseline)                              \
   V(KeyedHasICWithVector)                            \
   V(KeyedLoad)                                       \
@@ -881,6 +882,19 @@ class JSTrampolineDescriptor
   DEFINE_JS_PARAMETER_TYPES()
 
   DECLARE_JS_COMPATIBLE_DESCRIPTOR(JSTrampolineDescriptor)
+};
+
+class JSTrampolineWithSignatureDescriptor
+    : public StaticJSCallInterfaceDescriptor<
+          JSTrampolineWithSignatureDescriptor> {
+ public:
+  SANDBOX_EXPOSED_DESCRIPTOR(kJSEntrypointTag)
+  DEFINE_JS_PARAMETERS(kSignature)
+  DEFINE_JS_PARAMETER_TYPES(MachineType::Int32())
+
+  DECLARE_JS_COMPATIBLE_DESCRIPTOR(JSTrampolineWithSignatureDescriptor)
+
+  static constexpr auto registers();
 };
 
 // Descriptor used for code using the RegExp calling convention, in particular

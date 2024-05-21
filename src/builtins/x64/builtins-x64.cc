@@ -902,6 +902,7 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
         rax, FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
     __ movzxwq(rax, FieldOperand(
                         rax, SharedFunctionInfo::kFormalParameterCountOffset));
+    __ Move(kJavaScriptCallSignatureRegister, rax);
     // We abuse new.target both to indicate that this is a resume call and to
     // pass in the generator object.  In ordinary calls, new.target is always
     // undefined because generator functions are non-constructable.
@@ -1113,6 +1114,11 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   GetSharedFunctionInfoBytecodeOrBaseline(
       masm, shared_function_info, kInterpreterBytecodeArrayRegister,
       kScratchRegister, &is_baseline, &compile_lazy);
+
+  __ movl(r15, FieldOperand(kInterpreterBytecodeArrayRegister,
+                            BytecodeArray::kParameterSizeOffset));
+  __ shrl(r15, Immediate(kSystemPointerSizeLog2));
+  __ SignatureCheck(r15);
 
   Label push_stack_frame;
   Register feedback_vector = rbx;
@@ -1979,7 +1985,7 @@ void Builtins::Generate_BaselineOutOfLinePrologueDeopt(MacroAssembler* masm) {
   // deopt).
   __ Pop(kScratchRegister);
   // Drop bytecode array
-  __ Pop(kScratchRegister);
+  __ Pop(kInterpreterBytecodeArrayRegister);
 
   // argc.
   __ Pop(kJavaScriptCallArgCountRegister);
@@ -1990,6 +1996,16 @@ void Builtins::Generate_BaselineOutOfLinePrologueDeopt(MacroAssembler* masm) {
 
   // Drop frame pointer
   __ LeaveFrame(StackFrame::BASELINE);
+
+#ifdef V8_ENABLE_SANDBOX
+  // Signature.
+  // We restore the signature parameter from the bytecode array as it is not
+  // pushed to the stack.
+  __ movl(kJavaScriptCallSignatureRegister,
+          FieldOperand(kInterpreterBytecodeArrayRegister,
+                       BytecodeArray::kParameterSizeOffset));
+  __ shrl(kJavaScriptCallSignatureRegister, Immediate(kSystemPointerSizeLog2));
+#endif  // V8_ENABLE_SANDBOX
 
   // Enter the interpreter.
   __ TailCallBuiltin(Builtin::kInterpreterEntryTrampoline);
@@ -2040,6 +2056,10 @@ void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
       kSystemPointerSize;
   __ popq(Operand(rsp, offsetToPC));
   __ Drop(offsetToPC / kSystemPointerSize);
+
+  // TODO(saelo): put behind #ifdef V8_SANDBOX_CFI?
+  // Here we assume that
+  __ movq(kJavaScriptCallSignatureRegister, rax);
 
   // Replace the builtin index Smi on the stack with the instruction start
   // address of the builtin from the builtins table, and then Ret to this
@@ -5142,10 +5162,19 @@ void Builtins::Generate_RestartFrameTrampoline(MacroAssembler* masm) {
 
   __ LeaveFrame(StackFrame::INTERPRETED);
 
+#ifdef V8_ENABLE_SANDBOX
+  // Fetch the formal parameter count to use as signature parameter.
+  // TODO(saelo): we should not fetch the parameter count from the SFI here, as
+  // that is inside the sandbox and therefore untrusted.
+  __ LoadTaggedField(rbx,
+                     FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
+  __ movzxwq(
+      rbx, FieldOperand(rbx, SharedFunctionInfo::kFormalParameterCountOffset));
+#endif  // V8_ENABLE_SANDBOX
+
   // The arguments are already in the stack (including any necessary padding),
   // we should not try to massage the arguments again.
-  __ movq(rbx, Immediate(kDontAdaptArgumentsSentinel));
-  __ InvokeFunction(rdi, no_reg, rbx, rax, InvokeType::kJump);
+  __ InvokeFunction(rdi, no_reg, rbx, rax, InvokeType::kJumpSkipPrologue);
 }
 
 #undef __

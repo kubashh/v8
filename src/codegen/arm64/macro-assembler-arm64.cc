@@ -1412,9 +1412,10 @@ void TailCallOptimizedCodeSlot(MacroAssembler* masm,
   //  -- x0 : actual argument count
   //  -- x3 : new target (preserved for callee if needed, and caller)
   //  -- x1 : target function (preserved for callee if needed, and caller)
+  //  -- x19 : signature
   // -----------------------------------
   ASM_CODE_COMMENT(masm);
-  DCHECK(!AreAliased(x1, x3, optimized_code_entry, scratch));
+  DCHECK(!AreAliased(x1, x3, x19, optimized_code_entry, scratch));
 
   Register closure = x1;
   Label heal_optimized_code_slot;
@@ -1486,6 +1487,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
   //  -- x0 : actual argument count
   //  -- x1 : target function (preserved for callee)
   //  -- x3 : new target (preserved for callee)
+  //  -- x19 : signature register
   // -----------------------------------
   {
     FrameScope scope(this, StackFrame::INTERNAL);
@@ -1493,7 +1495,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     // argument count.
     SmiTag(kJavaScriptCallArgCountRegister);
     Push(kJavaScriptCallTargetRegister, kJavaScriptCallNewTargetRegister,
-         kJavaScriptCallArgCountRegister, padreg);
+         kJavaScriptCallArgCountRegister, kJavaScriptCallSignatureRegister);
     // Push another copy as a parameter to the runtime call.
     PushArgument(kJavaScriptCallTargetRegister);
 
@@ -1501,7 +1503,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     Mov(x2, x0);
 
     // Restore target function, new target and actual argument count.
-    Pop(padreg, kJavaScriptCallArgCountRegister,
+    Pop(kJavaScriptCallSignatureRegister, kJavaScriptCallArgCountRegister,
         kJavaScriptCallNewTargetRegister, kJavaScriptCallTargetRegister);
     SmiUntag(kJavaScriptCallArgCountRegister);
   }
@@ -2654,6 +2656,30 @@ void MacroAssembler::StackOverflowCheck(Register num_args,
   B(le, stack_overflow);
 }
 
+void MacroAssembler::SignatureCheck(uint16_t expected_parameter_count) {
+  if (expected_parameter_count == kDontAdaptArgumentsSentinel) return;
+  Label ok;
+  Cmp(kJavaScriptCallSignatureRegister, expected_parameter_count);
+  B(eq, &ok);
+  Trap();
+  Bind(&ok);
+}
+
+void MacroAssembler::SignatureCheck(Register expected_parameter_count) {
+  Label ok;
+  Cmp(kJavaScriptCallSignatureRegister, expected_parameter_count);
+  B(eq, &ok);
+  Trap();
+  Bind(&ok);
+}
+
+void MacroAssembler::SignatureCheck(uint16_t expected_parameter_count,
+                                    Label* fail) {
+  if (expected_parameter_count == kDontAdaptArgumentsSentinel) return;
+  Cmp(kJavaScriptCallSignatureRegister, expected_parameter_count);
+  B(ne, fail);
+}
+
 void MacroAssembler::InvokePrologue(Register formal_parameter_count,
                                     Register actual_argument_count, Label* done,
                                     InvokeType type) {
@@ -2665,6 +2691,8 @@ void MacroAssembler::InvokePrologue(Register formal_parameter_count,
   Label regular_invoke;
   DCHECK_EQ(actual_argument_count, x0);
   DCHECK_EQ(formal_parameter_count, x2);
+
+  Mov(kJavaScriptCallSignatureRegister, formal_parameter_count);
 
   // If overapplication or if the actual argument count is equal to the
   // formal parameter count, no need to push extra undefined values.
@@ -2789,7 +2817,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   DCHECK_IMPLIES(new_target.is_valid(), new_target == x3);
 
   // On function call, call into the debugger if necessary.
-  Label debug_hook, continue_after_hook;
+  Label debug_hook, continue_after_hook, done;
   {
     Mov(x4, ExternalReference::debug_hook_on_function_call_address(isolate()));
     Ldrsb(x4, MemOperand(x4));
@@ -2802,8 +2830,12 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
     LoadRoot(x3, RootIndex::kUndefinedValue);
   }
 
-  Label done;
-  InvokePrologue(expected_parameter_count, actual_parameter_count, &done, type);
+  if (type == InvokeType::kJumpSkipPrologue) {
+    Mov(kJavaScriptCallSignatureRegister, expected_parameter_count);
+  } else {
+    InvokePrologue(expected_parameter_count, actual_parameter_count, &done,
+                   type);
+  }
 
   // If actual != expected, InvokePrologue will have handled the call through
   // the argument adaptor mechanism.
@@ -2816,6 +2848,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
       CallJSFunction(function);
       break;
     case InvokeType::kJump:
+    case InvokeType::kJumpSkipPrologue:
       JumpJSFunction(function);
       break;
   }
@@ -2856,7 +2889,7 @@ void MacroAssembler::InvokeFunctionWithNewTarget(
     InvokeType type) {
   ASM_CODE_COMMENT(this);
   // You can't call a function without a valid frame.
-  DCHECK(type == InvokeType::kJump || has_frame());
+  DCHECK_IMPLIES(type == InvokeType::kCall, has_frame());
 
   // Contract with called JS functions requires that function is passed in x1.
   // (See FullCodeGenerator::Generate().)
@@ -2867,7 +2900,8 @@ void MacroAssembler::InvokeFunctionWithNewTarget(
   LoadTaggedField(cp, FieldMemOperand(function, JSFunction::kContextOffset));
   // The number of arguments is stored as an int32_t, and -1 is a marker
   // (kDontAdaptArgumentsSentinel), so we need sign
-  // extension to correctly handle it.
+  // extension to correctly handle it. TODO(saelo) this seems wrong,
+  // kDontAdaptArgumentsSentinel is 0, not -1.
   LoadTaggedField(
       expected_parameter_count,
       FieldMemOperand(function, JSFunction::kSharedFunctionInfoOffset));
@@ -2885,7 +2919,7 @@ void MacroAssembler::InvokeFunction(Register function,
                                     InvokeType type) {
   ASM_CODE_COMMENT(this);
   // You can't call a function without a valid frame.
-  DCHECK(type == InvokeType::kJump || has_frame());
+  DCHECK_IMPLIES(type == InvokeType::kCall, has_frame());
 
   // Contract with called JS functions requires that function is passed in x1.
   // (See FullCodeGenerator::Generate().)

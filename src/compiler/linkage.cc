@@ -442,6 +442,70 @@ CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
       "js-call");                    // debug name
 }
 
+CallDescriptor* Linkage::GetJSCallDescriptorWithSignature(
+    Zone* zone, bool is_osr, int js_parameter_count,
+    CallDescriptor::Flags flags, Operator::Properties properties) {
+  const size_t return_count = 1;
+  const size_t context_count = 1;
+  const size_t new_target_count = 1;
+  const size_t num_args_count = 1;
+  const size_t signature_count = 1;
+  const size_t parameter_count = js_parameter_count + new_target_count +
+                                 num_args_count + signature_count +
+                                 context_count;
+
+  LocationSignature::Builder locations(zone, return_count, parameter_count);
+
+  // All JS calls have exactly one return value.
+  locations.AddReturn(regloc(kReturnRegister0, MachineType::AnyTagged()));
+
+  // All parameters to JS calls go on the stack.
+  for (int i = 0; i < js_parameter_count; i++) {
+    int spill_slot_index = -i - 1;
+    locations.AddParam(LinkageLocation::ForCallerFrameSlot(
+        spill_slot_index, MachineType::AnyTagged()));
+  }
+
+  // Add JavaScript call new target value.
+  locations.AddParam(
+      regloc(kJavaScriptCallNewTargetRegister, MachineType::AnyTagged()));
+
+  // Add JavaScript call argument count.
+  locations.AddParam(
+      regloc(kJavaScriptCallArgCountRegister, MachineType::Int32()));
+
+  // Add JavaScript signature parameter.
+  // TODO try: add this to the default call descriptor, but after the context.
+  locations.AddParam(
+      regloc(kJavaScriptCallSignatureRegister, MachineType::Int32()));
+
+  // Add context.
+  locations.AddParam(regloc(kContextRegister, MachineType::AnyTagged()));
+
+  // The target for JS function calls is the JSFunction object.
+  MachineType target_type = MachineType::AnyTagged();
+  // When entering into an OSR function from unoptimized code the JSFunction
+  // is not in a register, but it is on the stack in the marker spill slot.
+  // For kind == JSDescKind::kBuiltin, we should still use the regular
+  // kJSFunctionRegister, so that frame attribution for stack traces works.
+  LinkageLocation target_loc = is_osr
+                                   ? LinkageLocation::ForSavedCallerFunction()
+                                   : regloc(kJSFunctionRegister, target_type);
+  CallDescriptor::Kind descriptor_kind = CallDescriptor::kCallJSFunction;
+  return zone->New<CallDescriptor>(  // --
+      descriptor_kind,               // kind
+      kJSEntrypointTag,              // tag
+      target_type,                   // target MachineType
+      target_loc,                    // target location
+      locations.Build(),             // location_sig
+      js_parameter_count,            // stack_parameter_count
+      properties,                    // properties
+      kNoCalleeSaved,                // callee-saved
+      kNoCalleeSavedFp,              // callee-saved fp
+      flags,                         // flags
+      "js-call");                    // debug name
+}
+
 // TODO(turbofan): cache call descriptors for code stub calls.
 // TODO(jgruber): Clean up stack parameter count handling. The descriptor
 // already knows the formal stack parameter count and ideally only additional
@@ -451,13 +515,15 @@ CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
 CallDescriptor* Linkage::GetStubCallDescriptor(
     Zone* zone, const CallInterfaceDescriptor& descriptor,
     int stack_parameter_count, CallDescriptor::Flags flags,
-    Operator::Properties properties, StubCallMode stub_mode) {
+    Operator::Properties properties, StubCallMode stub_mode,
+    bool with_signature) {
   const int register_parameter_count = descriptor.GetRegisterParameterCount();
   const int js_parameter_count =
       register_parameter_count + stack_parameter_count;
   const int context_count = descriptor.HasContextParameter() ? 1 : 0;
+  const int signature_count = with_signature ? 1 : 0;
   const size_t parameter_count =
-      static_cast<size_t>(js_parameter_count + context_count);
+      static_cast<size_t>(js_parameter_count + context_count + signature_count);
 
   DCHECK_GE(stack_parameter_count, descriptor.GetStackParameterCount());
 
@@ -500,6 +566,11 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
   // Add context.
   if (context_count) {
     locations.AddParam(regloc(kContextRegister, MachineType::AnyTagged()));
+  }
+
+  if (signature_count) {
+    locations.AddParam(
+        regloc(kJavaScriptCallSignatureRegister, MachineType::Int32()));
   }
 
   // The target for stub calls depends on the requested mode.

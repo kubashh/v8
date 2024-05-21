@@ -7957,7 +7957,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::ImportCallKind::kJSFunctionArityMismatch: {
         int pushed_count =
             std::max(expected_arity, wasm_count - suspender_count);
-        base::SmallVector<Node*, 16> args(pushed_count + 7);
+        base::SmallVector<Node*, 16> args(pushed_count + 8);
         int pos = 0;
 
         args[pos++] = callable_node;  // target callable.
@@ -7974,12 +7974,14 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         args[pos++] = undefined_node;  // new target
         args[pos++] = Int32Constant(
             JSParameterCount(wasm_count - suspender_count));  // argument count
+        args[pos++] =
+            Int32Constant(JSParameterCount(expected_arity));  // signature
 
         Node* function_context =
             gasm_->LoadContextFromJSFunction(callable_node);
         args[pos++] = function_context;
 
-        auto call_descriptor = Linkage::GetJSCallDescriptor(
+        auto call_descriptor = Linkage::GetJSCallDescriptorWithSignature(
             graph()->zone(), false, pushed_count + 1, CallDescriptor::kNoFlags);
         call =
             BuildCallOnCentralStack(args, pos, call_descriptor, callable_node);

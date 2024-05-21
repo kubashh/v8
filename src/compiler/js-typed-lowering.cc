@@ -1948,10 +1948,13 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
       node->InsertInput(graph()->zone(), formal_count + 2, new_target);
       node->InsertInput(graph()->zone(), formal_count + 3,
                         jsgraph()->ConstantNoHole(JSParameterCount(arity)));
-      NodeProperties::ChangeOp(node,
-                               common()->Call(Linkage::GetJSCallDescriptor(
-                                   graph()->zone(), false, 1 + formal_count,
-                                   flags | CallDescriptor::kCanUseRoots)));
+      node->InsertInput(
+          graph()->zone(), formal_count + 4,
+          jsgraph()->ConstantNoHole(JSParameterCount(formal_count)));
+      NodeProperties::ChangeOp(
+          node, common()->Call(Linkage::GetJSCallDescriptorWithSignature(
+                    graph()->zone(), false, 1 + formal_count,
+                    flags | CallDescriptor::kCanUseRoots)));
     } else if (shared->HasBuiltinId() &&
                Builtins::IsCpp(shared->builtin_id())) {
       // Patch {node} to a direct CEntry call.
@@ -1963,14 +1966,20 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
           Builtins::CallableFor(isolate(), shared->builtin_id());
 
       const CallInterfaceDescriptor& descriptor = callable.descriptor();
+      bool kWithSignature = true;
       auto call_descriptor = Linkage::GetStubCallDescriptor(
-          graph()->zone(), descriptor, 1 + arity, flags);
+          graph()->zone(), descriptor, 1 + arity, flags,
+          Operator::kNoProperties, StubCallMode::kCallCodeObject,
+          kWithSignature);
       Node* stub_code = jsgraph()->HeapConstantNoHole(callable.code());
       node->RemoveInput(n.FeedbackVectorIndex());
       node->InsertInput(graph()->zone(), 0, stub_code);  // Code object.
       node->InsertInput(graph()->zone(), 2, new_target);
       node->InsertInput(graph()->zone(), 3,
                         jsgraph()->ConstantNoHole(JSParameterCount(arity)));
+      node->InsertInput(
+          graph()->zone(), arity + 6,
+          jsgraph()->ConstantNoHole(JSParameterCount(formal_count)));
       NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
     } else {
       // Patch {node} to a direct call.
@@ -1978,10 +1987,13 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
       node->InsertInput(graph()->zone(), arity + 2, new_target);
       node->InsertInput(graph()->zone(), arity + 3,
                         jsgraph()->ConstantNoHole(JSParameterCount(arity)));
-      NodeProperties::ChangeOp(node,
-                               common()->Call(Linkage::GetJSCallDescriptor(
-                                   graph()->zone(), false, 1 + arity,
-                                   flags | CallDescriptor::kCanUseRoots)));
+      node->InsertInput(
+          graph()->zone(), arity + 4,
+          jsgraph()->ConstantNoHole(JSParameterCount(formal_count)));
+      NodeProperties::ChangeOp(
+          node, common()->Call(Linkage::GetJSCallDescriptorWithSignature(
+                    graph()->zone(), false, 1 + arity,
+                    flags | CallDescriptor::kCanUseRoots)));
     }
     return Changed(node);
   }

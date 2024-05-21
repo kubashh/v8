@@ -47,6 +47,13 @@ CallInterfaceDescriptor::DefaultJSRegisterArray() {
       kJavaScriptCallArgCountRegister, kJavaScriptCallExtraArg1Register);
 }
 
+constexpr auto JSTrampolineWithSignatureDescriptor::registers() {
+  return RegisterArray(
+      kJavaScriptCallTargetRegister, kJavaScriptCallNewTargetRegister,
+      kJavaScriptCallArgCountRegister, kJavaScriptCallSignatureRegister,
+      kJavaScriptCallExtraArg1Register);
+}
+
 // static
 template <typename DerivedDescriptor>
 constexpr auto StaticCallInterfaceDescriptor<DerivedDescriptor>::registers() {

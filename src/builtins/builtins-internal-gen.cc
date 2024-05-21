@@ -98,9 +98,13 @@ TF_BUILTIN(DebugBreakTrampoline, CodeStubAssembler) {
   Goto(&tailcall_to_shared);
 
   BIND(&tailcall_to_shared);
+  // TODO(saelo): we should instead use the signature that we got ourselves.
+  TNode<Int32T> signature = UncheckedCast<Int32T>(
+      LoadSharedFunctionInfoFormalParameterCountWithReceiver(shared));
   // Tail call into code object on the SharedFunctionInfo.
   TNode<Code> code = GetSharedFunctionInfoCode(shared);
-  TailCallJSCode(code, context, function, new_target, arg_count);
+  TailCallJSCodeWithSignature(code, context, function, new_target, arg_count,
+                              signature);
 }
 
 class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
@@ -1596,6 +1600,7 @@ TF_BUILTIN(InstantiateAsmJs, CodeStubAssembler) {
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
   auto arg_count =
       UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
+  auto signature = UncheckedParameter<Int32T>(Descriptor::kSignature);
   auto function = Parameter<JSFunction>(Descriptor::kTarget);
 
   // Retrieve arguments from caller (stdlib, foreign, heap).
@@ -1616,6 +1621,7 @@ TF_BUILTIN(InstantiateAsmJs, CodeStubAssembler) {
   // This builtin intercepts a call to {function}, where the number of arguments
   // pushed is the maximum of actual arguments count and formal parameters
   // count.
+  // TODO signature check here
   Label argc_lt_param_count(this), argc_ge_param_count(this);
   Branch(IntPtrLessThan(args.GetLengthWithReceiver(),
                         ChangeInt32ToIntPtr(parameter_count)),
@@ -1630,7 +1636,8 @@ TF_BUILTIN(InstantiateAsmJs, CodeStubAssembler) {
   // function which has been reset to the compile lazy builtin.
 
   TNode<Code> code = LoadJSFunctionCode(function);
-  TailCallJSCode(code, context, function, new_target, arg_count);
+  TailCallJSCodeWithSignature(code, context, function, new_target, arg_count,
+                              signature);
 }
 
 TF_BUILTIN(FindNonDefaultConstructorOrConstruct, CodeStubAssembler) {

@@ -897,6 +897,10 @@ class V8_EXPORT_PRIVATE MacroAssembler
                       Register expected_parameter_count,
                       Register actual_parameter_count, InvokeType type);
 
+  void SignatureCheck(uint16_t expected_parameter_count);
+  void SignatureCheck(Register expected_parameter_count);
+  void SignatureCheck(uint16_t expected_parameter_count, Label* fail);
+
   // ---------------------------------------------------------------------------
   // Macro instructions.
 

@@ -1059,10 +1059,11 @@ void TailCallOptimizedCodeSlot(MacroAssembler* masm,
   //  rdx : new target (preserved for callee if needed, and caller)
   //  rsi : current context, used for the runtime call
   //  rdi : target function (preserved for callee if needed, and caller)
+  //  r9  : signature
   // -----------------------------------
   ASM_CODE_COMMENT(masm);
   DCHECK_EQ(closure, kJSFunctionRegister);
-  DCHECK(!AreAliased(rax, rdx, closure, rsi, optimized_code_entry, scratch1,
+  DCHECK(!AreAliased(rax, rdx, closure, rsi, optimized_code_entry, r9, scratch1,
                      scratch2));
 
   Label heal_optimized_code_slot;
@@ -1120,12 +1121,15 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
   //  -- rax : actual argument count
   //  -- rdx : new target (preserved for callee)
   //  -- rdi : target function (preserved for callee)
+  //  -- r9 : signature
   // -----------------------------------
   ASM_CODE_COMMENT(this);
   {
     FrameScope scope(this, StackFrame::INTERNAL);
     // Push a copy of the target function, the new target and the actual
     // argument count.
+    SmiTag(kJavaScriptCallSignatureRegister);
+    Push(kJavaScriptCallSignatureRegister);
     Push(kJavaScriptCallTargetRegister);
     Push(kJavaScriptCallNewTargetRegister);
     SmiTag(kJavaScriptCallArgCountRegister);
@@ -1141,6 +1145,8 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     SmiUntagUnsigned(kJavaScriptCallArgCountRegister);
     Pop(kJavaScriptCallNewTargetRegister);
     Pop(kJavaScriptCallTargetRegister);
+    Pop(kJavaScriptCallSignatureRegister);
+    SmiUntagUnsigned(kJavaScriptCallSignatureRegister);
   }
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
   JumpCodeObject(rcx, kJSEntrypointTag, jump_mode);
@@ -1214,7 +1220,7 @@ void MacroAssembler::OptimizeCodeOrTailCallOptimizedCodeSlot(
   LoadTaggedField(
       optimized_code_entry,
       FieldOperand(feedback_vector, FeedbackVector::kMaybeOptimizedCodeOffset));
-  TailCallOptimizedCodeSlot(this, optimized_code_entry, closure, r9,
+  TailCallOptimizedCodeSlot(this, optimized_code_entry, closure, r11,
                             WriteBarrierDescriptor::SlotAddressRegister(),
                             jump_mode);
 }
@@ -3651,7 +3657,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   AssertFunction(function);
 
   // On function call, call into the debugger if necessary.
-  Label debug_hook, continue_after_hook;
+  Label debug_hook, continue_after_hook, done;
   {
     ExternalReference debug_hook_active =
         ExternalReference::debug_hook_on_function_call_address(isolate());
@@ -3667,8 +3673,12 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
     LoadRoot(rdx, RootIndex::kUndefinedValue);
   }
 
-  Label done;
-  InvokePrologue(expected_parameter_count, actual_parameter_count, type);
+  if (type == InvokeType::kJumpSkipPrologue) {
+    movq(kJavaScriptCallSignatureRegister, expected_parameter_count);
+  } else {
+    InvokePrologue(expected_parameter_count, actual_parameter_count, type);
+  }
+
   // We call indirectly through the code field in the function to
   // allow recompilation to take effect without changing any of the
   // call sites.
@@ -3678,6 +3688,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
       CallJSFunction(function);
       break;
     case InvokeType::kJump:
+    case InvokeType::kJumpSkipPrologue:
       JumpJSFunction(function);
       break;
   }
@@ -3725,10 +3736,37 @@ void MacroAssembler::StackOverflowCheck(
   j(less_equal, stack_overflow, stack_overflow_distance);
 }
 
+void MacroAssembler::SignatureCheck(uint16_t expected_parameter_count) {
+  if (expected_parameter_count == kDontAdaptArgumentsSentinel) return;
+  Label ok;
+  cmpl(kJavaScriptCallSignatureRegister, Immediate(expected_parameter_count));
+  j(equal, &ok);
+  int3();
+  bind(&ok);
+}
+
+void MacroAssembler::SignatureCheck(Register expected_parameter_count) {
+  Label ok;
+  cmpl(kJavaScriptCallSignatureRegister, expected_parameter_count);
+  j(equal, &ok);
+  int3();
+  bind(&ok);
+}
+
+void MacroAssembler::SignatureCheck(uint16_t expected_parameter_count,
+                                    Label* fail) {
+  if (expected_parameter_count == kDontAdaptArgumentsSentinel) return;
+  cmpl(kJavaScriptCallSignatureRegister, Immediate(expected_parameter_count));
+  j(not_equal, fail);
+}
+
 void MacroAssembler::InvokePrologue(Register expected_parameter_count,
                                     Register actual_parameter_count,
                                     InvokeType type) {
     ASM_CODE_COMMENT(this);
+
+    movq(kJavaScriptCallSignatureRegister, expected_parameter_count);
+
     if (expected_parameter_count == actual_parameter_count) {
       Move(rax, actual_parameter_count);
       return;
@@ -3747,7 +3785,7 @@ void MacroAssembler::InvokePrologue(Register expected_parameter_count,
     // receiver and the return address.
     {
       Label copy, check;
-      Register src = r8, dest = rsp, num = r9, current = r11;
+      Register src = r8, dest = rsp, num = r11, current = r12;
       movq(src, rsp);
       leaq(kScratchRegister,
            Operand(expected_parameter_count, times_system_pointer_size, 0));

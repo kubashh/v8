@@ -10,7 +10,7 @@
 #include "src/heap/heap.h"
 
 // Helper types to make boolean flag easier to read at call-site.
-enum class InvokeType { kCall, kJump };
+enum class InvokeType { kCall, kJump, kJumpSkipPrologue };
 
 // Flags used for the AllocateInNewSpace functions.
 enum AllocationFlags {

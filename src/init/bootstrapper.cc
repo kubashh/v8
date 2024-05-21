@@ -2202,7 +2202,7 @@ Handle<JSObject> InitializeTemporal(Isolate* isolate) {
         SimpleCreateFunction(isolate,
                              isolate->factory()->InternalizeUtf8String(
                                  "StringFixedArrayFromIterable"),
-                             Builtin::kStringFixedArrayFromIterable, 1, false);
+                             Builtin::kStringFixedArrayFromIterable, 0, true);
     native_context->set_string_fixed_array_from_iterable(*func);
   }
   // The TemporalInsantFixedArrayFromIterable functions is created but not
@@ -2212,7 +2212,7 @@ Handle<JSObject> InitializeTemporal(Isolate* isolate) {
         isolate,
         isolate->factory()->InternalizeUtf8String(
             "TemporalInstantFixedArrayFromIterable"),
-        Builtin::kTemporalInstantFixedArrayFromIterable, 1, false);
+        Builtin::kTemporalInstantFixedArrayFromIterable, 0, true);
     native_context->set_temporal_instant_fixed_array_from_iterable(*func);
   }
 
@@ -4149,10 +4149,10 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         JSObject::cast(array_buffer_fun->instance_prototype()), isolate_);
     SimpleInstallGetter(isolate_, array_buffer_prototype,
                         factory->max_byte_length_string(),
-                        Builtin::kArrayBufferPrototypeGetMaxByteLength, false);
+                        Builtin::kArrayBufferPrototypeGetMaxByteLength, true);
     SimpleInstallGetter(isolate_, array_buffer_prototype,
                         factory->resizable_string(),
-                        Builtin::kArrayBufferPrototypeGetResizable, false);
+                        Builtin::kArrayBufferPrototypeGetResizable, true);
     SimpleInstallFunction(isolate_, array_buffer_prototype, "resize",
                           Builtin::kArrayBufferPrototypeResize, 1, true);
     SimpleInstallFunction(isolate_, array_buffer_prototype, "transfer",
@@ -4162,7 +4162,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         Builtin::kArrayBufferPrototypeTransferToFixedLength, 0, false);
     SimpleInstallGetter(isolate_, array_buffer_prototype,
                         factory->detached_string(),
-                        Builtin::kArrayBufferPrototypeGetDetached, false);
+                        Builtin::kArrayBufferPrototypeGetDetached, true);
   }
 
   {  // -- S h a r e d A r r a y B u f f e r
@@ -4792,7 +4792,9 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         isolate_, finalization_registry_fun,
         Context::JS_FINALIZATION_REGISTRY_FUNCTION_INDEX);
 
-    finalization_registry_fun->shared()->DontAdaptArguments();
+    // finalization_registry_fun->shared()->DontAdaptArguments();
+    finalization_registry_fun->shared()->set_internal_formal_parameter_count(
+        JSParameterCount(1));
     finalization_registry_fun->shared()->set_length(1);
 
     Handle<JSObject> finalization_registry_prototype(
@@ -4826,7 +4828,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     InstallWithIntrinsicDefaultProto(isolate_, weak_ref_fun,
                                      Context::JS_WEAK_REF_FUNCTION_INDEX);
 
-    weak_ref_fun->shared()->DontAdaptArguments();
+    weak_ref_fun->shared()->set_internal_formal_parameter_count(
+        JSParameterCount(1));
     weak_ref_fun->shared()->set_length(1);
 
     Handle<JSObject> weak_ref_prototype(
@@ -5445,7 +5448,8 @@ void Genesis::InitializeGlobal_harmony_iterator_helpers() {
   Handle<JSFunction> iterator_function = InstallFunction(
       isolate(), global, "Iterator", JS_OBJECT_TYPE, JSObject::kHeaderSize, 0,
       iterator_prototype, Builtin::kIteratorConstructor);
-  iterator_function->shared()->DontAdaptArguments();
+  iterator_function->shared()->set_internal_formal_parameter_count(
+      JSParameterCount(0));
   iterator_function->shared()->set_length(0);
   SimpleInstallFunction(isolate(), iterator_function, "from",
                         Builtin::kIteratorFrom, 1, true);
@@ -5645,8 +5649,7 @@ void Genesis::InitializeGlobal_harmony_shadow_realm() {
   {
     Handle<JSFunction> shadow_realm_import_value_rejected =
         SimpleCreateFunction(isolate(), factory->empty_string(),
-                             Builtin::kShadowRealmImportValueRejected, 1,
-                             false);
+                             Builtin::kShadowRealmImportValueRejected, 1, true);
     shadow_realm_import_value_rejected->shared()->set_native(false);
     native_context()->set_shadow_realm_import_value_rejected(
         *shadow_realm_import_value_rejected);
@@ -5996,7 +5999,7 @@ Handle<JSFunction> Genesis::CreateArrayBuffer(
 
       // Install the "byteLength" getter on the {prototype}.
       SimpleInstallGetter(isolate(), prototype, factory()->byte_length_string(),
-                          Builtin::kArrayBufferPrototypeGetByteLength, false);
+                          Builtin::kArrayBufferPrototypeGetByteLength, true);
       SimpleInstallFunction(isolate(), prototype, "slice",
                             Builtin::kArrayBufferPrototypeSlice, 2, true);
       break;

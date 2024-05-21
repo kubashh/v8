@@ -1336,6 +1336,12 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                       TNode<JSFunction> function, TNode<Object> new_target,
                       TNode<Int32T> arg_count);
 
+  void TailCallJSCodeWithSignature(TNode<Code> code, TNode<Context> context,
+                                   TNode<JSFunction> function,
+                                   TNode<Object> new_target,
+                                   TNode<Int32T> arg_count,
+                                   TNode<Int32T> signature);
+
   template <class... TArgs>
   TNode<Object> CallJS(Builtin builtin, TNode<Context> context,
                        TNode<Object> function,
@@ -1347,9 +1353,11 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                    !new_target.has_value());
     int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
     TNode<Int32T> arity = Int32Constant(argc);
+    TNode<Int32T> signature = Int32Constant(argc);  // ??
     TNode<Code> target = HeapConstantNoHole(callable.code());
     return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
-                               new_target, arity, {receiver, args...}));
+                               new_target, arity, signature,
+                               {receiver, args...}));
   }
 
   template <class... TArgs>
@@ -1361,10 +1369,12 @@ class V8_EXPORT_PRIVATE CodeAssembler {
     DCHECK_EQ(callable.descriptor(), JSTrampolineDescriptor{});
     int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
     TNode<Int32T> arity = Int32Constant(argc);
+    TNode<Int32T> signature = Int32Constant(argc);  // ??
     TNode<Object> receiver = LoadRoot(RootIndex::kUndefinedValue);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
-                               new_target, arity, {receiver, args...}));
+                               new_target, arity, signature,
+                               {receiver, args...}));
   }
 
   template <class... TArgs>
@@ -1484,11 +1494,12 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                        TNode<Object> target, TNode<Object> context,
                        TNode<Object> function,
                        base::Optional<TNode<Object>> new_target,
-                       TNode<Int32T> arity, std::initializer_list<Node*> args);
+                       TNode<Int32T> arity, TNode<Int32T> signature,
+                       std::initializer_list<Node*> args);
 
   Node* CallStubN(StubCallMode call_mode,
                   const CallInterfaceDescriptor& descriptor, int input_count,
-                  Node* const* inputs);
+                  Node* const* inputs, bool with_signature);
 
   Node* AtomicLoad(MachineType type, AtomicMemoryOrder order,
                    TNode<RawPtrT> base, TNode<WordT> offset);

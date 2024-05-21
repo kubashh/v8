@@ -5450,6 +5450,7 @@ void CallSelf::GenerateCode(MaglevAssembler* masm,
   DCHECK_EQ(kContextRegister, ToRegister(context()));
   DCHECK_EQ(kJavaScriptCallTargetRegister, ToRegister(closure()));
   __ Move(kJavaScriptCallArgCountRegister, actual_parameter_count);
+  __ Move(kJavaScriptCallSignatureRegister, expected_parameter_count_);
   DCHECK(!shared_function_info().HasBuiltinId());
   __ CallSelf();
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
@@ -5498,6 +5499,7 @@ void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
   DCHECK_EQ(kContextRegister, ToRegister(context()));
   DCHECK_EQ(kJavaScriptCallTargetRegister, ToRegister(closure()));
   __ Move(kJavaScriptCallArgCountRegister, actual_parameter_count);
+  __ Move(kJavaScriptCallSignatureRegister, expected_parameter_count_);
   if (shared_function_info().HasBuiltinId()) {
     __ CallBuiltin(shared_function_info().builtin_id());
   } else {

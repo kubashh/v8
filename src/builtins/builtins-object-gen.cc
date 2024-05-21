@@ -537,8 +537,8 @@ TF_BUILTIN(ObjectHasOwn, ObjectBuiltinsAssembler) {
   ThrowTypeError(context, MessageTemplate::kUndefinedOrNullToObject);
 
   BIND(&not_undefined_nor_null);
-  Return(CallBuiltin(Builtin::kObjectPrototypeHasOwnProperty, context, target,
-                     new_target, JSParameterCount(1), object, key));
+  Return(CallJS(Builtin::kObjectPrototypeHasOwnProperty, context, target,
+                new_target, object, key));
 }
 
 // ES #sec-object.getOwnPropertyNames

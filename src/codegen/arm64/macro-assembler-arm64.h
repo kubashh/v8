@@ -2045,6 +2045,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void JumpToExternalReference(const ExternalReference& builtin,
                                bool builtin_exit_frame = false);
 
+  void SignatureCheck(uint16_t expected_parameter_count);
+  void SignatureCheck(Register expected_parameter_count);
+  void SignatureCheck(uint16_t expected_parameter_count, Label* fail);
+
   // Registers used through the invocation chain are hard-coded.
   // We force passing the parameters to ensure the contracts are correctly
   // honoured by the caller.

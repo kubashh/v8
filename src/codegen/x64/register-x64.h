@@ -283,6 +283,9 @@ constexpr Register kJavaScriptCallCodeStartRegister = rcx;
 constexpr Register kJavaScriptCallTargetRegister = kJSFunctionRegister;
 constexpr Register kJavaScriptCallNewTargetRegister = rdx;
 constexpr Register kJavaScriptCallExtraArg1Register = rbx;
+// Register used for JS signature verification when the sandbox is enabled.
+// This solves the following problem: TODO
+constexpr Register kJavaScriptCallSignatureRegister = r9;
 
 constexpr Register kRuntimeCallFunctionRegister = rbx;
 constexpr Register kRuntimeCallArgCountRegister = rax;

@@ -608,6 +608,7 @@ constexpr Register kJavaScriptCallCodeStartRegister = x2;
 constexpr Register kJavaScriptCallTargetRegister = kJSFunctionRegister;
 constexpr Register kJavaScriptCallNewTargetRegister = x3;
 constexpr Register kJavaScriptCallExtraArg1Register = x2;
+constexpr Register kJavaScriptCallSignatureRegister = x19;
 
 constexpr Register kRuntimeCallFunctionRegister = x1;
 constexpr Register kRuntimeCallArgCountRegister = x0;

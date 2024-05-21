@@ -1192,12 +1192,14 @@ void CodeAssembler::TailCallRuntimeImpl(
 
 Node* CodeAssembler::CallStubN(StubCallMode call_mode,
                                const CallInterfaceDescriptor& descriptor,
-                               int input_count, Node* const* inputs) {
+                               int input_count, Node* const* inputs,
+                               bool with_signature) {
   DCHECK(call_mode == StubCallMode::kCallCodeObject ||
          call_mode == StubCallMode::kCallBuiltinPointer);
 
   // implicit nodes are target and optionally context.
   int implicit_nodes = descriptor.HasContextParameter() ? 2 : 1;
+  if (with_signature) implicit_nodes += 1;
   DCHECK_LE(implicit_nodes, input_count);
   int argc = input_count - implicit_nodes;
 #ifdef DEBUG
@@ -1213,7 +1215,7 @@ Node* CodeAssembler::CallStubN(StubCallMode call_mode,
 
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), descriptor, stack_parameter_count, CallDescriptor::kNoFlags,
-      Operator::kNoProperties, call_mode);
+      Operator::kNoProperties, call_mode, with_signature);
 
   CallPrologue();
   Node* return_value =
@@ -1260,7 +1262,7 @@ Node* CodeAssembler::CallStubRImpl(StubCallMode call_mode,
     inputs.Add(context);
   }
 
-  return CallStubN(call_mode, descriptor, inputs.size(), inputs.data());
+  return CallStubN(call_mode, descriptor, inputs.size(), inputs.data(), false);
 }
 
 Node* CodeAssembler::CallJSStubImpl(const CallInterfaceDescriptor& descriptor,
@@ -1268,6 +1270,7 @@ Node* CodeAssembler::CallJSStubImpl(const CallInterfaceDescriptor& descriptor,
                                     TNode<Object> function,
                                     base::Optional<TNode<Object>> new_target,
                                     TNode<Int32T> arity,
+                                    TNode<Int32T> signature,
                                     std::initializer_list<Node*> args) {
   constexpr size_t kMaxNumArgs = 10;
   DCHECK_GE(kMaxNumArgs, args.size());
@@ -1282,8 +1285,11 @@ Node* CodeAssembler::CallJSStubImpl(const CallInterfaceDescriptor& descriptor,
   if (descriptor.HasContextParameter()) {
     inputs.Add(context);
   }
+  // TODO(saelo): if (descriptor.HasSignatureParameter()) ?
+  inputs.Add(signature);
+  constexpr bool kWithSignature = true;
   return CallStubN(StubCallMode::kCallCodeObject, descriptor, inputs.size(),
-                   inputs.data());
+                   inputs.data(), kWithSignature);
 }
 
 void CodeAssembler::TailCallStubThenBytecodeDispatchImpl(
@@ -1339,6 +1345,22 @@ void CodeAssembler::TailCallJSCode(TNode<Code> code, TNode<Context> context,
       CallDescriptor::kFixedTargetRegister, Operator::kNoProperties);
 
   Node* nodes[] = {code, function, new_target, arg_count, context};
+  CHECK_EQ(descriptor.GetParameterCount() + 2, arraysize(nodes));
+  raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes);
+}
+
+void CodeAssembler::TailCallJSCodeWithSignature(TNode<Code> code,
+                                                TNode<Context> context,
+                                                TNode<JSFunction> function,
+                                                TNode<Object> new_target,
+                                                TNode<Int32T> arg_count,
+                                                TNode<Int32T> signature) {
+  JSTrampolineWithSignatureDescriptor descriptor;
+  auto call_descriptor = Linkage::GetStubCallDescriptor(
+      zone(), descriptor, descriptor.GetStackParameterCount(),
+      CallDescriptor::kFixedTargetRegister, Operator::kNoProperties);
+
+  Node* nodes[] = {code, function, new_target, arg_count, signature, context};
   CHECK_EQ(descriptor.GetParameterCount() + 2, arraysize(nodes));
   raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes);
 }

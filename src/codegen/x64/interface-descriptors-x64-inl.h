@@ -177,12 +177,12 @@ MaglevOptimizeCodeOrTailCallOptimizedCodeSlotDescriptor::FlagsRegister() {
 // static
 constexpr Register MaglevOptimizeCodeOrTailCallOptimizedCodeSlotDescriptor::
     FeedbackVectorRegister() {
-  return r9;
+  return r11;
 }
 // static
 constexpr Register
 MaglevOptimizeCodeOrTailCallOptimizedCodeSlotDescriptor::TemporaryRegister() {
-  return r11;
+  return r12;
 }
 
 // static

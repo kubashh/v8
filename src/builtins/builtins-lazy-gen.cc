@@ -17,9 +17,10 @@ namespace internal {
 void LazyBuiltinsAssembler::GenerateTailCallToJSCode(
     TNode<Code> code, TNode<JSFunction> function) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
+  auto sig = UncheckedParameter<Int32T>(Descriptor::kSignature);
   auto context = Parameter<Context>(Descriptor::kContext);
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
-  TailCallJSCode(code, context, function, new_target, argc);
+  TailCallJSCodeWithSignature(code, context, function, new_target, argc, sig);
 }
 
 void LazyBuiltinsAssembler::GenerateTailCallToReturnedCode(

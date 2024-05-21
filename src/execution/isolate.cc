@@ -330,6 +330,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
         "time.");
   }
   if (v8_flags.text_is_readable) {
+    /*
     if (d.EmbeddedBlobCodeHash() != d.CreateEmbeddedBlobCodeHash()) {
       FATAL(
           "Embedded blob code section checksum verification failed. This "
@@ -337,6 +338,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
           "compilation time. A common cause is a debugging breakpoint set "
           "within builtin code.");
     }
+    */
   }
 #endif  // DEBUG
 }

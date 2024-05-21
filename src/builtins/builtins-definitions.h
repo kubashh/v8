@@ -217,9 +217,9 @@ namespace internal {
       MaglevOptimizeCodeOrTailCallOptimizedCodeSlot)                           \
                                                                                \
   /* Code life-cycle */                                                        \
-  TFC(CompileLazy, JSTrampoline)                                               \
-  TFC(CompileLazyDeoptimizedCode, JSTrampoline)                                \
-  TFC(InstantiateAsmJs, JSTrampoline)                                          \
+  TFC(CompileLazy, JSTrampolineWithSignature)                                  \
+  TFC(CompileLazyDeoptimizedCode, JSTrampolineWithSignature)                   \
+  TFC(InstantiateAsmJs, JSTrampolineWithSignature)                             \
   ASM(NotifyDeoptimized, Void)                                                 \
                                                                                \
   /* Trampolines called when returning from a deoptimization that expects   */ \
@@ -1752,7 +1752,7 @@ namespace internal {
   /* Temporal #sec-temporal.calendar.prototype.inleapyear */                   \
   CPP(TemporalCalendarPrototypeInLeapYear)                                     \
   /* Temporal #sec-temporal.calendar.prototype.fields */                       \
-  TFJ(TemporalCalendarPrototypeFields, kJSArgcReceiverSlots, kIterable)        \
+  TFJ(TemporalCalendarPrototypeFields, kDontAdaptArgumentsSentinel)            \
   /* Temporal #sec-temporal.calendar.prototype.mergefields */                  \
   CPP(TemporalCalendarPrototypeMergeFields)                                    \
   /* Temporal #sec-temporal.calendar.prototype.tostring */                     \

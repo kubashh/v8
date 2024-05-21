@@ -589,8 +589,10 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
 
     V<Undefined> undefined_node = LOAD_ROOT(UndefinedValue);
     int pushed_count = std::max(expected_arity, wasm_count);
-    // 4 extra arguments: receiver, new target, arg count and context.
-    base::SmallVector<OpIndex, 16> args(pushed_count + 4);
+    // 5 extra arguments: receiver, new target, arg count, potentially
+    // signature, and context.
+    int num_additional_args = kind == ImportCallKind::kUseCallBuiltin ? 4 : 5;
+    base::SmallVector<OpIndex, 16> args(pushed_count + num_additional_args);
     // Position of the first wasm argument in the JS arguments.
     int pos = kind == ImportCallKind::kUseCallBuiltin ? 3 : 1;
     // If {suspender_count} is 1, {wasm_count} includes the suspender argument,
@@ -614,8 +616,10 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
         DCHECK_EQ(expected_arity, wasm_count);
         [[fallthrough]];
       case wasm::ImportCallKind::kJSFunctionArityMismatch: {
-        auto call_descriptor = compiler::Linkage::GetJSCallDescriptor(
-            __ graph_zone(), false, pushed_count + 1, CallDescriptor::kNoFlags);
+        auto call_descriptor =
+            compiler::Linkage::GetJSCallDescriptorWithSignature(
+                __ graph_zone(), false, pushed_count + 1,
+                CallDescriptor::kNoFlags);
         const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
             call_descriptor, compiler::CanThrow::kYes, __ graph_zone());
 
@@ -626,6 +630,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
         args[pos++] = undefined_node;  // new target
         args[pos++] =
             __ Word32Constant(JSParameterCount(wasm_count));  // argument count
+        args[pos++] =
+            __ Word32Constant(JSParameterCount(expected_arity));  // signature
         args[pos++] = LoadContextFromJSFunction(callable_node);
         call = BuildCallOnCentralStack(callable_node, args, ts_call_descriptor,
                                        callable_node);

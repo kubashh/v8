@@ -373,6 +373,11 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
       Operator::Properties properties =
           Operator::kNoProperties /* use with care! */);
 
+  static CallDescriptor* GetJSCallDescriptorWithSignature(
+      Zone* zone, bool is_osr, int parameter_count, CallDescriptor::Flags flags,
+      Operator::Properties properties =
+          Operator::kNoProperties /* use with care! */);
+
   static CallDescriptor* GetRuntimeCallDescriptor(
       Zone* zone, Runtime::FunctionId function, int js_parameter_count,
       Operator::Properties properties, CallDescriptor::Flags flags);
@@ -387,7 +392,8 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
       Zone* zone, const CallInterfaceDescriptor& descriptor,
       int stack_parameter_count, CallDescriptor::Flags flags,
       Operator::Properties properties = Operator::kNoProperties,
-      StubCallMode stub_mode = StubCallMode::kCallCodeObject);
+      StubCallMode stub_mode = StubCallMode::kCallCodeObject,
+      bool with_signature = false);
 
   static CallDescriptor* GetBytecodeDispatchCallDescriptor(
       Zone* zone, const CallInterfaceDescriptor& descriptor,
