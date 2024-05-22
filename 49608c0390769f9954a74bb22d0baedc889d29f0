@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "62c052d6_34e3cc52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "Maybe better: \"if the value is a signaling NaN which gets converted to a quiet NaN on ia32.\"",
+      "range": {
+        "startLine": 12,
+        "startChar": 14,
+        "endLine": 13,
+        "endChar": 10
+      },
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "02ce6d26_dcab88aa",
@@ -14,6 +37,114 @@
       "writtenOn": "2024-05-22T12:17:45Z",
       "side": 1,
       "message": "As a co-author could you take a look, please? 😄",
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f325f2_99a6e3e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "LGTM with comments, thanks!",
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69879259_063330be",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "It seems this should be `signaling` in AE.",
+      "range": {
+        "startLine": 2417,
+        "startChar": 34,
+        "endLine": 2417,
+        "endChar": 44
+      },
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61281105_c4c39f4a",
+        "filename": "test/mjsunit/regress/wasm/regress-339704607.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "Please remove.",
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd067967_29a2e58c",
+        "filename": "test/mjsunit/regress/wasm/regress-339704607.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "I guess, a `// signaling NaN` wouldn\u0027t hurt?\nOr even better: What about a `function wasmF32ConstSignalingNaN()` in the `wasm-module-builder.js` and then here `...wasmF32ConstSignalingNaN()`?",
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f6621e2_b4aab41f",
+        "filename": "test/mjsunit/regress/wasm/regress-339704607.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7dc3a8e_4cfc1d7e",
+        "filename": "test/mjsunit/regress/wasm/regress-339704607.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T13:03:52Z",
+      "side": 1,
+      "message": "Please remove.",
       "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
