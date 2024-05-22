@@ -203,7 +203,12 @@ void V8::Initialize() {
   // TODO(jgruber): Remove this once / if wasm can run without executable
   // memory.
 #if V8_ENABLE_WEBASSEMBLY
-  if (v8_flags.jitless && !v8_flags.correctness_fuzzer_suppressions) {
+  if (v8_flags.jitless &&
+      !v8_flags.correctness_fuzzer_suppressions
+      // --wasm-jitless-if-available-for-testing implies --wasm-jitless but
+      // FlagList::EnforceFlagImplications() not called yet.
+      && !v8_flags.wasm_jitless &&
+      !v8_flags.wasm_jitless_if_available_for_testing) {
     DISABLE_FLAG(expose_wasm);
   }
 #endif
