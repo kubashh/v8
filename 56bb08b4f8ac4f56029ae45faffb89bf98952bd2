@@ -16,6 +16,23 @@
       "message": "Thank you Matthias, could you take another look, please?",
       "revId": "56bb08b4f8ac4f56029ae45faffb89bf98952bd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "484f78b9_34684fc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-22T15:37:44Z",
+      "side": 1,
+      "message": "Awesome, thanks!",
+      "revId": "56bb08b4f8ac4f56029ae45faffb89bf98952bd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
