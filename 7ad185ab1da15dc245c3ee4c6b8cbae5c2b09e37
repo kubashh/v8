@@ -231,6 +231,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3068e27d_0476cb9c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1912,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-22T19:30:40Z",
+      "side": 1,
+      "message": "Yes, typo :|",
+      "parentUuid": "b1643e6b_0ee95532",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b23a08b7_99ef8d8d",
@@ -1432,6 +1450,24 @@
       "writtenOn": "2024-05-15T15:21:31Z",
       "side": 1,
       "message": "This is possibly a more fundamental/invasive design question: In the jitless mode, `target` will never be populated (since there is no generated code `target` could point to), so why not use that as storage for the function index, and save some memory (possibly one would have to type it as a union of a pointer and uintptr_t)?",
+      "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78be5abb_70dfd967",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-22T19:30:40Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "83e37433_01269e66",
       "revId": "7ad185ab1da15dc245c3ee4c6b8cbae5c2b09e37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

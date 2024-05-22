@@ -176,6 +176,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3045d3_1b17fbaa",
+        "filename": "test/cctest/wasm/test-run-wasm-relaxed-simd.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-22T19:30:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bc7fc08_a20e75f2",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b67cf45_7209c950",
@@ -436,6 +454,24 @@
       "side": 1,
       "message": "(Actually, `#TODO(paolosev@microsoft.com)` would be more apt.)",
       "parentUuid": "b6dc037e_9c7fbbe2",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "787c0ea7_015f68cb",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-22T19:30:40Z",
+      "side": 1,
+      "message": "This process is causing some very nice clean up. Actually, most of these failing tests had already been fixed, the only remaining failure was `wasm/streaming-api` was fixed by making sure that in jitless mode we always validate the module in `AsyncStreamingProcessor::ProcessFunctionBody`.",
+      "parentUuid": "7fad0e08_be7e5787",
       "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

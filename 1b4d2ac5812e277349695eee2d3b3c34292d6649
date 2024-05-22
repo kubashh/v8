@@ -52,6 +52,24 @@
       "parentUuid": "f96732e6_702b325b",
       "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "132764e6_a88d4482",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-22T19:30:40Z",
+      "side": 0,
+      "message": "Thanks! noicu/d8 works much better, but unfortunately, I get build errors while building the main branch:\n\n```\npaolosev@TDC554593874:~/v8/v8/v8$ bazel build :noicu/d8\nINFO: Analyzed target //:noicu/d8 (0 packages loaded, 0 targets configured).\nERROR: /home/paolosev/v8/v8/v8/BUILD.bazel:4172:11: Compiling src/builtins/accessors.cc failed: (Exit 1): gcc failed: error executing CppCompile command (from target //:v8_libshared_noicu) /usr/bin/gcc -U_FORTIFY_SOURCE -fstack-protector -Wall -Wunused-but-set-parameter -Wno-free-nonheap-object -fno-omit-frame-pointer \u0027-std\u003dc++14\u0027 -MD -MF ... (remaining 84 arguments skipped)\n\nUse --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging\nIn file included from /usr/include/unistd.h:226,\n                 from external/com_google_absl/absl/base/internal/thread_identity.h:27,\n                 from external/com_google_absl/absl/synchronization/mutex.h:71,\n                 from external/com_google_absl/absl/strings/internal/cordz_info.h:31,\n                 from external/com_google_absl/absl/strings/cord.h:92,\n                 from external/com_google_absl/absl/container/internal/hash_function_defaults.h:58,\n                 from external/com_google_absl/absl/container/hash_container_defaults.h:19,\n                 from external/com_google_absl/absl/container/flat_hash_map.h:40,\n                 from ./src/zone/zone-containers.h:20,\n                 from ./src/objects/source-text-module.h:11,\n                 from ./src/api/api.h:27,\n                 from ./src/api/api-inl.h:9,\n                 from src/builtins/accessors.cc:7:\nsrc/builtins/accessors.cc: In static member function \u0027static bool v8::internal::Accessors::IsJSObjectFieldAccessor(v8::internal::Isolate*, v8::internal::Handle\u003cv8::internal::Map\u003e, v8::internal::Handle\u003cv8::internal::Name\u003e, v8::internal::FieldIndex*)\u0027:\nsrc/builtins/accessors.cc:77:38: error: \u0027offsetof\u0027 within non-standard-layout type \u0027v8::internal::String\u0027 is conditionally-supported [-Werror\u003dinvalid-offsetof]\n   77 |                             offsetof(String, length_), FieldIndex::kWord32,\n      |                                      ^\nAt global scope:\ncc1plus: note: unrecognized command-line option \u0027-Wno-implicit-int-float-conversion\u0027 may have been intended to silence earlier diagnostics\ncc1plus: note: unrecognized command-line option \u0027-Wno-builtin-assume-aligned-alignment\u0027 may have been intended to silence earlier diagnostics\ncc1plus: note: unrecognized command-line option \u0027-Wno-bitwise-instead-of-logical\u0027 may have been intended to silence earlier diagnostics\ncc1plus: note: unrecognized command-line option \u0027-Wno-cast-function-type-mismatch\u0027 may have been intended to silence earlier diagnostics\ncc1plus: note: unrecognized command-line option \u0027-Wno-unknown-warning-option\u0027 may have been intended to silence earlier diagnostics\ncc1plus: note: unrecognized command-line option \u0027-Wno-unneeded-internal-declaration\u0027 may have been intended to silence earlier diagnostics\ncc1plus: all warnings being treated as errors\nTarget //:noicu/d8 failed to build\n```",
+      "parentUuid": "f8530915_1afd93a2",
+      "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
