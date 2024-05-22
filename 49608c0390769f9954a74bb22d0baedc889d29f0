@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b69ab8_8aab2a48",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-05-22T16:06:26Z",
+      "side": 1,
+      "message": "😋",
+      "parentUuid": "a357184f_60452066",
+      "range": {
+        "startLine": 2417,
+        "startChar": 34,
+        "endLine": 2417,
+        "endChar": 44
+      },
+      "revId": "49608c0390769f9954a74bb22d0baedc889d29f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61281105_c4c39f4a",
