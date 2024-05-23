@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e674b6d_7b763cc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-23T10:25:46Z",
+      "side": 1,
+      "message": "LGTM with a suggestion",
+      "revId": "1fae7edc939e7de2a684df148c42f54eec9de008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6890f415_64f21159",
+        "filename": "src/fuzzilli/fuzzilli.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-23T10:25:46Z",
+      "side": 1,
+      "message": "Nit: maybe add a short comment that we expect `DEBUG` to be defined due to dchecks-always_on, and that it\u0027s useful as some integrity checking logic is behind `DEBUG`",
+      "revId": "1fae7edc939e7de2a684df148c42f54eec9de008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
