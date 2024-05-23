@@ -109,6 +109,12 @@ void FuzzilliExtension::Fuzzilli(const FunctionCallbackInfo<Value>& info) {
         }
         break;
       }
+      case 8: {
+#ifdef DEBUG
+        IMMEDIATE_CRASH();
+#endif
+        break;
+      }
       default:
         break;
     }
