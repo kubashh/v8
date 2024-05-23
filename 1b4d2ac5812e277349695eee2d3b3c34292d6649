@@ -70,6 +70,24 @@
       "parentUuid": "f8530915_1afd93a2",
       "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd6b6014_7a1560b2",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-23T09:42:22Z",
+      "side": 0,
+      "message": "Unfortunately, I am not familiar with the Bazel build myself, so I can only suspect from the error message that it tries to build with `gcc` instead of `clang`; maybe try setting `CC\u003dclang`? Alternatively, ahaas@ knows more about this.",
+      "parentUuid": "132764e6_a88d4482",
+      "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
