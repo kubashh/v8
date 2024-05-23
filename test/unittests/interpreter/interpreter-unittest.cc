@@ -1493,6 +1493,10 @@ TEST_F(InterpreterTest, InterpreterConditionalJumps) {
   FeedbackSlot slot2 = feedback_spec.AddBinaryOpICSlot();
   FeedbackSlot slot3 = feedback_spec.AddBinaryOpICSlot();
   FeedbackSlot slot4 = feedback_spec.AddBinaryOpICSlot();
+  FeedbackSlot branch_slot1 = feedback_spec.AddBranchSlot();
+  FeedbackSlot branch_slot2 = feedback_spec.AddBranchSlot();
+  FeedbackSlot branch_slot3 = feedback_spec.AddBranchSlot();
+  FeedbackSlot branch_slot4 = feedback_spec.AddBranchSlot();
 
   Handle<i::FeedbackMetadata> metadata =
       FeedbackMetadata::New(i_isolate(), &feedback_spec);
@@ -1504,19 +1508,19 @@ TEST_F(InterpreterTest, InterpreterConditionalJumps) {
   builder.LoadLiteral(Smi::zero())
       .StoreAccumulatorInRegister(reg)
       .LoadFalse()
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &label[0]);
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &label[0], branch_slot1);
   IncrementRegister(&builder, reg, 1024, scratch, GetIndex(slot))
       .Bind(&label[0])
       .LoadTrue()
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done);
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done, branch_slot2);
   IncrementRegister(&builder, reg, 1, scratch, GetIndex(slot1))
       .LoadTrue()
-      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &label[1]);
+      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &label[1], branch_slot3);
   IncrementRegister(&builder, reg, 2048, scratch, GetIndex(slot2))
       .Bind(&label[1]);
   IncrementRegister(&builder, reg, 2, scratch, GetIndex(slot3))
       .LoadFalse()
-      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &done1);
+      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &done1, branch_slot4);
   IncrementRegister(&builder, reg, 4, scratch, GetIndex(slot4))
       .LoadAccumulatorWithRegister(reg)
       .Bind(&done)
@@ -1539,6 +1543,10 @@ TEST_F(InterpreterTest, InterpreterConditionalJumps2) {
   FeedbackSlot slot2 = feedback_spec.AddBinaryOpICSlot();
   FeedbackSlot slot3 = feedback_spec.AddBinaryOpICSlot();
   FeedbackSlot slot4 = feedback_spec.AddBinaryOpICSlot();
+  FeedbackSlot branch_slot1 = feedback_spec.AddBranchSlot();
+  FeedbackSlot branch_slot2 = feedback_spec.AddBranchSlot();
+  FeedbackSlot branch_slot3 = feedback_spec.AddBranchSlot();
+  FeedbackSlot branch_slot4 = feedback_spec.AddBranchSlot();
 
   Handle<i::FeedbackMetadata> metadata =
       FeedbackMetadata::New(i_isolate(), &feedback_spec);
@@ -1550,19 +1558,19 @@ TEST_F(InterpreterTest, InterpreterConditionalJumps2) {
   builder.LoadLiteral(Smi::zero())
       .StoreAccumulatorInRegister(reg)
       .LoadFalse()
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &label[0]);
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &label[0], branch_slot1);
   IncrementRegister(&builder, reg, 1024, scratch, GetIndex(slot))
       .Bind(&label[0])
       .LoadTrue()
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done);
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done, branch_slot2);
   IncrementRegister(&builder, reg, 1, scratch, GetIndex(slot1))
       .LoadTrue()
-      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &label[1]);
+      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &label[1], branch_slot3);
   IncrementRegister(&builder, reg, 2048, scratch, GetIndex(slot2))
       .Bind(&label[1]);
   IncrementRegister(&builder, reg, 2, scratch, GetIndex(slot3))
       .LoadFalse()
-      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &done1);
+      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &done1, branch_slot4);
   IncrementRegister(&builder, reg, 4, scratch, GetIndex(slot4))
       .LoadAccumulatorWithRegister(reg)
       .Bind(&done)
@@ -1590,7 +1598,8 @@ TEST_F(InterpreterTest, InterpreterJumpConstantWith16BitOperand) {
   builder.LoadLiteral(Smi::zero());
   builder.StoreAccumulatorInRegister(reg);
   // Conditional jump to the fake label, to force both basic blocks to be live.
-  builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &fake);
+  builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &fake,
+                     feedback_spec.AddBranchSlot());
   // Consume all 8-bit operands
   for (int i = 1; i <= 256; i++) {
     builder.LoadLiteral(i + 0.5);

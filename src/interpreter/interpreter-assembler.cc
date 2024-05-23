@@ -1146,7 +1146,6 @@ void InterpreterAssembler::JumpConditional(TNode<BoolT> condition,
 void InterpreterAssembler::JumpConditionalByImmediateOperand(
     TNode<BoolT> condition, int operand_index) {
   Label match(this), no_match(this);
-
   Branch(condition, &match, &no_match);
   BIND(&match);
   TNode<IntPtrT> jump_offset = Signed(BytecodeOperandUImmWord(operand_index));
@@ -1158,7 +1157,6 @@ void InterpreterAssembler::JumpConditionalByImmediateOperand(
 void InterpreterAssembler::JumpConditionalByConstantOperand(
     TNode<BoolT> condition, int operand_index) {
   Label match(this), no_match(this);
-
   Branch(condition, &match, &no_match);
   BIND(&match);
   TNode<IntPtrT> jump_offset =

@@ -1998,44 +1998,50 @@ IGNITION_HANDLER(JumpConstant, InterpreterAssembler) {
   Jump(relative_jump);
 }
 
-// JumpIfTrue <imm>
+// JumpIfTrue <imm> <branch_slot>
 //
 // Jump by the number of bytes represented by an immediate operand if the
 // accumulator contains true. This only works for boolean inputs, and
-// will misbehave if passed arbitrary input values.
+// will misbehave if passed arbitrary input values. Feedback about which way the
+// branch went is collected in baseline (not in interpreter) in <branch_slot>.
 IGNITION_HANDLER(JumpIfTrue, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, TrueConstant(), 0);
 }
 
-// JumpIfTrueConstant <idx>
+// JumpIfTrueConstant <idx> <branch_slot>
 //
 // Jump by the number of bytes in the Smi in the |idx| entry in the constant
 // pool if the accumulator contains true. This only works for boolean inputs,
-// and will misbehave if passed arbitrary input values.
+// and will misbehave if passed arbitrary input values. Feedback about which way
+// the branch went is collected in baseline (not in interpreter) in
+// <branch_slot>.
 IGNITION_HANDLER(JumpIfTrueConstant, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqualConstant(accumulator, TrueConstant(), 0);
 }
 
-// JumpIfFalse <imm>
+// JumpIfFalse <imm> <branch_slot>
 //
 // Jump by the number of bytes represented by an immediate operand if the
 // accumulator contains false. This only works for boolean inputs, and
-// will misbehave if passed arbitrary input values.
+// will misbehave if passed arbitrary input values. Feedback about which way the
+// branch went is collected in baseline (not in interpreter) in <branch_slot>.
 IGNITION_HANDLER(JumpIfFalse, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, FalseConstant(), 0);
 }
 
-// JumpIfFalseConstant <idx>
+// JumpIfFalseConstant <idx> <branch_slot>
 //
 // Jump by the number of bytes in the Smi in the |idx| entry in the constant
 // pool if the accumulator contains false. This only works for boolean inputs,
-// and will misbehave if passed arbitrary input values.
+// and will misbehave if passed arbitrary input values. Feedback about which way
+// the branch went is collected in baseline (not in interpreter) in
+// <branch_slot>.
 IGNITION_HANDLER(JumpIfFalseConstant, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));

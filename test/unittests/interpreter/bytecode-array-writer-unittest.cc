@@ -50,6 +50,8 @@ class BytecodeArrayWriterUnittest : public TestWithIsolateAndZone {
   void WriteJump(Bytecode bytecode, BytecodeLabel* label,
                  BytecodeSourceInfo info = BytecodeSourceInfo());
   void WriteJump(Bytecode bytecode, BytecodeLabel* label, uint32_t operand1,
+                 BytecodeSourceInfo info = BytecodeSourceInfo());
+  void WriteJump(Bytecode bytecode, BytecodeLabel* label, uint32_t operand1,
                  uint32_t operand2,
                  BytecodeSourceInfo info = BytecodeSourceInfo());
   void WriteJumpLoop(Bytecode bytecode, BytecodeLoopHeader* loop_header,
@@ -105,6 +107,14 @@ void BytecodeArrayWriterUnittest::WriteJump(Bytecode bytecode,
                                             BytecodeLabel* label,
                                             BytecodeSourceInfo info) {
   BytecodeNode node(bytecode, 0, info);
+  writer()->WriteJump(&node, label);
+}
+
+void BytecodeArrayWriterUnittest::WriteJump(Bytecode bytecode,
+                                            BytecodeLabel* label,
+                                            uint32_t operand1,
+                                            BytecodeSourceInfo info) {
+  BytecodeNode node(bytecode, 0, operand1, info);
   writer()->WriteJump(&node, label);
 }
 
@@ -308,18 +318,18 @@ TEST_F(BytecodeArrayWriterUnittest, DeadcodeElimination) {
       /*  0  55 S> */ B(LdaSmi), U8(127),
       /*  2        */ B(Jump), U8(2),
       /*  4  65 S> */ B(LdaSmi), U8(127),
-      /*  6        */ B(JumpIfFalse), U8(3),
-      /*  8  75 S> */ B(Return),
-      /*  9       */ B(JumpIfFalse), U8(3),
-      /*  11       */ B(Throw),
-      /*  12       */ B(JumpIfFalse), U8(3),
-      /*  14       */ B(ReThrow),
-      /*  15       */ B(Return),
+      /*  6        */ B(JumpIfFalse), U8(4), U8(0),
+      /*  9  75 S> */ B(Return),
+      /*  10       */ B(JumpIfFalse), U8(4), U8(0),
+      /*  13       */ B(Throw),
+      /*  14       */ B(JumpIfFalse), U8(4), U8(0),
+      /*  16       */ B(ReThrow),
+      /*  17       */ B(Return),
       // clang-format on
   };
 
   static const PositionTableEntry expected_positions[] = {
-      {0, 55, true}, {4, 65, true}, {8, 75, true}};
+      {0, 55, true}, {4, 65, true}, {9, 75, true}};
 
   BytecodeLabel after_jump, after_conditional_jump, after_return, after_throw,
       after_rethrow;
@@ -327,21 +337,21 @@ TEST_F(BytecodeArrayWriterUnittest, DeadcodeElimination) {
   Write(Bytecode::kLdaSmi, 127, {55, true});
   WriteJump(Bytecode::kJump, &after_jump);
   Write(Bytecode::kLdaSmi, 127);                               // Dead code.
-  WriteJump(Bytecode::kJumpIfFalse, &after_conditional_jump);  // Dead code.
+  WriteJump(Bytecode::kJumpIfFalse, &after_conditional_jump, 0);  // Dead code.
   writer()->BindLabel(&after_jump);
   // We would bind the after_conditional_jump label here, but the jump to it is
   // dead.
   CHECK(!after_conditional_jump.has_referrer_jump());
   Write(Bytecode::kLdaSmi, 127, {65, true});
-  WriteJump(Bytecode::kJumpIfFalse, &after_return);
+  WriteJump(Bytecode::kJumpIfFalse, &after_return, 0);
   Write(Bytecode::kReturn, {75, true});
   Write(Bytecode::kLdaSmi, 127, {100, true});  // Dead code.
   writer()->BindLabel(&after_return);
-  WriteJump(Bytecode::kJumpIfFalse, &after_throw);
+  WriteJump(Bytecode::kJumpIfFalse, &after_throw, 0);
   Write(Bytecode::kThrow);
   Write(Bytecode::kLdaSmi, 127);  // Dead code.
   writer()->BindLabel(&after_throw);
-  WriteJump(Bytecode::kJumpIfFalse, &after_rethrow);
+  WriteJump(Bytecode::kJumpIfFalse, &after_rethrow, 0);
   Write(Bytecode::kReThrow);
   Write(Bytecode::kLdaSmi, 127);  // Dead code.
   writer()->BindLabel(&after_rethrow);

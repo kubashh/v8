@@ -161,7 +161,7 @@ bytecodes: [
                 B(Ldar), R(2),
                 B(Inc), U8(12),
                 B(Star2),
-                B(JumpLoop), U8(31), I8(0), U8(19),
+                B(JumpLoop), U8(31), I8(0), U8(21),
                 B(Ldar), R(1),
   /*   71 S> */ B(Return),
 ]
