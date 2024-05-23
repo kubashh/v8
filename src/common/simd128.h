@@ -56,6 +56,17 @@ class alignas(double) Simd128 {
   template <typename T>
   inline T to() const;
 
+#ifdef V8_ENABLE_DRUMBRAKE
+  struct hash {
+    size_t operator()(const Simd128& s128) const { return s128.hash_value(); }
+  };
+  size_t hash_value() const {
+    static_assert(sizeof(size_t) == sizeof(uint64_t));
+    const int2 s = to_i64x2();
+    return s.val[0] ^ s.val[1];
+  }
+#endif  // V8_ENABLE_DRUMBRAKE
+
  private:
   uint8_t val_[16] = {0};
 };
