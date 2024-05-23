@@ -243,6 +243,8 @@ void MicrotaskQueue::IterateMicrotasks(RootVisitor* visitor) {
 
 void MicrotaskQueue::AddMicrotasksCompletedCallback(
     MicrotasksCompletedCallbackWithData callback, void* data) {
+  CHECK(!callbacks_being_run_);
+
   CallbackWithData callback_with_data(callback, data);
   auto pos =
       std::find(microtasks_completed_callbacks_.begin(),
@@ -253,6 +255,8 @@ void MicrotaskQueue::AddMicrotasksCompletedCallback(
 
 void MicrotaskQueue::RemoveMicrotasksCompletedCallback(
     MicrotasksCompletedCallbackWithData callback, void* data) {
+  CHECK(!callbacks_being_run_);
+
   CallbackWithData callback_with_data(callback, data);
   auto pos =
       std::find(microtasks_completed_callbacks_.begin(),
@@ -261,11 +265,12 @@ void MicrotaskQueue::RemoveMicrotasksCompletedCallback(
   microtasks_completed_callbacks_.erase(pos);
 }
 
-void MicrotaskQueue::OnCompleted(Isolate* isolate) const {
-  std::vector<CallbackWithData> callbacks(microtasks_completed_callbacks_);
-  for (auto& callback : callbacks) {
+void MicrotaskQueue::OnCompleted(Isolate* isolate) {
+  callbacks_being_run_ = true;
+  for (auto& callback : microtasks_completed_callbacks_) {
     callback.first(reinterpret_cast<v8::Isolate*>(isolate), callback.second);
   }
+  callbacks_being_run_ = false;
 }
 
 Tagged<Microtask> MicrotaskQueue::get(intptr_t index) const {
