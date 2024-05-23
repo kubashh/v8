@@ -18,12 +18,12 @@ snippet: "
 "
 frame size: 4
 parameter count: 1
-bytecode array length: 32
+bytecode array length: 33
 bytecodes: [
   /*   56 S> */ B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(1),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star2),
                 B(LdaConstant), U8(0),
@@ -32,7 +32,7 @@ bytecodes: [
                 B(Throw),
                 B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star0),
-  /*   70 E> */ B(CallAnyReceiver), R(0), R(1), U8(1), U8(0),
+  /*   70 E> */ B(CallAnyReceiver), R(0), R(1), U8(1), U8(2),
   /*   73 S> */ B(Return),
 ]
 constant pool: [
@@ -53,14 +53,14 @@ snippet: "
 "
 frame size: 4
 parameter count: 1
-bytecode array length: 40
+bytecode array length: 41
 bytecodes: [
   /*   56 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star1),
                 B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star2),
                 B(LdaConstant), U8(0),
@@ -93,12 +93,12 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 37
+bytecode array length: 38
 bytecodes: [
   /*   56 S> */ B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star1),
                 B(LdaConstant), U8(0),
@@ -137,14 +137,14 @@ snippet: "
 "
 frame size: 5
 parameter count: 1
-bytecode array length: 127
+bytecode array length: 130
 bytecodes: [
   /*   90 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star1),
                 B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star2),
                 B(LdaConstant), U8(0),
@@ -153,12 +153,12 @@ bytecodes: [
                 B(Throw),
                 B(CallRuntime), U16(Runtime::kLoadPrivateGetter), R(1), U8(1),
                 B(Star2),
-                B(CallProperty0), R(2), R(0), U8(0),
-                B(Inc), U8(2),
+                B(CallProperty0), R(2), R(0), U8(2),
+                B(Inc), U8(4),
                 B(Star2),
   /*   97 E> */ B(CallRuntime), U16(Runtime::kLoadPrivateSetter), R(1), U8(1),
                 B(Star3),
-                B(CallProperty1), R(3), R(0), R(2), U8(3),
+                B(CallProperty1), R(3), R(0), R(2), U8(5),
   /*  105 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star1),
                 B(LdaSmi), I8(1),
@@ -166,7 +166,7 @@ bytecodes: [
                 B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(7),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star3),
                 B(LdaConstant), U8(0),
@@ -175,13 +175,13 @@ bytecodes: [
                 B(Throw),
                 B(CallRuntime), U16(Runtime::kLoadPrivateSetter), R(1), U8(1),
                 B(Star3),
-                B(CallProperty1), R(3), R(0), R(2), U8(5),
+                B(CallProperty1), R(3), R(0), R(2), U8(9),
   /*  122 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star1),
                 B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(11),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star2),
                 B(LdaConstant), U8(0),
@@ -190,7 +190,7 @@ bytecodes: [
                 B(Throw),
                 B(CallRuntime), U16(Runtime::kLoadPrivateGetter), R(1), U8(1),
                 B(Star2),
-                B(CallProperty0), R(2), R(0), U8(7),
+                B(CallProperty0), R(2), R(0), U8(13),
   /*  137 S> */ B(Return),
 ]
 constant pool: [
@@ -210,12 +210,12 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 37
+bytecode array length: 38
 bytecodes: [
   /*   60 S> */ B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star1),
                 B(LdaConstant), U8(0),
@@ -247,12 +247,12 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 37
+bytecode array length: 38
 bytecodes: [
   /*   53 S> */ B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star1),
                 B(LdaConstant), U8(0),
@@ -284,14 +284,14 @@ snippet: "
 "
 frame size: 4
 parameter count: 1
-bytecode array length: 40
+bytecode array length: 41
 bytecodes: [
   /*   60 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star1),
                 B(LdaCurrentContextSlot), U8(3),
                 B(TestReferenceEqual), R(this),
                 B(Mov), R(this), R(0),
-                B(JumpIfTrue), U8(16),
+                B(JumpIfTrue), U8(17), U8(0),
                 B(Wide), B(LdaSmi), I16(314),
                 B(Star2),
                 B(LdaConstant), U8(0),

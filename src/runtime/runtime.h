@@ -526,6 +526,7 @@ namespace internal {
   F(EnsureFeedbackVectorForFunction, 1, 1)    \
   F(FinalizeOptimization, 0, 1)               \
   F(ForceFlush, 1, 1)                         \
+  F(GetBranchCounts, 1, 1)                    \
   F(GetCallable, 1, 1)                        \
   F(GetFunctionForCurrentFrame, 0, 1)         \
   F(GetInitializerFunction, 1, 1)             \

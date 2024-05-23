@@ -2520,6 +2520,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void IncrementCallCount(TNode<FeedbackVector> feedback_vector,
                           TNode<UintPtrT> slot_id);
 
+  void IncrementBranchCount(TNode<FeedbackVector> feedback_vector,
+                            TNode<UintPtrT> slot_id, bool branch_taken);
+
   // Specify DestroySource::kYes if {from_array} is being supplanted by
   // {to_array}. This offers a slight performance benefit by simply copying the
   // array word by word. The source may be destroyed at the end of this macro.
