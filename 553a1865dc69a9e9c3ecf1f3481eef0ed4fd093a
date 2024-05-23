@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ec7d7db_fb1143a4",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3969,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-05-23T18:13:23Z",
+      "side": 1,
+      "message": "Hi Francis,\n\nOut of curiosity, is this meant to be `b(eq, ...` by any chance? comparing it with arm64 and x64 were they branch to no_stack_change if the value is zero.",
+      "revId": "553a1865dc69a9e9c3ecf1f3481eef0ed4fd093a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
