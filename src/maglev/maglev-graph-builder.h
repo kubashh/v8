@@ -1984,6 +1984,8 @@ class MaglevGraphBuilder {
   ValueNode* BuildLogicalNot(ValueNode* value);
   ValueNode* BuildTestUndetectable(ValueNode* value);
   void BuildToNumberOrToNumeric(Object::Conversion mode);
+  void BuildCheckCondition(ValueNode* node, bool check_true,
+                           DeoptimizeReason reason);
 
   bool CanElideWriteBarrier(ValueNode* object, ValueNode* value);
   void BuildInitializeStoreTaggedField(InlinedAllocation* alloc,
@@ -2382,8 +2384,9 @@ class MaglevGraphBuilder {
     return BranchBuilder(this, subgraph, jump_type, jump_label);
   }
 
-  BranchResult BuildBranchIfRootConstant(BranchBuilder& builder,
-                                         ValueNode* node, RootIndex root_index);
+  BranchResult BuildBranchIfRootConstant(
+      BranchBuilder& builder, ValueNode* node, RootIndex root_index,
+      FeedbackSlot branch_slot = FeedbackSlot::Invalid());
   BranchResult BuildBranchIfToBooleanTrue(BranchBuilder& builder,
                                           ValueNode* node);
   BranchResult BuildBranchIfInt32ToBooleanTrue(BranchBuilder& builder,
@@ -2405,7 +2408,9 @@ class MaglevGraphBuilder {
   BranchResult BuildBranchIfJSReceiver(BranchBuilder& builder,
                                        ValueNode* value);
 
-  BranchResult BuildBranchIfTrue(BranchBuilder& builder, ValueNode* node);
+  BranchResult BuildBranchIfTrue(
+      BranchBuilder& builder, ValueNode* node,
+      FeedbackSlot branch_slot = FeedbackSlot::Invalid());
   BranchResult BuildBranchIfNull(BranchBuilder& builder, ValueNode* node);
   BranchResult BuildBranchIfUndefined(BranchBuilder& builder, ValueNode* node);
   BasicBlock* BuildBranchIfReferenceEqual(ValueNode* lhs, ValueNode* rhs,

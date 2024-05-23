@@ -1144,9 +1144,26 @@ void InterpreterAssembler::JumpConditional(TNode<BoolT> condition,
 }
 
 void InterpreterAssembler::JumpConditionalByImmediateOperand(
-    TNode<BoolT> condition, int operand_index) {
-  Label match(this), no_match(this);
+    TNode<BoolT> condition, int operand_index, TNode<UintPtrT>* branch_slot) {
+  if (branch_slot) {
+    Label match(this), no_match(this), no_feedback(this);
+    TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
+    GotoIfNot(IsFeedbackVector(maybe_feedback_vector), &no_feedback);
 
+    Branch(condition, &match, &no_match);
+    BIND(&match);
+    IncrementBranchCount(CAST(maybe_feedback_vector), *branch_slot, true);
+
+    TNode<IntPtrT> jump_offset = Signed(BytecodeOperandUImmWord(operand_index));
+    Jump(jump_offset);
+
+    BIND(&no_match);
+    IncrementBranchCount(CAST(maybe_feedback_vector), *branch_slot, false);
+    Dispatch();
+
+    BIND(&no_feedback);
+  }
+  Label match(this), no_match(this);
   Branch(condition, &match, &no_match);
   BIND(&match);
   TNode<IntPtrT> jump_offset = Signed(BytecodeOperandUImmWord(operand_index));
@@ -1156,9 +1173,27 @@ void InterpreterAssembler::JumpConditionalByImmediateOperand(
 }
 
 void InterpreterAssembler::JumpConditionalByConstantOperand(
-    TNode<BoolT> condition, int operand_index) {
-  Label match(this), no_match(this);
+    TNode<BoolT> condition, int operand_index, TNode<UintPtrT>* branch_slot) {
+  if (branch_slot) {
+    Label match(this), no_match(this), no_feedback(this);
+    TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
+    GotoIfNot(IsFeedbackVector(maybe_feedback_vector), &no_feedback);
 
+    Branch(condition, &match, &no_match);
+    BIND(&match);
+    IncrementBranchCount(CAST(maybe_feedback_vector), *branch_slot, true);
+
+    TNode<IntPtrT> jump_offset =
+        LoadAndUntagConstantPoolEntryAtOperandIndex(operand_index);
+    Jump(jump_offset);
+
+    BIND(&no_match);
+    IncrementBranchCount(CAST(maybe_feedback_vector), *branch_slot, false);
+    Dispatch();
+
+    BIND(&no_feedback);
+  }
+  Label match(this), no_match(this);
   Branch(condition, &match, &no_match);
   BIND(&match);
   TNode<IntPtrT> jump_offset =
@@ -1176,14 +1211,17 @@ void InterpreterAssembler::JumpIfTaggedEqual(TNode<Object> lhs,
 
 void InterpreterAssembler::JumpIfTaggedEqual(TNode<Object> lhs,
                                              TNode<Object> rhs,
-                                             int operand_index) {
-  JumpConditionalByImmediateOperand(TaggedEqual(lhs, rhs), operand_index);
+                                             int operand_index,
+                                             TNode<UintPtrT>* branch_slot) {
+  JumpConditionalByImmediateOperand(TaggedEqual(lhs, rhs), operand_index,
+                                    branch_slot);
 }
 
-void InterpreterAssembler::JumpIfTaggedEqualConstant(TNode<Object> lhs,
-                                                     TNode<Object> rhs,
-                                                     int operand_index) {
-  JumpConditionalByConstantOperand(TaggedEqual(lhs, rhs), operand_index);
+void InterpreterAssembler::JumpIfTaggedEqualConstant(
+    TNode<Object> lhs, TNode<Object> rhs, int operand_index,
+    TNode<UintPtrT>* branch_slot) {
+  JumpConditionalByConstantOperand(TaggedEqual(lhs, rhs), operand_index,
+                                   branch_slot);
 }
 
 void InterpreterAssembler::JumpIfTaggedNotEqual(TNode<Object> lhs,

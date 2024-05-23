@@ -24,6 +24,7 @@ class MegaDOMPropertyAccessFeedback;
 class NamedAccessFeedback;
 class RegExpLiteralFeedback;
 class TemplateObjectFeedback;
+class BranchFeedback;
 
 class ProcessedFeedback : public ZoneObject {
  public:
@@ -42,6 +43,7 @@ class ProcessedFeedback : public ZoneObject {
     kNamedAccess,
     kRegExpLiteral,
     kTemplateObject,
+    kBranch,
   };
   Kind kind() const { return kind_; }
 
@@ -61,6 +63,7 @@ class ProcessedFeedback : public ZoneObject {
   LiteralFeedback const& AsLiteral() const;
   RegExpLiteralFeedback const& AsRegExpLiteral() const;
   TemplateObjectFeedback const& AsTemplateObject() const;
+  BranchFeedback const& AsBranch() const;
 
  protected:
   ProcessedFeedback(Kind kind, FeedbackSlotKind slot_kind);
@@ -220,7 +223,8 @@ class SingleValueFeedback : public ProcessedFeedback {
         (K == kForIn && slot_kind == FeedbackSlotKind::kForIn) ||
         (K == kInstanceOf && slot_kind == FeedbackSlotKind::kInstanceOf) ||
         ((K == kLiteral || K == kRegExpLiteral || K == kTemplateObject) &&
-         slot_kind == FeedbackSlotKind::kLiteral));
+         slot_kind == FeedbackSlotKind::kLiteral) ||
+        (K == kBranch && slot_kind == FeedbackSlotKind::kBranch));
   }
 
   T value() const { return value_; }
@@ -273,6 +277,11 @@ class CompareOperationFeedback
 
 class ForInFeedback
     : public SingleValueFeedback<ForInHint, ProcessedFeedback::kForIn> {
+  using SingleValueFeedback::SingleValueFeedback;
+};
+
+class BranchFeedback
+    : public SingleValueFeedback<BranchHint, ProcessedFeedback::kBranch> {
   using SingleValueFeedback::SingleValueFeedback;
 };
 

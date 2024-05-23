@@ -2116,6 +2116,8 @@ void BaselineCompiler::VisitJumpIfToBooleanFalse() {
   __ Bind(&dont_jump);
 }
 
+// TODO(340100647): We could continue collecting branch feedback in baseline,
+// too.
 void BaselineCompiler::VisitJumpIfTrue() { JumpIfRoot(RootIndex::kTrueValue); }
 
 void BaselineCompiler::VisitJumpIfFalse() {

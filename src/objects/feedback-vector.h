@@ -74,8 +74,10 @@ enum class FeedbackSlotKind : uint8_t {
   kTypeOf,
   kCloneObject,
   kJumpLoop,
+  kBranch,
 
-  kLast = kJumpLoop  // Always update this if the list above changes.
+  kLast =
+      /*kJumpLoop*/ kBranch  // Always update this if the list above changes.
 };
 
 static constexpr int kFeedbackSlotKindCount =
@@ -482,6 +484,14 @@ class V8_EXPORT_PRIVATE FeedbackVectorSpec {
     return AddSlot(FeedbackSlotKind::kHasKeyed);
   }
 
+  FeedbackSlot AddBranchSlot() {
+    // FIXME: put this behind V8_JITLESS?
+    // if (v8_flags.maglev_branch_feedback) {
+    return AddSlot(FeedbackSlotKind::kBranch);
+    //}
+    // return FeedbackSlot::Invalid();
+  }
+
   FeedbackSlotKind GetStoreICSlot(LanguageMode language_mode) {
     static_assert(LanguageModeSize == 2);
     return is_strict(language_mode) ? FeedbackSlotKind::kSetNamedStrict
@@ -871,6 +881,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   CompareOperationHint GetCompareOperationFeedback() const;
   TypeOfFeedback::Result GetTypeOfFeedback() const;
   ForInHint GetForInFeedback() const;
+  BranchHint GetBranchFeedback() const;
 
   // For KeyedLoad ICs.
   KeyedAccessLoadMode GetKeyedAccessLoadMode() const;

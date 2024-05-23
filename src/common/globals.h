@@ -1650,7 +1650,13 @@ constexpr int kIeeeDoubleExponentWordOffset = 0;
   (((value) + ::i::kDoubleAlignmentMask) & ~::i::kDoubleAlignmentMask)
 
 // Prediction hint for branches.
-enum class BranchHint : uint8_t { kNone, kTrue, kFalse };
+enum class BranchHint : uint8_t {
+  kNone,
+  kTrue,
+  kFalse,
+  kMostlyTrue,
+  kMostlyFalse
+};
 
 // Defines hints about receiver values based on structural knowledge.
 enum class ConvertReceiverMode : unsigned {

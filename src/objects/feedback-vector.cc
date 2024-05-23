@@ -182,6 +182,8 @@ const char* FeedbackMetadata::Kind2String(FeedbackSlotKind kind) {
       return "CloneObject";
     case FeedbackSlotKind::kJumpLoop:
       return "JumpLoop";
+    case FeedbackSlotKind::kBranch:
+      return "Branch";
   }
 }
 
@@ -273,7 +275,9 @@ Handle<FeedbackVector> FeedbackVector::New(
         vector->Set(slot, Smi::zero(), SKIP_WRITE_BARRIER);
         break;
       case FeedbackSlotKind::kLiteral:
+      case FeedbackSlotKind::kBranch:
         vector->Set(slot, Smi::zero(), SKIP_WRITE_BARRIER);
+        extra_value = Smi::zero();
         break;
       case FeedbackSlotKind::kCall:
         vector->Set(slot, *uninitialized_sentinel, SKIP_WRITE_BARRIER);
@@ -638,6 +642,7 @@ bool FeedbackNexus::Clear(ClearBehavior behavior) {
       break;
 
     case FeedbackSlotKind::kLiteral:
+    case FeedbackSlotKind::kBranch:
       if (!IsCleared()) {
         SetFeedback(Smi::zero(), SKIP_WRITE_BARRIER);
         feedback_updated = true;
@@ -890,6 +895,8 @@ InlineCacheState FeedbackNexus::ic_state() const {
       return InlineCacheState::POLYMORPHIC;
     }
 
+    case FeedbackSlotKind::kBranch:
+      return InlineCacheState::MONOMORPHIC;
     case FeedbackSlotKind::kInvalid:
       UNREACHABLE();
   }
@@ -1385,6 +1392,31 @@ ForInHint FeedbackNexus::GetForInFeedback() const {
   DCHECK_EQ(kind(), FeedbackSlotKind::kForIn);
   int feedback = GetFeedback().ToSmi().value();
   return ForInHintFromFeedback(static_cast<ForInFeedback>(feedback));
+}
+
+BranchHint FeedbackNexus::GetBranchFeedback() const {
+  DCHECK_EQ(kind(), FeedbackSlotKind::kBranch);
+  int branch_taken = GetFeedback().ToSmi().value();
+  int branch_not_taken = GetFeedbackExtra().ToSmi().value();
+  constexpr int kMinFeedbackItems = 20;
+  constexpr int kThresholdForMostlyTakenPercentage = 90;
+  if (branch_taken + branch_not_taken < kMinFeedbackItems) {
+    return BranchHint::kNone;
+  }
+  if (branch_taken == 0) {
+    return BranchHint::kFalse;
+  }
+  if (branch_not_taken == 0) {
+    return BranchHint::kTrue;
+  }
+  int percentage_taken = 100 * branch_taken / (branch_taken + branch_not_taken);
+  if (percentage_taken > kThresholdForMostlyTakenPercentage) {
+    return BranchHint::kMostlyTrue;
+  }
+  if (percentage_taken < 100 - kThresholdForMostlyTakenPercentage) {
+    return BranchHint::kMostlyFalse;
+  }
+  return BranchHint::kNone;
 }
 
 MaybeHandle<JSObject> FeedbackNexus::GetConstructorFeedback() const {
