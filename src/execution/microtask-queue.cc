@@ -248,7 +248,12 @@ void MicrotaskQueue::AddMicrotasksCompletedCallback(
       std::find(microtasks_completed_callbacks_.begin(),
                 microtasks_completed_callbacks_.end(), callback_with_data);
   if (pos != microtasks_completed_callbacks_.end()) return;
-  microtasks_completed_callbacks_.push_back(callback_with_data);
+
+  if (callbacks_being_run_) {
+    new_microtasks_completed_callbacks_.push_back(callback_with_data);
+  } else {
+    microtasks_completed_callbacks_.push_back(callback_with_data);
+  }
 }
 
 void MicrotaskQueue::RemoveMicrotasksCompletedCallback(
@@ -258,14 +263,58 @@ void MicrotaskQueue::RemoveMicrotasksCompletedCallback(
       std::find(microtasks_completed_callbacks_.begin(),
                 microtasks_completed_callbacks_.end(), callback_with_data);
   if (pos == microtasks_completed_callbacks_.end()) return;
-  microtasks_completed_callbacks_.erase(pos);
+
+  if (callbacks_being_run_) {
+    deleted_microtasks_completed_callbacks_.push_back(pos);
+  } else {
+    microtasks_completed_callbacks_.erase(pos);
+  }
 }
 
-void MicrotaskQueue::OnCompleted(Isolate* isolate) const {
-  std::vector<CallbackWithData> callbacks(microtasks_completed_callbacks_);
-  for (auto& callback : callbacks) {
+void MicrotaskQueue::OnCompleted(Isolate* isolate) {
+  CHECK(!callbacks_being_run_);
+  CHECK(new_microtasks_completed_callbacks_.empty());
+  CHECK(deleted_microtasks_completed_callbacks_.empty());
+
+  // Execute all available calbacks.
+  callbacks_being_run_ = true;
+  for (auto& callback : microtasks_completed_callbacks_) {
     callback.first(reinterpret_cast<v8::Isolate*>(isolate), callback.second);
   }
+  callbacks_being_run_ = false;
+
+  // Remove duplicates from new callbacks if any.
+  new_microtasks_completed_callbacks_.erase(
+      std::unique(new_microtasks_completed_callbacks_.begin(),
+                  new_microtasks_completed_callbacks_.end()),
+      new_microtasks_completed_callbacks_.end());
+
+  // Some callbacks were removed during the iteration, make the list reflect
+  // this fact.
+  if (!deleted_microtasks_completed_callbacks_.empty()) {
+    // All non-removed callbacks are moved to the new list in addition to newly
+    // inserted entries.
+    for (auto it = microtasks_completed_callbacks_.begin();
+         it < microtasks_completed_callbacks_.end(); ++it) {
+      if (std::find(deleted_microtasks_completed_callbacks_.begin(),
+                    deleted_microtasks_completed_callbacks_.end(),
+                    it) == deleted_microtasks_completed_callbacks_.end()) {
+        new_microtasks_completed_callbacks_.push_back(*it);
+      }
+    }
+
+    // New list contains all entries of interest. It can replace the old list.
+    microtasks_completed_callbacks_ = new_microtasks_completed_callbacks_;
+  } else if (!new_microtasks_completed_callbacks_.empty()) {
+    // No entries were deleted, only added. Simply augment the existing list.
+    microtasks_completed_callbacks_.insert(
+        microtasks_completed_callbacks_.end(),
+        new_microtasks_completed_callbacks_.begin(),
+        new_microtasks_completed_callbacks_.end());
+  }
+
+  deleted_microtasks_completed_callbacks_.clear();
+  new_microtasks_completed_callbacks_.clear();
 }
 
 Tagged<Microtask> MicrotaskQueue::get(intptr_t index) const {

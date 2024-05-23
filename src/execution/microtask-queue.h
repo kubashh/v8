@@ -118,7 +118,7 @@ class V8_EXPORT_PRIVATE MicrotaskQueue final : public v8::MicrotaskQueue {
  private:
   void PerformCheckpointInternal(v8::Isolate* v8_isolate);
 
-  void OnCompleted(Isolate* isolate) const;
+  void OnCompleted(Isolate* isolate);
 
   MicrotaskQueue();
   void ResizeBuffer(intptr_t new_capacity);
@@ -150,7 +150,14 @@ class V8_EXPORT_PRIVATE MicrotaskQueue final : public v8::MicrotaskQueue {
   bool is_running_microtasks_ = false;
   using CallbackWithData =
       std::pair<MicrotasksCompletedCallbackWithData, void*>;
-  std::vector<CallbackWithData> microtasks_completed_callbacks_;
+  using CallBacksVec = std::vector<CallbackWithData>;
+  CallBacksVec microtasks_completed_callbacks_;
+
+  // If callbacks are being iterated mutations to the vector have to be
+  // postponed.
+  bool callbacks_being_run_ = false;
+  std::vector<CallBacksVec::iterator> deleted_microtasks_completed_callbacks_;
+  std::vector<CallbackWithData> new_microtasks_completed_callbacks_;
 };
 
 }  // namespace internal
