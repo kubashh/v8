@@ -29,6 +29,7 @@
 #include "src/heap/pretenuring-handler-inl.h"
 #include "src/ic/stub-cache.h"
 #include "src/objects/bytecode-array.h"
+#include "src/objects/elements-kind.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/utils/utils.h"
 #ifdef V8_ENABLE_MAGLEV
@@ -2180,6 +2181,57 @@ RUNTIME_FUNCTION(Runtime_SetBatterySaverMode) {
     return ReadOnlyRoots(isolate).false_value();
   }
   return ReadOnlyRoots(isolate).true_value();
+}
+
+RUNTIME_FUNCTION(Runtime_GetBranchCounts) {
+  HandleScope scope(isolate);
+  if (args.length() != 1) {
+    return CrashUnlessFuzzing(isolate);
+  }
+  Handle<Object> function_object = args.at(0);
+  if (!IsJSFunction(*function_object)) return CrashUnlessFuzzing(isolate);
+  Handle<JSFunction> function = Handle<JSFunction>::cast(function_object);
+
+  if (!function->has_feedback_vector()) {
+    return CrashUnlessFuzzing(isolate);
+  }
+  Handle<FeedbackVector> feedback_vector =
+      handle(FeedbackVector::cast(function->feedback_vector()), isolate);
+
+  // Count how many result items we need.
+  int count = 0;
+  {
+    FeedbackMetadataIterator iter(feedback_vector->metadata());
+    while (iter.HasNext()) {
+      iter.Next();
+      FeedbackSlotKind kind = iter.kind();
+      if (kind == FeedbackSlotKind::kBranch) {
+        count += 2;
+      }
+    }
+  }
+
+  // Return the branch counts as a JSArray.
+  Handle<FixedArray> elements = isolate->factory()->NewFixedArray(count);
+  {
+    FeedbackMetadataIterator iter(feedback_vector->metadata());
+    int ix = 0;
+    while (iter.HasNext()) {
+      FeedbackSlot slot = iter.Next();
+      FeedbackSlotKind kind = iter.kind();
+      if (kind == FeedbackSlotKind::kBranch) {
+        FeedbackNexus nexus(*feedback_vector, slot);
+        auto feedback = nexus.GetFeedbackPair();
+        elements->set(ix++, feedback.first.GetHeapObjectOrSmi().ToSmi());
+        elements->set(ix++, feedback.second.GetHeapObjectOrSmi().ToSmi());
+      }
+    }
+  }
+
+  Handle<JSArray> result = isolate->factory()->NewJSArrayWithElements(
+      elements, PACKED_SMI_ELEMENTS, count);
+
+  return *result;
 }
 
 }  // namespace internal

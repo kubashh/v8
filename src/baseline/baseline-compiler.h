@@ -106,7 +106,9 @@ class BaselineCompiler {
   void UpdateInterruptBudgetAndJumpToLabel(
       int weight, Label* label, Label* skip_interrupt_label,
       StackCheckBehavior stack_check_behavior);
-  void JumpIfRoot(RootIndex root);
+  void IncrementBranchCount(FeedbackSlot branch_slot, bool branch_taken);
+  void JumpIfRoot(RootIndex root,
+                  FeedbackSlot branch_slot = FeedbackSlot::Invalid());
   void JumpIfNotRoot(RootIndex root);
 
   // Feedback vector.

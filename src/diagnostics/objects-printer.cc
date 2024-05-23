@@ -1578,6 +1578,9 @@ void FeedbackNexus::Print(std::ostream& os) {
     case FeedbackSlotKind::kJumpLoop:
       os << "JumpLoop";
       break;
+    case FeedbackSlotKind::kBranch:
+      os << "Branch";
+      break;
     case FeedbackSlotKind::kInvalid:
       UNREACHABLE();
   }

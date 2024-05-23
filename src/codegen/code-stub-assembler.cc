@@ -189,6 +189,19 @@ void CodeStubAssembler::IncrementCallCount(
                           SKIP_WRITE_BARRIER, kTaggedSize);
 }
 
+void CodeStubAssembler::IncrementBranchCount(
+    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id,
+    bool branch_taken) {
+  Comment("increment branch count");
+  int additional_offset = branch_taken ? 0 : kTaggedSize;
+  TNode<Smi> branch_count =
+      CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, additional_offset));
+  TNode<Smi> new_count = SmiAdd(branch_count, SmiConstant(1));
+  // Count is Smi, so we don't need a write barrier.
+  StoreFeedbackVectorSlot(feedback_vector, slot_id, new_count,
+                          SKIP_WRITE_BARRIER, additional_offset);
+}
+
 void CodeStubAssembler::FastCheck(TNode<BoolT> condition) {
   Label ok(this), not_ok(this, Label::kDeferred);
   Branch(condition, &ok, &not_ok);

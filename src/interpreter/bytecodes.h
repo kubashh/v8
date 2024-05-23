@@ -370,9 +370,9 @@ namespace interpreter {
   V(JumpIfUndefinedOrNullConstant, ImplicitRegisterUse::kReadAccumulator,      \
     OperandType::kIdx)                                                         \
   V(JumpIfTrueConstant, ImplicitRegisterUse::kReadAccumulator,                 \
-    OperandType::kIdx)                                                         \
+    OperandType::kIdx, OperandType::kIdx)                                      \
   V(JumpIfFalseConstant, ImplicitRegisterUse::kReadAccumulator,                \
-    OperandType::kIdx)                                                         \
+    OperandType::kIdx, OperandType::kIdx)                                      \
   V(JumpIfJSReceiverConstant, ImplicitRegisterUse::kReadAccumulator,           \
     OperandType::kIdx)                                                         \
   V(JumpIfForInDoneConstant, ImplicitRegisterUse::kNone, OperandType::kIdx,    \
@@ -389,8 +389,10 @@ namespace interpreter {
   V(JumpIfToBooleanFalse, ImplicitRegisterUse::kReadAccumulator,               \
     OperandType::kUImm)                                                        \
   /* - [End ToBoolean jumps] */                                                \
-  V(JumpIfTrue, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)     \
-  V(JumpIfFalse, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)    \
+  V(JumpIfTrue, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm,     \
+    OperandType::kIdx)                                                         \
+  V(JumpIfFalse, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm,    \
+    OperandType::kIdx)                                                         \
   V(JumpIfNull, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)     \
   V(JumpIfNotNull, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)  \
   V(JumpIfUndefined, ImplicitRegisterUse::kReadAccumulator,                    \

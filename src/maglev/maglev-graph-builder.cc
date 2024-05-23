@@ -3671,6 +3671,34 @@ void MaglevGraphBuilder::BuildCheckJSReceiver(ValueNode* object) {
                                 FIRST_JS_RECEIVER_TYPE, LAST_JS_RECEIVER_TYPE);
 }
 
+void MaglevGraphBuilder::BuildCheckCondition(ValueNode* node, bool check_true,
+                                             DeoptimizeReason reason) {
+  if (node->opcode() == Opcode::kInt32Compare) {
+    auto compare_node = node->Cast<Int32Compare>();
+    switch (compare_node->operation()) {
+      case Operation::kEqual:
+        if (check_true) {
+          AddNewNode<CheckInt32Condition>({compare_node->left_input().node(),
+                                           compare_node->right_input().node()},
+                                          AssertCondition::kEqual, reason);
+        } else {
+          AddNewNode<CheckInt32Condition>({compare_node->left_input().node(),
+                                           compare_node->right_input().node()},
+                                          AssertCondition::kNotEqual, reason);
+        }
+        return;
+      default:
+        break;
+    }
+  }
+  // TODO(340100647): implement more cases; see BuildBranchIfRootConstant.
+  if (check_true) {
+    RETURN_VOID_IF_ABORT(BuildCheckValue(node, broker()->true_value()));
+  } else {
+    RETURN_VOID_IF_ABORT(BuildCheckValue(node, broker()->false_value()));
+  }
+}
+
 namespace {
 
 class KnownMapsMerger {
@@ -10985,6 +11013,7 @@ void MaglevGraphBuilder::VisitJumpIfUndefinedOrNullConstant() {
 }
 void MaglevGraphBuilder::VisitJumpIfTrueConstant() { VisitJumpIfTrue(); }
 void MaglevGraphBuilder::VisitJumpIfFalseConstant() { VisitJumpIfFalse(); }
+
 void MaglevGraphBuilder::VisitJumpIfJSReceiverConstant() {
   VisitJumpIfJSReceiver();
 }
@@ -11125,7 +11154,8 @@ bool IsNumberRootConstant(RootIndex root_index) {
 #endif
 
 MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
-    BranchBuilder& builder, ValueNode* node, RootIndex root_index) {
+    BranchBuilder& builder, ValueNode* node, RootIndex root_index,
+    FeedbackSlot branch_slot) {
   // We assume that Maglev never emits a comparison to a root number.
   DCHECK(!IsNumberRootConstant(root_index));
 
@@ -11153,6 +11183,12 @@ MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
     return builder.AlwaysFalse();
   }
 
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback && !branch_slot.IsInvalid()) {
+    compiler::FeedbackSource feedback_source{feedback(), branch_slot};
+    branch_hint = broker()->GetFeedbackForBranch(feedback_source);
+  }
+
   while (LogicalNot* logical_not = node->TryCast<LogicalNot>()) {
     // Bypassing logical not(s) on the input and swapping true/false
     // destinations.
@@ -11169,6 +11205,20 @@ MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
       return builder.FromBool(constant->object().IsUndefined());
     }
   }
+
+  if (branch_hint == BranchHint::kTrue) {
+    // The jump was always taken. Generate a check that the condition is
+    // true this time too, and an unconditional jump. The fallthrough
+    // block will be dead.
+    if (builder.GetCurrentBranchType() == BranchType::kBranchIfTrue) {
+      BuildCheckCondition(node, true, DeoptimizeReason::kUnexpectedBranch);
+      return builder.AlwaysTrue();
+    } else {
+      BuildCheckCondition(node, false, DeoptimizeReason::kUnexpectedBranch);
+      return builder.AlwaysFalse();
+    }
+  }
+  // TODO(340100647): If the jump is never taken, do the reverse.
 
   if (root_index != RootIndex::kTrueValue &&
       root_index != RootIndex::kFalseValue) {
@@ -11223,9 +11273,10 @@ MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
 }
 
 MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfTrue(
-    BranchBuilder& builder, ValueNode* node) {
+    BranchBuilder& builder, ValueNode* node, FeedbackSlot branch_slot) {
   builder.SetBranchSpecializationMode(BranchSpecializationMode::kAlwaysBoolean);
-  return BuildBranchIfRootConstant(builder, node, RootIndex::kTrueValue);
+  return BuildBranchIfRootConstant(builder, node, RootIndex::kTrueValue,
+                                   branch_slot);
 }
 
 MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfNull(
@@ -11365,12 +11416,14 @@ void MaglevGraphBuilder::VisitJumpIfToBooleanFalse() {
   BuildBranchIfToBooleanTrue(branch_builder, GetRawAccumulator());
 }
 void MaglevGraphBuilder::VisitJumpIfTrue() {
+  FeedbackSlot branch_slot = GetSlotOperand(1);
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfTrue);
-  BuildBranchIfTrue(branch_builder, GetRawAccumulator());
+  BuildBranchIfTrue(branch_builder, GetRawAccumulator(), branch_slot);
 }
 void MaglevGraphBuilder::VisitJumpIfFalse() {
+  FeedbackSlot branch_slot = GetSlotOperand(1);
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfFalse);
-  BuildBranchIfTrue(branch_builder, GetRawAccumulator());
+  BuildBranchIfTrue(branch_builder, GetRawAccumulator(), branch_slot);
 }
 void MaglevGraphBuilder::VisitJumpIfNull() {
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfTrue);
