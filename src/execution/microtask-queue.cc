@@ -248,7 +248,12 @@ void MicrotaskQueue::AddMicrotasksCompletedCallback(
       std::find(microtasks_completed_callbacks_.begin(),
                 microtasks_completed_callbacks_.end(), callback_with_data);
   if (pos != microtasks_completed_callbacks_.end()) return;
-  microtasks_completed_callbacks_.push_back(callback_with_data);
+
+  if (callbacks_being_run_) {
+    new_microtasks_completed_callbacks_.push_back(callback_with_data);
+  } else {
+    microtasks_completed_callbacks_.push_back(callback_with_data);
+  }
 }
 
 void MicrotaskQueue::RemoveMicrotasksCompletedCallback(
@@ -258,14 +263,33 @@ void MicrotaskQueue::RemoveMicrotasksCompletedCallback(
       std::find(microtasks_completed_callbacks_.begin(),
                 microtasks_completed_callbacks_.end(), callback_with_data);
   if (pos == microtasks_completed_callbacks_.end()) return;
-  microtasks_completed_callbacks_.erase(pos);
+
+  if (callbacks_being_run_) {
+    deleted_microtasks_completed_callbacks_.push_back(pos);
+  } else {
+    microtasks_completed_callbacks_.erase(pos);
+  }
 }
 
-void MicrotaskQueue::OnCompleted(Isolate* isolate) const {
-  std::vector<CallbackWithData> callbacks(microtasks_completed_callbacks_);
-  for (auto& callback : callbacks) {
+void MicrotaskQueue::OnCompleted(Isolate* isolate) {
+  deleted_microtasks_completed_callbacks_.clear();
+  new_microtasks_completed_callbacks_.clear();
+
+  callbacks_being_run_ = true;
+  for (auto& callback : microtasks_completed_callbacks_) {
     callback.first(reinterpret_cast<v8::Isolate*>(isolate), callback.second);
   }
+  callbacks_being_run_ = false;
+
+  for (auto it = microtasks_completed_callbacks_.begin();
+       it < microtasks_completed_callbacks_.end(); ++it) {
+    if (std::find(deleted_microtasks_completed_callbacks_.begin(),
+                  deleted_microtasks_completed_callbacks_.end(),
+                  it) == deleted_microtasks_completed_callbacks_.end()) {
+      new_microtasks_completed_callbacks_.push_back(*it);
+    }
+  }
+  microtasks_completed_callbacks_ = new_microtasks_completed_callbacks_;
 }
 
 Tagged<Microtask> MicrotaskQueue::get(intptr_t index) const {
