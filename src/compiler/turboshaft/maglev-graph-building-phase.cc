@@ -1433,6 +1433,21 @@ class GraphBuilder {
     return maglev::ProcessResult::kContinue;
   }
 
+  maglev::ProcessResult Process(maglev::AllocateElementsArray* node,
+                                const maglev::ProcessingState& state) {
+    V<Word32> length = Map(node->length_input());
+    __ DeoptimizeIfNot(
+        __ Int32LessThan(length, JSArray::kInitialMaxFastElementArray),
+        BuildFrameState(node->eager_deopt_info()),
+        DeoptimizeReason::kGreaterThanMaxFastElementArray,
+        node->eager_deopt_info()->feedback_to_update());
+
+    SetMap(node,
+           __ NewArray(__ ChangeUint32ToUintPtr(length),
+                       NewArrayOp::Kind::kObject, node->allocation_type()));
+    return maglev::ProcessResult::kContinue;
+  }
+
   maglev::ProcessResult Process(maglev::StringConcat* node,
                                 const maglev::ProcessingState& state) {
     SetMap(node, __ StringConcat(Map(node->lhs()), Map(node->rhs())));
@@ -2797,6 +2812,9 @@ class GraphBuilder {
   maglev::ProcessResult Process(maglev::Abort* node,
                                 const maglev::ProcessingState&) {
     __ RuntimeAbort(node->reason());
+    // TODO(dmercadier): remove this `Unreachable` once RuntimeAbort is marked
+    // as a block terminator.
+    __ Unreachable();
     return maglev::ProcessResult::kContinue;
   }
 
