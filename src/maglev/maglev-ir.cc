@@ -6041,7 +6041,7 @@ void ConstructWithSpread::GenerateCode(MaglevAssembler* masm,
       function(),            // target
       new_target(),          // new target
       num_args_no_spread(),  // actual arguments count
-      feedback().index(),    // feedback slot
+      feedback().index(),    // feedback slot // FIXME: is this correct?
       spread(),              // spread
       feedback().vector,     // feedback vector
       args_no_spread()       // args

@@ -871,7 +871,7 @@ TNode<Object> InterpreterAssembler::Construct(
 
 TNode<Object> InterpreterAssembler::ConstructWithSpread(
     TNode<Object> target, TNode<Context> context, TNode<Object> new_target,
-    const RegListNodePair& args, TNode<UintPtrT> slot_id) {
+    const RegListNodePair& args, TNode<TaggedIndex> slot_id) {
   // TODO(bmeurer): Unify this with the Construct bytecode feedback
   // above once we have a way to pass the AllocationSite to the Array
   // constructor _and_ spread the last argument at the same time.

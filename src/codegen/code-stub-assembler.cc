@@ -175,7 +175,7 @@ void CodeStubAssembler::Check(TNode<Word32T> condition_node,
 }
 
 void CodeStubAssembler::IncrementCallCount(
-    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id) {
+    TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot_id) {
   Comment("increment call count");
   TNode<Smi> call_count =
       CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, kTaggedSize));
@@ -3088,9 +3088,8 @@ TNode<Numeric> CodeStubAssembler::LoadFixedTypedArrayElementAsTagged(
   return var_result.value();
 }
 
-template <typename TIndex>
 TNode<MaybeObject> CodeStubAssembler::LoadFeedbackVectorSlot(
-    TNode<FeedbackVector> feedback_vector, TNode<TIndex> slot,
+    TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
     int additional_offset) {
   int32_t header_size = FeedbackVector::kRawFeedbackSlotsOffset +
                         additional_offset - kHeapObjectTag;
@@ -12088,12 +12087,13 @@ void CodeStubAssembler::UpdateFeedback(TNode<Smi> feedback,
 }
 
 void CodeStubAssembler::ReportFeedbackUpdate(
-    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id,
+    TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot_id,
     const char* reason) {
 #ifdef V8_TRACE_FEEDBACK_UPDATES
   // Trace the update.
   CallRuntime(Runtime::kTraceUpdateFeedback, NoContextConstant(),
-              feedback_vector, SmiTag(Signed(slot_id)), StringConstant(reason));
+              feedback_vector, TaggedIndexToSmi(slot_id),
+              StringConstant(reason));
 #endif  // V8_TRACE_FEEDBACK_UPDATES
 }
 
@@ -13270,7 +13270,7 @@ TNode<IntPtrT> CodeStubAssembler::PageMetadataFromAddress(
 }
 
 TNode<AllocationSite> CodeStubAssembler::CreateAllocationSiteInFeedbackVector(
-    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot) {
+    TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot) {
   TNode<IntPtrT> size = IntPtrConstant(AllocationSite::kSizeWithWeakNext);
   TNode<HeapObject> site = Allocate(size, AllocationFlag::kPretenured);
   StoreMapNoWriteBarrier(site, RootIndex::kAllocationSiteWithWeakNextMap);
@@ -13316,7 +13316,7 @@ TNode<AllocationSite> CodeStubAssembler::CreateAllocationSiteInFeedbackVector(
 }
 
 TNode<MaybeObject> CodeStubAssembler::StoreWeakReferenceInFeedbackVector(
-    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot,
+    TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
     TNode<HeapObject> value, int additional_offset) {
   TNode<HeapObjectReference> weak_value = MakeWeak(value);
   StoreFeedbackVectorSlot(feedback_vector, slot, weak_value,

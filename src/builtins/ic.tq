@@ -50,20 +50,20 @@ macro IsUninitialized(feedback: MaybeObject): bool {
   return TaggedEqual(feedback, kUninitializedSymbol);
 }
 
-extern macro LoadFeedbackVectorSlot(FeedbackVector, uintptr): MaybeObject;
-extern macro LoadFeedbackVectorSlot(FeedbackVector, uintptr, constexpr int32):
-    MaybeObject;
+extern macro LoadFeedbackVectorSlot(FeedbackVector, TaggedIndex): MaybeObject;
+extern macro LoadFeedbackVectorSlot(
+    FeedbackVector, TaggedIndex, constexpr int32): MaybeObject;
 extern operator '[]' macro LoadFeedbackVectorSlot(FeedbackVector, intptr):
     MaybeObject;
-extern macro StoreFeedbackVectorSlot(FeedbackVector, uintptr, MaybeObject):
+extern macro StoreFeedbackVectorSlot(FeedbackVector, TaggedIndex, MaybeObject):
     void;
 extern macro StoreFeedbackVectorSlot(
-    FeedbackVector, uintptr, MaybeObject, constexpr WriteBarrierMode,
+    FeedbackVector, TaggedIndex, MaybeObject, constexpr WriteBarrierMode,
     constexpr int32): void;
 extern macro StoreWeakReferenceInFeedbackVector(
-    FeedbackVector, uintptr, HeapObject): MaybeObject;
-extern macro ReportFeedbackUpdate(FeedbackVector, uintptr, constexpr string):
-    void;
+    FeedbackVector, TaggedIndex, HeapObject): MaybeObject;
+extern macro ReportFeedbackUpdate(
+    FeedbackVector, TaggedIndex, constexpr string): void;
 extern operator '.length_intptr' macro LoadFeedbackVectorLength(FeedbackVector):
     intptr;
 

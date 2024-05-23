@@ -50,7 +50,7 @@ TF_BUILTIN(Construct_Baseline, CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kTarget);
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
-  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+  auto slot = UncheckedParameter<TaggedIndex>(Descriptor::kSlot);
 
   BuildConstruct(
       target, new_target, argc, [=] { return LoadContextFromBaseline(); },
@@ -64,7 +64,7 @@ TF_BUILTIN(Construct_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
   auto feedback_vector = Parameter<FeedbackVector>(Descriptor::kFeedbackVector);
-  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+  auto slot = UncheckedParameter<TaggedIndex>(Descriptor::kSlot);
 
   BuildConstruct(
       target, new_target, argc, [=] { return context; },
@@ -75,7 +75,7 @@ TF_BUILTIN(Construct_WithFeedback, CallOrConstructBuiltinsAssembler) {
 void CallOrConstructBuiltinsAssembler::BuildConstruct(
     TNode<Object> target, TNode<Object> new_target, TNode<Int32T> argc,
     const LazyNode<Context>& context,
-    const LazyNode<HeapObject>& feedback_vector, TNode<UintPtrT> slot,
+    const LazyNode<HeapObject>& feedback_vector, TNode<TaggedIndex> slot,
     UpdateFeedbackMode mode) {
   TVARIABLE(AllocationSite, allocation_site);
   Label if_construct_generic(this), if_construct_array(this);
@@ -140,7 +140,7 @@ TF_BUILTIN(ConstructWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
   auto spread = Parameter<Object>(Descriptor::kSpread);
   auto args_count =
       UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
-  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+  auto slot = UncheckedParameter<TaggedIndex>(Descriptor::kSlot);
   return BuildConstructWithSpread(
       target, new_target, spread, args_count,
       [=] { return LoadContextFromBaseline(); },
@@ -156,7 +156,7 @@ TF_BUILTIN(ConstructWithSpread_WithFeedback, CallOrConstructBuiltinsAssembler) {
       UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
   auto feedback_vector = Parameter<HeapObject>(Descriptor::kFeedbackVector);
-  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+  auto slot = UncheckedParameter<TaggedIndex>(Descriptor::kSlot);
 
   return BuildConstructWithSpread(
       target, new_target, spread, args_count, [=] { return context; },
@@ -187,7 +187,7 @@ void CallOrConstructBuiltinsAssembler::BuildConstructWithSpread(
 TF_BUILTIN(ConstructForwardAllArgs_Baseline, CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kTarget);
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
-  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+  auto slot = UncheckedParameter<TaggedIndex>(Descriptor::kSlot);
 
   return BuildConstructForwardAllArgs(
       target, new_target, [=] { return LoadContextFromBaseline(); },
@@ -198,7 +198,7 @@ TF_BUILTIN(ConstructForwardAllArgs_WithFeedback,
            CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kTarget);
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
-  auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
+  auto slot = UncheckedParameter<TaggedIndex>(Descriptor::kSlot);
   auto feedback_vector = Parameter<HeapObject>(Descriptor::kVector);
   auto context = Parameter<Context>(Descriptor::kContext);
 
@@ -210,14 +210,15 @@ TF_BUILTIN(ConstructForwardAllArgs_WithFeedback,
 void CallOrConstructBuiltinsAssembler::BuildConstructForwardAllArgs(
     TNode<Object> target, TNode<Object> new_target,
     const LazyNode<Context>& context,
-    const LazyNode<HeapObject>& feedback_vector, TNode<UintPtrT> slot) {
+    const LazyNode<HeapObject>& feedback_vector, TNode<TaggedIndex> slot) {
   TVARIABLE(AllocationSite, allocation_site);
   TNode<Context> eager_context = context();
 
   Label construct(this);
   CollectConstructFeedback(eager_context, target, new_target, feedback_vector(),
-                           slot, UpdateFeedbackMode::kGuaranteedFeedback,
-                           &construct, &construct, &allocation_site);
+                           Unsigned(TaggedIndexToIntPtr(slot)),
+                           UpdateFeedbackMode::kGuaranteedFeedback, &construct,
+                           &construct, &allocation_site);
 
   BIND(&construct);
   TailCallBuiltin(Builtin::kConstructForwardAllArgs, eager_context, target,
@@ -540,10 +541,8 @@ TNode<JSArray> ConstructorBuiltinsAssembler::CreateEmptyArrayLiteral(
   // TODO(cbruni): create the AllocationSite in CSA.
   BIND(&initialize_allocation_site);
   {
-    allocation_site = CreateAllocationSiteInFeedbackVector(
-        feedback_vector,
-        // TODO(v8:10047): pass slot as TaggedIndex here
-        Unsigned(TaggedIndexToIntPtr(slot)));
+    allocation_site =
+        CreateAllocationSiteInFeedbackVector(feedback_vector, slot);
     Goto(&create_empty_array);
   }
 

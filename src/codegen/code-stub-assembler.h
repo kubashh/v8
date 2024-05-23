@@ -1862,9 +1862,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<Int32T> elements_kind, Label* if_accessor, Label* if_hole);
 
   // Load a feedback slot from a FeedbackVector.
-  template <typename TIndex>
   TNode<MaybeObject> LoadFeedbackVectorSlot(
-      TNode<FeedbackVector> feedback_vector, TNode<TIndex> slot,
+      TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
       int additional_offset = 0);
 
   TNode<IntPtrT> LoadFeedbackVectorLength(TNode<FeedbackVector>);
@@ -2176,7 +2175,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void StoreFixedDoubleArrayHole(TNode<FixedDoubleArray> array,
                                  TNode<IntPtrT> index);
   void StoreFeedbackVectorSlot(
-      TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot,
+      TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
       TNode<AnyTaggedT> value,
       WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER,
       int additional_offset = 0);
@@ -2518,7 +2517,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Increment the call count for a CALL_IC or construct call.
   // The call count is located at feedback_vector[slot_id + 1].
   void IncrementCallCount(TNode<FeedbackVector> feedback_vector,
-                          TNode<UintPtrT> slot_id);
+                          TNode<TaggedIndex> slot_id);
 
   // Specify DestroySource::kYes if {from_array} is being supplanted by
   // {to_array}. This offers a slight performance benefit by simply copying the
@@ -3938,7 +3937,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Report that there was a feedback update, performing any tasks that should
   // be done after a feedback update.
   void ReportFeedbackUpdate(TNode<FeedbackVector> feedback_vector,
-                            TNode<UintPtrT> slot_id, const char* reason);
+                            TNode<TaggedIndex> slot_id, const char* reason);
 
   // Combine the new feedback with the existing_feedback. Do nothing if
   // existing_feedback is nullptr.
@@ -4018,12 +4017,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Store a weak in-place reference into the FeedbackVector.
   TNode<MaybeObject> StoreWeakReferenceInFeedbackVector(
-      TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot,
+      TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot,
       TNode<HeapObject> value, int additional_offset = 0);
 
   // Create a new AllocationSite and install it into a feedback vector.
   TNode<AllocationSite> CreateAllocationSiteInFeedbackVector(
-      TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot);
+      TNode<FeedbackVector> feedback_vector, TNode<TaggedIndex> slot);
 
   TNode<BoolT> HasBoilerplate(TNode<Object> maybe_literal_site);
   TNode<Smi> LoadTransitionInfo(TNode<AllocationSite> allocation_site);
@@ -4335,6 +4334,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<JSArrayBuffer> GetTypedArrayBuffer(TNode<Context> context,
                                            TNode<JSTypedArray> array);
 
+  // FIXME: might not need templatization any more.
   template <typename TIndex>
   TNode<IntPtrT> ElementOffsetFromIndex(TNode<TIndex> index, ElementsKind kind,
                                         int base_size = 0);

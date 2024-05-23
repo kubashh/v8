@@ -1800,8 +1800,8 @@ class ConstructWithSpread_BaselineDescriptor
   // Note: kSlot comes before kSpread since as an untagged value it must be
   // passed in a register.
   DEFINE_JS_PARAMETERS_NO_CONTEXT(kSlot, kSpread)
-  DEFINE_JS_PARAMETER_TYPES(MachineType::UintPtr(),    // kSlot
-                            MachineType::AnyTagged())  // kSpread
+  DEFINE_JS_PARAMETER_TYPES(MachineType::TaggedSigned(),  // kSlot
+                            MachineType::AnyTagged())     // kSpread
   DECLARE_DESCRIPTOR(ConstructWithSpread_BaselineDescriptor)
 };
 
@@ -1866,7 +1866,7 @@ class ConstructForwardAllArgs_BaselineDescriptor
   DEFINE_PARAMETERS(kTarget, kNewTarget, kSlot)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kNewTarget
-                         MachineType::UintPtr())    // kSlot
+                         MachineType::AnyTagged())  // kSlot
   DECLARE_DESCRIPTOR(ConstructForwardAllArgs_BaselineDescriptor)
 };
 
@@ -1878,7 +1878,7 @@ class ConstructForwardAllArgs_WithFeedbackDescriptor
   DEFINE_PARAMETERS(kTarget, kNewTarget, kSlot, kVector)
   DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kTarget
                          MachineType::AnyTagged(),  // kNewTarget
-                         MachineType::UintPtr(),    // kSlot
+                         MachineType::AnyTagged(),  // kSlot
                          MachineType::AnyTagged())  // kVector
   DECLARE_DESCRIPTOR(ConstructForwardAllArgs_WithFeedbackDescriptor)
 };
@@ -2644,7 +2644,7 @@ class Construct_BaselineDescriptor
  public:
   INTERNAL_DESCRIPTOR()
   DEFINE_JS_PARAMETERS_NO_CONTEXT(kSlot)
-  DEFINE_JS_PARAMETER_TYPES(MachineType::UintPtr())  // kSlot
+  DEFINE_JS_PARAMETER_TYPES(MachineType::TaggedSigned())  // kSlot
   DECLARE_JS_COMPATIBLE_DESCRIPTOR(Construct_BaselineDescriptor)
 };
 
@@ -2654,8 +2654,8 @@ class Construct_WithFeedbackDescriptor
   INTERNAL_DESCRIPTOR()
   // kSlot is passed in a register, kFeedbackVector on the stack.
   DEFINE_JS_PARAMETERS(kSlot, kFeedbackVector)
-  DEFINE_JS_PARAMETER_TYPES(MachineType::UintPtr(),    // kSlot
-                            MachineType::AnyTagged())  // kFeedbackVector
+  DEFINE_JS_PARAMETER_TYPES(MachineType::TaggedSigned(),  // kSlot
+                            MachineType::AnyTagged())     // kFeedbackVector
   DECLARE_JS_COMPATIBLE_DESCRIPTOR(Construct_WithFeedbackDescriptor)
 };
 
