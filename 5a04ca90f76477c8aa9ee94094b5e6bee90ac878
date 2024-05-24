@@ -34,6 +34,24 @@
       "parentUuid": "c94fa527_aba5ebd0",
       "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e1ec017_334bc915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-05-24T12:19:57Z",
+      "side": 1,
+      "message": "Is there a specific test for mprotect scnario? \n\nThe error in this case happens after `DiscardPooledPages` is called:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/test/unittests/heap/cppgc/page-memory-unittest.cc;l\u003d284\nseems to be the only places it is used on tests.\n\nThe address that is passed to `OS::DecommitPages \u003e mmap` has to be aligned to page size or it will return an error. In this case the address seems to go out of alignment here before being passed to mmap:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc/page-memory.h;l\u003d74",
+      "parentUuid": "a537f79d_c663df6c",
+      "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
