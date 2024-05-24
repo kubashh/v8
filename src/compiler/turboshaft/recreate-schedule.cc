@@ -1564,6 +1564,9 @@ Node* ScheduleBuilder::ProcessOperation(const BranchOp& op) {
     case BranchHint::kFalse:
       true_block->set_deferred(true);
       break;
+    case BranchHint::kMostlyTrue:
+    case BranchHint::kMostlyFalse:
+      UNREACHABLE();
   }
   current_block = nullptr;
   return nullptr;
