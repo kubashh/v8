@@ -52,6 +52,24 @@
       "parentUuid": "a537f79d_c663df6c",
       "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3dfa9ad_bc5f152a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-24T12:57:15Z",
+      "side": 1,
+      "message": "`mprotect` for the writable area is called on every page allocaion, which is covered in almost all tests:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc/page-memory.cc;l\u003d23\nThat area has been only 4K aligned on ppc64. My question is why didn\u0027t page allocation failed before on ppc64?",
+      "parentUuid": "3e1ec017_334bc915",
+      "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
