@@ -359,6 +359,9 @@ class V8_TRIVIAL_ABI DirectHandleBase :
   // The number is only accurate if V8_HAS_ATTRIBUTE_TRIVIAL_ABI,
   // otherwise it's zero.
   V8_INLINE static int NumberOfHandles() { return number_of_handles_; }
+  V8_INLINE static void SetNumberOfHandles(int number_of_handles) {
+    number_of_handles_ = number_of_handles;
+  }
 #endif
 
  protected:

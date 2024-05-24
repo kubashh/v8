@@ -62,18 +62,25 @@ Address LocalHeap::AllocateRawOrFail(int object_size, AllocationType type,
 template <typename Callback>
 V8_INLINE void LocalHeap::ParkAndExecuteCallback(Callback callback) {
   ParkedScope parked(this);
+#ifdef V8_ENABLE_DIRECT_HANDLE
+  int previous_direct_handles = DirectHandleBase::NumberOfHandles();
+  DirectHandleBase::SetNumberOfHandles(0);
+#endif  // V8_ENABLE_DIRECT_HANDLE
   // Provide the parked scope as a witness, if the callback expects it.
   if constexpr (std::is_invocable_v<Callback, const ParkedScope&>) {
     callback(parked);
   } else {
     callback();
   }
+#ifdef V8_ENABLE_DIRECT_HANDLE
+  DirectHandleBase::SetNumberOfHandles(previous_direct_handles);
+#endif  // V8_ENABLE_DIRECT_HANDLE
 }
 
 template <typename Callback>
 V8_INLINE void LocalHeap::ExecuteWithStackMarker(Callback callback) {
   if (is_main_thread()) {
-    heap()->stack().SetMarkerIfNeededAndCallback(callback);
+    heap()->stack().SetMarkerAndCallback(callback);
   } else {
     heap()->stack().SetMarkerForBackgroundThreadAndCallback(
         ThreadId::Current().ToInteger(), callback);
@@ -89,7 +96,7 @@ V8_INLINE void LocalHeap::BlockWhileParked(Callback callback) {
 template <typename Callback>
 V8_INLINE void LocalHeap::BlockMainThreadWhileParked(Callback callback) {
   DCHECK(is_main_thread());
-  heap()->stack().SetMarkerIfNeededAndCallback(
+  heap()->stack().SetMarkerAndCallback(
       [this, callback]() { ParkAndExecuteCallback(callback); });
 }
 
@@ -99,6 +106,15 @@ V8_INLINE void LocalHeap::BlockBackgroundThreadWhileParked(Callback callback) {
   heap()->stack().SetMarkerForBackgroundThreadAndCallback(
       ThreadId::Current().ToInteger(),
       [this, callback]() { ParkAndExecuteCallback(callback); });
+}
+
+V8_INLINE bool LocalHeap::is_in_trampoline() const {
+  if (is_main_thread()) {
+    return heap_->stack().IsMarkerSet();
+  } else {
+    return heap_->stack().IsMarkerSetForBackgroundThread(
+        ThreadId::Current().ToInteger());
+  }
 }
 
 }  // namespace internal

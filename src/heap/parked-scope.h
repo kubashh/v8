@@ -21,10 +21,15 @@ class V8_NODISCARD ParkedScope {
   explicit ParkedScope(LocalIsolate* local_isolate)
       : ParkedScope(local_isolate->heap()) {}
   explicit ParkedScope(LocalHeap* local_heap) : local_heap_(local_heap) {
+    ++local_heap_->nested_parked_scopes_;
     local_heap_->Park();
   }
 
-  ~ParkedScope() { local_heap_->Unpark(); }
+  ~ParkedScope() {
+    DCHECK_LT(0, local_heap_->nested_parked_scopes_);
+    --local_heap_->nested_parked_scopes_;
+    local_heap_->Unpark();
+  }
 
  private:
   LocalHeap* const local_heap_;
