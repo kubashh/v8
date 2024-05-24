@@ -16,6 +16,24 @@
       "message": "Hi Francis,\n\nOut of curiosity, is this meant to be `b(eq, ...` by any chance? comparing it with arm64 and x64 were they branch to no_stack_change if the value is zero.",
       "revId": "553a1865dc69a9e9c3ecf1f3481eef0ed4fd093a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a288c43c_43ac5d9f",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3969,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-05-24T14:48:25Z",
+      "side": 1,
+      "message": "I believe that the code is correct, the flags don\u0027t hold the same value on different platforms. Here is what I can gather from a quick look:\nOn arm the flag is set to the value of the \"is on central stack\" flag. We don\u0027t need to switch to the central stack if we are already there, so we only switch if the flag is false.\nOn arm64, the flag is initialized to 0 and set to 1 when we switch, so we only need to switch back if the flag is 1.\nOn x64 there is no dedicated flag, we use the old sp. The old sp is only set if we switch, so that we know where to switch back. So we only switch back if the old sp is non-zero.",
+      "parentUuid": "9ec7d7db_fb1143a4",
+      "revId": "553a1865dc69a9e9c3ecf1f3481eef0ed4fd093a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
