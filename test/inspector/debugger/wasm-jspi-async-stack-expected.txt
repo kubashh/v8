@@ -120,7 +120,7 @@ Returned result {"result":{"type":"undefined"}}
 PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testAsyncThrow to testCatch
-Debugger paused on uncaught exception
+Debugger paused on caught exception
 testAsyncThrow (test.js:61:2)
 -- await --
 js_func (test.js:24:17)
@@ -129,7 +129,6 @@ $threeTimes (wasm://wasm/bbce4a62:0:85)
 
 console: caught: fail
 Returned result {"result":{"type":"undefined"}}
-PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testSyncThrow to testDontCatch
 Debugger paused on uncaught exception
