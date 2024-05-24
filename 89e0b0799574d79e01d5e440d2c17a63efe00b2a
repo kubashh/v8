@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "196b54b9_5bb6b274",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-05-24T14:56:39Z",
+      "side": 1,
+      "message": "This is a partial fix for catch prediction through JSPI, but it doesn\u0027t handle the case where the Wasm frames are currently on the callstack, and it\u0027s not clear to me how that should be handled. There is no current microtask in that case. My first guess would be to look at active_suspender, but it looks like we only set that when the suspender is created, not when we switch to code with that suspender, and it doesn\u0027t appear to ever be cleared, so I would need a test of whether it is relevant. Thoughts?",
+      "revId": "89e0b0799574d79e01d5e440d2c17a63efe00b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
