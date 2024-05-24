@@ -1,112 +1,5 @@
 Test async stack traces with wasm jspi
 
-Running test: testAsyncStackTracesOnPauseAndError
-Testing async callstacks in JSPI with test function testSimple
-console: Error location: Error
-    at doPause (test.js:41:34)
-    at testSimple (test.js:46:3)
-    at js_func (test.js:25:18)
-    at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
-    at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x55)
-
-Debugger paused on debugger statement
-doPause (test.js:41:2)
-testSimple (test.js:45:2)
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:85)
-
-console: Error location: Error
-    at doPause (test.js:41:34)
-    at testSimple (test.js:46:3)
-    at js_func (test.js:25:18)
-    at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
-    at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x5b)
-
-Debugger paused on debugger statement
-doPause (test.js:41:2)
-testSimple (test.js:45:2)
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:91)
-
-console: Error location: Error
-    at doPause (test.js:41:34)
-    at testSimple (test.js:46:3)
-    at js_func (test.js:25:18)
-    at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
-    at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x61)
-
-Debugger paused on debugger statement
-doPause (test.js:41:2)
-testSimple (test.js:45:2)
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:97)
-
-Returned result {"result":{"type":"number","value":3,"description":"3"}}
-
-Testing async callstacks in JSPI with test function testSetTimeout
-console: Error location: Error
-    at doPause (test.js:41:34)
-    at testSetTimeout (test.js:52:3)
-    at async js_func (test.js:25:12)
-
-Debugger paused on debugger statement
-doPause (test.js:41:2)
-testSetTimeout (test.js:51:2)
--- await --
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:85)
-
-console: Error location: Error
-    at doPause (test.js:41:34)
-    at testSetTimeout (test.js:52:3)
-    at async js_func (test.js:25:12)
-
-Debugger paused on debugger statement
-doPause (test.js:41:2)
-testSetTimeout (test.js:51:2)
--- await --
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:91)
--- setTimeout --
-result (test.js:50:40)
-testSetTimeout (test.js:50:23)
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:85)
-
-console: Error location: Error
-    at doPause (test.js:41:34)
-    at testSetTimeout (test.js:52:3)
-    at async js_func (test.js:25:12)
-
-Debugger paused on debugger statement
-doPause (test.js:41:2)
-testSetTimeout (test.js:51:2)
--- await --
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:97)
--- setTimeout --
-result (test.js:50:40)
-testSetTimeout (test.js:50:23)
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:91)
--- setTimeout --
-result (test.js:50:40)
-testSetTimeout (test.js:50:23)
-js_func (test.js:24:17)
-$wrappedWasm (wasm://wasm/bbce4a62:0:76)
-$threeTimes (wasm://wasm/bbce4a62:0:85)
-
-Returned result {"result":{"type":"number","value":3,"description":"3"}}
-
-
 Running test: testCatchPrediction
 Testing catch prediction through JSPI throwing from testSyncThrow to testCatch
 Debugger paused on uncaught exception
@@ -120,7 +13,7 @@ Returned result {"result":{"type":"undefined"}}
 PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testAsyncThrow to testCatch
-Debugger paused on uncaught exception
+Debugger paused on caught exception
 testAsyncThrow (test.js:61:2)
 -- await --
 js_func (test.js:24:17)
@@ -129,7 +22,6 @@ $threeTimes (wasm://wasm/bbce4a62:0:85)
 
 console: caught: fail
 Returned result {"result":{"type":"undefined"}}
-PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testSyncThrow to testDontCatch
 Debugger paused on uncaught exception
