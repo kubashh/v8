@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "329c763f_9139b10e",
+        "filename": "src/common/simd128.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-24T12:11:29Z",
+      "side": 0,
+      "message": "Already done but I forgot to remove the TODO.",
+      "revId": "eb91621f1aa730e533f4228516a29e1cce69a0f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "099e50e4_adf6607c",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-24T12:11:29Z",
+      "side": 0,
+      "message": "Already done.",
+      "range": {
+        "startLine": 958,
+        "startChar": 2,
+        "endLine": 959,
+        "endChar": 53
+      },
+      "revId": "eb91621f1aa730e533f4228516a29e1cce69a0f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "554058e7_05acef09",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-24T12:11:29Z",
+      "side": 0,
+      "message": "Nothing else changed in this function than returning the `TODO` and the scope.",
+      "revId": "eb91621f1aa730e533f4228516a29e1cce69a0f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
