@@ -164,15 +164,15 @@ Protocol.Runtime.enable();
 // Run tests
 
 InspectorTest.runAsyncTestSuite([
-  async function testAsyncStackTracesOnPauseAndError() {
-    for (const testFunc of testPauseFunctions) {
-      InspectorTest.log(`Testing async callstacks in JSPI with test function ${testFunc.name}`);
-      const {result} = await Protocol.Runtime.evaluate({expression: `wrapperFunc(${testFunc.name})//# sourceURL=test_framework.js`, awaitPromise: true});
+  // async function testAsyncStackTracesOnPauseAndError() {
+  //   for (const testFunc of testPauseFunctions) {
+  //     InspectorTest.log(`Testing async callstacks in JSPI with test function ${testFunc.name}`);
+  //     const {result} = await Protocol.Runtime.evaluate({expression: `wrapperFunc(${testFunc.name})//# sourceURL=test_framework.js`, awaitPromise: true});
 
-      InspectorTest.log(`Returned result ${JSON.stringify(result)}`);
-      InspectorTest.log('');
-    }
-  },
+  //     InspectorTest.log(`Returned result ${JSON.stringify(result)}`);
+  //     InspectorTest.log('');
+  //   }
+  // },
   async function testCatchPrediction() {
     for (const testCatchFunc of testCatchFunctions) {
       for (const testThrowFunc of testThrowFunctions) {

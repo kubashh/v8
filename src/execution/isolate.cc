@@ -785,6 +785,24 @@ MaybeHandle<JSGeneratorObject> TryGetAsyncGenerator(
   return MaybeHandle<JSGeneratorObject>();
 }
 
+#if V8_ENABLE_WEBASSEMBLY
+MaybeHandle<WasmSuspenderObject> TryGetWasmSuspender(
+    Isolate* isolate, Handle<PromiseReaction> reaction) {
+  // Check if the {reaction} is WasmResume.
+  if (IsBuiltinFunction(isolate, reaction->fulfill_handler(),
+                        Builtin::kWasmResume)) {
+    // Now peek into the handlers' AwaitContext to get to
+    // the JSGeneratorObject for the async function.
+    Handle<SharedFunctionInfo> shared(
+        JSFunction::cast(reaction->fulfill_handler())->shared(), isolate);
+    if (shared->HasWasmResumeData()) {
+      return handle(shared->wasm_resume_data()->suspender(), isolate);
+    }
+  }
+  return MaybeHandle<WasmSuspenderObject>();
+}
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 int GetGeneratorBytecodeOffset(Handle<JSGeneratorObject> generator_object) {
   // The stored bytecode offset is relative to a different base than what
   // is used in the source position table, hence the subtraction.
@@ -1201,6 +1219,8 @@ MaybeHandle<JSPromise> TryGetCurrentTaskPromise(Isolate* isolate) {
       }
     }
   }
+  // TODO: else if the microtask is undefined, we need to check if there is
+  // a wasm suspender and get the promise from that.
   return MaybeHandle<JSPromise>();
 }
 
@@ -2923,7 +2943,21 @@ bool WalkPromiseTreeInternal(
         any_caught = any_caught || caught;
         any_uncaught = any_uncaught || !caught;
       }
+    } else {
+#if V8_ENABLE_WEBASSEMBLY
+      Handle<WasmSuspenderObject> suspender;
+      if (TryGetWasmSuspender(isolate, reaction).ToHandle(&suspender)) {
+        // If in the future we support Wasm exceptions or ignore listing in
+        // Wasm, we will need to iterate through these frames. For now, we
+        // only care about the resulting promise.
+        Handle<JSPromise> next_promise = handle(suspender->promise(), isolate);
+        bool caught = WalkPromiseTreeInternal(isolate, next_promise, callback);
+        any_caught = any_caught || caught;
+        any_uncaught = any_uncaught || !caught;
+#endif  // V8_ENABLE_WEBASSEMBLY
+      }
     }
+
     current = handle(reaction->next(), isolate);
   }
 
