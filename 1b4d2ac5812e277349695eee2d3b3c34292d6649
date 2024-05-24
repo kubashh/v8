@@ -88,6 +88,24 @@
       "parentUuid": "132764e6_a88d4482",
       "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03c6a771_d7fc92b3",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-05-24T21:27:14Z",
+      "side": 0,
+      "message": "Thanks! That was the issue. I managed to build with bazel with:\n```\nCC\u003d/home/paolosev/v8/v8/v8/third_party/llvm-build/Release+Asserts/bin/clang bazel build :noicu/d8\n```",
+      "parentUuid": "dd6b6014_7a1560b2",
+      "revId": "1b4d2ac5812e277349695eee2d3b3c34292d6649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
