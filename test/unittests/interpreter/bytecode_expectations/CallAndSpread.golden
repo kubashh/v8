@@ -92,7 +92,7 @@ bytecodes: [
                 B(Ldar), R(3),
                 B(Inc), U8(16),
                 B(Star3),
-                B(JumpLoop), U8(31), I8(0), U8(23),
+                B(JumpLoop), U8(31), I8(0), U8(25),
                 B(LdaSmi), I8(4),
                 B(StaInArrayLiteral), R(2), R(3), U8(17),
   /*   39 E> */ B(CallJSRuntime), U8(%reflect_apply), R(0), U8(3),
