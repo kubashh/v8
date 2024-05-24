@@ -16,6 +16,24 @@
       "message": "Hello,\n\nThis change seems to fix a test failure on ppc caused by https://crrev.com/c/5541750 (i have added details on it\u0027s comment section). Could you please tell me if this the correct way of fixing the problem? I\u0027m following the comments on arm64 and setting kGuardPageSize to 0.",
       "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a537f79d_c663df6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-05-24T08:23:52Z",
+      "side": 1,
+      "message": "On M1 the page size is 16KB, so we don\u0027t want to waste too much of reserved memory and therefore don\u0027t use the guard pages for Oilpan.\n\nI\u0027m surprised you see the test failures after the Benoit\u0027s change. I suppose if the page size on ppc64 has always been 64kb (whatever the OS you\u0027re referring to), we\u0027d see the failures much earlier, when trying to `mprotect` the 4kb guard pages. Do you know why this hasn\u0027t been the case?",
+      "parentUuid": "c94fa527_aba5ebd0",
+      "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
