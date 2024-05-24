@@ -158,20 +158,19 @@ UNINITIALIZED_TEST(ConcurrentAllocationWhileMainThreadIsParked) {
   std::vector<std::unique_ptr<ConcurrentAllocationThread>> threads;
   const int kThreads = 4;
 
-  {
-    ParkedScope scope(i_isolate->main_thread_local_isolate());
+  i_isolate->main_thread_local_isolate()->BlockMainThreadWhileParked(
+      [i_isolate, &threads]() {
+        for (int i = 0; i < kThreads; i++) {
+          auto thread =
+              std::make_unique<ConcurrentAllocationThread>(i_isolate->heap());
+          CHECK(thread->Start());
+          threads.push_back(std::move(thread));
+        }
 
-    for (int i = 0; i < kThreads; i++) {
-      auto thread =
-          std::make_unique<ConcurrentAllocationThread>(i_isolate->heap());
-      CHECK(thread->Start());
-      threads.push_back(std::move(thread));
-    }
-
-    for (auto& thread : threads) {
-      thread->Join();
-    }
-  }
+        for (auto& thread : threads) {
+          thread->Join();
+        }
+      });
 
   isolate->Dispose();
 }
@@ -354,9 +353,10 @@ class ConcurrentBlackAllocationThread final : public v8::base::Thread {
 
     for (int i = 0; i < kNumIterations; i++) {
       if (i == kWhiteIterations) {
-        ParkedScope scope(&local_heap);
-        sema_white_->Signal();
-        sema_marking_started_->Wait();
+        local_heap.BlockWhileParked([this]() {
+          sema_white_->Signal();
+          sema_marking_started_->Wait();
+        });
       }
       Address address = local_heap.AllocateRawOrFail(
           kSmallObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
