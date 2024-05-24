@@ -34,6 +34,24 @@
       "parentUuid": "9ec7d7db_fb1143a4",
       "revId": "553a1865dc69a9e9c3ecf1f3481eef0ed4fd093a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f2fcf0_04be259b",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 3969,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-05-24T16:48:27Z",
+      "side": 1,
+      "message": "ah thanks for clarifying, the key was that flags don\u0027t hold the same value, we mainly follow arm for ports so will make a note of this.",
+      "parentUuid": "a288c43c_43ac5d9f",
+      "revId": "553a1865dc69a9e9c3ecf1f3481eef0ed4fd093a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
