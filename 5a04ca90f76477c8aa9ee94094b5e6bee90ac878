@@ -123,6 +123,24 @@
       "message": "lgtm, thanks",
       "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3305c1c_0e616bcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-05-26T14:52:43Z",
+      "side": 1,
+      "message": "Thank you for reviewing.",
+      "parentUuid": "a3c9d79f_13ea2d77",
+      "revId": "5a04ca90f76477c8aa9ee94094b5e6bee90ac878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
