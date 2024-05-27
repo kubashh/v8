@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b74fe27d_c2c7dd90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3446604
+      },
+      "writtenOn": "2024-05-27T17:55:37Z",
+      "side": 1,
+      "message": "5573905: [maglev] Inline simple Number.parseInt cases | https://chromium-review.googlesource.com/c/v8/v8/+/5573905",
+      "revId": "77f045f1c9329cafc90edd347fba6f22e4687031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
