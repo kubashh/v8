@@ -2930,6 +2930,58 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   }
 }
 
+MaybeHandle<Code> Pipeline::GenerateCodeForTurboshaftBuiltin(
+    Isolate* isolate, CallDescriptor* call_descriptor, turboshaft::Graph* graph,
+    CodeKind kind, const char* debug_name, Builtin builtin) {
+  UNIMPLEMENTED();
+#if 0
+  Zone* graph_zone = graph->graph_zone();
+  OptimizedCompilationInfo info(base::CStrVector(debug_name), graph_zone, kind);
+  info.set_builtin(builtin);
+
+  turboshaft::Tracing::Scope tracing_scope(&info);
+
+  ZoneStats zone_stats(isolate->allocator());
+  std::unique_ptr<TurbofanPipelineStatistics> pipeline_statistics(
+      CreatePipelineStatistics(Handle<Script>::null(), &info, isolate,
+                               &zone_stats));
+
+  PipelineData data(&zone_stats, isolate, &info, pipeline_statistics.get());
+
+  UnparkedScopeIfNeeded scope(data.broker(),
+                              v8_flags.turboshaft_trace_reduction);
+
+  PipelineImpl pipeline(&data);
+  base::Optional<turboshaft::PipelineData::Scope> turboshaft_pipeline(
+      data.GetTurboshaftPipelineData(turboshaft::TurboshaftPipelineKind::kCSA,
+                                     graph));
+
+  pipeline.Run<turboshaft::CsaEarlyMachineOptimizationPhase>();
+  pipeline.Run<turboshaft::CsaLoadEliminationPhase>();
+  pipeline.Run<turboshaft::CsaLateEscapeAnalysisPhase>();
+  pipeline.Run<turboshaft::CsaBranchEliminationPhase>();
+  pipeline.Run<turboshaft::CsaOptimizePhase>();
+
+  pipeline.Run<turboshaft::CodeEliminationAndSimplificationPhase>();
+
+  // DecompressionOptimization has to run as the last phase because it
+  // constructs an (slightly) invalid graph that mixes Tagged and Compressed
+  // representations.
+  pipeline.Run<turboshaft::DecompressionOptimizationPhase>();
+
+  Linkage linkage(call_descriptor);
+  pipeline.SelectInstructionsTurboshaft(&linkage);
+  turboshaft_pipeline.reset();
+  data.DeleteGraphZone();
+
+  pipeline.AllocateRegisters(linkage.GetIncomingDescriptor(), false);
+
+  pipeline.AssembleCode(&linkage);
+
+  return pipeline.FinalizeCode(false);
+#endif
+}
+
 #if V8_ENABLE_WEBASSEMBLY
 
 namespace {
