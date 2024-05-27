@@ -7880,6 +7880,34 @@ ReduceResult MaglevGraphBuilder::TryReduceMathRound(
   return DoTryReduceMathRound(args, Float64Round::Kind::kNearest);
 }
 
+ReduceResult MaglevGraphBuilder::TryReduceNumberParseInt(
+    compiler::JSFunctionRef target, CallArguments& args) {
+  if (args.count() == 0) {
+    return GetRootConstant(RootIndex::kNanValue);
+  }
+  ValueNode* arg = args[0];
+
+  switch (arg->value_representation()) {
+    case ValueRepresentation::kUint32:
+    case ValueRepresentation::kInt32:
+      return arg;
+    case ValueRepresentation::kTagged:
+      switch (CheckTypes(arg, {NodeType::kSmi})) {
+        case NodeType::kSmi:
+          return arg;
+        default:
+          // TODO(verwaest): Support actually parsing strings, converting
+          // doubles to ints, ...
+          return ReduceResult::Fail();
+      }
+    case ValueRepresentation::kIntPtr:
+      UNREACHABLE();
+    case ValueRepresentation::kFloat64:
+    case ValueRepresentation::kHoleyFloat64:
+      return ReduceResult::Fail();
+  }
+}
+
 ReduceResult MaglevGraphBuilder::TryReduceMathAbs(
     compiler::JSFunctionRef target, CallArguments& args) {
   if (args.count() == 0) {
