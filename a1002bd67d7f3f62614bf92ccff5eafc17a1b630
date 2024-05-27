@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fe7f558_b2cbae85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-27T17:21:49Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "a1002bd67d7f3f62614bf92ccff5eafc17a1b630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f90a8ad7_6021c3d7",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4108,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-05-27T17:21:49Z",
+      "side": 1,
+      "message": "The call itself can cause GC (and finishes sweeping). This probably should be the last call before we open the no-GC scope.",
+      "range": {
+        "startLine": 4108,
+        "startChar": 8,
+        "endLine": 4108,
+        "endChar": 21
+      },
+      "revId": "a1002bd67d7f3f62614bf92ccff5eafc17a1b630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
