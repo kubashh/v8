@@ -16,6 +16,69 @@
       "message": "@jkummerow@chromium.org: PTAL.",
       "revId": "db9c964332d07a94f99d9b178be268e928ca55e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0e28678_586a8419",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-27T10:20:41Z",
+      "side": 1,
+      "message": "LGTM with two minor comments.",
+      "revId": "db9c964332d07a94f99d9b178be268e928ca55e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "857d445c_234e9e3d",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8385,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-27T10:20:41Z",
+      "side": 1,
+      "message": "A quick experiment suggests that you can address this right away even with C++17, at the cost of spelling out the struct/constructor name:\n```\n    frame_description_ \u003d std::make_unique\u003cLiftoffFrameDescriptionForDeopt\u003e(\n        LiftoffFrameDescriptionForDeopt{\n            decoder-\u003epc_offset(), static_cast\u003cuint32_t\u003e(__ pc_offset()),\n            std::vector\u003cLiftoffVarState\u003e(__ cache_state()-\u003estack_state.begin(),\n                                         __ cache_state()-\u003estack_state.end()),\n            __ cache_state()-\u003ecached_instance_data});\n```",
+      "range": {
+        "startLine": 8385,
+        "startChar": 4,
+        "endLine": 8385,
+        "endChar": 48
+      },
+      "revId": "db9c964332d07a94f99d9b178be268e928ca55e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb5c8e53_4d630ea3",
+        "filename": "src/wasm/wasm-deopt-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-05-27T10:20:41Z",
+      "side": 1,
+      "message": "Language nit: \"how X has to look\" or \"what X has to look like\".",
+      "range": {
+        "startLine": 96,
+        "startChar": 15,
+        "endLine": 96,
+        "endChar": 19
+      },
+      "revId": "db9c964332d07a94f99d9b178be268e928ca55e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
