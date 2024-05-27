@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "67feb904_2aa6d390",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-27T17:50:29Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 10,
+        "startChar": 35,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad5648ac_bd6fdb93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-27T17:50:29Z",
+      "side": 1,
+      "message": "Is this about `LanguageMode` transitions for `JSFunctions`?",
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d63696dd_bf75379a",
@@ -14,6 +54,40 @@
       "writtenOn": "2024-05-27T13:56:12Z",
       "side": 1,
       "message": "ptal",
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd38473a_94445b1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-27T17:50:29Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59cade6c_f12ae6cf",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-05-27T17:50:29Z",
+      "side": 1,
+      "message": "Please add a comment why is this necessary. If it\u0027s only `JSFunction` related it might make sense to add `IsJSFunctionMap(*old_map_)` to the condition.",
       "revId": "0ca144dae464749599283be835a054ce232819fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
