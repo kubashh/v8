@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "847da9a1_12f65f70",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-27T12:40:00Z",
+      "side": 1,
+      "message": "This CHECK in this branch should express the same condition as the CHECK_IMPLIES that we ran unconditionally before this CL.",
+      "revId": "2583f6bf878c968d88706886e5423de6bcf859a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90bb4a17_e9e0cba6",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-05-27T12:40:00Z",
+      "side": 1,
+      "message": "Here we actually store twice to the TracedNode::object_ field. I think that\u0027s okay because this zap case seems quite important. We can\u0027t really avoid this because the TracedHandle is reset through the same Reset() API function as the \"eager Reset()\" case (we could make the \"eager Reset()\" perform two stores instead though). Alternatively, we could also add a branch in TracedHandles::Destroy().",
+      "revId": "2583f6bf878c968d88706886e5423de6bcf859a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
