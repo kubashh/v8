@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31bfd2eb_c1eeb97f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-27T13:14:10Z",
+      "side": 1,
+      "message": "Thanks for all the iterations Paolo! Once the bots are green and you are happy with the CL, can you please add OWNERs for those files that require additional people to review?",
+      "revId": "3b43f0aa192eb14508130f7e9dacb00c43f31976",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5de4067_8df0f9d3",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-27T13:14:10Z",
+      "side": 1,
+      "message": "Very minor nit: Is there a particular reason why you couldn\u0027t put the `#if V8_ENABLE_DRUMBRAKE` inside the `WASM_EXEC_TEST` macro body? This would avoid a tiny bit of duplication.",
+      "revId": "3b43f0aa192eb14508130f7e9dacb00c43f31976",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd6bc5ab_59f8875e",
+        "filename": "test/message/message.status",
+        "patchSetId": 22
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-27T13:14:10Z",
+      "side": 1,
+      "message": "In case we skip or fail specific tests even with the interpreter, could you update the comment or add a new one explaining why (or even just a `TODO(paolosev@...)` to investigate). Right now, it\u0027s a bit confusing that the comment says we disable things because we don\u0027t support Wasm in jitless, even though with DrumBrake we do.",
+      "revId": "3b43f0aa192eb14508130f7e9dacb00c43f31976",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

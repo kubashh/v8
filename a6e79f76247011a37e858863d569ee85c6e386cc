@@ -525,6 +525,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b8b61b6_0b9da354",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-05-27T13:14:10Z",
+      "side": 1,
+      "message": "A senior team member might be a good person to review just these `frames.cc/h`-related parts (also ideally an OWNER and knowledgeable about Wasm), maybe Andreas, Clemens (but he is OOO for a little while longer), or Jakob?",
+      "parentUuid": "6ce78678_ad92b3c7",
+      "range": {
+        "startLine": 79,
+        "startChar": 29,
+        "endLine": 79,
+        "endChar": 42
+      },
+      "revId": "a6e79f76247011a37e858863d569ee85c6e386cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc542496_c41565d8",
         "filename": "src/execution/frames.cc",
         "patchSetId": 10
