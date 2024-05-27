@@ -1635,6 +1635,7 @@ bool MaglevCodeGenerator::EmitCode() {
                                     MaglevCodeGeneratingNodeProcessor>>
       processor(SafepointingNodeProcessor{local_isolate_},
                 MaglevCodeGeneratingNodeProcessor{masm()});
+  processor.set_defer_deferred_blocks(true);
   RecordInlinedFunctions();
 
   if (graph_->is_osr()) {
