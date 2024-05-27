@@ -49,7 +49,7 @@ in_category(
         properties = {"builder_group": "client.v8.fyi"},
         use_remoteexec = RECLIENT.DEFAULT,
         notifies = ["sheriffs"],
-        barrier = BARRIER.LKGR_TREE_CLOSER,
+        barrier = BARRIER.NONE,
     ),
     integration_builder(
         name = "V8 Blink Linux Debug",
