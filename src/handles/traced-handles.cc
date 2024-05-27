@@ -40,7 +40,7 @@ void TracedNode::Release() {
   // Clear all flags.
   flags_ = 0;
   clear_markbit();
-  set_raw_object(kGlobalHandleZapValue);
+  set_raw_object(kTracedHandleEarlyResetZapValue);
   DCHECK(IsMetadataCleared());
 }
 
@@ -321,6 +321,8 @@ void TracedHandles::ResetDeadNodes(
       // Detect unreachable nodes first.
       if (!node->markbit()) {
         FreeNode(node);
+        // Mark entry as zapped during Full GC.
+        node->set_raw_object(kTracedHandleFullGCResetZapValue);
         continue;
       }
 
@@ -349,6 +351,8 @@ void TracedHandles::ResetYoungDeadNodes(
 
       if (!node->markbit()) {
         FreeNode(node);
+        // Mark entry as zapped during Minor GC.
+        node->set_raw_object(kTracedHandleMinorGCResetZapValue);
         continue;
       }
 
@@ -440,9 +444,7 @@ void TracedHandles::ProcessYoungObjects(
         FullObjectSlot slot = node->location();
         handler->ResetRoot(
             *reinterpret_cast<v8::TracedReference<v8::Value>*>(&slot));
-        // We cannot check whether a node is in use here as the reset behavior
-        // depends on whether incremental marking is running when reclaiming
-        // young objects.
+        CHECK(!node->is_in_use());
       } else {
         if (node->is_weak()) {
           node->set_weak(false);
