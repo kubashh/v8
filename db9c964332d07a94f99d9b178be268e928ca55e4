@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4973999f_87a3d19f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8385,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-27T11:40:39Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "857d445c_234e9e3d",
+      "range": {
+        "startLine": 8385,
+        "startChar": 4,
+        "endLine": 8385,
+        "endChar": 48
+      },
+      "revId": "db9c964332d07a94f99d9b178be268e928ca55e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb5c8e53_4d630ea3",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-05-27T10:20:41Z",
       "side": 1,
       "message": "Language nit: \"how X has to look\" or \"what X has to look like\".",
+      "range": {
+        "startLine": 96,
+        "startChar": 15,
+        "endLine": 96,
+        "endChar": 19
+      },
+      "revId": "db9c964332d07a94f99d9b178be268e928ca55e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b15a9028_dc853f92",
+        "filename": "src/wasm/wasm-deopt-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-05-27T11:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb5c8e53_4d630ea3",
       "range": {
         "startLine": 96,
         "startChar": 15,
