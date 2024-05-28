@@ -551,9 +551,13 @@ class GraphBuilder {
           std::max<int>(actual_parameter_count,
                         node->expected_parameter_count()),
           CallDescriptor::kNeedsFrameState | CallDescriptor::kCanUseRoots);
+
+      LazyDeoptOnThrow lazy_deopt_on_throw = ShouldLazyDeoptOnThrow(node);
+
       SetMap(node, __ Call(V<CallTarget>::Cast(callee), frame_state,
                            base::VectorOf(arguments),
                            TSCallDescriptor::Create(descriptor, CanThrow::kYes,
+                                                    lazy_deopt_on_throw,
                                                     graph_zone())));
     }
 
@@ -639,9 +643,11 @@ class GraphBuilder {
                             : CallDescriptor::kNoFlags);
     V<Code> stub_code = __ HeapConstant(callable.code());
 
+    LazyDeoptOnThrow lazy_deopt_on_throw = ShouldLazyDeoptOnThrow(node);
+
     return __ Call(stub_code, frame_state, base::VectorOf(arguments),
                    TSCallDescriptor::Create(call_descriptor, CanThrow::kYes,
-                                            graph_zone()));
+                                            lazy_deopt_on_throw, graph_zone()));
   }
   maglev::ProcessResult Process(maglev::CallBuiltin* node,
                                 const maglev::ProcessingState& state) {
@@ -707,9 +713,12 @@ class GraphBuilder {
       frame_state = BuildFrameState(node->lazy_deopt_info());
     }
 
+    LazyDeoptOnThrow lazy_deopt_on_throw = ShouldLazyDeoptOnThrow(node);
+
     SetMap(node, __ Call(c_entry_stub, frame_state, base::VectorOf(arguments),
                          TSCallDescriptor::Create(
-                             call_descriptor, CanThrow::kYes, graph_zone())));
+                             call_descriptor, CanThrow::kYes,
+                             lazy_deopt_on_throw, graph_zone())));
 
     return maglev::ProcessResult::kContinue;
   }
@@ -3657,6 +3666,13 @@ class GraphBuilder {
     if (flip) std::swap(true_idx, false_idx);
     return __ Select(b, true_idx, false_idx, RegisterRepresentation::Tagged(),
                      BranchHint::kNone, SelectOp::Implementation::kBranch);
+  }
+
+  LazyDeoptOnThrow ShouldLazyDeoptOnThrow(maglev::NodeBase* node) {
+    if (!node->properties().can_throw()) return LazyDeoptOnThrow::kNo;
+    const maglev::ExceptionHandlerInfo* info = node->exception_handler_info();
+    if (info->ShouldLazyDeopt()) return LazyDeoptOnThrow::kYes;
+    return LazyDeoptOnThrow::kNo;
   }
 
   class ThrowingScope {
