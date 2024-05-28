@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64ccb069_68b7366d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-28T07:14:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67feb904_2aa6d390",
+      "range": {
+        "startLine": 10,
+        "startChar": 35,
+        "endLine": 10,
+        "endChar": 43
+      },
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad5648ac_bd6fdb93",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-05-27T17:50:29Z",
       "side": 1,
       "message": "Is this about `LanguageMode` transitions for `JSFunctions`?",
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f53cc01_452d06c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-28T07:14:12Z",
+      "side": 1,
+      "message": "yes, afaiu language mode transitions assume that all JSFunction transitions are between maps with equivalent property types.",
+      "parentUuid": "ad5648ac_bd6fdb93",
       "revId": "0ca144dae464749599283be835a054ce232819fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +130,24 @@
       "writtenOn": "2024-05-27T17:50:29Z",
       "side": 1,
       "message": "Please add a comment why is this necessary. If it\u0027s only `JSFunction` related it might make sense to add `IsJSFunctionMap(*old_map_)` to the condition.",
+      "revId": "0ca144dae464749599283be835a054ce232819fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0d649f7_472008b4",
+        "filename": "src/objects/map-updater.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-05-28T07:14:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59cade6c_f12ae6cf",
       "revId": "0ca144dae464749599283be835a054ce232819fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
