@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e143b7b_23cf2dfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-28T09:29:59Z",
+      "side": 1,
+      "message": "We\u0027re considering using the parameter count on the Code object in more places as we would like to deprecate the one in the untrusted SharedFunctionInfo object. This change makes the value available in more cases. We still need it for CppBuiltins though (and maybe others).\n\nDarius, could you take a look? Cc Igor FYI",
+      "revId": "eec6a509ae0ae73e9696a24e020b7cb4facd9e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b9a85cd_66ab331e",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-05-28T09:29:59Z",
+      "side": 1,
+      "message": "The main reason this is set here and stored in a member field, instead of just having this block in `FinalizeCode` (where it\u0027s actually used) is that the `linkage()` often references a stack-allocated object, which will have gone out of scope in `FinalizeCode`.",
+      "revId": "eec6a509ae0ae73e9696a24e020b7cb4facd9e98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
