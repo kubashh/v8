@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9b981e_4ca4c1b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-05-28T09:30:40Z",
+      "side": 1,
+      "message": "please link doc directly.",
+      "range": {
+        "startLine": 11,
+        "startChar": 39,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "f9e2cde527da8eef4ab6ed8ba96e2a896f0f7a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ca72d08_c5e0bb39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-05-28T09:30:40Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f9e2cde527da8eef4ab6ed8ba96e2a896f0f7a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06c3a95d_d743c029",
+        "filename": "src/execution/local-isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-05-28T09:30:40Z",
+      "side": 1,
+      "message": "nit: The name is not ideal imo because it sounds like it only executes if on background. Maybe `ParkIfOnBackgroundAndExecute`?",
+      "range": {
+        "startLine": 162,
+        "startChar": 17,
+        "endLine": 162,
+        "endChar": 49
+      },
+      "revId": "f9e2cde527da8eef4ab6ed8ba96e2a896f0f7a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
