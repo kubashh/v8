@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed7fc6b_2caba83a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-05-28T15:16:59Z",
+      "side": 1,
+      "message": "Rubber-stamp LGTM, I didn\u0027t look at the platform-specific code.",
+      "revId": "5d6992d8ea4d84d215910f165f043b50500d7215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "662ef32e_909a8645",
+        "filename": "src/codegen/riscv/macro-assembler-riscv.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-05-28T15:16:59Z",
+      "side": 1,
+      "message": "Why did this move? I think it made more sense under the `// Stack limit utilities` comment.",
+      "revId": "5d6992d8ea4d84d215910f165f043b50500d7215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d9f4cf_ebc6c58e",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 1994,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-05-28T15:16:59Z",
+      "side": 1,
+      "message": "nit: you can also add riscv64 to the list, or maybe let\u0027s just rephrase the comment to something like \"Stack switching is not supported on all platforms\". The block condition is clear enough.",
+      "range": {
+        "startLine": 1994,
+        "startChar": 41,
+        "endLine": 1994,
+        "endChar": 59
+      },
+      "revId": "5d6992d8ea4d84d215910f165f043b50500d7215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
