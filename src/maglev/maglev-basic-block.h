@@ -166,6 +166,9 @@ class BasicBlock {
   ZonePtrList<ValueNode>& reload_hints() { return reload_hints_; }
   ZonePtrList<ValueNode>& spill_hints() { return spill_hints_; }
 
+  bool is_deferred() const { return deferred_; }
+  void set_deferred(bool deferred) { deferred_ = deferred; }
+
  private:
   enum : uint8_t { kMerge, kEdgeSplit, kOther } type_ = kMerge;
   bool is_start_block_of_switch_case_ = false;
@@ -187,6 +190,8 @@ class BasicBlock {
   // {snapshot_} is used during PhiRepresentationSelection in order to track to
   // phi tagging nodes that come out of this basic block.
   MaybeSnapshot snapshot_;
+
+  bool deferred_ = false;
 };
 
 inline base::SmallVector<BasicBlock*, 2> BasicBlock::successors() const {
