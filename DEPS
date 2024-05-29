@@ -320,7 +320,7 @@ deps = {
   'third_party/perfetto':
     Var('android_url') + '/platform/external/perfetto.git' + '@' + '6fc824d618d2f06b5d9cd8655ba0419b6b3b366e',
   'third_party/protobuf_chrome':
-    Var('chromium_url') + '/chromium/src/third_party/protobuf.git' + '@' + '4abbe88863a7dd75dd11da0487e9b995133f7592',
+    Var('chromium_url') + '/chromium/src/third_party/protobuf.git' + '@' + 'ed9284c473211491ae6de41d60ac0329a79270d8',
   'third_party/re2/src':
     Var('chromium_url') + '/external/github.com/google/re2.git' + '@' + 'a771d3fbe7c432dc4db68360c6c0004fdde5646b',
   'third_party/requests': {
