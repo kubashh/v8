@@ -156,6 +156,18 @@ struct WasmModulesPerIsolate {
   size_t count = 0;
 };
 
+#if V8_ENABLE_DRUMBRAKE
+struct WasmInterpreterSlowExecution {
+  bool slow_execution = true;
+  bool jitless = true;
+  int64_t cpu_percentage = 0;
+};
+
+struct WasmInterpreterJitStatus {
+  bool jitless = true;
+};
+#endif  // V8_ENABLE_DRUMBRAKE
+
 /**
  * This class serves as a base class for recording event-based metrics in V8.
  * There a two kinds of metrics, those which are expected to be thread-safe and
@@ -208,6 +220,11 @@ class V8_EXPORT Recorder {
   ADD_MAIN_THREAD_EVENT(WasmModuleDecoded)
   ADD_MAIN_THREAD_EVENT(WasmModuleCompiled)
   ADD_MAIN_THREAD_EVENT(WasmModuleInstantiated)
+#if V8_ENABLE_DRUMBRAKE
+  ADD_MAIN_THREAD_EVENT(WasmInterpreterSlowExecution)
+  ADD_MAIN_THREAD_EVENT(WasmInterpreterJitStatus)
+#endif  // V8_ENABLE_DRUMBRAKE
+
 #undef ADD_MAIN_THREAD_EVENT
 
   // Thread-safe events are not allowed to access the context and therefore do
