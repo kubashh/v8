@@ -3816,10 +3816,12 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* args) {
-    V<Word32> dst = args[0].op;
-    V<Word32> src = args[1].op;
-    V<Word32> size = args[2].op;
+                 const Value& dst_val, const Value& src_val,
+                 const Value& size_val) {
+    // TODO(evih): use proper types.
+    V<Word32> dst = dst_val.op;
+    V<Word32> src = src_val.op;
+    V<Word32> size = size_val.op;
     bool table_is_shared = decoder->module_->tables[imm.table.index].shared;
     DCHECK_EQ(
         table_is_shared,
@@ -3836,10 +3838,12 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value args[]) {
-    V<Word32> dst = args[0].op;
-    V<Word32> src = args[1].op;
-    V<Word32> size = args[2].op;
+                 const Value& dst_val, const Value& src_val,
+                 const Value& size_val) {
+    // TODO(evih): use proper types.
+    V<Word32> dst = dst_val.op;
+    V<Word32> src = src_val.op;
+    V<Word32> size = size_val.op;
     bool table_is_shared = decoder->module_->tables[imm.table_dst.index].shared;
     // TODO(14616): Is this too restrictive?
     DCHECK_EQ(table_is_shared,
