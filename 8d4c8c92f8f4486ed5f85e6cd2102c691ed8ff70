@@ -69,6 +69,41 @@
       "message": "Poking at this again: the node failure manifests itself as an EPT entry having the wrong type.  The segfault occurs here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/x64/builtins-x64.cc;l\u003d4523, which loads the callback for a FunctionTemplateInfo.  Still poking to find how this happened.",
       "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec183dc_e81c8358",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-29T14:47:47Z",
+      "side": 1,
+      "message": "Somehow the EmbedderDataArray of node\u0027s NativeContext is corrupted when it is deserialized, containing non-null ExternalPointerHandles in it.  Later writes to those context fields during node boot end up overwriting the handle that was correctly allocated when deserializing the FunctionTemplateInfo instance.  Still poking; very perplexing.",
+      "parentUuid": "24db7b37_5f6c6a3d",
+      "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc2b28d_c921ac80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-29T14:47:47Z",
+      "side": 1,
+      "message": "It would seem that the problem is that the",
+      "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
