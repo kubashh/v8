@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85952398_97050e47",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-05-29T16:03:51Z",
+      "side": 1,
+      "message": "Upon further investigation this case is entirely in error. What is happening is that when JS calls into JSPI wasm, we don\u0027t return a promise to the JS until the wasm gets suspended. After that point we are in the above added case, but before it we are in a situation where we aren\u0027t in a reaction job, but for some reason the StackFrameIterator won\u0027t iterate past the wasm frames to the outer JS frames even though they have not been suspended. I think this is a bug in StackFrameIterator.",
+      "range": {
+        "startLine": 1236,
+        "startChar": 2,
+        "endLine": 1236,
+        "endChar": 10
+      },
+      "revId": "b121654e48049249c25b7a422c1355de4d14eb11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
