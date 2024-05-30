@@ -104,6 +104,24 @@
       "message": "It would seem that the problem is that the",
       "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de84a08_596938f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-30T08:47:45Z",
+      "side": 1,
+      "message": "Funny.  So what happens is that the `NativeContext` gets deserialized, along with its `EmbedderDataArray`, which has 40 slots.  Each slot is `EmbedderDataSlot`, with two 32-bit words.  There is special post-processing for a context\u0027s `EmbedderDataArray` in `context-deserializer.cc` but that doesn\u0027t occur in this case because Node doesn\u0027t yet support custom context serialization/deserialization.  Each slot in the array can have a heap object or an external pointer.  Those external pointer slots are lazily initialized, so the first write to them should allocate an EPT slot.  However the bug is that the `EmbedderDataArray` is getting deserialized with non-null EPT handles!\n\nThe bug occurs because in the serializer we skip over `ExternalPointerSlot` values for `EmbedderDataArray` and other types: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/snapshot/serializer.cc;l\u003d1156\n\nThis causes the `bytes_processed_so_far_` to not advance when visiting the EPT slot, indicating these values will be filled in by copying, via `OutputRawData`.  But of course this ends up copying a raw EPT handle from the serializer to the deserializer, leading to aliasing of the EPT handle and eventual stompling.\n\nThe way this works for other data types is that we null out the external pointer fields before writing.  Perhaps that is what needs to happen with embedder fields on the context as well.",
+      "parentUuid": "cfc2b28d_c921ac80",
+      "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
