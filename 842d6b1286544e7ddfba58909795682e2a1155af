@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa461b56_9aca00ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-05-30T10:23:00Z",
+      "side": 1,
+      "message": "According to our discussion at https://docs.google.com/document/d/1ioIByc89pi74J_ldzygh1Dnq_NttqgsStsblfPiMmcU/edit , I tried to change the deoptimization of the new ic state, that is, let the builtin call to return a symbol `mega_transition_failed_symbol` and have a deopt check in the JIT\u0027d code.\n\nHowever, I found that the solution can bring some extra complexity:\n1) We need to introduce a two separate builtin functions for Ignition/Sparkplug and Maglev/Turbofan. Because in Maglev/Turbofan, we need the builtin to return the symbol `mega_transition_failed_symbol` if the transition fails, but for Ignition/Sparkplug, we don\u0027t want this result at all.\n\n2) We need to introduce a new operator `StoreTransitionOrDeopt` in Turbofan. This is because the `JSSetKeyedProperty` node will be reduced to a `Call` node, and unlike the existing `CheckIf` operator in Turbofan, we want a tailing deoptimization check. I didn\u0027t found any other solution to gurantee that the `CheckIf` node is placed right after the `Call` node.\n\nWhat do you think of these issues? Do you think the complexity is acceptable or we can find some way to avoid it?",
+      "revId": "842d6b1286544e7ddfba58909795682e2a1155af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

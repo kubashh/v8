@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82035bf3_253bc32a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-05-30T10:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4d68d62_6b79d1af",
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9bdf17e_78485668",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "Thanks for your comments! I\u0027ve introduced a new state called `MegaTransition`, and now the feedback slot looks like:\n\n```\n- slot #0 StoreKeyedSloppy MEGATRANSITION {\n  [0] \u003cSymbol: (mega_transition_symbol)\u003e\n  [1] [cleared]\n}\n```",
       "parentUuid": "c9bdf17e_78485668",
+      "range": {
+        "startLine": 2417,
+        "startChar": 46,
+        "endLine": 2417,
+        "endChar": 62
+      },
+      "revId": "d4e8443a8c2ea87e6707a53f83baa16564b09cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67001558_0b054575",
+        "filename": "src/common/globals.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-05-30T10:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63860450_004165a1",
       "range": {
         "startLine": 2417,
         "startChar": 46,

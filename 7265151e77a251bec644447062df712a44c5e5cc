@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f0b39b_626443dd",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-05-30T10:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fbfd47f_1c606785",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 795,
+        "endChar": 16
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "149f4da5_4547f89c",
@@ -216,6 +240,30 @@
       "side": 1,
       "message": "First of all in the current CL I have a Builtin for `MegaTransition` state that is only called from Maglev/Turbofan JIT\u0027d code. I added some counters in this Builtin (by Builtin PGO profiling) and the number is calculated by `times_to_call_runtime_ic_miss/call_count_of_this_builtin`.\n\nOne of the reason that 2) have more deoptimizations is that in 2) I didn\u0027t deal with dictionary properties in `MegaTransition` state. If in Ignition/Sparkplug we only saw fast-mode receiver but encounter a dictionary-mode receiver in Maglev/Turbofan, we will have to deoptimize.\n\nFor 3), if the key is coming from `for-in`\u0027s enum cache, the receiver is more likely to stay in fast mode. In the future we can even have some tricks to avoid receiver to have `fast mode -\u003e dictionary mode` conversion in bytecode.",
       "parentUuid": "3ef6d4ec_3d09b133",
+      "range": {
+        "startLine": 797,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 9
+      },
+      "revId": "7265151e77a251bec644447062df712a44c5e5cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13d1993c_70157896",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-05-30T10:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dcde92f_3f923d4e",
       "range": {
         "startLine": 797,
         "startChar": 10,
