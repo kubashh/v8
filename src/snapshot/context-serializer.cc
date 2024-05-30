@@ -28,6 +28,7 @@ class V8_NODISCARD SanitizeNativeContextScope final {
   SanitizeNativeContextScope(Isolate* isolate,
                              Tagged<NativeContext> native_context,
                              bool allow_active_isolate_for_testing,
+                             bool has_serialize_context_data_callback,
                              const DisallowGarbageCollection& no_gc)
       : native_context_(native_context), no_gc_(no_gc) {
 #ifdef DEBUG
@@ -45,6 +46,23 @@ class V8_NODISCARD SanitizeNativeContextScope final {
             ->RawExternalPointerField(NativeContext::kMicrotaskQueueOffset,
                                       kNativeContextMicrotaskQueueTag)
             .GetAndClearContentForSerialization(no_gc);
+
+    // If the embedder has not provided a serializer for the EmbedderDataArray,
+    // clear all fields that might hold external pointers, to avoid serializing
+    // a native pointer (or an ExternalPointerHandle).
+    if (!has_serialize_context_data_callback &&
+        !allow_active_isolate_for_testing) {
+      Tagged<EmbedderDataArray> embedder_data =
+          EmbedderDataArray::cast(native_context_->embedder_data());
+      for (int index = 0; index < embedder_data->length(); index++) {
+        EmbedderDataSlot slot(embedder_data, index);
+        ExternalPointer_t value = kNullExternalPointer;
+        if (slot.GetAndClearExternalPointerForSerialization(&value, no_gc)) {
+          saved_embedder_data_array_external_pointers_.emplace_back(index,
+                                                                    value);
+        }
+      }
+    }
   }
 
   ~SanitizeNativeContextScope() {
@@ -54,11 +72,20 @@ class V8_NODISCARD SanitizeNativeContextScope final {
                                   kNativeContextMicrotaskQueueTag)
         .RestoreContentAfterSerialization(microtask_queue_external_pointer_,
                                           no_gc_);
+
+    Tagged<EmbedderDataArray> embedder_data =
+        EmbedderDataArray::cast(native_context_->embedder_data());
+    for (auto [index, value] : saved_embedder_data_array_external_pointers_) {
+      EmbedderDataSlot slot(embedder_data, index);
+      slot.RestoreExternalPointerAfterSerialization(value, no_gc_);
+    }
   }
 
  private:
   Tagged<NativeContext> native_context_;
   ExternalPointerSlot::RawContent microtask_queue_external_pointer_;
+  std::vector<std::pair<int, ExternalPointer_t>>
+      saved_embedder_data_array_external_pointers_;
   const DisallowGarbageCollection& no_gc_;
 };
 
@@ -104,7 +131,7 @@ void ContextSerializer::Serialize(Tagged<Context>* o,
 
   SanitizeNativeContextScope sanitize_native_context(
       isolate(), context_->native_context(), allow_active_isolate_for_testing(),
-      no_gc);
+      serialize_embedder_fields_.context_callback.callback != nullptr, no_gc);
 
   VisitRootPointer(Root::kStartupObjectCache, nullptr, FullObjectSlot(o));
   SerializeDeferredObjects();
