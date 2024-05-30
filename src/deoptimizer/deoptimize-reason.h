@@ -65,6 +65,7 @@ namespace internal {
   V(NotAString, "not a String")                                                \
   V(NotAStringOrStringWrapper, "not a String or a string wrapper")             \
   V(NotASymbol, "not a Symbol")                                                \
+  V(NotATransitioningStore, "not a transition store")                          \
   V(NotDetectableReceiver, "not a detectable receiver")                        \
   V(NotInt32, "not int32")                                                     \
   V(NotUint32, "not unsigned int32")                                           \

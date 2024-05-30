@@ -4527,6 +4527,7 @@ class RepresentationSelector {
       case IrOpcode::kJSToObject:
       case IrOpcode::kJSToString:
       case IrOpcode::kJSParseInt:
+      case IrOpcode::kStoreTransitionOrDeopt:
 #if V8_ENABLE_WEBASSEMBLY
         if (node->opcode() == IrOpcode::kJSWasmCall) {
           return VisitJSWasmCall<T>(node, lowering);

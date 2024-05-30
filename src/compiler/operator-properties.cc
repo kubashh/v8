@@ -16,7 +16,8 @@ namespace compiler {
 // static
 bool OperatorProperties::HasContextInput(const Operator* op) {
   IrOpcode::Value opcode = static_cast<IrOpcode::Value>(op->opcode());
-  return IrOpcode::IsJsOpcode(opcode);
+  return IrOpcode::IsJsOpcode(opcode) ||
+         op->opcode() == IrOpcode::kStoreTransitionOrDeopt;
 }
 
 // static
@@ -208,6 +209,7 @@ bool OperatorProperties::HasFrameStateInput(const Operator* op) {
     case IrOpcode::kJSSetNamedProperty:
     case IrOpcode::kJSDefineNamedOwnProperty:
     case IrOpcode::kJSSetKeyedProperty:
+    case IrOpcode::kStoreTransitionOrDeopt:
     case IrOpcode::kJSDefineKeyedOwnProperty:
 
     // Conversions

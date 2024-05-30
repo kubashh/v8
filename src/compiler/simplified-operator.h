@@ -258,6 +258,34 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, ObjectAccess const&);
 V8_EXPORT_PRIVATE ObjectAccess const& ObjectAccessOf(const Operator* op)
     V8_WARN_UNUSED_RESULT;
 
+struct StoreTransitionParameters {
+  int slot_;
+  bool is_internalized_string_key_;  // machine type of the field.
+  bool is_trampoline_;
+
+  StoreTransitionParameters(int slot, bool is_internalized_string_key,
+                            bool is_trampoline)
+      : slot_(slot),
+        is_internalized_string_key_(is_internalized_string_key),
+        is_trampoline_(is_trampoline) {}
+
+  int slot() const { return slot_; }
+  bool is_internalized_string_key() const {
+    return is_internalized_string_key_;
+  }
+  bool is_trampoline() const { return is_trampoline_; }
+};
+
+V8_EXPORT_PRIVATE bool operator==(StoreTransitionParameters const&,
+                                  StoreTransitionParameters const&);
+
+size_t hash_value(StoreTransitionParameters const&);
+
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&,
+                                           StoreTransitionParameters const&);
+V8_EXPORT_PRIVATE StoreTransitionParameters const& StoreTransitionParametersOf(
+    const Operator* op) V8_WARN_UNUSED_RESULT;
+
 // The ConvertReceiverMode is used as parameter by ConvertReceiver operators.
 ConvertReceiverMode ConvertReceiverModeOf(Operator const* op)
     V8_WARN_UNUSED_RESULT;
@@ -1153,6 +1181,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   // CsaLoadElimination.
   const Operator* StoreToObject(ObjectAccess const&);
   const Operator* InitializeImmutableInObject(ObjectAccess const&);
+
+  const Operator* StoreTransitionOrDeopt(StoreTransitionParameters const&);
 
   // load-typed-element buffer, [base + external + index]
   const Operator* LoadTypedElement(ExternalArrayType const&);

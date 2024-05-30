@@ -1823,6 +1823,37 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
   return Replace(value);
 }
 
+Reduction JSNativeContextSpecialization::ReduceKeyedStoreTransition(Node* node,
+                                                                    Node* key) {
+  DCHECK(node->opcode() == IrOpcode::kJSSetKeyedProperty);
+  static_assert(JSSetKeyedPropertyNode::ObjectIndex() == 0);
+  JSSetKeyedPropertyNode n(node);
+  const PropertyAccess& p = n.Parameters();
+
+  bool is_internalized_string_key = false;
+  if (key->opcode() == IrOpcode::kJSForInNext) {
+    JSForInNextNode name(key);
+    auto mode = name.Parameters().mode();
+    if (mode == ForInMode::kUseEnumCacheKeysAndIndices ||
+        mode == ForInMode::kUseEnumCacheKeys) {
+      is_internalized_string_key = true;
+    }
+  }
+
+  FrameState frame_state = n.frame_state();
+  Node* outer_state = frame_state.outer_frame_state();
+  bool is_trampoline = outer_state->opcode() != IrOpcode::kFrameState;
+  StoreTransitionParameters params(p.feedback().index(),
+                                   is_internalized_string_key, is_trampoline);
+  Node* inputs[8] = {n.object(),  key,         n.value(),  n.feedback_vector(),
+                     n.context(), frame_state, n.effect(), n.control()};
+  Node* value =
+      graph()->NewNode(simplified()->StoreTransitionOrDeopt(params), 8, inputs);
+  ReplaceWithValue(node, value, value, n.control());
+
+  return Replace(value);
+}
+
 Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
   JSLoadNamedNode n(node);
   NamedAccess const& p = n.Parameters();
@@ -2526,9 +2557,16 @@ Reduction JSNativeContextSpecialization::ReducePropertyAccess(
       return ReduceEagerDeoptimize(
           node,
           DeoptimizeReason::kInsufficientTypeFeedbackForGenericNamedAccess);
-    case ProcessedFeedback::kNamedAccess:
-      return ReduceNamedAccess(node, value, feedback.AsNamedAccess(),
-                               access_mode, key);
+    case ProcessedFeedback::kNamedAccess: {
+      NamedAccessFeedback const& named_access_feedback =
+          feedback.AsNamedAccess();
+      if (named_access_feedback.IsStoreTransition()) {
+        return ReduceKeyedStoreTransition(node, key);
+      } else {
+        return ReduceNamedAccess(node, value, feedback.AsNamedAccess(),
+                                 access_mode, key);
+      }
+    }
     case ProcessedFeedback::kMegaDOMPropertyAccess:
       DCHECK_EQ(access_mode, AccessMode::kLoad);
       DCHECK_NULL(key);

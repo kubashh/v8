@@ -294,6 +294,7 @@ class FeedbackVector
   void SetOptimizedCode(IsolateForSandbox isolate, Tagged<Code> code);
   void EvictOptimizedCodeMarkedForDeoptimization(
       Isolate* isolate, Tagged<SharedFunctionInfo> shared, const char* reason);
+  void SetMarkedForDeoptimization(Isolate* isolate, const char* reason);
   void ClearOptimizedCode();
 
   // Optimized OSR'd code is cached in JumpLoop feedback vector slots. The
@@ -408,6 +409,9 @@ class FeedbackVector
 
   // The object that indicates a MegaDOM state.
   static inline Handle<Symbol> MegaDOMSentinel(Isolate* isolate);
+
+  // The object that indicates a MegaDOM state.
+  static inline Handle<Symbol> MegaTransitionSentinel(Isolate* isolate);
 
   // A raw version of the uninitialized sentinel that's safe to read during
   // garbage collection (e.g., for patching the cache).
@@ -850,6 +854,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   // was changed. Extra feedback is cleared if the 0 parameter version is used.
   bool ConfigureMegamorphic();
   bool ConfigureMegamorphic(IcCheckType property_type);
+  bool ConfigureMegaTransition();
 
   inline Tagged<MaybeObject> GetFeedback() const;
   inline Tagged<MaybeObject> GetFeedbackExtra() const;
@@ -935,6 +940,7 @@ class V8_EXPORT_PRIVATE FeedbackNexus final {
   inline Tagged<MaybeObject> UninitializedSentinel() const;
   inline Tagged<MaybeObject> MegamorphicSentinel() const;
   inline Tagged<MaybeObject> MegaDOMSentinel() const;
+  inline Tagged<MaybeObject> MegaTransitionSentinel() const;
 
   // Create an array. The caller must install it in a feedback vector slot.
   Handle<WeakFixedArray> CreateArrayOfSize(int length);
