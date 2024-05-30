@@ -122,6 +122,24 @@
       "parentUuid": "cfc2b28d_c921ac80",
       "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "692b45b6_d215ab83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-30T08:52:33Z",
+      "side": 1,
+      "message": "I should add that this doesn\u0027t happen in the existing +pc,-sandbox configuration because serializing a raw pointer does not appear to be a problem, if that pointer is always overwritten after deserialization.  The problem is that if we serialize a raw EPT handle, it\u0027s an indirect write that aliases a storage location owned by something else.",
+      "parentUuid": "5de84a08_596938f1",
+      "revId": "8d4c8c92f8f4486ed5f85e6cd2102c691ed8ff70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
