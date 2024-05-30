@@ -16,6 +16,24 @@
       "message": "PTAL especially at this block, which fixes the node-ci errors.  Would have been nice to use EmbedderDataSlot::load_raw / EmbedderDataSlot::store_raw to avoid allocating a fresh EPT entry but gc_safe_store balked at restoring a value for reasons I didn\u0027t investigate.",
       "revId": "c1100209431c0e2b4c4eba10f6b1b6592c96521a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "690284a8_4d12b9e3",
+        "filename": "src/snapshot/context-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-30T14:36:14Z",
+      "side": 1,
+      "message": "The idea is good but the execution is bad :)  Really I just want to null out external pointers, but with pointer compression this also nulls out heap objects (because of the way ToAlignedPointer works; https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/embedder-data-slot-inl.h;l\u003d98).  Will fix.",
+      "parentUuid": "f0fbbbdf_9bd67418",
+      "revId": "c1100209431c0e2b4c4eba10f6b1b6592c96521a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
