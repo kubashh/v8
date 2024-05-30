@@ -165,6 +165,7 @@ class MergePointInterpreterFrameState;
   V(CheckConstructResult)                           \
   V(CheckDerivedConstructResult)                    \
   V(CheckNotHole)                                   \
+  V(CheckNotMegaTransitionFailed)                   \
   V(ConstructWithSpread)                            \
   V(ConvertReceiver)                                \
   V(ConvertHoleToUndefined)                         \
@@ -8824,6 +8825,24 @@ class CheckNotHole : public FixedInputValueNodeT<1, CheckNotHole> {
 
  public:
   explicit CheckNotHole(uint64_t bitfield) : Base(bitfield) {}
+
+  static constexpr OpProperties kProperties = OpProperties::EagerDeopt();
+  static constexpr
+      typename Base::InputTypes kInputTypes{ValueRepresentation::kTagged};
+
+  Input& object_input() { return input(0); }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
+class CheckNotMegaTransitionFailed
+    : public FixedInputValueNodeT<1, CheckNotMegaTransitionFailed> {
+  using Base = FixedInputValueNodeT<1, CheckNotMegaTransitionFailed>;
+
+ public:
+  explicit CheckNotMegaTransitionFailed(uint64_t bitfield) : Base(bitfield) {}
 
   static constexpr OpProperties kProperties = OpProperties::EagerDeopt();
   static constexpr

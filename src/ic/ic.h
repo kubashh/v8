@@ -62,6 +62,7 @@ class IC {
   }
 
   static inline bool IsHandler(Tagged<MaybeObject> object);
+  static inline bool IsStoreTransitionHandler(Tagged<MaybeObject> object);
 
   // Nofity the IC system that a feedback has changed.
   static void OnFeedbackChanged(Isolate* isolate, Tagged<FeedbackVector> vector,
@@ -91,6 +92,8 @@ class IC {
                             MaybeObjectHandles* handlers);
   void ConfigureVectorState(
       Handle<Name> name, std::vector<MapAndHandler> const& maps_and_handlers);
+  // Configure the vector for MEGATRANSITION.
+  void ConfigureVectorState(IC::State new_state);
 
   char TransitionMarkFromState(IC::State state);
   void TraceIC(const char* type, Handle<Object> name);
@@ -103,6 +106,7 @@ class IC {
 
   void UpdateMonomorphicIC(const MaybeObjectHandle& handler, Handle<Name> name);
   bool UpdateMegaDOMIC(const MaybeObjectHandle& handler, Handle<Name> name);
+  bool UpdateMegaTransitionIC(LookupIterator* lookup);
   bool UpdatePolymorphicIC(Handle<Name> name, const MaybeObjectHandle& handler);
   void UpdateMegamorphicCache(Handle<Map> map, Handle<Name> name,
                               const MaybeObjectHandle& handler);
@@ -114,6 +118,7 @@ class IC {
                                        Tagged<Map> target_map);
   void SetCache(Handle<Name> name, Handle<Object> handler);
   void SetCache(Handle<Name> name, const MaybeObjectHandle& handler);
+  void SetCache(LookupIterator* lookup, const MaybeObjectHandle& handler);
   FeedbackSlotKind kind() const { return kind_; }
   bool IsGlobalIC() const { return IsLoadGlobalIC() || IsStoreGlobalIC(); }
   bool IsLoadIC() const { return IsLoadICKind(kind_); }
@@ -315,6 +320,9 @@ class KeyedStoreIC : public StoreIC {
   V8_WARN_UNUSED_RESULT MaybeHandle<Object> Store(Handle<Object> object,
                                                   Handle<Object> name,
                                                   Handle<Object> value);
+
+  V8_WARN_UNUSED_RESULT MaybeHandle<Object> StoreTransition(
+      Handle<Object> object, Handle<Object> name, Handle<Object> value);
 
  protected:
   void UpdateStoreElement(Handle<Map> receiver_map,

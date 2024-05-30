@@ -1663,6 +1663,8 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
     case IrOpcode::kInitializeImmutableInObject:
       // TODO(gsps): Can we check some types here?
       break;
+    case IrOpcode::kStoreTransitionOrDeopt:
+      break;
     case IrOpcode::kTransitionAndStoreElement:
       CheckNotTyped(node);
       break;

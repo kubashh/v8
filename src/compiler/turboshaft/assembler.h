@@ -2882,7 +2882,8 @@ class TurboshaftAssemblerOpInterface
     DCHECK(frame_state.valid());
     auto arguments = std::apply(
         [](auto&&... as) {
-          return base::SmallVector<OpIndex, std::tuple_size_v<decltype(args)>>{
+          return base::SmallVector<
+              OpIndex, std::tuple_size_v<typename Descriptor::arguments_t>>{
               std::forward<decltype(as)>(as)...};
         },
         args);
@@ -3191,6 +3192,38 @@ class TurboshaftAssemblerOpInterface
   V<String> CallBuiltin_Typeof(Isolate* isolate, V<Object> object) {
     return CallBuiltin<typename BuiltinCallDescriptor::Typeof>(isolate,
                                                                {object});
+  }
+  V<Object> CallBuiltin_KeyedStoreTransition(
+      Isolate* isolate, V<Object> object, V<Object> key, V<Object> value,
+      int slot, V<Object> feedback_vector, OpIndex context, OpIndex frame_state,
+      bool is_internalized_string_key) {
+    if (is_internalized_string_key) {
+      return CallBuiltin<
+          typename BuiltinCallDescriptor::EnumeratedKeyedStoreIC_Transition>(
+          isolate, frame_state, context,
+          {object, key, value, TaggedIndexConstant(slot), feedback_vector});
+    } else {
+      return CallBuiltin<
+          typename BuiltinCallDescriptor::KeyedStoreIC_Transition>(
+          isolate, frame_state, context,
+          {object, key, value, TaggedIndexConstant(slot), feedback_vector});
+    }
+  }
+  V<Object> CallBuiltin_KeyedStoreTransitionTrampoline(
+      Isolate* isolate, V<Object> object, V<Object> key, V<Object> value,
+      int slot, OpIndex context, OpIndex frame_state,
+      bool is_internalized_string_key) {
+    if (is_internalized_string_key) {
+      return CallBuiltin<typename BuiltinCallDescriptor::
+                             EnumeratedKeyedStoreICTrampoline_Transition>(
+          isolate, frame_state, context,
+          {object, key, value, TaggedIndexConstant(slot)});
+    } else {
+      return CallBuiltin<
+          typename BuiltinCallDescriptor::KeyedStoreICTrampoline_Transition>(
+          isolate, frame_state, context,
+          {object, key, value, TaggedIndexConstant(slot)});
+    }
   }
 
   V<Object> CallBuiltinWithVarStackArgs(

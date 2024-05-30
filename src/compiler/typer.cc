@@ -2477,6 +2477,8 @@ Type Typer::Visitor::TypeInitializeImmutableInObject(Node* node) {
   UNREACHABLE();
 }
 
+Type Typer::Visitor::TypeStoreTransitionOrDeopt(Node* node) { UNREACHABLE(); }
+
 Type Typer::Visitor::TypeTransitionAndStoreElement(Node* node) {
   UNREACHABLE();
 }

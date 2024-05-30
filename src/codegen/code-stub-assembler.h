@@ -207,6 +207,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(match_symbol, match_symbol, MatchSymbol)                                 \
   V(megamorphic_symbol, megamorphic_symbol, MegamorphicSymbol)               \
   V(mega_dom_symbol, mega_dom_symbol, MegaDOMSymbol)                         \
+  V(mega_transition_symbol, mega_transition_symbol, MegaTransitionSymbol)    \
   V(message_string, message_string, MessageString)                           \
   V(minus_Infinity_string, minus_Infinity_string, MinusInfinityString)       \
   V(MinusZeroValue, minus_zero_value, MinusZero)                             \
