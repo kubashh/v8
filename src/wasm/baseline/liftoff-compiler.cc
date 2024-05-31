@@ -6016,7 +6016,7 @@ class LiftoffCompiler {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
@@ -6073,7 +6073,7 @@ class LiftoffCompiler {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
