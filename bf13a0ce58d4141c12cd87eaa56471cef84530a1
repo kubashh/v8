@@ -180,6 +180,24 @@
       "parentUuid": "9f19c0d1_3f5a2c14",
       "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b111d63_345a7cb9",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-05-31T13:08:11Z",
+      "side": 1,
+      "message": "OK.  Before this patch, the RO heap snapshot in non-sandbox configurations would not have EPT entries, and now it will.  For a monocage configuration this is fine; closer to the sandbox configuration.  But for a multi-cage configuration we need to refactor to make one read-only heap per isolate group, in a multi-cage configuration.  That will require another patch or two.",
+      "parentUuid": "b871aee1_6ff98817",
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
