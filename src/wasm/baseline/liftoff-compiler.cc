@@ -3019,12 +3019,15 @@ class LiftoffCompiler {
 
     VarState index = __ PopVarState();
 
-    ValueType type = env_->module->tables[imm.index].type;
+    const WasmTable* table = &env_->module->tables[imm.index];
+    ValueType type = table->type;
     bool is_funcref = IsSubtypeOf(type, kWasmFuncRef, env_->module);
     auto stub =
         is_funcref ? Builtin::kWasmTableGetFuncRef : Builtin::kWasmTableGet;
 
-    CallBuiltin(stub, MakeSig::Returns(type.kind()).Params(kI32, kI32),
+    CallBuiltin(stub,
+                MakeSig::Returns(type.kind())
+                    .Params(kI32, table->is_table64 ? kI64 : kI32),
                 {table_index, index}, decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
@@ -6016,7 +6019,7 @@ class LiftoffCompiler {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
@@ -6073,7 +6076,7 @@ class LiftoffCompiler {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 

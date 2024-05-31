@@ -3748,18 +3748,21 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
 
   void TableGet(FullDecoder* decoder, const Value& index, Value* result,
                 const IndexImmediate& imm) {
-    ValueType element_type = decoder->module_->tables[imm.index].type;
+    const WasmTable* wasm_table = &decoder->module_->tables[imm.index];
+    ValueType element_type = wasm_table->type;
     V<WasmTableObject> table = LoadTable(decoder, imm.index);
     V<Smi> size_smi = __ Load(table, LoadOp::Kind::TaggedBase(),
                               MemoryRepresentation::TaggedSigned(),
                               WasmTableObject::kCurrentLengthOffset);
-    V<Word32> in_bounds = __ Uint32LessThan(index.op, __ UntagSmi(size_smi));
+    V<Word32> index_32bit =
+        TableIndexToWord32OrOOBTrap(wasm_table->is_table64, index.op);
+    V<Word32> in_bounds = __ Uint32LessThan(index_32bit, __ UntagSmi(size_smi));
     __ TrapIfNot(in_bounds, OpIndex::Invalid(), TrapId::kTrapTableOutOfBounds);
     V<FixedArray> entries = __ Load(table, LoadOp::Kind::TaggedBase(),
                                     MemoryRepresentation::TaggedPointer(),
                                     WasmTableObject::kEntriesOffset);
     OpIndex entry =
-        __ LoadFixedArrayElement(entries, __ ChangeInt32ToIntPtr(index.op));
+        __ LoadFixedArrayElement(entries, __ ChangeInt32ToIntPtr(index_32bit));
 
     if (IsSubtypeOf(element_type, kWasmFuncRef, decoder->module_) ||
         IsSubtypeOf(element_type, ValueType::RefNull(HeapType::kFuncShared),
@@ -3784,7 +3787,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       GOTO(resolved,
            CallBuiltinThroughJumptable<
                BuiltinCallDescriptor::WasmFunctionTableGet>(
-               decoder, {__ IntPtrConstant(imm.index), index.op,
+               decoder, {__ IntPtrConstant(imm.index), index_32bit,
                          __ Word32Constant(extract_shared_data ? 1 : 0)}));
 
       BIND(resolved, resolved_entry);
@@ -3816,10 +3819,12 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* args) {
-    V<Word32> dst = args[0].op;
-    V<Word32> src = args[1].op;
-    V<Word32> size = args[2].op;
+                 const Value& dst_val, const Value& src_val,
+                 const Value& size_val) {
+    // TODO(evih): use proper types.
+    V<Word32> dst = dst_val.op;
+    V<Word32> src = src_val.op;
+    V<Word32> size = size_val.op;
     bool table_is_shared = decoder->module_->tables[imm.table.index].shared;
     DCHECK_EQ(
         table_is_shared,
@@ -3836,10 +3841,12 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value args[]) {
-    V<Word32> dst = args[0].op;
-    V<Word32> src = args[1].op;
-    V<Word32> size = args[2].op;
+                 const Value& dst_val, const Value& src_val,
+                 const Value& size_val) {
+    // TODO(evih): use proper types.
+    V<Word32> dst = dst_val.op;
+    V<Word32> src = src_val.op;
+    V<Word32> size = size_val.op;
     bool table_is_shared = decoder->module_->tables[imm.table_dst.index].shared;
     // TODO(14616): Is this too restrictive?
     DCHECK_EQ(table_is_shared,
@@ -7199,6 +7206,13 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     if (kSystemPointerSize == kInt64Size) return index;
     __ TrapIf(__ TruncateWord64ToWord32(__ Word64ShiftRightLogical(index, 32)),
               OpIndex::Invalid(), TrapId::kTrapMemOutOfBounds);
+    return OpIndex(__ TruncateWord64ToWord32(index));
+  }
+
+  V<Word32> TableIndexToWord32OrOOBTrap(bool is_table64, OpIndex index) {
+    if (!is_table64) return index;
+    __ TrapIf(__ TruncateWord64ToWord32(__ Word64ShiftRightLogical(index, 32)),
+              OpIndex::Invalid(), TrapId::kTrapTableOutOfBounds);
     return OpIndex(__ TruncateWord64ToWord32(index));
   }
 
