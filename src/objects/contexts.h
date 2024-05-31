@@ -623,9 +623,6 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
   Handle<Object> ErrorMessageForCodeGenerationFromStrings();
   Handle<Object> ErrorMessageForWasmCodeGeneration();
 
-  static int IntrinsicIndexForName(Handle<String> name);
-  static int IntrinsicIndexForName(const unsigned char* name, int length);
-
 #define NATIVE_CONTEXT_FIELD_ACCESSORS(index, type, name) \
   inline void set_##name(Tagged<type> value);             \
   inline bool is_##name(Tagged<type> value) const;        \
