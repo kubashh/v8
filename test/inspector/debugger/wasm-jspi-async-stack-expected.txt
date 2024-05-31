@@ -23,6 +23,7 @@ console: Error location: Error
     at js_func (test.js:25:18)
     at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
     at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x5b)
+    at async wrapperFunc (test.js:44:12)
 
 Debugger paused on debugger statement
 doPause (test.js:51:2)
@@ -37,6 +38,7 @@ console: Error location: Error
     at js_func (test.js:25:18)
     at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
     at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x61)
+    at async wrapperFunc (test.js:44:12)
 
 Debugger paused on debugger statement
 doPause (test.js:51:2)
@@ -162,6 +164,10 @@ console: Error location: Error
     at js_func (test.js:25:18)
     at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
     at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x5b)
+    at async wrapperFunc (test.js:44:12)
+    at async thread1 (test.js:62:12)
+    at async Promise.all (index 0)
+    at async testStackSwitching (test.js:72:18)
 
 Debugger paused on debugger statement
 doPause (test.js:51:2)
@@ -176,6 +182,10 @@ console: Error location: Error
     at js_func (test.js:25:18)
     at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
     at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x5b)
+    at async wrapperFunc (test.js:44:12)
+    at async thread2 (test.js:65:12)
+    at async Promise.all (index 1)
+    at async testStackSwitching (test.js:72:18)
 
 Debugger paused on debugger statement
 doPause (test.js:51:2)
@@ -220,6 +230,10 @@ console: Error location: Error
     at js_func (test.js:25:18)
     at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
     at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x61)
+    at async wrapperFunc (test.js:44:12)
+    at async thread1 (test.js:62:12)
+    at async Promise.all (index 0)
+    at async testStackSwitching (test.js:72:18)
 
 Debugger paused on debugger statement
 doPause (test.js:51:2)
@@ -234,6 +248,10 @@ console: Error location: Error
     at js_func (test.js:25:18)
     at wrappedWasm (wasm://wasm/bbce4a62:wasm-function[1]:0x4c)
     at threeTimes (wasm://wasm/bbce4a62:wasm-function[2]:0x61)
+    at async wrapperFunc (test.js:44:12)
+    at async thread2 (test.js:65:12)
+    at async Promise.all (index 1)
+    at async testStackSwitching (test.js:72:18)
 
 Debugger paused on debugger statement
 doPause (test.js:51:2)
@@ -260,7 +278,7 @@ PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testAsyncThrow to testCatch
 console: Suspending wrapperFunc
-Debugger paused on uncaught exception
+Debugger paused on caught exception
 testAsyncThrow (test.js:92:2)
 -- await --
 js_func (test.js:24:17)
@@ -269,11 +287,10 @@ $threeTimes (wasm://wasm/bbce4a62:0:85)
 
 console: caught: fail
 Returned result {"result":{"type":"undefined"}}
-PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testSyncThrowAfterResume to testCatch
 console: Suspending wrapperFunc
-Debugger paused on uncaught exception
+Debugger paused on caught exception
 testSyncThrowAfterResume (test.js:100:4)
 js_func (test.js:24:17)
 $wrappedWasm (wasm://wasm/bbce4a62:0:76)
@@ -281,7 +298,6 @@ $threeTimes (wasm://wasm/bbce4a62:0:91)
 
 console: caught: fail
 Returned result {"result":{"type":"undefined"}}
-PREDICTION MISMATCH: predicted uncaught=true actual uncaught=false
 
 Testing catch prediction through JSPI throwing from testSyncThrow to testDontCatch
 Debugger paused on uncaught exception
