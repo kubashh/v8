@@ -563,8 +563,17 @@
       'os': 'Ubuntu-22.04',
     },
     'tests': [
-      {'name': 'test262', 'variant': 'default', 'shards': 4},
-      {'name': 'v8testing', 'shards': 4},
+      {
+        'name': 'test262',
+        'variant': 'default',
+        'shards': 4,
+        'test_args': ['--command-prefix', 'third_party/instrumented_libs/binaries/msan-chained-origins-noble-lib/lib/ld-linux-x86-64.so.2 '],
+      },
+      {
+        'name': 'v8testing',
+        'shards': 4,
+        'test_args': ['--command-prefix', 'third_party/instrumented_libs/binaries/msan-chained-origins-noble-lib/lib/ld-linux-x86-64.so.2 '],
+      },
     ],
   },
   'v8_linux64_nodcheck_rel': {
@@ -1189,8 +1198,17 @@
       'os': 'Ubuntu-22.04',
     },
     'tests': [
-      {'name': 'test262', 'variant': 'default', 'shards': 4},
-      {'name': 'v8testing', 'shards': 4},
+      {
+        'name': 'test262',
+        'variant': 'default',
+        'shards': 4,
+        'test_args': ['--command-prefix', 'third_party/instrumented_libs/binaries/msan-chained-origins-noble-lib/lib/ld-linux-x86-64.so.2 '],
+      },
+      {
+        'name': 'v8testing',
+        'shards': 4,
+        'test_args': ['--command-prefix', 'third_party/instrumented_libs/binaries/msan-chained-origins-noble-lib/lib/ld-linux-x86-64.so.2 '],
+      },
     ],
   },
   'V8 Linux - debug': {
