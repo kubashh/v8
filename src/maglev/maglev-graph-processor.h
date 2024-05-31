@@ -80,6 +80,35 @@ class GraphProcessor {
   explicit GraphProcessor(Args&&... args)
       : node_processor_(std::forward<Args>(args)...) {}
 
+  void ProcessBlock(BasicBlock* block) {
+    node_processor_.PreProcessBasicBlock(block);
+
+    if (block->has_phi()) {
+      auto& phis = *block->phis();
+      for (auto it = phis.begin(); it != phis.end();) {
+        Phi* phi = *it;
+        ProcessResult result = node_processor_.Process(phi, GetCurrentState());
+        if (V8_UNLIKELY(result == ProcessResult::kRemove)) {
+          it = phis.RemoveAt(it);
+        } else {
+          ++it;
+        }
+      }
+    }
+
+    for (node_it_ = block->nodes().begin(); node_it_ != block->nodes().end();) {
+      Node* node = *node_it_;
+      ProcessResult result = ProcessNodeBase(node, GetCurrentState());
+      if (V8_UNLIKELY(result == ProcessResult::kRemove)) {
+        node_it_ = block->nodes().RemoveAt(node_it_);
+      } else {
+        ++node_it_;
+      }
+    }
+
+    ProcessNodeBase(block->control_node(), GetCurrentState());
+  }
+
   void ProcessGraph(Graph* graph) {
     graph_ = graph;
 
@@ -105,37 +134,39 @@ class GraphProcessor {
     process_constants(graph->float64());
     process_constants(graph->external_references());
 
-    for (block_it_ = graph->begin(); block_it_ != graph->end(); ++block_it_) {
-      BasicBlock* block = *block_it_;
+    if (defer_deferred_blocks_) {
+      // Divide blocks into deferred and non-deferred lists; this is the easiest
+      // way to keep track of what the next block is.
+      ZoneVector<BasicBlock*> non_deferred(graph->zone());
+      ZoneVector<BasicBlock*> deferred(graph->zone());
 
-      node_processor_.PreProcessBasicBlock(block);
-
-      if (block->has_phi()) {
-        auto& phis = *block->phis();
-        for (auto it = phis.begin(); it != phis.end();) {
-          Phi* phi = *it;
-          ProcessResult result =
-              node_processor_.Process(phi, GetCurrentState());
-          if (V8_UNLIKELY(result == ProcessResult::kRemove)) {
-            it = phis.RemoveAt(it);
-          } else {
-            ++it;
-          }
-        }
-      }
-
-      for (node_it_ = block->nodes().begin();
-           node_it_ != block->nodes().end();) {
-        Node* node = *node_it_;
-        ProcessResult result = ProcessNodeBase(node, GetCurrentState());
-        if (V8_UNLIKELY(result == ProcessResult::kRemove)) {
-          node_it_ = block->nodes().RemoveAt(node_it_);
+      for (block_it_ = graph->begin(); block_it_ != graph->end(); ++block_it_) {
+        BasicBlock* block = *block_it_;
+        if (block->is_deferred()) {
+          deferred.emplace_back(block);
         } else {
-          ++node_it_;
+          non_deferred.emplace_back(block);
         }
       }
 
-      ProcessNodeBase(block->control_node(), GetCurrentState());
+      for (block_it_ = non_deferred.begin(); block_it_ != non_deferred.end();
+           ++block_it_) {
+        BasicBlock* block = *block_it_;
+        ProcessBlock(block);
+      }
+
+      for (block_it_ = deferred.begin(); block_it_ != deferred.end();
+           ++block_it_) {
+        BasicBlock* block = *block_it_;
+        ProcessBlock(block);
+      }
+
+    } else {
+      for (block_it_ = graph->begin(); block_it_ != graph->end(); ++block_it_) {
+        BasicBlock* block = *block_it_;
+
+        ProcessBlock(block);
+      }
     }
 
     node_processor_.PostProcessGraph(graph);
@@ -143,6 +174,8 @@ class GraphProcessor {
 
   NodeProcessor& node_processor() { return node_processor_; }
   const NodeProcessor& node_processor() const { return node_processor_; }
+
+  void set_defer_deferred_blocks(bool defer) { defer_deferred_blocks_ = true; }
 
  private:
   ProcessingState GetCurrentState() {
@@ -171,6 +204,7 @@ class GraphProcessor {
   Graph* graph_;
   BlockConstIterator block_it_;
   NodeIterator node_it_;
+  bool defer_deferred_blocks_ = false;
 };
 
 // A NodeProcessor that wraps multiple NodeProcessors, and forwards to each of

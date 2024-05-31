@@ -501,6 +501,10 @@ void MaglevGraphBuilder::BranchBuilder::StartFallthroughBlock(
       builder_->StartNewBlock(predecessor, nullptr, data.fallthrough);
       break;
   }
+  if (builder_->current_block_) {
+    // If the fallthrough block has > 1 predecessors, it won't be deferred.
+    builder_->current_block_->set_deferred(defer_fallthrough_);
+  }
 }
 
 void MaglevGraphBuilder::BranchBuilder::SetAccumulatorInBranch(
@@ -11218,6 +11222,18 @@ MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
     }
   }
   // TODO(340100647): If the jump is never taken, do the reverse.
+
+  if (branch_hint == BranchHint::kMostlyTrue) {
+    DCHECK(v8_flags.maglev_branch_feedback);
+    // Reorder the code so that the block where we jump to is generated right
+    // after the jump, and the fallthrough block is generated later.
+
+    // We will still execute all code conceptually in the "forward" order, just
+    // the basic blocks will be laid in memory in a different order.
+    builder.DeferFallthrough();  // FIXME: maybe unify
+  } else if (branch_hint == BranchHint::kMostlyFalse) {
+    builder.jump_target()->set_deferred(true);
+  }
 
   if (root_index != RootIndex::kTrueValue &&
       root_index != RootIndex::kFalseValue) {

@@ -1398,7 +1398,7 @@ BranchHint FeedbackNexus::GetBranchFeedback() const {
   DCHECK_EQ(kind(), FeedbackSlotKind::kBranch);
   int branch_taken = GetFeedback().ToSmi().value();
   int branch_not_taken = GetFeedbackExtra().ToSmi().value();
-  constexpr int kThresholdForMostlyTakenPercentage = 90;
+  constexpr int kThresholdForMostlyTakenPercentage = 80;
   if (branch_taken == 0) {
     if (branch_not_taken == 0) {
       return BranchHint::kNone;
