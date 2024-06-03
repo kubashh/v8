@@ -496,6 +496,8 @@ class MaglevGraphBuilder {
     current_block_ = zone()->New<BasicBlock>(nullptr, zone());
     BasicBlock* result = FinishBlock<Jump>({}, &jump_targets);
     result->set_edge_split_block(predecessor);
+    result->set_deferred(jump_targets.is_deferred());
+    jump_targets.set_deferred(false);
 #ifdef DEBUG
     new_nodes_.clear();
 #endif
@@ -2379,6 +2381,8 @@ class MaglevGraphBuilder {
     BranchResult Build(std::initializer_list<ValueNode*> inputs,
                        Args&&... args);
 
+    void DeferFallthrough() { defer_fallthrough_ = true; }
+
    private:
     MaglevGraphBuilder* builder_;
     MaglevGraphBuilder::MaglevSubGraphBuilder* sub_builder_;
@@ -2386,6 +2390,7 @@ class MaglevGraphBuilder {
     BranchSpecializationMode branch_specialization_mode_ =
         BranchSpecializationMode::kDefault;
     Data data_;
+    bool defer_fallthrough_ = false;
 
     void StartFallthroughBlock(BasicBlock* predecessor);
     void SetAccumulatorInBranch(BranchType jump_type) const;
