@@ -3,13 +3,12 @@
 // found in the LICENSE file.
 
 // Flags: --maglev-branch-feedback
-// Flags: --allow-natives-syntax --maglev --no-always-sparkplug
+// Flags: --allow-natives-syntax --maglev --sparkplug
 
 function foo(a) {
   let b = 1;
-  // "Then" block never executed (the jump over it always executed).
-  if (a != 0x333) {
-    // Maglev can generate code for this branch even if it was never taken.
+  // "Then" block always executed (the jump over it never executed).
+  if (a != 0x33) {
     b = 2;
   }
   return b;
@@ -18,16 +17,16 @@ function foo(a) {
 %CompileBaseline(foo);
 
 for (let i = 0; i < 100; ++i) {
-  foo(0x333);
+  foo(0);
 }
 
 %OptimizeMaglevOnNextCall(foo);
-assertEquals(1, foo(0x333));
+assertEquals(2, foo(0));
 
-assertTrue(isMaglevved(foo));
-
-assertEquals(1, foo(0x333));
 assertTrue(isMaglevved(foo));
 
 assertEquals(2, foo(0));
+assertTrue(isMaglevved(foo));
+
+assertEquals(1, foo(0x33));
 assertFalse(isMaglevved(foo));
