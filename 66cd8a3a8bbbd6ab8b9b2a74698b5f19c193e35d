@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ce84cff_2e981080",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-03T09:16:04Z",
+      "side": 1,
+      "message": "I think I now reviewed all latest files that I own. Some minor comments, otherwise LGTM (module more comments by other folks).",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5c2014_012ce81b",
+        "filename": "BUILD.bazel",
+        "patchSetId": 28
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-03T09:16:04Z",
+      "side": 1,
+      "message": "That should be false, probably. @Andreas: Since I\u0027m not a Blaze/g3 expert, could you take a look at this build file as well?",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "587f12e3_163ecd95",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-03T09:16:04Z",
+      "side": 1,
+      "message": "This #if is not necessary, right? (Analogous to earlier comments)",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56980191_b67baf0a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-03T09:16:04Z",
+      "side": 1,
+      "message": "Should this use `v8_flags.wasm_jitless` in the condition, instead of the static `#if` (which doesn\u0027t take whether the interpreter is enabled dynamically into account)?",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b7539a_8376bad5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 2507,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-03T09:16:04Z",
+      "side": 1,
+      "message": "See above (use dynamic flag instead of static `#if` guard)?",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6b08d23_4656134c",
+        "filename": "test/cctest/wasm/test-run-wasm-relaxed-simd.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-03T09:16:04Z",
+      "side": 1,
+      "message": "Isn\u0027t this comment and macro now obsolete since you added interpreter testing in `wasm-run-utils.h`?",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
