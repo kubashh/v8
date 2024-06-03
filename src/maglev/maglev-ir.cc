@@ -340,6 +340,17 @@ bool CheckToBooleanOnAllRoots(LocalIsolate* local_isolate) {
 
 }  // namespace
 
+void BasicBlockRef::Bind(BasicBlock* block) {
+  DCHECK_EQ(state_, kRefList);
+
+  BasicBlockRef* next_ref = SetToBlockAndReturnNext(block);
+  while (next_ref != nullptr) {
+    next_ref = next_ref->SetToBlockAndReturnNext(block);
+  }
+  DCHECK_EQ(block_ptr(), block);
+  block->set_deferred(is_deferred_);
+}
+
 bool CapturedValue::IsValidRuntimeValue() const {
   if (type != kRuntimeValue) return false;
   // We should not use a generic runtime value for any of the following specific
