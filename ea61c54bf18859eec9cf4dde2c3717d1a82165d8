@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f799da1_a720ffeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-03T15:03:54Z",
+      "side": 1,
+      "message": "PTAL, hit this when trying to introduce a Union type and a Number\u003dUnion\u003cSmi,HeapNumber\u003e typedef.",
+      "revId": "ea61c54bf18859eec9cf4dde2c3717d1a82165d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
