@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a871839c_1035d7ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-06-03T06:40:01Z",
+      "side": 1,
+      "message": "PTAL. Need review again, because I dropped the changes to builders.pyl. Those should not be necessary now with the fix https://crrev.com/c/5589987\n\nThat fix has not rolled to Chrome yet, so we\u0027d be ahead of Chrome for a short period (if it works at all).\n\nI\u0027ve restored this rather than the latest roll, because some other problems seem to start piling up.",
+      "revId": "07fa1f0355d7ca7ee6e3a1dc070a05d45229b6ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
