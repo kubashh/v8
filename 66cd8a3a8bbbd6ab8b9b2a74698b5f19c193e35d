@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc91c943_e9027814",
+        "filename": "BUILD.bazel",
+        "patchSetId": 28
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-06-03T09:53:17Z",
+      "side": 1,
+      "message": "I thought drumbrake should be disabled by default anyways, so I guess it should also be disabled in the Bazel file.\n\nIndependent of the default value, I think we should not introduce a flag here as long as we don\u0027t see a use case where anyone wants to change the flag. Just add the `#define` in line 461.",
+      "parentUuid": "dd5c2014_012ce81b",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "587f12e3_163ecd95",
         "filename": "src/diagnostics/objects-debug.cc",
         "patchSetId": 28
