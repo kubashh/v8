@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f612b76e_315ad4b2",
+        "filename": "BUILD.bazel",
+        "patchSetId": 28
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-06-03T12:42:11Z",
+      "side": 1,
+      "message": "Fair enough, I didn\u0027t think of that.",
+      "parentUuid": "28a831e7_43d82042",
+      "revId": "66cd8a3a8bbbd6ab8b9b2a74698b5f19c193e35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "587f12e3_163ecd95",
