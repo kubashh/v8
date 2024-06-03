@@ -835,15 +835,7 @@ class BasicBlockRef {
     return old_next_ptr;
   }
 
-  void Bind(BasicBlock* block) {
-    DCHECK_EQ(state_, kRefList);
-
-    BasicBlockRef* next_ref = SetToBlockAndReturnNext(block);
-    while (next_ref != nullptr) {
-      next_ref = next_ref->SetToBlockAndReturnNext(block);
-    }
-    DCHECK_EQ(block_ptr(), block);
-  }
+  void Bind(BasicBlock* block);
 
   BasicBlock* block_ptr() const {
     DCHECK_EQ(state_, kBlockPointer);
@@ -860,6 +852,9 @@ class BasicBlockRef {
     return next_ref_ != nullptr;
   }
 
+  void set_deferred(bool is_deferred) { is_deferred_ = is_deferred; }
+  bool is_deferred() const { return is_deferred_; }
+
  private:
   union {
     BasicBlock* block_ptr_;
@@ -868,6 +863,8 @@ class BasicBlockRef {
 #ifdef DEBUG
   enum { kBlockPointer, kRefList } state_;
 #endif  // DEBUG
+
+  bool is_deferred_ = false;
 };
 
 struct CapturedValue;

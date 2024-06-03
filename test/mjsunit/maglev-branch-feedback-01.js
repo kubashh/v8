@@ -7,7 +7,8 @@
 
 function foo(a) {
   let b = 1;
-  if (a == 0x333) { // Never taken.
+  // "Then" block never executed (the jump over it always executed).
+  if (a == 0x333) {
     // Maglev can generate code for this branch even if it was never taken.
     b = 2;
   }

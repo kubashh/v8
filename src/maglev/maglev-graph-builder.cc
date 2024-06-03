@@ -11206,6 +11206,7 @@ MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
   }
 
   if (branch_hint == BranchHint::kTrue) {
+    DCHECK(v8_flags.maglev_branch_feedback);
     // The jump was always taken. Generate a check that the condition is
     // true this time too, and an unconditional jump. The fallthrough
     // block will be dead.
@@ -11216,8 +11217,29 @@ MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
       BuildCheckCondition(node, false, DeoptimizeReason::kUnexpectedBranch);
       return builder.AlwaysFalse();
     }
+  } else if (branch_hint == BranchHint::kFalse) {
+    DCHECK(v8_flags.maglev_branch_feedback);
+    // The jump was never taken. Generate a check that the condition was
+    // false this time too.
+    if (builder.GetCurrentBranchType() == BranchType::kBranchIfTrue) {
+      BuildCheckCondition(node, false, DeoptimizeReason::kUnexpectedBranch);
+      return builder.AlwaysFalse();
+    } else {
+      BuildCheckCondition(node, true, DeoptimizeReason::kUnexpectedBranch);
+      return builder.AlwaysTrue();
+    }
+  } else if (branch_hint == BranchHint::kMostlyTrue) {
+    DCHECK(v8_flags.maglev_branch_feedback);
+    // Reorder the code so that the block where we jump to is generated right
+    // after the jump, and the fallthrough block is generated later. We will
+    // still execute all code conceptually in the "forward" order, just
+    // the basic blocks will be laid in memory in a different order.
+    builder.fallthrough()->set_deferred(true);
+  } else if (branch_hint == BranchHint::kMostlyFalse) {
+    DCHECK(v8_flags.maglev_branch_feedback);
+    // Defer the block where we'd jump to.
+    builder.jump_target()->set_deferred(true);
   }
-  // TODO(340100647): If the jump is never taken, do the reverse.
 
   if (root_index != RootIndex::kTrueValue &&
       root_index != RootIndex::kFalseValue) {
