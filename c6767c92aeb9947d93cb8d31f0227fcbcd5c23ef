@@ -16,6 +16,23 @@
       "message": "Nico, PTAL torque",
       "revId": "c6767c92aeb9947d93cb8d31f0227fcbcd5c23ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7690ef43_60707731",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-03T15:40:25Z",
+      "side": 1,
+      "message": "LGTM in general but wait for a torque stamp from Nico",
+      "revId": "c6767c92aeb9947d93cb8d31f0227fcbcd5c23ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
