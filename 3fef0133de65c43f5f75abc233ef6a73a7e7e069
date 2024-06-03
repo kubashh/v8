@@ -50,6 +50,23 @@
       "message": "LGTM :)\n\n(and sorry for the delay; I was out half of last week)",
       "revId": "3fef0133de65c43f5f75abc233ef6a73a7e7e069",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17838ba7_3c2d665a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2024-06-03T08:07:45Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "3fef0133de65c43f5f75abc233ef6a73a7e7e069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
