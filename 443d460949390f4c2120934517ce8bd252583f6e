@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab79322_5bc0144d",
+        "filename": "src/heap/WRITE_BARRIER.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-06-04T14:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "587f4c02_afb8f620",
+      "range": {
+        "startLine": 7,
+        "startChar": 35,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "443d460949390f4c2120934517ce8bd252583f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a9c75b3_9153e9ba",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-06-04T13:49:07Z",
       "side": 1,
       "message": "Can you number them here and refer back in the headings\n\nE.g.\n## (A) Fast path\n## (B) Deferred code path",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "443d460949390f4c2120934517ce8bd252583f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66326aa_fad306f0",
+        "filename": "src/heap/WRITE_BARRIER.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-06-04T14:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a9c75b3_9153e9ba",
       "range": {
         "startLine": 14,
         "startChar": 0,
