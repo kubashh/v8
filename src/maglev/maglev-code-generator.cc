@@ -1331,14 +1331,15 @@ class MaglevFrameTranslationBuilder {
     translation_array_builder_->StoreLiteral(GetDeoptLiteral(*value));
   }
 
-  void BuildFixedDoubleArray(CapturedFixedDoubleArray array) {
-    translation_array_builder_->BeginCapturedObject(array.length + 2);
+  void BuildFixedDoubleArray(uint32_t length,
+                             compiler::FixedDoubleArrayRef array) {
+    translation_array_builder_->BeginCapturedObject(length + 2);
     translation_array_builder_->StoreLiteral(
         GetDeoptLiteral(*local_isolate_->factory()->fixed_double_array_map()));
     translation_array_builder_->StoreLiteral(
-        GetDeoptLiteral(Smi::FromInt(array.length)));
-    for (int i = 0; i < array.length; i++) {
-      Float64 value = array.values[i];
+        GetDeoptLiteral(Smi::FromInt(length)));
+    for (uint32_t i = 0; i < length; i++) {
+      Float64 value = array.GetFromImmutableFixedDoubleArray(i);
       if (value.is_hole_nan()) {
         translation_array_builder_->StoreLiteral(
             GetDeoptLiteral(ReadOnlyRoots(local_isolate_).the_hole_value()));
@@ -1348,73 +1349,54 @@ class MaglevFrameTranslationBuilder {
     }
   }
 
-  void BuildCapturedValue(CapturedValue value,
-                          const InputLocation*& input_location) {
-    switch (value.type) {
-      case CapturedValue::kUninitalized:
-        translation_array_builder_->StoreLiteral(GetDeoptLiteral(
-            ReadOnlyRoots(local_isolate_).one_pointer_filler_map()));
-        break;
-      case CapturedValue::kRuntimeValue:
-        BuildDeoptFrameSingleValue(value.runtime_value, input_location);
-        break;
-      case CapturedValue::kConstant:
-        translation_array_builder_->StoreLiteral(
-            GetDeoptLiteral(*value.constant.object()));
-        break;
-      case CapturedValue::kRootConstant:
-        translation_array_builder_->StoreLiteral(GetDeoptLiteral(
-            ReadOnlyRoots(local_isolate_).object_at(value.root_constant)));
-        break;
-      case CapturedValue::kSmi:
-        translation_array_builder_->StoreLiteral(
-            GetDeoptLiteral(Smi::FromInt(value.smi)));
-        break;
-      case CapturedValue::kArgumentsElements:
+  void BuildNestedValue(ValueNode* value,
+                        const InputLocation*& input_location) {
+    if (IsConstantNode(value->opcode())) {
+      translation_array_builder_->StoreLiteral(
+          GetDeoptLiteral(*value->Reify(local_isolate_)));
+      return;
+    }
+    // Special nodes.
+    switch (value->opcode()) {
+      case Opcode::kArgumentsElements:
         translation_array_builder_->ArgumentsElements(
-            value.arguments_elements->type());
+            value->Cast<ArgumentsElements>()->type());
         // We simulate the deoptimizer deduplication machinery, which will give
         // a fresh id to the ArgumentsElements. For that, we need to push
         // something object_ids_ We push -1, since no object should have id -1.
         object_ids_.push_back(-1);
         break;
-      case CapturedValue::kArgumentsLength:
+      case Opcode::kArgumentsLength:
         translation_array_builder_->ArgumentsLength();
         break;
-      case CapturedValue::kRestLength:
+      case Opcode::kRestLength:
         translation_array_builder_->RestLength();
         break;
-      case CapturedValue::kCapturedObject:
-      case CapturedValue::kFixedDoubleArray:
-      case CapturedValue::kNumber:
-        UNREACHABLE();
+      default:
+        BuildDeoptFrameSingleValue(value, input_location);
+        break;
     }
   }
 
-  void BuildCapturedObject(CapturedObject object,
-                           const InputLocation*& input_location) {
-    translation_array_builder_->BeginCapturedObject(object.slot_count());
-    for (CapturedValue& value : object) {
-      BuildCapturedValue(value, input_location);
+  void BuildVirtualObject(VirtualObject* object,
+                          const InputLocation*& input_location) {
+    switch (object->type()) {
+      case VirtualObject::kDefault:
+        translation_array_builder_->BeginCapturedObject(object->slot_count());
+        translation_array_builder_->StoreLiteral(
+            GetDeoptLiteral(*object->map().object()));
+        for (uint32_t i = 0; i < object->slot_count(); i++) {
+          BuildNestedValue(object->get_by_index(i), input_location);
+        }
+        break;
+      case VirtualObject::kHeapNumber:
+        BuildHeapNumber(object->number());
+        break;
+      case VirtualObject::kFixedDoubleArray:
+        BuildFixedDoubleArray(object->double_elements_length(),
+                              object->double_elements());
+        break;
     }
-  }
-
-  void BuildCapturedAllocation(const CapturedAllocation& alloc,
-                               const InputLocation*& input_location) {
-    if (alloc.type == CapturedAllocation::kHeapNumber) {
-      return BuildHeapNumber(alloc.number);
-    }
-    int dup_id = GetDuplicatedId(alloc.id);
-    if (dup_id != kNotDuplicated) {
-      translation_array_builder_->DuplicateObject(dup_id);
-      input_location += alloc.InputLocationSizeNeeded();
-      return;
-    }
-    if (alloc.type == CapturedAllocation::kFixedDoubleArray) {
-      return BuildFixedDoubleArray(alloc.fixed_double_array);
-    }
-    DCHECK_EQ(alloc.type, CapturedAllocation::kObject);
-    return BuildCapturedObject(alloc.object, input_location);
   }
 
   void BuildDeoptFrameSingleValue(const ValueNode* value,
@@ -1424,11 +1406,10 @@ class MaglevFrameTranslationBuilder {
     if (const InlinedAllocation* alloc = value->TryCast<InlinedAllocation>()) {
       if (alloc->HasBeenElided()) {
         input_location++;
-        BuildCapturedAllocation(alloc->captured_allocation(), input_location);
+        BuildVirtualObject(alloc->object(), input_location);
         return;
       }
-      input_locations_to_advance +=
-          alloc->captured_allocation().InputLocationSizeNeeded();
+      input_locations_to_advance += alloc->object()->InputLocationSizeNeeded();
     }
     if (input_location->operand().IsConstant()) {
       translation_array_builder_->StoreLiteral(
