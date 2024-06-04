@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "213f1d0a_e737c3b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-06-04T10:51:06Z",
+      "side": 1,
+      "message": "ptal. Just a small refactoring, that came out of a wrong lead I had with the other bugfix. In case I get bored because nothing is breaking anymore I can then enable sharing of descriptors 😊",
+      "revId": "78e1e52ee23af20aec0321aa1fe400a967030d7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
