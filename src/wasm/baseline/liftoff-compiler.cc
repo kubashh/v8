@@ -3013,19 +3013,37 @@ class LiftoffCompiler {
     __ Store(addr, no_reg, offset, reg, type, {}, nullptr, false);
   }
 
+  bool Is64bitArch() {
+    return (kSystemPointerSize == kInt64Size) ? true : false;
+  }
+
   void TableGet(FullDecoder* decoder, const Value&, Value*,
                 const IndexImmediate& imm) {
+    Register mem_offsets_high_word = no_reg;
+    LiftoffRegList pinned;
     VarState table_index{kI32, static_cast<int>(imm.index), 0};
 
-    VarState index = __ PopVarState();
+    // Convert the index to the table to an intptr.
+    VarState index = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    // Trap if any high word bits were set.
+    Label* trap_label =
+        AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapTableOutOfBounds);
+    if (mem_offsets_high_word != no_reg) {
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, mem_offsets_high_word,
+                        no_reg, trapping);
+      pinned.clear(mem_offsets_high_word);
+    }
 
     ValueType type = env_->module->tables[imm.index].type;
     bool is_funcref = IsSubtypeOf(type, kWasmFuncRef, env_->module);
     auto stub =
         is_funcref ? Builtin::kWasmTableGetFuncRef : Builtin::kWasmTableGet;
 
-    CallBuiltin(stub, MakeSig::Returns(type.kind()).Params(kI32, kI32),
-                {table_index, index}, decoder->position());
+    CallBuiltin(
+        stub,
+        MakeSig::Returns(type.kind()).Params(kI32, Is64bitArch() ? kI64 : kI32),
+        {table_index, index}, decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
@@ -5755,13 +5773,13 @@ class LiftoffCompiler {
     const bool is_mem64 = slot.kind() == kI64;
     // For memory32 on a 32-bit system or memory64 on a 64-bit system, there is
     // nothing to do.
-    if ((kSystemPointerSize == kInt64Size) == is_mem64) {
+    if (Is64bitArch() == is_mem64) {
       if (slot.is_reg()) pinned->set(slot.reg());
       return slot;
     }
 
     // For memory32 on 64-bit hosts, zero-extend.
-    if (kSystemPointerSize == kInt64Size) {
+    if (Is64bitArch()) {
       DCHECK(!is_mem64);  // Handled above.
       LiftoffRegister reg = __ LoadToModifiableRegister(slot, *pinned);
       __ emit_u32_to_uintptr(reg.gp(), reg.gp());
@@ -5773,7 +5791,7 @@ class LiftoffCompiler {
     // and only use the low words afterwards. This keeps the register pressure
     // managable.
     DCHECK(is_mem64);  // Other cases are handled above.
-    DCHECK_EQ(kSystemPointerSize, kInt32Size);
+    DCHECK(!Is64bitArch());
     LiftoffRegister reg = __ LoadToRegister(slot, *pinned);
     pinned->set(reg.low());
     if (*high_word == no_reg) {
@@ -6016,7 +6034,7 @@ class LiftoffCompiler {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
@@ -6073,7 +6091,7 @@ class LiftoffCompiler {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
