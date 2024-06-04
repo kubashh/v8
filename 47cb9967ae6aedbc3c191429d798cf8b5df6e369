@@ -16,6 +16,97 @@
       "message": "Ping😊",
       "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cff72fc9_654699d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-04T08:12:50Z",
+      "side": 1,
+      "message": "General lgtm, just a few code style comments.",
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6eff6f7_363c2c6c",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-04T08:12:50Z",
+      "side": 1,
+      "message": "please add new two-valued enums for these two parameters, since a list of `bool` arguments is hard to understand.",
+      "range": {
+        "startLine": 46,
+        "startChar": 56,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c425b16_8319d309",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-04T08:12:50Z",
+      "side": 1,
+      "message": "this is grammatically weird, please fix to something like `GetPotentialVariableInRegister/Accumulator`, and document that this is a variable value that is preserved across flushes.",
+      "range": {
+        "startLine": 126,
+        "startChar": 12,
+        "endLine": 126,
+        "endChar": 32
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "9fc42167_308589ad",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/interpreter/bytecode-register-optimizer.h",
+              "range": {
+                "startLine": 125,
+                "startChar": 0,
+                "endLine": 127,
+                "endChar": 0
+              },
+              "replacement": "  // Get the variable that might be in the reg. This is a variable value that is\n  // preserved across flushes.\n  Variable* GetPotentialVariableInRegister(Register reg);\n"
+            },
+            {
+              "path": "src/interpreter/bytecode-register-optimizer.h",
+              "range": {
+                "startLine": 128,
+                "startChar": 0,
+                "endLine": 131,
+                "endChar": 0
+              },
+              "replacement": "  // Get the variable that might be in the accumulator. This is a variable value\n  // that is preserved across flushes.\n  Variable* GetPotentialVariableInAccumulator() {\n    return GetPotentialVariableInRegister(accumulator_);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
