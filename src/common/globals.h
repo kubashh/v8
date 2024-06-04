@@ -151,6 +151,7 @@ namespace internal {
 #else
 #define V8_MOVE_PROTOYPE_TRANSITIONS_FIRST_BOOL false
 #endif
+#define V8_PROTOYPE_TRANSITIONS_SHARE_DESCRIPTOR_BOOL false
 
 #if V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_ARM64
 // Set stack limit lower for ARM and ARM64 than for other architectures because:

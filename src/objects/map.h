@@ -800,14 +800,11 @@ class Map : public TorqueGeneratedMap<Map, HeapObject> {
   // Returns a copy of the map, prepared for inserting into the transition
   // tree (if the |map| owns descriptors then the new one will share
   // descriptors with |map|).
-  static Handle<Map> CopyForElementsTransition(Isolate* isolate,
-                                               Handle<Map> map);
+  static Handle<Map> CopyForTransitionWithDescriptorSharing(Isolate* isolate,
+                                                            Handle<Map> map);
 
-  // Returns a copy of the map, prepared for inserting into the transition
-  // tree as a prototype transition.
-  static Handle<Map> CopyForPrototypeTransition(Isolate* isolate,
-                                                Handle<Map> map,
-                                                Handle<HeapObject> prototype);
+  static Handle<Map> CopyForDetachedPrototypeUpdate(
+      Isolate* isolate, Handle<Map> map, Handle<HeapObject> prototype);
 
   // Returns a copy of the map, with all transitions dropped from the
   // instance descriptors.

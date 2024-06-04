@@ -249,10 +249,8 @@ Handle<Map> MapUpdater::ApplyPrototypeTransition(Handle<HeapObject> prototype) {
   DCHECK_EQ(kInitialized, state_);
   DCHECK_NE(old_map_->prototype(), *prototype);
 
-  // Prototype maps are replaced by deprecation when their prototype changes. No
-  // need to add a transition.
   if (old_map_->is_prototype_map()) {
-    return Map::CopyForPrototypeTransition(isolate_, old_map_, prototype);
+    return Map::TransitionToUpdatePrototype(isolate_, old_map_, prototype);
   }
 
   new_prototype_ = prototype;
@@ -674,9 +672,8 @@ MapUpdater::State MapUpdater::FindRootMap() {
   if (root_map_->prototype() != *new_prototype_) {
     DCHECK(V8_MOVE_PROTOYPE_TRANSITIONS_FIRST_BOOL);
     bool is_cached;
-    Handle<Map> new_root_map_ = Map::TransitionToUpdatePrototype(
-        isolate_, root_map_, new_prototype_, &is_cached);
-    root_map_ = new_root_map_;
+    root_map_ = Map::TransitionToUpdatePrototype(isolate_, root_map_,
+                                                 new_prototype_, &is_cached);
 
     if (!old_map_->EquivalentToForTransition(
             *root_map_, ConcurrencyMode::kSynchronous, new_prototype_)) {
