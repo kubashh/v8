@@ -208,6 +208,7 @@ class V8_EXPORT Recorder {
   ADD_MAIN_THREAD_EVENT(WasmModuleDecoded)
   ADD_MAIN_THREAD_EVENT(WasmModuleCompiled)
   ADD_MAIN_THREAD_EVENT(WasmModuleInstantiated)
+
 #undef ADD_MAIN_THREAD_EVENT
 
   // Thread-safe events are not allowed to access the context and therefore do
