@@ -1194,6 +1194,7 @@ MaybeHandle<Code> CompileTurbofan(Isolate* isolate, Handle<JSFunction> function,
                                   ConcurrencyMode mode,
                                   BytecodeOffset osr_offset,
                                   CompileResultBehavior result_behavior) {
+  function->CheckIntegrity(isolate);
   VMState<COMPILER> state(isolate);
   TimerEventScope<TimerEventOptimizeCode> optimize_code_timer(isolate);
   RCS_SCOPE(isolate, RuntimeCallCounterId::kOptimizeCode);
@@ -1257,6 +1258,7 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
                                 ConcurrencyMode mode, BytecodeOffset osr_offset,
                                 CompileResultBehavior result_behavior) {
 #ifdef V8_ENABLE_MAGLEV
+  function->CheckIntegrity(isolate);
   DCHECK(maglev::IsMaglevEnabled());
   CHECK(result_behavior == CompileResultBehavior::kDefault);
 
@@ -2681,10 +2683,7 @@ bool Compiler::Compile(Isolate* isolate, Handle<JSFunction> function,
   // We should never reach here if the function is already compiled or
   // optimized.
   DCHECK(!function->is_compiled(isolate));
-  DCHECK_IMPLIES(!IsNone(function->tiering_state()),
-                 function->shared()->is_compiled());
-  DCHECK_IMPLIES(function->HasAvailableOptimizedCode(isolate),
-                 function->shared()->is_compiled());
+  function->CheckIntegrity(isolate);
 
   // Reset the JSFunction if we are recompiling due to the bytecode having been
   // flushed.
@@ -2805,6 +2804,7 @@ bool Compiler::CompileSharedWithBaseline(Isolate* isolate,
 bool Compiler::CompileBaseline(Isolate* isolate, Handle<JSFunction> function,
                                ClearExceptionFlag flag,
                                IsCompiledScope* is_compiled_scope) {
+  function->CheckIntegrity(isolate);
   Handle<SharedFunctionInfo> shared(function->shared(isolate), isolate);
   if (!CompileSharedWithBaseline(isolate, shared, flag, is_compiled_scope)) {
     return false;

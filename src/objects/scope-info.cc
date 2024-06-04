@@ -736,6 +736,17 @@ int ScopeInfo::ContextHeaderLength() const {
                                    : Context::MIN_CONTEXT_SLOTS;
 }
 
+int ScopeInfo::ContextDepth() const {
+  int depth = 0;
+  Tagged<ScopeInfo> current =
+      IsEmpty() ? OuterScopeInfo() : Tagged<ScopeInfo>(*this);
+  while (current->HasOuterScopeInfo()) {
+    depth++;
+    current = current->OuterScopeInfo();
+  }
+  return depth;
+}
+
 bool ScopeInfo::HasReceiver() const {
   return VariableAllocationInfo::NONE != ReceiverVariableBits::decode(Flags());
 }

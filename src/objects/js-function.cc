@@ -34,6 +34,17 @@ CodeKinds JSFunction::GetAttachedCodeKinds(IsolateForSandbox isolate) const {
   return CodeKindToCodeKindFlag(kind);
 }
 
+void JSFunction::CheckIntegrity(Isolate* isolate) const {
+  DCHECK_IMPLIES(!IsNone(tiering_state()), shared()->is_compiled());
+  DCHECK_IMPLIES(HasAvailableOptimizedCode(isolate), shared()->is_compiled());
+  if (shared()->HasOuterScopeInfo()) {
+    CHECK_EQ(shared()->GetOuterScopeInfo()->ContextDepth(),
+             context()->scope_info()->ContextDepth());
+  } else {
+    CHECK_IMPLIES(!IsNativeContext(context()), context()->IsScriptContext());
+  }
+}
+
 CodeKinds JSFunction::GetAvailableCodeKinds(IsolateForSandbox isolate) const {
   CodeKinds result = GetAttachedCodeKinds(isolate);
 
