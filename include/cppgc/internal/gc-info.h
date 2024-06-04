@@ -127,19 +127,23 @@ struct GCInfoFolding final {
   // configuration. Only a single GCInfo (for `ResultType` below) will actually
   // be instantiated but existence (and well-formedness) of all callbacks is
   // checked.
-  static constexpr bool kCheckTypeGuardAlwaysTrue =
+  static constexpr bool WantToFold() {
+    if constexpr ((kHasVirtualDestructorAtBase ||
+                   kBothTypesAreTriviallyDestructible ||
+                   kHasCustomFinalizerDispatchAtBase) &&
+                  !kWantsDetailedObjectNames) {
       GCInfoTrait<T>::CheckCallbacksAreDefined() &&
-      GCInfoTrait<ParentMostGarbageCollectedType>::CheckCallbacksAreDefined();
+          GCInfoTrait<
+              ParentMostGarbageCollectedType>::CheckCallbacksAreDefined();
+      return true;
+    }
+    return false;
+  }
 
   // Folding would regress name resolution when deriving names from C++
   // class names as it would just folds a name to the base class name.
   using ResultType =
-      std::conditional_t<kCheckTypeGuardAlwaysTrue &&
-                             (kHasVirtualDestructorAtBase ||
-                              kBothTypesAreTriviallyDestructible ||
-                              kHasCustomFinalizerDispatchAtBase) &&
-                             !kWantsDetailedObjectNames,
-                         ParentMostGarbageCollectedType, T>;
+      std::conditional_t<WantToFold(), ParentMostGarbageCollectedType, T>;
 };
 
 }  // namespace internal
