@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "521c0c56_10b1c988",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-06-04T12:26:24Z",
+      "side": 1,
+      "message": "I looked at this field a bit more, and I don\u0027t think there\u0027s a way for this to ever be a Smi (after all, it\u0027s a `Tagged\u003cJSFunction\u003e`), so I\u0027ve removed that handling now.",
+      "parentUuid": "73991cc7_bc95aaef",
+      "revId": "266f3297ffed5de1f0df541a549a9b62e0ffbbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f440c376_30536d88",
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "Funny you should say that -- `frame-\u003eLookupCode()` already goes through the  `isolate-\u003einner_pointer_to_code_cache()`. I guess you mean a cache on the frame itself? Could make sense, we can always make it null for Wasm if that doesn\u0027t apply; ask a Wasm person.",
       "parentUuid": "f440c376_30536d88",
+      "range": {
+        "startLine": 1664,
+        "startChar": 0,
+        "endLine": 1664,
+        "endChar": 42
+      },
+      "revId": "266f3297ffed5de1f0df541a549a9b62e0ffbbf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab32fe3_3c29ce26",
+        "filename": "src/deoptimizer/translated-state.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-06-04T12:26:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ef46b06f_004fdf60",
       "range": {
         "startLine": 1664,
         "startChar": 0,

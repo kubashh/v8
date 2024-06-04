@@ -22,6 +22,30 @@
       },
       "revId": "d0e0b413a50ab0a19d594fe412f28fbe2b815083",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d49998_c366794b",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-06-04T12:26:24Z",
+      "side": 1,
+      "message": "So I guess I cannot do that while there are still users of this method since I\u0027ll otherwise get a bunch of compiler errors. I\u0027ve changed the comment now and left a TODO. PTAL!",
+      "parentUuid": "8a84037b_5d1a914a",
+      "range": {
+        "startLine": 308,
+        "startChar": 5,
+        "endLine": 308,
+        "endChar": 15
+      },
+      "revId": "d0e0b413a50ab0a19d594fe412f28fbe2b815083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
