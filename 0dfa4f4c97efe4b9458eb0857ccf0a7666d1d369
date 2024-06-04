@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd8da4bb_e45859fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-04T13:43:47Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0dfa4f4c97efe4b9458eb0857ccf0a7666d1d369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c41b0b94_4583fee7",
+        "filename": "include/cppgc/internal/gc-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-04T13:43:47Z",
+      "side": 1,
+      "message": "Do these still need to return true? I guess we can just call these methods with the same result?",
+      "range": {
+        "startLine": 135,
+        "startChar": 22,
+        "endLine": 135,
+        "endChar": 46
+      },
+      "revId": "0dfa4f4c97efe4b9458eb0857ccf0a7666d1d369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
