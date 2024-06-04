@@ -112,6 +112,8 @@ class JSFunction : public TorqueGeneratedJSFunction<
   inline Tagged<NativeContext> native_context();
   inline int length();
 
+  void CheckIntegrity(Isolate* isolate) const;
+
   static Handle<String> GetName(Isolate* isolate, Handle<JSFunction> function);
 
   // [code]: The generated code object for this function.  Executed
