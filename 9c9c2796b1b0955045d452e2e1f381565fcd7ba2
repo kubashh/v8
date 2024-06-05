@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ae1645_84d64982",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 0,
+      "message": "What was wrong with this test?",
+      "revId": "9c9c2796b1b0955045d452e2e1f381565fcd7ba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

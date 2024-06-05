@@ -1,0 +1,245 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db5be5be_37c9ed79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "Nice! Left some comments, but will take another look later, when this CL is actually finished :)",
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be718f9_ed97df42",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5313,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "Should this be `is_table64`?",
+      "range": {
+        "startLine": 5313,
+        "startChar": 9,
+        "endLine": 5313,
+        "endChar": 20
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebdb0063_71036665",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3018,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "This should be a static constexpr, and doesn\u0027t need to be a member of the LiftoffCompiler. You can put it up near the other constants like `kHeavyInstructionSteps`.",
+      "range": {
+        "startLine": 3016,
+        "startChar": 0,
+        "endLine": 3018,
+        "endChar": 3
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1170820f_cb6b8a62",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3022,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "Please name this appropriately, maybe `index_high_word`?",
+      "range": {
+        "startLine": 3022,
+        "startChar": 13,
+        "endLine": 3022,
+        "endChar": 34
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "195c3407_2194d0e3",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3029,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "nit: There is just one index involved here, so also just one high word.",
+      "range": {
+        "startLine": 3029,
+        "startChar": 15,
+        "endLine": 3029,
+        "endChar": 33
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68a35bc5_3840f665",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "We have `kIntPtrKind` for this.",
+      "range": {
+        "startLine": 3039,
+        "startChar": 51,
+        "endLine": 3039,
+        "endChar": 78
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e417971c_df2d3046",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5765,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "WDYT about `PopIndexToVarState`? This would apply to both memories and tables.",
+      "range": {
+        "startLine": 5765,
+        "startChar": 11,
+        "endLine": 5765,
+        "endChar": 38
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a96169c_557089de",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5818,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "1) This is unused if `high_word \u003d\u003d no_reg`, so you should check for that first.\n2) Please add a comment that says that this is suboptimal because we add OOL code for this special condition, and have the other check (and conditional trap) in the builtin, but it\u0027s only for 32-bit platforms with table64, so we don\u0027t care :)",
+      "range": {
+        "startLine": 5817,
+        "startChar": 0,
+        "endLine": 5818,
+        "endChar": 75
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f667647f_59a71658",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5825,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "Is this worth a separate helper? It has a single use only. Or did you mean to unify this with the memory accesses? The trap builtin would need to be an argument then.",
+      "range": {
+        "startLine": 5811,
+        "startChar": 0,
+        "endLine": 5825,
+        "endChar": 3
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "442736da_ed99998a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6008,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "typo: `table`",
+      "range": {
+        "startLine": 6008,
+        "startChar": 60,
+        "endLine": 6008,
+        "endChar": 66
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3caa487_b0b19bcf",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6010,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-05T10:43:01Z",
+      "side": 1,
+      "message": "This is allowed now, also for memories. See https://github.com/WebAssembly/memory64/pull/58 and https://github.com/WebAssembly/memory64/issues/6. Please add a TODO to fix this for both.",
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
