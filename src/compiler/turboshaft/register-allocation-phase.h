@@ -9,7 +9,10 @@
 #include "src/compiler/backend/jump-threading.h"
 #include "src/compiler/backend/move-optimizer.h"
 #include "src/compiler/backend/register-allocator.h"
+#include "src/compiler/turboshaft/block-instrumentation-reducer.h"
+#include "src/compiler/turboshaft/copying-phase.h"
 #include "src/compiler/turboshaft/phase.h"
+#include "src/compiler/turboshaft/value-numbering-reducer.h"
 
 namespace v8::internal::compiler::turboshaft {
 
@@ -208,6 +211,15 @@ struct FinalizeCodePhase {
     CodeGenerator* code_generator = data->code_generator();
     DCHECK_NOT_NULL(code_generator);
     data->set_code(code_generator->FinalizeCode());
+  }
+};
+
+struct BlockInstrumentationPhase {
+  DECL_TURBOSHAFT_PHASE_CONSTANTS(BlockInstrumentation)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    CopyingPhase<BlockInstrumentationReducer, ValueNumberingReducer>::Run(
+        data, temp_zone);
   }
 };
 

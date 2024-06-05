@@ -518,6 +518,7 @@ void GenerateCodeFromTurboshaftGraph(
     turboshaft::PipelineData* turboshaft_data = turboshaft_pipeline.data();
     turboshaft_data->InitializeCodegenComponent(osr_helper);
     // Run Turboshaft instruction selection.
+    turboshaft_pipeline.PrepareForInstructionSelection();
     CHECK(turboshaft_pipeline.SelectInstructions(linkage));
     // We can release the graph now.
     turboshaft_data->ClearGraphComponent();
@@ -2714,6 +2715,7 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
     const ProfileDataFromFile* profile_data) {
   OptimizedCompilationInfo info(base::CStrVector(debug_name), graph->zone(),
                                 kind);
+
   info.set_builtin(builtin);
 
   // Construct a pipeline for scheduling and code generation.
@@ -2839,17 +2841,12 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
     turboshaft_pipeline
         .Run<turboshaft::CodeEliminationAndSimplificationPhase>();
 
-    // DecompressionOptimization has to run as the last phase because it
-    // constructs an (slightly) invalid graph that mixes Tagged and Compressed
-    // representations.
-    turboshaft_pipeline.Run<turboshaft::DecompressionOptimizationPhase>();
-
     // Run a first round of code generation, in order to be able
     // to repeat it for jump optimization.
     DCHECK_NULL(data.frame());
     turboshaft_data.InitializeCodegenComponent(data.osr_helper_ptr(),
                                                jump_optimization_info);
-
+    turboshaft_pipeline.PrepareForInstructionSelection(profile_data);
     CHECK(turboshaft_pipeline.SelectInstructions(&linkage));
     CHECK(
         turboshaft_pipeline.AllocateRegisters(linkage.GetIncomingDescriptor()));
