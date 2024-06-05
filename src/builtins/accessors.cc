@@ -34,7 +34,7 @@ Handle<AccessorInfo> Accessors::MakeAccessor(
   {
     DisallowGarbageCollection no_gc;
     Tagged<AccessorInfo> raw = *info;
-    raw->set_is_special_data_property(true);
+    raw->set_is_special_data_property(false);
     raw->set_is_sloppy(false);
     raw->set_replace_on_access(false);
     raw->set_getter_side_effect_type(SideEffectType::kHasSideEffect);
