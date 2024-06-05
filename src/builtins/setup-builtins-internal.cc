@@ -11,7 +11,11 @@
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/codegen/reloc-info-inl.h"
+#include "src/common/globals.h"
 #include "src/compiler/code-assembler.h"
+#include "src/compiler/pipeline.h"
+#include "src/compiler/turboshaft/graph.h"
+#include "src/compiler/turboshaft/phase.h"
 #include "src/execution/isolate.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/heap-inl.h"
@@ -90,6 +94,9 @@ AssemblerOptions BuiltinAssemblerOptions(Isolate* isolate, Builtin builtin) {
 
 using MacroAssemblerGenerator = void (*)(MacroAssembler*);
 using CodeAssemblerGenerator = void (*)(compiler::CodeAssemblerState*);
+using TurboshaftAssemblerGenerator =
+    void (*)(compiler::turboshaft::PipelineData*, Isolate*,
+             compiler::turboshaft::Graph&, Zone*);
 
 Handle<Code> BuildPlaceholder(Isolate* isolate, Builtin builtin) {
   HandleScope scope(isolate);
@@ -193,6 +200,39 @@ V8_NOINLINE Tagged<Code> BuildWithCodeStubAssemblerJS(
   Handle<Code> code = compiler::CodeAssembler::GenerateCode(
       &state, BuiltinAssemblerOptions(isolate, builtin),
       ProfileDataFromFile::TryRead(name));
+  return *code;
+}
+
+// Builder for builtins implemented in Turboshaft with CallStub linkage.
+V8_NOINLINE Tagged<Code> BuildWithTurboshaftAssemblerCS(
+    Isolate* isolate, Builtin builtin, TurboshaftAssemblerGenerator generator,
+    CallDescriptors::Key interface_descriptor, const char* name) {
+  HandleScope scope(isolate);
+  using namespace compiler::turboshaft;
+
+  compiler::ZoneStats zone_stats(isolate->allocator());
+  constexpr char kBuiltinCompilationZoneName[] = "builtin-compilation-zone";
+  ZoneWithName<kBuiltinCompilationZoneName> zone(&zone_stats, kBuiltinCompilationZoneName);
+  OptimizedCompilationInfo info(base::CStrVector(name), zone, CodeKind::BUILTIN);
+ 
+  PipelineData data(&zone_stats, TurboshaftPipelineKind::kCSA,
+    isolate, &info);
+  data.InitializeGraphComponent(nullptr);
+  ZoneWithName<"temp-zone"> temp_zone(&zone_stats, "temp_zone");
+  generator(&data, isolate, data.graph(), temp_zone);
+
+  CallInterfaceDescriptor descriptor(interface_descriptor);
+  DCHECK_LE(0, descriptor.GetRegisterParameterCount());
+  compiler::CallDescriptor* call_descriptor =
+      compiler::Linkage::GetStubCallDescriptor(
+          zone, descriptor, descriptor.GetStackParameterCount(),
+          compiler::CallDescriptor::kNoFlags,
+          compiler::Operator::kNoProperties);
+
+  Handle<Code> code =
+      compiler::Pipeline::GenerateCodeForTurboshaftBuiltin(
+          &data, call_descriptor, builtin)
+          .ToHandleChecked();
   return *code;
 }
 
@@ -334,6 +374,20 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   AddBuiltin(builtins, Builtin::k##Name, code);                            \
   index++;
 
+  //#define BUILD_TSC(Name, Argc, ...) \
+//  code = BuildWithTurboshaftAssemblerJS( \
+//    isolate, Builtin::k##Name, &Builtins::Generate_##Name, Argc, #Name); \
+//    AddBuiltin(builtins, Builtin::k##Name, code); \
+//    index++;
+
+#define BUILD_TSC(Name, InterfaceDescriptor)                      \
+  /* Return size is from the provided CallInterfaceDescriptor. */ \
+  code = BuildWithTurboshaftAssemblerCS(                          \
+      isolate, Builtin::k##Name, &Builtins::Generate_##Name,      \
+      CallDescriptors::InterfaceDescriptor, #Name);               \
+  AddBuiltin(builtins, Builtin::k##Name, code);                   \
+  index++;
+
 #define BUILD_TFC(Name, InterfaceDescriptor)                      \
   /* Return size is from the provided CallInterfaceDescriptor. */ \
   code = BuildWithCodeStubAssemblerCS(                            \
@@ -370,11 +424,12 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   AddBuiltin(builtins, Builtin::k##Name, code);                     \
   index++;
 
-  BUILTIN_LIST(BUILD_CPP, BUILD_TFJ, BUILD_TFC, BUILD_TFS, BUILD_TFH, BUILD_BCH,
-               BUILD_ASM);
+  BUILTIN_LIST(BUILD_CPP, BUILD_TFJ, BUILD_TSC, BUILD_TFC, BUILD_TFS, BUILD_TFH,
+               BUILD_BCH, BUILD_ASM);
 
 #undef BUILD_CPP
 #undef BUILD_TFJ
+#undef BUILD_TSC
 #undef BUILD_TFC
 #undef BUILD_TFS
 #undef BUILD_TFH

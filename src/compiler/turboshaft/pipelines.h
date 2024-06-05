@@ -29,7 +29,7 @@
 
 namespace v8::internal::compiler::turboshaft {
 
-class Pipeline final {
+class Pipeline {
  public:
   explicit Pipeline(PipelineData* data) : data_(data) {}
 
@@ -204,6 +204,11 @@ class Pipeline final {
 
     return true;
   }
+
+  void GenerateCode(Linkage* linkage,
+    std::shared_ptr<OsrHelper> osr_helper = {},
+    JumpOptimizationInfo* jump_optimization_info = nullptr,
+    int initial_graph_hash = 0);
 
   bool SelectInstructions(Linkage* linkage) {
     auto call_descriptor = linkage->GetIncomingDescriptor();
@@ -509,6 +514,14 @@ class Pipeline final {
 
  private:
   PipelineData* data_;
+};
+
+class BuiltinPipeline : public Pipeline {
+ public:
+  explicit BuiltinPipeline(PipelineData* data)
+    : Pipeline(data) {}
+
+  void OptimizeBuiltin();  
 };
 
 }  // namespace v8::internal::compiler::turboshaft

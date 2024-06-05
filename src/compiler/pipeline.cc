@@ -2807,8 +2807,25 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
 
   if (v8_flags.turboshaft_csa) {
     pipeline.ComputeScheduledGraph();
+    DCHECK_NULL(data.frame());
     DCHECK_NOT_NULL(data.schedule());
 
+    turboshaft::PipelineData turboshaft_data(
+        data.zone_stats(), turboshaft::TurboshaftPipelineKind::kCSA,
+        data.isolate(), data.info(), data.start_source_position(), options);
+
+    turboshaft::BuiltinPipeline turboshaft_pipeline(&turboshaft_data);
+    Linkage linkage(call_descriptor);
+    CHECK(turboshaft_pipeline.CreateGraphFromTurbofan(&data, &linkage));
+
+    turboshaft_pipeline.OptimizeBuiltin();
+
+    turboshaft_pipeline.GenerateCode(&linkage, data.osr_helper_ptr(),
+      jump_optimization_info, initial_graph_hash);
+
+    return turboshaft_pipeline.FinalizeCode();
+
+#if 0
     UnparkedScopeIfNeeded scope(data.broker(),
                                 v8_flags.turboshaft_trace_reduction);
 
@@ -2879,6 +2896,7 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
     } else {
       return turboshaft_pipeline.FinalizeCode();
     }
+#endif
   } else {
     pipeline.Run<CsaEarlyOptimizationPhase>();
     pipeline.RunPrintAndVerify(CsaEarlyOptimizationPhase::phase_name(), true);
@@ -2928,6 +2946,24 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
       return second_pipeline.FinalizeCode();
     }
   }
+}
+
+MaybeHandle<Code> Pipeline::GenerateCodeForTurboshaftBuiltin(
+    turboshaft::PipelineData* turboshaft_data, CallDescriptor* call_descriptor,
+    Builtin builtin) {
+  OptimizedCompilationInfo* info = turboshaft_data->info();
+  info->set_builtin(builtin);
+
+  std::unique_ptr<TurbofanPipelineStatistics> pipeline_statistics(
+      CreatePipelineStatistics(Handle<Script>::null(), info, turboshaft_data->isolate(),
+                               turboshaft_data->zone_stats()));
+
+  turboshaft::BuiltinPipeline pipeline(turboshaft_data);
+  pipeline.OptimizeBuiltin();
+  Linkage linkage(call_descriptor);
+  pipeline.GenerateCode(&linkage, {}, nullptr, 0);
+
+  return pipeline.FinalizeCode(false);
 }
 
 #if V8_ENABLE_WEBASSEMBLY
