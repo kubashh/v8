@@ -16,6 +16,52 @@
       "message": "PTAL!",
       "revId": "b8fb20620d200962efde820b9bfee4032435fa2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a1580fe_5cda8cb5",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 10262,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-05T13:41:23Z",
+      "side": 1,
+      "message": "GetRootConstant?",
+      "range": {
+        "startLine": 10262,
+        "startChar": 7,
+        "endLine": 10262,
+        "endChar": 28
+      },
+      "revId": "b8fb20620d200962efde820b9bfee4032435fa2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2b9377e_7836bda6",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 10332,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-05T13:41:23Z",
+      "side": 1,
+      "message": "maybe also add a DCHECK to `AddNode` that we\u0027re not trying to add a `VirtualObject`",
+      "range": {
+        "startLine": 10332,
+        "startChar": 2,
+        "endLine": 10332,
+        "endChar": 54
+      },
+      "revId": "b8fb20620d200962efde820b9bfee4032435fa2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
