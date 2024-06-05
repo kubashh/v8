@@ -170,7 +170,7 @@ class StackFrame {
     Address fp = kNullAddress;
     Address* pc_address = nullptr;
     Address callee_fp = kNullAddress;
-    Address* callee_pc_address = nullptr;
+    Address callee_pc = kNullAddress;
     Address* constant_pool_address = nullptr;
   };
 

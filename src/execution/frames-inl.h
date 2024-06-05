@@ -71,10 +71,7 @@ inline StackHandler* StackFrame::top_handler() const {
   return iterator_->handler();
 }
 
-inline Address StackFrame::callee_pc() const {
-  return state_.callee_pc_address ? ReadPC(state_.callee_pc_address)
-                                  : kNullAddress;
-}
+inline Address StackFrame::callee_pc() const { return state_.callee_pc; }
 
 inline Address StackFrame::pc() const { return ReadPC(pc_address()); }
 
