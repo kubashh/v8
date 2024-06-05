@@ -2379,8 +2379,8 @@ class ModuleDecoderImpl : public Decoder {
       return {};
     }
 
-    ValueType table_type =
-        is_active ? module_->tables[table_index].type : kWasmBottom;
+    const WasmTable* table = &module_->tables[table_index];
+    ValueType table_type = is_active ? table->type : kWasmBottom;
 
     ConstantExpression offset;
     if (is_active) {
@@ -2388,7 +2388,8 @@ class ModuleDecoderImpl : public Decoder {
         tracer_->Description(", offset:");
         tracer_->NextLine();
       }
-      offset = consume_init_expr(module_.get(), kWasmI32, is_shared);
+      offset = consume_init_expr(
+          module_.get(), table->is_table64 ? kWasmI64 : kWasmI32, is_shared);
       // Failed to parse offset initializer, return early.
       if (failed()) return {};
     }
