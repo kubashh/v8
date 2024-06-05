@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fdfe4fa_754bb786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-06-05T07:01:10Z",
+      "side": 1,
+      "message": "I have worked around this issue by resetting depot_tools\u0027s commit to `bb14391a5092f01557cf1fedfa3f7fe3afdbd1fb`.",
+      "parentUuid": "a06cf4fa_bc8cc97f",
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6eff6f7_363c2c6c",
         "filename": "src/interpreter/bytecode-register-optimizer.cc",
         "patchSetId": 15
@@ -65,6 +83,30 @@
       "writtenOn": "2024-06-04T08:12:50Z",
       "side": 1,
       "message": "please add new two-valued enums for these two parameters, since a list of `bool` arguments is hard to understand.",
+      "range": {
+        "startLine": 46,
+        "startChar": 56,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6141aba2_3df886ff",
+        "filename": "src/interpreter/bytecode-register-optimizer.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-06-05T07:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6eff6f7_363c2c6c",
       "range": {
         "startLine": 46,
         "startChar": 56,
@@ -122,6 +164,30 @@
           ]
         }
       ],
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b48817_2cf9ae66",
+        "filename": "src/interpreter/bytecode-register-optimizer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-06-05T07:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c425b16_8319d309",
+      "range": {
+        "startLine": 126,
+        "startChar": 12,
+        "endLine": 126,
+        "endChar": 32
+      },
       "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
