@@ -3013,19 +3013,31 @@ class LiftoffCompiler {
     __ Store(addr, no_reg, offset, reg, type, {}, nullptr, false);
   }
 
+  bool Is64bitArch() {
+    return (kSystemPointerSize == kInt64Size) ? true : false;
+  }
+
   void TableGet(FullDecoder* decoder, const Value&, Value*,
                 const IndexImmediate& imm) {
+    Register mem_offsets_high_word = no_reg;
+    LiftoffRegList pinned;
     VarState table_index{kI32, static_cast<int>(imm.index), 0};
 
-    VarState index = __ PopVarState();
+    // Convert the index to the table to an intptr.
+    VarState index =
+        PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
+    // Trap if any high word bits were set.
+    CheckHighWordEmptyForTableType(decoder, mem_offsets_high_word, &pinned);
 
     ValueType type = env_->module->tables[imm.index].type;
     bool is_funcref = IsSubtypeOf(type, kWasmFuncRef, env_->module);
     auto stub =
         is_funcref ? Builtin::kWasmTableGetFuncRef : Builtin::kWasmTableGet;
 
-    CallBuiltin(stub, MakeSig::Returns(type.kind()).Params(kI32, kI32),
-                {table_index, index}, decoder->position());
+    CallBuiltin(
+        stub,
+        MakeSig::Returns(type.kind()).Params(kI32, Is64bitArch() ? kI64 : kI32),
+        {table_index, index}, decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
 
@@ -5750,18 +5762,19 @@ class LiftoffCompiler {
   // Pop a VarState and if needed transform it to an intptr.
   // When truncating from u64 to u32, the {*high_word} is updated to contain
   // the ORed combination of all high words.
-  VarState PopMemTypeToVarState(Register* high_word, LiftoffRegList* pinned) {
+  VarState PopMemOrTableTypeToVarState(Register* high_word,
+                                       LiftoffRegList* pinned) {
     VarState slot = __ PopVarState();
     const bool is_mem64 = slot.kind() == kI64;
     // For memory32 on a 32-bit system or memory64 on a 64-bit system, there is
     // nothing to do.
-    if ((kSystemPointerSize == kInt64Size) == is_mem64) {
+    if (Is64bitArch() == is_mem64) {
       if (slot.is_reg()) pinned->set(slot.reg());
       return slot;
     }
 
     // For memory32 on 64-bit hosts, zero-extend.
-    if (kSystemPointerSize == kInt64Size) {
+    if (Is64bitArch()) {
       DCHECK(!is_mem64);  // Handled above.
       LiftoffRegister reg = __ LoadToModifiableRegister(slot, *pinned);
       __ emit_u32_to_uintptr(reg.gp(), reg.gp());
@@ -5773,7 +5786,7 @@ class LiftoffCompiler {
     // and only use the low words afterwards. This keeps the register pressure
     // managable.
     DCHECK(is_mem64);  // Other cases are handled above.
-    DCHECK_EQ(kSystemPointerSize, kInt32Size);
+    DCHECK(!Is64bitArch());
     LiftoffRegister reg = __ LoadToRegister(slot, *pinned);
     pinned->set(reg.low());
     if (*high_word == no_reg) {
@@ -5793,6 +5806,22 @@ class LiftoffCompiler {
       __ emit_i32_or(*high_word, *high_word, reg.high_gp());
     }
     return {kIntPtrKind, reg.low(), 0};
+  }
+
+  // This is a helper function that traps with TableOOB if any bit is set in
+  // `high_word`. It is meant to be used after `PopMemOrTableTypeToVarState()`
+  // to check if the conversion was valid.
+  void CheckHighWordEmptyForTableType(FullDecoder* decoder,
+                                      const Register& high_word,
+                                      LiftoffRegList* pinned) {
+    Label* trap_label =
+        AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapTableOutOfBounds);
+    if (high_word != no_reg) {
+      FREEZE_STATE(trapping);
+      __ emit_cond_jump(kNotZero, trap_label, kI32, high_word, no_reg,
+                        trapping);
+      pinned->clear(high_word);
+    }
   }
 
   // Same, but can take a VarState in the middle of the stack without
@@ -5866,7 +5895,7 @@ class LiftoffCompiler {
     VarState src = __ PopVarState();
     if (src.is_reg()) pinned.set(src.reg());
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory.memory));
-    VarState dst = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState dst = PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
     if (instance_data == no_reg) {
@@ -5930,11 +5959,12 @@ class LiftoffCompiler {
     DCHECK_EQ(imm.memory_dst.memory->is_memory64,
               imm.memory_src.memory->is_memory64);
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
-    VarState size = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState size =
+        PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
-    VarState src = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState src = PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
-    VarState dst = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState dst = PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
     if (instance_data == no_reg) {
@@ -5973,11 +6003,12 @@ class LiftoffCompiler {
     Register mem_offsets_high_word = no_reg;
     LiftoffRegList pinned;
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
-    VarState size = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState size =
+        PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
     VarState value = __ PopVarState();
     if (value.is_reg()) pinned.set(value.reg());
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
-    VarState dst = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState dst = PopMemOrTableTypeToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
     if (instance_data == no_reg) {
@@ -6016,7 +6047,7 @@ class LiftoffCompiler {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
@@ -6073,7 +6104,7 @@ class LiftoffCompiler {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 

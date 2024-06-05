@@ -809,7 +809,7 @@ struct BuiltinCallDescriptor {
 
   struct WasmFunctionTableGet : public Descriptor<WasmFunctionTableGet> {
     static constexpr auto kFunction = Builtin::kWasmFunctionTableGet;
-    using arguments_t = std::tuple<V<WordPtr>, V<Word32>, V<Word32>>;
+    using arguments_t = std::tuple<V<WordPtr>, V<WordPtr>, V<Word32>>;
     using results_t = std::tuple<V<Object>>;
 
     static constexpr bool kNeedsFrameState = false;
