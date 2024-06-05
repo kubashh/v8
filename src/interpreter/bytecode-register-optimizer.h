@@ -122,9 +122,13 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   // Get the variable in the reg.
   Variable* GetVariableInRegister(Register reg);
 
-  // Get the variable in the accumulator.
-  Variable* GetVariableInAccumulator() {
-    return GetVariableInRegister(accumulator_);
+  // Get the potential variable in the register. The variable is preserved
+  // across flushes until we bind a new variable to the register.
+  Variable* GetPotentialVariableInRegister(Register reg);
+
+  // Get the potential variable in accumulator.
+  Variable* GetPotentialVariableInAccumulator() {
+    return GetPotentialVariableInRegister(accumulator_);
   }
 
   // Return true if the var is in the reg.
