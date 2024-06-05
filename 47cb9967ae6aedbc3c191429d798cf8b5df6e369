@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a06cf4fa_bc8cc97f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-06-05T06:32:22Z",
+      "side": 1,
+      "message": "Thanks for your comments!\nI encountered a `Failed to set owners_client - [Errno 110] Connection timed out` failure in `git cl presubmit`, while other scripts like `gclient sync` works well. Is this a known issue?",
+      "revId": "47cb9967ae6aedbc3c191429d798cf8b5df6e369",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6eff6f7_363c2c6c",
         "filename": "src/interpreter/bytecode-register-optimizer.cc",
         "patchSetId": 15
