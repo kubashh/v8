@@ -170,7 +170,7 @@ StackFrame::Type GetStateForFastCCallCallerFP(Isolate* isolate, Address fp,
   state->fp = fp;
   state->sp = kNullAddress;
   state->pc_address = reinterpret_cast<Address*>(pc_address);
-  state->callee_pc_address = nullptr;
+  state->callee_pc = kNullAddress;
   state->constant_pool_address = nullptr;
 #if V8_ENABLE_WEBASSEMBLY
   if (wasm::GetWasmCodeManager()->LookupCode(isolate, pc)) {
@@ -438,7 +438,9 @@ StackFrameIteratorForProfiler::StackFrameIteratorForProfiler(
     // iterating the stack from this topmost JS frame.
     DCHECK_NE(kNullAddress, isolate->isolate_data()->fast_c_call_caller_pc());
     state.fp = fast_c_fp;
-    state.sp = sp;
+    // The SP is not needed in the state here, and by setting it to kNullAddress
+    // we indicate to the frame iterator that the PC is not authenticated.
+    state.sp = kNullAddress;
     state.pc_address = reinterpret_cast<Address*>(
         isolate->isolate_data()->fast_c_call_caller_pc_address());
 
@@ -465,7 +467,9 @@ StackFrameIteratorForProfiler::StackFrameIteratorForProfiler(
   } else if (IsValidStackAddress(fp)) {
     DCHECK_NE(fp, kNullAddress);
     state.fp = fp;
-    state.sp = sp;
+    // The SP is not needed in the state here, and by setting it to kNullAddress
+    // we indicate to the frame iterator that the PC is not authenticated.
+    state.sp = kNullAddress;
     state.pc_address =
         StackFrame::ResolveReturnAddressLocation(reinterpret_cast<Address*>(
             fp + StandardFrameConstants::kCallerPCOffset));
@@ -966,7 +970,7 @@ void NativeFrame::ComputeCallerState(State* state) const {
   state->fp = Memory<Address>(fp() + CommonFrameConstants::kCallerFPOffset);
   state->pc_address = ResolveReturnAddressLocation(
       reinterpret_cast<Address*>(fp() + CommonFrameConstants::kCallerPCOffset));
-  state->callee_pc_address = nullptr;
+  state->callee_pc = kNullAddress;
   state->constant_pool_address = nullptr;
 }
 
@@ -1011,7 +1015,7 @@ void ExitFrame::ComputeCallerState(State* state) const {
   state->fp = Memory<Address>(fp() + ExitFrameConstants::kCallerFPOffset);
   state->pc_address = ResolveReturnAddressLocation(
       reinterpret_cast<Address*>(fp() + ExitFrameConstants::kCallerPCOffset));
-  state->callee_pc_address = nullptr;
+  state->callee_pc = kNullAddress;
   if (V8_EMBEDDED_CONSTANT_POOL_BOOL) {
     state->constant_pool_address = reinterpret_cast<Address*>(
         fp() + ExitFrameConstants::kConstantPoolOffset);
@@ -1087,7 +1091,7 @@ void ExitFrame::FillState(Address fp, Address sp, State* state) {
   state->fp = fp;
   state->pc_address = ResolveReturnAddressLocation(
       reinterpret_cast<Address*>(sp - 1 * kPCOnStackSize));
-  state->callee_pc_address = nullptr;
+  state->callee_pc = kNullAddress;
   // The constant pool recorded in the exit frame is not associated
   // with the pc in this state (the return address into a C entry
   // stub).  ComputeCallerState will retrieve the constant pool
@@ -1383,7 +1387,7 @@ void CommonFrame::ComputeCallerState(State* state) const {
   state->pc_address = ResolveReturnAddressLocation(reinterpret_cast<Address*>(
       fp() + StandardFrameConstants::kCallerPCOffset));
   state->callee_fp = fp();
-  state->callee_pc_address = pc_address();
+  state->callee_pc = maybe_unauthenticated_pc();
   state->constant_pool_address = reinterpret_cast<Address*>(
       fp() + StandardFrameConstants::kConstantPoolOffset);
 }
