@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1828d7f_0f86fa91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-06-06T07:13:32Z",
+      "side": 1,
+      "message": "I ran a CQ Dry Run with the `v8_enable_drumbrake` build flag enabled; all bots build and all tests are currently passing, with one exception: https://chromium-review.googlesource.com/c/v8/v8/+/5509903?checksPatchset\u003d32\u0026tab\u003dchecks\n\nThe only failing test is` mjsunit/wasm/many-parameters/default`, which fails with MSAN in v8_linux64_msan_rel. However, this test has recently been flaky (see https://ci.chromium.org/ui/test/v8/%2F%2Fmjsunit%2Fwasm%2Fmany-parameters%2F%2Fdefault) and in fact there is no evident reason why enabling the build flag should impact this particular test, with the `default` variant.\n\nSo, I would consider all bots green (at least right now). So I will disable by default the `v8_enable_drumbrake` build flag.",
+      "revId": "69216a677f523106832891b3f64c10d749bdfc36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
