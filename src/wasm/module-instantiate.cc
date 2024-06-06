@@ -1584,6 +1584,16 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     isolate_->metrics_recorder()->DelayMainThreadEvent(wasm_module_instantiated,
                                                        context_id_);
   }
+
+#if V8_ENABLE_DRUMBRAKE
+  // Skip this event because not (yet) supported by Chromium.
+
+  // v8::metrics::WasmInterpreterJitStatus jit_status;
+  // jit_status.jitless = v8_flags.wasm_jitless;
+  // isolate_->metrics_recorder()->DelayMainThreadEvent(jit_status,
+  // context_id_);
+#endif  // V8_ENABLE_DRUMBRAKE
+
   return instance_object;
 }
 
@@ -1960,7 +1970,12 @@ bool InstanceBuilder::ProcessImportedFunction(
       // The import reference is the instance object itself.
       Address imported_target = imported_function->GetWasmCallTarget();
       imported_entry.SetWasmToWasm(imported_function->instance_data(),
-                                   imported_target);
+                                   imported_target
+#if V8_ENABLE_DRUMBRAKE
+                                   ,
+                                   imported_function->function_index()
+#endif  // V8_ENABLE_DRUMBRAKE
+      );
       break;
     }
     case ImportCallKind::kWasmToCapi: {
@@ -2030,8 +2045,9 @@ bool InstanceBuilder::ProcessImportedFunction(
               [module_->functions[func_index].sig_index];
       WasmCode* wasm_code = native_module->import_wrapper_cache()->Get(
           kind, canonical_type_index, expected_arity, resolved.suspend());
-      DCHECK_NOT_NULL(wasm_code);
-      if (wasm_code->kind() == WasmCode::kWasmToJsWrapper) {
+      DCHECK(v8_flags.wasm_jitless || wasm_code != nullptr);
+      if (v8_flags.wasm_jitless ||
+          wasm_code->kind() == WasmCode::kWasmToJsWrapper) {
         // Wasm to JS wrappers are treated specially in the import table.
         imported_entry.SetWasmToJs(isolate_, js_receiver, wasm_code,
                                    resolved.suspend(), expected_sig);
@@ -2040,7 +2056,12 @@ bool InstanceBuilder::ProcessImportedFunction(
         DCHECK(kind >= ImportCallKind::kFirstMathIntrinsic &&
                kind <= ImportCallKind::kLastMathIntrinsic);
         imported_entry.SetWasmToWasm(*trusted_instance_data,
-                                     wasm_code->instruction_start());
+                                     wasm_code->instruction_start()
+#if V8_ENABLE_DRUMBRAKE
+                                         ,
+                                     -1
+#endif  // V8_ENABLE_DRUMBRAKE
+        );
       }
       break;
     }
@@ -2099,9 +2120,14 @@ bool InstanceBuilder::InitializeImportedIndirectFunctionTable(
 
     uint32_t canonical_sig_index =
         target_module->isorecursive_canonical_type_ids[function.sig_index];
-
+#if !V8_ENABLE_DRUMBRAKE
     trusted_instance_data->dispatch_table(table_index)
         ->Set(i, *ref, entry.call_target(), canonical_sig_index);
+#else   // !V8_ENABLE_DRUMBRAKE
+    trusted_instance_data->dispatch_table(table_index)
+        ->Set(i, *ref, entry.call_target(), canonical_sig_index,
+              entry.target_func_index());
+#endif  // !V8_ENABLE_DRUMBRAKE
   }
   return true;
 }
@@ -2882,7 +2908,12 @@ V8_INLINE void SetFunctionTablePlaceholder(
         isolate, table_object, entry_index, trusted_instance_data, func_index);
   }
   WasmTableObject::UpdateDispatchTables(isolate, table_object, entry_index,
-                                        function, trusted_instance_data);
+                                        function, trusted_instance_data
+#if V8_ENABLE_DRUMBRAKE
+                                        ,
+                                        func_index
+#endif  // V8_ENABLE_DRUMBRAKE
+  );
 }
 
 V8_INLINE void SetFunctionTableNullEntry(Isolate* isolate,
