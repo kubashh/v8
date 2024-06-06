@@ -3550,6 +3550,7 @@ Node* WasmGraphBuilder::TableGet(uint32_t table_index, Node* index,
   auto stub =
       is_funcref ? Builtin::kWasmTableGetFuncRef : Builtin::kWasmTableGet;
 
+  TableTypeToUintPtrOrOOBTrap(table.is_table64, {&index}, position);
   return gasm_->CallBuiltinThroughJumptable(
       stub, Operator::kNoThrow, gasm_->IntPtrConstant(table_index), index);
 }
@@ -3560,7 +3561,7 @@ void WasmGraphBuilder::TableSet(uint32_t table_index, Node* index, Node* val,
   bool is_funcref = IsSubtypeOf(table.type, wasm::kWasmFuncRef, env_->module);
   auto stub =
       is_funcref ? Builtin::kWasmTableSetFuncRef : Builtin::kWasmTableSet;
-
+  TableTypeToUintPtrOrOOBTrap(table.is_table64, {&index}, position);
   gasm_->CallBuiltinThroughJumptable(stub, Operator::kNoThrow,
                                      gasm_->IntPtrConstant(table_index),
                                      gasm_->Int32Constant(0), index, val);
@@ -5304,7 +5305,21 @@ Node* WasmGraphBuilder::StoreArgsInStackSlot(
 void WasmGraphBuilder::MemTypeToUintPtrOrOOBTrap(
     bool is_memory64, std::initializer_list<Node**> nodes,
     wasm::WasmCodePosition position) {
-  if (!is_memory64) {
+  MemOrTableTypeToUintPtrOrOOBTrap(is_memory64, nodes, position,
+                                   wasm::kTrapMemOutOfBounds);
+}
+
+void WasmGraphBuilder::TableTypeToUintPtrOrOOBTrap(
+    bool is_table64, std::initializer_list<Node**> nodes,
+    wasm::WasmCodePosition position) {
+  MemOrTableTypeToUintPtrOrOOBTrap(is_table64, nodes, position,
+                                   wasm::kTrapTableOutOfBounds);
+}
+
+void WasmGraphBuilder::MemOrTableTypeToUintPtrOrOOBTrap(
+    bool is_64bit, std::initializer_list<Node**> nodes,
+    wasm::WasmCodePosition position, wasm::TrapReason trap_reason) {
+  if (!is_64bit) {
     for (Node** node : nodes) {
       *node = gasm_->BuildChangeUint32ToUintPtr(*node);
     }
@@ -5320,7 +5335,7 @@ void WasmGraphBuilder::MemTypeToUintPtrOrOOBTrap(
     // Only keep the low word as uintptr_t.
     *node = gasm_->TruncateInt64ToInt32(*node);
   }
-  TrapIfTrue(wasm::kTrapMemOutOfBounds, any_high_word, position);
+  TrapIfTrue(trap_reason, any_high_word, position);
 }
 
 void WasmGraphBuilder::MemoryCopy(const wasm::WasmMemory* dst_memory,
