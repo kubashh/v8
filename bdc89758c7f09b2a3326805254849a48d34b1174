@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4ff1884_a201491e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-06T08:43:43Z",
+      "side": 1,
+      "message": "LGTM, modulo getting review/approval from OWNERs where I am not an OWNER. Paolo, could you please add those as reviewers? (Let me know if you need help finding appropriate people.)",
+      "revId": "bdc89758c7f09b2a3326805254849a48d34b1174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8442625b_04d03ab2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3817,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-06T08:43:43Z",
+      "side": 1,
+      "message": "Oh interesting, did that come up while you were fixing the CQ bots? It seems orthogonal to the interpreter, right?",
+      "revId": "bdc89758c7f09b2a3326805254849a48d34b1174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

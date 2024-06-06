@@ -441,6 +441,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9d03951_332c6233",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-06T08:43:43Z",
+      "side": 1,
+      "message": "Emanuel and me added some notes about missing features to the DrumBrake overview/design document: http://doc/1OIJ4Sv2XfTlI5NmTS1QI8v8wPL0LUT5s1W2D9OlJmMc#heading\u003dh.t1ljq9jf7y5q\nSo I\u0027ll mark this as resolved here.",
+      "parentUuid": "2bdeee9f_a4c2f430",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fa5e6b5_85c37a63",
@@ -561,6 +579,24 @@
       "side": 1,
       "message": "Sure, let\u0027s keep this unresolved for future readers of the CL.",
       "parentUuid": "f3c18cc7_6dcf22e7",
+      "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61bd8eb_f873605a",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 12
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-06T08:43:43Z",
+      "side": 1,
+      "message": "Emanuel and me added some notes about missing features to the DrumBrake overview/design document: http://doc/1OIJ4Sv2XfTlI5NmTS1QI8v8wPL0LUT5s1W2D9OlJmMc#heading\u003dh.t1ljq9jf7y5q\nSo I\u0027ll mark this as resolved here.",
+      "parentUuid": "27e46dbc_cdca04c0",
       "revId": "0a42f7fd8c85f4194a4773a069195e7b148a1252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
