@@ -33,6 +33,24 @@
       "message": "Oh interesting, did that come up while you were fixing the CQ bots? It seems orthogonal to the interpreter, right?",
       "revId": "bdc89758c7f09b2a3326805254849a48d34b1174",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adbbc4fd_bfadfbef",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 3817,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-06-06T09:23:22Z",
+      "side": 1,
+      "message": "Ah found it, this is just a merge of https://crrev.com/c/5596551",
+      "parentUuid": "8442625b_04d03ab2",
+      "revId": "bdc89758c7f09b2a3326805254849a48d34b1174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
