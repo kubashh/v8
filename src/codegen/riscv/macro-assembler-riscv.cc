@@ -6952,21 +6952,8 @@ void MacroAssembler::AtomicDecompressTagged(Register dst,
 }
 
 #endif
-void MacroAssembler::DropArguments(Register count, ArgumentsCountType type,
-                                   ArgumentsCountMode mode, Register scratch) {
-  switch (type) {
-    case kCountIsInteger: {
-      CalcScaledAddress(sp, sp, count, kSystemPointerSizeLog2);
-      break;
-    }
-    case kCountIsSmi: {
-      static_assert(kSmiTagSize == 1 && kSmiTag == 0);
-      DCHECK_NE(scratch, no_reg);
-      SmiScale(scratch, count, kSystemPointerSizeLog2);
-      AddWord(sp, sp, scratch);
-      break;
-    }
-  }
+void MacroAssembler::DropArguments(Register count, ArgumentsCountMode mode) {
+  CalcScaledAddress(sp, sp, count, kSystemPointerSizeLog2);
   if (mode == kCountExcludesReceiver) {
     AddWord(sp, sp, kSystemPointerSize);
   }
@@ -6974,16 +6961,14 @@ void MacroAssembler::DropArguments(Register count, ArgumentsCountType type,
 
 void MacroAssembler::DropArgumentsAndPushNewReceiver(Register argc,
                                                      Register receiver,
-                                                     ArgumentsCountType type,
-                                                     ArgumentsCountMode mode,
-                                                     Register scratch) {
+                                                     ArgumentsCountMode mode) {
   DCHECK(!AreAliased(argc, receiver));
   if (mode == kCountExcludesReceiver) {
     // Drop arguments without receiver and override old receiver.
-    DropArguments(argc, type, kCountIncludesReceiver, scratch);
+    DropArguments(argc, kCountIncludesReceiver);
     StoreWord(receiver, MemOperand(sp));
   } else {
-    DropArguments(argc, type, mode, scratch);
+    DropArguments(argc, mode);
     push(receiver);
   }
 }
