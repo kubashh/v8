@@ -84,9 +84,7 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
 
     // Preserve the incoming parameters on the stack.
-    __ SmiTag(a0);
     __ Push(cp, a0);
-    __ SmiUntag(a0);
 
     // Set up pointer to first argument (skip receiver).
     __ AddWord(
@@ -111,15 +109,14 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 
     // Restore context from the frame.
     __ LoadWord(cp, MemOperand(fp, ConstructFrameConstants::kContextOffset));
-    // Restore smi-tagged arguments count from the frame.
+    // Restore arguments count from the frame.
     __ LoadWord(kScratchReg,
                 MemOperand(fp, ConstructFrameConstants::kLengthOffset));
     // Leave construct frame.
   }
 
   // Remove caller arguments from the stack and return.
-  __ DropArguments(kScratchReg, MacroAssembler::kCountIsSmi,
-                   MacroAssembler::kCountIncludesReceiver, kScratchReg);
+  __ DropArguments(kScratchReg, MacroAssembler::kCountIncludesReceiver);
   __ Ret();
 }
 
@@ -143,7 +140,6 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   __ EnterFrame(StackFrame::CONSTRUCT);
 
   // Preserve the incoming parameters on the stack.
-  __ SmiTag(a0);
   __ Push(cp, a0, a1);
   __ PushRoot(RootIndex::kUndefinedValue);
   __ Push(a3);
@@ -152,7 +148,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   //  --        sp[0*kSystemPointerSize]: new target
   //  --        sp[1*kSystemPointerSize]: padding
   //  -- a1 and sp[2*kSystemPointerSize]: constructor function
-  //  --        sp[3*kSystemPointerSize]: number of arguments (tagged)
+  //  --        sp[3*kSystemPointerSize]: number of arguments
   //  --        sp[4*kSystemPointerSize]: context
   // -----------------------------------
   {
@@ -181,7 +177,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   //  -- Slot 4 / sp[0*kSystemPointerSize]: new target
   //  -- Slot 3 / sp[1*kSystemPointerSize]: padding
   //  -- Slot 2 / sp[2*kSystemPointerSize]: constructor function
-  //  -- Slot 1 / sp[3*kSystemPointerSize]: number of arguments (tagged)
+  //  -- Slot 1 / sp[3*kSystemPointerSize]: number of arguments
   //  -- Slot 0 / sp[4*kSystemPointerSize]: context
   // -----------------------------------
   // Deoptimizer enters here.
@@ -212,14 +208,13 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   //  -- sp[1*kSystemPointerSize]: implicit receiver
   //  -- sp[2*kSystemPointerSize]: padding
   //  -- sp[3*kSystemPointerSize]: constructor function
-  //  -- sp[4*kSystemPointerSize]: number of arguments (tagged)
+  //  -- sp[4*kSystemPointerSize]: number of arguments
   //  -- sp[5*kSystemPointerSize]: context
   // -----------------------------------
 
   // Restore constructor function and argument count.
   __ LoadWord(a1, MemOperand(fp, ConstructFrameConstants::kConstructorOffset));
   __ LoadWord(a0, MemOperand(fp, ConstructFrameConstants::kLengthOffset));
-  __ SmiUntag(a0);
 
   Label stack_overflow;
   {
@@ -266,14 +261,14 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   __ JumpIfRoot(a0, RootIndex::kTheHoleValue, &do_throw);
 
   __ bind(&leave_and_return);
-  // Restore smi-tagged arguments count from the frame.
+  // Restore  arguments count from the frame.
   __ LoadWord(a1, MemOperand(fp, ConstructFrameConstants::kLengthOffset));
   // Leave construct frame.
   __ LeaveFrame(StackFrame::CONSTRUCT);
 
   // Remove caller arguments from the stack and return.
-  __ DropArguments(a1, MacroAssembler::kCountIsSmi,
-                   MacroAssembler::kCountIncludesReceiver, a4);
+  __ DropArguments(a1,
+                   MacroAssembler::kCountIncludesReceiver);
   __ Ret();
 
   __ bind(&check_receiver);
@@ -883,7 +878,7 @@ static void LeaveInterpreterFrame(MacroAssembler* masm, Register scratch1,
   __ LeaveFrame(StackFrame::INTERPRETED);
 
   // Drop receiver + arguments.
-  __ DropArguments(params_size, MacroAssembler::kCountIsInteger,
+  __ DropArguments(params_size,
                    MacroAssembler::kCountIncludesReceiver);
 }
 
@@ -2090,7 +2085,6 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
 
     __ LoadWord(receiver, MemOperand(sp));
     __ DropArgumentsAndPushNewReceiver(argc, this_arg,
-                                       MacroAssembler::kCountIsInteger,
                                        MacroAssembler::kCountIncludesReceiver);
   }
 
@@ -2196,7 +2190,6 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
     __ bind(&done2);                           // argc > 2
 
     __ DropArgumentsAndPushNewReceiver(argc, this_argument,
-                                       MacroAssembler::kCountIsInteger,
                                        MacroAssembler::kCountIncludesReceiver);
   }
 
@@ -2262,7 +2255,6 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
     __ bind(&done2);
 
     __ DropArgumentsAndPushNewReceiver(argc, undefined_value,
-                                       MacroAssembler::kCountIsInteger,
                                        MacroAssembler::kCountIncludesReceiver);
   }
 

@@ -1560,12 +1560,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
 
   enum ArgumentsCountMode { kCountIncludesReceiver, kCountExcludesReceiver };
   enum ArgumentsCountType { kCountIsInteger, kCountIsSmi };
-  void DropArguments(Register count, ArgumentsCountType type,
-                     ArgumentsCountMode mode, Register scratch = no_reg);
+  void DropArguments(Register count, ArgumentsCountMode mode);
   void DropArgumentsAndPushNewReceiver(Register argc, Register receiver,
-                                       ArgumentsCountType type,
-                                       ArgumentsCountMode mode,
-                                       Register scratch = no_reg);
+                                       ArgumentsCountMode mode);
+
   void JumpIfCodeIsMarkedForDeoptimization(Register code, Register scratch,
                                            Label* if_marked_for_deoptimization);
   Operand ClearedValue() const;
