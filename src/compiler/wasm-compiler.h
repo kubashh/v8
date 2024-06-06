@@ -760,6 +760,15 @@ class WasmGraphBuilder {
                                  std::initializer_list<Node**> nodes,
                                  wasm::WasmCodePosition position);
 
+  void TableTypeToUintPtrOrOOBTrap(bool is_memory64,
+                                   std::initializer_list<Node**> nodes,
+                                   wasm::WasmCodePosition position);
+
+  void MemOrTableTypeToUintPtrOrOOBTrap(bool is_memory64,
+                                        std::initializer_list<Node**> nodes,
+                                        wasm::WasmCodePosition position,
+                                        wasm::TrapReason trap_reason);
+
   void GetGlobalBaseAndOffset(const wasm::WasmGlobal&, Node** base_node,
                               Node** offset_node);
 
