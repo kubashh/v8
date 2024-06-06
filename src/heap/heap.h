@@ -695,6 +695,10 @@ class Heap final {
   V8_EXPORT_PRIVATE void ClearWasmCanonicalRttsForTesting();
 #endif
 
+#if V8_ENABLE_DRUMBRAKE
+  V8_EXPORT_PRIVATE void ClearJsToWasmWrappersForTesting();
+#endif  // V8_ENABLE_DRUMBRAKE
+
   // ===========================================================================
   // Initialization. ===========================================================
   // ===========================================================================
