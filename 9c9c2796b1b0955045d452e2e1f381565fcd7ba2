@@ -16,6 +16,24 @@
       "message": "What was wrong with this test?",
       "revId": "9c9c2796b1b0955045d452e2e1f381565fcd7ba2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d7dfe09_ce1096e6",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-06T10:23:17Z",
+      "side": 0,
+      "message": "Oopsie, I put it back.\n\nFirst I parameterized all table instruction tests, but then I found it worse to read and unnecessary so I undid it.",
+      "parentUuid": "70ae1645_84d64982",
+      "revId": "9c9c2796b1b0955045d452e2e1f381565fcd7ba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
