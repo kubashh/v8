@@ -425,7 +425,8 @@ class WasmGraphBuilder {
   void ElemDrop(uint32_t elem_segment_index, wasm::WasmCodePosition position);
   void TableCopy(uint32_t table_dst_index, uint32_t table_src_index, Node* dst,
                  Node* src, Node* size, wasm::WasmCodePosition position);
-  Node* TableGrow(uint32_t table_index, Node* value, Node* delta);
+  Node* TableGrow(uint32_t table_index, Node* value, Node* delta,
+                  wasm::WasmCodePosition position);
   Node* TableSize(uint32_t table_index);
   void TableFill(uint32_t table_index, Node* start, Node* value, Node* count);
 
@@ -759,6 +760,15 @@ class WasmGraphBuilder {
   void MemTypeToUintPtrOrOOBTrap(bool is_memory64,
                                  std::initializer_list<Node**> nodes,
                                  wasm::WasmCodePosition position);
+
+  void TableTypeToUintPtrOrOOBTrap(bool is_memory64,
+                                   std::initializer_list<Node**> nodes,
+                                   wasm::WasmCodePosition position);
+
+  void MemOrTableTypeToUintPtrOrOOBTrap(bool is_memory64,
+                                        std::initializer_list<Node**> nodes,
+                                        wasm::WasmCodePosition position,
+                                        wasm::TrapReason trap_reason);
 
   void GetGlobalBaseAndOffset(const wasm::WasmGlobal&, Node** base_node,
                               Node** offset_node);
