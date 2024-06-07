@@ -1524,10 +1524,9 @@ class WasmGraphBuildingInterface {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* args) {
-    builder_->TableInit(imm.table.index, imm.element_segment.index,
-                        args[0].node, args[1].node, args[2].node,
-                        decoder->position());
+                 const Value& dst, const Value& src, const Value& size) {
+    builder_->TableInit(imm.table.index, imm.element_segment.index, dst.node,
+                        src.node, size.node, decoder->position());
   }
 
   void ElemDrop(FullDecoder* decoder, const IndexImmediate& imm) {
@@ -1535,9 +1534,9 @@ class WasmGraphBuildingInterface {
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value args[]) {
-    builder_->TableCopy(imm.table_dst.index, imm.table_src.index, args[0].node,
-                        args[1].node, args[2].node, decoder->position());
+                 const Value& dst, const Value& src, const Value& size) {
+    builder_->TableCopy(imm.table_dst.index, imm.table_src.index, dst.node,
+                        src.node, size.node, decoder->position());
   }
 
   void TableGrow(FullDecoder* decoder, const IndexImmediate& imm,
