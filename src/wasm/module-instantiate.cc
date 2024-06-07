@@ -2722,7 +2722,7 @@ void InstanceBuilder::ProcessExports(
   for (const WasmExport& exp : module_->export_table) {
     Handle<String> name = WasmModuleObject::ExtractUtf8StringFromModuleBytes(
         isolate_, module_object_, exp.name, kInternalize);
-    Handle<Object> value;
+    Handle<JSAny> value;
     switch (exp.kind) {
       case kExternalFunction: {
         // Wrap and export the code as a JSFunction.
@@ -2753,7 +2753,7 @@ void InstanceBuilder::ProcessExports(
         bool shared = module_->tables[exp.index].shared;
         DirectHandle<WasmTrustedInstanceData> data =
             shared ? shared_trusted_instance_data : trusted_instance_data;
-        value = handle(data->tables()->get(exp.index), isolate_);
+        value = handle(Cast<JSAny>(data->tables()->get(exp.index)), isolate_);
         break;
       }
       case kExternalMemory: {
@@ -2773,7 +2773,7 @@ void InstanceBuilder::ProcessExports(
         if (global.imported) {
           auto cached_global = imported_globals.find(exp.index);
           if (cached_global != imported_globals.end()) {
-            value = cached_global->second;
+            value = Cast<JSAny>(cached_global->second);
             break;
           }
         }

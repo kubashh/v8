@@ -12,6 +12,7 @@
 #include "src/logging/counters.h"
 #include "src/objects/managed-inl.h"
 #include "src/objects/objects-inl.h"
+#include "src/objects/oddball.h"
 #include "src/objects/shared-function-info.h"
 #include "src/utils/utils.h"
 #include "src/wasm/code-space-access.h"
@@ -153,7 +154,7 @@ Handle<WasmTableObject> WasmTableObject::New(
     entries->set(i, *initial_value);
   }
 
-  DirectHandle<Object> max;
+  DirectHandle<UnionOf<Number, Undefined>> max;
   if (has_maximum) {
     max = isolate->factory()->NewNumberFromUint(maximum);
   } else {

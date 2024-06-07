@@ -1318,8 +1318,7 @@ void Heap::CreateInitialMutableObjects() {
       RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
 
   // Allocate FeedbackCell for builtins.
-  Handle<FeedbackCell> many_closures_cell =
-      factory->NewManyClosuresCell(factory->undefined_value());
+  Handle<FeedbackCell> many_closures_cell = factory->NewManyClosuresCell();
   set_many_closures_cell(*many_closures_cell);
 
   set_detached_contexts(roots.empty_weak_array_list());

@@ -230,6 +230,33 @@ IS_HELPER_DEF(PromiseReaction)
 ODDBALL_LIST(IS_HELPER_DEF)
 #undef IS_HELPER_DEF
 
+template <typename... T>
+struct CastTraits<Union<T...>> {
+  static inline bool AllowFrom(Tagged<Object> value) {
+    return (Is<T>(value) || ...);
+  }
+  static inline bool AllowFrom(Tagged<HeapObject> value) {
+    return (Is<T>(value) || ...);
+  }
+};
+template <>
+struct CastTraits<JSPrimitive> {
+  static inline bool AllowFrom(Tagged<Object> value) {
+    return IsPrimitive(value);
+  }
+  static inline bool AllowFrom(Tagged<HeapObject> value) {
+    return IsPrimitive(value);
+  }
+};
+template <>
+struct CastTraits<JSAny> {
+  static inline bool AllowFrom(Tagged<Object> value) {
+    return IsPrimitive(value) || IsJSReceiver(value);
+  }
+  static inline bool AllowFrom(Tagged<HeapObject> value) {
+    return IsPrimitive(value) || IsJSReceiver(value);
+  }
+};
 template <>
 struct CastTraits<HeapObject> {
   static inline bool AllowFrom(Tagged<Object> value) {
@@ -283,8 +310,9 @@ Tagged<Object> HeapObject::SeqCst_CompareAndSwapField(
         !IsNumber(actual_expected)) {
       return old_value;
     }
-    if (!Object::SameNumberValue(Object::NumberValue(old_value),
-                                 Object::NumberValue(actual_expected))) {
+    if (!Object::SameNumberValue(
+            Object::NumberValue(Cast<Number>(old_value)),
+            Object::NumberValue(Cast<Number>(actual_expected)))) {
       return old_value;
     }
     // The pointer comparison failed, but the numbers are equal. This can
@@ -594,11 +622,22 @@ STRUCT_LIST(MAKE_STRUCT_PREDICATE)
 #undef MAKE_STRUCT_PREDICATE
 
 // static
-double Object::NumberValue(Tagged<Object> obj) {
+double Object::NumberValue(Tagged<Number> obj) {
   DCHECK(IsNumber(obj));
   return IsSmi(obj)
              ? static_cast<double>(Tagged<Smi>::unchecked_cast(obj).value())
              : HeapNumber::unchecked_cast(obj)->value();
+}
+// TODO(leszeks): Remove in favour of Tagged<Number>
+// static
+double Object::NumberValue(Tagged<Object> obj) {
+  return NumberValue(Cast<Number>(obj));
+}
+double Object::NumberValue(Tagged<HeapNumber> obj) {
+  return NumberValue(Cast<Number>(obj));
+}
+double Object::NumberValue(Tagged<Smi> obj) {
+  return NumberValue(Cast<Number>(obj));
 }
 
 // static
@@ -729,31 +768,31 @@ MaybeHandle<Object> Object::ToPrimitive(Isolate* isolate, Handle<Object> input,
 }
 
 // static
-MaybeHandle<Object> Object::ToNumber(Isolate* isolate, Handle<Object> input) {
-  if (IsNumber(*input)) return input;  // Shortcut.
-  return ConvertToNumberOrNumeric(isolate, input, Conversion::kToNumber);
+MaybeHandle<Number> Object::ToNumber(Isolate* isolate, Handle<Object> input) {
+  if (IsNumber(*input)) return Cast<Number>(input);  // Shortcut.
+  return ConvertToNumber(isolate, input);
 }
 
 // static
 MaybeHandle<Object> Object::ToNumeric(Isolate* isolate, Handle<Object> input) {
   if (IsNumber(*input) || IsBigInt(*input)) return input;  // Shortcut.
-  return ConvertToNumberOrNumeric(isolate, input, Conversion::kToNumeric);
+  return ConvertToNumeric(isolate, input);
 }
 
 // static
-MaybeHandle<Object> Object::ToInteger(Isolate* isolate, Handle<Object> input) {
-  if (IsSmi(*input)) return input;
+MaybeHandle<Number> Object::ToInteger(Isolate* isolate, Handle<Object> input) {
+  if (IsSmi(*input)) return Handle<Smi>::cast(input);
   return ConvertToInteger(isolate, input);
 }
 
 // static
-MaybeHandle<Object> Object::ToInt32(Isolate* isolate, Handle<Object> input) {
-  if (IsSmi(*input)) return input;
+MaybeHandle<Number> Object::ToInt32(Isolate* isolate, Handle<Object> input) {
+  if (IsSmi(*input)) return Handle<Smi>::cast(input);
   return ConvertToInt32(isolate, input);
 }
 
 // static
-MaybeHandle<Object> Object::ToUint32(Isolate* isolate, Handle<Object> input) {
+MaybeHandle<Number> Object::ToUint32(Isolate* isolate, Handle<Object> input) {
   if (IsSmi(*input)) {
     return handle(Smi::ToUint32Smi(Smi::cast(*input)), isolate);
   }

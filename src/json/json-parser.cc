@@ -286,7 +286,7 @@ bool JsonParseInternalizer::RecurseAndApply(Handle<JSReceiver> holder,
                                                         LanguageMode::kSloppy);
   } else {
     PropertyDescriptor desc;
-    desc.set_value(result);
+    desc.set_value(Cast<JSAny>(result));
     desc.set_configurable(true);
     desc.set_enumerable(true);
     desc.set_writable(true);

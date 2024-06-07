@@ -347,10 +347,13 @@ MaybeHandle<JSArray> Runtime::GetInternalProperties(Isolate* isolate,
                          isolate->factory()->NewNumberFromSize(byte_length));
 
       auto backing_store = js_array_buffer->GetBackingStore();
-      Handle<Object> array_buffer_data =
-          backing_store
-              ? isolate->factory()->NewNumberFromUint(backing_store->id())
-              : isolate->factory()->null_value();
+      Handle<Object> array_buffer_data;
+      if (backing_store) {
+        array_buffer_data =
+            isolate->factory()->NewNumberFromUint(backing_store->id());
+      } else {
+        array_buffer_data = isolate->factory()->null_value();
+      }
       result = ArrayList::Add(
           isolate, result,
           isolate->factory()->NewStringFromAsciiChecked("[[ArrayBufferData]]"),

@@ -126,8 +126,9 @@ Handle<Object> LoadHandler::LoadFromPrototype(
   int data_size = GetHandlerDataSize<LoadHandler>(
       isolate, &smi_handler, lookup_start_object_map, data1, maybe_data2);
 
-  Handle<Object> validity_cell = Map::GetOrCreatePrototypeChainValidityCell(
-      lookup_start_object_map, isolate);
+  Handle<UnionOf<Smi, Cell>> validity_cell =
+      Map::GetOrCreatePrototypeChainValidityCell(lookup_start_object_map,
+                                                 isolate);
 
   Handle<LoadHandler> handler = isolate->factory()->NewLoadHandler(data_size);
 
@@ -148,8 +149,9 @@ Handle<Object> LoadHandler::LoadFullChain(Isolate* isolate,
   int data_size = GetHandlerDataSize<LoadHandler>(
       isolate, &smi_handler, lookup_start_object_map, data1);
 
-  Handle<Object> validity_cell = Map::GetOrCreatePrototypeChainValidityCell(
-      lookup_start_object_map, isolate);
+  Handle<UnionOf<Smi, Cell>> validity_cell =
+      Map::GetOrCreatePrototypeChainValidityCell(lookup_start_object_map,
+                                                 isolate);
   if (IsSmi(*validity_cell)) {
     DCHECK_EQ(1, data_size);
     // Lookup on lookup start object isn't supported in case of a simple smi
@@ -207,9 +209,10 @@ KeyedAccessStoreMode StoreHandler::GetKeyedAccessStoreMode(
 // static
 Handle<Object> StoreHandler::StoreElementTransition(
     Isolate* isolate, Handle<Map> receiver_map, Handle<Map> transition,
-    KeyedAccessStoreMode store_mode, MaybeHandle<Object> prev_validity_cell) {
-  Handle<Object> code = ElementsTransitionAndStoreBuiltin(isolate, store_mode);
-  Handle<Object> validity_cell;
+    KeyedAccessStoreMode store_mode,
+    MaybeHandle<UnionOf<Smi, Cell>> prev_validity_cell) {
+  Handle<Code> code = ElementsTransitionAndStoreBuiltin(isolate, store_mode);
+  Handle<UnionOf<Smi, Cell>> validity_cell;
   if (!prev_validity_cell.ToHandle(&validity_cell)) {
     validity_cell =
         Map::GetOrCreatePrototypeChainValidityCell(receiver_map, isolate);
@@ -279,7 +282,7 @@ MaybeObjectHandle StoreHandler::StoreTransition(Isolate* isolate,
   DCHECK(!transition_map->is_access_check_needed());
 
   // Get validity cell value if it is necessary for the handler.
-  Handle<Object> validity_cell;
+  Handle<UnionOf<Smi, Cell>> validity_cell;
   if (is_dictionary_map || !transition_map->IsPrototypeValidityCellValid()) {
     validity_cell =
         Map::GetOrCreatePrototypeChainValidityCell(transition_map, isolate);
@@ -320,7 +323,7 @@ Handle<Object> StoreHandler::StoreThroughPrototype(
   int data_size = GetHandlerDataSize<StoreHandler>(
       isolate, &smi_handler, receiver_map, data1, maybe_data2);
 
-  Handle<Object> validity_cell =
+  Handle<UnionOf<Smi, Cell>> validity_cell =
       Map::GetOrCreatePrototypeChainValidityCell(receiver_map, isolate);
 
   Handle<StoreHandler> handler = isolate->factory()->NewStoreHandler(data_size);
