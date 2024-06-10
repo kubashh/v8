@@ -109,6 +109,24 @@
       "parentUuid": "6c17f8d3_4c156a99",
       "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "829cb7c3_e76fc2e4",
+        "filename": "src/compiler/turboshaft/phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-10T09:06:16Z",
+      "side": 1,
+      "message": "`wasm_engine_` should be nullptr for non-wasm (in the TF pipeline data), however `wasm::GetWasmEngine()` is a singleton accessor, it doesn\u0027t know anything about the compilation.",
+      "parentUuid": "0bacc61a_df6b3d53",
+      "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
