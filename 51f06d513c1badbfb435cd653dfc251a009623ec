@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d49607a5_53759aa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T12:37:38Z",
+      "side": 1,
+      "message": "You could have split the staging and the inclusion of the spec tests in two CLs, but in any case LGTM.",
+      "revId": "51f06d513c1badbfb435cd653dfc251a009623ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
