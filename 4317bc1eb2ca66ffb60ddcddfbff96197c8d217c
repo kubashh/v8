@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf2b4dac_23d3f1fe",
+        "filename": "src/handles/handles-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-10T12:52:46Z",
+      "side": 1,
+      "message": "should this use `value.obj_` directly? On `HandleBase`, `address()` says \"This should only be used for hashing handles; do not ever try to dereference it.\" so I\u0027m wondering if it\u0027s outside of the `address()` contract to use it for accessing the pointer.",
+      "range": {
+        "startLine": 135,
+        "startChar": 32,
+        "endLine": 135,
+        "endChar": 39
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "e4474a5a_61892bc7",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/handles/handles-inl.h",
+              "range": {
+                "startLine": 135,
+                "startChar": 0,
+                "endLine": 136,
+                "endChar": 0
+              },
+              "replacement": "  return DirectHandle\u003cTo\u003e(value.obj_);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "4317bc1eb2ca66ffb60ddcddfbff96197c8d217c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
