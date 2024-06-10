@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0cf3042_82b543c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-10T14:23:03Z",
+      "side": 1,
+      "message": "maybe it\u0027s time to add this (similar to UseRegister vs UseAndClobberRegister)...",
+      "range": {
+        "startLine": 13,
+        "startChar": 19,
+        "endLine": 14,
+        "endChar": 63
+      },
+      "revId": "13fb23dbad6cfa92ee10913fbd789eec1e94e455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25bf6a5f_b298ee9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-10T14:23:03Z",
+      "side": 1,
+      "message": "LGTM as-is, but maybe we want to add this extra constraint and revert this later.",
+      "revId": "13fb23dbad6cfa92ee10913fbd789eec1e94e455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
