@@ -5,6 +5,8 @@
 #ifndef V8_OBJECTS_CASTING_H_
 #define V8_OBJECTS_CASTING_H_
 
+#include <source_location>
+
 #include "src/objects/tagged.h"
 
 namespace v8::internal {
@@ -46,19 +48,34 @@ inline bool Is(Tagged<U> value) {
 // `Cast<T>(value)` casts `value` to a tagged object of type `T`, with a debug
 // check that `value` is a tagged object of type `T`.
 template <typename To, typename From>
-inline Tagged<To> Cast(Tagged<From> value) {
-  DCHECK(Is<To>(value));
+inline Tagged<To> Cast(
+    Tagged<From> value,
+    std::source_location location = std::source_location::current()) {
+// Manually call V8_Dcheck instead of using the DCHECK macro, to propagate the
+// Cast caller's source location.
+#ifdef DEBUG
+  if (V8_UNLIKELY(!Is<To>(value))) {
+    V8_Dcheck(location.file_name(), location.line(), "Type mismatch on cast");
+  }
+#endif
   return UncheckedCast<To>(value);
 }
 template <typename To, typename From>
-inline Handle<To> Cast(Handle<From> value);
+inline Handle<To> Cast(Handle<From> value, std::source_location location =
+                                               std::source_location::current());
 template <typename To, typename From>
-inline MaybeHandle<To> Cast(MaybeHandle<From> value);
+inline MaybeHandle<To> Cast(
+    MaybeHandle<From> value,
+    std::source_location location = std::source_location::current());
 #if V8_ENABLE_DIRECT_HANDLE_BOOL
 template <typename To, typename From>
-inline DirectHandle<To> Cast(DirectHandle<From> value);
+inline DirectHandle<To> Cast(
+    DirectHandle<From> value,
+    std::source_location location = std::source_location::current());
 template <typename To, typename From>
-inline MaybeDirectHandle<To> Cast(MaybeDirectHandle<From> value);
+inline MaybeDirectHandle<To> Cast(
+    MaybeDirectHandle<From> value,
+    std::source_location location = std::source_location::current());
 #endif
 
 // `UncheckedCast<T>(value)` casts `value` to a tagged object of type `T`,
