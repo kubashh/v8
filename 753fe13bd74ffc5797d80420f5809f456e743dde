@@ -91,6 +91,24 @@
       "parentUuid": "e4e2298f_3f3618a5",
       "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bacc61a_df6b3d53",
+        "filename": "src/compiler/turboshaft/phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-06-10T09:03:18Z",
+      "side": 1,
+      "message": "I basically copy-pasted https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/pipeline-data-inl.h;l\u003d381-386;drc\u003d773beeedb06aadb65e79c76a04618072d1ddfa9e\n(where `wasm_engine_` is sometimes initialized with `wasm::GetWasmEngine()` and sometimes not; but given that we use `wasm::GetWasmEngine()` pretty much everywhere this seemed safe).\n\nI would have guess than in the JS pipeline, wasm::GetWasmEngine returns nullptr.. no?",
+      "parentUuid": "6c17f8d3_4c156a99",
+      "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
