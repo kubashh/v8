@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb5616e_693d7ab6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T13:43:27Z",
+      "side": 1,
+      "message": "Some late comments that still seem worth fixing before launching this :)",
+      "revId": "e55ee48761361f45d1cf7927047d1bacdd70d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f45e32e5_5572f3c4",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2454,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T13:43:27Z",
+      "side": 1,
+      "message": "`code_table_` is protected by `allocation_mutex_`. Shouldn\u0027t we take this mutex before accessing the `code_table_`?\nDo we have any tests that test code flushing in a multi-isolate scenario?",
+      "revId": "e55ee48761361f45d1cf7927047d1bacdd70d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f50754c2_23e1ec65",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T13:43:27Z",
+      "side": 1,
+      "message": "nit: This should be `const`.",
+      "revId": "e55ee48761361f45d1cf7927047d1bacdd70d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed27d6c9_fdcc4628",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T13:43:27Z",
+      "side": 1,
+      "message": "Similar here: `native_modules_` is protected by `mutex_`.",
+      "revId": "e55ee48761361f45d1cf7927047d1bacdd70d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d0ff781_762f1bf5",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T13:43:27Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "e55ee48761361f45d1cf7927047d1bacdd70d0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
