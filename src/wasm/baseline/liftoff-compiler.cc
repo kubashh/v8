@@ -8382,6 +8382,12 @@ class LiftoffCompiler {
             __ pc_offset(), SourcePosition(decoder->position()), true);
         __ CallIndirect(&sig, call_descriptor, target);
 
+        if (v8_flags.wasm_deopt &&
+            env_->deopt_info_bytecode_offset == decoder->pc_offset() &&
+            env_->deopt_location_kind == LocationKindForDeopt::kInlinedCall) {
+          StoreFrameDescriptionForDeopt(decoder);
+        }
+
         FinishCall(decoder, &sig, call_descriptor);
       }
     }
