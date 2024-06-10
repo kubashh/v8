@@ -5,6 +5,9 @@
 #ifndef V8_HANDLES_MAYBE_HANDLES_INL_H_
 #define V8_HANDLES_MAYBE_HANDLES_INL_H_
 
+#include <source_location>
+
+#include "src/base/macros.h"
 #include "src/handles/handles-inl.h"
 #include "src/handles/maybe-handles.h"
 #include "src/objects/casting.h"
@@ -22,8 +25,9 @@ MaybeHandle<T>::MaybeHandle(Tagged<T> object, LocalHeap* local_heap)
     : MaybeHandle(handle(object, local_heap)) {}
 
 template <typename To, typename From>
-inline MaybeHandle<To> Cast(MaybeHandle<From> value) {
-  DCHECK_IMPLIES(!value.is_null(), Is<To>(*value.ToHandleChecked()));
+inline MaybeHandle<To> Cast(MaybeHandle<From> value, v8::SourceLocation loc) {
+  DCHECK_WITH_MSG_AND_LOC(value.is_null() || Is<To>(*value.ToHandleChecked()),
+                          V8_PRETTY_FUNCTION_VALUE_OR("Cast type check"), loc);
   return MaybeHandle<To>(value.location_);
 }
 
@@ -160,8 +164,10 @@ MaybeDirectHandle<T>::MaybeDirectHandle(Tagged<T> object, LocalHeap* local_heap)
     : MaybeDirectHandle(direct_handle(object, local_heap)) {}
 
 template <typename To, typename From>
-inline MaybeDirectHandle<To> Cast(MaybeDirectHandle<From> value) {
-  DCHECK_IMPLIES(!value.is_null(), Is<To>(*value.ToHandleChecked()));
+inline MaybeDirectHandle<To> Cast(MaybeDirectHandle<From> value,
+                                  v8::SourceLocation loc) {
+  DCHECK_WITH_MSG_AND_LOC(value.is_null() || Is<To>(*value.ToHandleChecked()),
+                          V8_PRETTY_FUNCTION_VALUE_OR("Cast type check"), loc);
   return MaybeDirectHandle<To>(value.location_);
 }
 

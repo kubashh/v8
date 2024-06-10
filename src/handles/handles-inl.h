@@ -5,6 +5,8 @@
 #ifndef V8_HANDLES_HANDLES_INL_H_
 #define V8_HANDLES_HANDLES_INL_H_
 
+#include <source_location>
+
 #include "src/base/sanitizer/msan.h"
 #include "src/execution/isolate.h"
 #include "src/execution/local-isolate.h"
@@ -53,9 +55,10 @@ const Handle<T> Handle<T>::cast(Handle<S> that) {
 }
 
 template <typename To, typename From>
-inline Handle<To> Cast(Handle<From> value) {
-  DCHECK_IMPLIES(!value.is_null(), Is<To>(*value));
-  return Handle<To>(value.location_);
+inline Handle<To> Cast(Handle<From> value, v8::SourceLocation loc) {
+  DCHECK_WITH_MSG_AND_LOC(value.is_null() || Is<To>(*value),
+                          V8_PRETTY_FUNCTION_VALUE_OR("Cast type check"), loc);
+  return Handle<To>(value.location());
 }
 
 template <typename T>
@@ -130,9 +133,10 @@ V8_INLINE const DirectHandle<T> DirectHandle<T>::cast(Handle<S> that) {
 }
 
 template <typename To, typename From>
-inline DirectHandle<To> Cast(DirectHandle<From> value) {
-  DCHECK(Is<To>(*value));
-  return DirectHandle<To>(value.location_);
+inline DirectHandle<To> Cast(DirectHandle<From> value, v8::SourceLocation loc) {
+  DCHECK_WITH_MSG_AND_LOC(value.is_null() || Is<To>(*value),
+                          V8_PRETTY_FUNCTION_VALUE_OR("Cast type check"), loc);
+  return DirectHandle<To>(value.location());
 }
 
 template <typename T>
