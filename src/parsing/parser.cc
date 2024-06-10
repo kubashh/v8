@@ -1019,6 +1019,8 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
         }
       }
 
+      CHECK_EQ(function_literal_id, GetNextFunctionLiteralId());
+
       // TODO(adamk): We should construct this scope from the ScopeInfo.
       DeclarationScope* scope = NewFunctionScope(kind);
       scope->set_has_checked_syntax(true);
@@ -1048,29 +1050,8 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
         formals.duplicate_loc = formals_scope.duplicate_location();
       }
 
-      if (GetLastFunctionLiteralId() != function_literal_id - 1) {
-        if (has_error()) return nullptr;
-        // If there were FunctionLiterals in the parameters, we need to
-        // renumber them to shift down so the next function literal id for
-        // the arrow function is the one requested.
-        AstFunctionLiteralIdReindexer reindexer(
-            stack_limit_,
-            (function_literal_id - 1) - GetLastFunctionLiteralId());
-        for (auto p : formals.params) {
-          if (p->pattern != nullptr) reindexer.Reindex(p->pattern);
-          if (p->initializer() != nullptr) {
-            reindexer.Reindex(p->initializer());
-          }
-          if (reindexer.HasStackOverflow()) {
-            set_stack_overflow();
-            return nullptr;
-          }
-        }
-        ResetFunctionLiteralId();
-        SkipFunctionLiterals(function_literal_id - 1);
-      }
-
-      Expression* expression = ParseArrowFunctionLiteral(formals);
+      Expression* expression =
+          ParseArrowFunctionLiteral(formals, function_literal_id);
       // Scanning must end at the same position that was recorded
       // previously. If not, parsing has been interrupted due to a stack
       // overflow, at which point the partially parsed arrow function
@@ -2632,6 +2613,21 @@ void Parser::DeclareArrowFunctionFormalParameters(
   DeclareFormalParameters(parameters);
   DCHECK_IMPLIES(parameters->is_simple,
                  parameters->scope->has_simple_parameters());
+}
+
+void Parser::ReindexArrowFunctionFormalParameters(
+    ParserFormalParameters* parameters) {
+  AstFunctionLiteralIdReindexer reindexer(stack_limit_, 1);
+  for (auto p : parameters->params) {
+    if (p->pattern != nullptr) reindexer.Reindex(p->pattern);
+    if (p->initializer() != nullptr) {
+      reindexer.Reindex(p->initializer());
+    }
+    if (reindexer.HasStackOverflow()) {
+      set_stack_overflow();
+      return;
+    }
+  }
 }
 
 void Parser::PrepareGeneratorVariables() {
