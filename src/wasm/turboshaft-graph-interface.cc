@@ -3748,18 +3748,22 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
 
   void TableGet(FullDecoder* decoder, const Value& index, Value* result,
                 const IndexImmediate& imm) {
-    ValueType element_type = decoder->module_->tables[imm.index].type;
+    const WasmTable* wasm_table = &decoder->module_->tables[imm.index];
+    ValueType element_type = wasm_table->type;
     V<WasmTableObject> table = LoadTable(decoder, imm.index);
     V<Smi> size_smi = __ Load(table, LoadOp::Kind::TaggedBase(),
                               MemoryRepresentation::TaggedSigned(),
                               WasmTableObject::kCurrentLengthOffset);
-    V<Word32> in_bounds = __ Uint32LessThan(index.op, __ UntagSmi(size_smi));
+    V<WordPtr> index_intptr =
+        TableIndexToUintPtrOrOOBTrap(wasm_table->is_table64, index.op);
+    DCHECK(kSmiMaxValue >= v8_flags.wasm_max_table_size);
+    V<Word32> in_bounds = __ UintPtrLessThan(
+        index_intptr, __ ChangeUint32ToUintPtr(__ UntagSmi(size_smi)));
     __ TrapIfNot(in_bounds, OpIndex::Invalid(), TrapId::kTrapTableOutOfBounds);
     V<FixedArray> entries = __ Load(table, LoadOp::Kind::TaggedBase(),
                                     MemoryRepresentation::TaggedPointer(),
                                     WasmTableObject::kEntriesOffset);
-    OpIndex entry =
-        __ LoadFixedArrayElement(entries, __ ChangeInt32ToIntPtr(index.op));
+    OpIndex entry = __ LoadFixedArrayElement(entries, index_intptr);
 
     if (IsSubtypeOf(element_type, kWasmFuncRef, decoder->module_) ||
         IsSubtypeOf(element_type, ValueType::RefNull(HeapType::kFuncShared),
@@ -3779,12 +3783,11 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       GOTO(resolved, entry);
 
       BIND(call_runtime);
-      bool extract_shared_data =
-          !shared_ && decoder->module_->tables[imm.index].shared;
+      bool extract_shared_data = !shared_ && wasm_table->shared;
       GOTO(resolved,
            CallBuiltinThroughJumptable<
                BuiltinCallDescriptor::WasmFunctionTableGet>(
-               decoder, {__ IntPtrConstant(imm.index), index.op,
+               decoder, {__ IntPtrConstant(imm.index), index_intptr,
                          __ Word32Constant(extract_shared_data ? 1 : 0)}));
 
       BIND(resolved, resolved_entry);
@@ -3800,74 +3803,102 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     const WasmTable* table = &decoder->module_->tables[imm.index];
     bool extract_shared_data = !shared_ && table->shared;
 
+    V<WordPtr> index_intptr =
+        TableIndexToUintPtrOrOOBTrap(table->is_table64, index.op);
+    DCHECK(kSmiMaxValue >= v8_flags.wasm_max_table_size);
+
     if (IsSubtypeOf(table->type, kWasmFuncRef, decoder->module_) ||
         IsSubtypeOf(table->type, ValueType::RefNull(HeapType::kFuncShared),
                     decoder->module_)) {
       CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmTableSetFuncRef>(
-          decoder,
-          {__ IntPtrConstant(imm.index),
-           __ Word32Constant(extract_shared_data ? 1 : 0), index.op, value.op});
+          decoder, {__ IntPtrConstant(imm.index),
+                    __ Word32Constant(extract_shared_data ? 1 : 0),
+                    index_intptr, value.op});
     } else {
       CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmTableSet>(
-          decoder,
-          {__ IntPtrConstant(imm.index),
-           __ Word32Constant(extract_shared_data ? 1 : 0), index.op, value.op});
+          decoder, {__ IntPtrConstant(imm.index),
+                    __ Word32Constant(extract_shared_data ? 1 : 0),
+                    index_intptr, value.op});
     }
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* args) {
-    V<Word32> dst = args[0].op;
-    V<Word32> src = args[1].op;
-    V<Word32> size = args[2].op;
-    bool table_is_shared = decoder->module_->tables[imm.table.index].shared;
-    DCHECK_EQ(
-        table_is_shared,
-        decoder->module_->elem_segments[imm.element_segment.index].shared);
+                 const Value& dst_val, const Value& src_val,
+                 const Value& size_val) {
+    const WasmTable* table = &decoder->module_->tables[imm.table.index];
+    V<WordPtr> dst_intptr =
+        TableIndexToUintPtrOrOOBTrap(table->is_table64, dst_val.op);
+    V<Word32> src = src_val.op;
+    V<Word32> size = size_val.op;
+    DCHECK_EQ(table->shared, table->shared);
     CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmTableInit>(
         decoder, {
-                     dst,
+                     dst_intptr,
                      src,
                      size,
                      __ NumberConstant(imm.table.index),
                      __ NumberConstant(imm.element_segment.index),
-                     __ NumberConstant((!shared_ && table_is_shared) ? 1 : 0),
+                     __ NumberConstant((!shared_ && table->shared) ? 1 : 0),
                  });
   }
 
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value args[]) {
-    V<Word32> dst = args[0].op;
-    V<Word32> src = args[1].op;
-    V<Word32> size = args[2].op;
+                 const Value& dst_val, const Value& src_val,
+                 const Value& size_val) {
+    const WasmTable* table_dst = &decoder->module_->tables[imm.table_dst.index];
+    const WasmTable* table_src = &decoder->module_->tables[imm.table_src.index];
+    V<WordPtr> dst_intptr =
+        TableIndexToUintPtrOrOOBTrap(table_dst->is_table64, dst_val.op);
+    V<WordPtr> src_intptr =
+        TableIndexToUintPtrOrOOBTrap(table_src->is_table64, src_val.op);
+    // TODO(crbug.com/338024338): Take the type of the table that has the
+    // smaller size.
+    V<WordPtr> size_intptr =
+        TableIndexToUintPtrOrOOBTrap(table_src->is_table64, size_val.op);
+    DCHECK(kSmiMaxValue >= v8_flags.wasm_max_table_size);
     bool table_is_shared = decoder->module_->tables[imm.table_dst.index].shared;
     // TODO(14616): Is this too restrictive?
     DCHECK_EQ(table_is_shared,
               decoder->module_->tables[imm.table_src.index].shared);
     CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmTableCopy>(
-        decoder, {dst, src, size, __ NumberConstant(imm.table_dst.index),
+        decoder, {dst_intptr, src_intptr, size_intptr,
+                  __ NumberConstant(imm.table_dst.index),
                   __ NumberConstant(imm.table_src.index),
                   __ NumberConstant((!shared_ && table_is_shared) ? 1 : 0)});
   }
 
   void TableGrow(FullDecoder* decoder, const IndexImmediate& imm,
                  const Value& value, const Value& delta, Value* result) {
-    bool extract_shared_data =
-        !shared_ && decoder->module_->tables[imm.index].shared;
-    V<Smi> result_smi =
+    const WasmTable* table = &decoder->module_->tables[imm.index];
+    V<WordPtr> delta_intptr =
+        TableIndexToUintPtrOrOOBTrap(table->is_table64, delta.op);
+    DCHECK(kSmiMaxValue >= v8_flags.wasm_max_table_size);
+    bool extract_shared_data = !shared_ && table->shared;
+    V<Word32> result_i32 = __ UntagSmi(
         CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmTableGrow>(
-            decoder, {__ NumberConstant(imm.index), delta.op,
-                      __ Word32Constant(extract_shared_data), value.op});
-    result->op = __ UntagSmi(result_smi);
+            decoder, {__ NumberConstant(imm.index), delta_intptr,
+                      __ Word32Constant(extract_shared_data), value.op}));
+    if (table->is_table64) {
+      result->op = __ ChangeInt32ToInt64(result_i32);
+    } else {
+      result->op = result_i32;
+    }
   }
 
   void TableFill(FullDecoder* decoder, const IndexImmediate& imm,
                  const Value& start, const Value& value, const Value& count) {
+    const WasmTable* table = &decoder->module_->tables[imm.index];
+    V<WordPtr> start_intptr =
+        TableIndexToUintPtrOrOOBTrap(table->is_table64, start.op);
+    V<WordPtr> count_intptr =
+        TableIndexToUintPtrOrOOBTrap(table->is_table64, count.op);
+    DCHECK(kSmiMaxValue >= v8_flags.wasm_max_table_size);
     bool extract_shared_data =
         !shared_ && decoder->module_->tables[imm.index].shared;
     CallBuiltinThroughJumptable<BuiltinCallDescriptor::WasmTableFill>(
-        decoder, {start.op, count.op, __ Word32Constant(extract_shared_data),
-                  __ NumberConstant(imm.index), value.op});
+        decoder,
+        {start_intptr, count_intptr, __ Word32Constant(extract_shared_data),
+         __ NumberConstant(imm.index), value.op});
   }
 
   V<WasmTableObject> LoadTable(FullDecoder* decoder, uint32_t table_index) {
@@ -3882,10 +3913,15 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   void TableSize(FullDecoder* decoder, const IndexImmediate& imm,
                  Value* result) {
     V<WasmTableObject> table = LoadTable(decoder, imm.index);
-    V<Smi> size_smi = __ Load(table, LoadOp::Kind::TaggedBase(),
-                              MemoryRepresentation::TaggedSigned(),
-                              WasmTableObject::kCurrentLengthOffset);
-    result->op = __ UntagSmi(size_smi);
+    V<Word32> size_i32 = __ UntagSmi(__ Load(
+        table, LoadOp::Kind::TaggedBase(), MemoryRepresentation::TaggedSigned(),
+        WasmTableObject::kCurrentLengthOffset));
+    const WasmTable* wasm_table = &decoder->module_->tables[imm.index];
+    if (wasm_table->is_table64) {
+      result->op = __ ChangeInt32ToInt64(size_i32);
+    } else {
+      result->op = size_i32;
+    }
   }
 
   void ElemDrop(FullDecoder* decoder, const IndexImmediate& imm) {
@@ -7199,6 +7235,14 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     if (kSystemPointerSize == kInt64Size) return index;
     __ TrapIf(__ TruncateWord64ToWord32(__ Word64ShiftRightLogical(index, 32)),
               OpIndex::Invalid(), TrapId::kTrapMemOutOfBounds);
+    return OpIndex(__ TruncateWord64ToWord32(index));
+  }
+
+  V<WordPtr> TableIndexToUintPtrOrOOBTrap(bool is_table64, OpIndex index) {
+    if (!is_table64) return __ ChangeUint32ToUintPtr(index);
+    if (Is64()) return index;
+    __ TrapIf(__ TruncateWord64ToWord32(__ Word64ShiftRightLogical(index, 32)),
+              OpIndex::Invalid(), TrapId::kTrapTableOutOfBounds);
     return OpIndex(__ TruncateWord64ToWord32(index));
   }
 
