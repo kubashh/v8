@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ffd525_5e7e8367",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-10T15:02:56Z",
+      "side": 1,
+      "message": "Well, that was easier than I thought. 😊\n@manoskouk@chromium.org: PTAL.",
+      "revId": "467b8b24a38497e4917456c0f376403ad30a0967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
