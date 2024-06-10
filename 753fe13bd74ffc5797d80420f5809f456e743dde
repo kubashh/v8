@@ -73,6 +73,24 @@
       "message": "`wasm::GetWasmEngine()` will always return a non-null ptr, so no need for the `if`.\n\nFor wasm, do we always want to use the wasm code tracer, so should we first check if we have an isolate with its own tracer?",
       "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c17f8d3_4c156a99",
+        "filename": "src/compiler/turboshaft/phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-10T08:57:56Z",
+      "side": 1,
+      "message": "Ah, I guess, the check should be `info_-\u003eisWasm()` to only use the wasm code tracer if it\u0027s wasm.\n@clemensb@chromium.org: If it\u0027s wasm, we should never have an isolate during compilation.",
+      "parentUuid": "e4e2298f_3f3618a5",
+      "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
