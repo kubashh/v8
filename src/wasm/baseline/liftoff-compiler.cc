@@ -3015,16 +3015,24 @@ class LiftoffCompiler {
 
   void TableGet(FullDecoder* decoder, const Value&, Value*,
                 const IndexImmediate& imm) {
+    Register index_high_word = no_reg;
+    LiftoffRegList pinned;
     VarState table_index{kI32, static_cast<int>(imm.index), 0};
 
-    VarState index = __ PopVarState();
+    // Convert the index to the table to an intptr.
+    VarState index = PopIndexToVarState(&index_high_word, &pinned);
+    // Trap if any bit in the high word was set.
+    if (index_high_word != no_reg) {
+      DCHECK(!Is64());
+      CheckHighWordEmptyForTableType(decoder, index_high_word, &pinned);
+    }
 
     ValueType type = env_->module->tables[imm.index].type;
     bool is_funcref = IsSubtypeOf(type, kWasmFuncRef, env_->module);
     auto stub =
         is_funcref ? Builtin::kWasmTableGetFuncRef : Builtin::kWasmTableGet;
 
-    CallBuiltin(stub, MakeSig::Returns(type.kind()).Params(kI32, kI32),
+    CallBuiltin(stub, MakeSig::Returns(type.kind()).Params(kI32, kIntPtrKind),
                 {table_index, index}, decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
@@ -3034,10 +3042,18 @@ class LiftoffCompiler {
 
   void TableSet(FullDecoder* decoder, const Value&, const Value&,
                 const IndexImmediate& imm) {
+    Register index_high_word = no_reg;
+    LiftoffRegList pinned;
     VarState table_index{kI32, static_cast<int>(imm.index), 0};
 
     VarState value = __ PopVarState();
-    VarState index = __ PopVarState();
+    if (value.is_reg()) pinned.set(value.reg());
+    // Convert the index to the table to an intptr.
+    VarState index = PopIndexToVarState(&index_high_word, &pinned);
+    // Trap if any bit in the high word was set.
+    if (index_high_word != no_reg) {
+      CheckHighWordEmptyForTableType(decoder, index_high_word, &pinned);
+    }
     VarState extract_shared_part{kI32, 0, 0};
 
     ValueType type = env_->module->tables[imm.index].type;
@@ -3045,7 +3061,7 @@ class LiftoffCompiler {
     auto stub =
         is_funcref ? Builtin::kWasmTableSetFuncRef : Builtin::kWasmTableSet;
 
-    CallBuiltin(stub, MakeSig::Params(kI32, kI32, kI32, kRefNull),
+    CallBuiltin(stub, MakeSig::Params(kI32, kI32, kIntPtrKind, kRefNull),
                 {table_index, extract_shared_part, index, value},
                 decoder->position());
 
@@ -5750,18 +5766,18 @@ class LiftoffCompiler {
   // Pop a VarState and if needed transform it to an intptr.
   // When truncating from u64 to u32, the {*high_word} is updated to contain
   // the ORed combination of all high words.
-  VarState PopMemTypeToVarState(Register* high_word, LiftoffRegList* pinned) {
+  VarState PopIndexToVarState(Register* high_word, LiftoffRegList* pinned) {
     VarState slot = __ PopVarState();
     const bool is_mem64 = slot.kind() == kI64;
     // For memory32 on a 32-bit system or memory64 on a 64-bit system, there is
     // nothing to do.
-    if ((kSystemPointerSize == kInt64Size) == is_mem64) {
+    if (Is64() == is_mem64) {
       if (slot.is_reg()) pinned->set(slot.reg());
       return slot;
     }
 
     // For memory32 on 64-bit hosts, zero-extend.
-    if (kSystemPointerSize == kInt64Size) {
+    if (Is64()) {
       DCHECK(!is_mem64);  // Handled above.
       LiftoffRegister reg = __ LoadToModifiableRegister(slot, *pinned);
       __ emit_u32_to_uintptr(reg.gp(), reg.gp());
@@ -5773,7 +5789,7 @@ class LiftoffCompiler {
     // and only use the low words afterwards. This keeps the register pressure
     // managable.
     DCHECK(is_mem64);  // Other cases are handled above.
-    DCHECK_EQ(kSystemPointerSize, kInt32Size);
+    DCHECK(!Is64());
     LiftoffRegister reg = __ LoadToRegister(slot, *pinned);
     pinned->set(reg.low());
     if (*high_word == no_reg) {
@@ -5793,6 +5809,25 @@ class LiftoffCompiler {
       __ emit_i32_or(*high_word, *high_word, reg.high_gp());
     }
     return {kIntPtrKind, reg.low(), 0};
+  }
+
+  // This is a helper function that traps with TableOOB if any bit is set in
+  // `high_word`. It is meant to be used after `PopMemOrTableTypeToVarState()`
+  // to check if the conversion was valid.
+  // Note that this is suboptimal as we add an OOL code for this special
+  // condition, and there's also another conditional trap in the caller builtin.
+  // However, it only applies for the rare case of 32-bit platforms with
+  // table64.
+  void CheckHighWordEmptyForTableType(FullDecoder* decoder,
+                                      const Register& high_word,
+                                      LiftoffRegList* pinned) {
+    DCHECK(!Is64());
+    DCHECK(high_word != no_reg);
+    Label* trap_label =
+        AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapTableOutOfBounds);
+    FREEZE_STATE(trapping);
+    __ emit_cond_jump(kNotZero, trap_label, kI32, high_word, no_reg, trapping);
+    pinned->clear(high_word);
   }
 
   // Same, but can take a VarState in the middle of the stack without
@@ -5866,7 +5901,7 @@ class LiftoffCompiler {
     VarState src = __ PopVarState();
     if (src.is_reg()) pinned.set(src.reg());
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory.memory));
-    VarState dst = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState dst = PopIndexToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
     if (instance_data == no_reg) {
@@ -5875,8 +5910,10 @@ class LiftoffCompiler {
     }
     pinned.set(instance_data);
 
-    // Only allocate the OOB code now, so the state of the stack is reflected
-    // correctly.
+    // TODO(crbug.com/41480344): We wanted to allocate the OOB after popping
+    // values from the stack to reflected the state of the stack. However,
+    // `PopIndexToVarState()` pops values already, so we should think of another
+    // solution.
     Label* trap_label =
         AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
     if (mem_offsets_high_word != no_reg) {
@@ -5930,11 +5967,11 @@ class LiftoffCompiler {
     DCHECK_EQ(imm.memory_dst.memory->is_memory64,
               imm.memory_src.memory->is_memory64);
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
-    VarState size = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState size = PopIndexToVarState(&mem_offsets_high_word, &pinned);
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
-    VarState src = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState src = PopIndexToVarState(&mem_offsets_high_word, &pinned);
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
-    VarState dst = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState dst = PopIndexToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
     if (instance_data == no_reg) {
@@ -5943,8 +5980,10 @@ class LiftoffCompiler {
     }
     pinned.set(instance_data);
 
-    // Only allocate the OOB code now, so the state of the stack is reflected
-    // correctly.
+    // TODO(crbug.com/41480344): We wanted to allocate the OOB after popping
+    // values from the stack to reflected the state of the stack. However,
+    // `PopIndexToVarState()` pops values already, so we should think of another
+    // solution.
     Label* trap_label =
         AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
     if (mem_offsets_high_word != no_reg) {
@@ -5973,11 +6012,11 @@ class LiftoffCompiler {
     Register mem_offsets_high_word = no_reg;
     LiftoffRegList pinned;
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
-    VarState size = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState size = PopIndexToVarState(&mem_offsets_high_word, &pinned);
     VarState value = __ PopVarState();
     if (value.is_reg()) pinned.set(value.reg());
     DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
-    VarState dst = PopMemTypeToVarState(&mem_offsets_high_word, &pinned);
+    VarState dst = PopIndexToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
     if (instance_data == no_reg) {
@@ -5986,8 +6025,10 @@ class LiftoffCompiler {
     }
     pinned.set(instance_data);
 
-    // Only allocate the OOB code now, so the state of the stack is reflected
-    // correctly.
+    // TODO(crbug.com/41480344): We wanted to allocate the OOB after popping
+    // values from the stack to reflected the state of the stack. However,
+    // `PopIndexToVarState()` pops values already, so we should think of another
+    // solution.
     Label* trap_label =
         AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapMemOutOfBounds);
     if (mem_offsets_high_word != no_reg) {
@@ -6016,32 +6057,30 @@ class LiftoffCompiler {
   }
 
   void TableInit(FullDecoder* decoder, const TableInitImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
-    LiftoffRegister table_index_reg =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
-    LoadSmi(table_index_reg, imm.table.index);
-    VarState table_index{kSmiKind, table_index_reg, 0};
-
-    LiftoffRegister segment_index_reg =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
-    LoadSmi(segment_index_reg, imm.element_segment.index);
-    VarState segment_index{kSmiKind, segment_index_reg, 0};
-
-    LiftoffRegister extract_shared_data_reg =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
-    LoadSmi(extract_shared_data_reg, 0);
-    VarState extract_shared_data{kSmiKind, extract_shared_data_reg, 0};
+    VarState table_index = LoadSmiConstant(imm.table.index, &pinned);
+    VarState segment_index =
+        LoadSmiConstant(imm.element_segment.index, &pinned);
+    VarState extract_shared_data = LoadSmiConstant(0, &pinned);
 
     VarState size = __ PopVarState();
+    if (size.is_reg()) pinned.set(size.reg());
     VarState src = __ PopVarState();
-    VarState dst = __ PopVarState();
+    if (src.is_reg()) pinned.set(src.reg());
+    Register index_high_word = no_reg;
+    VarState dst = PopIndexToVarState(&index_high_word, &pinned);
+
+    // Trap if any bit in high word was set.
+    if (index_high_word != no_reg) {
+      CheckHighWordEmptyForTableType(decoder, index_high_word, &pinned);
+    }
 
     CallBuiltin(
         Builtin::kWasmTableInit,
-        MakeSig::Params(kI32, kI32, kI32, kSmiKind, kSmiKind, kSmiKind),
+        MakeSig::Params(kIntPtrKind, kI32, kI32, kSmiKind, kSmiKind, kSmiKind),
         {dst, src, size, table_index, segment_index, extract_shared_data},
         decoder->position());
 
@@ -6072,33 +6111,41 @@ class LiftoffCompiler {
                           empty_fixed_array, pinned);
   }
 
+  VarState LoadSmiConstant(int32_t constant, LiftoffRegList* pinned) {
+    if constexpr (kSmiKind == kI32) {
+      int32_t smi_const = static_cast<int32_t>(Smi::FromInt(constant).ptr());
+      return VarState{kI32, smi_const, 0};
+    } else {
+      LiftoffRegister table_dst_index_reg =
+          pinned->set(__ GetUnusedRegister(kGpReg, *pinned));
+      LoadSmi(table_dst_index_reg, constant);
+      return VarState{kSmiKind, table_dst_index_reg, 0};
+    }
+  }
+
   void TableCopy(FullDecoder* decoder, const TableCopyImmediate& imm,
-                 const Value* /* args */) {
+                 const Value&, const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
+    Register index_high_word = no_reg;
     LiftoffRegList pinned;
 
-    LiftoffRegister table_dst_index_reg =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
-    LoadSmi(table_dst_index_reg, imm.table_dst.index);
-    VarState table_dst_index{kSmiKind, table_dst_index_reg, 0};
+    VarState table_src_index = LoadSmiConstant(imm.table_src.index, &pinned);
+    VarState table_dst_index = LoadSmiConstant(imm.table_dst.index, &pinned);
+    VarState extract_shared_data = LoadSmiConstant(0, &pinned);
 
-    LiftoffRegister table_src_index_reg =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
-    LoadSmi(table_src_index_reg, imm.table_src.index);
-    VarState table_src_index{kSmiKind, table_src_index_reg, 0};
+    VarState size = PopIndexToVarState(&index_high_word, &pinned);
+    VarState src = PopIndexToVarState(&index_high_word, &pinned);
+    VarState dst = PopIndexToVarState(&index_high_word, &pinned);
 
-    LiftoffRegister extract_shared_data_reg =
-        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
-    LoadSmi(extract_shared_data_reg, 0);
-    VarState extract_shared_data{kSmiKind, extract_shared_data_reg, 0};
-
-    VarState size = __ PopVarState();
-    VarState src = __ PopVarState();
-    VarState dst = __ PopVarState();
+    // Trap if any bit in the combined high words was set.
+    if (index_high_word != no_reg) {
+      CheckHighWordEmptyForTableType(decoder, index_high_word, &pinned);
+    }
 
     CallBuiltin(
         Builtin::kWasmTableCopy,
-        MakeSig::Params(kI32, kI32, kI32, kSmiKind, kSmiKind, kSmiKind),
+        MakeSig::Params(kIntPtrKind, kIntPtrKind, kIntPtrKind, kSmiKind,
+                        kSmiKind, kSmiKind),
         {dst, src, size, table_dst_index, table_src_index, extract_shared_data},
         decoder->position());
 
@@ -6108,25 +6155,39 @@ class LiftoffCompiler {
   void TableGrow(FullDecoder* decoder, const IndexImmediate& imm, const Value&,
                  const Value&, Value* result) {
     FUZZER_HEAVY_INSTRUCTION;
+    Register index_high_word = no_reg;
     LiftoffRegList pinned;
 
     LiftoffRegister table_index_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LoadSmi(table_index_reg, imm.index);
     VarState table_index(kSmiKind, table_index_reg, 0);
-
-    VarState delta = __ PopVarState();
+    VarState delta = PopIndexToVarState(&index_high_word, &pinned);
+    // Trap if any bit in the high word was set.
+    if (index_high_word != no_reg) {
+      CheckHighWordEmptyForTableType(decoder, index_high_word, &pinned);
+    }
     VarState value = __ PopVarState();
     VarState extract_shared_data(kI32, 0, 0);
 
-    CallBuiltin(
-        Builtin::kWasmTableGrow,
-        MakeSig::Returns(kSmiKind).Params(kSmiKind, kI32, kI32, kRefNull),
-        {table_index, delta, extract_shared_data, value}, decoder->position());
+    CallBuiltin(Builtin::kWasmTableGrow,
+                MakeSig::Returns(kSmiKind).Params(kSmiKind, kIntPtrKind, kI32,
+                                                  kRefNull),
+                {table_index, delta, extract_shared_data, value},
+                decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
     __ SmiToInt32(kReturnRegister0);
-    __ PushRegister(kI32, LiftoffRegister(kReturnRegister0));
+    const WasmTable& wasm_table = decoder->module_->tables[imm.index];
+    if (wasm_table.is_table64) {
+      LiftoffRegister result64 = LiftoffRegister(kReturnRegister0);
+      if (kNeedI64RegPair) result64 = __ GetUnusedRegister(kGpRegPair, pinned);
+      __ emit_type_conversion(kExprI64SConvertI32, result64,
+                              LiftoffRegister(kReturnRegister0), nullptr);
+      __ PushRegister(kI64, result64);
+    } else {
+      __ PushRegister(kI32, LiftoffRegister(kReturnRegister0));
+    }
   }
 
   void TableSize(FullDecoder* decoder, const IndexImmediate& imm, Value*) {
@@ -6151,12 +6212,23 @@ class LiftoffCompiler {
             length_field_size == 4 ? LoadType::kI32Load : LoadType::kI64Load);
 
     __ SmiUntag(result);
-    __ PushRegister(kI32, LiftoffRegister(result));
+
+    const WasmTable& wasm_table = decoder->module_->tables[imm.index];
+    if (wasm_table.is_table64) {
+      LiftoffRegister result64 = LiftoffRegister(result);
+      if (kNeedI64RegPair) result64 = __ GetUnusedRegister(kGpRegPair, pinned);
+      __ emit_type_conversion(kExprI64SConvertI32, result64,
+                              LiftoffRegister(result), nullptr);
+      __ PushRegister(kI64, result64);
+    } else {
+      __ PushRegister(kI32, LiftoffRegister(result));
+    }
   }
 
   void TableFill(FullDecoder* decoder, const IndexImmediate& imm, const Value&,
                  const Value&, const Value&) {
     FUZZER_HEAVY_INSTRUCTION;
+    Register high_words = no_reg;
     LiftoffRegList pinned;
 
     LiftoffRegister table_index_reg =
@@ -6165,14 +6237,20 @@ class LiftoffCompiler {
     VarState table_index(kSmiKind, table_index_reg, 0);
     VarState extract_shared_data(kI32, 0, 0);
 
-    VarState count = __ PopVarState();
+    VarState count = PopIndexToVarState(&high_words, &pinned);
     VarState value = __ PopVarState();
-    VarState start = __ PopVarState();
+    if (value.is_reg()) pinned.set(value.reg());
+    VarState start = PopIndexToVarState(&high_words, &pinned);
+    // Trap if any bit in the combined high words was set.
+    if (high_words != no_reg) {
+      CheckHighWordEmptyForTableType(decoder, high_words, &pinned);
+    }
 
-    CallBuiltin(Builtin::kWasmTableFill,
-                MakeSig::Params(kI32, kI32, kI32, kSmiKind, kRefNull),
-                {start, count, extract_shared_data, table_index, value},
-                decoder->position());
+    CallBuiltin(
+        Builtin::kWasmTableFill,
+        MakeSig::Params(kIntPtrKind, kIntPtrKind, kI32, kSmiKind, kRefNull),
+        {start, count, extract_shared_data, table_index, value},
+        decoder->position());
 
     RegisterDebugSideTableEntry(decoder, DebugSideTableBuilder::kDidSpill);
   }
