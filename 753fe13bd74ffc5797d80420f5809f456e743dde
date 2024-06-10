@@ -56,6 +56,23 @@
       },
       "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4e2298f_3f3618a5",
+        "filename": "src/compiler/turboshaft/phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-10T08:52:00Z",
+      "side": 1,
+      "message": "`wasm::GetWasmEngine()` will always return a non-null ptr, so no need for the `if`.\n\nFor wasm, do we always want to use the wasm code tracer, so should we first check if we have an isolate with its own tracer?",
+      "revId": "753fe13bd74ffc5797d80420f5809f456e743dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
