@@ -40,6 +40,30 @@
       ],
       "revId": "4317bc1eb2ca66ffb60ddcddfbff96197c8d217c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "010777f8_96ea5be6",
+        "filename": "src/handles/handles-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-10T12:57:02Z",
+      "side": 1,
+      "message": "Let\u0027s use `obj_` directly, I agree.\nThe comment was added so that the public `address()` method is not abused.",
+      "parentUuid": "cf2b4dac_23d3f1fe",
+      "range": {
+        "startLine": 135,
+        "startChar": 32,
+        "endLine": 135,
+        "endChar": 39
+      },
+      "revId": "4317bc1eb2ca66ffb60ddcddfbff96197c8d217c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
