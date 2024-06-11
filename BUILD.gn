@@ -68,12 +68,10 @@ declare_args() {
   v8_promise_internal_field_count = 0
 
   # Sets the number of internal fields on array buffer objects.
-  # TODO(346350847): Switch default to 0.
-  v8_array_buffer_internal_field_count = 2
+  v8_array_buffer_internal_field_count = 0
 
   # Sets the number of internal fields on array buffer view objects.
-  # TODO(346350847): Switch default to 0.
-  v8_array_buffer_view_internal_field_count = 2
+  v8_array_buffer_view_internal_field_count = 0
 
   # Sets -dENABLE_GDB_JIT_INTERFACE.
   v8_enable_gdbjit = ""
