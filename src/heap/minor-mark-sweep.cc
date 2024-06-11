@@ -901,8 +901,9 @@ bool MinorMarkSweepCollector::StartSweepNewSpace() {
   PagedSpaceForNewSpace* paged_space = heap_->paged_new_space()->paged_space();
   paged_space->ClearAllocatorState();
 
-  int will_be_swept = 0;
+  unsigned will_be_swept = 0;
   bool has_promoted_pages = false;
+  unsigned swept_empty_pages = 0;
 
   DCHECK_EQ(Heap::ResizeNewSpaceMode::kNone, resize_new_space_);
   resize_new_space_ = heap_->ShouldResizeNewSpace();
@@ -919,7 +920,14 @@ bool MinorMarkSweepCollector::StartSweepNewSpace() {
       if (paged_space->ShouldReleaseEmptyPage()) {
         paged_space->ReleasePage(p);
       } else {
-        sweeper()->SweepEmptyNewSpacePage(p);
+        if (swept_empty_pages <
+            v8_flags.minor_ms_max_empty_pages_swept_in_atomic_pause) {
+          sweeper()->SweepEmptyNewSpacePage(p);
+          swept_empty_pages++;
+        } else {
+          sweeper()->AddNewSpacePage(p);
+          will_be_swept++;
+        }
       }
       continue;
     }
@@ -945,8 +953,10 @@ bool MinorMarkSweepCollector::StartSweepNewSpace() {
 
   if (v8_flags.gc_verbose) {
     PrintIsolate(heap_->isolate(),
-                 "sweeping: space=%s initialized_for_sweeping=%d",
-                 ToString(paged_space->identity()), will_be_swept);
+                 "sweeping: space=%s initialized_for_sweeping=%d "
+                 "empty_page_atomically_swept=%d",
+                 ToString(paged_space->identity()), will_be_swept,
+                 swept_empty_pages);
   }
 
   return has_promoted_pages;
