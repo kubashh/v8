@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e39ce4_0b8d0383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-11T10:10:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "97956d55_dd366ce2",
+      "revId": "56c7509aba9ab73d013d51918a778ad45d168cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89bb738a_7731f306",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-06-11T09:21:59Z",
       "side": 1,
       "message": "This is the only non-trivial refactoring, in the sense that the `Cast` was moved one level up and the ternary operator one level down.",
+      "revId": "56c7509aba9ab73d013d51918a778ad45d168cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd9975aa_4f135b21",
+        "filename": "src/codegen/pending-optimization-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-11T10:10:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "89bb738a_7731f306",
       "revId": "56c7509aba9ab73d013d51918a778ad45d168cb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
