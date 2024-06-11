@@ -22,6 +22,30 @@
       },
       "revId": "1f77ddfe372ae7792038ae7583faf4d57768f6bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a70451b5_540dda87",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 8172,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-11T10:40:15Z",
+      "side": 1,
+      "message": "In this case it does not really matter. This is only used to detect statically OOB table accesses, which are rare anyway, and in production the value of `v8_flags.wasm_max_table_size` will always be the same as `kV8MaxWasmTableSize`. We could use the flag value instead, but I am not sure if it\u0027s worth changing this.",
+      "parentUuid": "eeb9af1c_da7ede82",
+      "range": {
+        "startLine": 8169,
+        "startChar": 0,
+        "endLine": 8172,
+        "endChar": 44
+      },
+      "revId": "1f77ddfe372ae7792038ae7583faf4d57768f6bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
