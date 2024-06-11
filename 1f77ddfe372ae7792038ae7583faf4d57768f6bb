@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb9af1c_da7ede82",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 8172,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T09:00:38Z",
+      "side": 1,
+      "message": "Should we rather use `v8_flags.wasm_max_table_size` instead of `kV8MaxWasmTableSize`? \nThe [comment above the definition](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-limits.h;drc\u003deca0d3645e88876fefaf2ed1f1e6164fbde8a1b5;l\u003d57) suggests so.",
+      "range": {
+        "startLine": 8169,
+        "startChar": 0,
+        "endLine": 8172,
+        "endChar": 44
+      },
+      "revId": "1f77ddfe372ae7792038ae7583faf4d57768f6bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
