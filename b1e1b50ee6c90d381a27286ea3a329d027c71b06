@@ -34,6 +34,24 @@
       "parentUuid": "ac202723_e16199b6",
       "revId": "b1e1b50ee6c90d381a27286ea3a329d027c71b06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61a5a20d_8d7d24c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3456009
+      },
+      "writtenOn": "2024-06-11T06:51:01Z",
+      "side": 1,
+      "message": "I saw this point before, and i afraid that if we use that method to init some features like sv39, we need to check feature also in runtime, this will decrease the performance if the function is hot.\n\nFeature detection dynamically is good method what i think also :)\nI saw the code and it supports Linux only ?",
+      "parentUuid": "ac202723_e16199b6",
+      "revId": "b1e1b50ee6c90d381a27286ea3a329d027c71b06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
