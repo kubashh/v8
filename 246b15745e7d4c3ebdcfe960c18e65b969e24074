@@ -16,6 +16,23 @@
       "message": "All changes in this CL should be trivial.\n\n- Replacements `s/Handle/DirectHandle/` (mostly by the tool, some manually)\n- Replacements `s/handle/direct_handle/`\n- Replacements `s/OpenHandle/OpenDirectHandle/`\n- Simplified handle initializations, e.g. `DirectHandle\u003cT\u003e h \u003d Cast\u003cT\u003e(...);` or `DirectHandle\u003cT\u003e h(obj, isolate);`",
       "revId": "246b15745e7d4c3ebdcfe960c18e65b969e24074",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f3debde_344b352e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-06-11T15:01:26Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "246b15745e7d4c3ebdcfe960c18e65b969e24074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
