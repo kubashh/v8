@@ -2614,8 +2614,8 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                 decoder->module_->functions[inlined_index].sig;
             V<FrameState> frame_state =
                 CreateFrameState(decoder, sig, &index, args);
-            DeoptIfNot(decoder, __ WordPtrEqual(target, inlined_target), sig,
-                       args, frame_state);
+            DeoptIfNot(decoder, __ WordPtrEqual(target, inlined_target),
+                       frame_state);
           } else {
             TSBlock* inline_block = __ NewBlock();
             BranchHint hint =
@@ -2864,7 +2864,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
           V<FrameState> frame_state =
               CreateFrameState(decoder, sig, &func_ref, args);
           DeoptIfNot(decoder, __ TaggedEqual(func_ref.op, inlined_func_ref),
-                     sig, args, frame_state);
+                     frame_state);
         } else {
           TSBlock* inline_block = __ NewBlock();
           BranchHint hint =
@@ -5605,7 +5605,6 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   }
 
   void DeoptIfNot(FullDecoder* decoder, OpIndex deopt_condition,
-                  const FunctionSig* callee_sig, const Value args[],
                   V<FrameState> frame_state) {
     CHECK(v8_flags.wasm_deopt);
     __ DeoptimizeIfNot(deopt_condition, frame_state,
