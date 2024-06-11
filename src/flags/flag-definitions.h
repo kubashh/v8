@@ -2761,6 +2761,10 @@ DEFINE_SIZE_T(minor_ms_min_lab_size_kb, 0,
               "override for the minimum lab size in KB to be used for new "
               "space allocations with minor ms. ")
 
+DEFINE_UINT(minor_ms_max_empty_pages_swept_in_atomic_pause, 4,
+            "max number of empty pages to sweep during the atomic pause "
+            "(additional pages are deferred to concurrent sweeping)")
+
 //
 // Dev shell flags
 //

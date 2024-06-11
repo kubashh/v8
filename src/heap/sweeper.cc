@@ -1230,12 +1230,17 @@ void Sweeper::AddPage(AllocationSpace space, PageMetadata* page) {
 
 void Sweeper::AddNewSpacePage(PageMetadata* page) {
   DCHECK_EQ(NEW_SPACE, page->owner_identity());
-  DCHECK_LE(page->AgeInNewSpace(), v8_flags.minor_ms_max_page_age);
   size_t live_bytes = page->live_bytes();
+  DCHECK_IMPLIES(live_bytes > 0,
+                 page->AgeInNewSpace() <= v8_flags.minor_ms_max_page_age);
   heap_->IncrementNewSpaceSurvivingObjectSize(live_bytes);
   heap_->IncrementYoungSurvivorsCounter(live_bytes);
   AddPageImpl(NEW_SPACE, page);
-  page->IncrementAgeInNewSpace();
+  if (live_bytes > 0) {
+    page->IncrementAgeInNewSpace();
+  } else {
+    page->ResetAgeInNewSpace();
+  }
 }
 
 void Sweeper::AddPageImpl(AllocationSpace space, PageMetadata* page) {
