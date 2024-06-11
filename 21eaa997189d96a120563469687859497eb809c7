@@ -16,6 +16,52 @@
       "message": "ptal",
       "revId": "21eaa997189d96a120563469687859497eb809c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fddce69_3826b214",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-11T09:15:13Z",
+      "side": 1,
+      "message": "Can you add a comment here that we\u0027re reserving the function_literal_id for the arrow function, and that\u0027s why we need the `GetNextFunctionLiteralId` side effect?",
+      "range": {
+        "startLine": 1022,
+        "startChar": 6,
+        "endLine": 1022,
+        "endChar": 14
+      },
+      "revId": "21eaa997189d96a120563469687859497eb809c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d10a25_b1f509ea",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2620,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-11T09:15:13Z",
+      "side": 1,
+      "message": "add a comment that this is shifting up by one to make space for the arrow function literal id.",
+      "range": {
+        "startLine": 2620,
+        "startChar": 56,
+        "endLine": 2620,
+        "endChar": 58
+      },
+      "revId": "21eaa997189d96a120563469687859497eb809c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
