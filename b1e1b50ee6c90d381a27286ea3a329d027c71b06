@@ -87,6 +87,24 @@
       "parentUuid": "61a5a20d_8d7d24c8",
       "revId": "b1e1b50ee6c90d381a27286ea3a329d027c71b06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab562b97_43913e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3456009
+      },
+      "writtenOn": "2024-06-11T07:24:22Z",
+      "side": 1,
+      "message": "Good news，Pointer Compress is unclear function in RV64 for performance mode,\nthat will save huge RAM but decrease performance due to a few 32 bits instructions",
+      "parentUuid": "bc6a792c_d145b083",
+      "revId": "b1e1b50ee6c90d381a27286ea3a329d027c71b06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
