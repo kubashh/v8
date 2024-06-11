@@ -16,6 +16,24 @@
       "message": "Thanks,\nI think we can use base::cpu to dectect sv39 or sv47 when init a assembler.",
       "revId": "b1e1b50ee6c90d381a27286ea3a329d027c71b06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "869907e5_7a8bbeb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-06-11T06:49:01Z",
+      "side": 1,
+      "message": "The idea may be cause has two li_pte instrs and cause unnecessary trouble.\nDone",
+      "parentUuid": "ac202723_e16199b6",
+      "revId": "b1e1b50ee6c90d381a27286ea3a329d027c71b06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
