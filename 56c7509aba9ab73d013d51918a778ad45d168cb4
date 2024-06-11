@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97956d55_dd366ce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-11T09:02:10Z",
+      "side": 1,
+      "message": "All changes in this CL should be trivial.\n\n- Replacements `s/Handle/DirectHandle/` (mostly by the tool, some manually)\n- Replacements `s/handle/direct_handle/`\n- Replacements `s/OpenHandle/OpenDirectHandle/`\n- Simplified handle initializations, e.g. `DirectHandle\u003cT\u003e h \u003d Cast\u003cT\u003e(...);` or `DirectHandle\u003cT\u003e h(obj, isolate);`",
+      "revId": "56c7509aba9ab73d013d51918a778ad45d168cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
