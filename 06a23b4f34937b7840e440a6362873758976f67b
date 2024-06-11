@@ -318,6 +318,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2c51b19_1d10c682",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5827,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-11T15:05:52Z",
+      "side": 1,
+      "message": "You can remove the `if (high_words !\u003d no_reg)` at every call site now. On 64-bit release builds this function is empty now, so it won\u0027t cost any performance to call it unconditionally (it will be inlined and then eliminated).",
+      "parentUuid": "46a51e7f_9ac608f1",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "23a98e39_dee0f900",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 25
@@ -721,6 +739,24 @@
       "side": 1,
       "message": "**Idea**:\nHmm, I think my general idea was to make sure that we can cast the index to a Smi in the builtins (wasm.tq).\nNote: that in the builtin we check the **index into the tables[]** if it\u0027s a valid Smi (`IsValidPositiveSmi()`), but we don\u0027t do it for the **index** into the table. \n\nMy mistake was though what you already mentioned: not checking whether the **index** is actually a valid positive smi like we check for the **index into the tables[]**.\n\n**I will change it this way:**\nRemove the DCHECKs if we don\u0027t `UntagSmi`.\nIn the builtins we will compare inptrs when comparing if the index is in bounds, so we don\u0027t need to do `IsValidPositiveSmi` on the index.",
       "parentUuid": "3fc247a5_3149088f",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d60dcd8_f9471184",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3977,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-11T15:05:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "068f3f5e_2b8b4b68",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1241,6 +1277,24 @@
       "side": 1,
       "message": "Can I keep it?\nPersonally, I found it very helpful when writing my tests if I found a file \"table-[instruction_name].js\". (I struggled a bit to find e.g. table.init, table.size).\nAlso if something goes wrong with the size, someone will know it\u0027s the .size and not .grow.",
       "parentUuid": "d5c7efbc_913a88e3",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b8b4cb2_72de0883",
+        "filename": "test/mjsunit/wasm/table64-size.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-11T15:05:52Z",
+      "side": 1,
+      "message": "Sure, if it proved beneficial then let\u0027s keep it.",
+      "parentUuid": "187c499a_8248e9cd",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
