@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6449d64_1175f3bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Thank you for the comments!!\n\nI resolved almost all. I need to add the OOB tests + change that part in the code (basically the unresolved comments).",
+      "revId": "8a3726088617fa99c01a0a7175cfdd0de42b60f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

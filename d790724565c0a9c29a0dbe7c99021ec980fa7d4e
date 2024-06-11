@@ -394,6 +394,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e54f06f7_831c0a23",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5825,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "resolving",
+      "parentUuid": "bb5143da_b19dfcb8",
+      "range": {
+        "startLine": 5811,
+        "startChar": 0,
+        "endLine": 5825,
+        "endChar": 3
+      },
+      "revId": "d790724565c0a9c29a0dbe7c99021ec980fa7d4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "442736da_ed99998a",

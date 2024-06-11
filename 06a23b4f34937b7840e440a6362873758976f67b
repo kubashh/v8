@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be6f5d6d_3f90fbea",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2975,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a81e34f_8a602fa8",
+      "range": {
+        "startLine": 2975,
+        "startChar": 47,
+        "endLine": 2975,
+        "endChar": 65
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66c6e36_6ec870d6",
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52352979_d28ca068",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5424,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b66c6e36_6ec870d6",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d4ab81c_3f266b5c",
@@ -88,6 +130,30 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "These two can be trivally combined by just passing `{\u0026start, \u0026count}` as second argument.",
+      "range": {
+        "startLine": 5468,
+        "startChar": 0,
+        "endLine": 5469,
+        "endChar": 68
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90fc1c70_6e7dddf2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5469,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d4ab81c_3f266b5c",
       "range": {
         "startLine": 5468,
         "startChar": 0,
@@ -121,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8917d1f6_b2584711",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bcf2ba8_07e750a5",
+      "range": {
+        "startLine": 765,
+        "startChar": 40,
+        "endLine": 765,
+        "endChar": 51
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "283e57bc_35affd9b",
@@ -134,6 +224,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "You mean `PopIndexToVarState()` here.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee9e5552_4e215a30",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5818,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "283e57bc_35affd9b",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +263,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5638e76a_c0f8596e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5825,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcc136fa_a9f4a0b8",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5af66d70_23cef91d",
@@ -168,6 +294,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "Let\u0027s write this such that the compiler can infer that this is a no-op on 64-bit. This would also avoid the check for `no_reg` before each call.\n\nLike:\n\n    if constexpr (Is64()) {\n      DCHECK_EQ(no_reg, high_word \u003d\u003d no_reg);\n      return;\n    }\n    if (high_word \u003d\u003d no_reg) return;\n...",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a51e7f_9ac608f1",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5827,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5af66d70_23cef91d",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -189,6 +333,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9be7aa71_2ee44d7b",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5833,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23a98e39_dee0f900",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2148323_5d423a48",
@@ -202,6 +364,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "There\u0027s a type (\"reflected\"), and lets be more clear with the wording and the purpose, like\n\n   // TODO(crbug.com/41480344): The stack state in the OOL code should reflect the state before popping any values (for a better debugging experience).",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c71f403_db7a7afc",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5917,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2148323_5d423a48",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -223,6 +403,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d18bac2_7125b7a5",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5986,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2d30eb8_26299f1e",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf88cf6_608fe7a5",
@@ -236,6 +434,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "And here.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97156b5e_e5369028",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6031,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baf88cf6_608fe7a5",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -257,6 +473,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d050fa_8bdbddeb",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6187,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb062a07_bcb6c077",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f3fd015_8c7903fc",
@@ -270,6 +504,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "Similar here. We should just take the existing scratch register for the low word, and get a new one for the high word. I.e. `result64 \u003d LiftoffRegister::ForPair(result.gp(), __ GetUnusedRegister(kGpReg, pinned));`.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e19f0aea_2539f65c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6222,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done (I guess the `.gp()` should have been at the second param)",
+      "parentUuid": "9f3fd015_8c7903fc",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -297,6 +549,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a353562f_78990b71",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 8167,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done, I forgot to put it back to the original form. \n(Before I popped something from the stack so I added something else to the condition, but then we realized we should not pop just peek).",
+      "parentUuid": "0233c90f_08a08f32",
+      "range": {
+        "startLine": 8164,
+        "startChar": 0,
+        "endLine": 8167,
+        "endChar": 5
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0cab760_26a3b188",
@@ -310,6 +586,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "This does not work if `kIntPtrKind` is not equal to `kI32`. We might not have test coverage for this as it\u0027s currently being developed. I think the `vectorIndex` argument to `CallIndirectIC` can just stay an int32, as it\u0027s bounded by the maximum function body size.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ec7270d_cbe3251e",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 8414,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done (changed it back here, down at the builtin call and in the builtin function itself)",
+      "parentUuid": "b0cab760_26a3b188",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -337,6 +631,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d72fa546_30bb04f9",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3109,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done (+ did the same for memories in LoadDataSegments (~line 1760)).",
+      "parentUuid": "ec1df6d4_b8fe71db",
+      "range": {
+        "startLine": 3105,
+        "startChar": 0,
+        "endLine": 3109,
+        "endChar": 46
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "309b4787_16e7c2b1",
@@ -350,6 +668,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "nit: `DCHECK_GE`.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8479f598_eff9b48d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3928,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "309b4787_16e7c2b1",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -373,6 +709,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "068f3f5e_2b8b4b68",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3977,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "**Idea**:\nHmm, I think my general idea was to make sure that we can cast the index to a Smi in the builtins (wasm.tq).\nNote: that in the builtin we check the **index into the tables[]** if it\u0027s a valid Smi (`IsValidPositiveSmi()`), but we don\u0027t do it for the **index** into the table. \n\nMy mistake was though what you already mentioned: not checking whether the **index** is actually a valid positive smi like we check for the **index into the tables[]**.\n\n**I will change it this way:**\nRemove the DCHECKs if we don\u0027t `UntagSmi`.\nIn the builtins we will compare inptrs when comparing if the index is in bounds, so we don\u0027t need to do `IsValidPositiveSmi` on the index.",
+      "parentUuid": "3fc247a5_3149088f",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f9e6e23_69ad406a",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 25
@@ -384,6 +738,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "We should add a DCHECK so we do not forget to update this code once we allow copying between different table types: `DCHECK_EQ(table_src-\u003eis_table64, table_dst-\u003eis_table64);`.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97df8a3a_25de125d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4023,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done + also in turboshaft.",
+      "parentUuid": "8f9e6e23_69ad406a",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -405,6 +777,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a8211dd_5c247f3f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4027,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Again, the idea was the same. But yes, in the builtin we do `Convert\u003cPositiveSmi\u003e(dstRaw) otherwise TableOutOfBounds`, so I guess it\u0027s safe and not necessary. Removing it.",
+      "parentUuid": "ec4f8e9b_704ccd2a",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39b0e84b_55ef987f",
@@ -418,6 +808,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "Here the DCHECK makes sense because we `UntagSmi` the result of the builtin call below. But please use `DCHECK_GE`.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5a4927b_787d70bb",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4044,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39b0e84b_55ef987f",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -445,6 +853,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95a3db3a_b49d30b9",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4054,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Hah, here I think I tried, but I cannot use it, because: \n`Incompatible operand types (\u0027V\u003cWordWithBits\u003c64\u003e\u003e\u0027 and \u0027V\u003cWordWithBits\u003c32\u003e\u003e\u0027)`",
+      "parentUuid": "8fa6ac72_db09383d",
+      "range": {
+        "startLine": 4050,
+        "startChar": 0,
+        "endLine": 4054,
+        "endChar": 5
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7472c7bf_4c725653",
@@ -458,6 +890,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "Seems irrelevant here.",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf6a32df_defc258c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4064,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Yes, in the builtin we do `Convert\u003cPositiveSmi\u003e(_) otherwise TableOutOfBounds`, so I guess it\u0027s safe and not necessary. Removing it.",
+      "parentUuid": "7472c7bf_4c725653",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -485,6 +935,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d97149f_06676f43",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4093,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Probably `Incompatible operand types (\u0027V\u003cWordWithBits\u003c64\u003e\u003e\u0027 and \u0027V\u003cWordWithBits\u003c32\u003e\u003e\u0027)` here too",
+      "parentUuid": "d97ba81b_f0e0235a",
+      "range": {
+        "startLine": 4089,
+        "startChar": 0,
+        "endLine": 4093,
+        "endChar": 5
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3b625e2_75c1c213",
@@ -498,6 +972,30 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "This comment does not fix the code any more.",
+      "range": {
+        "startLine": 6963,
+        "startChar": 0,
+        "endLine": 6964,
+        "endChar": 73
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b035e7_59cd43d7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6964,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "removed it",
+      "parentUuid": "f3b625e2_75c1c213",
       "range": {
         "startLine": 6963,
         "startChar": 0,
@@ -542,6 +1040,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a367ace_aa480ed5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 7441,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcce1bc1_1c53713e",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae554cdb_ef911e15",
@@ -555,6 +1071,30 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "should this be `is_tail_call`?",
+      "range": {
+        "startLine": 9,
+        "startChar": 69,
+        "endLine": 9,
+        "endChar": 81
+      },
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5c1556a_184cf25b",
+        "filename": "test/mjsunit/wasm/table64-callindirect.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae554cdb_ef911e15",
       "range": {
         "startLine": 9,
         "startChar": 69,
@@ -582,6 +1122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a8e75c8_d8f38277",
+        "filename": "test/mjsunit/wasm/table64-copy.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0d60b03_e9940a92",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cc8c7e1_fe58b0e5",
@@ -595,6 +1153,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "nit: missing `let`",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d1b07a7_38060f04",
+        "filename": "test/mjsunit/wasm/table64-fill.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cc8c7e1_fe58b0e5",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -616,6 +1192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5427348b_98640233",
+        "filename": "test/mjsunit/wasm/table64-set.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c94feca_7eb4b518",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5c7efbc_913a88e3",
@@ -629,6 +1223,24 @@
       "writtenOn": "2024-06-11T10:40:15Z",
       "side": 1,
       "message": "This seems tested enough in `table64-grow` already. Should we just drop this test?",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "187c499a_8248e9cd",
+        "filename": "test/mjsunit/wasm/table64-size.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-11T14:50:36Z",
+      "side": 1,
+      "message": "Can I keep it?\nPersonally, I found it very helpful when writing my tests if I found a file \"table-[instruction_name].js\". (I struggled a bit to find e.g. table.init, table.size).\nAlso if something goes wrong with the size, someone will know it\u0027s the .size and not .grow.",
+      "parentUuid": "d5c7efbc_913a88e3",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
