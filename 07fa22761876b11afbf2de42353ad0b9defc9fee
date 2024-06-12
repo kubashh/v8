@@ -34,6 +34,24 @@
       "parentUuid": "f8278302_a194ada4",
       "revId": "07fa22761876b11afbf2de42353ad0b9defc9fee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f742a13_7806d609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-06-12T14:34:07Z",
+      "side": 1,
+      "message": "Regarding the first point, I don\u0027t think Milad meant the signature-specific wrappers. Based on the link, I think the question was about the old version of the generic wrapper fully written in assembly. Then the answer is no, this code has been replaced by the torque wrapper. We still have the (much smaller) JSToWasmWrapperAsm builtin on all platforms to perform the platform-dependent logic that could not be ported to torque.",
+      "parentUuid": "d54ed9ed_5777a69c",
+      "revId": "07fa22761876b11afbf2de42353ad0b9defc9fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
