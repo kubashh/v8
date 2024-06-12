@@ -34,6 +34,24 @@
       "parentUuid": "3c7cd7bf_73731965",
       "revId": "86f22c54bbc072c1f52bc6645f6f97eae92adc2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82baad2_9a6726d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-12T11:49:02Z",
+      "side": 1,
+      "message": "FYI: I moved the defines to external defines as these are used in API headers. I cargo-culted on the promise internal fields which were wrongly put in the internal defines (but I guess that never showed up for us as we have them set to 0).",
+      "parentUuid": "d74c661c_89858379",
+      "revId": "86f22c54bbc072c1f52bc6645f6f97eae92adc2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
