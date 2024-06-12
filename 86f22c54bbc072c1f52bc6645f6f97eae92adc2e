@@ -16,6 +16,24 @@
       "message": "ptal, I made the flags unconditonal for GN now. Without GN we still have the defines (and I am not sure if I should remove them)",
       "revId": "86f22c54bbc072c1f52bc6645f6f97eae92adc2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d74c661c_89858379",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-12T11:42:01Z",
+      "side": 1,
+      "message": "I think keeping them is ok (for backwards compatibility)",
+      "parentUuid": "3c7cd7bf_73731965",
+      "revId": "86f22c54bbc072c1f52bc6645f6f97eae92adc2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
