@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc61e495_07f9e41b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T13:42:08Z",
+      "side": 1,
+      "message": "Right now because I\u0027m trying to build a new fuzzer and I\u0027m not smart enough so I need wami to figure out what my fuzzer is trying to generate and in this case it was just unhappy even though the module was valid. 😄\n\nSo basically I *am* fuzzing it manually. 😊",
+      "parentUuid": "3eb2cc7d_70ffbc95",
+      "revId": "064932150085eb6996e37f3e65626bda84c7e1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e3a0674_4b7bf8bf",
