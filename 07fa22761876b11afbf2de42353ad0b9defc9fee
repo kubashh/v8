@@ -16,6 +16,24 @@
       "message": "Hi Andreas,\n\nPlease take a look when you have a chance, I also have 3 related questions:\n\n- Is the non torque based js-to-wasm wrapper (arm64 cl https://crrev.com/c/3869197) still used anywhere or the torque based version is the only implementation?\n\n- I didn\u0027t include this param padding which is on arm and ia32: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/arm/builtins-arm.cc;l\u003d3771\nI\u0027m assuming they are there since gp and double registers have different sizes on these platforms so you will need the alignment?\n\n- On the same padding line above, correct me if i\u0027m wrong but wouldn\u0027t it be better to do something like `stack_params_offset \u0026 (kSystemPointerSize -1);` to clear the lower 2 bits or even better `(stack_params_offset + (kSystemPointerSize - 1)) \u0026 ~(kSystemPointerSize - 1)` to align it fully to an upper bound value? current code will just clear the upper bits after `0b100`?",
       "revId": "07fa22761876b11afbf2de42353ad0b9defc9fee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d54ed9ed_5777a69c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-06-12T14:11:10Z",
+      "side": 1,
+      "message": "The non torque wrappers are the default, the torque wrappers are just an optimization for faster startup, and maybe for a jitless mode or a no-turbofan mode, if that is ever done.\n\nI don\u0027t remember why the padding is needed. There is a fuzzer for the js-to-wasm wrapper [1]. You can run the test repeatedly, if there is an issue in your implementation, it will probably find it. In the fuzzer/test you can set the debug flag [2] to true, then each test execution executes more test cases.\n\nAbout the `stack_params_offset`, isn\u0027t `param_padding \u003d 4` (`kSystemPointerSize`) if `wasm::kGpParamRegisters` is even, and otherwise `0`? Maybe the code should be written like that, maybe that would be easier to understand ...\n\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/wasm/torque-wrapper.js\n[2] https://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/wasm/torque-wrapper.js;l\u003d25;drc\u003db2df50672c06c070ecb137570d1072a3835ac4ca",
+      "parentUuid": "f8278302_a194ada4",
+      "revId": "07fa22761876b11afbf2de42353ad0b9defc9fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
