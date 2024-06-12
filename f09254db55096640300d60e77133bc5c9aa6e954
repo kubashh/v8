@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63e1d5e0_a981b167",
+        "filename": "src/handles/maybe-handles-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-12T14:13:40Z",
+      "side": 1,
+      "message": "Wrong header",
+      "range": {
+        "startLine": 8,
+        "startChar": 10,
+        "endLine": 8,
+        "endChar": 25
+      },
+      "revId": "f09254db55096640300d60e77133bc5c9aa6e954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "457e26f5_d8e72a06",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-12T14:13:40Z",
+      "side": 1,
+      "message": "stale edit",
+      "range": {
+        "startLine": 23,
+        "startChar": 3,
+        "endLine": 23,
+        "endChar": 4
+      },
+      "revId": "f09254db55096640300d60e77133bc5c9aa6e954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd2f7e8e_ae505380",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-12T14:13:40Z",
+      "side": 1,
+      "message": "I think we always used a const ref so far as parameter in cppgc which worked well. Why by value?",
+      "range": {
+        "startLine": 103,
+        "startChar": 41,
+        "endLine": 103,
+        "endChar": 55
+      },
+      "revId": "f09254db55096640300d60e77133bc5c9aa6e954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51cff6cf_bb889bb8",
+        "filename": "src/objects/casting.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-12T14:13:40Z",
+      "side": 1,
+      "message": "I was excited to read `std::source_location` but you are really using our V8 version :)",
+      "range": {
+        "startLine": 50,
+        "startChar": 42,
+        "endLine": 50,
+        "endChar": 56
+      },
+      "revId": "f09254db55096640300d60e77133bc5c9aa6e954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
