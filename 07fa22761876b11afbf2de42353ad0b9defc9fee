@@ -52,6 +52,24 @@
       "parentUuid": "d54ed9ed_5777a69c",
       "revId": "07fa22761876b11afbf2de42353ad0b9defc9fee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "533d1316_d14da1d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-06-12T16:33:56Z",
+      "side": 1,
+      "message": "yes the first point was referring to the old version of the generic wrapper, I had an issue on that which seems to be safe to close now, thanks for confirming.\n\nThe fuzzer does pass after running it multiple times with debug flag set to true.\n\nand thanks for clarifying param_padding, it makes sens as stack_params_offset is always even.",
+      "parentUuid": "6f742a13_7806d609",
+      "revId": "07fa22761876b11afbf2de42353ad0b9defc9fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
