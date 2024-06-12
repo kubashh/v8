@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af19f1fd_1ff41439",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5559,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T10:17:35Z",
+      "side": 1,
+      "message": "Just reusing the same 0-constant removes emitting one node that then needs to be GVNed.",
+      "revId": "4a07352a42d02c55f5b6ad9b0b70a2bd7dc716b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
