@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b6dac4_0066d462",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 25
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T11:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a02e183_aca45248",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a81e34f_8a602fa8",
@@ -330,6 +348,24 @@
       "side": 1,
       "message": "You can remove the `if (high_words !\u003d no_reg)` at every call site now. On 64-bit release builds this function is empty now, so it won\u0027t cost any performance to call it unconditionally (it will be inlined and then eliminated).",
       "parentUuid": "46a51e7f_9ac608f1",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad85719_b7246909",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 5827,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T11:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2c51b19_1d10c682",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1059,6 +1095,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fcf1ccd_ac75f446",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6966,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T11:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87a96574_8a556bf9",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcce1bc1_1c53713e",
@@ -1295,6 +1349,24 @@
       "side": 1,
       "message": "Sure, if it proved beneficial then let\u0027s keep it.",
       "parentUuid": "187c499a_8248e9cd",
+      "revId": "06a23b4f34937b7840e440a6362873758976f67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e792e671_45637efa",
+        "filename": "test/mjsunit/wasm/table64-size.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T11:08:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7b8b4cb2_72de0883",
       "revId": "06a23b4f34937b7840e440a6362873758976f67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

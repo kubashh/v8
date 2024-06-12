@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b587b86_0274b5bc",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 28
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T11:08:31Z",
+      "side": 1,
+      "message": "Should we add a `dcheck(IsValidPositiveSmi(__))` for `tableIndex` and `index` here? \n\nAs far as I understand, this builtin is called only by Turboshaft and we bounds check the `index` (see line 3929 in turboshaft-graph-interface.cc).\n\n(Question: We don\u0027t do any checks for the `tableIndex`. We expect that when creating the `IndexImmediate` the `read_u32v` would fail if it\u0027s larger than 64 bits, right?)",
+      "revId": "b762fabc9f16676eb8ff3a7ccd8ac8276968f205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e2434fa_74cf56a2",
+        "filename": "test/mjsunit/wasm/table64-get.js",
+        "patchSetId": 28
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T11:08:31Z",
+      "side": 1,
+      "message": "I added two OOB tests for `table.get` because we have a different builtin for funcref tables. Similarly for `table.set`.",
+      "revId": "b762fabc9f16676eb8ff3a7ccd8ac8276968f205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
