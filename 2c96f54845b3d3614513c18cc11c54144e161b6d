@@ -92,6 +92,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc2cef38_6452aa76",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5331,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Renamed it to `index_type_is_64bit`, seems like in this file for params they use snake_case.",
+      "parentUuid": "60b8bad6_4282f5c9",
+      "range": {
+        "startLine": 5331,
+        "startChar": 9,
+        "endLine": 5331,
+        "endChar": 17
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20fef12e_006f3d2c",
@@ -105,6 +129,30 @@
       "writtenOn": "2024-06-12T14:26:10Z",
       "side": 1,
       "message": "What do I miss?\nCouldn\u0027t this just be\n```suggestion\nTableTypeToUintPtrOrOOBTrap(table_dst.is_table64, {\u0026dst, \u0026src}, position);\n```\nIf not, I\u0027m not sure what the `std::initializer_list` is for.",
+      "range": {
+        "startLine": 5424,
+        "startChar": 2,
+        "endLine": 5429,
+        "endChar": 70
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "485224b3_2e661092",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5429,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Because of the future TODO(crbug.com/345274931) below, we cannot put all 3 together, so this TODO should stay. \nI put `src` and `dst` together though at least.",
+      "parentUuid": "20fef12e_006f3d2c",
       "range": {
         "startLine": 5424,
         "startChar": 2,
@@ -138,6 +186,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6430318c_4fc3a8a5",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5432,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "I changed the todo to point to the more accurate bug: we want to allow copying between 32/64 memories and tables. It\u0027s gonna be implemented as a followup.",
+      "parentUuid": "9326575f_595944fb",
+      "range": {
+        "startLine": 5430,
+        "startChar": 2,
+        "endLine": 5432,
+        "endChar": 56
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "063c52ec_a9480d2b",
@@ -155,6 +227,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39cd5778_6e5f3e34",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5450,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "063c52ec_a9480d2b",
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32195e15_a8b58575",
@@ -168,6 +258,30 @@
       "writtenOn": "2024-06-12T14:26:10Z",
       "side": 1,
       "message": "Probably more readable and potentially less generated C++ code:\n```suggestion\n  Node* length32 \u003d gasm_-\u003eBuildChangeSmiToInt32(length_smi);\n  return table.is_table64\n             ? gasm_-\u003eChangeInt32ToInt64(length32) : length32;\n```",
+      "range": {
+        "startLine": 5464,
+        "startChar": 0,
+        "endLine": 5467,
+        "endChar": 56
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef2e4c40_65f56bd5",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5467,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Done (table here is a node and not the WasmTable)",
+      "parentUuid": "32195e15_a8b58575",
       "range": {
         "startLine": 5464,
         "startChar": 0,
@@ -201,6 +315,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51aeb8e4_6ee1dba5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "I tried to change it everywhere, but might have missed some places.",
+      "parentUuid": "cbd9d7b7_bd5f4e5f",
+      "range": {
+        "startLine": 3926,
+        "startChar": 15,
+        "endLine": 3926,
+        "endChar": 27
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c854471_1bde2e7b",
@@ -214,6 +352,30 @@
       "writtenOn": "2024-06-12T14:26:10Z",
       "side": 1,
       "message": "Nit: `ChangeUint32ToUint64`.",
+      "range": {
+        "startLine": 4050,
+        "startChar": 22,
+        "endLine": 4050,
+        "endChar": 40
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f523296_ecdde6dc",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 4050,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "No",
+      "parentUuid": "8c854471_1bde2e7b",
       "range": {
         "startLine": 4050,
         "startChar": 22,
@@ -247,6 +409,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54e70770_f852f422",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "248ade5f_6f0c661c",
+      "range": {
+        "startLine": 4083,
+        "startChar": 14,
+        "endLine": 4083,
+        "endChar": 22
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "998f4440_71e5523c",
@@ -260,6 +446,30 @@
       "writtenOn": "2024-06-12T14:26:10Z",
       "side": 1,
       "message": "Nit: `ChangeUint32ToUint64`",
+      "range": {
+        "startLine": 4088,
+        "startChar": 22,
+        "endLine": 4088,
+        "endChar": 40
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d1b91e_b9ec265a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 4088,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "998f4440_71e5523c",
       "range": {
         "startLine": 4088,
         "startChar": 22,
@@ -293,6 +503,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c559a23b_83b2367b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 7435,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e7e28aa_7c5b6955",
+      "range": {
+        "startLine": 7435,
+        "startChar": 59,
+        "endLine": 7435,
+        "endChar": 66
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ffae4b2_c0c578c7",
@@ -306,6 +540,30 @@
       "writtenOn": "2024-06-12T14:26:10Z",
       "side": 1,
       "message": "Please `return V\u003cWordPtr\u003e::Cast(__ TruncateWord64ToWord32(index))` instead.",
+      "range": {
+        "startLine": 7440,
+        "startChar": 11,
+        "endLine": 7440,
+        "endChar": 53
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec189247_eca7fcfe",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 7440,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:48:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ffae4b2_c0c578c7",
       "range": {
         "startLine": 7440,
         "startChar": 11,
