@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd19c3c7_00f82af7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 5637,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T11:59:05Z",
+      "side": 1,
+      "message": "This came up in a Maglev -\u003e Turboshaft CL (https://chromium-review.googlesource.com/c/v8/v8/+/5621692), unrelated to this CL.",
+      "revId": "10d689ec14cd760d137557c09d99929e15c5b80e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
