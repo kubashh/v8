@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12bac12f_f8c14261",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-12T15:59:01Z",
+      "side": 1,
+      "message": "LGTM with another nit.",
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b41f051_da00a2b8",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 5339,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-12T15:59:01Z",
+      "side": 1,
+      "message": "Please update this comment.\nAlso: `if constexpr`.",
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9da9ff6_805dfaae",
