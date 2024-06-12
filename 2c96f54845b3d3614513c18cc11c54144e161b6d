@@ -50,6 +50,270 @@
       "message": "+Mathias for the builtin call descriptors. FYI: we now pass some parameters as intptr instead of int32.",
       "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "170c3e26_2df8bab3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "I reviewed the Turbofan / Turboshaft parts but didn\u0027t look into anything else.",
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60b8bad6_4282f5c9",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5331,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "This is very confusing. We have a global `is64()` that indicates whether the architecture is a 64 bit architecture. Here you use it to indicate whether the table type is 64 bit.\nCan you use a different name please? `indexTypeIs64Bit`?",
+      "range": {
+        "startLine": 5331,
+        "startChar": 9,
+        "endLine": 5331,
+        "endChar": 17
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20fef12e_006f3d2c",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5429,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "What do I miss?\nCouldn\u0027t this just be\n```suggestion\nTableTypeToUintPtrOrOOBTrap(table_dst.is_table64, {\u0026dst, \u0026src}, position);\n```\nIf not, I\u0027m not sure what the `std::initializer_list` is for.",
+      "range": {
+        "startLine": 5424,
+        "startChar": 2,
+        "endLine": 5429,
+        "endChar": 70
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9326575f_595944fb",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5432,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "I also don\u0027t get this `TODO`: The `DCHECK` means that we cannot copy from table to table64 or the other way around. So I\u0027d assume that the `size` node is an int64 if the source table is a table64.\nWhy do we care about the \"table that has the smaller size\"? The size is a dynamic property and the type is static.",
+      "range": {
+        "startLine": 5430,
+        "startChar": 2,
+        "endLine": 5432,
+        "endChar": 56
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "063c52ec_a9480d2b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5450,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Nit\n```suggestion\n  return table.is_table64\n```",
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32195e15_a8b58575",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 5467,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Probably more readable and potentially less generated C++ code:\n```suggestion\n  Node* length32 \u003d gasm_-\u003eBuildChangeSmiToInt32(length_smi);\n  return table.is_table64\n             ? gasm_-\u003eChangeInt32ToInt64(length32) : length32;\n```",
+      "range": {
+        "startLine": 5464,
+        "startChar": 0,
+        "endLine": 5467,
+        "endChar": 56
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbd9d7b7_bd5f4e5f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Nit: `index_wordptr`. This doesn\u0027t have signedness.\nAlso on all the other variables below including `src_intptr` etc.",
+      "range": {
+        "startLine": 3926,
+        "startChar": 15,
+        "endLine": 3926,
+        "endChar": 27
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c854471_1bde2e7b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 4050,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Nit: `ChangeUint32ToUint64`.",
+      "range": {
+        "startLine": 4050,
+        "startChar": 22,
+        "endLine": 4050,
+        "endChar": 40
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "248ade5f_6f0c661c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 4083,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Nit: `size_word32`. `i32` sounds like a wasm type and this one is an internal type.",
+      "range": {
+        "startLine": 4083,
+        "startChar": 14,
+        "endLine": 4083,
+        "endChar": 22
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "998f4440_71e5523c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 4088,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Nit: `ChangeUint32ToUint64`",
+      "range": {
+        "startLine": 4088,
+        "startChar": 22,
+        "endLine": 4088,
+        "endChar": 40
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e7e28aa_7c5b6955",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 7435,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "`V\u003cWord\u003e`",
+      "range": {
+        "startLine": 7435,
+        "startChar": 59,
+        "endLine": 7435,
+        "endChar": 66
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ffae4b2_c0c578c7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 7440,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T14:26:10Z",
+      "side": 1,
+      "message": "Please `return V\u003cWordPtr\u003e::Cast(__ TruncateWord64ToWord32(index))` instead.",
+      "range": {
+        "startLine": 7440,
+        "startChar": 11,
+        "endLine": 7440,
+        "endChar": 53
+      },
+      "revId": "2c96f54845b3d3614513c18cc11c54144e161b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
