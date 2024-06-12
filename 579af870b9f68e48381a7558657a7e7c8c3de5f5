@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8be02f03_07c4529b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 5429,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:57:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9da9ff6_805dfaae",
+      "range": {
+        "startLine": 5429,
+        "startChar": 30,
+        "endLine": 5429,
+        "endChar": 39
+      },
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f18941e1_4cb3ce94",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-06-12T15:52:08Z",
       "side": 1,
       "message": "Nit and not even your CL: `is_memory64` would be easier to read and more consistent with the `is_table64` below.",
+      "range": {
+        "startLine": 7458,
+        "startChar": 48,
+        "endLine": 7458,
+        "endChar": 60
+      },
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc5be76_48a925ed",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 7458,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-12T15:57:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f18941e1_4cb3ce94",
       "range": {
         "startLine": 7458,
         "startChar": 48,
