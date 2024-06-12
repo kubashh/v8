@@ -20,7 +20,7 @@ constexpr NullMaybeHandleType kNullMaybeHandle;
 // A Handle can be converted into a MaybeHandle. Converting a MaybeHandle
 // into a Handle requires checking that it does not point to nullptr. This
 // ensures nullptr checks before use.
-//
+// p
 // Also note that MaybeHandles do not provide default equality comparison or
 // hashing operators on purpose. Such operators would be misleading, because
 // intended semantics is ambiguous between handle location and object identity.
@@ -99,7 +99,8 @@ class MaybeHandle final {
 #endif
   // Casts are allowed to access location_.
   template <typename To, typename From>
-  friend inline MaybeHandle<To> Cast(MaybeHandle<From> value);
+  friend inline MaybeHandle<To> Cast(MaybeHandle<From> value,
+                                     v8::SourceLocation);
 };
 
 template <typename T>
@@ -221,7 +222,8 @@ class MaybeDirectHandle final {
   friend class MaybeHandle;
   // Casts are allowed to access location_.
   template <typename To, typename From>
-  friend inline MaybeHandle<To> Cast(MaybeHandle<From> value);
+  friend inline MaybeDirectHandle<To> Cast(MaybeDirectHandle<From> value,
+                                           v8::SourceLocation);
 };
 
 class MaybeObjectDirectHandle {
