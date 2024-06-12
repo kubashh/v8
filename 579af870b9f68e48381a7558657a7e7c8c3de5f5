@@ -16,6 +16,69 @@
       "message": "Thank you! Could you take a quick second look, please?",
       "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14ce3962_2637916f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T15:52:08Z",
+      "side": 1,
+      "message": "LGTM, thanks a lot!",
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9da9ff6_805dfaae",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 5429,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T15:52:08Z",
+      "side": 1,
+      "message": "Nit: `table_src`. On the other hand, you\u0027ll anyways rewrite these lines when addressing the todo.",
+      "range": {
+        "startLine": 5429,
+        "startChar": 30,
+        "endLine": 5429,
+        "endChar": 39
+      },
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f18941e1_4cb3ce94",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 34
+      },
+      "lineNbr": 7458,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-12T15:52:08Z",
+      "side": 1,
+      "message": "Nit and not even your CL: `is_memory64` would be easier to read and more consistent with the `is_table64` below.",
+      "range": {
+        "startLine": 7458,
+        "startChar": 48,
+        "endLine": 7458,
+        "endChar": 60
+      },
+      "revId": "579af870b9f68e48381a7558657a7e7c8c3de5f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
