@@ -7,7 +7,9 @@
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/codegen/code-stub-assembler-inl.h"
+#include "src/handles/handles-inl.h"
 #include "src/objects/dictionary.h"
+#include "src/objects/slots-inl.h"
 
 namespace v8 {
 namespace internal {
