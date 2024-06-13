@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ccb655_ee3afa57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-06-13T17:08:43Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "8f2638c17ad3c2af15af6f09a97e8b489842fc5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b541d90d_9a865713",
+        "filename": "test/unittests/fuzztest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-06-13T17:08:43Z",
+      "side": 1,
+      "message": "Tested locally that this is just enough to make https://github.com/google/clusterfuzz/blob/e503b5961383389a25e462e885e2a5448df4537d/src/clusterfuzz/_internal/crash_analysis/crash_comparer.py#L72 decide it\u0027s not similar anymore...",
+      "range": {
+        "startLine": 53,
+        "startChar": 24,
+        "endLine": 53,
+        "endChar": 78
+      },
+      "revId": "8f2638c17ad3c2af15af6f09a97e8b489842fc5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
