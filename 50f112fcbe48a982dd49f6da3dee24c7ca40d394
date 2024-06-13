@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab4806a3_ded32fa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-06-13T06:57:56Z",
+      "side": 1,
+      "message": "Sad but necessary, +1. The alternative would have been to grab even more cores from other bots which is more undesired.",
+      "revId": "50f112fcbe48a982dd49f6da3dee24c7ca40d394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
