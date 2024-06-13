@@ -443,8 +443,10 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
                                  int loop_depth, int position,
                                  int feedback_slot);
 
-  BytecodeArrayBuilder& JumpIfTrue(ToBooleanMode mode, BytecodeLabel* label);
-  BytecodeArrayBuilder& JumpIfFalse(ToBooleanMode mode, BytecodeLabel* label);
+  BytecodeArrayBuilder& JumpIfTrue(ToBooleanMode mode, BytecodeLabel* label,
+                                   FeedbackSlot branch_slot);
+  BytecodeArrayBuilder& JumpIfFalse(ToBooleanMode mode, BytecodeLabel* label,
+                                    FeedbackSlot branch_slot);
   BytecodeArrayBuilder& JumpIfJSReceiver(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNull(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNotNull(BytecodeLabel* label);
@@ -452,9 +454,9 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   BytecodeArrayBuilder& JumpIfUndefinedOrNull(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNotUndefined(BytecodeLabel* label);
   BytecodeArrayBuilder& JumpIfNil(BytecodeLabel* label, Token::Value op,
-                                  NilValue nil);
+                                  NilValue nil, FeedbackSlot branch_slot);
   BytecodeArrayBuilder& JumpIfNotNil(BytecodeLabel* label, Token::Value op,
-                                     NilValue nil);
+                                     NilValue nil, FeedbackSlot branch_slot);
   BytecodeArrayBuilder& JumpIfForInDone(BytecodeLabel* label, Register index,
                                         Register cache_length);
 

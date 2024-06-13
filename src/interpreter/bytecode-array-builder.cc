@@ -1215,26 +1215,28 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::Jump(BytecodeLabel* label) {
   return *this;
 }
 
-BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfTrue(ToBooleanMode mode,
-                                                       BytecodeLabel* label) {
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfTrue(
+    ToBooleanMode mode, BytecodeLabel* label, FeedbackSlot branch_slot) {
   DCHECK(!label->is_bound());
+  DCHECK(!branch_slot.IsInvalid());
   if (mode == ToBooleanMode::kAlreadyBoolean) {
-    OutputJumpIfTrue(label, 0);
+    OutputJumpIfTrue(label, 0, branch_slot.ToInt());
   } else {
     DCHECK_EQ(mode, ToBooleanMode::kConvertToBoolean);
-    OutputJumpIfToBooleanTrue(label, 0);
+    OutputJumpIfToBooleanTrue(label, 0, branch_slot.ToInt());
   }
   return *this;
 }
 
-BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfFalse(ToBooleanMode mode,
-                                                        BytecodeLabel* label) {
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfFalse(
+    ToBooleanMode mode, BytecodeLabel* label, FeedbackSlot branch_slot) {
   DCHECK(!label->is_bound());
+  DCHECK(!branch_slot.IsInvalid());
   if (mode == ToBooleanMode::kAlreadyBoolean) {
-    OutputJumpIfFalse(label, 0);
+    OutputJumpIfFalse(label, 0, branch_slot.ToInt());
   } else {
     DCHECK_EQ(mode, ToBooleanMode::kConvertToBoolean);
-    OutputJumpIfToBooleanFalse(label, 0);
+    OutputJumpIfToBooleanFalse(label, 0, branch_slot.ToInt());
   }
   return *this;
 }
@@ -1273,14 +1275,15 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNotUndefined(
   return *this;
 }
 
-BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNil(BytecodeLabel* label,
-                                                      Token::Value op,
-                                                      NilValue nil) {
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNil(
+    BytecodeLabel* label, Token::Value op, NilValue nil,
+    FeedbackSlot branch_slot) {
   if (op == Token::kEq) {
     // TODO(rmcilroy): Implement JumpIfUndetectable.
     return CompareUndetectable().JumpIfTrue(ToBooleanMode::kAlreadyBoolean,
-                                            label);
+                                            label, branch_slot);
   } else {
+    // TODO(340100647): Add branch feedback.
     DCHECK_EQ(Token::kEqStrict, op);
     if (nil == kUndefinedValue) {
       return JumpIfUndefined(label);
@@ -1291,14 +1294,15 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNil(BytecodeLabel* label,
   }
 }
 
-BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNotNil(BytecodeLabel* label,
-                                                         Token::Value op,
-                                                         NilValue nil) {
+BytecodeArrayBuilder& BytecodeArrayBuilder::JumpIfNotNil(
+    BytecodeLabel* label, Token::Value op, NilValue nil,
+    FeedbackSlot branch_slot) {
   if (op == Token::kEq) {
     // TODO(rmcilroy): Implement JumpIfUndetectable.
     return CompareUndetectable().JumpIfFalse(ToBooleanMode::kAlreadyBoolean,
-                                             label);
+                                             label, branch_slot);
   } else {
+    // TODO(340100647): Add branch feedback.
     DCHECK_EQ(Token::kEqStrict, op);
     if (nil == kUndefinedValue) {
       return JumpIfNotUndefined(label);
