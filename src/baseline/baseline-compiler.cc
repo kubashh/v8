@@ -593,12 +593,27 @@ void BaselineCompiler::UpdateInterruptBudgetAndJumpToLabel(
   if (label) __ Jump(label);
 }
 
-void BaselineCompiler::JumpIfRoot(RootIndex root) {
+void BaselineCompiler::IncrementBranchCount(FeedbackSlot branch_slot,
+                                            bool branch_taken) {
+  if (v8_flags.maglev_branch_feedback && !branch_slot.IsInvalid()) {
+    BaselineAssembler::ScratchRegisterScope temps(&basm_);
+    Register feedback_vector = temps.AcquireScratch();
+    __ Move(feedback_vector, __ FeedbackVectorOperand());
+    int offset = FeedbackVector::OffsetOfElementAt(branch_slot.ToInt() +
+                                                   (branch_taken ? 0 : 1)) -
+                 kHeapObjectTag;
+    __ IncrementSmi(MemOperand(feedback_vector, offset));
+  }
+}
+
+void BaselineCompiler::JumpIfRoot(RootIndex root, FeedbackSlot branch_slot) {
   Label dont_jump;
   __ JumpIfNotRoot(kInterpreterAccumulatorRegister, root, &dont_jump,
                    Label::kNear);
+  IncrementBranchCount(branch_slot, true);
   __ Jump(BuildForwardJumpLabel());
   __ Bind(&dont_jump);
+  IncrementBranchCount(branch_slot, false);
 }
 
 void BaselineCompiler::JumpIfNotRoot(RootIndex root) {
@@ -2080,23 +2095,33 @@ void BaselineCompiler::VisitJumpIfToBooleanFalseConstant() {
 }
 
 void BaselineCompiler::VisitJumpIfToBooleanTrue() {
+  auto branch_slot = FeedbackSlot(static_cast<int>(IndexAsTagged(1).value()));
   Label dont_jump;
   JumpIfToBoolean(false, &dont_jump, Label::kNear);
+  IncrementBranchCount(branch_slot, true);
   __ Jump(BuildForwardJumpLabel());
   __ Bind(&dont_jump);
+  IncrementBranchCount(branch_slot, false);
 }
 
 void BaselineCompiler::VisitJumpIfToBooleanFalse() {
+  auto branch_slot = FeedbackSlot(static_cast<int>(IndexAsTagged(1).value()));
   Label dont_jump;
   JumpIfToBoolean(true, &dont_jump, Label::kNear);
+  IncrementBranchCount(branch_slot, true);
   __ Jump(BuildForwardJumpLabel());
   __ Bind(&dont_jump);
+  IncrementBranchCount(branch_slot, false);
 }
 
-void BaselineCompiler::VisitJumpIfTrue() { JumpIfRoot(RootIndex::kTrueValue); }
+void BaselineCompiler::VisitJumpIfTrue() {
+  auto branch_slot = FeedbackSlot(static_cast<int>(IndexAsTagged(1).value()));
+  JumpIfRoot(RootIndex::kTrueValue, branch_slot);
+}
 
 void BaselineCompiler::VisitJumpIfFalse() {
-  JumpIfRoot(RootIndex::kFalseValue);
+  auto branch_slot = FeedbackSlot(static_cast<int>(IndexAsTagged(1).value()));
+  JumpIfRoot(RootIndex::kFalseValue, branch_slot);
 }
 
 void BaselineCompiler::VisitJumpIfNull() { JumpIfRoot(RootIndex::kNullValue); }

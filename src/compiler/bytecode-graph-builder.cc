@@ -321,8 +321,9 @@ class BytecodeGraphBuilder {
 
   // Control flow plumbing.
   void BuildJump();
-  void BuildJumpIf(Node* condition);
-  void BuildJumpIfNot(Node* condition);
+  void BuildJumpIf(Node* condition, BranchHint branch_hint = BranchHint::kNone);
+  void BuildJumpIfNot(Node* condition,
+                      BranchHint branch_hint = BranchHint::kNone);
   void BuildJumpIfEqual(Node* comperand);
   void BuildJumpIfNotEqual(Node* comperand);
   void BuildJumpIfTrue();
@@ -4085,8 +4086,9 @@ void BytecodeGraphBuilder::BuildJump() {
   MergeIntoSuccessorEnvironment(bytecode_iterator().GetJumpTargetOffset());
 }
 
-void BytecodeGraphBuilder::BuildJumpIf(Node* condition) {
-  NewBranch(condition, BranchHint::kNone);
+void BytecodeGraphBuilder::BuildJumpIf(Node* condition,
+                                       BranchHint branch_hint) {
+  NewBranch(condition, branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfTrue();
@@ -4095,8 +4097,9 @@ void BytecodeGraphBuilder::BuildJumpIf(Node* condition) {
   NewIfFalse();
 }
 
-void BytecodeGraphBuilder::BuildJumpIfNot(Node* condition) {
-  NewBranch(condition, BranchHint::kNone);
+void BytecodeGraphBuilder::BuildJumpIfNot(Node* condition,
+                                          BranchHint branch_hint) {
+  NewBranch(condition, branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfFalse();
@@ -4120,7 +4123,16 @@ void BytecodeGraphBuilder::BuildJumpIfNotEqual(Node* comperand) {
 }
 
 void BytecodeGraphBuilder::BuildJumpIfFalse() {
-  NewBranch(environment()->LookupAccumulator(), BranchHint::kNone);
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = FeedbackNexus::ReverseBranchHint(
+        broker()->GetFeedbackForBranch(source));
+  }
+
+  NewBranch(environment()->LookupAccumulator(), branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfFalse();
@@ -4132,7 +4144,15 @@ void BytecodeGraphBuilder::BuildJumpIfFalse() {
 }
 
 void BytecodeGraphBuilder::BuildJumpIfTrue() {
-  NewBranch(environment()->LookupAccumulator(), BranchHint::kNone);
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = broker()->GetFeedbackForBranch(source);
+  }
+
+  NewBranch(environment()->LookupAccumulator(), branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfTrue();
@@ -4144,15 +4164,31 @@ void BytecodeGraphBuilder::BuildJumpIfTrue() {
 }
 
 void BytecodeGraphBuilder::BuildJumpIfToBooleanTrue() {
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = broker()->GetFeedbackForBranch(source);
+  }
+
   Node* accumulator = environment()->LookupAccumulator();
   Node* condition = NewNode(simplified()->ToBoolean(), accumulator);
-  BuildJumpIf(condition);
+  BuildJumpIf(condition, branch_hint);
 }
 
 void BytecodeGraphBuilder::BuildJumpIfToBooleanFalse() {
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = FeedbackNexus::ReverseBranchHint(
+        broker()->GetFeedbackForBranch(source));
+  }
   Node* accumulator = environment()->LookupAccumulator();
   Node* condition = NewNode(simplified()->ToBoolean(), accumulator);
-  BuildJumpIfNot(condition);
+  BuildJumpIfNot(condition, branch_hint);
 }
 
 void BytecodeGraphBuilder::BuildJumpIfNotHole() {

@@ -636,6 +636,16 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForForIn(
   return *zone()->New<ForInFeedback>(hint, nexus.kind());
 }
 
+ProcessedFeedback const& JSHeapBroker::ReadFeedbackForBranch(
+    FeedbackSource const& source) const {
+  FeedbackNexus nexus(source.vector, source.slot, feedback_nexus_config());
+  BranchHint hint = nexus.GetBranchFeedback();
+  if (hint == BranchHint::kNone) {
+    return NewInsufficientFeedback(nexus.kind());
+  }
+  return *zone()->New<BranchFeedback>(hint, nexus.kind());
+}
+
 ProcessedFeedback const& JSHeapBroker::ReadFeedbackForInstanceOf(
     FeedbackSource const& source) {
   FeedbackNexus nexus(source.vector, source.slot, feedback_nexus_config());
@@ -745,6 +755,12 @@ ForInHint JSHeapBroker::GetFeedbackForForIn(FeedbackSource const& source) {
                                    : feedback.AsForIn().value();
 }
 
+BranchHint JSHeapBroker::GetFeedbackForBranch(FeedbackSource const& source) {
+  ProcessedFeedback const& feedback = ProcessFeedbackForBranch(source);
+  return feedback.IsInsufficient() ? BranchHint::kNone
+                                   : feedback.AsBranch().value();
+}
+
 ProcessedFeedback const& JSHeapBroker::GetFeedbackForArrayOrObjectLiteral(
     FeedbackSource const& source) {
   if (HasFeedback(source)) return GetFeedback(source);
@@ -798,6 +814,14 @@ ProcessedFeedback const& JSHeapBroker::ProcessFeedbackForForIn(
     FeedbackSource const& source) {
   if (HasFeedback(source)) return GetFeedback(source);
   ProcessedFeedback const& feedback = ReadFeedbackForForIn(source);
+  SetFeedback(source, &feedback);
+  return feedback;
+}
+
+ProcessedFeedback const& JSHeapBroker::ProcessFeedbackForBranch(
+    FeedbackSource const& source) {
+  if (HasFeedback(source)) return GetFeedback(source);
+  ProcessedFeedback const& feedback = ReadFeedbackForBranch(source);
   SetFeedback(source, &feedback);
   return feedback;
 }
@@ -1001,6 +1025,11 @@ RegExpLiteralFeedback const& ProcessedFeedback::AsRegExpLiteral() const {
 TemplateObjectFeedback const& ProcessedFeedback::AsTemplateObject() const {
   CHECK_EQ(kTemplateObject, kind());
   return *static_cast<TemplateObjectFeedback const*>(this);
+}
+
+BranchFeedback const& ProcessedFeedback::AsBranch() const {
+  CHECK_EQ(kBranch, kind());
+  return *static_cast<BranchFeedback const*>(this);
 }
 
 #undef TRACE

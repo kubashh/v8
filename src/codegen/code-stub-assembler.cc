@@ -189,6 +189,19 @@ void CodeStubAssembler::IncrementCallCount(
                           SKIP_WRITE_BARRIER, kTaggedSize);
 }
 
+void CodeStubAssembler::IncrementBranchCount(
+    TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot_id,
+    bool branch_taken) {
+  Comment("increment branch count");
+  int additional_offset = branch_taken ? 0 : kTaggedSize;
+  TNode<Smi> branch_count =
+      CAST(LoadFeedbackVectorSlot(feedback_vector, slot_id, additional_offset));
+  TNode<Smi> new_count = SmiAdd(branch_count, SmiConstant(1));
+  // Count is Smi, so we don't need a write barrier.
+  StoreFeedbackVectorSlot(feedback_vector, slot_id, new_count,
+                          SKIP_WRITE_BARRIER, additional_offset);
+}
+
 void CodeStubAssembler::FastCheck(TNode<BoolT> condition) {
   Label ok(this), not_ok(this, Label::kDeferred);
   Branch(condition, &ok, &not_ok);
@@ -1624,6 +1637,31 @@ TNode<HeapObject> CodeStubAssembler::Allocate(int size_in_bytes,
 TNode<BoolT> CodeStubAssembler::IsRegularHeapObjectSize(TNode<IntPtrT> size) {
   return UintPtrLessThanOrEqual(size,
                                 IntPtrConstant(kMaxRegularHeapObjectSize));
+}
+
+void CodeStubAssembler::BranchIfToBooleanIsTrue(
+    TNode<Object> value, Label* if_true, Label* if_false,
+    TNode<HeapObject> maybe_feedback_vector, TNode<UintPtrT>* branch_slot,
+    bool reverse_branch_counts) {
+#ifndef V8_JITLESS
+  Label outer_if_true(this), outer_if_false(this), no_feedback(this);
+  GotoIfNot(IsFeedbackVector(maybe_feedback_vector), &no_feedback);
+
+  BranchIfToBooleanIsTrue(value, &outer_if_true, &outer_if_false);
+
+  BIND(&outer_if_true);
+  IncrementBranchCount(CAST(maybe_feedback_vector), *branch_slot,
+                       !reverse_branch_counts);
+  Goto(if_true);
+
+  BIND(&outer_if_false);
+  IncrementBranchCount(CAST(maybe_feedback_vector), *branch_slot,
+                       reverse_branch_counts);
+  Goto(if_false);
+
+  BIND(&no_feedback);
+#endif  // V8_JITLESS
+  BranchIfToBooleanIsTrue(value, if_true, if_false);
 }
 
 void CodeStubAssembler::BranchIfToBooleanIsTrue(TNode<Object> value,

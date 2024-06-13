@@ -110,13 +110,13 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 18
+bytecode array length: 19
 bytecodes: [
   /*   25 S> */ B(LdaSmi), I8(1),
                 B(Star0),
-  /*   30 S> */ B(JumpIfToBooleanFalse), U8(10),
+  /*   30 S> */ B(JumpIfToBooleanFalse), U8(11), U8(0),
   /*   43 S> */ B(Ldar), R(0),
-                B(AddSmi), I8(1), U8(0),
+                B(AddSmi), I8(1), U8(2),
                 B(Star0),
                 B(Jump), U8(5),
   /*   66 S> */ B(LdaSmi), I8(2),
@@ -142,11 +142,11 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 16
+bytecode array length: 17
 bytecodes: [
   /*   18 S> */ B(LdaZero),
-  /*   24 E> */ B(TestLessThanOrEqual), R(arg0), U8(0),
-                B(JumpIfFalse), U8(7),
+  /*   24 E> */ B(TestLessThanOrEqual), R(arg0), U8(2),
+                B(JumpIfFalse), U8(8), U8(0),
   /*   36 S> */ B(Wide), B(LdaSmi), I16(200),
   /*   47 S> */ B(Return),
   /*   63 S> */ B(Wide), B(LdaSmi), I16(-200),
@@ -163,11 +163,11 @@ snippet: "
 "
 frame size: 0
 parameter count: 3
-bytecode array length: 14
+bytecode array length: 15
 bytecodes: [
   /*   19 S> */ B(Ldar), R(arg1),
-  /*   25 E> */ B(TestIn), R(arg0), U8(0),
-                B(JumpIfFalse), U8(7),
+  /*   25 E> */ B(TestIn), R(arg0), U8(2),
+                B(JumpIfFalse), U8(8), U8(0),
   /*   33 S> */ B(Wide), B(LdaSmi), I16(200),
   /*   44 S> */ B(Return),
                 B(LdaUndefined),
@@ -249,15 +249,15 @@ snippet: "
 "
 frame size: 2
 parameter count: 2
-bytecode array length: 24
+bytecode array length: 25
 bytecodes: [
   /*   24 S> */ B(LdaZero),
                 B(Star0),
   /*   35 S> */ B(LdaZero),
                 B(Star1),
   /*   38 S> */ B(LdaConstant), U8(0),
-  /*   44 E> */ B(TestEqualStrict), R(0), U8(0),
-                B(JumpIfFalse), U8(10),
+  /*   44 E> */ B(TestEqualStrict), R(0), U8(2),
+                B(JumpIfFalse), U8(11), U8(0),
   /*   58 S> */ B(Mov), R(0), R(1),
   /* 1081 S> */ B(Wide), B(LdaSmi), I16(200),
   /* 1092 S> */ B(Return),
@@ -345,14 +345,14 @@ snippet: "
 "
 frame size: 2
 parameter count: 1
-bytecode array length: 21
+bytecode array length: 22
 bytecodes: [
   /*   25 S> */ B(LdaZero),
                 B(Star0),
   /*   36 S> */ B(LdaZero),
                 B(Star1),
   /*   41 S> */ B(Ldar), R(0),
-                B(JumpIfToBooleanFalse), U8(10),
+                B(JumpIfToBooleanFalse), U8(11), U8(0),
   /*   52 S> */ B(Mov), R(0), R(1),
   /* 1076 S> */ B(Wide), B(LdaSmi), I16(200),
   /* 1087 S> */ B(Return),
@@ -381,46 +381,46 @@ snippet: "
 "
 frame size: 0
 parameter count: 3
-bytecode array length: 82
+bytecode array length: 90
 bytecodes: [
   /*   21 S> */ B(Ldar), R(arg1),
-  /*   27 E> */ B(TestEqual), R(arg0), U8(0),
-                B(JumpIfFalse), U8(5),
+  /*   27 E> */ B(TestEqual), R(arg0), U8(2),
+                B(JumpIfFalse), U8(6), U8(0),
   /*   35 S> */ B(LdaSmi), I8(1),
   /*   44 S> */ B(Return),
   /*   49 S> */ B(Ldar), R(arg1),
-  /*   55 E> */ B(TestEqualStrict), R(arg0), U8(1),
-                B(JumpIfFalse), U8(5),
+  /*   55 E> */ B(TestEqualStrict), R(arg0), U8(5),
+                B(JumpIfFalse), U8(6), U8(3),
   /*   64 S> */ B(LdaSmi), I8(1),
   /*   73 S> */ B(Return),
   /*   78 S> */ B(Ldar), R(arg1),
-  /*   84 E> */ B(TestLessThan), R(arg0), U8(2),
-                B(JumpIfFalse), U8(5),
+  /*   84 E> */ B(TestLessThan), R(arg0), U8(8),
+                B(JumpIfFalse), U8(6), U8(6),
   /*   91 S> */ B(LdaSmi), I8(1),
   /*  100 S> */ B(Return),
   /*  105 S> */ B(Ldar), R(arg1),
-  /*  111 E> */ B(TestGreaterThan), R(arg0), U8(3),
-                B(JumpIfFalse), U8(5),
+  /*  111 E> */ B(TestGreaterThan), R(arg0), U8(11),
+                B(JumpIfFalse), U8(6), U8(9),
   /*  118 S> */ B(LdaSmi), I8(1),
   /*  127 S> */ B(Return),
   /*  132 S> */ B(Ldar), R(arg1),
-  /*  138 E> */ B(TestLessThanOrEqual), R(arg0), U8(4),
-                B(JumpIfFalse), U8(5),
+  /*  138 E> */ B(TestLessThanOrEqual), R(arg0), U8(14),
+                B(JumpIfFalse), U8(6), U8(12),
   /*  146 S> */ B(LdaSmi), I8(1),
   /*  155 S> */ B(Return),
   /*  160 S> */ B(Ldar), R(arg1),
-  /*  166 E> */ B(TestGreaterThanOrEqual), R(arg0), U8(5),
-                B(JumpIfFalse), U8(5),
+  /*  166 E> */ B(TestGreaterThanOrEqual), R(arg0), U8(17),
+                B(JumpIfFalse), U8(6), U8(15),
   /*  174 S> */ B(LdaSmi), I8(1),
   /*  183 S> */ B(Return),
   /*  188 S> */ B(Ldar), R(arg1),
-  /*  194 E> */ B(TestIn), R(arg0), U8(6),
-                B(JumpIfFalse), U8(5),
+  /*  194 E> */ B(TestIn), R(arg0), U8(20),
+                B(JumpIfFalse), U8(6), U8(18),
   /*  202 S> */ B(LdaSmi), I8(1),
   /*  211 S> */ B(Return),
   /*  216 S> */ B(Ldar), R(arg1),
-  /*  222 E> */ B(TestInstanceOf), R(arg0), U8(8),
-                B(JumpIfFalse), U8(5),
+  /*  222 E> */ B(TestInstanceOf), R(arg0), U8(24),
+                B(JumpIfFalse), U8(6), U8(22),
   /*  238 S> */ B(LdaSmi), I8(1),
   /*  247 S> */ B(Return),
   /*  252 S> */ B(LdaZero),
@@ -445,11 +445,11 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 10
+bytecode array length: 11
 bytecodes: [
   /*   25 S> */ B(LdaZero),
                 B(Star0),
-  /*   30 S> */ B(JumpIfToBooleanFalse), U8(5),
+  /*   30 S> */ B(JumpIfToBooleanFalse), U8(6), U8(0),
   /*   43 S> */ B(LdaSmi), I8(20),
   /*   53 S> */ B(Return),
   /*   69 S> */ B(LdaSmi), I8(-20),
@@ -475,22 +475,22 @@ snippet: "
 "
 frame size: 0
 parameter count: 3
-bytecode array length: 33
+bytecode array length: 37
 bytecodes: [
   /*   21 S> */ B(Ldar), R(arg1),
-  /*   27 E> */ B(TestEqual), R(arg0), U8(0),
-                B(JumpIfTrue), U8(8),
+  /*   27 E> */ B(TestEqual), R(arg0), U8(4),
+                B(JumpIfTrue), U8(10), U8(2),
                 B(LdaZero),
-  /*   37 E> */ B(TestLessThan), R(arg0), U8(1),
-                B(JumpIfFalse), U8(5),
+  /*   37 E> */ B(TestLessThan), R(arg0), U8(7),
+                B(JumpIfFalse), U8(6), U8(5),
   /*   48 S> */ B(LdaSmi), I8(1),
   /*   57 S> */ B(Return),
   /*   67 S> */ B(LdaZero),
-  /*   73 E> */ B(TestGreaterThan), R(arg0), U8(2),
-                B(JumpIfFalse), U8(10),
+  /*   73 E> */ B(TestGreaterThan), R(arg0), U8(12),
+                B(JumpIfFalse), U8(12), U8(10),
                 B(LdaZero),
-  /*   82 E> */ B(TestGreaterThan), R(arg1), U8(3),
-                B(JumpIfFalse), U8(4),
+  /*   82 E> */ B(TestGreaterThan), R(arg1), U8(15),
+                B(JumpIfFalse), U8(5), U8(13),
   /*   93 S> */ B(LdaZero),
   /*  102 S> */ B(Return),
   /*  118 S> */ B(LdaSmi), I8(-1),

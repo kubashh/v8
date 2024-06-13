@@ -335,13 +335,17 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
         .Bind(&after_jump7)
         .JumpIfForInDone(&after_jump8, reg, reg)
         .Bind(&after_jump8)
-        .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &after_jump9)
+        .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &after_jump9,
+                    feedback_spec.AddBranchSlot())
         .Bind(&after_jump9)
-        .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &after_jump10)
+        .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &after_jump10,
+                    feedback_spec.AddBranchSlot())
         .Bind(&after_jump10)
-        .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &after_jump11)
+        .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &after_jump11,
+                     feedback_spec.AddBranchSlot())
         .Bind(&after_jump11)
-        .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &after_jump12)
+        .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &after_jump12,
+                     feedback_spec.AddBranchSlot())
         .Bind(&after_jump12)
         .JumpLoop(&loop_header, 0, 0, 0)
         .Bind(&after_loop);
@@ -354,10 +358,14 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
     builder.JumpIfNull(&after_jump)
         .Jump(&end[0])
         .Bind(&after_jump)
-        .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &end[1])
-        .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &end[2])
-        .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &end[3])
-        .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &end[4])
+        .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &end[1],
+                    feedback_spec.AddBranchSlot())
+        .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &end[2],
+                    feedback_spec.AddBranchSlot())
+        .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &end[3],
+                     feedback_spec.AddBranchSlot())
+        .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &end[4],
+                     feedback_spec.AddBranchSlot())
         .JumpIfNull(&end[5])
         .JumpIfNotNull(&end[6])
         .JumpIfUndefined(&end[7])
@@ -441,7 +449,9 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
     // We have to skip over suspend because it returns and marks the remaining
     // bytecode dead.
     BytecodeLabel after_suspend;
-    builder.JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &after_suspend)
+    builder
+        .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &after_suspend,
+                    feedback_spec.AddBranchSlot())
         .SuspendGenerator(reg, reg_list, 0)
         .Bind(&after_suspend)
         .ResumeGenerator(reg, reg_list);
@@ -610,6 +620,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
   static const int kFarJumpDistance = 256 + 20;
 
   BytecodeArrayBuilder builder(zone(), 1, 1);
+  FeedbackVectorSpec feedback_spec(zone());
 
   Register reg(0);
   BytecodeLabel far0, far1, far2, far3, far4;
@@ -620,13 +631,17 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
       .Jump(&near0)
       .Bind(&after_jump_near0)
       .CompareOperation(Token::kEq, reg, 1)
-      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &near1)
+      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &near1,
+                  feedback_spec.AddBranchSlot())
       .CompareOperation(Token::kEq, reg, 2)
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &near2)
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &near2,
+                   feedback_spec.AddBranchSlot())
       .BinaryOperation(Token::kAdd, reg, 1)
-      .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &near3)
+      .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &near3,
+                  feedback_spec.AddBranchSlot())
       .BinaryOperation(Token::kAdd, reg, 2)
-      .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &near4)
+      .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &near4,
+                   feedback_spec.AddBranchSlot())
       .Bind(&near0)
       .Bind(&near1)
       .Bind(&near2)
@@ -636,13 +651,17 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
       .Jump(&far0)
       .Bind(&after_jump_far0)
       .CompareOperation(Token::kEq, reg, 3)
-      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &far1)
+      .JumpIfTrue(ToBooleanMode::kAlreadyBoolean, &far1,
+                  feedback_spec.AddBranchSlot())
       .CompareOperation(Token::kEq, reg, 4)
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &far2)
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &far2,
+                   feedback_spec.AddBranchSlot())
       .BinaryOperation(Token::kAdd, reg, 3)
-      .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &far3)
+      .JumpIfTrue(ToBooleanMode::kConvertToBoolean, &far3,
+                  feedback_spec.AddBranchSlot())
       .BinaryOperation(Token::kAdd, reg, 4)
-      .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &far4);
+      .JumpIfFalse(ToBooleanMode::kConvertToBoolean, &far4,
+                   feedback_spec.AddBranchSlot());
   for (int i = 0; i < kFarJumpDistance - 22; i++) {
     builder.Debugger();
   }
@@ -650,7 +669,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
   builder.Return();
 
   Handle<BytecodeArray> array = builder.ToBytecodeArray(isolate());
-  DCHECK_EQ(array->length(), 48 + kFarJumpDistance - 22 + 1);
+  DCHECK_EQ(array->length(), 56 + kFarJumpDistance - 22 + 1);
 
   BytecodeArrayIterator iterator(array);
 
@@ -658,35 +677,35 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
   iterator.Advance();
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJump);
-  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 22);
+  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 26);
   iterator.Advance();
 
   // Ignore compare operation.
   iterator.Advance();
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfTrue);
-  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 17);
+  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 21);
   iterator.Advance();
 
   // Ignore compare operation.
   iterator.Advance();
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfFalse);
-  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 12);
+  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 15);
   iterator.Advance();
 
   // Ignore add operation.
   iterator.Advance();
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfToBooleanTrue);
-  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 7);
+  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 9);
   iterator.Advance();
 
   // Ignore add operation.
   iterator.Advance();
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfToBooleanFalse);
-  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 2);
+  CHECK_EQ(iterator.GetUnsignedImmediateOperand(0), 3);
   iterator.Advance();
 
   // Ignore JumpIfNull operation.
@@ -694,7 +713,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpConstant);
   CHECK_EQ(*(iterator.GetConstantForIndexOperand(0, isolate())),
-           Smi::FromInt(kFarJumpDistance));
+           Smi::FromInt(kFarJumpDistance + 4));
   iterator.Advance();
 
   // Ignore compare operation.
@@ -702,7 +721,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfTrueConstant);
   CHECK_EQ(*(iterator.GetConstantForIndexOperand(0, isolate())),
-           Smi::FromInt(kFarJumpDistance - 5));
+           Smi::FromInt(kFarJumpDistance - 1));
   iterator.Advance();
 
   // Ignore compare operation.
@@ -710,7 +729,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfFalseConstant);
   CHECK_EQ(*(iterator.GetConstantForIndexOperand(0, isolate())),
-           Smi::FromInt(kFarJumpDistance - 10));
+           Smi::FromInt(kFarJumpDistance - 7));
   iterator.Advance();
 
   // Ignore add operation.
@@ -718,7 +737,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
 
   CHECK_EQ(iterator.current_bytecode(), Bytecode::kJumpIfToBooleanTrueConstant);
   CHECK_EQ(*(iterator.GetConstantForIndexOperand(0, isolate())),
-           Smi::FromInt(kFarJumpDistance - 15));
+           Smi::FromInt(kFarJumpDistance - 13));
   iterator.Advance();
 
   // Ignore add operation.
@@ -727,7 +746,7 @@ TEST_F(BytecodeArrayBuilderTest, ForwardJumps) {
   CHECK_EQ(iterator.current_bytecode(),
            Bytecode::kJumpIfToBooleanFalseConstant);
   CHECK_EQ(*(iterator.GetConstantForIndexOperand(0, isolate())),
-           Smi::FromInt(kFarJumpDistance - 20));
+           Smi::FromInt(kFarJumpDistance - 19));
   iterator.Advance();
 }
 
