@@ -3421,7 +3421,8 @@ bool CanFastCloneObjectWithDifferentMaps(DirectHandle<Map> source_map,
                                          null_proto_literal, isolate)) {
       if (!details.representation().fits_into(
               target_details.representation()) ||
-          (target_details.representation().IsDouble() &&
+          (target_details.representation().fits_into(
+               Representation::Double()) &&
            details.representation().IsSmi())) {
         return false;
       }
