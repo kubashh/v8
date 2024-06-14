@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f44f2c_5c476dec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2024-06-14T19:45:50Z",
+      "side": 1,
+      "message": "maybe the simplest way to test this, is just a quick mjsunit crash test with \n--allow-natives-syntax and a direct invocation of %DefineObjectOwnProperty, even if it wouldn\u0027t really match the reproduction",
+      "revId": "4505f6a3dbc161c92953c4ccffe901f1ebb4371a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
