@@ -1192,6 +1192,9 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
   // Ensure that the function's meta map belongs to the same native context.
   CHECK_EQ(map()->map()->native_context_or_null(), native_context());
 
+  if (has_feedback_vector()) {
+    CHECK_EQ(shared(), feedback_vector()->shared_function_info());
+  }
   Handle<JSFunction> function(*this, isolate);
   LookupIterator it(isolate, function, isolate->factory()->prototype_string(),
                     LookupIterator::OWN_SKIP_INTERCEPTOR);

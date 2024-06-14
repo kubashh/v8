@@ -625,6 +625,8 @@ void JSFunction::InitializeFeedbackCell(
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   if (function->has_feedback_vector()) {
+    CHECK_EQ(function->shared(),
+             function->feedback_vector()->shared_function_info());
     CHECK_EQ(function->feedback_vector()->length(),
              function->feedback_vector()->metadata()->slot_count());
     return;
