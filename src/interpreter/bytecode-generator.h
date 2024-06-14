@@ -435,7 +435,8 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void BuildIncrementBlockCoverageCounterIfEnabled(int coverage_array_slot);
 
   void BuildTest(ToBooleanMode mode, BytecodeLabels* then_labels,
-                 BytecodeLabels* else_labels, TestFallthrough fallthrough);
+                 BytecodeLabels* else_labels, TestFallthrough fallthrough,
+                 FeedbackSlot branch_slot);
 
   template <typename TryBodyFunc, typename CatchBodyFunc>
   void BuildTryCatch(TryBodyFunc try_body_func, CatchBodyFunc catch_body_func,
@@ -470,10 +471,12 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
   void VisitAndPushIntoRegisterList(Expression* expr, RegisterList* reg_list);
   void VisitForEffect(Expression* expr);
   void VisitForTest(Expression* expr, BytecodeLabels* then_labels,
-                    BytecodeLabels* else_labels, TestFallthrough fallthrough);
+                    BytecodeLabels* else_labels, TestFallthrough fallthrough,
+                    FeedbackSlot branch_slot = FeedbackSlot::Invalid());
   void VisitForNullishTest(Expression* expr, BytecodeLabels* then_labels,
                            BytecodeLabels* test_next_labels,
-                           BytecodeLabels* else_labels);
+                           BytecodeLabels* else_labels,
+                           FeedbackSlot branch_slot);
 
   // Convenience visitors that put a HoleCheckElisionScope on stack.
   template <typename T>

@@ -45,18 +45,18 @@ snippet: "
 "
 frame size: 1
 parameter count: 2
-bytecode array length: 22
+bytecode array length: 23
 bytecodes: [
   /*   24 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
-                B(JumpIfToBooleanFalse), U8(6),
+                B(JumpIfToBooleanFalse), U8(7), U8(0),
   /*   33 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
                 B(ThrowReferenceErrorIfHole), U8(1),
   /*   38 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(Star0),
                 B(LdaImmutableCurrentContextSlot), U8(3),
   /*   42 E> */ B(ThrowReferenceErrorIfHole), U8(1),
-  /*   40 E> */ B(Add), R(0), U8(0),
+  /*   40 E> */ B(Add), R(0), U8(2),
                 B(LdaUndefined),
   /*   47 S> */ B(Return),
 ]
@@ -80,10 +80,10 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 34
+bytecode array length: 35
 bytecodes: [
   /*   24 S> */ B(Ldar), R(arg0),
-                B(JumpIfToBooleanFalse), U8(12),
+                B(JumpIfToBooleanFalse), U8(13), U8(0),
   /*   33 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
   /*   36 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
@@ -122,14 +122,14 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 22
+bytecode array length: 23
 bytecodes: [
   /*   31 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
-                B(JumpIfToBooleanFalse), U8(10),
+                B(JumpIfToBooleanFalse), U8(11), U8(0),
   /*   36 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
                 B(ThrowReferenceErrorIfHole), U8(1),
-  /*   24 E> */ B(JumpLoop), U8(10), I8(0), U8(0),
+  /*   24 E> */ B(JumpLoop), U8(11), I8(0), U8(2),
   /*   41 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
   /*   44 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
                 B(ThrowReferenceErrorIfHole), U8(1),
@@ -156,14 +156,14 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 20
+bytecode array length: 21
 bytecodes: [
   /*   29 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
   /*   41 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
                 B(ThrowReferenceErrorIfHole), U8(1),
-                B(JumpIfToBooleanFalse), U8(6),
-  /*   24 E> */ B(JumpLoop), U8(10), I8(0), U8(0),
+                B(JumpIfToBooleanFalse), U8(7), U8(0),
+  /*   24 E> */ B(JumpLoop), U8(11), I8(0), U8(2),
   /*   45 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
   /*   48 S> */ B(LdaUndefined),
@@ -221,18 +221,18 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 36
+bytecode array length: 37
 bytecodes: [
   /*   29 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
                 B(ThrowReferenceErrorIfHole), U8(0),
   /*   32 S> */ B(LdaImmutableCurrentContextSlot), U8(4),
                 B(ThrowReferenceErrorIfHole), U8(1),
-                B(JumpIfToBooleanFalse), U8(14),
+                B(JumpIfToBooleanFalse), U8(15), U8(0),
   /*   40 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(2),
   /*   35 S> */ B(LdaImmutableCurrentContextSlot), U8(5),
                 B(ThrowReferenceErrorIfHole), U8(3),
-  /*   24 E> */ B(JumpLoop), U8(14), I8(0), U8(0),
+  /*   24 E> */ B(JumpLoop), U8(15), I8(0), U8(2),
   /*   45 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
   /*   48 S> */ B(LdaImmutableCurrentContextSlot), U8(4),
   /*   51 S> */ B(LdaImmutableCurrentContextSlot), U8(5),
@@ -322,7 +322,7 @@ snippet: "
 "
 frame size: 10
 parameter count: 2
-bytecode array length: 147
+bytecode array length: 151
 bytecodes: [
   /*   34 S> */ B(CreateArrayLiteral), U8(0), U8(0), U8(37),
                 B(Star0),
@@ -347,8 +347,8 @@ bytecodes: [
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(7), U8(1),
                 B(GetNamedProperty), R(7), U8(3), U8(11),
-                B(JumpIfToBooleanTrue), U8(25),
-                B(GetNamedProperty), R(7), U8(4), U8(13),
+                B(JumpIfToBooleanTrue), U8(26), U8(13),
+                B(GetNamedProperty), R(7), U8(4), U8(15),
                 B(Star7),
                 B(LdaFalse),
                 B(Star2),
@@ -358,7 +358,7 @@ bytecodes: [
                 B(StaCurrentContextSlot), U8(2),
   /*   41 S> */ B(LdaImmutableCurrentContextSlot), U8(4),
                 B(ThrowReferenceErrorIfHole), U8(6),
-  /*   24 E> */ B(JumpLoop), U8(39), I8(0), U8(15),
+  /*   24 E> */ B(JumpLoop), U8(40), I8(0), U8(17),
                 B(LdaSmi), I8(-1),
                 B(Star4),
                 B(Star3),
@@ -370,25 +370,25 @@ bytecodes: [
                 B(SetPendingMessage),
                 B(Star5),
                 B(Ldar), R(2),
-                B(JumpIfToBooleanTrue), U8(35),
+                B(JumpIfToBooleanTrue), U8(37), U8(18),
                 B(Mov), R(context), R(7),
-                B(GetNamedProperty), R(1), U8(7), U8(16),
-                B(JumpIfUndefinedOrNull), U8(26),
+                B(GetNamedProperty), R(1), U8(7), U8(20),
+                B(JumpIfUndefinedOrNull), U8(27),
                 B(Star8),
-                B(CallProperty0), R(8), R(1), U8(18),
-                B(JumpIfJSReceiver), U8(19),
+                B(CallProperty0), R(8), R(1), U8(22),
+                B(JumpIfJSReceiver), U8(20),
                 B(Star9),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(9), U8(1),
-                B(Jump), U8(11),
+                B(Jump), U8(12),
                 B(Star7),
                 B(LdaZero),
                 B(TestReferenceEqual), R(3),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(24),
                 B(Ldar), R(7),
                 B(ReThrow),
                 B(LdaZero),
                 B(TestReferenceEqual), R(3),
-                B(JumpIfFalse), U8(8),
+                B(JumpIfFalse), U8(9), U8(26),
                 B(Ldar), R(5),
                 B(SetPendingMessage),
                 B(Ldar), R(4),
@@ -412,8 +412,8 @@ constant pool: [
   INTERNALIZED_ONE_BYTE_STRING_TYPE ["return"],
 ]
 handlers: [
-  [32, 75, 81],
-  [94, 113, 115],
+  [32, 76, 82],
+  [96, 115, 117],
 ]
 
 ---
@@ -429,7 +429,7 @@ snippet: "
 "
 frame size: 6
 parameter count: 2
-bytecode array length: 76
+bytecode array length: 77
 bytecodes: [
                 B(LdaTheHole),
                 B(Star2),
@@ -463,7 +463,7 @@ bytecodes: [
                 B(ThrowReferenceErrorIfHole), U8(3),
                 B(LdaZero),
                 B(TestReferenceEqual), R(0),
-                B(JumpIfFalse), U8(8),
+                B(JumpIfFalse), U8(9), U8(0),
                 B(Ldar), R(2),
                 B(SetPendingMessage),
                 B(Ldar), R(1),
@@ -537,14 +537,14 @@ snippet: "
 "
 frame size: 1
 parameter count: 2
-bytecode array length: 29
+bytecode array length: 31
 bytecodes: [
   /*   34 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
-                B(JumpIfToBooleanFalse), U8(12),
+                B(JumpIfToBooleanFalse), U8(14), U8(0),
                 B(LdaImmutableCurrentContextSlot), U8(3),
   /*   39 E> */ B(ThrowReferenceErrorIfHole), U8(1),
-                B(JumpIfToBooleanFalse), U8(6),
+                B(JumpIfToBooleanFalse), U8(7), U8(2),
                 B(LdaImmutableCurrentContextSlot), U8(4),
   /*   44 E> */ B(ThrowReferenceErrorIfHole), U8(2),
                 B(Star0),
@@ -577,14 +577,14 @@ snippet: "
 "
 frame size: 1
 parameter count: 2
-bytecode array length: 29
+bytecode array length: 31
 bytecodes: [
   /*   34 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
-                B(JumpIfToBooleanTrue), U8(12),
+                B(JumpIfToBooleanTrue), U8(14), U8(0),
                 B(LdaImmutableCurrentContextSlot), U8(3),
   /*   39 E> */ B(ThrowReferenceErrorIfHole), U8(1),
-                B(JumpIfToBooleanTrue), U8(6),
+                B(JumpIfToBooleanTrue), U8(7), U8(2),
                 B(LdaImmutableCurrentContextSlot), U8(4),
   /*   44 E> */ B(ThrowReferenceErrorIfHole), U8(2),
                 B(Star0),
@@ -706,11 +706,11 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 20
+bytecode array length: 21
 bytecodes: [
   /*   24 S> */ B(LdaCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
-                B(JumpIfToBooleanFalse), U8(8),
+                B(JumpIfToBooleanFalse), U8(9), U8(1),
                 B(LdaImmutableCurrentContextSlot), U8(3),
   /*   30 E> */ B(ThrowReferenceErrorIfHole), U8(1),
   /*   26 E> */ B(StaCurrentContextSlot), U8(2),
@@ -740,11 +740,11 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 20
+bytecode array length: 21
 bytecodes: [
   /*   24 S> */ B(LdaCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
-                B(JumpIfToBooleanTrue), U8(8),
+                B(JumpIfToBooleanTrue), U8(9), U8(1),
                 B(LdaImmutableCurrentContextSlot), U8(3),
   /*   30 E> */ B(ThrowReferenceErrorIfHole), U8(1),
   /*   26 E> */ B(StaCurrentContextSlot), U8(2),
@@ -813,16 +813,16 @@ snippet: "
 "
 frame size: 1
 parameter count: 2
-bytecode array length: 57
+bytecode array length: 59
 bytecodes: [
   /*   24 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
   /*   44 E> */ B(ThrowReferenceErrorIfHole), U8(0),
                 B(TestEqualStrict), R(arg0), U8(0),
                 B(Mov), R(arg0), R(0),
-                B(JumpIfTrue), U8(11),
+                B(JumpIfTrue), U8(13), U8(1),
                 B(LdaSmi), I8(42),
                 B(TestEqualStrict), R(0), U8(0),
-                B(JumpIfTrue), U8(10),
+                B(JumpIfTrue), U8(11), U8(3),
                 B(Jump), U8(16),
   /*   47 S> */ B(LdaImmutableCurrentContextSlot), U8(4),
                 B(ThrowReferenceErrorIfHole), U8(1),
@@ -870,12 +870,12 @@ snippet: "
 "
 frame size: 0
 parameter count: 2
-bytecode array length: 24
+bytecode array length: 25
 bytecodes: [
   /*   33 S> */ B(LdaImmutableCurrentContextSlot), U8(2),
                 B(ThrowReferenceErrorIfHole), U8(0),
   /*   38 S> */ B(Ldar), R(arg0),
-                B(JumpIfToBooleanFalse), U8(4),
+                B(JumpIfToBooleanFalse), U8(5), U8(0),
   /*   45 S> */ B(Jump), U8(6),
   /*   58 S> */ B(LdaImmutableCurrentContextSlot), U8(3),
                 B(ThrowReferenceErrorIfHole), U8(1),
@@ -1025,7 +1025,7 @@ snippet: "
 "
 frame size: 4
 parameter count: 2
-bytecode array length: 42
+bytecode array length: 43
 bytecodes: [
                 B(LdaTheHole),
                 B(Star2),
@@ -1046,7 +1046,7 @@ bytecodes: [
                 B(ThrowReferenceErrorIfHole), U8(1),
                 B(LdaZero),
                 B(TestReferenceEqual), R(0),
-                B(JumpIfFalse), U8(8),
+                B(JumpIfFalse), U8(9), U8(0),
                 B(Ldar), R(2),
                 B(SetPendingMessage),
                 B(Ldar), R(1),

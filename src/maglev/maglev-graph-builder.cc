@@ -11762,7 +11762,15 @@ void MaglevGraphBuilder::VisitJumpIfToBooleanTrue() {
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfTrue);
   BuildBranchIfToBooleanTrue(branch_builder, GetRawAccumulator());
 }
+void MaglevGraphBuilder::VisitJumpIfToBooleanTrueNoFeedback() {
+  auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfTrue);
+  BuildBranchIfToBooleanTrue(branch_builder, GetRawAccumulator());
+}
 void MaglevGraphBuilder::VisitJumpIfToBooleanFalse() {
+  auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfFalse);
+  BuildBranchIfToBooleanTrue(branch_builder, GetRawAccumulator());
+}
+void MaglevGraphBuilder::VisitJumpIfToBooleanFalseNoFeedback() {
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfFalse);
   BuildBranchIfToBooleanTrue(branch_builder, GetRawAccumulator());
 }
@@ -11770,7 +11778,15 @@ void MaglevGraphBuilder::VisitJumpIfTrue() {
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfTrue);
   BuildBranchIfTrue(branch_builder, GetRawAccumulator());
 }
+void MaglevGraphBuilder::VisitJumpIfTrueNoFeedback() {
+  auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfTrue);
+  BuildBranchIfTrue(branch_builder, GetRawAccumulator());
+}
 void MaglevGraphBuilder::VisitJumpIfFalse() {
+  auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfFalse);
+  BuildBranchIfTrue(branch_builder, GetRawAccumulator());
+}
+void MaglevGraphBuilder::VisitJumpIfFalseNoFeedback() {
   auto branch_builder = CreateBranchBuilder(BranchType::kBranchIfFalse);
   BuildBranchIfTrue(branch_builder, GetRawAccumulator());
 }
