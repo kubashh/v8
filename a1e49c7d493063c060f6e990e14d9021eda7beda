@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99110f87_198efced",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-06-14T06:04:55Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a68c60a2_264054c9",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-06-14T06:04:55Z",
+      "side": 1,
+      "message": "As long as `HasWasmResumeData` does not allocate I think you can get away with using a `Tagged\u003cSharedFunctionInfo\u003e` here.",
+      "range": {
+        "startLine": 795,
+        "startChar": 4,
+        "endLine": 795,
+        "endChar": 10
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7dcbfe_3dad8331",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2966,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-06-14T06:04:55Z",
+      "side": 1,
+      "message": "I think we could just use `TryGetWasmSuspenderForHandler(isolate, reaction-\u003efulfill_handler()` directly here and get rid of `TryGetWasmSuspender`.",
+      "range": {
+        "startLine": 2966,
+        "startChar": 10,
+        "endLine": 2966,
+        "endChar": 29
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a948fd33_eb04bc60",
+        "filename": "test/inspector/debugger/wasm-jspi-async-stack-expected.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-06-14T06:04:55Z",
+      "side": 1,
+      "message": "Whats with this case?",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 388,
+        "endChar": 66
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
