@@ -206,6 +206,8 @@ class V8_EXPORT V8InspectorSession {
   virtual void releaseObjectGroup(StringView) = 0;
   virtual void triggerPreciseCoverageDeltaUpdate(StringView occasion) = 0;
 
+  virtual std::vector<v8::Local<v8::Data>> getDetachedNodes() = 0;
+
   struct V8_EXPORT EvaluateResult {
     enum class ResultType {
       kNotRun,
