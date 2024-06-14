@@ -52,7 +52,7 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
     self.setUpPyfakefs(allow_root_user=True)
     with self.assertRaises(AssertionError):
       # The expected executable is missing.
-      gen_fuzztest_configs.main()
+      gen_fuzztest_configs.main(['gen'])
 
   def _set_up_executable(self):
     os.makedirs('/out/build')
@@ -66,13 +66,36 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
 
     with patch('subprocess.check_output', return_value=b''):
       with self.assertRaises(AssertionError) as e:
-        gen_fuzztest_configs.main()
+        gen_fuzztest_configs.main(['gen'])
+
+  def test_init(self):
+    self.setUpPyfakefs(allow_root_user=True)
+
+    os.makedirs('/out/build/fuzztests')
+    os.chdir('/out/build')
+    with open('/out/build/fuzztests/leftover_garbage', 'w') as f:
+      f.write('')
+
+    gen_fuzztest_configs.main(['init'])
+
+    fuzz_test_output = sorted(os.listdir('/out/build/fuzztests'))
+    expexted_fuzz_test_output = [
+        'centipede',  # Bash wrapper to ../centipede
+        'fuzztests.stamp',
+    ]
+    self.assertEqual(expexted_fuzz_test_output, fuzz_test_output)
+
+    with open('/out/build/fuzztests/fuzztests_dir.stamp') as f:
+      self.assertEqual('AlphaSortThis.FooBarXYZ\nFooTest.Test1\nFooTest.Test2',
+                       f.read())
+
 
   def test_three_fuzzers(self):
     self.setUpPyfakefs(allow_root_user=True)
     self._set_up_executable()
 
     os.makedirs('/out/build/fuzztests')
+    os.chdir('/out/build')
     with open('/out/build/fuzztests/leftover_garbage', 'w') as f:
       f.write('')
 
