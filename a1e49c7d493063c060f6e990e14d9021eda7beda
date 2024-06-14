@@ -157,6 +157,30 @@
       },
       "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20f2e9c9_398888b6",
+        "filename": "test/inspector/debugger/wasm-jspi-async-stack-expected.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-06-14T09:56:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "14ca5b1d_cd415225",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 388,
+        "endChar": 66
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
