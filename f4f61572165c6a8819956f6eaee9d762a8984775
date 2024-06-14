@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4c64a24_09f05487",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-06-14T14:49:14Z",
+      "side": 1,
+      "message": "PTAL, thanks\n\nTODO: Rebase on https://chromium-review.googlesource.com/c/v8/v8/+/5633597 before landing",
+      "revId": "f4f61572165c6a8819956f6eaee9d762a8984775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
