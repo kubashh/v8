@@ -68,6 +68,8 @@ class V8HeapProfilerAgentImpl : public protocol::HeapProfiler::Backend {
   // called by the debugger when pausing execution on this thread.
   void takePendingHeapSnapshots();
 
+  std::vector<v8::Local<v8::Data>> getDetachedNodes();
+
  private:
   struct AsyncCallbacks;
   class GCTask;
