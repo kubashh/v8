@@ -96,6 +96,8 @@ class V8InspectorSessionImpl : public V8InspectorSession,
       v8::Local<v8::Context>, v8::Local<v8::Value>, StringView groupName,
       bool generatePreview) override;
 
+  std::vector<v8::Local<v8::Data>> getDetachedNodes() override;
+
   V8InspectorSession::Inspectable* inspectedObject(unsigned num);
   static const unsigned kInspectedObjectBufferSize = 5;
 
