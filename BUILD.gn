@@ -7859,6 +7859,10 @@ if (v8_enable_webassembly) {
   v8_wasm_fuzzer("wasm_init_expr_fuzzer") {
     sources = [ "test/fuzzer/wasm-init-expr.cc" ]
   }
+
+  v8_wasm_fuzzer("wasm_deopt_fuzzer") {
+    sources = [ "test/fuzzer/wasm-deopt.cc" ]
+  }
 }
 
 v8_fuzzer("inspector_fuzzer") {

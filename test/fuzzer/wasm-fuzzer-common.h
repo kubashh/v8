@@ -32,6 +32,10 @@ void ExecuteAgainstReference(Isolate* isolate,
                              Handle<WasmModuleObject> module_object,
                              int32_t max_executed_instructions);
 
+void CompileAllFunctionsForReferenceExecution(NativeModule* native_module,
+                                              int32_t* max_steps,
+                                              int32_t* nondeterminism);
+
 void GenerateTestCase(Isolate* isolate, ModuleWireBytes wire_bytes,
                       bool compiles);
 
