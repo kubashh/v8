@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "361a0e57_00111fe3",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-06-14T09:55:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a68c60a2_264054c9",
+      "range": {
+        "startLine": 795,
+        "startChar": 4,
+        "endLine": 795,
+        "endChar": 10
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de7dcbfe_3dad8331",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b67fd481_03f94165",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2966,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-06-14T09:55:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de7dcbfe_3dad8331",
+      "range": {
+        "startLine": 2966,
+        "startChar": 10,
+        "endLine": 2966,
+        "endChar": 29
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a948fd33_eb04bc60",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-06-14T06:04:55Z",
       "side": 1,
       "message": "Whats with this case?",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 388,
+        "endChar": 66
+      },
+      "revId": "a1e49c7d493063c060f6e990e14d9021eda7beda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ca5b1d_cd415225",
+        "filename": "test/inspector/debugger/wasm-jspi-async-stack-expected.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2024-06-14T09:55:21Z",
+      "side": 1,
+      "message": "The StackFrameIterator terminates after iterating through a switchable wasm stack even if there are more active frames. Thibaud is investigating a fix for this.",
+      "parentUuid": "a948fd33_eb04bc60",
       "range": {
         "startLine": 388,
         "startChar": 0,
