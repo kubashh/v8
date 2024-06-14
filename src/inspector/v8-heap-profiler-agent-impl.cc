@@ -446,6 +446,13 @@ void V8HeapProfilerAgentImpl::takePendingHeapSnapshots() {
   }
 }
 
+std::vector<v8::Local<v8::Data>> V8HeapProfilerAgentImpl::getDetachedNodes() {
+
+  v8::HeapProfiler* profiler = m_isolate->GetHeapProfiler();
+  
+  return profiler->GetDetachedJSWrapperObjects();
+}
+
 Response V8HeapProfilerAgentImpl::addInspectedHeapObject(
     const String16& inspectedHeapObjectId) {
   bool ok;
