@@ -559,6 +559,7 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtin id) {
     // Array builtins.
     case Builtin::kArrayIsArray:
     case Builtin::kArrayConstructor:
+    case Builtin::kArrayFrom:
     case Builtin::kArrayIndexOf:
     case Builtin::kArrayPrototypeValues:
     case Builtin::kArrayIncludes:
@@ -1126,6 +1127,7 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
     case Builtin::kCEntry_Return2_ArgvInRegister_NoBuiltinExit:
     case Builtin::kWasmCEntry:
     case Builtin::kCloneFastJSArray:
+    case Builtin::kCloneFastJSArrayFillingHoles:
     case Builtin::kConstruct:
     case Builtin::kConvertToLocaleString:
     case Builtin::kCreateTypedArray:
@@ -1144,6 +1146,7 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
     case Builtin::kGroupByGeneric:
     case Builtin::kHasProperty:
     case Builtin::kCreateHTML:
+    case Builtin::kMapIteratorToList:
     case Builtin::kNonNumberToNumber:
     case Builtin::kNonPrimitiveToPrimitive_Number:
     case Builtin::kNumberToString:
@@ -1157,10 +1160,12 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
     case Builtin::kProxyGetPrototypeOf:
     case Builtin::kRecordWriteSaveFP:
     case Builtin::kRecordWriteIgnoreFP:
+    case Builtin::kSetOrSetIteratorToList:
     case Builtin::kStringAdd_CheckNone:
     case Builtin::kStringEqual:
     case Builtin::kStringIndexOf:
     case Builtin::kStringRepeat:
+    case Builtin::kStringToList:
     case Builtin::kBigIntEqual:
     case Builtin::kToInteger:
     case Builtin::kToLength:
@@ -1209,6 +1214,7 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
         case Builtin::kArrayPrototypeToSpliced:
         case Builtin::kArrayPrototypeWith:
         case Builtin::kArrayFilter:
+        case Builtin::kArrayFrom:
           return true;
         default:
           return false;
@@ -1217,6 +1223,7 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
       switch (caller) {
         case Builtin::kArrayPrototypeSlice:
         case Builtin::kArrayPrototypeToSorted:
+        case Builtin::kArrayFrom:
         case Builtin::kTypedArrayPrototypeMap:
         case Builtin::kStringPrototypeMatchAll:
           return true;

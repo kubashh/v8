@@ -76,7 +76,8 @@ function listener(event, exec_state, event_data, data) {
     success([], `new Array()`);
     success([undefined, undefined], `new Array(2)`);
     success([1, 2], `new Array(1, 2)`);
-    fail(`Array.from([1, 2, 3])`);
+    success([1, 2, 3], `Array.from([1, 2, 3])`);
+    success(3, `Array.from([1, 2, 3]).pop()`);
     fail(`Array.of(1, 2, 3)`);
     var function_param = [
       "flatMap", "forEach", "every", "some", "reduce", "reduceRight", "find",
