@@ -16,6 +16,23 @@
       "message": "PTAL, thanks!",
       "revId": "b19b1774dd499ac267d30020f8fc78c7628161a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26586a3d_5db238ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-17T17:00:43Z",
+      "side": 1,
+      "message": "LGTM, thanks Joyee for fixing this!",
+      "revId": "b19b1774dd499ac267d30020f8fc78c7628161a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
