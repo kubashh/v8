@@ -273,7 +273,8 @@ class V8_NODISCARD BytecodeGenerator::ControlScope::DeferredCommands final {
       builder()
           ->LoadLiteral(Smi::FromInt(entry.token))
           .CompareReference(token_register_)
-          .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &fall_through);
+          .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &fall_through,
+                       generator_->feedback_spec()->AddBranchSlot());
 
       if (entry.command == CMD_RETHROW) {
         // Pending message object is restored on exit.
@@ -743,12 +744,14 @@ class V8_NODISCARD BytecodeGenerator::TestResultScope final
     : public ExpressionResultScope {
  public:
   TestResultScope(BytecodeGenerator* generator, BytecodeLabels* then_labels,
-                  BytecodeLabels* else_labels, TestFallthrough fallthrough)
+                  BytecodeLabels* else_labels, TestFallthrough fallthrough,
+                  FeedbackSlot branch_slot)
       : ExpressionResultScope(generator, Expression::kTest),
         result_consumed_by_test_(false),
         fallthrough_(fallthrough),
         then_labels_(then_labels),
-        else_labels_(else_labels) {}
+        else_labels_(else_labels),
+        branch_slot_(branch_slot) {}
 
   TestResultScope(const TestResultScope&) = delete;
   TestResultScope& operator=(const TestResultScope&) = delete;
@@ -793,11 +796,14 @@ class V8_NODISCARD BytecodeGenerator::TestResultScope final
     fallthrough_ = fallthrough;
   }
 
+  FeedbackSlot branch_slot() const { return branch_slot_; }
+
  private:
   bool result_consumed_by_test_;
   TestFallthrough fallthrough_;
   BytecodeLabels* then_labels_;
   BytecodeLabels* else_labels_;
+  FeedbackSlot branch_slot_;
 };
 
 // Used to build a list of toplevel declaration data.
@@ -2082,7 +2088,8 @@ void BytecodeGenerator::VisitIfStatement(IfStatement* stmt) {
     // ContinueStatement we can reduce number of generated
     // jump/jump_ifs here. See BasicLoops test.
     VisitForTest(stmt->condition(), conditional_builder.then_labels(),
-                 conditional_builder.else_labels(), TestFallthrough::kThen);
+                 conditional_builder.else_labels(), TestFallthrough::kThen,
+                 feedback_spec()->AddBranchSlot());
 
     HoleCheckElisionMergeScope merge_elider(this);
     {
@@ -2365,7 +2372,7 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
     builder()->StoreAccumulatorInRegister(r1);
 
     builder()->CompareTypeOf(TestTypeOfFlags::LiteralFlag::kNumber);
-    switch_builder.JumpToFallThroughIfFalse();
+    switch_builder.JumpToFallThroughIfFalse(feedback_spec()->AddBranchSlot());
     builder()->LoadAccumulatorWithRegister(r1);
 
     // TODO(leszeks): Note these are duplicated range checks with the
@@ -2377,7 +2384,7 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
         Token::kGreaterThanEq, r1,
         feedback_index(feedback_spec()->AddCompareICSlot()));
 
-    switch_builder.JumpToFallThroughIfFalse();
+    switch_builder.JumpToFallThroughIfFalse(feedback_spec()->AddBranchSlot());
     builder()->LoadAccumulatorWithRegister(r1);
 
     builder()->LoadLiteral(Smi::kMaxValue);
@@ -2386,7 +2393,7 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
         Token::kLessThanEq, r1,
         feedback_index(feedback_spec()->AddCompareICSlot()));
 
-    switch_builder.JumpToFallThroughIfFalse();
+    switch_builder.JumpToFallThroughIfFalse(feedback_spec()->AddBranchSlot());
     builder()->LoadAccumulatorWithRegister(r1);
 
     builder()->BinaryOperationSmiLiteral(
@@ -2398,7 +2405,7 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
         Token::kEqStrict, r1,
         feedback_index(feedback_spec()->AddCompareICSlot()));
 
-    switch_builder.JumpToFallThroughIfFalse();
+    switch_builder.JumpToFallThroughIfFalse(feedback_spec()->AddBranchSlot());
     builder()->LoadAccumulatorWithRegister(r2);
 
     switch_builder.EmitJumpTableIfExists(info.MinCase(), info.MaxCase(),
@@ -2444,7 +2451,8 @@ void BytecodeGenerator::VisitSwitchStatement(SwitchStatement* stmt) {
           case_ctr_checker[i] = case_compare_ctr;
 #endif
           switch_builder.JumpToCaseIfTrue(ToBooleanMode::kAlreadyBoolean,
-                                          case_compare_ctr++);
+                                          case_compare_ctr++,
+                                          feedback_spec()->AddBranchSlot());
           first_jump_emitted = true;
         }
       }
@@ -2875,6 +2883,7 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
           builder()->LoadNamedProperty(
               next_result, ast_string_constants()->done_string(),
               feedback_index(feedback_spec()->AddLoadICSlot()));
+
           loop_builder.BreakIfTrue(ToBooleanMode::kConvertToBoolean);
 
           builder()
@@ -3123,7 +3132,8 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
           builder()
               ->LoadLiteral(ast_string_constants()->prototype_string())
               .CompareOperation(Token::kEqStrict, key, feedback_index(slot))
-              .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done)
+              .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &done,
+                           feedback_spec()->AddBranchSlot())
               .CallRuntime(Runtime::kThrowStaticPrototypeError)
               .Bind(&done);
         }
@@ -3449,9 +3459,10 @@ void BytecodeGenerator::VisitConditionalChain(ConditionalChain* expr) {
         HoleCheckElisionMergeScope::Branch branch(merge_elider);
         conditional_builder.ElseAt(i);
       } else {
-        VisitForTest(
-            expr->condition_at(i), conditional_builder.then_labels_at(i),
-            conditional_builder.else_labels_at(i), TestFallthrough::kThen);
+        VisitForTest(expr->condition_at(i),
+                     conditional_builder.then_labels_at(i),
+                     conditional_builder.else_labels_at(i),
+                     TestFallthrough::kThen, feedback_spec()->AddBranchSlot());
         {
           HoleCheckElisionMergeScope::Branch branch(merge_elider);
           conditional_builder.ThenAt(i);
@@ -3486,7 +3497,8 @@ void BytecodeGenerator::VisitConditional(Conditional* expr) {
     VisitForAccumulatorValue(expr->else_expression());
   } else {
     VisitForTest(expr->condition(), conditional_builder.then_labels(),
-                 conditional_builder.else_labels(), TestFallthrough::kThen);
+                 conditional_builder.else_labels(), TestFallthrough::kThen,
+                 feedback_spec()->AddBranchSlot());
 
     HoleCheckElisionMergeScope merge_elider(this);
     conditional_builder.Then();
@@ -4858,8 +4870,8 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
           BytecodeLabels is_done(zone());
 
           builder()->LoadAccumulatorWithRegister(done);
-          builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean,
-                                is_done.New());
+          builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean, is_done.New(),
+                                feedback_spec()->AddBranchSlot());
 
           builder()->LoadTrue().StoreAccumulatorInRegister(done);
           BuildIteratorNext(iterator, next_result);
@@ -4867,7 +4879,8 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
               ->LoadNamedProperty(next_result,
                                   ast_string_constants()->done_string(),
                                   feedback_index(next_done_load_slot))
-              .JumpIfTrue(ToBooleanMode::kConvertToBoolean, is_done.New());
+              .JumpIfTrue(ToBooleanMode::kConvertToBoolean, is_done.New(),
+                          feedback_spec()->AddBranchSlot());
 
           // Only do the assignment if this is not a hole (i.e. 'elided').
           if (!target->IsTheHoleLiteral()) {
@@ -4924,7 +4937,8 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
 
           // If done, jump to assigning empty array
           builder()->LoadAccumulatorWithRegister(done);
-          builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean, &is_done);
+          builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean, &is_done,
+                                feedback_spec()->AddBranchSlot());
 
           // var index = 0;
           Register index = register_allocator()->NewRegister();
@@ -5296,10 +5310,12 @@ void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
         .Bind(&nullish);
     VisitInHoleCheckElisionScopeForAccumulatorValue(expr->value());
   } else if (binop->op() == Token::kOr) {
-    builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean, &short_circuit);
+    builder()->JumpIfTrue(ToBooleanMode::kConvertToBoolean, &short_circuit,
+                          feedback_spec()->AddBranchSlot());
     VisitInHoleCheckElisionScopeForAccumulatorValue(expr->value());
   } else if (binop->op() == Token::kAnd) {
-    builder()->JumpIfFalse(ToBooleanMode::kConvertToBoolean, &short_circuit);
+    builder()->JumpIfFalse(ToBooleanMode::kConvertToBoolean, &short_circuit,
+                           feedback_spec()->AddBranchSlot());
     VisitInHoleCheckElisionScopeForAccumulatorValue(expr->value());
   } else if (expr->value()->IsSmiLiteral()) {
     builder()->BinaryOperationSmiLiteral(
@@ -5666,7 +5682,8 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
       .StoreAccumulatorInRegister(output_value)
       .LoadLiteral(Smi::FromInt(JSGeneratorObject::kReturn))
       .CompareReference(resume_mode)
-      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &completion_is_output_value)
+      .JumpIfFalse(ToBooleanMode::kAlreadyBoolean, &completion_is_output_value,
+                   feedback_spec()->AddBranchSlot())
       .LoadAccumulatorWithRegister(output_value);
   if (iterator_type == IteratorType::kAsync) {
     execution_control()->AsyncReturnAccumulator(kNoSourcePosition);
@@ -5959,7 +5976,8 @@ void BytecodeGenerator::BuildPrivateBrandCheck(Property* property,
                                            HoleCheckMode::kElided);
       BytecodeLabel return_check;
       builder()->CompareReference(object).JumpIfTrue(
-          ToBooleanMode::kAlreadyBoolean, &return_check);
+          ToBooleanMode::kAlreadyBoolean, &return_check,
+          feedback_spec()->AddBranchSlot());
       const AstRawString* name = scope->class_variable()->raw_name();
       RegisterAllocationScope register_scope(this);
       RegisterList args = register_allocator()->NewRegisterList(2);
@@ -6968,14 +6986,17 @@ void BytecodeGenerator::BuildLiteralCompareNil(
     TestResultScope* test_result = execution_result()->AsTest();
     switch (test_result->fallthrough()) {
       case TestFallthrough::kThen:
-        builder()->JumpIfNotNil(test_result->NewElseLabel(), op, nil);
+        builder()->JumpIfNotNil(test_result->NewElseLabel(), op, nil,
+                                feedback_spec()->AddBranchSlot());
         break;
       case TestFallthrough::kElse:
-        builder()->JumpIfNil(test_result->NewThenLabel(), op, nil);
+        builder()->JumpIfNil(test_result->NewThenLabel(), op, nil,
+                             feedback_spec()->AddBranchSlot());
         break;
       case TestFallthrough::kNone:
         builder()
-            ->JumpIfNil(test_result->NewThenLabel(), op, nil)
+            ->JumpIfNil(test_result->NewThenLabel(), op, nil,
+                        feedback_spec()->AddBranchSlot())
             .Jump(test_result->NewElseLabel());
     }
     test_result->SetResultConsumedByTest();
@@ -7446,14 +7467,18 @@ void BytecodeGenerator::VisitLogicalTestSubExpression(
   DCHECK(token == Token::kOr || token == Token::kAnd ||
          token == Token::kNullish);
 
+  FeedbackSlot branch_slot = feedback_spec()->AddBranchSlot();
   BytecodeLabels test_next(zone());
   if (token == Token::kOr) {
-    VisitForTest(expr, then_labels, &test_next, TestFallthrough::kElse);
+    VisitForTest(expr, then_labels, &test_next, TestFallthrough::kElse,
+                 branch_slot);
   } else if (token == Token::kAnd) {
-    VisitForTest(expr, &test_next, else_labels, TestFallthrough::kThen);
+    VisitForTest(expr, &test_next, else_labels, TestFallthrough::kThen,
+                 branch_slot);
   } else {
     DCHECK_EQ(Token::kNullish, token);
-    VisitForNullishTest(expr, then_labels, &test_next, else_labels);
+    VisitForNullishTest(expr, then_labels, &test_next, else_labels,
+                        branch_slot);
   }
   test_next.Bind(builder());
 
@@ -7474,7 +7499,8 @@ void BytecodeGenerator::VisitLogicalTest(Token::Value token, Expression* left,
                                 right_coverage_slot);
   // The last test has the same then, else and fallthrough as the parent test.
   HoleCheckElisionScope elider(this);
-  VisitForTest(right, then_labels, else_labels, fallthrough);
+  VisitForTest(right, then_labels, else_labels, fallthrough,
+               feedback_spec()->AddBranchSlot());
 }
 
 void BytecodeGenerator::VisitNaryLogicalTest(
@@ -7499,7 +7525,7 @@ void BytecodeGenerator::VisitNaryLogicalTest(
   }
   // The last test has the same then, else and fallthrough as the parent test.
   VisitForTest(expr->subsequent(expr->subsequent_length() - 1), then_labels,
-               else_labels, fallthrough);
+               else_labels, fallthrough, feedback_spec()->AddBranchSlot());
 }
 
 bool BytecodeGenerator::VisitLogicalOrSubExpression(Expression* expr,
@@ -7512,7 +7538,7 @@ bool BytecodeGenerator::VisitLogicalOrSubExpression(Expression* expr,
   } else if (!expr->ToBooleanIsFalse()) {
     TypeHint type_hint = VisitForAccumulatorValue(expr);
     builder()->JumpIfTrue(ToBooleanModeFromTypeHint(type_hint),
-                          end_labels->New());
+                          end_labels->New(), feedback_spec()->AddBranchSlot());
   }
 
   BuildIncrementBlockCoverageCounterIfEnabled(coverage_slot);
@@ -7530,7 +7556,7 @@ bool BytecodeGenerator::VisitLogicalAndSubExpression(Expression* expr,
   } else if (!expr->ToBooleanIsTrue()) {
     TypeHint type_hint = VisitForAccumulatorValue(expr);
     builder()->JumpIfFalse(ToBooleanModeFromTypeHint(type_hint),
-                           end_labels->New());
+                           end_labels->New(), feedback_spec()->AddBranchSlot());
   }
 
   BuildIncrementBlockCoverageCounterIfEnabled(coverage_slot);
@@ -8036,16 +8062,17 @@ void BytecodeGenerator::VisitAndPushIntoRegisterList(Expression* expr,
 void BytecodeGenerator::BuildTest(ToBooleanMode mode,
                                   BytecodeLabels* then_labels,
                                   BytecodeLabels* else_labels,
-                                  TestFallthrough fallthrough) {
+                                  TestFallthrough fallthrough,
+                                  FeedbackSlot branch_slot) {
   switch (fallthrough) {
     case TestFallthrough::kThen:
-      builder()->JumpIfFalse(mode, else_labels->New());
+      builder()->JumpIfFalse(mode, else_labels->New(), branch_slot);
       break;
     case TestFallthrough::kElse:
-      builder()->JumpIfTrue(mode, then_labels->New());
+      builder()->JumpIfTrue(mode, then_labels->New(), branch_slot);
       break;
     case TestFallthrough::kNone:
-      builder()->JumpIfTrue(mode, then_labels->New());
+      builder()->JumpIfTrue(mode, then_labels->New(), branch_slot);
       builder()->Jump(else_labels->New());
       break;
   }
@@ -8056,14 +8083,16 @@ void BytecodeGenerator::BuildTest(ToBooleanMode mode,
 void BytecodeGenerator::VisitForTest(Expression* expr,
                                      BytecodeLabels* then_labels,
                                      BytecodeLabels* else_labels,
-                                     TestFallthrough fallthrough) {
+                                     TestFallthrough fallthrough,
+                                     FeedbackSlot branch_slot) {
   bool result_consumed;
   TypeHint type_hint;
   {
     // To make sure that all temporary registers are returned before generating
     // jumps below, we ensure that the result scope is deleted before doing so.
     // Dead registers might be materialized otherwise.
-    TestResultScope test_result(this, then_labels, else_labels, fallthrough);
+    TestResultScope test_result(this, then_labels, else_labels, fallthrough,
+                                branch_slot);
     Visit(expr);
     result_consumed = test_result.result_consumed_by_test();
     type_hint = test_result.type_hint();
@@ -8075,7 +8104,7 @@ void BytecodeGenerator::VisitForTest(Expression* expr,
   }
   if (!result_consumed) {
     BuildTest(ToBooleanModeFromTypeHint(type_hint), then_labels, else_labels,
-              fallthrough);
+              fallthrough, branch_slot);
   }
 }
 
@@ -8084,7 +8113,8 @@ void BytecodeGenerator::VisitForTest(Expression* expr,
 void BytecodeGenerator::VisitForNullishTest(Expression* expr,
                                             BytecodeLabels* then_labels,
                                             BytecodeLabels* test_next_labels,
-                                            BytecodeLabels* else_labels) {
+                                            BytecodeLabels* else_labels,
+                                            FeedbackSlot branch_slot) {
   // Nullish short circuits on undefined or null, otherwise we fall back to
   // BuildTest with no fallthrough.
   // TODO(joshualitt): We should do this in a TestResultScope.
@@ -8095,7 +8125,8 @@ void BytecodeGenerator::VisitForNullishTest(Expression* expr,
   if (mode != ToBooleanMode::kAlreadyBoolean) {
     builder()->JumpIfUndefinedOrNull(test_next_labels->New());
   }
-  BuildTest(mode, then_labels, else_labels, TestFallthrough::kNone);
+  BuildTest(mode, then_labels, else_labels, TestFallthrough::kNone,
+            branch_slot);
 }
 
 void BytecodeGenerator::VisitInSameTestExecutionScope(Expression* expr) {
@@ -8108,7 +8139,7 @@ void BytecodeGenerator::VisitInSameTestExecutionScope(Expression* expr) {
     TestResultScope* result_scope = execution_result()->AsTest();
     BuildTest(ToBooleanModeFromTypeHint(result_scope->type_hint()),
               result_scope->then_labels(), result_scope->else_labels(),
-              result_scope->fallthrough());
+              result_scope->fallthrough(), result_scope->branch_slot());
     result_scope->SetResultConsumedByTest();
   }
 }
