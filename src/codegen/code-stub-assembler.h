@@ -1149,12 +1149,31 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   // Branches to {if_true} if ToBoolean applied to {value} yields true,
+  // otherwise goes to {if_false}. If {reverse_branch_counts} is false, logs the
+  // branch as taken if we branch to {if_true} and not taken if we go to
+  // {if_false}. If {reverse_branch_counts} is true, logs the branch as taken if
+  // we branch to {if_false} and not taken if we go to {if_true}.
+  void BranchIfToBooleanIsTrue(TNode<Object> value, Label* if_true,
+                               Label* if_false,
+                               TNode<HeapObject> maybe_feedback_vector,
+                               TNode<UintPtrT>* branch_slot,
+                               bool reverse_branch_counts = false);
+
+  // Branches to {if_true} if ToBoolean applied to {value} yields true,
   // otherwise goes to {if_false}.
   void BranchIfToBooleanIsTrue(TNode<Object> value, Label* if_true,
                                Label* if_false);
 
   // Branches to {if_false} if ToBoolean applied to {value} yields false,
   // otherwise goes to {if_true}.
+  void BranchIfToBooleanIsFalse(TNode<Object> value, Label* if_false,
+                                Label* if_true,
+                                TNode<HeapObject> maybe_feedback_vector,
+                                TNode<UintPtrT>* branch_slot) {
+    BranchIfToBooleanIsTrue(value, if_true, if_false, maybe_feedback_vector,
+                            branch_slot, true);
+  }
+
   void BranchIfToBooleanIsFalse(TNode<Object> value, Label* if_false,
                                 Label* if_true) {
     BranchIfToBooleanIsTrue(value, if_true, if_false);
@@ -2525,6 +2544,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // The call count is located at feedback_vector[slot_id + 1].
   void IncrementCallCount(TNode<FeedbackVector> feedback_vector,
                           TNode<UintPtrT> slot_id);
+
+  void IncrementBranchCount(TNode<FeedbackVector> feedback_vector,
+                            TNode<UintPtrT> slot_id, bool branch_taken);
 
   // Specify DestroySource::kYes if {from_array} is being supplanted by
   // {to_array}. This offers a slight performance benefit by simply copying the

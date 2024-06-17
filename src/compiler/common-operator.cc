@@ -24,6 +24,10 @@ std::ostream& operator<<(std::ostream& os, BranchHint hint) {
       return os << "True";
     case BranchHint::kFalse:
       return os << "False";
+    case BranchHint::kMostlyTrue:
+      return os << "MostlyTrue";
+    case BranchHint::kMostlyFalse:
+      return os << "MostlyFalse";
   }
   UNREACHABLE();
 }

@@ -29,6 +29,7 @@
 #include "src/heap/pretenuring-handler-inl.h"
 #include "src/ic/stub-cache.h"
 #include "src/objects/bytecode-array.h"
+#include "src/objects/elements-kind.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/utils/utils.h"
 #ifdef V8_ENABLE_MAGLEV
