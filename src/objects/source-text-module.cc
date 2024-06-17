@@ -927,9 +927,7 @@ Maybe<bool> SourceTextModule::ExecuteAsyncModule(
   // 2. Assert: module.[[Async]] is true.
   DCHECK(module->async());
 
-  // 3. Set module.[[AsyncEvaluating]] to true.
-  module->set_async_evaluating_ordinal(
-      isolate->NextModuleAsyncEvaluatingOrdinal());
+  // TODO(syg): Sync spec text.
 
   // 4. Let capability be ! NewPromiseCapability(%Promise%).
   Handle<JSPromise> capability = isolate->factory()->NewJSPromise();

@@ -1670,8 +1670,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return id;
   }
 
-  // https://github.com/tc39/proposal-top-level-await/pull/159
-  // TODO(syg): Update to actual spec link once merged.
+  // ES#sec-async-module-execution-fulfilled
+  // step 10
   //
   // According to the spec, modules that depend on async modules (i.e. modules
   // with top-level await) must be evaluated in order in which their
@@ -1681,6 +1681,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   unsigned NextModuleAsyncEvaluatingOrdinal() {
     unsigned ordinal = next_module_async_evaluating_ordinal_++;
     CHECK_LT(ordinal, kMaxModuleAsyncEvaluatingOrdinal);
+    in_progress_async_evaluating_modules_++;
     return ordinal;
   }
 
@@ -2561,6 +2562,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   std::atomic<uint32_t> next_unique_sfi_id_;
 
   unsigned next_module_async_evaluating_ordinal_;
+  unsigned in_progress_async_evaluating_modules_;
 
   // Vector of callbacks before a Call starts execution.
   std::vector<BeforeCallEnteredCallback> before_call_entered_callbacks_;
