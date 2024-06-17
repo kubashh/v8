@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71fc5401_c5f79da0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-17T17:00:40Z",
+      "side": 1,
+      "message": "These things (from this line onward) probably should not exist as part of your commit message.",
+      "revId": "529dd950b42553db9e740dd16a6c62b7719827c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "382e799e_1cfe91ea",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-17T17:00:40Z",
+      "side": 1,
+      "message": "You probably don\u0027t want to use the term `nodes` here -- probably `externalObjects` or `embedderObjects` would be more appropriate. `Nodes` is a Blink-ism.",
+      "revId": "529dd950b42553db9e740dd16a6c62b7719827c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291a3df9_a5ccc87e",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-17T17:00:40Z",
+      "side": 1,
+      "message": "Nit: whitespace",
+      "revId": "529dd950b42553db9e740dd16a6c62b7719827c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5226d84d_eca6e805",
+        "filename": "include/v8-version.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-17T17:00:40Z",
+      "side": 1,
+      "message": "Beware this file. You don\u0027t want to be changing it.",
+      "revId": "529dd950b42553db9e740dd16a6c62b7719827c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0ae4de8_cd37bd01",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-17T17:00:40Z",
+      "side": 1,
+      "message": "Mentioned in your other CL: calling this \"detached elements\" is violating layering. This can exist in any embedder.",
+      "revId": "529dd950b42553db9e740dd16a6c62b7719827c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
