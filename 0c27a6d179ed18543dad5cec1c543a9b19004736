@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac37317_9e76ba09",
+        "filename": "test/mjsunit/wasm/table64-copy.js",
+        "patchSetId": 37
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-17T14:29:30Z",
+      "side": 1,
+      "message": "Only seeing this now that I am extending this file: We have a test function of the same name above. This one seems to be an extended version of the first one. Should we drop the first one?",
+      "revId": "0c27a6d179ed18543dad5cec1c543a9b19004736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
