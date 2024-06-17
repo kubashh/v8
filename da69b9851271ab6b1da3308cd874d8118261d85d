@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b06c0a8_4d9883b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-17T09:47:04Z",
+      "side": 1,
+      "message": "lgtm from the JS and src/execution side.",
+      "revId": "da69b9851271ab6b1da3308cd874d8118261d85d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "731f791f_d2ee4a97",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-17T09:47:04Z",
+      "side": 1,
+      "message": "nit: comment formatting",
+      "range": {
+        "startLine": 1224,
+        "startChar": 36,
+        "endLine": 1224,
+        "endChar": 38
+      },
+      "revId": "da69b9851271ab6b1da3308cd874d8118261d85d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
