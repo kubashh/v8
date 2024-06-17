@@ -906,7 +906,7 @@ if (v8_enable_fuzztest && use_centipede) {
   }
 
   # Placeholder target used on the bots.
-  group("v8_fuzztests") {
+  group("v8_all_fuzztests") {
     testonly = true
     deps = [ ":v8_gen_fuzztest_configs" ]
   }

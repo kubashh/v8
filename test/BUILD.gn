@@ -10,6 +10,7 @@ group("gn_all") {
   data_deps = [
     "benchmarks:v8_benchmarks",
     "fuzzer:v8_fuzzer",
+    "fuzztests:v8_fuzztests",
     "intl:v8_intl",
     "message:v8_message",
     "mjsunit:v8_mjsunit",
@@ -93,6 +94,7 @@ group("v8_bot_default") {
     "cctest:cctest",
     "debugger:v8_debugger",
     "fuzzer:v8_fuzzer",
+    "fuzztests:v8_fuzztests",
     "inspector:inspector-test",
     "intl:v8_intl",
     "message:v8_message",
@@ -192,6 +194,55 @@ v8_header_set("common_test_headers") {
       "common/wasm/flag-utils.h",
       "common/wasm/test-signatures.h",
       "common/wasm/wasm-macro-gen.h",
+    ]
+  }
+}
+
+if (v8_enable_fuzztest && use_centipede) {
+  # Create all fuzzer wrappers in the fuzztests/ subdirectory. Note that
+  # the contents of the directory are calculated dynamically. Therefore
+  # we purge this directory and can't depent on any specific files in this
+  # directory in any dependent ninja targets.
+  action("v8_init_fuzztest_configs") {
+    testonly = true
+    script = "common/fuzztest/gen_fuzztest_configs.py"
+    args = [ "init" ]
+    outputs = [ "$root_out_dir/fuzztests/fuzztests_dir.stamp" ]
+
+    deps = [
+      "fuzztests:v8_fuzztests",
+      "unittests:v8_unittests",
+      "//third_party/fuzztest:centipede",
+    ]
+  }
+
+  template("fuzztest_configs") {
+    forward_variables_from(invoker, [])
+    executable = target_name
+    action("v8_gen_fuzztest_configs_for_$executable") {
+      testonly = true
+      script = "common/fuzztest/gen_fuzztest_configs.py"
+      args = [
+        "gen",
+        "--executable",
+        executable,
+      ]
+      outputs = [ "$root_out_dir/fuzztests/$executable.stamp" ]
+
+      deps = [ ":v8_init_fuzztest_configs" ]
+    }
+  }
+  fuzztest_configs("v8_unittests") {
+  }
+  fuzztest_configs("v8_fuzztests") {
+  }
+
+  # Placeholder target used on the bots.
+  group("v8_all_fuzztests") {
+    testonly = true
+    deps = [
+      ":v8_gen_fuzztest_configs_for_v8_fuzztests",
+      ":v8_gen_fuzztest_configs_for_v8_unittests",
     ]
   }
 }

@@ -52,12 +52,12 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
     self.setUpPyfakefs(allow_root_user=True)
     with self.assertRaises(AssertionError):
       # The expected executable is missing.
-      gen_fuzztest_configs.main()
+      gen_fuzztest_configs.main(['gen', '--executable', 'v8_unittests'])
 
   def _set_up_executable(self):
     os.makedirs('/out/build')
     os.chdir('/out/build')
-    with open('/out/build/v8_unittests', 'w') as f:
+    with open('/out/build/exe', 'w') as f:
       f.write('I am an executable')
 
   def test_no_fuzzers(self):
@@ -66,9 +66,9 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
 
     with patch('subprocess.check_output', return_value=b''):
       with self.assertRaises(AssertionError) as e:
-        gen_fuzztest_configs.main()
+        gen_fuzztest_configs.main(['gen', '--executable', 'exe'])
 
-  def test_three_fuzzers(self):
+  def test_init(self):
     self.setUpPyfakefs(allow_root_user=True)
     self._set_up_executable()
 
@@ -76,6 +76,24 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
     with open('/out/build/fuzztests/leftover_garbage', 'w') as f:
       f.write('')
 
+    gen_fuzztest_configs.main(['init'])
+
+    fuzz_test_output = sorted(os.listdir('/out/build/fuzztests'))
+    expexted_fuzz_test_output = [
+        'centipede',  # Bash wrapper to ../centipede
+        'fuzztests_dir.stamp',
+    ]
+    self.assertEqual(expexted_fuzz_test_output, fuzz_test_output)
+
+    with open('/out/build/fuzztests/fuzztests_dir.stamp') as f:
+      self.assertEqual('Initialized directory', f.read())
+
+
+  def test_three_fuzzers(self):
+    self.setUpPyfakefs(allow_root_user=True)
+    self._set_up_executable()
+
+    os.makedirs('/out/build/fuzztests')
     fake_fuzz_test_list = dedent("""\
       [*] Fuzz test: FooTest.Test1
       [*] Fuzz test: FooTest.Test2
@@ -84,19 +102,18 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
     with patch(
         'subprocess.check_output',
         return_value=fake_fuzz_test_list.encode('utf-8')):
-      gen_fuzztest_configs.main()
+      gen_fuzztest_configs.main(['gen', '--executable', 'exe'])
 
     fuzz_test_output = sorted(os.listdir('/out/build/fuzztests'))
     expexted_fuzz_test_output = [
-        'centipede',  # Bash wrapper to ../centipede
-        'fuzztests.stamp',
+        'exe.stamp',
         'v8_alpha_sort_this_foo_bar_xyz_fuzztest',
         'v8_foo_1_fuzztest',
         'v8_foo_2_fuzztest',
     ]
     self.assertEqual(expexted_fuzz_test_output, fuzz_test_output)
 
-    with open('/out/build/fuzztests/fuzztests.stamp') as f:
+    with open('/out/build/fuzztests/exe.stamp') as f:
       self.assertEqual('AlphaSortThis.FooBarXYZ\nFooTest.Test1\nFooTest.Test2',
                        f.read())
 
@@ -106,12 +123,12 @@ class TestFullRun(fake_filesystem_unittest.TestCase):
       cd $BINARY_DIR
       # Normal fuzzing.
       if [ "$#" -eq  "0" ]; then
-         exec $BINARY_DIR/v8_unittests --fuzz=FooTest.Test1 --corpus_database=""
+         exec $BINARY_DIR/exe --fuzz=FooTest.Test1 --corpus_database=""
       fi
       # Fuzztest replay.
       if [ "$#" -eq  "1" ]; then
          unset CENTIPEDE_RUNNER_FLAGS
-         FUZZTEST_REPLAY=$1 exec $BINARY_DIR/v8_unittests --fuzz=FooTest.Test1 --corpus_database=""
+         FUZZTEST_REPLAY=$1 exec $BINARY_DIR/exe --fuzz=FooTest.Test1 --corpus_database=""
       fi
       """)
     with open('/out/build/fuzztests/v8_foo_1_fuzztest') as f:

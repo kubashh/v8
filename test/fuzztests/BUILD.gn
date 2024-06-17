@@ -1,0 +1,84 @@
+# Copyright 2024 the V8 project authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("../../gni/v8.gni")
+
+v8_executable("v8_fuzztests") {
+  testonly = true
+
+  deps = [
+    ":v8_fuzztests_sources",
+    "../..:v8_for_testing",
+    "../..:v8_libbase",
+    "../..:v8_libplatform",
+    "//build/win:default_exe_manifest",
+    "//testing/gmock",
+    "//testing/gtest",
+  ]
+
+  if (v8_enable_fuzztest && use_centipede) {
+    deps += [ "//third_party/boringssl" ]
+  }
+
+  #data_deps = [ "../../tools:v8_testrunner" ]
+
+  #data = [
+  #  "testcfg.py",
+  #  "unittests.status",
+  #]
+
+  configs = [
+    "../..:external_config",
+    "../..:internal_config_base",
+    "../..:v8_tracing_config",
+  ]
+}
+
+v8_source_set("v8_fuzztests_sources") {
+  testonly = true
+
+  sources = [
+    "../unittests/run-all-unittests.cc",
+  ]
+
+  configs = [
+    "../..:cppgc_base_config",
+    "../..:external_config",
+    "../..:internal_config_base",
+    "../unittests:gcc_warnings_not_errors",
+  ]
+
+  deps = [
+    "..:common_test_headers",
+    "../..:v8_for_testing",
+    "../..:v8_libbase",
+    "../..:v8_libplatform",
+    "../..:v8_shared_internal_headers",
+    "../..:v8_version",
+    "//build/win:default_exe_manifest",
+    "//testing/gmock",
+    "//testing/gtest",
+  ]
+
+  if (v8_enable_fuzztest) {
+    # TODO(https://crbug.com/1500944): Drop this once FuzzTest fixed these
+    # warnings.
+    remove_configs = [ v8_path_prefix + ":strict_warnings" ]
+
+    sources += [
+      "../unittests/fuzztest-adapter.h",
+      "../unittests/fuzztest-init-adapter.h",
+    ]
+
+    deps += [
+      "//third_party/abseil-cpp:absl_full",
+      "//third_party/fuzztest:fuzztest",
+      "//third_party/fuzztest:init_fuzztest",
+    ]
+  }
+
+  if (v8_enable_webassembly) {
+    deps += [ "../..:wasm_test_common" ]
+  }
+}
