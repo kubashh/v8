@@ -57,6 +57,30 @@
       ],
       "revId": "edf5785b35baf067455e6303d0f6946a83619bd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb83c952_fd5b87b3",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1524702
+      },
+      "writtenOn": "2024-06-17T10:16:16Z",
+      "side": 1,
+      "message": "Hehe, good catch! Updated it too :)",
+      "parentUuid": "280619ca_e7d12e68",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "revId": "edf5785b35baf067455e6303d0f6946a83619bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
