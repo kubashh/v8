@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fb3d6c0_4bef3d33",
+        "filename": "include/v8-metrics.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-06-17T20:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdfaff59_dd678a16",
+      "revId": "90145607dcf46b0c198f1ea1cfe53d06cc279ba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "373fa53a_9f1e2e96",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-06-07T08:28:52Z",
       "side": 1,
       "message": "nit: This should go into the define above?",
+      "range": {
+        "startLine": 698,
+        "startChar": 3,
+        "endLine": 698,
+        "endChar": 4
+      },
+      "revId": "90145607dcf46b0c198f1ea1cfe53d06cc279ba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eabc8dd_19c880a0",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-06-17T20:38:42Z",
+      "side": 1,
+      "message": "Oh, this change is actually useless, it was used by a fuzzer.",
+      "parentUuid": "373fa53a_9f1e2e96",
       "range": {
         "startLine": 698,
         "startChar": 3,
