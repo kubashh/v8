@@ -1,0 +1,62 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bbeaf09_e7b06de8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2024-06-17T09:51:00Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "edf5785b35baf067455e6303d0f6946a83619bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "280619ca_e7d12e68",
+        "filename": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2024-06-17T09:51:00Z",
+      "side": 1,
+      "message": "It seems like Array.of should also be side-effect free :P",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 30
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "292a317e_ba54ee2f",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "test/debugger/debug/side-effect/debug-evaluate-no-side-effect-builtins.js",
+              "range": {
+                "startLine": 81,
+                "startChar": 0,
+                "endLine": 82,
+                "endChar": 0
+              },
+              "replacement": "    success([1, 2, 3], `Array.of(1, 2, 3)`);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "edf5785b35baf067455e6303d0f6946a83619bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
