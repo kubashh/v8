@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccb442f6_cc7e8f6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-06-17T21:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a433da4_b7be6036",
+      "revId": "6269dd3b8ad0f943ee11bf1fe736e70deeb1a84c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e3c2186_38f56dc5",
@@ -136,6 +154,30 @@
       "writtenOn": "2024-05-21T12:26:39Z",
       "side": 1,
       "message": "Double checking: This now runs only in the jitless variant where the flag was added, but not in other variants that run on the drumbrake bot.",
+      "range": {
+        "startLine": 1715,
+        "startChar": 51,
+        "endLine": 1715,
+        "endChar": 56
+      },
+      "revId": "6269dd3b8ad0f943ee11bf1fe736e70deeb1a84c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7123fcb4_48af438c",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1715,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-06-17T21:09:38Z",
+      "side": 1,
+      "message": "The handling of flag implications has been refactored.\n\nNow `wasm_jitless_if_available_for_testing` is also defined, as false, in other variants where V8_ENABLE_DRUMBRAKE is false.",
+      "parentUuid": "bea8730a_9e065ba6",
       "range": {
         "startLine": 1715,
         "startChar": 51,
