@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8e9891f_437da8ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-17T17:07:00Z",
+      "side": 1,
+      "message": "Nit: `chromium:` prefix is not necessary anymore.",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "b19b1774dd499ac267d30020f8fc78c7628161a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "15457f6d_b0a84abc",
@@ -31,6 +54,23 @@
       "writtenOn": "2024-06-17T17:00:43Z",
       "side": 1,
       "message": "LGTM, thanks Joyee for fixing this!",
+      "revId": "b19b1774dd499ac267d30020f8fc78c7628161a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "112abc11_ac63165e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-17T17:07:00Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
       "revId": "b19b1774dd499ac267d30020f8fc78c7628161a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
