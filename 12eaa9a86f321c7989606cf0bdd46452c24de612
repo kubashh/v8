@@ -16,6 +16,24 @@
       "message": "How are you supposed to add new values to public enums if Node fails to compile with exhaustiveness checking?",
       "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5be117c8_12f557c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-18T22:47:15Z",
+      "side": 1,
+      "message": "Resolving in favor of more targeted comment.",
+      "parentUuid": "19954c98_fce316eb",
+      "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
