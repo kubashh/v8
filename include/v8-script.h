@@ -178,6 +178,7 @@ class V8_EXPORT Module : public Data {
     kInstantiating,
     kInstantiated,
     kEvaluating,
+    kEvaluatingAsync,
     kEvaluated,
     kErrored
   };

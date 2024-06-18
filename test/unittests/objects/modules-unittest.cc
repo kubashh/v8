@@ -939,7 +939,7 @@ TEST_F(ModuleTest, ModuleEvaluationTopLevelAwaitDynamicImport) {
 
     Local<Promise> promise =
         Local<Promise>::Cast(module->Evaluate(context()).ToLocalChecked());
-    CHECK_EQ(Module::kEvaluated, module->GetStatus());
+    CHECK_EQ(Module::kEvaluatingAsync, module->GetStatus());
     CHECK_EQ(promise->State(), v8::Promise::kPending);
     CHECK(!try_catch.HasCaught());
 
@@ -975,7 +975,7 @@ TEST_F(ModuleTest, ModuleEvaluationTopLevelAwaitDynamicImportError) {
 
     Local<Promise> promise =
         Local<Promise>::Cast(module->Evaluate(context()).ToLocalChecked());
-    CHECK_EQ(Module::kEvaluated, module->GetStatus());
+    CHECK_EQ(Module::kEvaluatingAsync, module->GetStatus());
     CHECK_EQ(promise->State(), v8::Promise::kPending);
     CHECK(!try_catch.HasCaught());
 
@@ -1053,7 +1053,7 @@ TEST_F(ModuleTest, TerminateExecutionTopLevelAwaitAsync) {
 
   Local<Promise> promise =
       Local<Promise>::Cast(module->Evaluate(context()).ToLocalChecked());
-  CHECK_EQ(module->GetStatus(), Module::kEvaluated);
+  CHECK_EQ(module->GetStatus(), Module::kEvaluatingAsync);
   CHECK_EQ(promise->State(), Promise::PromiseState::kPending);
   CHECK(!try_catch.HasCaught());
   CHECK(!try_catch.HasTerminated());
@@ -1066,7 +1066,7 @@ TEST_F(ModuleTest, TerminateExecutionTopLevelAwaitAsync) {
 
   // The termination exception doesn't trigger the module's
   // catch handler, so the module isn't transitioned to kErrored.
-  CHECK_EQ(module->GetStatus(), Module::kEvaluated);
+  CHECK_EQ(module->GetStatus(), Module::kEvaluatingAsync);
 }
 
 static v8::Global<Module> async_leaf_module_global;
