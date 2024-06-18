@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c8c2f1c_e77ea379",
+        "filename": "src/api/api.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-18T22:46:31Z",
+      "side": 1,
+      "message": "This change is because prior to this CL, even though `i::Module::kEvaluatingAsync` existed, it wasn\u0027t used. Instead, `i::Module::kEvaluated` was used everywhere as a stand-in for `i::Module::kEvaluatingAsync` together with checking if the module had an async evaluation ordinal.\n\nThis CL started using `i::Module::kEvaluatingAsync`, so without breaking back compat for embedders, we need to map it to `v8::Module::kEvaluated`. Ideally, we would expose `v8::Module::kEvaluatingAsync` but I\u0027m leaving that as a follow up because I don\u0027t actually know how to go about changing an API enum.",
+      "revId": "51ad6674513a9e238062597d978a7462945b0f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
