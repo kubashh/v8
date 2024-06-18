@@ -677,6 +677,18 @@ DEFINE_BOOL(maglev_stats_nvp, false,
 DEFINE_BOOL(maglev_function_context_specialization, true,
             "enable function context specialization in maglev")
 
+DEFINE_BOOL(maglev_branch_feedback, false, "Use branch feedback in maglev")
+DEFINE_NEG_NEG_IMPLICATION(maglev, maglev_branch_feedback)
+DEFINE_INT(
+    maglev_branch_feedback_min_samples, 100,
+    "Minimum amount of samples for a branch for using the branch feedback")
+DEFINE_INT(
+    maglev_branch_feedback_percentage_for_mostly_taken, 80,
+    "Percentage of samples where we consider the branch mostly (not) taken")
+DEFINE_BOOL(maglev_branch_feedback_for_deopts, false,
+            "Generate deopts instead of always / never taken branches")
+DEFINE_IMPLICATION(maglev_branch_feedback_for_deopts, maglev_branch_feedback)
+
 #ifdef V8_ENABLE_SPARKPLUG
 DEFINE_WEAK_IMPLICATION(future, flush_baseline_code)
 #endif

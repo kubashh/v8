@@ -88,7 +88,8 @@ namespace internal {
   V(ArrayLengthChanged, "the array length changed")                            \
   V(GreaterThanMaxFastElementArray,                                            \
     "length is greater than the maximum for fast elements array")              \
-  V(Float16NotYetSupported, "float16 is not supported as machine operation")
+  V(Float16NotYetSupported, "float16 is not supported as machine operation")   \
+  V(UnexpectedBranch, "took a branch which we expected to be dead")
 
 enum class DeoptimizeReason : uint8_t {
 #define DEOPTIMIZE_REASON(Name, message) k##Name,
@@ -99,7 +100,7 @@ enum class DeoptimizeReason : uint8_t {
 constexpr DeoptimizeReason kFirstDeoptimizeReason =
     DeoptimizeReason::kArrayBufferWasDetached;
 constexpr DeoptimizeReason kLastDeoptimizeReason =
-    DeoptimizeReason::kArrayLengthChanged;
+    DeoptimizeReason::kUnexpectedBranch;
 static_assert(static_cast<int>(kFirstDeoptimizeReason) == 0);
 constexpr int kDeoptimizeReasonCount =
     static_cast<int>(kLastDeoptimizeReason) + 1;

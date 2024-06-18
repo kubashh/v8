@@ -89,7 +89,7 @@ snippet: "
 "
 frame size: 9
 parameter count: 1
-bytecode array length: 49
+bytecode array length: 50
 bytecodes: [
                 B(Mov), R(closure), R(1),
   /*  118 S> */ B(LdaSmi), I8(1),
@@ -99,16 +99,16 @@ bytecodes: [
                 B(Mov), R(1), R(3),
                 B(Mov), R(0), R(6),
                 B(Mov), R(8), R(4),
-                B(JumpIfTrue), U8(12),
+                B(JumpIfTrue), U8(13), U8(0),
                 B(ThrowIfNotSuperConstructor), R(4),
                 B(Ldar), R(6),
-  /*  118 E> */ B(Construct), R(4), R(5), U8(1), U8(0),
+  /*  118 E> */ B(Construct), R(4), R(5), U8(1), U8(2),
                 B(Star4),
                 B(Ldar), R(this),
                 B(ThrowSuperAlreadyCalledIfNotHole),
                 B(Mov), R(4), R(this),
   /*  128 S> */ B(LdaSmi), I8(2),
-  /*  136 E> */ B(SetNamedProperty), R(this), U8(0), U8(2),
+  /*  136 E> */ B(SetNamedProperty), R(this), U8(0), U8(4),
                 B(Ldar), R(this),
                 B(ThrowSuperNotCalledIfHole),
   /*  141 S> */ B(Return),
@@ -134,7 +134,7 @@ snippet: "
 "
 frame size: 8
 parameter count: 1
-bytecode array length: 46
+bytecode array length: 47
 bytecodes: [
                 B(Mov), R(closure), R(1),
   /*  117 S> */ B(FindNonDefaultConstructorOrConstruct), R(1), R(0), R(6),
@@ -142,16 +142,16 @@ bytecodes: [
                 B(Mov), R(1), R(3),
                 B(Mov), R(0), R(5),
                 B(Mov), R(7), R(4),
-                B(JumpIfTrue), U8(12),
+                B(JumpIfTrue), U8(13), U8(0),
                 B(ThrowIfNotSuperConstructor), R(4),
                 B(Ldar), R(5),
-  /*  117 E> */ B(Construct), R(4), R(0), U8(0), U8(0),
+  /*  117 E> */ B(Construct), R(4), R(0), U8(0), U8(2),
                 B(Star4),
                 B(Ldar), R(this),
                 B(ThrowSuperAlreadyCalledIfNotHole),
                 B(Mov), R(4), R(this),
   /*  126 S> */ B(LdaSmi), I8(2),
-  /*  134 E> */ B(SetNamedProperty), R(this), U8(0), U8(2),
+  /*  134 E> */ B(SetNamedProperty), R(this), U8(0), U8(4),
                 B(Ldar), R(this),
                 B(ThrowSuperNotCalledIfHole),
   /*  139 S> */ B(Return),

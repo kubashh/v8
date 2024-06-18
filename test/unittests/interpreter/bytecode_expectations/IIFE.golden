@@ -67,31 +67,31 @@ snippet: "
 "
 frame size: 3
 parameter count: 1
-bytecode array length: 58
+bytecode array length: 59
 bytecodes: [
   /*   16 E> */ B(CreateMappedArguments),
                 B(Star0),
   /*   29 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
   /*   31 E> */ B(StaGlobal), U8(1), U8(1),
-  /*   93 S> */ B(LdaGlobal), U8(1), U8(3),
+  /*   93 S> */ B(LdaGlobal), U8(1), U8(5),
                 B(Star1),
-  /*   99 E> */ B(GetNamedProperty), R(1), U8(2), U8(5),
-                B(Star1),
-                B(LdaSmi), I8(3),
-  /*  101 E> */ B(TestLessThan), R(1), U8(7),
-                B(JumpIfFalse), U8(14),
-  /*  118 S> */ B(LdaGlobal), U8(1), U8(3),
+  /*   99 E> */ B(GetNamedProperty), R(1), U8(2), U8(7),
                 B(Star1),
                 B(LdaSmi), I8(3),
-  /*  122 E> */ B(SetNamedProperty), R(1), U8(2), U8(8),
+  /*  101 E> */ B(TestLessThan), R(1), U8(9),
+                B(JumpIfFalse), U8(15), U8(3),
+  /*  118 S> */ B(LdaGlobal), U8(1), U8(5),
+                B(Star1),
+                B(LdaSmi), I8(3),
+  /*  122 E> */ B(SetNamedProperty), R(1), U8(2), U8(10),
                 B(Jump), U8(18),
-  /*  154 S> */ B(LdaGlobal), U8(1), U8(3),
+  /*  154 S> */ B(LdaGlobal), U8(1), U8(5),
                 B(Star1),
-  /*  160 E> */ B(LdaGlobal), U8(1), U8(3),
+  /*  160 E> */ B(LdaGlobal), U8(1), U8(5),
                 B(Star2),
-  /*  162 E> */ B(GetNamedProperty), R(2), U8(3), U8(10),
-  /*  158 E> */ B(SetNamedProperty), R(1), U8(2), U8(8),
-  /*  200 S> */ B(GetNamedProperty), R(0), U8(4), U8(12),
+  /*  162 E> */ B(GetNamedProperty), R(2), U8(3), U8(12),
+  /*  158 E> */ B(SetNamedProperty), R(1), U8(2), U8(10),
+  /*  200 S> */ B(GetNamedProperty), R(0), U8(4), U8(14),
   /*  207 S> */ B(Return),
 ]
 constant pool: [

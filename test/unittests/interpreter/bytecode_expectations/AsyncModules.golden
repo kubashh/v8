@@ -13,7 +13,7 @@ snippet: "
 "
 frame size: 6
 parameter count: 1
-bytecode array length: 112
+bytecode array length: 113
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(2),
@@ -43,7 +43,7 @@ bytecodes: [
                 B(Star4),
                 B(LdaZero),
                 B(TestReferenceEqual), R(4),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(0),
                 B(Ldar), R(3),
                 B(ReThrow),
                 B(LdaUndefined),
@@ -72,7 +72,7 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [47, 90, 90],
+  [47, 91, 91],
 ]
 
 ---
@@ -81,7 +81,7 @@ snippet: "
 "
 frame size: 6
 parameter count: 1
-bytecode array length: 121
+bytecode array length: 122
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(2),
@@ -114,7 +114,7 @@ bytecodes: [
                 B(Star4),
                 B(LdaZero),
                 B(TestReferenceEqual), R(4),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(0),
                 B(Ldar), R(3),
                 B(ReThrow),
                 B(LdaUndefined),
@@ -144,7 +144,7 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [47, 99, 99],
+  [47, 100, 100],
 ]
 
 ---
@@ -157,7 +157,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 122
+bytecode array length: 123
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(3),
@@ -190,10 +190,10 @@ bytecodes: [
                 B(Star5),
                 B(LdaZero),
                 B(TestReferenceEqual), R(5),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(0),
                 B(Ldar), R(4),
                 B(ReThrow),
-  /*   47 S> */ B(CallUndefinedReceiver0), R(1), U8(0),
+  /*   47 S> */ B(CallUndefinedReceiver0), R(1), U8(2),
                 B(LdaUndefined),
                 B(Star5),
                 B(Mov), R(0), R(4),
@@ -221,7 +221,7 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [54, 100, 100],
+  [54, 101, 101],
 ]
 
 ---
@@ -231,7 +231,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 131
+bytecode array length: 132
 bytecodes: [
                 B(SwitchOnGeneratorState), R(0), U8(0), U8(2),
                 B(Mov), R(closure), R(3),
@@ -269,7 +269,7 @@ bytecodes: [
                 B(Star5),
                 B(LdaZero),
                 B(TestReferenceEqual), R(5),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(0),
                 B(Ldar), R(4),
                 B(ReThrow),
                 B(LdaUndefined),
@@ -299,6 +299,6 @@ constant pool: [
   SCOPE_INFO_TYPE,
 ]
 handlers: [
-  [57, 109, 109],
+  [57, 110, 110],
 ]
 
