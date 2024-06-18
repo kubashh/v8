@@ -2119,7 +2119,7 @@ void Module::ModuleVerify(Isolate* isolate) {
   }
 
   if (!(status() == kErrored || status() == kEvaluating ||
-        status() == kEvaluated)) {
+        status() == kEvaluatingAsync || status() == kEvaluated)) {
     CHECK(IsUndefined(top_level_capability()));
   }
 
@@ -2144,7 +2144,8 @@ void SourceTextModule::SourceTextModuleVerify(Isolate* isolate) {
 
   if (status() == kErrored) {
     CHECK(IsSharedFunctionInfo(code()));
-  } else if (status() == kEvaluating || status() == kEvaluated) {
+  } else if (status() == kEvaluating || status() == kEvaluatingAsync ||
+             status() == kEvaluated) {
     CHECK(IsJSGeneratorObject(code()));
   } else {
     if (status() == kLinked) {
@@ -2158,7 +2159,7 @@ void SourceTextModule::SourceTextModuleVerify(Isolate* isolate) {
     }
     CHECK(!AsyncParentModuleCount());
     CHECK(!pending_async_dependencies());
-    CHECK(!IsAsyncEvaluating());
+    CHECK(!HasAsyncEvaluationOrdinal());
   }
 
   CHECK_EQ(requested_modules()->length(), info()->module_requests()->length());
