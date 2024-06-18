@@ -16,6 +16,7 @@
 #include <utility>
 
 #include "include/v8-template.h"
+#include "src/api/api-arguments-inl.h"
 #include "src/api/api-inl.h"
 #include "src/ast/ast-value-factory.h"
 #include "src/ast/scopes.h"
@@ -1993,6 +1994,11 @@ Tagged<Object> Isolate::Throw(Tagged<Object> raw_exception,
   // Set the exception being thrown.
   set_exception(*exception);
   PropagateExceptionToExternalTryCatch(TopExceptionHandlerType(*exception));
+
+  if (v8_flags.experimental_report_exceptions_from_callbacks &&
+      !rethrowing_message && exception_propagation_callback_) {
+    NotifyExceptionPropagationCallback();
+  }
   return ReadOnlyRoots(heap()).exception();
 }
 
@@ -4517,6 +4523,224 @@ bool Isolate::PropagateExceptionToExternalTryCatch(
     handler->message_obj_ = reinterpret_cast<void*>(pending_message().ptr());
   }
   return true;
+}
+
+namespace {
+
+inline Tagged<FunctionTemplateInfo> GetTargetFunctionTemplateInfo(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  Tagged<Object> target = FunctionCallbackArguments::GetTarget(info);
+  CHECK(IsFunctionTemplateInfo(target));
+  return Cast<FunctionTemplateInfo>(target);
+}
+
+}  // namespace
+
+void Isolate::NotifyExceptionPropagationCallback() {
+  DCHECK_NOT_NULL(exception_propagation_callback_);
+
+  // Try to figure out whether the exception was thrown directly from an
+  // Api callback and if it's the case then call the
+  // |exception_propagation_callback_| with relevant data.
+
+  ExternalCallbackScope* ext_callback_scope = external_callback_scope();
+  StackFrameIterator it(this);
+
+  if (it.done() && !ext_callback_scope) {
+    // The exception was thrown directly by embedder code without crossing
+    // "C++ -> JS" or "C++ -> Api callback" boundary.
+    return;
+  }
+  if (it.done() || (ext_callback_scope &&
+                    ext_callback_scope->scope_address() < it.frame()->fp())) {
+    // There were no crossings of "C++ -> JS" boundary at all or they happened
+    // earlier than the last crossing of the  "C++ -> Api callback" boundary.
+    // In this case all the data about Api callback is available in the
+    // |ext_callback_scope| object.
+    DCHECK_NOT_NULL(ext_callback_scope);
+    v8::ExceptionContext kind = ext_callback_scope->exception_context();
+    switch (kind) {
+      case v8::ExceptionContext::kConstructor:
+      case v8::ExceptionContext::kOperation: {
+        DCHECK_NOT_NULL(ext_callback_scope->callback_info());
+        auto callback_info =
+            reinterpret_cast<v8::FunctionCallbackInfo<v8::Value>*>(
+                ext_callback_scope->callback_info());
+
+        Handle<FunctionTemplateInfo> function_template_info(
+            GetTargetFunctionTemplateInfo(*callback_info), this);
+        ReportExceptionFunctionCallback(function_template_info, kind);
+        return;
+      }
+      case v8::ExceptionContext::kAttributeGet:
+      case v8::ExceptionContext::kAttributeSet:
+      case v8::ExceptionContext::kIndexedQuery:
+      case v8::ExceptionContext::kIndexedGetter:
+      case v8::ExceptionContext::kIndexedDescriptor:
+      case v8::ExceptionContext::kIndexedSetter:
+      case v8::ExceptionContext::kIndexedDefiner:
+      case v8::ExceptionContext::kIndexedDeleter:
+      case v8::ExceptionContext::kNamedQuery:
+      case v8::ExceptionContext::kNamedGetter:
+      case v8::ExceptionContext::kNamedDescriptor:
+      case v8::ExceptionContext::kNamedSetter:
+      case v8::ExceptionContext::kNamedDefiner:
+      case v8::ExceptionContext::kNamedDeleter:
+      case v8::ExceptionContext::kNamedEnumerator: {
+        DCHECK_NOT_NULL(ext_callback_scope->callback_info());
+        auto callback_info =
+            reinterpret_cast<v8::PropertyCallbackInfo<v8::Value>*>(
+                ext_callback_scope->callback_info());
+
+        // Allow usages of v8::PropertyCallbackInfo<T>::Holder() for now.
+        // TODO(https://crbug.com/333672197): remove.
+        START_ALLOW_USE_DEPRECATED()
+
+        DirectHandle<Object> holder =
+            Utils::OpenDirectHandle(*callback_info->Holder());
+        // TODO(ishell): propagate property name via ext_callback_scope.
+        Handle<Name> name = factory()->yearMonthFromFields_string();
+        DCHECK(IsJSReceiver(*holder));
+
+        // Allow usages of v8::PropertyCallbackInfo<T>::Holder() for now.
+        // TODO(https://crbug.com/333672197): remove.
+        END_ALLOW_USE_DEPRECATED()
+
+        // Currently we call only ApiGetters from JS code.
+        ReportExceptionPropertyCallback(Cast<JSReceiver>(holder), name, kind);
+        return;
+      }
+
+      case v8::ExceptionContext::kUnknown:
+        UNREACHABLE();
+    }
+    UNREACHABLE();
+  }
+
+  // There were no crossings of "C++ -> Api callback" bondary or they
+  // happened before crossing the "C++ -> JS" boundary.
+  // In this case all the data about Api callback is available in the
+  // topmost "JS -> Api callback" frame (ApiCallbackExitFrame or
+  // ApiAccessorExitFrame).
+  DCHECK(!it.done());
+  StackFrame::Type frame_type = it.frame()->type();
+  switch (frame_type) {
+    case StackFrame::API_CALLBACK_EXIT: {
+      ApiCallbackExitFrame* frame = ApiCallbackExitFrame::cast(it.frame());
+      Handle<FunctionTemplateInfo> function_template_info =
+          frame->GetFunctionTemplateInfo();
+
+      v8::ExceptionContext callback_kind =
+          frame->IsConstructor() ? v8::ExceptionContext::kConstructor
+                                 : v8::ExceptionContext::kOperation;
+      ReportExceptionFunctionCallback(function_template_info, callback_kind);
+      return;
+    }
+    case StackFrame::API_ACCESSOR_EXIT: {
+      ApiAccessorExitFrame* frame = ApiAccessorExitFrame::cast(it.frame());
+
+      Handle<Object> holder(frame->holder(), this);
+      Handle<Name> name(frame->property_name(), this);
+      DCHECK(IsJSReceiver(*holder));
+
+      // Currently we call only ApiGetters from JS code.
+      ReportExceptionPropertyCallback(Cast<JSReceiver>(holder), name,
+                                      v8::ExceptionContext::kAttributeGet);
+      return;
+    }
+    case StackFrame::TURBOFAN:
+      // This must be a fast Api call.
+      CHECK(it.frame()->InFastCCall());
+      // TODO(ishell): support fast Api calls.
+      return;
+    case StackFrame::WASM:
+      // No more info.
+      return;
+    case StackFrame::EXIT:
+    case StackFrame::BUILTIN_EXIT:
+      // This is a regular runtime function or C++ builtin.
+      return;
+    default:
+      // Other types are not expected, so just hard-crash.
+      CHECK_NE(frame_type, frame_type);
+  }
+}
+
+void Isolate::ReportExceptionFunctionCallback(
+    Handle<FunctionTemplateInfo> function, v8::ExceptionContext callback_kind) {
+  DCHECK(callback_kind == v8::ExceptionContext::kConstructor ||
+         callback_kind == v8::ExceptionContext::kOperation);
+  DCHECK_NOT_NULL(exception_propagation_callback_);
+
+  Handle<Object> exception(this->exception(), this);
+  if (!IsJSReceiver(*exception)) return;
+
+  Handle<Object> maybe_message(pending_message(), this);
+
+  Handle<String> property_name =
+      IsUndefined(function->class_name(), this)
+          ? factory()->empty_string()
+          : Handle<String>(Cast<String>(function->class_name()), this);
+  Handle<String> interface_name =
+      IsUndefined(function->interface_name(), this)
+          ? factory()->empty_string()
+          : Handle<String>(Cast<String>(function->interface_name()), this);
+  ExceptionContext exception_context =
+      callback_kind == ExceptionContext::kConstructor
+          ? ExceptionContext::kConstructor
+          : static_cast<ExceptionContext>(function->exception_context());
+
+  {
+    v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(this);
+    // Ignore any exceptions thrown inside the callback and rethrow the
+    // original exception/message.
+    TryCatch try_catch(v8_isolate);
+
+    exception_propagation_callback_(v8::ExceptionPropagationMessage(
+        v8_isolate, v8::Local<v8::Object>::Cast(v8::Utils::ToLocal(exception)),
+        v8::Utils::ToLocal(interface_name), v8::Utils::ToLocal(property_name),
+        exception_context));
+
+    if (!has_exception())
+      try_catch.exception_ = reinterpret_cast<void*>((*exception).ptr());
+    try_catch.ReThrow();
+  }
+}
+
+void Isolate::ReportExceptionPropertyCallback(
+    Handle<JSReceiver> holder, Handle<Name> name,
+    ExceptionContext exception_context) {
+  DCHECK_NOT_NULL(exception_propagation_callback_);
+
+  Handle<Object> exception(this->exception(), this);
+  if (!IsJSReceiver(*exception)) return;
+
+  Handle<Object> maybe_message(pending_message(), this);
+
+  Handle<String> property_name;
+  std::ignore = Name::ToFunctionName(this, name).ToHandle(&property_name);
+  Handle<String> interface_name = JSReceiver::GetConstructorName(this, holder);
+
+  {
+    v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(this);
+    // Ignore any exceptions thrown inside the callback and rethrow the
+    // original exception/message.
+    TryCatch try_catch(v8_isolate);
+
+    exception_propagation_callback_(v8::ExceptionPropagationMessage(
+        v8_isolate, v8::Local<v8::Object>::Cast(v8::Utils::ToLocal(exception)),
+        v8::Utils::ToLocal(interface_name), v8::Utils::ToLocal(property_name),
+        exception_context));
+
+    if (!has_exception())
+      try_catch.exception_ = reinterpret_cast<void*>((*exception).ptr());
+    try_catch.ReThrow();
+  }
+}
+
+void Isolate::SetExceptionPropagationCallback(
+    ExceptionPropagationCallback callback) {
+  exception_propagation_callback_ = callback;
 }
 
 bool Isolate::InitializeCounters() {

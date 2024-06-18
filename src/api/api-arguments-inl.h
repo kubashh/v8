@@ -68,27 +68,30 @@ inline Tagged<JSReceiver> FunctionCallbackArguments::holder() const {
   DCHECK_IMPLIES(IsSymbol(*name), interceptor->can_intercept_symbols());
 
 #define PREPARE_CALLBACK_INFO_ACCESSOR(ISOLATE, F, API_RETURN_TYPE,            \
-                                       ACCESSOR_INFO, RECEIVER, ACCESSOR_KIND) \
+                                       ACCESSOR_INFO, RECEIVER, ACCESSOR_KIND, \
+                                       EXCEPTION_CONTEXT)                      \
   if (ISOLATE->should_check_side_effects() &&                                  \
       !ISOLATE->debug()->PerformSideEffectCheckForAccessor(                    \
           ACCESSOR_INFO, RECEIVER, ACCESSOR_KIND)) {                           \
     return {};                                                                 \
   }                                                                            \
-  ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F));                 \
-  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);
+  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);                \
+  ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F),                  \
+                                   EXCEPTION_CONTEXT, &callback_info);
 
-#define PREPARE_CALLBACK_INFO_INTERCEPTOR(ISOLATE, F, API_RETURN_TYPE, \
-                                          INTERCEPTOR_INFO)            \
-  if (ISOLATE->should_check_side_effects() &&                          \
-      !ISOLATE->debug()->PerformSideEffectCheckForInterceptor(         \
-          INTERCEPTOR_INFO)) {                                         \
-    return {};                                                         \
-  }                                                                    \
-  ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F));         \
-  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);
+#define PREPARE_CALLBACK_INFO_INTERCEPTOR(ISOLATE, F, API_RETURN_TYPE,         \
+                                          INTERCEPTOR_INFO, EXCEPTION_CONTEXT) \
+  if (ISOLATE->should_check_side_effects() &&                                  \
+      !ISOLATE->debug()->PerformSideEffectCheckForInterceptor(                 \
+          INTERCEPTOR_INFO)) {                                                 \
+    return {};                                                                 \
+  }                                                                            \
+  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);                \
+  ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F),                  \
+                                   EXCEPTION_CONTEXT, &callback_info);
 
-Handle<Object> FunctionCallbackArguments::Call(
-    Tagged<FunctionTemplateInfo> function) {
+Handle<Object> FunctionCallbackArguments::CallOrConstruct(
+    Tagged<FunctionTemplateInfo> function, bool is_construct) {
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kFunctionCallback);
   v8::FunctionCallback f =
@@ -98,8 +101,11 @@ Handle<Object> FunctionCallbackArguments::Call(
           handle(function, isolate))) {
     return {};
   }
-  ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f));
   FunctionCallbackInfo<v8::Value> info(values_, argv_, argc_);
+  ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f),
+                                   is_construct ? ExceptionContext::kConstructor
+                                                : ExceptionContext::kOperation,
+                                   &info);
   f(info);
   return GetReturnValue<Object>(isolate);
 }
@@ -133,7 +139,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedQuery(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedQueryCallback);
   NamedPropertyQueryCallback f =
       ToCData<NamedPropertyQueryCallback>(interceptor->query());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Integer, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Integer, interceptor,
+                                    ExceptionContext::kNamedQuery);
   // Constructor sets the return value to undefined, while this callback
   // must return v8::Integer, set default value to v8::None.
   callback_info.GetReturnValue().Set(static_cast<uint16_t>(v8::None));
@@ -149,7 +156,8 @@ Handle<JSAny> PropertyCallbackArguments::CallNamedGetter(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedGetterCallback);
   NamedPropertyGetterCallback f =
       ToCData<NamedPropertyGetterCallback>(interceptor->getter());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor,
+                                    ExceptionContext::kNamedGetter);
   v8::Intercepted intercepted = f(v8::Utils::ToLocal(name), callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   return GetReturnValueNoHoleCheck<JSAny>(isolate);
@@ -162,7 +170,8 @@ Handle<JSAny> PropertyCallbackArguments::CallNamedDescriptor(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedDescriptorCallback);
   NamedPropertyDescriptorCallback f =
       ToCData<NamedPropertyDescriptorCallback>(interceptor->descriptor());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor,
+                                    ExceptionContext::kNamedDescriptor);
   v8::Intercepted intercepted = f(v8::Utils::ToLocal(name), callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   return GetReturnValueNoHoleCheck<JSAny>(isolate);
@@ -178,7 +187,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedSetter(
   NamedPropertySetterCallback f =
       ToCData<NamedPropertySetterCallback>(interceptor->setter());
   Handle<InterceptorInfo> has_side_effects;
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects,
+                                    ExceptionContext::kNamedSetter);
   v8::Intercepted intercepted =
       f(v8::Utils::ToLocal(name), v8::Utils::ToLocal(value), callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
@@ -196,7 +206,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedDefiner(
   NamedPropertyDefinerCallback f =
       ToCData<NamedPropertyDefinerCallback>(interceptor->definer());
   Handle<InterceptorInfo> has_side_effects;
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects,
+                                    ExceptionContext::kNamedDefiner);
   v8::Intercepted intercepted =
       f(v8::Utils::ToLocal(name), desc, callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
@@ -216,7 +227,8 @@ Handle<Object> PropertyCallbackArguments::CallNamedDeleter(
   NamedPropertyDeleterCallback f =
       ToCData<NamedPropertyDeleterCallback>(interceptor->deleter());
   Handle<InterceptorInfo> has_side_effects;
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Boolean, has_side_effects);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Boolean, has_side_effects,
+                                    ExceptionContext::kNamedDeleter);
   v8::Intercepted intercepted = f(v8::Utils::ToLocal(name), callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   return GetReturnValue<Object>(isolate);
@@ -240,7 +252,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedQuery(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedQueryCallback);
   IndexedPropertyQueryCallbackV2 f =
       ToCData<IndexedPropertyQueryCallbackV2>(interceptor->query());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Integer, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Integer, interceptor,
+                                    ExceptionContext::kIndexedQuery);
   // Constructor sets the return value to undefined, while this callback
   // must return v8::Integer, set default value to v8::None.
   callback_info.GetReturnValue().Set(static_cast<uint16_t>(v8::None));
@@ -256,7 +269,8 @@ Handle<JSAny> PropertyCallbackArguments::CallIndexedGetter(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedGetterCallback);
   IndexedPropertyGetterCallbackV2 f =
       ToCData<IndexedPropertyGetterCallbackV2>(interceptor->getter());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor,
+                                    ExceptionContext::kIndexedGetter);
   v8::Intercepted intercepted = f(index, callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   return GetReturnValueNoHoleCheck<JSAny>(isolate);
@@ -269,7 +283,8 @@ Handle<JSAny> PropertyCallbackArguments::CallIndexedDescriptor(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedDescriptorCallback);
   IndexedPropertyDescriptorCallbackV2 f =
       ToCData<IndexedPropertyDescriptorCallbackV2>(interceptor->descriptor());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Value, interceptor,
+                                    ExceptionContext::kIndexedDescriptor);
   v8::Intercepted intercepted = f(index, callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   return GetReturnValueNoHoleCheck<JSAny>(isolate);
@@ -285,7 +300,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedSetter(
   IndexedPropertySetterCallbackV2 f =
       ToCData<IndexedPropertySetterCallbackV2>(interceptor->setter());
   Handle<InterceptorInfo> has_side_effects;
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects,
+                                    ExceptionContext::kIndexedSetter);
   v8::Intercepted intercepted =
       f(index, v8::Utils::ToLocal(value), callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
@@ -303,7 +319,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDefiner(
   IndexedPropertyDefinerCallbackV2 f =
       ToCData<IndexedPropertyDefinerCallbackV2>(interceptor->definer());
   Handle<InterceptorInfo> has_side_effects;
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, void, has_side_effects,
+                                    ExceptionContext::kIndexedDefiner);
   v8::Intercepted intercepted = f(index, desc, callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   // Non-empty handle indicates that the request was intercepted.
@@ -321,7 +338,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedDeleter(
   slot_at(kReturnValueIndex).store(ReadOnlyRoots(isolate).false_value());
   IndexedPropertyDeleterCallbackV2 f =
       ToCData<IndexedPropertyDeleterCallbackV2>(interceptor->deleter());
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Boolean, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Boolean, interceptor,
+                                    ExceptionContext::kIndexedDeleter);
   v8::Intercepted intercepted = f(index, callback_info);
   if (intercepted == v8::Intercepted::kNo) return {};
   return GetReturnValueNoHoleCheck<Object>(isolate);
@@ -339,7 +357,8 @@ Handle<JSObjectOrUndefined> PropertyCallbackArguments::CallPropertyEnumerator(
   IndexedPropertyEnumeratorCallback f =
       v8::ToCData<IndexedPropertyEnumeratorCallback>(interceptor->enumerator());
   Isolate* isolate = this->isolate();
-  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Array, interceptor);
+  PREPARE_CALLBACK_INFO_INTERCEPTOR(isolate, f, v8::Array, interceptor,
+                                    ExceptionContext::kNamedEnumerator);
   f(callback_info);
   Handle<JSAny> result = GetReturnValue<JSAny>(isolate);
   if (result.is_null()) return isolate->factory()->undefined_value();
@@ -361,7 +380,8 @@ Handle<JSAny> PropertyCallbackArguments::CallAccessorGetter(
   AccessorNameGetterCallback f =
       reinterpret_cast<AccessorNameGetterCallback>(info->getter(isolate));
   PREPARE_CALLBACK_INFO_ACCESSOR(isolate, f, v8::Value, info,
-                                 handle(receiver(), isolate), ACCESSOR_GETTER);
+                                 handle(receiver(), isolate), ACCESSOR_GETTER,
+                                 ExceptionContext::kAttributeGet);
   f(v8::Utils::ToLocal(name), callback_info);
   return GetReturnValue<JSAny>(isolate);
 }
@@ -387,7 +407,8 @@ bool PropertyCallbackArguments::CallAccessorSetter(
   AccessorNameSetterCallback f = reinterpret_cast<AccessorNameSetterCallback>(
       accessor_info->setter(isolate));
   PREPARE_CALLBACK_INFO_ACCESSOR(isolate, f, void, accessor_info,
-                                 handle(receiver(), isolate), ACCESSOR_SETTER);
+                                 handle(receiver(), isolate), ACCESSOR_SETTER,
+                                 ExceptionContext::kAttributeSet);
   // Constructor sets the return value to undefined, while for API callbacks
   // we still need to detect the "result was never set" or the "result
   // value was set to empty handle" cases to treat them as a successful
