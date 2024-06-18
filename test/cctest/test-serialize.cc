@@ -4349,6 +4349,60 @@ UNINITIALIZED_TEST(SerializeContextData) {
     }
     delete[] blob.data;
   }
+  {
+    // Check that embedder pointers set on a context serialize into a snapshot
+    // as nullptr if a context_data_serializer is not provided.
+
+    v8::StartupData blob;
+    {
+      SnapshotCreatorParams params;
+      v8::SnapshotCreator creator(params.create_params);
+      v8::Isolate* isolate = creator.GetIsolate();
+      {
+        v8::HandleScope handle_scope(isolate);
+
+        v8::Local<v8::Context> default_context = v8::Context::New(isolate);
+        creator.SetDefaultContext(default_context);
+
+        v8::Local<v8::Context> context = v8::Context::New(isolate);
+        v8::Context::Scope context_scope(context);
+        context->SetAlignedPointerInEmbedderData(0, nullptr);
+        context->SetAlignedPointerInEmbedderData(
+            1, &context_data_test::context_data);
+
+        CHECK_EQ(0, creator.AddContext(context));
+
+        CHECK_EQ(nullptr, context->GetAlignedPointerFromEmbedderData(0));
+        CHECK_EQ(&context_data_test::context_data,
+                 context->GetAlignedPointerFromEmbedderData(1));
+
+        blob = creator.CreateBlob(
+            v8::SnapshotCreator::FunctionCodeHandling::kClear);
+
+        CHECK_EQ(nullptr, context->GetAlignedPointerFromEmbedderData(0));
+        CHECK_EQ(&context_data_test::context_data,
+                 context->GetAlignedPointerFromEmbedderData(1));
+      }
+    }
+
+    {
+      v8::Isolate::CreateParams params;
+      params.snapshot_blob = &blob;
+      params.array_buffer_allocator = CcTest::array_buffer_allocator();
+      // Test-appropriate equivalent of v8::Isolate::New.
+      v8::Isolate* isolate = TestSerializer::NewIsolate(params);
+      {
+        v8::Isolate::Scope isolate_scope(isolate);
+        v8::HandleScope handle_scope(isolate);
+        v8::Local<v8::Context> context =
+            v8::Context::FromSnapshot(isolate, 0).ToLocalChecked();
+        CHECK_EQ(nullptr, context->GetAlignedPointerFromEmbedderData(0));
+        CHECK_EQ(nullptr, context->GetAlignedPointerFromEmbedderData(1));
+      }
+      isolate->Dispose();
+    }
+    delete[] blob.data;
+  }
 
   FreeCurrentEmbeddedBlob();
 }
