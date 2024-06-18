@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b759f855_b9607200",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-06-18T10:02:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4c64a24_09f05487",
+      "revId": "f4f61572165c6a8819956f6eaee9d762a8984775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68c649a0_07a1307f",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-06-17T09:43:45Z",
       "side": 1,
       "message": "Keep the V8_UNLIKELY maybe?",
+      "range": {
+        "startLine": 213,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 70
+      },
+      "revId": "f4f61572165c6a8819956f6eaee9d762a8984775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa97f39b_bc404eef",
+        "filename": "src/compiler/turboshaft/pipelines.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-06-18T10:02:50Z",
+      "side": 1,
+      "message": "Sure. No idea why this is gone (probably rebasing).",
+      "parentUuid": "68c649a0_07a1307f",
       "range": {
         "startLine": 213,
         "startChar": 8,
