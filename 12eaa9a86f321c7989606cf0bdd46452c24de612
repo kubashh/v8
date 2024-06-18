@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "658082d7_225a359c",
+        "filename": "include/v8-script.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-18T23:07:34Z",
+      "side": 1,
+      "message": "Reverted this part of the change.",
+      "parentUuid": "da941db7_fc59ca51",
+      "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f92a958c_bcddb03d",
@@ -72,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b88bc379_c550f0e3",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-18T23:07:34Z",
+      "side": 1,
+      "message": "Sorry, no clue. I assumed there were security bugs at some point involving modules\u0027 state transitions, because there\u0027s also --trace-module-status.",
+      "parentUuid": "f92a958c_bcddb03d",
+      "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed593912_ca489e4b",
         "filename": "src/objects/source-text-module.cc",
         "patchSetId": 4
@@ -83,6 +119,24 @@
       "writtenOn": "2024-06-18T22:49:25Z",
       "side": 1,
       "message": "I think it\u0027d be clearer if this step was included in the comment above, I was confused as to why we were checking for sync evaluation there until I read further.\n\nAlternatively, you could just follow the spec exactly.",
+      "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6b1b9c_6dfc4b63",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-18T23:07:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed593912_ca489e4b",
       "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
