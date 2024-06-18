@@ -2231,6 +2231,7 @@ void SourceTextModule::SourceTextModulePrint(std::ostream& os) {
   os << "\n - requested_modules: " << Brief(requested_modules());
   os << "\n - import_meta: " << Brief(import_meta(kAcquireLoad));
   os << "\n - cycle_root: " << Brief(cycle_root());
+  os << "\n - async: " << async();
   os << "\n - async_evaluating_ordinal: " << async_evaluating_ordinal();
   os << "\n";
 }

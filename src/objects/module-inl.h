@@ -104,7 +104,7 @@ class UnorderedModuleSet
 
 Handle<SourceTextModule> SourceTextModule::GetCycleRoot(
     Isolate* isolate) const {
-  CHECK_GE(status(), kEvaluated);
+  CHECK_GE(status(), kEvaluatingAsync);
   DCHECK(!IsTheHole(cycle_root(), isolate));
   Handle<SourceTextModule> root(Cast<SourceTextModule>(cycle_root()), isolate);
   return root;

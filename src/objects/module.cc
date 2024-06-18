@@ -72,6 +72,8 @@ void Module::SetStatus(Status new_status) {
   DisallowGarbageCollection no_gc;
   DCHECK_LE(status(), new_status);
   DCHECK_NE(new_status, Module::kErrored);
+  DCHECK_IMPLIES(new_status == kEvaluated && IsSourceTextModule(*this),
+                 !(Cast<SourceTextModule>(*this)->IsAsyncEvaluating()));
   SetStatusInternal(*this, new_status);
 }
 

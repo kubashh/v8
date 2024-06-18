@@ -94,7 +94,7 @@ class SourceTextModule
   friend class Module;
 
   struct AsyncEvaluatingOrdinalCompare;
-  using AsyncParentCompletionSet =
+  using AvailableAncestorsSet =
       ZoneSet<Handle<SourceTextModule>, AsyncEvaluatingOrdinalCompare>;
 
   // Appends a tuple of module and generator to the async parent modules
@@ -186,9 +186,9 @@ class SourceTextModule
                                Handle<SourceTextModule> module, Zone* zone,
                                UnorderedModuleSet* visited);
 
-  static void GatherAsyncParentCompletions(Isolate* isolate, Zone* zone,
-                                           Handle<SourceTextModule> start,
-                                           AsyncParentCompletionSet* exec_list);
+  static void GatherAvailableAncestors(Isolate* isolate, Zone* zone,
+                                       Handle<SourceTextModule> start,
+                                       AvailableAncestorsSet* exec_list);
 
   // Implementation of spec concrete method Evaluate.
   static V8_WARN_UNUSED_RESULT MaybeHandle<Object> Evaluate(
