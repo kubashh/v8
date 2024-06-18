@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fe321a3_18c00312",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-06-18T12:34:56Z",
+      "side": 1,
+      "message": "Hello :)\n\nPing... I still need review/approval for:\n- src/base\n- src/debug\n- src/execution\n- src/snapshot\n- src/torque\n- src/trap_handler\n\nThanks!",
+      "revId": "bbde4fae7bf6b7ce53bc63fc21b82c58cd84d51a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
