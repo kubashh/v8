@@ -34,6 +34,24 @@
       "parentUuid": "f0fbbbdf_9bd67418",
       "revId": "c1100209431c0e2b4c4eba10f6b1b6592c96521a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c4f14f_99a3511a",
+        "filename": "src/snapshot/context-serializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-06-18T10:44:14Z",
+      "side": 1,
+      "message": "Fixed in https://chromium-review.googlesource.com/c/v8/v8/+/5630743.",
+      "parentUuid": "690284a8_4d12b9e3",
+      "revId": "c1100209431c0e2b4c4eba10f6b1b6592c96521a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

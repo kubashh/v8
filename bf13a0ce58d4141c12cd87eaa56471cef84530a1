@@ -198,6 +198,24 @@
       "parentUuid": "b871aee1_6ff98817",
       "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3211f90e_ca940984",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-06-18T10:44:14Z",
+      "side": 1,
+      "message": "Dmitry is working on this in https://chromium-review.googlesource.com/c/v8/v8/+/5632279.",
+      "parentUuid": "9b111d63_345a7cb9",
+      "revId": "bf13a0ce58d4141c12cd87eaa56471cef84530a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
