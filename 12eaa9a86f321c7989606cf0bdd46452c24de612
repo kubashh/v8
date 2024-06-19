@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53d265b4_97d341bc",
+        "filename": "src/objects/source-text-module.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-06-19T13:15:12Z",
+      "side": 1,
+      "message": "let\u0027s put it this way, the original author had their own understanding on how V8 code should look like. Probably doesn\u0027t harm too much if we keep the CHECKs for larger state changes.",
+      "parentUuid": "b88bc379_c550f0e3",
+      "revId": "12eaa9a86f321c7989606cf0bdd46452c24de612",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed593912_ca489e4b",
         "filename": "src/objects/source-text-module.cc",
         "patchSetId": 4
