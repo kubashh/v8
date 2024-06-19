@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5059d4_724c352a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-19T20:04:33Z",
+      "side": 1,
+      "message": "ptal, likely neutral (I don\u0027t think S3 is a regression) but we should really not be going to the Map for HeapNumber",
+      "revId": "d3e91db189f4e144f988703b2d01170e63dfd083",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
