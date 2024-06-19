@@ -231,13 +231,15 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Jump forward relative to the current bytecode by offest specified in
   // operand |operand_index| if the word values |lhs| and |rhs| are equal.
   void JumpIfTaggedEqual(TNode<Object> lhs, TNode<Object> rhs,
-                         int operand_index);
+                         int operand_index,
+                         TNode<UintPtrT>* branch_slot = nullptr);
 
   // Jump forward relative to the current bytecode by offest specified from the
   // constant pool if the word values |lhs| and |rhs| are equal.
   // The constant's index is specified in operand |operand_index|.
   void JumpIfTaggedEqualConstant(TNode<Object> lhs, TNode<Object> rhs,
-                                 int operand_index);
+                                 int operand_index,
+                                 TNode<UintPtrT>* branch_slot = nullptr);
 
   // Jump forward relative to the current bytecode by |jump_offset| if the
   // word values |lhs| and |rhs| are not equal.
@@ -416,15 +418,17 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Jump forward relative to the current bytecode by offest specified in
   // operand |operand_index| if the |condition| is true. Helper function for
   // JumpIfTaggedEqual and JumpIfTaggedNotEqual.
-  void JumpConditionalByImmediateOperand(TNode<BoolT> condition,
-                                         int operand_index);
+  void JumpConditionalByImmediateOperand(
+      TNode<BoolT> condition, int operand_index,
+      TNode<UintPtrT>* branch_slot = nullptr);
 
   // Jump forward relative to the current bytecode by offest specified from the
   // constant pool if the |condition| is true. The constant's index is specified
   // in operand |operand_index|. Helper function for JumpIfTaggedEqualConstant
   // and JumpIfTaggedNotEqualConstant.
   void JumpConditionalByConstantOperand(TNode<BoolT> condition,
-                                        int operand_index);
+                                        int operand_index,
+                                        TNode<UintPtrT>* branch_slot = nullptr);
 
   // Save the bytecode offset to the interpreter frame.
   void SaveBytecodeOffset();

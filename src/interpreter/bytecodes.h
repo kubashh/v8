@@ -370,8 +370,12 @@ namespace interpreter {
   V(JumpIfUndefinedOrNullConstant, ImplicitRegisterUse::kReadAccumulator,      \
     OperandType::kIdx)                                                         \
   V(JumpIfTrueConstant, ImplicitRegisterUse::kReadAccumulator,                 \
-    OperandType::kIdx)                                                         \
+    OperandType::kIdx, OperandType::kIdx)                                      \
   V(JumpIfFalseConstant, ImplicitRegisterUse::kReadAccumulator,                \
+    OperandType::kIdx, OperandType::kIdx)                                      \
+  V(JumpIfTrueConstantNoFeedback, ImplicitRegisterUse::kReadAccumulator,       \
+    OperandType::kIdx)                                                         \
+  V(JumpIfFalseConstantNoFeedback, ImplicitRegisterUse::kReadAccumulator,      \
     OperandType::kIdx)                                                         \
   V(JumpIfJSReceiverConstant, ImplicitRegisterUse::kReadAccumulator,           \
     OperandType::kIdx)                                                         \
@@ -379,18 +383,32 @@ namespace interpreter {
     OperandType::kReg, OperandType::kReg)                                      \
   /* - [Start ToBoolean jumps] */                                              \
   V(JumpIfToBooleanTrueConstant, ImplicitRegisterUse::kReadAccumulator,        \
-    OperandType::kIdx)                                                         \
+    OperandType::kIdx, OperandType::kIdx)                                      \
   V(JumpIfToBooleanFalseConstant, ImplicitRegisterUse::kReadAccumulator,       \
-    OperandType::kIdx)                                                         \
+    OperandType::kIdx, OperandType::kIdx)                                      \
+  V(JumpIfToBooleanTrueConstantNoFeedback,                                     \
+    ImplicitRegisterUse::kReadAccumulator, OperandType::kIdx)                  \
+  V(JumpIfToBooleanFalseConstantNoFeedback,                                    \
+    ImplicitRegisterUse::kReadAccumulator, OperandType::kIdx)                  \
   /* - [End constant jumps] */                                                 \
   /* - [Conditional immediate jumps] */                                        \
   V(JumpIfToBooleanTrue, ImplicitRegisterUse::kReadAccumulator,                \
-    OperandType::kUImm)                                                        \
+    OperandType::kUImm, OperandType::kIdx)                                     \
   V(JumpIfToBooleanFalse, ImplicitRegisterUse::kReadAccumulator,               \
+    OperandType::kUImm, OperandType::kIdx)                                     \
+  V(JumpIfToBooleanTrueNoFeedback, ImplicitRegisterUse::kReadAccumulator,      \
+    OperandType::kUImm)                                                        \
+  V(JumpIfToBooleanFalseNoFeedback, ImplicitRegisterUse::kReadAccumulator,     \
     OperandType::kUImm)                                                        \
   /* - [End ToBoolean jumps] */                                                \
-  V(JumpIfTrue, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)     \
-  V(JumpIfFalse, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)    \
+  V(JumpIfTrue, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm,     \
+    OperandType::kIdx)                                                         \
+  V(JumpIfFalse, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm,    \
+    OperandType::kIdx)                                                         \
+  V(JumpIfTrueNoFeedback, ImplicitRegisterUse::kReadAccumulator,               \
+    OperandType::kUImm)                                                        \
+  V(JumpIfFalseNoFeedback, ImplicitRegisterUse::kReadAccumulator,              \
+    OperandType::kUImm)                                                        \
   V(JumpIfNull, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)     \
   V(JumpIfNotNull, ImplicitRegisterUse::kReadAccumulator, OperandType::kUImm)  \
   V(JumpIfUndefined, ImplicitRegisterUse::kReadAccumulator,                    \
@@ -490,7 +508,9 @@ namespace interpreter {
 
 #define JUMP_TOBOOLEAN_CONDITIONAL_IMMEDIATE_BYTECODE_LIST(V) \
   V(JumpIfToBooleanTrue)                                      \
-  V(JumpIfToBooleanFalse)
+  V(JumpIfToBooleanFalse)                                     \
+  V(JumpIfToBooleanTrueNoFeedback)                            \
+  V(JumpIfToBooleanFalseNoFeedback)
 
 #define JUMP_TOBOOLEAN_CONDITIONAL_CONSTANT_BYTECODE_LIST(V) \
   V(JumpIfToBooleanTrueConstant)                             \
@@ -500,6 +520,8 @@ namespace interpreter {
   JUMP_TOBOOLEAN_CONDITIONAL_IMMEDIATE_BYTECODE_LIST(V) \
   V(JumpIfTrue)                                         \
   V(JumpIfFalse)                                        \
+  V(JumpIfTrueNoFeedback)                               \
+  V(JumpIfFalseNoFeedback)                              \
   V(JumpIfNull)                                         \
   V(JumpIfNotNull)                                      \
   V(JumpIfUndefined)                                    \
@@ -760,14 +782,14 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
   // constant pool entry (OperandType::kIdx).
   static constexpr bool IsJumpConstant(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpConstant &&
-           bytecode <= Bytecode::kJumpIfToBooleanFalseConstant;
+           bytecode <= Bytecode::kJumpIfToBooleanFalseConstantNoFeedback;
   }
 
   // Returns true if the bytecode is a jump that internally coerces the
   // accumulator to a boolean.
   static constexpr bool IsJumpIfToBoolean(Bytecode bytecode) {
     return bytecode >= Bytecode::kJumpIfToBooleanTrueConstant &&
-           bytecode <= Bytecode::kJumpIfToBooleanFalse;
+           bytecode <= Bytecode::kJumpIfToBooleanFalseNoFeedback;
   }
 
   // Returns true if the bytecode is a jump or conditional jump taking

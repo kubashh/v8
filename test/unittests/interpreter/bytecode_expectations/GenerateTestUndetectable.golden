@@ -14,7 +14,7 @@ snippet: "
 "
 frame size: 2
 parameter count: 1
-bytecode array length: 19
+bytecode array length: 20
 bytecodes: [
   /*   46 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
                 B(Star0),
@@ -22,7 +22,7 @@ bytecodes: [
                 B(Star1),
   /*   67 S> */ B(Ldar), R(0),
                 B(TestUndetectable),
-                B(JumpIfFalse), U8(5),
+                B(JumpIfFalse), U8(6), U8(3),
   /*   88 S> */ B(LdaSmi), I8(20),
                 B(Star1),
   /*   97 S> */ B(Ldar), R(1),
@@ -43,7 +43,7 @@ snippet: "
 "
 frame size: 2
 parameter count: 1
-bytecode array length: 19
+bytecode array length: 20
 bytecodes: [
   /*   46 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
                 B(Star0),
@@ -51,7 +51,7 @@ bytecodes: [
                 B(Star1),
   /*   67 S> */ B(Ldar), R(0),
                 B(TestUndetectable),
-                B(JumpIfFalse), U8(5),
+                B(JumpIfFalse), U8(6), U8(3),
   /*   93 S> */ B(LdaSmi), I8(20),
                 B(Star1),
   /*  102 S> */ B(Ldar), R(1),
@@ -72,7 +72,7 @@ snippet: "
 "
 frame size: 2
 parameter count: 1
-bytecode array length: 19
+bytecode array length: 20
 bytecodes: [
   /*   46 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
                 B(Star0),
@@ -80,7 +80,7 @@ bytecodes: [
                 B(Star1),
   /*   67 S> */ B(Ldar), R(0),
                 B(TestUndetectable),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(3),
   /*   88 S> */ B(LdaSmi), I8(20),
                 B(Star1),
   /*   97 S> */ B(Ldar), R(1),
@@ -101,7 +101,7 @@ snippet: "
 "
 frame size: 2
 parameter count: 1
-bytecode array length: 19
+bytecode array length: 20
 bytecodes: [
   /*   46 S> */ B(CreateObjectLiteral), U8(0), U8(0), U8(41),
                 B(Star0),
@@ -109,7 +109,7 @@ bytecodes: [
                 B(Star1),
   /*   67 S> */ B(Ldar), R(0),
                 B(TestUndetectable),
-                B(JumpIfTrue), U8(5),
+                B(JumpIfTrue), U8(6), U8(3),
   /*   93 S> */ B(LdaSmi), I8(20),
                 B(Star1),
   /*  102 S> */ B(Ldar), R(1),

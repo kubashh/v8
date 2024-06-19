@@ -321,14 +321,15 @@ class BytecodeGraphBuilder {
 
   // Control flow plumbing.
   void BuildJump();
-  void BuildJumpIf(Node* condition);
-  void BuildJumpIfNot(Node* condition);
+  void BuildJumpIf(Node* condition, BranchHint branch_hint = BranchHint::kNone);
+  void BuildJumpIfNot(Node* condition,
+                      BranchHint branch_hint = BranchHint::kNone);
   void BuildJumpIfEqual(Node* comperand);
   void BuildJumpIfNotEqual(Node* comperand);
-  void BuildJumpIfTrue();
-  void BuildJumpIfFalse();
-  void BuildJumpIfToBooleanTrue();
-  void BuildJumpIfToBooleanFalse();
+  void BuildJumpIfTrue(bool has_feedback);
+  void BuildJumpIfFalse(bool has_feedback);
+  void BuildJumpIfToBooleanTrue(bool has_feedback);
+  void BuildJumpIfToBooleanFalse(bool has_feedback);
   void BuildJumpIfNotHole();
   void BuildJumpIfJSReceiver();
   void BuildJumpIfForInDone();
@@ -3567,28 +3568,62 @@ void BytecodeGraphBuilder::VisitJump() { BuildJump(); }
 
 void BytecodeGraphBuilder::VisitJumpConstant() { BuildJump(); }
 
-void BytecodeGraphBuilder::VisitJumpIfTrue() { BuildJumpIfTrue(); }
+void BytecodeGraphBuilder::VisitJumpIfTrue() { BuildJumpIfTrue(true); }
 
-void BytecodeGraphBuilder::VisitJumpIfTrueConstant() { BuildJumpIfTrue(); }
+void BytecodeGraphBuilder::VisitJumpIfTrueNoFeedback() {
+  BuildJumpIfTrue(false);
+}
 
-void BytecodeGraphBuilder::VisitJumpIfFalse() { BuildJumpIfFalse(); }
+void BytecodeGraphBuilder::VisitJumpIfTrueConstant() { BuildJumpIfTrue(true); }
 
-void BytecodeGraphBuilder::VisitJumpIfFalseConstant() { BuildJumpIfFalse(); }
+void BytecodeGraphBuilder::VisitJumpIfTrueConstantNoFeedback() {
+  BuildJumpIfTrue(false);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfFalse() { BuildJumpIfFalse(true); }
+
+void BytecodeGraphBuilder::VisitJumpIfFalseNoFeedback() {
+  BuildJumpIfFalse(false);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfFalseConstant() {
+  BuildJumpIfFalse(true);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfFalseConstantNoFeedback() {
+  BuildJumpIfFalse(false);
+}
 
 void BytecodeGraphBuilder::VisitJumpIfToBooleanTrue() {
-  BuildJumpIfToBooleanTrue();
+  BuildJumpIfToBooleanTrue(true);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfToBooleanTrueNoFeedback() {
+  BuildJumpIfToBooleanTrue(false);
 }
 
 void BytecodeGraphBuilder::VisitJumpIfToBooleanTrueConstant() {
-  BuildJumpIfToBooleanTrue();
+  BuildJumpIfToBooleanTrue(true);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfToBooleanTrueConstantNoFeedback() {
+  BuildJumpIfToBooleanTrue(false);
 }
 
 void BytecodeGraphBuilder::VisitJumpIfToBooleanFalse() {
-  BuildJumpIfToBooleanFalse();
+  BuildJumpIfToBooleanFalse(true);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfToBooleanFalseNoFeedback() {
+  BuildJumpIfToBooleanFalse(false);
 }
 
 void BytecodeGraphBuilder::VisitJumpIfToBooleanFalseConstant() {
-  BuildJumpIfToBooleanFalse();
+  BuildJumpIfToBooleanFalse(true);
+}
+
+void BytecodeGraphBuilder::VisitJumpIfToBooleanFalseConstantNoFeedback() {
+  BuildJumpIfToBooleanFalse(false);
 }
 
 void BytecodeGraphBuilder::VisitJumpIfJSReceiver() { BuildJumpIfJSReceiver(); }
@@ -4085,8 +4120,9 @@ void BytecodeGraphBuilder::BuildJump() {
   MergeIntoSuccessorEnvironment(bytecode_iterator().GetJumpTargetOffset());
 }
 
-void BytecodeGraphBuilder::BuildJumpIf(Node* condition) {
-  NewBranch(condition, BranchHint::kNone);
+void BytecodeGraphBuilder::BuildJumpIf(Node* condition,
+                                       BranchHint branch_hint) {
+  NewBranch(condition, branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfTrue();
@@ -4095,8 +4131,9 @@ void BytecodeGraphBuilder::BuildJumpIf(Node* condition) {
   NewIfFalse();
 }
 
-void BytecodeGraphBuilder::BuildJumpIfNot(Node* condition) {
-  NewBranch(condition, BranchHint::kNone);
+void BytecodeGraphBuilder::BuildJumpIfNot(Node* condition,
+                                          BranchHint branch_hint) {
+  NewBranch(condition, branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfFalse();
@@ -4119,8 +4156,17 @@ void BytecodeGraphBuilder::BuildJumpIfNotEqual(Node* comperand) {
   BuildJumpIfNot(condition);
 }
 
-void BytecodeGraphBuilder::BuildJumpIfFalse() {
-  NewBranch(environment()->LookupAccumulator(), BranchHint::kNone);
+void BytecodeGraphBuilder::BuildJumpIfFalse(bool has_feedback) {
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback && has_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = FeedbackNexus::ReverseBranchHint(
+        broker()->GetFeedbackForBranch(source));
+  }
+
+  NewBranch(environment()->LookupAccumulator(), branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfFalse();
@@ -4131,8 +4177,16 @@ void BytecodeGraphBuilder::BuildJumpIfFalse() {
   environment()->BindAccumulator(jsgraph()->TrueConstant());
 }
 
-void BytecodeGraphBuilder::BuildJumpIfTrue() {
-  NewBranch(environment()->LookupAccumulator(), BranchHint::kNone);
+void BytecodeGraphBuilder::BuildJumpIfTrue(bool has_feedback) {
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback && has_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = broker()->GetFeedbackForBranch(source);
+  }
+
+  NewBranch(environment()->LookupAccumulator(), branch_hint);
   {
     SubEnvironment sub_environment(this);
     NewIfTrue();
@@ -4143,16 +4197,32 @@ void BytecodeGraphBuilder::BuildJumpIfTrue() {
   environment()->BindAccumulator(jsgraph()->FalseConstant());
 }
 
-void BytecodeGraphBuilder::BuildJumpIfToBooleanTrue() {
+void BytecodeGraphBuilder::BuildJumpIfToBooleanTrue(bool has_feedback) {
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback && has_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = broker()->GetFeedbackForBranch(source);
+  }
+
   Node* accumulator = environment()->LookupAccumulator();
   Node* condition = NewNode(simplified()->ToBoolean(), accumulator);
-  BuildJumpIf(condition);
+  BuildJumpIf(condition, branch_hint);
 }
 
-void BytecodeGraphBuilder::BuildJumpIfToBooleanFalse() {
+void BytecodeGraphBuilder::BuildJumpIfToBooleanFalse(bool has_feedback) {
+  BranchHint branch_hint = BranchHint::kNone;
+  if (v8_flags.maglev_branch_feedback && has_feedback) {
+    int const slot_id = bytecode_iterator().GetIndexOperand(1);
+    FeedbackSlot slot = FeedbackVector::ToSlot(slot_id);
+    FeedbackSource source(feedback_vector(), slot);
+    branch_hint = FeedbackNexus::ReverseBranchHint(
+        broker()->GetFeedbackForBranch(source));
+  }
   Node* accumulator = environment()->LookupAccumulator();
   Node* condition = NewNode(simplified()->ToBoolean(), accumulator);
-  BuildJumpIfNot(condition);
+  BuildJumpIfNot(condition, branch_hint);
 }
 
 void BytecodeGraphBuilder::BuildJumpIfNotHole() {

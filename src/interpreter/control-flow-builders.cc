@@ -28,13 +28,15 @@ void BreakableControlFlowBuilder::EmitJump(BytecodeLabels* sites) {
 }
 
 void BreakableControlFlowBuilder::EmitJumpIfTrue(
-    BytecodeArrayBuilder::ToBooleanMode mode, BytecodeLabels* sites) {
-  builder()->JumpIfTrue(mode, sites->New());
+    BytecodeArrayBuilder::ToBooleanMode mode, BytecodeLabels* sites,
+    FeedbackSlot branch_slot) {
+  builder()->JumpIfTrue(mode, sites->New(), branch_slot);
 }
 
 void BreakableControlFlowBuilder::EmitJumpIfFalse(
-    BytecodeArrayBuilder::ToBooleanMode mode, BytecodeLabels* sites) {
-  builder()->JumpIfFalse(mode, sites->New());
+    BytecodeArrayBuilder::ToBooleanMode mode, BytecodeLabels* sites,
+    FeedbackSlot branch_slot) {
+  builder()->JumpIfFalse(mode, sites->New(), branch_slot);
 }
 
 void BreakableControlFlowBuilder::EmitJumpIfUndefined(BytecodeLabels* sites) {
@@ -121,8 +123,8 @@ void SwitchBuilder::BindCaseTargetForCompareJump(int index,
 }
 
 void SwitchBuilder::JumpToCaseIfTrue(BytecodeArrayBuilder::ToBooleanMode mode,
-                                     int index) {
-  builder()->JumpIfTrue(mode, &case_sites_.at(index));
+                                     int index, FeedbackSlot branch_slot) {
+  builder()->JumpIfTrue(mode, &case_sites_.at(index), branch_slot);
 }
 
 // Precondition: tag is in the accumulator
@@ -144,9 +146,9 @@ void SwitchBuilder::BindDefault(CaseClause* clause) {
 
 void SwitchBuilder::JumpToDefault() { this->EmitJump(&default_); }
 
-void SwitchBuilder::JumpToFallThroughIfFalse() {
+void SwitchBuilder::JumpToFallThroughIfFalse(FeedbackSlot branch_slot) {
   this->EmitJumpIfFalse(BytecodeArrayBuilder::ToBooleanMode::kAlreadyBoolean,
-                        &fall_through_);
+                        &fall_through_, branch_slot);
 }
 
 TryCatchBuilder::~TryCatchBuilder() {

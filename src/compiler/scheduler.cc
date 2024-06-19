@@ -487,6 +487,9 @@ class CFGBuilder : public ZoneObject {
           case BranchHint::kFalse:
             successor_blocks[0]->set_deferred(true);
             break;
+          case BranchHint::kMostlyTrue:
+          case BranchHint::kMostlyFalse:
+            UNREACHABLE();
         }
         break;
       case BranchHint::kTrue:
@@ -495,6 +498,9 @@ class CFGBuilder : public ZoneObject {
       case BranchHint::kFalse:
         successor_blocks[0]->set_deferred(true);
         break;
+      case BranchHint::kMostlyTrue:
+      case BranchHint::kMostlyFalse:
+        UNREACHABLE();
     }
 
     if (branch == component_entry_) {

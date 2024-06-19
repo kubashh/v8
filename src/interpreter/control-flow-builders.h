@@ -51,10 +51,10 @@ class V8_EXPORT_PRIVATE BreakableControlFlowBuilder
   // BindBreakTarget is called.
   void Break() { EmitJump(&break_labels_); }
   void BreakIfTrue(BytecodeArrayBuilder::ToBooleanMode mode) {
-    EmitJumpIfTrue(mode, &break_labels_);
+    EmitJumpIfTrue(mode, &break_labels_, FeedbackSlot::Invalid());
   }
   void BreakIfFalse(BytecodeArrayBuilder::ToBooleanMode mode) {
-    EmitJumpIfFalse(mode, &break_labels_);
+    EmitJumpIfFalse(mode, &break_labels_, FeedbackSlot::Invalid());
   }
   void BreakIfUndefined() { EmitJumpIfUndefined(&break_labels_); }
   void BreakIfNull() { EmitJumpIfNull(&break_labels_); }
@@ -67,9 +67,9 @@ class V8_EXPORT_PRIVATE BreakableControlFlowBuilder
  protected:
   void EmitJump(BytecodeLabels* labels);
   void EmitJumpIfTrue(BytecodeArrayBuilder::ToBooleanMode mode,
-                      BytecodeLabels* labels);
+                      BytecodeLabels* labels, FeedbackSlot branch_slot);
   void EmitJumpIfFalse(BytecodeArrayBuilder::ToBooleanMode mode,
-                       BytecodeLabels* labels);
+                       BytecodeLabels* labels, FeedbackSlot branch_slot);
   void EmitJumpIfUndefined(BytecodeLabels* labels);
   void EmitJumpIfNull(BytecodeLabels* labels);
   void EmitJumpIfForInDone(BytecodeLabels* labels, Register index,
@@ -179,7 +179,8 @@ class V8_EXPORT_PRIVATE SwitchBuilder final
   // This method is called when visiting case comparison operation for |index|.
   // Inserts a JumpIfTrue with ToBooleanMode |mode| to a unbound label that is
   // patched when the corresponding SetCaseTarget is called.
-  void JumpToCaseIfTrue(BytecodeArrayBuilder::ToBooleanMode mode, int index);
+  void JumpToCaseIfTrue(BytecodeArrayBuilder::ToBooleanMode mode, int index,
+                        FeedbackSlot branch_slot);
 
   void EmitJumpTableIfExists(int min_case, int max_case,
                              std::map<int, CaseClause*>& covered_cases);
@@ -188,7 +189,7 @@ class V8_EXPORT_PRIVATE SwitchBuilder final
 
   void JumpToDefault();
 
-  void JumpToFallThroughIfFalse();
+  void JumpToFallThroughIfFalse(FeedbackSlot branch_slot);
 
  private:
   // Unbound labels that identify jumps for case statements in the code.
