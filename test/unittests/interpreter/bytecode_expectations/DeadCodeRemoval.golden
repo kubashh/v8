@@ -61,11 +61,11 @@ snippet: "
 "
 frame size: 1
 parameter count: 1
-bytecode array length: 11
+bytecode array length: 12
 bytecodes: [
   /*   42 S> */ B(LdaSmi), I8(1),
                 B(Star0),
-  /*   45 S> */ B(JumpIfToBooleanFalse), U8(5),
+  /*   45 S> */ B(JumpIfToBooleanFalse), U8(6), U8(0),
   /*   54 S> */ B(LdaSmi), I8(1),
   /*   63 S> */ B(Return),
   /*   67 S> */ B(LdaSmi), I8(2),

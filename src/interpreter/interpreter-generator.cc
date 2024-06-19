@@ -1998,55 +1998,101 @@ IGNITION_HANDLER(JumpConstant, InterpreterAssembler) {
   Jump(relative_jump);
 }
 
-// JumpIfTrue <imm>
+// JumpIfTrue <imm> <branch_slot>
 //
 // Jump by the number of bytes represented by an immediate operand if the
 // accumulator contains true. This only works for boolean inputs, and
-// will misbehave if passed arbitrary input values.
+// will misbehave if passed arbitrary input values. Feedback about which way the
+// branch went is collected in <branch_slot>.
 IGNITION_HANDLER(JumpIfTrue, InterpreterAssembler) {
+  TNode<Object> accumulator = GetAccumulator();
+  CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  JumpIfTaggedEqual(accumulator, TrueConstant(), 0, &branch_slot);
+}
+
+IGNITION_HANDLER(JumpIfTrueNoFeedback, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, TrueConstant(), 0);
 }
 
-// JumpIfTrueConstant <idx>
+// JumpIfTrueConstant <idx> <branch_slot>
 //
 // Jump by the number of bytes in the Smi in the |idx| entry in the constant
 // pool if the accumulator contains true. This only works for boolean inputs,
-// and will misbehave if passed arbitrary input values.
+// and will misbehave if passed arbitrary input values. Feedback about which way
+// the branch went is collected in <branch_slot>.
 IGNITION_HANDLER(JumpIfTrueConstant, InterpreterAssembler) {
+  TNode<Object> accumulator = GetAccumulator();
+  CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  JumpIfTaggedEqualConstant(accumulator, TrueConstant(), 0, &branch_slot);
+}
+
+IGNITION_HANDLER(JumpIfTrueConstantNoFeedback, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqualConstant(accumulator, TrueConstant(), 0);
 }
 
-// JumpIfFalse <imm>
+// JumpIfFalse <imm> <branch_slot>
 //
 // Jump by the number of bytes represented by an immediate operand if the
 // accumulator contains false. This only works for boolean inputs, and
-// will misbehave if passed arbitrary input values.
+// will misbehave if passed arbitrary input values. Feedback about which way the
+// branch went is collected in <branch_slot>.
 IGNITION_HANDLER(JumpIfFalse, InterpreterAssembler) {
+  TNode<Object> accumulator = GetAccumulator();
+  CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  JumpIfTaggedEqual(accumulator, FalseConstant(), 0, &branch_slot);
+}
+
+IGNITION_HANDLER(JumpIfFalseNoFeedback, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqual(accumulator, FalseConstant(), 0);
 }
 
-// JumpIfFalseConstant <idx>
+// JumpIfFalseConstant <idx> <branch_slot>
 //
 // Jump by the number of bytes in the Smi in the |idx| entry in the constant
 // pool if the accumulator contains false. This only works for boolean inputs,
-// and will misbehave if passed arbitrary input values.
+// and will misbehave if passed arbitrary input values. Feedback about which way
+// the branch went is collected in <branch_slot>.
 IGNITION_HANDLER(JumpIfFalseConstant, InterpreterAssembler) {
+  TNode<Object> accumulator = GetAccumulator();
+  CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  JumpIfTaggedEqualConstant(accumulator, FalseConstant(), 0, &branch_slot);
+}
+
+IGNITION_HANDLER(JumpIfFalseConstantNoFeedback, InterpreterAssembler) {
   TNode<Object> accumulator = GetAccumulator();
   CSA_DCHECK(this, IsBoolean(CAST(accumulator)));
   JumpIfTaggedEqualConstant(accumulator, FalseConstant(), 0);
 }
 
-// JumpIfToBooleanTrue <imm>
+// JumpIfToBooleanTrue <imm> <branch_slot>
 //
 // Jump by the number of bytes represented by an immediate operand if the object
 // referenced by the accumulator is true when the object is cast to boolean.
+// Feedback about which way the branch went is collected in <branch_slot>.
 IGNITION_HANDLER(JumpIfToBooleanTrue, InterpreterAssembler) {
+  TNode<Object> value = GetAccumulator();
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  Label if_true(this), if_false(this);
+  BranchIfToBooleanIsTrue(value, &if_true, &if_false, LoadFeedbackVector(),
+                          &branch_slot);
+  BIND(&if_true);
+  TNode<IntPtrT> relative_jump = Signed(BytecodeOperandUImmWord(0));
+  Jump(relative_jump);
+  BIND(&if_false);
+  Dispatch();
+}
+
+IGNITION_HANDLER(JumpIfToBooleanTrueNoFeedback, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
   Label if_true(this), if_false(this);
   BranchIfToBooleanIsTrue(value, &if_true, &if_false);
@@ -2057,12 +2103,26 @@ IGNITION_HANDLER(JumpIfToBooleanTrue, InterpreterAssembler) {
   Dispatch();
 }
 
-// JumpIfToBooleanTrueConstant <idx>
+// JumpIfToBooleanTrueConstant <idx> <branch_slot>
 //
 // Jump by the number of bytes in the Smi in the |idx| entry in the constant
 // pool if the object referenced by the accumulator is true when the object is
-// cast to boolean.
+// cast to boolean. Feedback about which way the branch went is collected in
+// <branch_slot>.
 IGNITION_HANDLER(JumpIfToBooleanTrueConstant, InterpreterAssembler) {
+  TNode<Object> value = GetAccumulator();
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  Label if_true(this), if_false(this);
+  BranchIfToBooleanIsTrue(value, &if_true, &if_false, LoadFeedbackVector(),
+                          &branch_slot);
+  BIND(&if_true);
+  TNode<IntPtrT> relative_jump = LoadAndUntagConstantPoolEntryAtOperandIndex(0);
+  Jump(relative_jump);
+  BIND(&if_false);
+  Dispatch();
+}
+
+IGNITION_HANDLER(JumpIfToBooleanTrueConstantNoFeedback, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
   Label if_true(this), if_false(this);
   BranchIfToBooleanIsTrue(value, &if_true, &if_false);
@@ -2073,11 +2133,25 @@ IGNITION_HANDLER(JumpIfToBooleanTrueConstant, InterpreterAssembler) {
   Dispatch();
 }
 
-// JumpIfToBooleanFalse <imm>
+// JumpIfToBooleanFalse <imm> <branch_slot>
 //
 // Jump by the number of bytes represented by an immediate operand if the object
 // referenced by the accumulator is false when the object is cast to boolean.
+// Feedback about which way the branch went is collected in <branch_slot>.
 IGNITION_HANDLER(JumpIfToBooleanFalse, InterpreterAssembler) {
+  TNode<Object> value = GetAccumulator();
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  Label if_true(this), if_false(this);
+  BranchIfToBooleanIsTrue(value, &if_true, &if_false, LoadFeedbackVector(),
+                          &branch_slot, true);
+  BIND(&if_true);
+  Dispatch();
+  BIND(&if_false);
+  TNode<IntPtrT> relative_jump = Signed(BytecodeOperandUImmWord(0));
+  Jump(relative_jump);
+}
+
+IGNITION_HANDLER(JumpIfToBooleanFalseNoFeedback, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
   Label if_true(this), if_false(this);
   BranchIfToBooleanIsTrue(value, &if_true, &if_false);
@@ -2088,12 +2162,26 @@ IGNITION_HANDLER(JumpIfToBooleanFalse, InterpreterAssembler) {
   Jump(relative_jump);
 }
 
-// JumpIfToBooleanFalseConstant <idx>
+// JumpIfToBooleanFalseConstant <idx> <branch_slot>
 //
 // Jump by the number of bytes in the Smi in the |idx| entry in the constant
 // pool if the object referenced by the accumulator is false when the object is
-// cast to boolean.
+// cast to boolean. Feedback about which way the branch went is collected in
+// <branch_slot>.
 IGNITION_HANDLER(JumpIfToBooleanFalseConstant, InterpreterAssembler) {
+  TNode<Object> value = GetAccumulator();
+  TNode<UintPtrT> branch_slot = BytecodeOperandIdx(1);
+  Label if_true(this), if_false(this);
+  BranchIfToBooleanIsTrue(value, &if_true, &if_false, LoadFeedbackVector(),
+                          &branch_slot, true);
+  BIND(&if_true);
+  Dispatch();
+  BIND(&if_false);
+  TNode<IntPtrT> relative_jump = LoadAndUntagConstantPoolEntryAtOperandIndex(0);
+  Jump(relative_jump);
+}
+
+IGNITION_HANDLER(JumpIfToBooleanFalseConstantNoFeedback, InterpreterAssembler) {
   TNode<Object> value = GetAccumulator();
   Label if_true(this), if_false(this);
   BranchIfToBooleanIsTrue(value, &if_true, &if_false);

@@ -19,7 +19,7 @@ snippet: "
 "
 frame size: 7
 parameter count: 1
-bytecode array length: 31
+bytecode array length: 32
 bytecodes: [
                 B(Mov), R(closure), R(1),
   /*   93 S> */ B(FindNonDefaultConstructorOrConstruct), R(1), R(0), R(5),
@@ -27,10 +27,10 @@ bytecodes: [
                 B(Mov), R(1), R(2),
                 B(Mov), R(0), R(3),
                 B(Mov), R(6), R(4),
-                B(JumpIfTrue), U8(10),
+                B(JumpIfTrue), U8(11), U8(0),
                 B(ThrowIfNotSuperConstructor), R(4),
                 B(Ldar), R(3),
-  /*   93 E> */ B(ConstructForwardAllArgs), R(4), U8(0),
+  /*   93 E> */ B(ConstructForwardAllArgs), R(4), U8(2),
                 B(Star4),
                 B(Ldar), R(4),
   /*   93 S> */ B(Return),
@@ -55,7 +55,7 @@ snippet: "
 "
 frame size: 12
 parameter count: 1
-bytecode array length: 51
+bytecode array length: 52
 bytecodes: [
   /*  128 E> */ B(CreateRestParameter),
                 B(Star3),
@@ -69,10 +69,10 @@ bytecodes: [
                 B(Mov), R(1), R(5),
                 B(Mov), R(0), R(9),
                 B(Mov), R(11), R(6),
-                B(JumpIfTrue), U8(12),
+                B(JumpIfTrue), U8(13), U8(0),
                 B(ThrowIfNotSuperConstructor), R(6),
                 B(Ldar), R(9),
-  /*  140 E> */ B(ConstructWithSpread), R(6), R(7), U8(2), U8(0),
+  /*  140 E> */ B(ConstructWithSpread), R(6), R(7), U8(2), U8(2),
                 B(Star6),
                 B(Ldar), R(this),
                 B(ThrowSuperAlreadyCalledIfNotHole),
@@ -101,7 +101,7 @@ snippet: "
 "
 frame size: 12
 parameter count: 1
-bytecode array length: 101
+bytecode array length: 103
 bytecodes: [
   /*  128 E> */ B(CreateRestParameter),
                 B(Star3),
@@ -121,20 +121,20 @@ bytecodes: [
                 B(JumpIfJSReceiver), U8(7),
                 B(CallRuntime), U16(Runtime::kThrowIteratorResultNotAnObject), R(11), U8(1),
                 B(GetNamedProperty), R(11), U8(2), U8(16),
-                B(JumpIfToBooleanTrue), U8(19),
+                B(JumpIfToBooleanTrue), U8(20), U8(18),
                 B(GetNamedProperty), R(11), U8(3), U8(7),
                 B(StaInArrayLiteral), R(7), R(8), U8(12),
                 B(Ldar), R(8),
                 B(Inc), U8(11),
                 B(Star8),
-                B(JumpLoop), U8(31), I8(0), U8(18),
+                B(JumpLoop), U8(32), I8(0), U8(20),
                 B(LdaSmi), I8(1),
                 B(StaInArrayLiteral), R(7), R(8), U8(12),
   /*  140 E> */ B(FindNonDefaultConstructorOrConstruct), R(5), R(0), R(9),
                 B(Ldar), R(9),
                 B(Mov), R(0), R(8),
                 B(Mov), R(10), R(6),
-                B(JumpIfTrue), U8(9),
+                B(JumpIfTrue), U8(10), U8(21),
                 B(ThrowIfNotSuperConstructor), R(6),
                 B(CallJSRuntime), U8(%reflect_construct), R(6), U8(3),
                 B(Star6),

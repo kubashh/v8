@@ -329,6 +329,14 @@ Bytecode GetJumpWithConstantOperand(Bytecode jump_bytecode) {
       return Bytecode::kJumpIfToBooleanTrueConstant;
     case Bytecode::kJumpIfToBooleanFalse:
       return Bytecode::kJumpIfToBooleanFalseConstant;
+    case Bytecode::kJumpIfTrueNoFeedback:
+      return Bytecode::kJumpIfTrueConstantNoFeedback;
+    case Bytecode::kJumpIfFalseNoFeedback:
+      return Bytecode::kJumpIfFalseConstantNoFeedback;
+    case Bytecode::kJumpIfToBooleanTrueNoFeedback:
+      return Bytecode::kJumpIfToBooleanTrueConstantNoFeedback;
+    case Bytecode::kJumpIfToBooleanFalseNoFeedback:
+      return Bytecode::kJumpIfToBooleanFalseConstantNoFeedback;
     case Bytecode::kJumpIfNull:
       return Bytecode::kJumpIfNullConstant;
     case Bytecode::kJumpIfNotNull:

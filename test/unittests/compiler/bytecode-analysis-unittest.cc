@@ -127,6 +127,8 @@ TEST_F(BytecodeAnalysisTest, StoreThenLoad) {
 
 TEST_F(BytecodeAnalysisTest, DiamondLoad) {
   interpreter::BytecodeArrayBuilder builder(zone(), 3, 3);
+  FeedbackVectorSpec spec(zone());
+
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
   interpreter::Register reg_0(0);
@@ -136,7 +138,8 @@ TEST_F(BytecodeAnalysisTest, DiamondLoad) {
   interpreter::BytecodeLabel ld1_label;
   interpreter::BytecodeLabel end_label;
 
-  builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &ld1_label);
+  builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &ld1_label,
+                     spec.AddBranchSlot());
   expected_liveness.emplace_back("LLLL", "LLL.");
 
   builder.LoadAccumulatorWithRegister(reg_0);
@@ -164,6 +167,8 @@ TEST_F(BytecodeAnalysisTest, DiamondLoad) {
 
 TEST_F(BytecodeAnalysisTest, DiamondLookupsAndBinds) {
   interpreter::BytecodeArrayBuilder builder(zone(), 3, 3);
+  FeedbackVectorSpec spec(zone());
+
   std::vector<std::pair<std::string, std::string>> expected_liveness;
 
   interpreter::Register reg_0(0);
@@ -176,7 +181,8 @@ TEST_F(BytecodeAnalysisTest, DiamondLookupsAndBinds) {
   builder.StoreAccumulatorInRegister(reg_0);
   expected_liveness.emplace_back(".LLL", "LLLL");
 
-  builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &ld1_label);
+  builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &ld1_label,
+                     spec.AddBranchSlot());
   expected_liveness.emplace_back("LLLL", "LLL.");
 
   {
@@ -229,7 +235,8 @@ TEST_F(BytecodeAnalysisTest, SimpleLoop) {
     expected_liveness.emplace_back("L.L.", "L.LL");
 
     builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean,
-                       loop_builder.break_labels()->New());
+                       loop_builder.break_labels()->New(),
+                       spec.AddBranchSlot());
     expected_liveness.emplace_back("L.LL", "L.L.");
 
     // Gen r0.
@@ -324,12 +331,14 @@ TEST_F(BytecodeAnalysisTest, DiamondInLoop) {
     builder.LoadUndefined();
     expected_liveness.emplace_back("L...", "L..L");
     builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean,
-                       loop_builder.break_labels()->New());
+                       loop_builder.break_labels()->New(),
+                       spec.AddBranchSlot());
     expected_liveness.emplace_back("L..L", "L..L");
 
     interpreter::BytecodeLabel ld1_label;
     interpreter::BytecodeLabel end_label;
-    builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &ld1_label);
+    builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean, &ld1_label,
+                       spec.AddBranchSlot());
     expected_liveness.emplace_back("L..L", "L...");
 
     {
@@ -402,7 +411,8 @@ TEST_F(BytecodeAnalysisTest, KillingLoopInsideLoop) {
     expected_liveness.emplace_back(".L..", ".L.L");
 
     builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean,
-                       loop_builder.break_labels()->New());
+                       loop_builder.break_labels()->New(),
+                       spec.AddBranchSlot());
     expected_liveness.emplace_back(".L.L", ".L..");
 
     {
@@ -417,7 +427,8 @@ TEST_F(BytecodeAnalysisTest, KillingLoopInsideLoop) {
       expected_liveness.emplace_back(".L.L", "LL.L");
 
       builder.JumpIfTrue(ToBooleanMode::kConvertToBoolean,
-                         inner_loop_builder.break_labels()->New());
+                         inner_loop_builder.break_labels()->New(),
+                         spec.AddBranchSlot());
       expected_liveness.emplace_back("LL.L", "LL..");
 
       inner_loop_builder.BindContinueTarget();
