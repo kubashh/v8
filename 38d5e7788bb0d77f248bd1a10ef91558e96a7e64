@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c28293_d10d6a9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-19T10:13:53Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "38d5e7788bb0d77f248bd1a10ef91558e96a7e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fc4118d_173f6b26",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-19T10:13:53Z",
+      "side": 1,
+      "message": "Idea: if we reserve a bit in the `VisitorId` values for this predicate then we can use it in the generic version (`IterateJSObjectBodyImpl`) to make it faster.",
+      "range": {
+        "startLine": 108,
+        "startChar": 17,
+        "endLine": 108,
+        "endChar": 48
+      },
+      "revId": "38d5e7788bb0d77f248bd1a10ef91558e96a7e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d1fb02b_a7517cd2",
+        "filename": "src/objects/objects-body-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-19T10:13:53Z",
+      "side": 1,
+      "message": "How about\n```\n// Treats all header and in-object fields in the range as tagged.\n// Figures out dynamically whether the object has embedder fields and\n// visits them accordingly (as tagged fields and as external pointers).\n```",
+      "revId": "38d5e7788bb0d77f248bd1a10ef91558e96a7e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
