@@ -273,6 +273,13 @@ template <typename EntryType, uint16_t MinSegmentSize>
 void Worklist<EntryType, MinSegmentSize>::Segment::Pop(EntryType* e) {
   DCHECK(!IsEmpty());
   *e = entry(--index_);
+  // We likely need the entry immediately for read-only with no locality (i.e.,
+  // we do not need to cache it).
+  __builtin_prefetch(reinterpret_cast<void*>(e), 0 /*read*/, 0 /*no locality*/);
+  if (e) [[likely]] {
+    __builtin_prefetch(*reinterpret_cast<void**>(e), 0 /*read*/,
+                       0 /*no locality*/);
+  }
 }
 
 template <typename EntryType, uint16_t MinSegmentSize>
