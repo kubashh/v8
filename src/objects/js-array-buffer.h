@@ -13,6 +13,7 @@
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
+#include "v8-array-buffer.h"
 
 namespace v8 {
 namespace internal {
@@ -155,9 +156,11 @@ class JSArrayBuffer
   DECL_PRINTER(JSArrayBuffer)
   DECL_VERIFIER(JSArrayBuffer)
 
-  static const int kSizeWithEmbedderFields =
+  static constexpr int kSizeWithEmbedderFields =
       kHeaderSize +
       v8::ArrayBuffer::kEmbedderFieldCount * kEmbedderDataSlotSize;
+  static constexpr bool kContainsEmbedderFields =
+      v8::ArrayBuffer::kEmbedderFieldCount > 0;
 
   class BodyDescriptor;
 
@@ -380,9 +383,11 @@ class JSTypedArray
   // static_assert(IsAligned(kLengthOffset, kTaggedSize));
   // static_assert(IsAligned(kExternalPointerOffset, kTaggedSize));
 
-  static const int kSizeWithEmbedderFields =
+  static constexpr int kSizeWithEmbedderFields =
       kHeaderSize +
       v8::ArrayBufferView::kEmbedderFieldCount * kEmbedderDataSlotSize;
+  static constexpr bool kContainsEmbedderFields =
+      v8::ArrayBufferView::kEmbedderFieldCount > 0;
 
   class BodyDescriptor;
 
@@ -423,9 +428,11 @@ class JSDataViewOrRabGsabDataView
   // TODO(v8:9287): Re-enable when GCMole stops mixing 32/64 bit configs.
   // static_assert(IsAligned(kDataPointerOffset, kTaggedSize));
 
-  static const int kSizeWithEmbedderFields =
+  static constexpr int kSizeWithEmbedderFields =
       kHeaderSize +
       v8::ArrayBufferView::kEmbedderFieldCount * kEmbedderDataSlotSize;
+  static constexpr bool kContainsEmbedderFields =
+      v8::ArrayBufferView::kEmbedderFieldCount > 0;
 
   class BodyDescriptor;
 

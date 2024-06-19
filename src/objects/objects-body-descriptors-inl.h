@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #include "include/v8-internal.h"
+#include "src/base/logging.h"
 #include "src/codegen/reloc-info.h"
 #include "src/common/globals.h"
 #include "src/ic/handler-configuration.h"
@@ -42,6 +43,7 @@
 #include "src/objects/transitions.h"
 #include "src/objects/turbofan-types-inl.h"
 #include "src/objects/turboshaft-types-inl.h"
+#include "v8-container.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/wasm-objects-inl.h"
@@ -98,6 +100,17 @@ void BodyDescriptorBase::IterateJSObjectBodyImpl(Tagged<Map> map,
   IteratePointers(obj, start_offset, end_offset, v);
 }
 
+template <typename ObjectVisitor>
+// static
+void BodyDescriptorBase::IterateJSObjectBodyWithoutEmbedderFieldsImpl(
+    Tagged<Map> map, Tagged<HeapObject> obj, int start_offset, int end_offset,
+    ObjectVisitor* v) {
+  // This body iteration assumes that there's no embedder fields.
+  DCHECK_IMPLIES(JSObject::MayHaveEmbedderFields(map),
+                 UncheckedCast<JSObject>(obj)->GetEmbedderFieldCount() == 0);
+  IteratePointers(obj, start_offset, end_offset, v);
+}
+
 // This is a BodyDescriptor helper for usage within JSAPIObjectWithEmbedderSlots
 // and JSSpecialObject. The class hierarchies are separate but
 // `kCppHeapWrappableOffset` is the same for both.
@@ -135,6 +148,14 @@ class JSAPIObjectWithEmbedderSlotsOrJSSpecialObjectBodyDescriptor
     // well.
     IterateJSObjectBodyImpl(map, obj, ConcreteType::kHeaderSize, object_size,
                             v);
+  }
+
+  template <typename ConcreteType, typename ObjectVisitor>
+  static inline void IterateJSAPIObjectWithoutEmbedderSlotsTail(
+      Tagged<Map> map, Tagged<HeapObject> obj, int object_size,
+      ObjectVisitor* v) {
+    IterateJSObjectBodyWithoutEmbedderFieldsImpl(
+        map, obj, ConcreteType::kHeaderSize, object_size, v);
   }
 
   static constexpr int kHeaderSize = JSSpecialObject::kHeaderSize;
@@ -439,9 +460,14 @@ class JSArrayBuffer::BodyDescriptor final
     v->VisitExternalPointer(
         obj, obj->RawExternalPointerField(JSArrayBuffer::kExtensionOffset,
                                           kArrayBufferExtensionTag));
-    // JSObject tail: embedder fields + in-object properties.
-    IterateJSAPIObjectWithEmbedderSlotsTail<JSArrayBuffer>(map, obj,
-                                                           object_size, v);
+    // JSObject tail: possible embedder fields + in-object properties.
+    if constexpr (JSArrayBuffer::kContainsEmbedderFields) {
+      IterateJSAPIObjectWithEmbedderSlotsTail<JSArrayBuffer>(map, obj,
+                                                             object_size, v);
+    } else {
+      IterateJSAPIObjectWithoutEmbedderSlotsTail<JSArrayBuffer>(map, obj,
+                                                                object_size, v);
+    }
   }
 
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
@@ -477,9 +503,15 @@ class JSTypedArray::BodyDescriptor : public JSArrayBufferView::BodyDescriptor {
     // JSTypedArray.
     IteratePointers(obj, JSTypedArray::kStartOfStrongFieldsOffset,
                     JSTypedArray::kEndOfStrongFieldsOffset, v);
-    // JSObject tail: embedder fields + in-object properties.
-    IterateJSAPIObjectWithEmbedderSlotsTail<JSTypedArray>(map, obj, object_size,
-                                                          v);
+
+    // JSObject tail: possible embedder fields + in-object properties.
+    if constexpr (JSTypedArray::kContainsEmbedderFields) {
+      IterateJSAPIObjectWithEmbedderSlotsTail<JSTypedArray>(map, obj,
+                                                            object_size, v);
+    } else {
+      IterateJSAPIObjectWithoutEmbedderSlotsTail<JSTypedArray>(map, obj,
+                                                               object_size, v);
+    }
   }
 
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
@@ -501,9 +533,14 @@ class JSDataViewOrRabGsabDataView::BodyDescriptor final
     IteratePointers(obj,
                     JSDataViewOrRabGsabDataView::kStartOfStrongFieldsOffset,
                     JSDataViewOrRabGsabDataView::kEndOfStrongFieldsOffset, v);
-    // JSObject tail: embedder fields + in-object properties.
-    IterateJSAPIObjectWithEmbedderSlotsTail<JSDataViewOrRabGsabDataView>(
-        map, obj, object_size, v);
+    // JSObject tail: possible embedder fields + in-object properties.
+    if constexpr (JSDataViewOrRabGsabDataView::kContainsEmbedderFields) {
+      IterateJSAPIObjectWithEmbedderSlotsTail<JSDataViewOrRabGsabDataView>(
+          map, obj, object_size, v);
+    } else {
+      IterateJSAPIObjectWithoutEmbedderSlotsTail<JSDataViewOrRabGsabDataView>(
+          map, obj, object_size, v);
+    }
   }
 
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
