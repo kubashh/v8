@@ -129,6 +129,9 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
     Tagged<Map> map, Tagged<HeapObject> object) {
   ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
   switch (map->visitor_id()) {
+    [[likely]] case kVisitJSObjectFast:
+      return visitor->VisitJSObjectFast(
+          map, ConcreteVisitor::template Cast<JSObject>(object));
 #define CASE(TypeName)                                                        \
   case kVisit##TypeName:                                                      \
     /* If this DCHECK fails, it means that the object type wasn't added       \
@@ -164,9 +167,6 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
           map, ConcreteVisitor::template Cast<ConsString>(object));
     case kVisitDataObject:
       return visitor->VisitDataObject(map, object);
-    case kVisitJSObjectFast:
-      return visitor->VisitJSObjectFast(
-          map, ConcreteVisitor::template Cast<JSObject>(object));
     case kVisitJSApiObject:
       return visitor->VisitJSApiObject(
           map, ConcreteVisitor::template Cast<JSObject>(object));
