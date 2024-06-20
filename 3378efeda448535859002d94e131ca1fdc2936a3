@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7708ec6_3936619b",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4706,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-20T19:06:01Z",
+      "side": 1,
+      "message": "Instead of the changes inside the block there should be this call here:\n```\nReThrow(*exception, *maybe_message);\n```",
+      "revId": "3378efeda448535859002d94e131ca1fdc2936a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9a6c14_fdc60352",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4735,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-20T19:06:01Z",
+      "side": 1,
+      "message": "Ditto:\n```\nReThrow(*exception, *maybe_message);\n```",
+      "revId": "3378efeda448535859002d94e131ca1fdc2936a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

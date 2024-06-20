@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8e282ea_47c7350a",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4706,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-20T19:06:01Z",
+      "side": 1,
+      "message": "Please revert.",
+      "revId": "19af5fdcfe855038c2f2fe3d98938207a29ef037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afd92ffc_92f0d1c9",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4737,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-20T19:06:01Z",
+      "side": 1,
+      "message": "Please revert.",
+      "revId": "19af5fdcfe855038c2f2fe3d98938207a29ef037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
