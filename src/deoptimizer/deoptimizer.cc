@@ -1066,15 +1066,23 @@ FrameDescription* Deoptimizer::DoComputeWasmLiftoffFrame(
       native_module->module(), frame.wasm_function_index());
   CHECK_LT(fct_feedback_index, module_feedback->length());
   Tagged<Object> feedback_vector = module_feedback->get(fct_feedback_index);
-  if (IsSmi(feedback_vector) && verbose_tracing_enabled()) {
-    // This can happen with multiple instantiations of the same module as the
-    // type feedback is separate per instance but the code is shared (even
-    // cross-isolate).
-    PrintF(trace_scope()->file(),
-           "Deopt with uninitialized feedback vector for function %s [%d]",
-           wasm_code->DebugName().c_str(), frame.wasm_function_index());
+  if (IsSmi(feedback_vector)) {
+    if (verbose_tracing_enabled()) {
+      PrintF(trace_scope()->file(),
+             "Deopt with uninitialized feedback vector for function %s [%d]",
+             wasm_code->DebugName().c_str(), frame.wasm_function_index());
+    }
+    // Not having a feedback vector can happen with multiple instantiations of
+    // the same module as the type feedback is separate per instance but the
+    // code is shared (even cross-isolate).
+    // Note that we cannot allocate the feedback vector here. Instead, store
+    // the function index, so that the feedback vector can be populated by the
+    // deopt finish builtin called from Liftoff.
+    output_frame->SetFrameSlot(feedback_offset,
+                               Smi::FromInt(fct_feedback_index).ptr());
+  } else {
+    output_frame->SetFrameSlot(feedback_offset, feedback_vector.ptr());
   }
-  output_frame->SetFrameSlot(feedback_offset, feedback_vector.ptr());
 
   output_frame->SetPc(wasm_code->instruction_start() +
                       liftoff_description->pc_offset);

@@ -420,6 +420,27 @@ RUNTIME_FUNCTION(Runtime_WasmCompileLazy) {
       wasm::JumpTableOffset(trusted_instance_data->module(), func_index));
 }
 
+namespace {
+Tagged<FixedArray> AllocateFeedbackVector(
+    Isolate* isolate,
+    DirectHandle<WasmTrustedInstanceData> trusted_instance_data,
+    int declared_func_index) {
+  DCHECK(isolate->context().is_null());
+  isolate->set_context(trusted_instance_data->native_context());
+  const wasm::WasmModule* module =
+      trusted_instance_data->native_module()->module();
+
+  int func_index = declared_func_index + module->num_imported_functions;
+  int num_slots = NumFeedbackSlots(module, func_index);
+  DirectHandle<FixedArray> vector =
+      isolate->factory()->NewFixedArrayWithZeroes(num_slots);
+  DCHECK_EQ(trusted_instance_data->feedback_vectors()->get(declared_func_index),
+            Smi::zero());
+  trusted_instance_data->feedback_vectors()->set(declared_func_index, *vector);
+  return *vector;
+}
+}  // namespace
+
 RUNTIME_FUNCTION(Runtime_WasmAllocateFeedbackVector) {
   ClearThreadInWasmScope wasm_flag(isolate);
   HandleScope scope(isolate);
@@ -436,18 +457,19 @@ RUNTIME_FUNCTION(Runtime_WasmAllocateFeedbackVector) {
   // We have to save the native_module on the stack, in case the allocation
   // triggers a GC and we need the module to scan LiftoffSetupFrame stack frame.
   *native_module_stack_slot = native_module;
+  return AllocateFeedbackVector(isolate, trusted_instance_data,
+                                declared_func_index);
+}
 
-  DCHECK(isolate->context().is_null());
-  isolate->set_context(trusted_instance_data->native_context());
-
-  int func_index = declared_func_index + module->num_imported_functions;
-  int num_slots = NumFeedbackSlots(module, func_index);
-  DirectHandle<FixedArray> vector =
-      isolate->factory()->NewFixedArrayWithZeroes(num_slots);
-  DCHECK_EQ(trusted_instance_data->feedback_vectors()->get(declared_func_index),
-            Smi::zero());
-  trusted_instance_data->feedback_vectors()->set(declared_func_index, *vector);
-  return *vector;
+RUNTIME_FUNCTION(Runtime_WasmAllocateFeedbackVectorAtDeopt) {
+  ClearThreadInWasmScope wasm_flag(isolate);
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  DirectHandle<WasmTrustedInstanceData> trusted_instance_data(
+      Cast<WasmTrustedInstanceData>(args[0]), isolate);
+  int declared_func_index = args.smi_value_at(1);
+  return AllocateFeedbackVector(isolate, trusted_instance_data,
+                                declared_func_index);
 }
 
 namespace {
