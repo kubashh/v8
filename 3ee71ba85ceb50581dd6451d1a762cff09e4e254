@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f32433cc_e4b253fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2024-06-20T18:56:58Z",
+      "side": 1,
+      "message": "lgtm, one question about testing",
+      "revId": "3ee71ba85ceb50581dd6451d1a762cff09e4e254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44fb1131_4a75cc14",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2024-06-20T18:56:58Z",
+      "side": 1,
+      "message": "How hard would it be to add a unit test of the API for this behavior?",
+      "revId": "3ee71ba85ceb50581dd6451d1a762cff09e4e254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
