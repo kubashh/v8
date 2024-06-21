@@ -164,6 +164,9 @@ class MarkingVisitorBase : public ConcurrentHeapVisitor<int, ConcreteVisitor> {
     return false;
   }
 
+  V8_INLINE static constexpr bool IsTrivialWeakHeapObject(
+      Tagged<HeapObject> host, Tagged<HeapObject> heap_object);
+
  protected:
   using ConcurrentHeapVisitor<int, ConcreteVisitor>::concrete_visitor;
 

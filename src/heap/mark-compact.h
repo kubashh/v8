@@ -197,6 +197,10 @@ class MarkCompactCollector final {
   explicit MarkCompactCollector(Heap* heap);
   ~MarkCompactCollector();
 
+  // Goes through the list of encountered trivial weak references and clears
+  // those with dead values.
+  void ClearTrivialWeakReferences();
+
  private:
   using ResizeNewSpaceMode = Heap::ResizeNewSpaceMode;
 
@@ -321,11 +325,11 @@ class MarkCompactCollector final {
   // The linked list of all encountered weak maps is destroyed.
   void ClearWeakCollections();
 
-  // Goes through the list of encountered weak references and clears those with
-  // dead values. If the value is a dead map and the parent map transitions to
-  // the dead map via weak cell, then this function also clears the map
-  // transition.
-  void ClearWeakReferences();
+  // Goes through the list of encountered non-trivial weak references and clears
+  // those with dead values. If the value is a dead map and the parent map
+  // transitions to the dead map via weak cell, then this function also clears
+  // the map transition.
+  void ClearNonTrivialWeakReferences();
 
   // Goes through the list of encountered JSWeakRefs and WeakCells and clears
   // those with dead values.
