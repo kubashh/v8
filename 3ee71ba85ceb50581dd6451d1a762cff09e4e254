@@ -51,6 +51,24 @@
       "parentUuid": "44fb1131_4a75cc14",
       "revId": "3ee71ba85ceb50581dd6451d1a762cff09e4e254",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e8ca55_09c7c267",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2024-06-21T19:20:37Z",
+      "side": 1,
+      "message": "Ah, thanks for the pointer, gotcha.",
+      "parentUuid": "46b6e9e4_e6468e14",
+      "revId": "3ee71ba85ceb50581dd6451d1a762cff09e4e254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
