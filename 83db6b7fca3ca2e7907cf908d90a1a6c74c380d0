@@ -16,6 +16,23 @@
       "message": "I forgot the `call_indirect` path. @manoskouk@chromium.org could you take another quick look at the [diff](https://chromium-review.googlesource.com/c/v8/v8/+/5643118/5..6)? 😊",
       "revId": "83db6b7fca3ca2e7907cf908d90a1a6c74c380d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2185f56b_f6cd4b5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2024-06-21T14:21:12Z",
+      "side": 1,
+      "message": "Still LGTM.",
+      "revId": "83db6b7fca3ca2e7907cf908d90a1a6c74c380d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
