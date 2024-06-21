@@ -8524,7 +8524,19 @@ class LiftoffCompiler {
       if (v8_flags.wasm_deopt &&
           env_->deopt_info_bytecode_offset == decoder->pc_offset() &&
           env_->deopt_location_kind == LocationKindForDeopt::kEagerDeopt) {
+        LiftoffAssembler::CacheState callref_state(zone_);
+        callref_state.Split(*__ cache_state());
+        // TODO(mliedtke): The deopt point should be in out-of-line-code.
+        Label deopt_point;
+        Label callref;
+        __ emit_jump(&callref);
+        __ bind(&deopt_point);
         StoreFrameDescriptionForDeopt(decoder);
+        CallBuiltin(Builtin::kWasmLiftoffDeoptFinish, MakeSig(), {},
+                    kNoSourcePosition);
+        __ MergeStackWith(callref_state, 0, LiftoffAssembler::kForwardJump);
+        __ cache_state() -> Steal(callref_state);
+        __ bind(&callref);
       }
       LiftoffRegList pinned;
       LiftoffRegister func_ref = pinned.set(__ PopToRegister(pinned));
