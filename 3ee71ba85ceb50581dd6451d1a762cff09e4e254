@@ -33,6 +33,24 @@
       "message": "How hard would it be to add a unit test of the API for this behavior?",
       "revId": "3ee71ba85ceb50581dd6451d1a762cff09e4e254",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b6e9e4_e6468e14",
+        "filename": "src/api/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-21T19:06:40Z",
+      "side": 1,
+      "message": "It\u0027s already covered. If you look at PS4, before the API change was undone, there\u0027s a `test-api.cc` change that needed to update a test from `kEvaluated` to `kEvaluatingAsync`.",
+      "parentUuid": "44fb1131_4a75cc14",
+      "revId": "3ee71ba85ceb50581dd6451d1a762cff09e4e254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

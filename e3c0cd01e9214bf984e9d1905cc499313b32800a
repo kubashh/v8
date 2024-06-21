@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e723dd_356ceb78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-21T19:06:40Z",
+      "side": 1,
+      "message": "PTAL the diff between PS8 and PS9. The refactor pointed out a spec bug, see description in the GH issue.",
+      "revId": "e3c0cd01e9214bf984e9d1905cc499313b32800a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
