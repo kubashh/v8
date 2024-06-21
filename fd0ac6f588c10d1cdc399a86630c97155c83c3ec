@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40eb3971_70cdd294",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-21T09:32:38Z",
+      "side": 1,
+      "message": "Igor, can you PTAL at the IC part of this?",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adc824e4_11a9cbb9",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-21T09:32:38Z",
+      "side": 1,
+      "message": "nit: MegaTransition",
+      "range": {
+        "startLine": 2327,
+        "startChar": 44,
+        "endLine": 2327,
+        "endChar": 51
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc715416_813b6053",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 4094,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-06-21T09:32:38Z",
+      "side": 1,
+      "message": "nit: order above `no_feedback` for consistency",
+      "range": {
+        "startLine": 4094,
+        "startChar": 4,
+        "endLine": 4094,
+        "endChar": 8
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
