@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "536fc7b3_0a4f0b88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-06-24T08:18:30Z",
+      "side": 1,
+      "message": "PTAL.  This patch enables ExternalPointerHandle for all external pointers when pointer-compression is enabled, regardless of the sandbox.  Had to rebase on top of Dmitry\u0027s patch to enabled shared read-only space in multi-cage contexts, because of external pointers in the snapshot.  We are buying a reduction of the configuration-space size by paying some concessions to the multi-cage configuration; I think it pays off but do let me know.",
+      "revId": "5cb387b68cde84b468291221f630f213397d1814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
