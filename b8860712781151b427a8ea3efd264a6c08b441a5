@@ -16,6 +16,40 @@
       "message": "PTAL. Looks bigger than it is because of some renaming. I\u0027m pleased to see that this ended up making output mode switching more regular rather than more complicated.",
       "revId": "b8860712781151b427a8ea3efd264a6c08b441a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c79d9e59_3de5ea7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T18:42:21Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b8860712781151b427a8ea3efd264a6c08b441a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bdebb99_66aae0b5",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T18:42:21Z",
+      "side": 1,
+      "message": "Oh, nice, I ran across that as well but solved the issue by just removing the atomic fence operation from the reproducer... 😄",
+      "revId": "b8860712781151b427a8ea3efd264a6c08b441a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
