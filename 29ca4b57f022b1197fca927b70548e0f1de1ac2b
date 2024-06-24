@@ -16,6 +16,23 @@
       "message": "Followup addressing comment in last CL",
       "revId": "29ca4b57f022b1197fca927b70548e0f1de1ac2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f786a22_e54681ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-06-24T20:24:43Z",
+      "side": 1,
+      "message": "lgtm, thanks for the quick follow up.",
+      "revId": "29ca4b57f022b1197fca927b70548e0f1de1ac2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
