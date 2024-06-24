@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b039f923_5b5b299c",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-24T18:06:44Z",
+      "side": 0,
+      "message": "This overload was dead code.",
+      "range": {
+        "startLine": 454,
+        "startChar": 7,
+        "endLine": 454,
+        "endChar": 20
+      },
+      "revId": "5c1dee6d3c98423de366df1c5cd6820635c26663",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

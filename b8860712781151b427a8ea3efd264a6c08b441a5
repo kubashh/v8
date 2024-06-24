@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f2c1eeb_25efb08e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-24T18:06:44Z",
+      "side": 1,
+      "message": "PTAL. Looks bigger than it is because of some renaming. I\u0027m pleased to see that this ended up making output mode switching more regular rather than more complicated.",
+      "revId": "b8860712781151b427a8ea3efd264a6c08b441a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
