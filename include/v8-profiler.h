@@ -1108,6 +1108,12 @@ class V8_EXPORT HeapProfiler {
       ActivityControl* control,
       ObjectNameResolver* global_object_name_resolver = nullptr,
       bool hide_internals = true, bool capture_numeric_value = false);
+  /**
+   * Obtains list of Detached JS Wrapper Objects.
+   *
+   * \returns the list of Detached JS Wrapper Objects.
+   */
+  std::vector<v8::Local<v8::Data>> GetDetachedJSWrapperObjects();
 
   /**
    * Starts tracking of heap objects population statistics. After calling

@@ -448,6 +448,10 @@ V8InspectorSession::Inspectable* V8InspectorSessionImpl::inspectedObject(
   return m_inspectedObjects[num].get();
 }
 
+std::vector<v8::Local<v8::Data>> V8InspectorSessionImpl::getDetachedEmbedderObjects() {
+  return m_heapProfilerAgent->getDetachedEmbedderObjects();
+}
+
 void V8InspectorSessionImpl::schedulePauseOnNextStatement(
     StringView breakReason, StringView breakDetails) {
   std::vector<uint8_t> cbor;
