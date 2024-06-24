@@ -85,6 +85,7 @@ class MarkingVisitorBase : public ConcurrentHeapVisitor<int, ConcreteVisitor> {
   V8_INLINE int VisitEphemeronHashTable(Tagged<Map> map,
                                         Tagged<EphemeronHashTable> object);
   V8_INLINE int VisitFixedArray(Tagged<Map> map, Tagged<FixedArray> object);
+  V8_INLINE int VisitFixedArray(Tagged_t map, Tagged<FixedArray> object);
   V8_INLINE int VisitJSArrayBuffer(Tagged<Map> map,
                                    Tagged<JSArrayBuffer> object);
   V8_INLINE int VisitJSFunction(Tagged<Map> map, Tagged<JSFunction> object);
@@ -183,8 +184,7 @@ class MarkingVisitorBase : public ConcurrentHeapVisitor<int, ConcreteVisitor> {
 
   V8_INLINE void VisitDescriptorsForMap(Tagged<Map> map);
 
-  V8_INLINE int VisitFixedArrayWithProgressBar(Tagged<Map> map,
-                                               Tagged<FixedArray> object,
+  V8_INLINE int VisitFixedArrayWithProgressBar(Tagged<FixedArray> object,
                                                ProgressBar& progress_bar);
 
   // Methods needed for supporting code flushing.

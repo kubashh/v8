@@ -285,6 +285,9 @@ class HeapNumber::BodyDescriptor final : public DataOnlyBodyDescriptor {
   static constexpr int SizeOf(Tagged<Map> map, Tagged<HeapObject> object) {
     return sizeof(HeapNumber);
   }
+  static inline int SizeOf(Tagged<HeapObject> object) {
+    return sizeof(HeapNumber);
+  }
 };
 
 // This is a descriptor for one/two pointer fillers.
@@ -1618,7 +1621,22 @@ class FixedArray::BodyDescriptor final
     : public SuffixRangeBodyDescriptor<HeapObject::kHeaderSize> {
  public:
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
+    return SizeOf(raw_object);
+  }
+  static inline int SizeOf(Tagged<HeapObject> raw_object) {
     return UncheckedCast<FixedArray>(raw_object)->AllocatedSize();
+  }
+};
+
+class PropertyArray::BodyDescriptor final
+    : public FlexibleBodyDescriptor<PropertyArray::kHeaderSize> {
+ public:
+  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
+    return SizeOf(raw_object);
+  }
+  static inline int SizeOf(Tagged<HeapObject> raw_object) {
+    return PropertyArray::SizeFor(
+        UncheckedCast<PropertyArray>(raw_object)->length(kAcquireLoad));
   }
 };
 

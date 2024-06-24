@@ -459,11 +459,11 @@ bool MarkingVisitorBase<ConcreteVisitor>::ShouldFlushBaselineCode(
 
 template <typename ConcreteVisitor>
 int MarkingVisitorBase<ConcreteVisitor>::VisitFixedArrayWithProgressBar(
-    Tagged<Map> map, Tagged<FixedArray> object, ProgressBar& progress_bar) {
+    Tagged<FixedArray> object, ProgressBar& progress_bar) {
   const int kProgressBarScanningChunk = kMaxRegularHeapObjectSize;
   static_assert(kMaxRegularHeapObjectSize % kTaggedSize == 0);
   DCHECK(concrete_visitor()->marking_state()->IsMarked(object));
-  const int size = FixedArray::BodyDescriptor::SizeOf(map, object);
+  const int size = FixedArray::BodyDescriptor::SizeOf(object);
   const size_t current_progress_bar = progress_bar.Value();
   int start = static_cast<int>(current_progress_bar);
   if (start == 0) {
@@ -498,8 +498,18 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitFixedArray(
   ProgressBar& progress_bar =
       MutablePageMetadata::FromHeapObject(object)->ProgressBar();
   return concrete_visitor()->CanUpdateValuesInHeap() && progress_bar.IsEnabled()
-             ? VisitFixedArrayWithProgressBar(map, object, progress_bar)
+             ? VisitFixedArrayWithProgressBar(object, progress_bar)
              : Base::VisitFixedArray(map, object);
+}
+
+template <typename ConcreteVisitor>
+int MarkingVisitorBase<ConcreteVisitor>::VisitFixedArray(
+    Tagged_t raw_map, Tagged<FixedArray> object) {
+  ProgressBar& progress_bar =
+      MutablePageMetadata::FromHeapObject(object)->ProgressBar();
+  return concrete_visitor()->CanUpdateValuesInHeap() && progress_bar.IsEnabled()
+             ? VisitFixedArrayWithProgressBar(object, progress_bar)
+             : Base::VisitFixedArray(raw_map, object);
 }
 
 // ===========================================================================
