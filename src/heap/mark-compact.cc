@@ -2198,24 +2198,30 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
                     kTrackNewlyDiscoveredObjects) {
       AddNewlyDiscovered(object);
     }
-    Tagged<Map> map = object->map(cage_base);
-    if (is_per_context_mode) {
-      Address context;
-      if (native_context_inferrer_.Infer(cage_base, map, object, &context)) {
-        local_marking_worklists_->SwitchToContext(context);
+    {
+      int visited_size = 0;
+      Tagged<Map> map;
+      if (is_per_context_mode) {
+        map = object->map(cage_base);
+        Address context;
+        if (native_context_inferrer_.Infer(cage_base, map, object, &context)) {
+          local_marking_worklists_->SwitchToContext(context);
+        }
       }
+      visited_size =
+          marking_visitor_->Visit(object->map_slot(), object, kRelaxedLoad);
+      if (visited_size) {
+        MutablePageMetadata::FromHeapObject(object)
+            ->IncrementLiveBytesAtomically(
+                ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+      }
+      if (is_per_context_mode) {
+        native_context_stats_.IncrementSize(local_marking_worklists_->Context(),
+                                            map, object, visited_size);
+      }
+      bytes_processed += visited_size;
+      objects_processed++;
     }
-    const auto visited_size = marking_visitor_->Visit(map, object);
-    if (visited_size) {
-      MutablePageMetadata::FromHeapObject(object)->IncrementLiveBytesAtomically(
-          ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
-    }
-    if (is_per_context_mode) {
-      native_context_stats_.IncrementSize(local_marking_worklists_->Context(),
-                                          map, object, visited_size);
-    }
-    bytes_processed += visited_size;
-    objects_processed++;
     static_assert(base::bits::IsPowerOfTwo(kDeadlineCheckInterval),
                   "kDeadlineCheckInterval must be power of 2");
     // The below check is an optimized version of

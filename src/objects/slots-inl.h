@@ -90,6 +90,12 @@ Address FullObjectSlot::Relaxed_Load_Raw() const {
   return static_cast<Address>(base::AsAtomicPointer::Relaxed_Load(location()));
 }
 
+Address FullObjectSlot::Acquire_Load_Raw() const {
+  return static_cast<Address>(base::AsAtomicPointer::Acquire_Load(location()));
+}
+
+Address FullObjectSlot::NonAtomic_Load_Raw() const { return *location(); }
+
 // static
 Tagged<Object> FullObjectSlot::RawToTagged(PtrComprCageBase cage_base,
                                            Address raw) {
@@ -147,6 +153,12 @@ Tagged<MaybeObject> FullMaybeObjectSlot::Relaxed_Load(
 Address FullMaybeObjectSlot::Relaxed_Load_Raw() const {
   return static_cast<Address>(base::AsAtomicPointer::Relaxed_Load(location()));
 }
+
+Address FullMaybeObjectSlot::Acquire_Load_Raw() const {
+  return static_cast<Address>(base::AsAtomicPointer::Acquire_Load(location()));
+}
+
+Address FullMaybeObjectSlot::NonAtomic_Load_Raw() const { return *location(); }
 
 // static
 Tagged<Object> FullMaybeObjectSlot::RawToTagged(PtrComprCageBase cage_base,

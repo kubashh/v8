@@ -65,6 +65,8 @@ class CompressedObjectSlot : public SlotBase<CompressedObjectSlot, Tagged_t> {
   inline Tagged<Object> Relaxed_Load() const;
   inline Tagged<Object> Relaxed_Load(PtrComprCageBase cage_base) const;
   inline Tagged_t Relaxed_Load_Raw() const;
+  inline Tagged_t Acquire_Load_Raw() const;
+  inline Tagged_t NonAtomic_Load_Raw() const;
   static inline Tagged<Object> RawToTagged(PtrComprCageBase cage_base,
                                            Tagged_t raw);
   inline void Relaxed_Store(Tagged<Object> value) const;
@@ -105,6 +107,8 @@ class CompressedMaybeObjectSlot
   inline Tagged<MaybeObject> Relaxed_Load() const;
   inline Tagged<MaybeObject> Relaxed_Load(PtrComprCageBase cage_base) const;
   inline Tagged_t Relaxed_Load_Raw() const;
+  inline Tagged_t Acquire_Load_Raw() const;
+  inline Tagged_t NonAtomic_Load_Raw() const;
   static inline Tagged<Object> RawToTagged(PtrComprCageBase cage_base,
                                            Tagged_t raw);
   inline void Relaxed_Store(Tagged<MaybeObject> value) const;
