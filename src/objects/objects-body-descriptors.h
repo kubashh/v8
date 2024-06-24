@@ -99,6 +99,9 @@ class DataOnlyBodyDescriptor : public BodyDescriptorBase {
   template <typename ObjectVisitor>
   static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
                                  int object_size, ObjectVisitor* v) {}
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<HeapObject> obj, int object_size,
+                                 ObjectVisitor* v) {}
 
  private:
   // Note: {SizeOf} is not implemented here; sub-classes will have to implement
@@ -121,9 +124,20 @@ class FixedRangeBodyDescriptor : public BodyDescriptorBase {
   }
 
   template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<HeapObject> obj, ObjectVisitor* v) {
+    IteratePointers(obj, start_offset, end_offset, v);
+  }
+
+  template <typename ObjectVisitor>
   static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
                                  int object_size, ObjectVisitor* v) {
     IterateBody(map, obj, v);
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<HeapObject> obj, int object_size,
+                                 ObjectVisitor* v) {
+    IterateBody(obj, v);
   }
 
   // Note: {SizeOf} is not implemented here; sub-classes will have to implement
@@ -146,6 +160,8 @@ class FixedBodyDescriptor
     DCHECK_EQ(kSize, map->instance_size());
     return kSize;
   }
+
+  static inline int SizeOf(Tagged<HeapObject> object) { return kSize; }
 };
 
 template <typename T>
@@ -164,6 +180,12 @@ class SuffixRangeBodyDescriptor : public BodyDescriptorBase {
   template <typename ObjectVisitor>
   static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
                                  int object_size, ObjectVisitor* v) {
+    IteratePointers(obj, start_offset, object_size, v);
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<HeapObject> obj, int object_size,
+                                 ObjectVisitor* v) {
     IteratePointers(obj, start_offset, object_size, v);
   }
 

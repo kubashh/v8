@@ -1538,6 +1538,9 @@ bool String::IsInPlaceInternalizableExcludingExternal(
 class SeqOneByteString::BodyDescriptor final : public DataOnlyBodyDescriptor {
  public:
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
+    return SizeOf(raw_object);
+  }
+  static inline int SizeOf(Tagged<HeapObject> raw_object) {
     return UncheckedCast<SeqOneByteString>(raw_object)->AllocatedSize();
   }
 };
@@ -1545,6 +1548,9 @@ class SeqOneByteString::BodyDescriptor final : public DataOnlyBodyDescriptor {
 class SeqTwoByteString::BodyDescriptor final : public DataOnlyBodyDescriptor {
  public:
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
+    return SizeOf(raw_object);
+  }
+  static inline int SizeOf(Tagged<HeapObject> raw_object) {
     return UncheckedCast<SeqTwoByteString>(raw_object)->AllocatedSize();
   }
 };
