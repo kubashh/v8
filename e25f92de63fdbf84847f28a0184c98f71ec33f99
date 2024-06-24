@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5cf76d5_04395a17",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T07:52:59Z",
+      "side": 1,
+      "message": "Moved from below.",
+      "range": {
+        "startLine": 33,
+        "startChar": 19,
+        "endLine": 33,
+        "endChar": 29
+      },
+      "revId": "e25f92de63fdbf84847f28a0184c98f71ec33f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59f3bcaa_9609a625",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T07:52:59Z",
+      "side": 1,
+      "message": "Moved from below.",
+      "range": {
+        "startLine": 336,
+        "startChar": 23,
+        "endLine": 336,
+        "endChar": 36
+      },
+      "revId": "e25f92de63fdbf84847f28a0184c98f71ec33f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a42cf209_025c2ef1",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T07:52:59Z",
+      "side": 1,
+      "message": "Just moved from below (`ToSig`).",
+      "range": {
+        "startLine": 346,
+        "startChar": 13,
+        "endLine": 346,
+        "endChar": 28
+      },
+      "revId": "e25f92de63fdbf84847f28a0184c98f71ec33f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c658d81_7375601f",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4487,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T07:52:59Z",
+      "side": 1,
+      "message": "This is just taken over from the other fuzzers. For gc type coverage, we need to add the builtin-strings features.",
+      "range": {
+        "startLine": 4462,
+        "startChar": 2,
+        "endLine": 4487,
+        "endChar": 58
+      },
+      "revId": "e25f92de63fdbf84847f28a0184c98f71ec33f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55e91961_afdf0da1",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T07:52:59Z",
+      "side": 0,
+      "message": "This function assumed that there is a 1:1 mapping between function indices and signature indices as that is what the existing fuzzers generate.\nThat doesn\u0027t work well with deopts where multiple functions share the same signature. (In theory, they could inherit from a common signature and have unique signatures as well, but that still doesn\u0027t change that the 1:1 mapping doesn\u0027t work any more.)",
+      "range": {
+        "startLine": 1413,
+        "startChar": 6,
+        "endLine": 1415,
+        "endChar": 78
+      },
+      "revId": "3f9aed4f7198ac0e03678f46ed5f7a44e2a52cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
