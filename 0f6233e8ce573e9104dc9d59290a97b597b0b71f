@@ -67,6 +67,24 @@
       "message": "Please do not just add more reviewers. It would also be useful to only ping when the bots are actually green and tests are passing.",
       "revId": "0f6233e8ce573e9104dc9d59290a97b597b0b71f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e0d6f8d_6391e2b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3456009
+      },
+      "writtenOn": "2024-06-24T09:15:30Z",
+      "side": 1,
+      "message": "Remaining failures of check were not caused by this patch,\nand we (qiuji@iscas.ac.cn \u0026 yahan@iscas.ac.cn) think about this patch is ok for committing, yahan@iscas.ac.cn will investigate the failures in another thread, any suggestions ?",
+      "parentUuid": "206b60f7_ac96d083",
+      "revId": "0f6233e8ce573e9104dc9d59290a97b597b0b71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
