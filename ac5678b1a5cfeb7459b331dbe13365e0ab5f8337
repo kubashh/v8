@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cad2ddc9_97146ed0",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4391,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-24T13:02:45Z",
+      "side": 1,
+      "message": "In case you feel a bit lost reviewing this CL:\nI added a comment to the following-up CL that explains what the fuzzer generates:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5647898/3/test/fuzzer/wasm-deopt.cc\n\nThere is only a slight difference in that in this CL the main function takes the callee (function) directly as a parameter instead of an index into a table.",
+      "revId": "ac5678b1a5cfeb7459b331dbe13365e0ab5f8337",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
