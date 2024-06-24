@@ -459,11 +459,11 @@ bool MarkingVisitorBase<ConcreteVisitor>::ShouldFlushBaselineCode(
 
 template <typename ConcreteVisitor>
 int MarkingVisitorBase<ConcreteVisitor>::VisitFixedArrayWithProgressBar(
-    Tagged<Map> map, Tagged<FixedArray> object, ProgressBar& progress_bar) {
+    Tagged<FixedArray> object, ProgressBar& progress_bar) {
   const int kProgressBarScanningChunk = kMaxRegularHeapObjectSize;
   static_assert(kMaxRegularHeapObjectSize % kTaggedSize == 0);
   DCHECK(concrete_visitor()->marking_state()->IsMarked(object));
-  const int size = FixedArray::BodyDescriptor::SizeOf(map, object);
+  const int size = FixedArray::BodyDescriptor::SizeOf(object);
   const size_t current_progress_bar = progress_bar.Value();
   int start = static_cast<int>(current_progress_bar);
   if (start == 0) {
@@ -498,8 +498,18 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitFixedArray(
   ProgressBar& progress_bar =
       MutablePageMetadata::FromHeapObject(object)->ProgressBar();
   return concrete_visitor()->CanUpdateValuesInHeap() && progress_bar.IsEnabled()
-             ? VisitFixedArrayWithProgressBar(map, object, progress_bar)
+             ? VisitFixedArrayWithProgressBar(object, progress_bar)
              : Base::VisitFixedArray(map, object);
+}
+
+template <typename ConcreteVisitor>
+int MarkingVisitorBase<ConcreteVisitor>::VisitFixedArray(
+    Tagged_t raw_map, Tagged<FixedArray> object) {
+  ProgressBar& progress_bar =
+      MutablePageMetadata::FromHeapObject(object)->ProgressBar();
+  return concrete_visitor()->CanUpdateValuesInHeap() && progress_bar.IsEnabled()
+             ? VisitFixedArrayWithProgressBar(object, progress_bar)
+             : Base::VisitFixedArray(raw_map, object);
 }
 
 // ===========================================================================
@@ -629,10 +639,10 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitWeakCell(
 
 template <typename ConcreteVisitor>
 int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArrayStrongly(
-    Tagged<Map> map, Tagged<DescriptorArray> array) {
+    Tagged<DescriptorArray> array) {
   this->template VisitMapPointerIfNeeded<VisitorId::kVisitDescriptorArray>(
       array);
-  const int size = DescriptorArray::BodyDescriptor::SizeOf(map, array);
+  const int size = DescriptorArray::BodyDescriptor::SizeOf(array);
   VisitPointers(array, array->GetFirstPointerSlot(),
                 array->GetDescriptorSlot(0));
   VisitPointers(array, MaybeObjectSlot(array->GetDescriptorSlot(0)),
@@ -642,12 +652,12 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArrayStrongly(
 }
 
 template <typename ConcreteVisitor>
-int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArray(
-    Tagged<Map> map, Tagged<DescriptorArray> array) {
+int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArrayImpl(
+    Tagged<DescriptorArray> array) {
   if (!concrete_visitor()->CanUpdateValuesInHeap()) {
     // If we cannot update the values in the heap, we just treat the array
     // strongly.
-    return VisitDescriptorArrayStrongly(map, array);
+    return VisitDescriptorArrayStrongly(array);
   }
 
   // The markbit is not used anymore. This is different from a checked
@@ -664,7 +674,7 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArray(
     if (start == 0) {
       // We are processing the object the first time. Visit the header and
       // return a size for accounting.
-      int size = DescriptorArray::BodyDescriptor::SizeOf(map, array);
+      int size = DescriptorArray::BodyDescriptor::SizeOf(array);
       VisitPointers(array, array->GetFirstPointerSlot(),
                     array->GetDescriptorSlot(0));
       concrete_visitor()
@@ -674,6 +684,18 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArray(
     }
   }
   return 0;
+}
+
+template <typename ConcreteVisitor>
+int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArray(
+    Tagged<Map> map, Tagged<DescriptorArray> array) {
+  return VisitDescriptorArrayImpl(array);
+}
+
+template <typename ConcreteVisitor>
+int MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorArray(
+    Tagged_t raw_map, Tagged<DescriptorArray> array) {
+  return VisitDescriptorArrayImpl(array);
 }
 
 template <typename ConcreteVisitor>

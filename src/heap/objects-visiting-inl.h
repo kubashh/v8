@@ -8,6 +8,7 @@
 #include <optional>
 
 #include "src/base/logging.h"
+#include "src/common/globals.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/object-lock-inl.h"
 #include "src/heap/objects-visiting.h"
@@ -39,52 +40,6 @@ template <VisitorId visitor_id>
 inline bool ContainsReadOnlyMap(PtrComprCageBase, Tagged<HeapObject>) {
   return false;
 }
-
-// List of visitor ids that can only appear in read-only maps. Unfortunately,
-// these are generally contained in all other lists. Adding an instance type
-// here optimizes handling in visitors that do not need to Map objects with such
-// visitor ids.
-#define READ_ONLY_MAPS_VISITOR_ID_LIST(V) \
-  V(AccessorInfo)                         \
-  V(AllocationSite)                       \
-  V(BigInt)                               \
-  V(BytecodeArray)                        \
-  V(BytecodeWrapper)                      \
-  V(ByteArray)                            \
-  V(Cell)                                 \
-  V(Code)                                 \
-  V(CodeWrapper)                          \
-  V(DataHandler)                          \
-  V(DataObject)                           \
-  V(DescriptorArray)                      \
-  V(EmbedderDataArray)                    \
-  V(ExternalString)                       \
-  V(FeedbackCell)                         \
-  V(FeedbackMetadata)                     \
-  V(FeedbackVector)                       \
-  V(FixedArray)                           \
-  V(FixedDoubleArray)                     \
-  V(FunctionTemplateInfo)                 \
-  V(HeapNumber)                           \
-  V(InstructionStream)                    \
-  V(PreparseData)                         \
-  V(PropertyArray)                        \
-  V(PropertyCell)                         \
-  V(PrototypeInfo)                        \
-  V(ScopeInfo)                            \
-  V(SeqOneByteString)                     \
-  V(SeqTwoByteString)                     \
-  V(SharedFunctionInfo)                   \
-  V(ShortcutCandidate)                    \
-  V(SlicedString)                         \
-  V(SloppyArgumentsElements)              \
-  V(Symbol)                               \
-  V(ThinString)                           \
-  V(TransitionArray)                      \
-  V(UncompiledDataWithoutPreparseData)    \
-  V(UncompiledDataWithPreparseData)       \
-  V(WeakArrayList)                        \
-  V(WeakFixedArray)
 
 #define DEFINE_READ_ONLY_MAP_SPECIALIZATION(VisitorIdType)                    \
   template <>                                                                 \
@@ -122,7 +77,71 @@ Tagged<T> HeapVisitor<ResultType, ConcreteVisitor>::Cast(
 template <typename ResultType, typename ConcreteVisitor>
 ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
     Tagged<HeapObject> object) {
-  return Visit(object->map(cage_base()), object);
+  return Visit(object->map_slot(), object, kRelaxedLoad);
+}
+
+template <typename ResultType, typename ConcreteVisitor>
+ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
+    ObjectSlot map_slot, Tagged<HeapObject> object, AcquireLoadTag) {
+  Tagged_t raw_map = map_slot.Acquire_Load_Raw();
+#if V8_STATIC_ROOTS_BOOL
+  return Visit(raw_map, object);
+#else
+  return Visit(Tagged<Map>::cast(ObjectSlot::RawToTagged(
+                   ObjectVisitorWithCageBases::cage_base(), raw_map)),
+               object);
+#endif  // V8_STATIC_ROOTS_BOOl
+}
+
+template <typename ResultType, typename ConcreteVisitor>
+ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
+    ObjectSlot map_slot, Tagged<HeapObject> object, RelaxedLoadTag) {
+  Tagged_t raw_map = map_slot.Relaxed_Load_Raw();
+#if V8_STATIC_ROOTS_BOOL
+  return Visit(raw_map, object);
+#else
+  return Visit(Tagged<Map>::cast(ObjectSlot::RawToTagged(
+                   ObjectVisitorWithCageBases::cage_base(), raw_map)),
+               object);
+#endif  // V8_STATIC_ROOTS_BOOl
+}
+
+template <typename ResultType, typename ConcreteVisitor>
+ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
+    ObjectSlot map_slot, Tagged<HeapObject> object, NonAtomicLoadTag) {
+  Tagged_t raw_map = map_slot.NonAtomic_Load_Raw();
+#if V8_STATIC_ROOTS_BOOL
+  return Visit(raw_map, object);
+#else
+  return Visit(Tagged<Map>::cast(ObjectSlot::RawToTagged(
+                   ObjectVisitorWithCageBases::cage_base(), raw_map)),
+               object);
+#endif  // V8_STATIC_ROOTS_BOOl
+}
+
+template <typename ResultType, typename ConcreteVisitor>
+ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
+    Tagged_t raw_map, Tagged<HeapObject> object) {
+  ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
+  switch (raw_map) {
+#if V8_STATIC_ROOTS_BOOL
+
+#define VISIT_WITHOUT_MAP(TypeName)          \
+  case StaticReadOnlyRoot::k##TypeName##Map: \
+    return visitor->Visit##TypeName(         \
+        raw_map, ConcreteVisitor::template Cast<TypeName>(object));
+
+    TRIVIAL_READ_ONLY_MAPS_VISITOR_ID_LIST(VISIT_WITHOUT_MAP)
+#undef VISIT_WITHOUT_MAP
+
+#endif  // V8_STATIC_ROOTS_BOOL
+
+    default:
+      return Visit(Tagged<Map>::cast(ObjectSlot::RawToTagged(
+                       ObjectVisitorWithCageBases::cage_base(), raw_map)),
+                   object);
+  }
+  UNREACHABLE();
 }
 
 template <typename ResultType, typename ConcreteVisitor>
@@ -236,6 +255,19 @@ TRUSTED_VISITOR_ID_LIST(VISIT)
 TYPED_VISITOR_WITH_SLACK_ID_LIST(VISIT_WITH_SLACK)
 #undef VISIT_WITH_SLACK
 
+#define VISIT_WITHOUT_MAP(TypeName)                                     \
+  template <typename ResultType, typename ConcreteVisitor>              \
+  ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit##TypeName( \
+      Tagged_t raw_map, Tagged<TypeName> object) {                      \
+    return static_cast<ConcreteVisitor*>(this)                          \
+        ->template VisitWithBodyDescriptor<                             \
+            VisitorId::kVisit##TypeName, TypeName,                      \
+            ObjectTraits<TypeName>::BodyDescriptor>(raw_map, object);   \
+  }
+
+TRIVIAL_READ_ONLY_MAPS_VISITOR_ID_LIST(VISIT_WITHOUT_MAP)
+#undef VISIT_WITHOUT_MAP
+
 template <typename ResultType, typename ConcreteVisitor>
 ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitShortcutCandidate(
     Tagged<Map> map, Tagged<ConsString> object) {
@@ -323,6 +355,28 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitWithBodyDescriptor(
   visitor->template VisitMapPointerIfNeeded<visitor_id>(object);
   const int size = TBodyDescriptor::SizeOf(map, object);
   TBodyDescriptor::IterateBody(map, object, size, visitor);
+  return size;
+}
+
+template <typename ResultType, typename ConcreteVisitor>
+template <VisitorId visitor_id, typename T, typename TBodyDescriptor>
+ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitWithBodyDescriptor(
+    Tagged_t raw_map, Tagged<T> object) {
+#ifdef DEBUG
+  Tagged<Map> map = UncheckedCast<Map>(ObjectSlot::RawToTagged(
+      ObjectVisitorWithCageBases::cage_base(), raw_map));
+  // If you see the following DCHECK fail, then the size computation of
+  // BodyDescriptor doesn't match the size return via obj.Size(). This is
+  // problematic as the GC requires those sizes to match for accounting reasons.
+  // The fix likely involves adding a padding field in the object defintions.
+  DCHECK_EQ(object->SizeFromMap(map), TBodyDescriptor::SizeOf(map, object));
+  DCHECK(!map->IsInobjectSlackTrackingInProgress());
+#endif  // DEBUG
+
+  ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
+  visitor->template VisitMapPointerIfNeeded<visitor_id>(object);
+  const int size = TBodyDescriptor::SizeOf(object);
+  TBodyDescriptor::IterateBody(object, size, visitor);
   return size;
 }
 
