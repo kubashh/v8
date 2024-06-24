@@ -498,7 +498,6 @@ void ForEachEntryWithName(const v8::HeapSnapshot* snapshot, const char* needle,
 }
 
 }  // namespace
-
 TEST_F(UnifiedHeapSnapshotTest, JSReferenceForcesVisibleObject) {
   // Test ensures that a C++->JS reference forces an object to be visible in the
   // snapshot.
@@ -604,6 +603,39 @@ constexpr uint8_t kExpectedDetachedValueForDetached =
     static_cast<uint8_t>(v8::EmbedderGraph::Node::Detachedness::kDetached);
 
 }  // namespace
+
+TEST_F(UnifiedHeapSnapshotTest, DetachedJSObjects) {
+  v8::Isolate* isolate = v8_isolate();
+  v8::HandleScope scope(isolate);
+  v8::HeapProfiler* heap_profiler = isolate->GetHeapProfiler();
+  heap_profiler->SetGetDetachednessCallback(
+      DetachednessHandler::GetDetachedness, nullptr);
+  // Test ensures that a C++->JS detached reference is caught by the V8 API
+  JsTestingScope testing_scope(v8_isolate());
+  cppgc::Persistent<GCedWithJSRef> gc_w_js_ref = SetupWrapperWrappablePair(
+      testing_scope, allocation_handle(), "Obj",
+      v8::EmbedderGraph::Node::Detachedness ::kDetached);
+  // Ensure we are obtaining a Detached Wrapper
+  CHECK_EQ(1, heap_profiler->GetDetachedJSWrapperObjects().size());
+
+  cppgc::Persistent<GCedWithJSRef> gc_w_js_ref_not_detached = SetupWrapperWrappablePair(
+      testing_scope, allocation_handle(), "Obj",
+      v8::EmbedderGraph::Node::Detachedness ::kAttached);
+      cppgc::Persistent<GCedWithJSRef> gc_w_js_ref_unknown = SetupWrapperWrappablePair(
+      testing_scope, allocation_handle(), "Obj",
+      v8::EmbedderGraph::Node::Detachedness ::kUnknown);
+  // Ensure we are only obtaining Detached Wrappers
+  CHECK_EQ(1, heap_profiler->GetDetachedJSWrapperObjects().size());
+
+  cppgc::Persistent<GCedWithJSRef> gc_w_js_ref2 = SetupWrapperWrappablePair(
+      testing_scope, allocation_handle(), "Obj",
+      v8::EmbedderGraph::Node::Detachedness ::kDetached);
+  cppgc::Persistent<GCedWithJSRef> gc_w_js_ref3 = SetupWrapperWrappablePair(
+      testing_scope, allocation_handle(), "Obj",
+      v8::EmbedderGraph::Node::Detachedness ::kDetached);
+  // Ensure we are obtaining all Detached Wrappers
+  CHECK_EQ(3, heap_profiler->GetDetachedJSWrapperObjects().size());
+}
 
 TEST_F(UnifiedHeapSnapshotTest, NoTriggerForStandAloneTracedReference) {
   // Test ensures that C++ objects with TracedReference have their V8 objects
