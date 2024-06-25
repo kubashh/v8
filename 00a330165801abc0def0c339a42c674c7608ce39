@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb47e7c_79584d2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "Really cool! Thanks for also explaining and all the pointers!:) I left just some comment suggestions.",
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0571852_d2337892",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4448,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "Could we add a comment to explain what the constants stand for?",
+      "range": {
+        "startLine": 4447,
+        "startChar": 0,
+        "endLine": 4448,
+        "endChar": 44
+      },
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae5cafb1_e697cf77",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "should we somehow explain this nesting idea behind it?",
+      "range": {
+        "startLine": 4554,
+        "startChar": 8,
+        "endLine": 4554,
+        "endChar": 14
+      },
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d816cbb_562afd39",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "into variable?",
+      "range": {
+        "startLine": 4558,
+        "startChar": 40,
+        "endLine": 4558,
+        "endChar": 59
+      },
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

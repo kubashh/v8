@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ae32c4e_53cb3097",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 4427,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "814589e7_939dae2b",
+      "range": {
+        "startLine": 4427,
+        "startChar": 22,
+        "endLine": 4427,
+        "endChar": 48
+      },
+      "revId": "5620e1a80490a1446f80df8ffa5762cbfc081020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5f1a92a_0133fa63",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b71257f_53669ed8",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a5f1a92a_0133fa63",
+      "range": {
+        "startLine": 43,
+        "startChar": 5,
+        "endLine": 43,
+        "endChar": 45
+      },
+      "revId": "5620e1a80490a1446f80df8ffa5762cbfc081020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "082aa94d_e919190d",
@@ -77,6 +125,24 @@
       "writtenOn": "2024-06-24T07:52:59Z",
       "side": 1,
       "message": "This is a fix of a fix I did (https://chromium-review.googlesource.com/c/v8/v8/+/5626412). Unfortunately, we can\u0027t fully skip it if the recgroup is invalid as we still need it for cases where a struct / array refers to itself. That\u0027s what\u0027s done with the `std::min` where we either iterate until the end of the recgroup or we iterate exactly once (for the current type).",
+      "revId": "5620e1a80490a1446f80df8ffa5762cbfc081020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dcb1ba5_80a7a846",
+        "filename": "tools/wasm/mjsunit-module-disassembler-impl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-06-25T14:16:37Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "082aa94d_e919190d",
       "revId": "5620e1a80490a1446f80df8ffa5762cbfc081020",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
