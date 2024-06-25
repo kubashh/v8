@@ -88,6 +88,14 @@ Tagged_t CompressedObjectSlot::Relaxed_Load_Raw() const {
   return static_cast<Tagged_t>(AsAtomicTagged::Relaxed_Load(location()));
 }
 
+Tagged_t CompressedObjectSlot::Acquire_Load_Raw() const {
+  return static_cast<Tagged_t>(AsAtomicTagged::Acquire_Load(location()));
+}
+
+Tagged_t CompressedObjectSlot::NonAtomic_Load_Raw() const {
+  return *location();
+}
+
 // static
 Tagged<Object> CompressedObjectSlot::RawToTagged(PtrComprCageBase cage_base,
                                                  Tagged_t raw) {
@@ -150,6 +158,14 @@ Tagged<MaybeObject> CompressedMaybeObjectSlot::Relaxed_Load(
 
 Tagged_t CompressedMaybeObjectSlot::Relaxed_Load_Raw() const {
   return static_cast<Tagged_t>(AsAtomicTagged::Relaxed_Load(location()));
+}
+
+Tagged_t CompressedMaybeObjectSlot::Acquire_Load_Raw() const {
+  return static_cast<Tagged_t>(AsAtomicTagged::Acquire_Load(location()));
+}
+
+Tagged_t CompressedMaybeObjectSlot::NonAtomic_Load_Raw() const {
+  return *location();
 }
 
 // static

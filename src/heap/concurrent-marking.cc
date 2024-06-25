@@ -339,17 +339,19 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
             addr == new_large_object) {
           local_marking_worklists.PushOnHold(object);
         } else {
-          Tagged<Map> map = object->map(cage_base, kAcquireLoad);
-          // The marking worklist should never contain filler objects.
-          CHECK(!IsFreeSpaceOrFillerMap(map));
+          Tagged<Map> map;
           if (is_per_context_mode) {
+            map = object->map(cage_base, kAcquireLoad);
+            // The marking worklist should never contain filler objects.
+            CHECK(!IsFreeSpaceOrFillerMap(map));
             Address context;
             if (native_context_inferrer.Infer(cage_base, map, object,
                                               &context)) {
               local_marking_worklists.SwitchToContext(context);
             }
           }
-          const auto visited_size = visitor.Visit(map, object);
+          const auto visited_size =
+              visitor.Visit(object->map_slot(), object, kAcquireLoad);
           visitor.IncrementLiveBytesCached(
               MutablePageMetadata::cast(
                   MemoryChunkMetadata::FromHeapObject(object)),
@@ -446,7 +448,6 @@ V8_INLINE size_t ConcurrentMarking::RunMinorImpl(JobDelegate* delegate,
   YoungGenerationRememberedSetsMarkingWorklist::Local remembered_sets(
       heap_->minor_mark_sweep_collector()->remembered_sets_marking_handler());
   auto& marking_worklists_local = visitor.marking_worklists_local();
-  Isolate* isolate = heap_->isolate();
   minor_marking_state_->MarkerStarted();
   MainAllocator* const new_space_allocator =
       heap_->allocator()->new_space_allocator();
@@ -464,8 +465,8 @@ V8_INLINE size_t ConcurrentMarking::RunMinorImpl(JobDelegate* delegate,
       if (IsYoungObjectInLab(new_space_allocator, new_lo_space, heap_object)) {
         visitor.marking_worklists_local().PushOnHold(heap_object);
       } else {
-        Tagged<Map> map = heap_object->map(isolate);
-        const auto visited_size = visitor.Visit(map, heap_object);
+        const auto visited_size =
+            visitor.Visit(heap_object->map_slot(), heap_object, kAcquireLoad);
         if (visited_size) {
           current_marked_bytes += visited_size;
           visitor.IncrementLiveBytesCached(

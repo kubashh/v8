@@ -98,48 +98,63 @@ namespace internal {
 // List of visitor ids that can only appear in read-only maps. Unfortunately,
 // these are generally contained in all other lists.
 //
+// The TRIVIAL list contains visitor ids where the id exactly matches a single
+// Map and there's no unsafe shape transition involved.  If you don't implement
+// a type with an unsafe shape transition (like ExternalString), then add the
+// type to the trivial list.
+//
+// The trivial list unlocks dispatch without actually loading the Map itself in
+// builds with static RO roots.
+#define TRIVIAL_READ_ONLY_MAPS_VISITOR_ID_LIST(V) \
+  V(DescriptorArray)                              \
+  V(FixedArray)                                   \
+  V(FixedDoubleArray)                             \
+  V(HeapNumber)                                   \
+  V(PropertyArray)                                \
+  V(SeqOneByteString)                             \
+  V(SeqTwoByteString)
+
+// See general documentation on TRIVIAL_READ_ONLY_MAPS_VISITOR_ID_LIST.
+//
 // Adding an instance type here allows skipping vistiation of Map slots for
 // visitors with `ShouldVisitReadOnlyMapPointer() == false`.
-#define VISITOR_IDS_WITH_READ_ONLY_MAPS_LIST(V)           \
-  /* All trusted objects have maps in read-only space. */ \
-  CONCRETE_TRUSTED_OBJECT_TYPE_LIST1(V)                   \
-  V(AccessorInfo)                                         \
-  V(AllocationSite)                                       \
-  V(BigInt)                                               \
-  V(BytecodeWrapper)                                      \
-  V(ByteArray)                                            \
-  V(Cell)                                                 \
-  V(CodeWrapper)                                          \
-  V(DataHandler)                                          \
-  V(DescriptorArray)                                      \
-  V(EmbedderDataArray)                                    \
-  V(ExternalString)                                       \
-  V(FeedbackCell)                                         \
-  V(FeedbackMetadata)                                     \
-  V(FeedbackVector)                                       \
-  V(Filler)                                               \
-  V(FixedArray)                                           \
-  V(FixedDoubleArray)                                     \
-  V(FunctionTemplateInfo)                                 \
-  V(FreeSpace)                                            \
-  V(HeapNumber)                                           \
-  V(PreparseData)                                         \
-  V(PropertyArray)                                        \
-  V(PropertyCell)                                         \
-  V(PrototypeInfo)                                        \
-  V(ScopeInfo)                                            \
-  V(SeqOneByteString)                                     \
-  V(SeqTwoByteString)                                     \
-  V(SharedFunctionInfo)                                   \
-  V(ShortcutCandidate)                                    \
-  V(SlicedString)                                         \
-  V(SloppyArgumentsElements)                              \
-  V(Symbol)                                               \
-  V(ThinString)                                           \
-  V(TransitionArray)                                      \
-  V(UncompiledDataWithoutPreparseData)                    \
-  V(UncompiledDataWithPreparseData)                       \
-  V(WeakArrayList)                                        \
+//
+// TODO(335479495): Most types should go in the trivial list.
+#define VISITOR_IDS_WITH_READ_ONLY_MAPS_LIST(V)               \
+  /* All trivial visitor ids have maps in read-only space. */ \
+  TRIVIAL_READ_ONLY_MAPS_VISITOR_ID_LIST(V)                   \
+  /* All trusted objects have maps in read-only space. */     \
+  CONCRETE_TRUSTED_OBJECT_TYPE_LIST1(V)                       \
+  V(AccessorInfo)                                             \
+  V(AllocationSite)                                           \
+  V(BigInt)                                                   \
+  V(BytecodeWrapper)                                          \
+  V(ByteArray)                                                \
+  V(Cell)                                                     \
+  V(CodeWrapper)                                              \
+  V(DataHandler)                                              \
+  V(EmbedderDataArray)                                        \
+  V(ExternalString)                                           \
+  V(FeedbackCell)                                             \
+  V(FeedbackMetadata)                                         \
+  V(FeedbackVector)                                           \
+  V(Filler)                                                   \
+  V(FunctionTemplateInfo)                                     \
+  V(FreeSpace)                                                \
+  V(PreparseData)                                             \
+  V(PropertyCell)                                             \
+  V(PrototypeInfo)                                            \
+  V(ScopeInfo)                                                \
+  V(SharedFunctionInfo)                                       \
+  V(ShortcutCandidate)                                        \
+  V(SlicedString)                                             \
+  V(SloppyArgumentsElements)                                  \
+  V(Symbol)                                                   \
+  V(ThinString)                                               \
+  V(TransitionArray)                                          \
+  V(UncompiledDataWithoutPreparseData)                        \
+  V(UncompiledDataWithPreparseData)                           \
+  V(WeakArrayList)                                            \
   V(WeakFixedArray)
 
 #define FORWARD_DECLARE(TypeName) class TypeName;
@@ -170,6 +185,14 @@ class HeapVisitor : public ObjectVisitorWithCageBases {
 
   V8_INLINE ResultType Visit(Tagged<HeapObject> object);
   V8_INLINE ResultType Visit(Tagged<Map> map, Tagged<HeapObject> object);
+  // The versions taking a map slot have optimized dispatch for objects with
+  // static root maps.
+  V8_INLINE ResultType Visit(ObjectSlot map_slot, Tagged<HeapObject> object,
+                             NonAtomicLoadTag);
+  V8_INLINE ResultType Visit(ObjectSlot map_slot, Tagged<HeapObject> object,
+                             AcquireLoadTag);
+  V8_INLINE ResultType Visit(ObjectSlot map_slot, Tagged<HeapObject> object,
+                             RelaxedLoadTag);
 
  protected:
   // If this predicate returns false the default implementations of Visit*
@@ -206,6 +229,14 @@ class HeapVisitor : public ObjectVisitorWithCageBases {
   TORQUE_VISITOR_ID_LIST(VISIT)
   TRUSTED_VISITOR_ID_LIST(VISIT)
 #undef VISIT
+
+#define VISIT_WITHOUT_MAP(TypeName)                      \
+  V8_INLINE ResultType Visit##TypeName(Tagged_t raw_map, \
+                                       Tagged<TypeName> object);
+
+  TRIVIAL_READ_ONLY_MAPS_VISITOR_ID_LIST(VISIT_WITHOUT_MAP)
+#undef VISIT_WITHOUT_MAP
+
   V8_INLINE ResultType VisitShortcutCandidate(Tagged<Map> map,
                                               Tagged<ConsString> object);
   V8_INLINE ResultType VisitJSObjectFast(Tagged<Map> map,
@@ -224,6 +255,10 @@ class HeapVisitor : public ObjectVisitorWithCageBases {
             typename TBodyDescriptor = typename T::BodyDescriptor>
   V8_INLINE ResultType VisitWithBodyDescriptor(Tagged<Map> map,
                                                Tagged<T> object);
+  template <VisitorId visitor_id, typename T,
+            typename TBodyDescriptor = typename T::BodyDescriptor>
+  V8_INLINE ResultType VisitWithBodyDescriptor(Tagged_t raw_map,
+                                               Tagged<T> object);
 
   template <typename T>
   static V8_INLINE Tagged<T> Cast(Tagged<HeapObject> object);
@@ -233,6 +268,8 @@ class HeapVisitor : public ObjectVisitorWithCageBases {
   template <typename TSlot>
   std::optional<Tagged<Object>> GetObjectFilterReadOnlyAndSmiFast(
       TSlot slot) const;
+
+  V8_INLINE ResultType Visit(Tagged_t raw_map, Tagged<HeapObject> object);
 };
 
 // These strings can be sources of safe string transitions. Transitions are safe

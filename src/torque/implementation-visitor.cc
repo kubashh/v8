@@ -5157,9 +5157,12 @@ void ImplementationVisitor::GenerateBodyDescriptors(
 
         h_contents << "  }\n\n";
       }
-
       h_contents << "  static inline int SizeOf(Tagged<Map> map, "
                     "Tagged<HeapObject> raw_object) {\n";
+      h_contents << "    return SizeOf(raw_object);";
+      h_contents << "  }\n\n";
+      h_contents
+          << "  static inline int SizeOf(Tagged<HeapObject> raw_object) {\n";
       if (type->size().SingleValue()) {
         h_contents << "    return " << *type->size().SingleValue() << ";\n";
       } else {
