@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c790fc5_a727fd7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-25T19:12:45Z",
+      "side": 1,
+      "message": "PTAL, especially [this comment](https://chromium-review.googlesource.com/c/v8/v8/+/5648710/comment/82e1e075_b7423d01/).",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eddc8a9_3c0a78e9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-25T19:12:45Z",
+      "side": 1,
+      "message": "These changes are trivial, just hiding irrelevant variables in the nested scope.",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75f09d4f_7f995f00",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2912,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-25T19:12:45Z",
+      "side": 1,
+      "message": "In patchset 1, I tried to add this job item to the clearing job that already existed (line 2845). Unfortunately, this job item cannot start earlier than here, because `ProcessOldCodeCandidates` in line 2897 may mark objects, so a data race occurs.",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ddabf7e_be06052d",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-25T19:12:45Z",
+      "side": 1,
+      "message": "If we insist on this method not being public, then class `ClearTrivialWeakRefJobItem` in line 2582 of `mark-compact.cc` must be moved out of the anonymous namespace and made a friend of `MarkCompactCollector`.",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e1e075_b7423d01",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-25T19:12:45Z",
+      "side": 1,
+      "message": "My first version, in patchset 1, examined also the host object and considered fewer objects to be trivial. I was not very confident about that and it was incompatible with [Olivier\u0027s CL](https://crrev.com/c/5621236) that landed soon after.\n\nLet\u0027s discuss this further, if you think this condition can be strengthened.",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
