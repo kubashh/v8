@@ -54,6 +54,7 @@ void BasicMarkingState::Publish() {
   if (movable_slots_worklist_) movable_slots_worklist_->Publish();
 
   for (const auto& entry : marked_bytes_map_.Take()) {
+    DCHECK_GE(entry.second, 0);
     entry.first->IncrementMarkedBytes(static_cast<size_t>(entry.second));
   }
 }
