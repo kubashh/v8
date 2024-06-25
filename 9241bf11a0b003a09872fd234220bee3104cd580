@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f90014ba_af9a29ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T12:09:19Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: PTAL.",
+      "revId": "9241bf11a0b003a09872fd234220bee3104cd580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1240eeb_32fbbca4",
+        "filename": "src/compiler/linkage.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T12:09:19Z",
+      "side": 1,
+      "message": "I have checked the non-deoptimizer use cases for the offset and they only use it if `count !\u003d 0`, so my change should be fine with other usages.",
+      "revId": "9241bf11a0b003a09872fd234220bee3104cd580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
