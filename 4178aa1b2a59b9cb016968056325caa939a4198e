@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "764257a4_c522df0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T14:44:41Z",
+      "side": 1,
+      "message": "Thanks! 😊",
+      "revId": "4178aa1b2a59b9cb016968056325caa939a4198e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f81e7dd_509385e0",
+        "filename": "BUILD.gn",
+        "patchSetId": 14
+      },
+      "lineNbr": 7445,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T14:44:41Z",
+      "side": 1,
+      "message": "This is required for the chromium-side fuzzer builds afaik.",
+      "revId": "4178aa1b2a59b9cb016968056325caa939a4198e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

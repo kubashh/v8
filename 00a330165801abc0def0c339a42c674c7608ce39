@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6584521d_30967d4a",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4448,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T14:44:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0571852_d2337892",
+      "range": {
+        "startLine": 4447,
+        "startChar": 0,
+        "endLine": 4448,
+        "endChar": 44
+      },
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae5cafb1_e697cf77",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c55f0c2d_6bb174c6",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4554,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T14:44:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae5cafb1_e697cf77",
+      "range": {
+        "startLine": 4554,
+        "startChar": 8,
+        "endLine": 4554,
+        "endChar": 14
+      },
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d816cbb_562afd39",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-06-25T14:16:37Z",
       "side": 1,
       "message": "into variable?",
+      "range": {
+        "startLine": 4558,
+        "startChar": 40,
+        "endLine": 4558,
+        "endChar": 59
+      },
+      "revId": "00a330165801abc0def0c339a42c674c7608ce39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60307ca8_6e599ea7",
+        "filename": "src/wasm/fuzzing/random-module-generation.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-25T14:44:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d816cbb_562afd39",
       "range": {
         "startLine": 4558,
         "startChar": 40,
