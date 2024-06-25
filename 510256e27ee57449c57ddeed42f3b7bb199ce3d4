@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15f67f3e_4a229a1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-25T16:18:31Z",
+      "side": 1,
+      "message": "Looking good! Ready to publish yet?",
+      "revId": "510256e27ee57449c57ddeed42f3b7bb199ce3d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99b872ee_d39887dc",
+        "filename": "test/unittests/heap/cppgc-js/unified-heap-snapshot-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-25T16:18:31Z",
+      "side": 1,
+      "message": "Consider adding a comment at the prolog to this test explaining precisely what you\u0027re testing. Alternatively, change the name of the test (which might be preferable). Even the comments within your test don\u0027t clarify that you\u0027re solving the problem of retained external objects.",
+      "revId": "510256e27ee57449c57ddeed42f3b7bb199ce3d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

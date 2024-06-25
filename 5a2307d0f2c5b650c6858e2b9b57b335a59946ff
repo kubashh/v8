@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0261fd74_047f6924",
+        "filename": "test/unittests/heap/cppgc-js/unified-heap-snapshot-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-06-25T16:18:31Z",
+      "side": 0,
+      "message": "Nit: Probably don\u0027t need to delete this line",
+      "revId": "5a2307d0f2c5b650c6858e2b9b57b335a59946ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
