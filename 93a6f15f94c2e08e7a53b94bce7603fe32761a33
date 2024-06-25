@@ -57,6 +57,30 @@
       ],
       "revId": "93a6f15f94c2e08e7a53b94bce7603fe32761a33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "296ede46_0d8576bd",
+        "filename": "test/mjsunit/maglev/inline-phi-leak.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-06-25T08:44:36Z",
+      "side": 1,
+      "message": "Yes, we do! 😊\nThanks for spotting that.",
+      "parentUuid": "6abd8bfa_dfafa56d",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 31
+      },
+      "revId": "93a6f15f94c2e08e7a53b94bce7603fe32761a33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
