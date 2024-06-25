@@ -39,6 +39,30 @@
       },
       "revId": "6b02c6b13736196809b0f6cf11c010aaa74ae3fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3458240_34a29175",
+        "filename": "src/heap/cppgc/heap-page.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-25T10:09:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89021f91_63c50e29",
+      "range": {
+        "startLine": 105,
+        "startChar": 18,
+        "endLine": 105,
+        "endChar": 27
+      },
+      "revId": "6b02c6b13736196809b0f6cf11c010aaa74ae3fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
