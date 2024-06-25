@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "687a9f64_a2b96c5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-06-25T07:23:39Z",
+      "side": 1,
+      "message": "Thanks! \\o/ Overall looks good, just one comment",
+      "revId": "0b86f0ac99313e0608fca8dbe327e0ba78c5729d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b0c3346_26ddbb32",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-06-25T07:23:39Z",
+      "side": 1,
+      "message": "... :) \n\nI think the naming here is probably just wrong, I guess this should be `LoadSandboxedPointerField`. At least then the code makes sense",
+      "revId": "0b86f0ac99313e0608fca8dbe327e0ba78c5729d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
