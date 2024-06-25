@@ -97,7 +97,11 @@ class V8_EXPORT_PRIVATE BasePage : public BasePageHandle {
   size_t discarded_memory() const { return discarded_memory_; }
 
   void IncrementMarkedBytes(size_t value) {
-    DCHECK_GE(marked_bytes_ + value, marked_bytes_);
+#ifdef DEBUG
+    const size_t old_marked_bytes =
+        marked_bytes_.load(std::memory_order_relaxed);
+    DCHECK_GE(old_marked_bytes + value, old_marked_bytes);
+#endif
     marked_bytes_.fetch_add(value, std::memory_order_relaxed);
   }
   void ResetMarkedBytes() { marked_bytes_.store(0, std::memory_order_relaxed); }
