@@ -16,6 +16,47 @@
       "message": "PTAL!",
       "revId": "93a6f15f94c2e08e7a53b94bce7603fe32761a33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6abd8bfa_dfafa56d",
+        "filename": "test/mjsunit/maglev/inline-phi-leak.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-06-25T08:41:17Z",
+      "side": 1,
+      "message": "do you also have to call prepare on `inlined`?",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 31
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "eafe1f2d_6ec5c9b5",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "test/mjsunit/maglev/inline-phi-leak.js",
+              "range": {
+                "startLine": 25,
+                "startChar": 0,
+                "endLine": 25,
+                "endChar": 0
+              },
+              "replacement": "\n%PrepareFunctionForOptimization(inlined);\ninlined(0);\ninlined(1);\n%OptimizeFunctionOnNextCall(inlined);\ninlined(2);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "93a6f15f94c2e08e7a53b94bce7603fe32761a33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
