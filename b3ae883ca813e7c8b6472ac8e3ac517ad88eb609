@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "881fbd01_504f7425",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-26T13:47:13Z",
+      "side": 0,
+      "message": "Until we enforce `has_exception \u003d\u003e v8::Intercepted::kYes` and `v8::Intercepted::kNo \u003d\u003e !has_exceptions` implications for interceptor callbacks, the exception check must be done before checking for \"not intercepted\" case.",
+      "revId": "b3ae883ca813e7c8b6472ac8e3ac517ad88eb609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5127c557_2e0af589",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-06-26T13:47:13Z",
+      "side": 0,
+      "message": "This is a native data property, it\u0027s guaranteed to either throw or return a non-empty handle.",
+      "revId": "b3ae883ca813e7c8b6472ac8e3ac517ad88eb609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
