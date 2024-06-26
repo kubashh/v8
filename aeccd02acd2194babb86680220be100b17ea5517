@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08042d85_61f15da7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T13:59:12Z",
+      "side": 1,
+      "message": "OK, reverting to patchset 4.",
+      "parentUuid": "6f523677_b59c00bf",
+      "revId": "aeccd02acd2194babb86680220be100b17ea5517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06ca8ec7_385fd8c4",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73462c0a_8eb27971",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3625,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T13:59:12Z",
+      "side": 1,
+      "message": "Will be done in a follow-up CL.",
+      "parentUuid": "06ca8ec7_385fd8c4",
+      "range": {
+        "startLine": 3625,
+        "startChar": 2,
+        "endLine": 3625,
+        "endChar": 19
+      },
+      "revId": "aeccd02acd2194babb86680220be100b17ea5517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aaf5493f_93a3d56e",
@@ -88,6 +130,30 @@
       "writtenOn": "2024-06-26T13:08:25Z",
       "side": 1,
       "message": "This will be obsolete, but...\n\nThis is not needed here. We only need to clear the transitions for Map weak refs in the special host objects. Any other weak ref to a Map can just be cleared without other actions because the transitions will always be reached through a weakref in the special object(s).\n\nI guess this is what concerned you?",
+      "range": {
+        "startLine": 3643,
+        "startChar": 10,
+        "endLine": 3643,
+        "endChar": 43
+      },
+      "revId": "aeccd02acd2194babb86680220be100b17ea5517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "add33925_94220622",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3643,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T13:59:12Z",
+      "side": 1,
+      "message": "Yes, exactly. Good to know",
+      "parentUuid": "aaf5493f_93a3d56e",
       "range": {
         "startLine": 3643,
         "startChar": 10,

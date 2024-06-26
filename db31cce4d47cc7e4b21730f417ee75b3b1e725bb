@@ -386,6 +386,24 @@
       "parentUuid": "93e12495_4e4ac751",
       "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48c447e9_a97cedfc",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T13:59:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24da47e6_44998094",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
