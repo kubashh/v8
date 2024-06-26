@@ -350,6 +350,24 @@
       "parentUuid": "82e1e075_b7423d01",
       "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93e12495_4e4ac751",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T11:27:45Z",
+      "side": 1,
+      "message": "I\u0027m implementing this again in patchset 5.  \nI think it\u0027s OK but it arguably breaks the abstraction that Olivier introduced.  \nLet\u0027s see if we want to keep this.",
+      "parentUuid": "638d1c1f_2309a02d",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
