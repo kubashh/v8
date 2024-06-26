@@ -81,8 +81,9 @@ void MarkingVisitorBase<ConcreteVisitor>::ProcessStrongHeapObject(
 // static
 template <typename ConcreteVisitor>
 constexpr bool MarkingVisitorBase<ConcreteVisitor>::IsTrivialWeakReferenceValue(
-    Tagged<HeapObject> heap_object) {
-  return InReadOnlySpace(heap_object) || !IsMap(heap_object);
+    Tagged<HeapObject> host, Tagged<HeapObject> heap_object) {
+  return !IsMap(heap_object) ||
+         !(IsMap(host) || IsTransitionArray(host) || IsDescriptorArray(host));
 }
 
 // class template arguments
@@ -110,7 +111,7 @@ void MarkingVisitorBase<ConcreteVisitor>::ProcessWeakHeapObject(
     // closure.
     // Distinguish trivial cases (non involving custom weakness) from
     // non-trivial ones: Map, TransitionArray, DescriptorArray.
-    if (IsTrivialWeakReferenceValue(heap_object)) {
+    if (IsTrivialWeakReferenceValue(host, heap_object)) {
       local_weak_objects_->weak_references_trivial_local.Push(
           std::make_pair(host, slot));
     } else {
