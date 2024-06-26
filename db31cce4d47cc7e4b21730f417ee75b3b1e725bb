@@ -368,6 +368,24 @@
       "parentUuid": "638d1c1f_2309a02d",
       "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24da47e6_44998094",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-26T13:08:25Z",
+      "side": 1,
+      "message": "I am still not sure if the `host` check here is actually beneficial because it will make this more expensive and the only benefit is that we can also process regular weak refs to Maps in the fast path.\n\nLet\u0027s revert to just `IsMap(heap_object)` for this CL.",
+      "parentUuid": "93e12495_4e4ac751",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

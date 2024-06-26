@@ -33,6 +33,69 @@
       "message": "Patchset 5 strengthens the condition again, so that only maps in `Map`, `TransitionArray`, and `DescriptorArray` are non-trivial.",
       "revId": "aeccd02acd2194babb86680220be100b17ea5517",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f523677_b59c00bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-26T13:08:25Z",
+      "side": 1,
+      "message": "Overalls looks good. Let\u0027s revert back to your initial change because I don\u0027t think there\u0027s lots of benefit in checking `host` (it\u0027s possibly expensive and we don\u0027t gain much).",
+      "revId": "aeccd02acd2194babb86680220be100b17ea5517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06ca8ec7_385fd8c4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3625,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-26T13:08:25Z",
+      "side": 1,
+      "message": "Unrelated: How about making `HeapObjectAndSlot` a POD struct and using named accessors. I always have to remind myself what `slot.first` actually means.\n\n(This can be a follow up or prework.)",
+      "range": {
+        "startLine": 3625,
+        "startChar": 2,
+        "endLine": 3625,
+        "endChar": 19
+      },
+      "revId": "aeccd02acd2194babb86680220be100b17ea5517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaf5493f_93a3d56e",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3643,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-06-26T13:08:25Z",
+      "side": 1,
+      "message": "This will be obsolete, but...\n\nThis is not needed here. We only need to clear the transitions for Map weak refs in the special host objects. Any other weak ref to a Map can just be cleared without other actions because the transitions will always be reached through a weakref in the special object(s).\n\nI guess this is what concerned you?",
+      "range": {
+        "startLine": 3643,
+        "startChar": 10,
+        "endLine": 3643,
+        "endChar": 43
+      },
+      "revId": "aeccd02acd2194babb86680220be100b17ea5517",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
