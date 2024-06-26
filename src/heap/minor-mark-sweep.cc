@@ -771,8 +771,8 @@ void MinorMarkSweepCollector::DrainMarkingWorklist() {
       DCHECK(!marking_state_->IsUnmarked(heap_object));
       // Maps won't change in the atomic pause, so the map can be read without
       // atomics.
-      Tagged<Map> map = Cast<Map>(*heap_object->map_slot());
-      const auto visited_size = main_marking_visitor_->Visit(map, heap_object);
+      const auto visited_size = main_marking_visitor_->Visit(
+          heap_object->map_slot(), heap_object, NonAtomicLoadTag{});
       if (visited_size) {
         main_marking_visitor_->IncrementLiveBytesCached(
             MutablePageMetadata::FromHeapObject(heap_object),
