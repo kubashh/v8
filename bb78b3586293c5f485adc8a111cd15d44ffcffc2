@@ -16,6 +16,92 @@
       "message": "@jkummerow@chromium.org: PTAL",
       "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d20742f_28693800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-26T16:52:12Z",
+      "side": 1,
+      "message": "LGTM with (very minor) nits.",
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fced4c76_7292298b",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-26T16:52:12Z",
+      "side": 1,
+      "message": "nit: snake_case_for_accessors_in_cpp",
+      "range": {
+        "startLine": 554,
+        "startChar": 7,
+        "endLine": 554,
+        "endChar": 30
+      },
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74949384_aadfac5c",
+        "filename": "test/mjsunit/wasm/deopt/deopt-non-inlineable-target.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-26T16:52:12Z",
+      "side": 1,
+      "message": "nit: `T` (or ignore me; or drop the comment entirely). Same in line 88.",
+      "range": {
+        "startLine": 37,
+        "startChar": 5,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da0f76fd_d9409b5e",
+        "filename": "test/mjsunit/wasm/deopt/deopt-non-inlineable-target.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-26T16:52:12Z",
+      "side": 1,
+      "message": "`L`",
+      "range": {
+        "startLine": 43,
+        "startChar": 43,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
