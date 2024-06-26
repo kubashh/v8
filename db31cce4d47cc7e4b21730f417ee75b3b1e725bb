@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28348610_bc2f672a",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2912,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T11:24:39Z",
+      "side": 1,
+      "message": "It\u0027s [here](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/mark-compact.cc;drc\u003dae983e94583c5e2d400fa7641439d2e8ca13fd93;l\u003d3106). The stack trace is:\n```\n    #7 TryMark src/heap/marking-state-inl.h:30:38\n    #8 TryMarkAndAccountLiveBytes src/heap/marking-state-inl.h:36:7\n    #9 v8::internal::MarkCompactCollector::FlushBytecodeFromSFI(v8::internal::Tagged\u003cv8::internal::SharedFunctionInfo\u003e) src/heap/mark-compact.cc:3150:19\n    #10 FlushSFI src/heap/mark-compact.cc:3274:5\n    #11 v8::internal::MarkCompactCollector::ProcessOldBytecodeSFI(v8::internal::Tagged\u003cv8::internal::SharedFunctionInfo\u003e) src/heap/mark-compact.cc:3205:5\n    #12 v8::internal::MarkCompactCollector::ProcessOldCodeCandidates() src/heap/mark-compact.cc:3167:26\n    #13 v8::internal::MarkCompactCollector::ClearNonLiveReferences() src/heap/mark-compact.cc:2906:5\n```\n\nI\u0027m adding the comment.",
+      "parentUuid": "055a2266_b0f98a5e",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66d4484f_0f09b010",
@@ -118,6 +136,30 @@
       "writtenOn": "2024-06-26T07:15:51Z",
       "side": 1,
       "message": "This is a non-atomic store which is fine as long as we only have a single job task clears. Let\u0027s add a comment.\n\n(The worklist would allow for `Pop()` to happen on many tasks but I think we limit the clearing to a single task.)",
+      "range": {
+        "startLine": 3638,
+        "startChar": 17,
+        "endLine": 3638,
+        "endChar": 22
+      },
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "862f85d3_eb938fb7",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3638,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T11:24:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66d4484f_0f09b010",
       "range": {
         "startLine": 3638,
         "startChar": 17,
@@ -163,6 +205,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "922faba0_0575743b",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T11:24:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fcebfdc_cb9b8c61",
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bbd168a_0fdcd63a",
@@ -186,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e498a29_73bf0658",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T11:24:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bbd168a_0fdcd63a",
+      "range": {
+        "startLine": 83,
+        "startChar": 52,
+        "endLine": 83,
+        "endChar": 75
+      },
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d3d2b59_500eb9d3",
@@ -199,6 +283,30 @@
       "writtenOn": "2024-06-26T07:15:51Z",
       "side": 1,
       "message": "You should not need the RO space check here because `MarkingHelper::ShouldMarkObject()` below will filter RO objects.",
+      "range": {
+        "startLine": 85,
+        "startChar": 9,
+        "endLine": 85,
+        "endChar": 24
+      },
+      "revId": "db31cce4d47cc7e4b21730f417ee75b3b1e725bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "772d3faa_b070f5b4",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-06-26T11:24:39Z",
+      "side": 1,
+      "message": "That\u0027s right. Then, the existing check for RO space in `MarkCompactCollector::ClearTrivialWeakReferences` was already redundant.",
+      "parentUuid": "2d3d2b59_500eb9d3",
       "range": {
         "startLine": 85,
         "startChar": 9,
