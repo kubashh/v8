@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2970c6a4_35c6edac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-27T13:22:53Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "bb57f99ef24cffe0cb0713dd62fa0e67702b6d17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77f3c0e5_d19f5356",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-06-27T13:22:53Z",
+      "side": 1,
+      "message": "This change makes it possible to pass `0` as the type without getting it overwritten by `type || kWasmFuncRef`.",
+      "range": {
+        "startLine": 1547,
+        "startChar": 38,
+        "endLine": 1547,
+        "endChar": 57
+      },
+      "revId": "bb57f99ef24cffe0cb0713dd62fa0e67702b6d17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
