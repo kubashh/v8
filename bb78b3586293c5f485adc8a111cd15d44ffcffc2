@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d769e3d8_576196b1",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-27T08:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fced4c76_7292298b",
+      "range": {
+        "startLine": 554,
+        "startChar": 7,
+        "endLine": 554,
+        "endChar": 30
+      },
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74949384_aadfac5c",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "510ef61d_eacd160b",
+        "filename": "test/mjsunit/wasm/deopt/deopt-non-inlineable-target.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-27T08:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74949384_aadfac5c",
+      "range": {
+        "startLine": 37,
+        "startChar": 5,
+        "endLine": 37,
+        "endChar": 6
+      },
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da0f76fd_d9409b5e",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-06-26T16:52:12Z",
       "side": 1,
       "message": "`L`",
+      "range": {
+        "startLine": 43,
+        "startChar": 43,
+        "endLine": 43,
+        "endChar": 44
+      },
+      "revId": "bb78b3586293c5f485adc8a111cd15d44ffcffc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8118f897_1b4fb24a",
+        "filename": "test/mjsunit/wasm/deopt/deopt-non-inlineable-target.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-06-27T08:06:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da0f76fd_d9409b5e",
       "range": {
         "startLine": 43,
         "startChar": 43,
