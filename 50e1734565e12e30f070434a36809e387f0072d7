@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "50e1734565e12e30f070434a36809e387f0072d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c7ab06f_7bc64e13",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3885,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-06-27T09:56:31Z",
+      "side": 1,
+      "message": "Don\u0027t you need to `arguments.AcceptSideEffects()` if we have a failure? Basically use `RETURN_VALUE_IF_EXCEPTION_DETECTOR`?",
+      "revId": "50e1734565e12e30f070434a36809e387f0072d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
