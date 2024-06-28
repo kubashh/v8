@@ -319,6 +319,16 @@ void ThreadIsolatedAllocator::SetDefaultPermissionsForSignalHandler() {
 #if V8_HAS_PKU_JIT_WRITE_PROTECT
   internal::RwxMemoryWriteScope::SetDefaultPermissionsForSignalHandler();
 #endif
+#if V8_PKU_PROTECT_SANDBOX
+  internal::GetProcessWideSandbox()->SetDefaultPermissionsForSignalHandler();
+#endif
+}
+
+// static
+void ThreadIsolatedAllocator::InitializeBeforeThreadCreation() {
+#if V8_PKU_PROTECT_SANDBOX
+  internal::GetProcessWideSandbox()->AllocatePkey();
+#endif
 }
 
 }  // namespace v8

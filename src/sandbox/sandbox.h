@@ -12,6 +12,10 @@
 #include "src/common/globals.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
+#if V8_PKU_PROTECT_SANDBOX
+#include "src/base/platform/memory-protection-key.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -198,6 +202,42 @@ class V8_EXPORT_PRIVATE Sandbox {
   Address end_address() const { return reinterpret_cast<Address>(&end_); }
   Address size_address() const { return reinterpret_cast<Address>(&size_); }
 
+  class V8_NODISCARD V8_ALLOW_UNUSED BlockAccessScope {
+   public:
+#if V8_PKU_PROTECT_SANDBOX
+    explicit BlockAccessScope(int pkey);
+    ~BlockAccessScope();
+
+   private:
+    int pkey_;
+#else
+    BlockAccessScope() = default;
+#endif
+  };
+
+  // If V8_PKU_PROTECT_SANDBOX is enabled, this function will prevent any access
+  // (read or write) to all sandbox memory on the current thread, as long as the
+  // returned Scope object is valid.
+  // The only exception are read-only pages, which will still be readable.
+  BlockAccessScope MaybeBlockAccess();
+
+#if V8_PKU_PROTECT_SANDBOX
+  // Allocates a pkey that will be used to optionally block sandbox access. This
+  // function should be called once before any threads were created so that new
+  // threads inherit read access to the new pkey.
+  void AllocatePkey();
+
+  // This function should only be called by
+  // `ThreadIsolatedAllocator::SetDefaultPermissionsForSignalHandler`.
+  void SetDefaultPermissionsForSignalHandler() const;
+
+  // Removes the pkey from read only pages, so that MaybeBlockAccess will still
+  // allow read access.
+  void NotifyReadOnlyPageCreated(
+      Address addr, size_t size,
+      PageAllocator::Permission current_permissions) const;
+#endif
+
  private:
   // The SequentialUnmapperTest calls the private Initialize method to create a
   // sandbox without guard regions, which would consume too much memory.
@@ -252,6 +292,10 @@ class V8_EXPORT_PRIVATE Sandbox {
 
   // Constant objects inside this sandbox.
   SandboxedPointerConstants constants_;
+
+#if V8_PKU_PROTECT_SANDBOX
+  int pkey_ = base::MemoryProtectionKey::kNoMemoryProtectionKey;
+#endif
 };
 
 V8_EXPORT_PRIVATE Sandbox* GetProcessWideSandbox();

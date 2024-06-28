@@ -14,7 +14,7 @@
 #include <string>
 
 #include "v8-source-location.h"  // NOLINT(build/include_directory)
-#include "v8config.h"  // NOLINT(build/include_directory)
+#include "v8config.h"            // NOLINT(build/include_directory)
 
 namespace v8 {
 
@@ -79,9 +79,8 @@ class TaskRunner {
    *
    * Embedders should override PostTaskImpl instead of this.
    */
-  void PostTask(
-      std::unique_ptr<Task> task,
-      const SourceLocation& location = SourceLocation::Current()) {
+  void PostTask(std::unique_ptr<Task> task,
+                const SourceLocation& location = SourceLocation::Current()) {
     PostTaskImpl(std::move(task), location);
   }
 
@@ -651,6 +650,13 @@ class ThreadIsolatedAllocator {
    * are restored.
    */
   static void SetDefaultPermissionsForSignalHandler();
+
+  /**
+   * Similar to `SetDefaultPermissionsForSignalHandler`, we need to ensure that
+   * permissions are set up before any threads were created so that they get
+   * inherited by any new threads.
+   */
+  static void InitializeBeforeThreadCreation();
 };
 
 // Opaque type representing a handle to a shared memory region.
