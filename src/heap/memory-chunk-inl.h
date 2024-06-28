@@ -7,6 +7,7 @@
 
 #include "src/heap/memory-chunk-metadata.h"
 #include "src/heap/memory-chunk.h"
+#include "src/sandbox/sandbox.h"
 
 namespace v8 {
 namespace internal {
