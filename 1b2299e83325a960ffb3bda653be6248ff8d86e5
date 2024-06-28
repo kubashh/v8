@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a2cf38b_2a524c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-06-28T11:30:38Z",
+      "side": 1,
+      "message": "Very nice, thank you!",
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1df4894_340f9e99",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-06-28T11:30:38Z",
+      "side": 1,
+      "message": "nit: Please add the braces back (we only omit them if the entire statement, condition and body, fits in a single line).",
+      "range": {
+        "startLine": 809,
+        "startChar": 54,
+        "endLine": 810,
+        "endChar": 17
+      },
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "107f4865_e4fae49a",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-06-28T11:30:38Z",
+      "side": 1,
+      "message": "nit: Please add braces.",
+      "range": {
+        "startLine": 1929,
+        "startChar": 58,
+        "endLine": 1930,
+        "endChar": 44
+      },
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21ffdb4_ed121df0",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-06-28T11:30:38Z",
+      "side": 1,
+      "message": "nit: Can you create an `else` branch instead of the early `break` inside the `if`?\nI would then also swap the conditions to get rid of the negation.",
+      "range": {
+        "startLine": 2415,
+        "startChar": 13,
+        "endLine": 2416,
+        "endChar": 13
+      },
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
