@@ -1087,7 +1087,8 @@ ObjectData* JSHeapBroker::TryGetOrCreateData(Handle<Object> object,
      * functions). We chose the class here based on in-sandbox data and before \
      * serializing the map. Ensure that the serialized map fits the object     \
      * type. See also crbug.com/326700497 for more details. */                 \
-    SBXCHECK(object_data->Is##Name());                                         \
+    SBXCHECK(object_data->kind() != kBackgroundSerializedHeapObject ||         \
+             object_data->Is##Name());                                         \
     /* NOLINTNEXTLINE(readability/braces) */                                   \
   } else
   HEAP_BROKER_OBJECT_LIST(CREATE_DATA)
