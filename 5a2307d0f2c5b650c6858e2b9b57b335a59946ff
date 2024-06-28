@@ -16,6 +16,24 @@
       "message": "Nit: Probably don\u0027t need to delete this line",
       "revId": "5a2307d0f2c5b650c6858e2b9b57b335a59946ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "182c2fa1_48a8dec9",
+        "filename": "test/unittests/heap/cppgc-js/unified-heap-snapshot-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-06-28T17:56:34Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "0261fd74_047f6924",
+      "revId": "5a2307d0f2c5b650c6858e2b9b57b335a59946ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
