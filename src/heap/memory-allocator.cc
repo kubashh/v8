@@ -460,6 +460,13 @@ ReadOnlyPageMetadata* MemoryAllocator::AllocateReadOnlyPage(
                                std::move(chunk_info->reservation));
 
   new (chunk_info->chunk) MemoryChunk(metadata->InitialFlags(), metadata);
+
+#if V8_PKU_PROTECT_SANDBOX
+  GetProcessWideSandbox()->NotifyReadOnlyPageCreated(
+      metadata->ChunkAddress(), metadata->size(),
+      PageAllocator::Permission::kReadWrite);
+#endif
+
   return metadata;
 }
 
