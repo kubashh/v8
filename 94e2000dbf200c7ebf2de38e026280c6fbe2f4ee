@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30a3418d_a4c5ef57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-06-28T17:58:12Z",
+      "side": 1,
+      "message": "Hello, could you PTAL at this CL? You were suggested to me as an owner for this CL. Thanks.",
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
