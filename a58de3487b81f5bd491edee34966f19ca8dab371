@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84b204bf_dd6f7c0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-28T16:05:27Z",
+      "side": 1,
+      "message": "Follow-up to print more information about Wasm objects.\nMichael, PTAL, and Jakob for a Wasm perspective.",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fff0e28_e50d93c6",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-06-28T16:05:27Z",
+      "side": 1,
+      "message": "QQ: I think we don\u0027t need to undef these because we are in a cc file, right?",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
