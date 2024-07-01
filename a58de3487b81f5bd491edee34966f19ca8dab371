@@ -89,6 +89,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0c9a6781_8cc5c203",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-01T10:57:27Z",
+      "side": 1,
+      "message": "Ack, I undef\u0027ed them now.",
+      "parentUuid": "7b9ab599_7ec8b47f",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bfdd7467_d241ee9e",
         "filename": "src/profiler/heap-snapshot-generator.cc",
         "patchSetId": 3
