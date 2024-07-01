@@ -335,9 +335,9 @@ class V8_EXPORT_PRIVATE WasmModuleBuilder : public ZoneObject {
                            WasmElemSegment::FunctionIndexingMode indexing_mode);
   // Increase the starting size of the table at {table_index} by {count}. Also
   // increases the maximum table size if needed. Returns the former starting
-  // size, or the maximum uint32_t value if the maximum table size has been
+  // size, or the maximum uintptr_t value if the maximum table size has been
   // exceeded.
-  uint32_t IncreaseTableMinSize(uint32_t table_index, uint32_t count);
+  uintptr_t IncreaseTableMinSize(uint32_t table_index, uint32_t count);
   // Adds the signature to the module if it does not already exist.
   uint32_t AddSignature(const FunctionSig* sig, bool is_final,
                         uint32_t supertype = kNoSuperType);
@@ -353,6 +353,9 @@ class V8_EXPORT_PRIVATE WasmModuleBuilder : public ZoneObject {
   uint32_t AddTable(ValueType type, uint32_t min_size, uint32_t max_size);
   uint32_t AddTable(ValueType type, uint32_t min_size, uint32_t max_size,
                     WasmInitExpr init);
+  uint32_t AddTable64(ValueType type, uint32_t min_size, uint32_t max_size);
+  uint32_t AddTable64(ValueType type, uint32_t min_size, uint32_t max_size,
+                      WasmInitExpr init);
   uint32_t AddMemory(uint32_t min_size);
   uint32_t AddMemory(uint32_t min_size, uint32_t max_size);
   uint32_t AddMemory64(uintptr_t min_size, uintptr_t max_size);
@@ -478,9 +481,11 @@ class V8_EXPORT_PRIVATE WasmModuleBuilder : public ZoneObject {
 
   struct WasmTable {
     ValueType type;
-    uint32_t min_size;
-    uint32_t max_size;
+    uintptr_t min_size;
+    uintptr_t max_size;
     bool has_maximum;
+    bool is_shared;
+    bool is_table64;
     base::Optional<WasmInitExpr> init;
   };
 
