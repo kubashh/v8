@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6057d70_b6f2c05d",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-07-01T11:41:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1df4894_340f9e99",
+      "range": {
+        "startLine": 809,
+        "startChar": 54,
+        "endLine": 810,
+        "endChar": 17
+      },
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "107f4865_e4fae49a",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d850f70_eec2bd0d",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1930,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-07-01T11:41:12Z",
+      "side": 1,
+      "message": "Done.\n\nIt\u0027s a bit annoying that git cl format creates these violations when it folds a too-long line.",
+      "parentUuid": "107f4865_e4fae49a",
+      "range": {
+        "startLine": 1929,
+        "startChar": 58,
+        "endLine": 1930,
+        "endChar": 44
+      },
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f21ffdb4_ed121df0",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-06-28T11:30:38Z",
       "side": 1,
       "message": "nit: Can you create an `else` branch instead of the early `break` inside the `if`?\nI would then also swap the conditions to get rid of the negation.",
+      "range": {
+        "startLine": 2415,
+        "startChar": 13,
+        "endLine": 2416,
+        "endChar": 13
+      },
+      "revId": "1b2299e83325a960ffb3bda653be6248ff8d86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6fb3a9_6d536f6e",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-07-01T11:41:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f21ffdb4_ed121df0",
       "range": {
         "startLine": 2415,
         "startChar": 13,
