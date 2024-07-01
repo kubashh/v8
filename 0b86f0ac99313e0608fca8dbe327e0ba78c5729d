@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5bda361_7dad953b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118571
+      },
+      "writtenOn": "2024-07-01T12:01:02Z",
+      "side": 1,
+      "message": "Thanks, will fix.  FYI, will retake this once Dmitry and I manage to land a fix to allow multicage configurations to have the read-only space, because of external pointers in the snapshot.",
+      "parentUuid": "90d2e668_e875f5e8",
+      "revId": "0b86f0ac99313e0608fca8dbe327e0ba78c5729d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b0c3346_26ddbb32",
