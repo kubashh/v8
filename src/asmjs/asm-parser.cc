@@ -2142,13 +2142,13 @@ AsmType* AsmJsParser::ValidateCall() {
       if (module_builder_->NumTables() == 0) {
         module_builder_->AddTable(kWasmFuncRef, 0);
       }
-      uint32_t func_index = module_builder_->IncreaseTableMinSize(0, mask + 1);
-      if (func_index == std::numeric_limits<uint32_t>::max()) {
+      uintptr_t func_index = module_builder_->IncreaseTableMinSize(0, mask + 1);
+      if (func_index == std::numeric_limits<uintptr_t>::max()) {
         FAILn("Exceeded maximum function table size");
       }
       function_info->kind = VarKind::kTable;
       function_info->mask = mask;
-      function_info->index = func_index;
+      function_info->index = static_cast<uint32_t>(func_index);
       function_info->mutable_variable = false;
     } else {
       if (function_info->kind != VarKind::kTable) {

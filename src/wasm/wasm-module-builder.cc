@@ -454,7 +454,7 @@ WasmFunctionBuilder* WasmModuleBuilder::AddFunction(uint32_t sig_index) {
 
 void WasmModuleBuilder::AddDataSegment(const uint8_t* data, uint32_t size,
                                        uint32_t dest) {
-  data_segments_.push_back({ZoneVector<uint8_t>(zone()), dest});
+  data_segments_.push_back({.data = ZoneVector<uint8_t>(zone()), .dest = dest});
   ZoneVector<uint8_t>& vec = data_segments_.back().data;
   for (uint32_t i = 0; i < size; i++) {
     vec.push_back(data[i]);
@@ -463,7 +463,8 @@ void WasmModuleBuilder::AddDataSegment(const uint8_t* data, uint32_t size,
 
 void WasmModuleBuilder::AddPassiveDataSegment(const uint8_t* data,
                                               uint32_t size) {
-  data_segments_.push_back({ZoneVector<uint8_t>(zone()), 0, false});
+  data_segments_.push_back(
+      {.data = ZoneVector<uint8_t>(zone()), .dest = 0, .is_active = false});
   ZoneVector<uint8_t>& vec = data_segments_.back().data;
   for (uint32_t i = 0; i < size; i++) {
     vec.push_back(data[i]);
@@ -508,12 +509,12 @@ uint32_t WasmModuleBuilder::AddArrayType(ArrayType* type, bool is_final,
   return index;
 }
 
-uint32_t WasmModuleBuilder::IncreaseTableMinSize(uint32_t table_index,
-                                                 uint32_t count) {
+uintptr_t WasmModuleBuilder::IncreaseTableMinSize(uint32_t table_index,
+                                                  uint32_t count) {
   DCHECK_LT(table_index, tables_.size());
-  uint32_t old_min_size = tables_[table_index].min_size;
+  uintptr_t old_min_size = tables_[table_index].min_size;
   if (count > v8_flags.wasm_max_table_size - old_min_size) {
-    return std::numeric_limits<uint32_t>::max();
+    return std::numeric_limits<uintptr_t>::max();
   }
   tables_[table_index].min_size = old_min_size + count;
   tables_[table_index].max_size =
@@ -522,35 +523,89 @@ uint32_t WasmModuleBuilder::IncreaseTableMinSize(uint32_t table_index,
 }
 
 uint32_t WasmModuleBuilder::AddTable(ValueType type, uint32_t min_size) {
-  tables_.push_back({type, min_size, 0, false, {}});
+  tables_.push_back({.type = type,
+                     .min_size = min_size,
+                     .max_size = 0,
+                     .has_maximum = false,
+                     .is_shared = false,
+                     .is_table64 = false,
+                     .init = {}});
   return static_cast<uint32_t>(tables_.size() - 1);
 }
 
 uint32_t WasmModuleBuilder::AddTable(ValueType type, uint32_t min_size,
                                      uint32_t max_size) {
-  tables_.push_back({type, min_size, max_size, true, {}});
+  tables_.push_back({.type = type,
+                     .min_size = min_size,
+                     .max_size = max_size,
+                     .has_maximum = true,
+                     .is_shared = false,
+                     .is_table64 = false,
+                     .init = {}});
   return static_cast<uint32_t>(tables_.size() - 1);
 }
 
 uint32_t WasmModuleBuilder::AddTable(ValueType type, uint32_t min_size,
                                      uint32_t max_size, WasmInitExpr init) {
-  tables_.push_back({type, min_size, max_size, true, {init}});
+  tables_.push_back({.type = type,
+                     .min_size = min_size,
+                     .max_size = max_size,
+                     .has_maximum = true,
+                     .is_shared = false,
+                     .is_table64 = false,
+                     .init = {init}});
+  return static_cast<uint32_t>(tables_.size() - 1);
+}
+
+uint32_t WasmModuleBuilder::AddTable64(ValueType type, uintptr_t min_size,
+                                       uintptr_t max_size) {
+  tables_.push_back({.type = type,
+                     .min_size = min_size,
+                     .max_size = max_size,
+                     .has_maximum = true,
+                     .is_shared = false,
+                     .is_table64 = true,
+                     .init = {}});
+  return static_cast<uint32_t>(tables_.size() - 1);
+}
+
+uint32_t WasmModuleBuilder::AddTable64(ValueType type, uintptr_t min_size,
+                                       uintptr_t max_size, WasmInitExpr init) {
+  tables_.push_back({.type = type,
+                     .min_size = min_size,
+                     .max_size = max_size,
+                     .has_maximum = true,
+                     .is_shared = false,
+                     .is_table64 = true,
+                     .init = {init}});
   return static_cast<uint32_t>(tables_.size() - 1);
 }
 
 uint32_t WasmModuleBuilder::AddMemory(uint32_t min_size) {
-  memories_.push_back({min_size, 0, false, false, false});
+  memories_.push_back({.min_size = min_size,
+                       .max_size = 0,
+                       .has_max_size = false,
+                       .is_shared = false,
+                       .is_memory64 = false});
   return static_cast<uint32_t>(memories_.size() - 1);
 }
 
 uint32_t WasmModuleBuilder::AddMemory(uint32_t min_size, uint32_t max_size) {
-  memories_.push_back({min_size, max_size, true, false, false});
+  memories_.push_back({.min_size = min_size,
+                       .max_size = max_size,
+                       .has_max_size = true,
+                       .is_shared = false,
+                       .is_memory64 = false});
   return static_cast<uint32_t>(memories_.size() - 1);
 }
 
 uint32_t WasmModuleBuilder::AddMemory64(uintptr_t min_size,
                                         uintptr_t max_size) {
-  memories_.push_back({min_size, max_size, true, false, true});
+  memories_.push_back({.min_size = min_size,
+                       .max_size = max_size,
+                       .has_max_size = true,
+                       .is_shared = false,
+                       .is_memory64 = true});
   return static_cast<uint32_t>(memories_.size() - 1);
 }
 
@@ -575,14 +630,18 @@ uint32_t WasmModuleBuilder::AddImport(base::Vector<const char> name,
                                       const FunctionSig* sig,
                                       base::Vector<const char> module) {
   DCHECK(adding_imports_allowed_);
-  function_imports_.push_back({module, name, AddSignature(sig, true)});
+  function_imports_.push_back(
+      {.module = module, .name = name, .sig_index = AddSignature(sig, true)});
   return static_cast<uint32_t>(function_imports_.size() - 1);
 }
 
 uint32_t WasmModuleBuilder::AddGlobalImport(base::Vector<const char> name,
                                             ValueType type, bool mutability,
                                             base::Vector<const char> module) {
-  global_imports_.push_back({module, name, type.value_type_code(), mutability});
+  global_imports_.push_back({.module = module,
+                             .name = name,
+                             .type_code = type.value_type_code(),
+                             .mutability = mutability});
   return static_cast<uint32_t>(global_imports_.size() - 1);
 }
 
@@ -593,7 +652,8 @@ void WasmModuleBuilder::MarkStartFunction(WasmFunctionBuilder* function) {
 void WasmModuleBuilder::AddExport(base::Vector<const char> name,
                                   ImportExportKindCode kind, uint32_t index) {
   DCHECK_LE(index, std::numeric_limits<int>::max());
-  exports_.push_back({name, kind, static_cast<int>(index)});
+  exports_.push_back(
+      {.name = name, .kind = kind, .index = static_cast<int>(index)});
 }
 
 uint32_t WasmModuleBuilder::AddExportedGlobal(ValueType type, bool mutability,
@@ -611,13 +671,14 @@ void WasmModuleBuilder::ExportImportedFunction(base::Vector<const char> name,
   adding_imports_allowed_ = false;
 #endif
   exports_.push_back(
-      {name, kExternalFunction,
-       import_index - static_cast<int>(function_imports_.size())});
+      {.name = name,
+       .kind = kExternalFunction,
+       .index = import_index - static_cast<int>(function_imports_.size())});
 }
 
 uint32_t WasmModuleBuilder::AddGlobal(ValueType type, bool mutability,
                                       WasmInitExpr init) {
-  globals_.push_back({type, mutability, init});
+  globals_.push_back({.type = type, .mutability = mutability, .init = init});
   return static_cast<uint32_t>(globals_.size() - 1);
 }
 
@@ -734,9 +795,22 @@ void WasmModuleBuilder::WriteTo(ZoneBuffer* buffer) const {
         buffer->write_u8(0x00);  // reserved byte
       }
       WriteValueType(buffer, table.type);
-      buffer->write_u8(table.has_maximum ? kWithMaximum : kNoMaximum);
-      buffer->write_size(table.min_size);
-      if (table.has_maximum) buffer->write_size(table.max_size);
+      uint8_t limits_byte = (table.is_table64 ? 4 : 0) |
+                            (table.is_shared ? 2 : 0) |
+                            (table.has_maximum ? 1 : 0);
+      buffer->write_u8(limits_byte);
+      auto WriteValToBuffer = [&](uintptr_t val) {
+        if (table.is_table64) {
+          buffer->write_u64v(val);
+        } else {
+          DCHECK_EQ(val, static_cast<uint32_t>(val));
+          buffer->write_u32v(static_cast<uint32_t>(val));
+        }
+      };
+      WriteValToBuffer(table.min_size);
+      if (table.has_maximum) {
+        WriteValToBuffer(table.max_size);
+      }
       if (table.init) {
         WriteInitializerExpression(buffer, *table.init);
       }
