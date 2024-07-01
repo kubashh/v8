@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5198e282_69c67e15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-01T09:52:31Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fff0e28_e50d93c6",
@@ -31,6 +48,24 @@
       "writtenOn": "2024-06-28T16:05:27Z",
       "side": 1,
       "message": "QQ: I think we don\u0027t need to undef these because we are in a cc file, right?",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b9ab599_7ec8b47f",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2269,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-01T09:52:31Z",
+      "side": 1,
+      "message": "Currently nothing fails if we don\u0027t, but arguably it\u0027s good practice to undef them nevertheless. The Jumbo build (or similar techniques) might come back. Also, our files tend to be big, and it\u0027s nice to keep things scoped to where they\u0027re needed, to avoid unexpected collisions with (future) things further down in the file.\n\nAs long as there\u0027s no forcing function or concrete benefit, I don\u0027t feel strongly about it; but personally I try to remember to undef my macros.",
+      "parentUuid": "8fff0e28_e50d93c6",
       "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
