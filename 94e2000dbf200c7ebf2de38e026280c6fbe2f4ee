@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e33129bc_a8fbff59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-07-01T07:48:07Z",
+      "side": 1,
+      "message": "nit: Please file a tracking bug for this feature at crbug.com and add it here as a separate `Bug: \u003cbugid\u003e` line. You can also link to the design doc in the bug as well. This will make finding all relevant CLs across V8, Blink and DevTools easier in the future.",
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "30a3418d_a4c5ef57",
@@ -14,6 +31,115 @@
       "writtenOn": "2024-06-28T17:58:12Z",
       "side": 1,
       "message": "Hello, could you PTAL at this CL? You were suggested to me as an owner for this CL. Thanks.",
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44a5ffb1_627abc5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-07-01T07:48:07Z",
+      "side": 1,
+      "message": "Mostly lgtm with some comments.",
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ed0f55e_7c73a74c",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-07-01T07:48:07Z",
+      "side": 1,
+      "message": "Does this really need to be an inspector API if it\u0027s already available on the `v8::HeapProfiler`? The call-site in the corresponding blink CL (https://crrev.com/c/5634107) could call `isolate_-\u003eGetHeapProfiler()-\u003eGetDetachedJSWrapperObjects()` directly without a round trip through the inspector APIs.",
+      "range": {
+        "startLine": 209,
+        "startChar": 2,
+        "endLine": 209,
+        "endChar": 76
+      },
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfec5894_f81fb733",
+        "filename": "src/inspector/v8-inspector-session-impl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-07-01T07:48:07Z",
+      "side": 1,
+      "message": "This can be a `nullptr` for untrusted inspector clients (e.g. inspecting extensions). We should check for that here and return an empty `std::vector` if the `m_heapProfilerAgent` is not available.",
+      "range": {
+        "startLine": 452,
+        "startChar": 9,
+        "endLine": 452,
+        "endChar": 28
+      },
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f26dee4_473e25cf",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-07-01T07:48:07Z",
+      "side": 1,
+      "message": "nit: Please follow standard V8 naming guidelines. `js_objects_found`. Although `detached_js_wrappers` might be a better name.",
+      "range": {
+        "startLine": 56,
+        "startChar": 35,
+        "endLine": 56,
+        "endChar": 49
+      },
+      "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cb20a25_9882499d",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-07-01T07:48:07Z",
+      "side": 1,
+      "message": "This and the comment on line 62 are superfluous. They don\u0027t convey any extra info so we should remove them.",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 35
+      },
       "revId": "94e2000dbf200c7ebf2de38e026280c6fbe2f4ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
