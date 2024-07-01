@@ -446,6 +446,7 @@ void V8HeapProfilerAgentImpl::takePendingHeapSnapshots() {
   }
 }
 
+
 Response V8HeapProfilerAgentImpl::addInspectedHeapObject(
     const String16& inspectedHeapObjectId) {
   bool ok;
