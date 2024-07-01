@@ -289,6 +289,12 @@ const size_t kShortBuiltinCallsOldSpaceSizeThreshold = size_t{2} * GB;
 #define V8_HEAP_USE_PKU_JIT_WRITE_PROTECT false
 #endif
 
+#if V8_HAS_PKU_JIT_WRITE_PROTECT && defined(V8_ENABLE_SANDBOX) && defined(DEBUG)
+#define V8_ENABLE_SANDBOX_HARDWARE_SUPPORT true
+#else
+#define V8_ENABLE_SANDBOX_HARDWARE_SUPPORT false
+#endif
+
 // Determine whether tagged pointers are 8 bytes (used in Torque layouts for
 // choosing where to insert padding).
 #if V8_TARGET_ARCH_64_BIT && !defined(V8_COMPRESS_POINTERS)
