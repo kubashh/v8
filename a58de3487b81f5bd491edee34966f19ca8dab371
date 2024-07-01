@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e12afcaa_d03c6f65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-01T09:57:15Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fff0e28_e50d93c6",
@@ -66,6 +83,29 @@
       "side": 1,
       "message": "Currently nothing fails if we don\u0027t, but arguably it\u0027s good practice to undef them nevertheless. The Jumbo build (or similar techniques) might come back. Also, our files tend to be big, and it\u0027s nice to keep things scoped to where they\u0027re needed, to avoid unexpected collisions with (future) things further down in the file.\n\nAs long as there\u0027s no forcing function or concrete benefit, I don\u0027t feel strongly about it; but personally I try to remember to undef my macros.",
       "parentUuid": "8fff0e28_e50d93c6",
+      "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdd7467_d241ee9e",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2273,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-01T09:57:15Z",
+      "side": 1,
+      "message": "Nice macros! Not sure they are useful everywhere but they certainly help in this case.",
+      "range": {
+        "startLine": 2273,
+        "startChar": 8,
+        "endLine": 2273,
+        "endChar": 25
+      },
       "revId": "a58de3487b81f5bd491edee34966f19ca8dab371",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
