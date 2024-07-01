@@ -141,6 +141,13 @@ void Sandbox::Initialize(v8::VirtualAddressSpace* vas) {
   trap_handler::SetV8SandboxBaseAndSize(base(), size());
 #endif  // V8_ENABLE_WEBASSEMBLY && V8_TRAP_HANDLER_SUPPORTED
 
+#if V8_PKU_PROTECT_SANDBOX
+  if (pkey_ != base::MemoryProtectionKey::kNoMemoryProtectionKey) {
+    base::MemoryProtectionKey::SetPermissionsAndKey(
+        {base(), size()}, v8::PageAllocator::Permission::kNoAccess, pkey_);
+  }
+#endif
+
   DCHECK(initialized_);
 }
 
@@ -193,6 +200,56 @@ bool Sandbox::Initialize(v8::VirtualAddressSpace* vas, size_t size,
   DCHECK(!is_partially_reserved());
   return true;
 }
+
+#if V8_PKU_PROTECT_SANDBOX
+
+void Sandbox::AllocatePkey() {
+  DCHECK_EQ(pkey_, base::MemoryProtectionKey::kNoMemoryProtectionKey);
+  pkey_ = base::MemoryProtectionKey::AllocateKey();
+}
+
+Sandbox::BlockAccessScope Sandbox::MaybeBlockAccess() {
+  return BlockAccessScope(pkey_);
+}
+
+Sandbox::BlockAccessScope::BlockAccessScope(int pkey) : pkey_(pkey) {
+  if (pkey_ != base::MemoryProtectionKey::kNoMemoryProtectionKey) {
+    base::MemoryProtectionKey::SetPermissionsForKey(
+        pkey_, base::MemoryProtectionKey::Permission::kDisableAccess);
+  }
+}
+
+Sandbox::BlockAccessScope::~BlockAccessScope() {
+  if (pkey_ != base::MemoryProtectionKey::kNoMemoryProtectionKey) {
+    base::MemoryProtectionKey::SetPermissionsForKey(
+        pkey_, base::MemoryProtectionKey::Permission::kNoRestrictions);
+  }
+}
+
+void Sandbox::SetDefaultPermissionsForSignalHandler() const {
+  if (pkey_ != base::MemoryProtectionKey::kNoMemoryProtectionKey) {
+    base::MemoryProtectionKey::SetPermissionsForKey(
+        pkey_, base::MemoryProtectionKey::Permission::kNoRestrictions);
+  }
+}
+
+void Sandbox::NotifyReadOnlyPageCreated(Address addr, size_t size,
+                                        PageAllocator::Permission perm) const {
+  if (pkey_ != base::MemoryProtectionKey::kNoMemoryProtectionKey) {
+    // Reset the pkey of the read-only page to the default pkey, since some
+    // SBXCHECKs will safely read read-only data from the heap.
+    base::MemoryProtectionKey::SetPermissionsAndKey(
+        {addr, size}, perm, base::MemoryProtectionKey::kDefaultProtectionKey);
+  }
+}
+
+#else
+
+Sandbox::BlockAccessScope Sandbox::MaybeBlockAccess() {
+  return BlockAccessScope();
+}
+
+#endif
 
 bool Sandbox::InitializeAsPartiallyReservedSandbox(v8::VirtualAddressSpace* vas,
                                                    size_t size,
