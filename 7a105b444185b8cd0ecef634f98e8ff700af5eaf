@@ -16,6 +16,98 @@
       "message": "ptal",
       "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65cdea3c_e560bc4f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5496,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-02T14:31:49Z",
+      "side": 1,
+      "message": "Why don\u0027t we make MigrateMapIfNeeded return the new map, instead of loading the map again? We can immediately return the map if no migration happened.",
+      "range": {
+        "startLine": 5496,
+        "startChar": 15,
+        "endLine": 5496,
+        "endChar": 33
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef488d73_f846fab7",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-02T14:31:49Z",
+      "side": 1,
+      "message": "This code is very similar to the one in CheckMapsWithMigration... Should we write a macro for it and re-use?",
+      "range": {
+        "startLine": 2017,
+        "startChar": 5,
+        "endLine": 2019,
+        "endChar": 76
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d07457ad_9dc9d27a",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-02T14:31:49Z",
+      "side": 1,
+      "message": "+1",
+      "range": {
+        "startLine": 2043,
+        "startChar": 0,
+        "endLine": 2045,
+        "endChar": 66
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01480fcb_e7d7eeb4",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2050,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-02T14:31:49Z",
+      "side": 1,
+      "message": "This is dead code, shouldn\u0027t be before Jump ?",
+      "range": {
+        "startLine": 2049,
+        "startChar": 0,
+        "endLine": 2050,
+        "endChar": 78
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
