@@ -16,6 +16,86 @@
       "message": "Could you take a look, please?",
       "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bee0faed_32ce4b2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-02T08:31:48Z",
+      "side": 1,
+      "message": "Good idea to refactor this. Some comments, happy to discuss offline if needed.",
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d83eff4c_f3370ef0",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-02T08:31:48Z",
+      "side": 1,
+      "message": "You should compare against the `uint32_t` limit, otherwise the `static_cast\u003cuint32_t\u003e` below will truncate the value and we will assign a duplicate function index.",
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d204fa_68fccd54",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-02T08:31:48Z",
+      "side": 1,
+      "message": "What would you think about making these the default values in the definition of `WasmTable`, and then skipping them here?",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 531,
+        "endChar": 41
+      },
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "badddc9f_757921c8",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-02T08:31:48Z",
+      "side": 1,
+      "message": "I am not sure if using `uintptr_t` makes sense here. We do not support tables bigger than 10M anyway, and *if* we would support more than 2^32 elements, I would propose to use `uint64_t` instead. Actually also for the memory64 below. This is the module builder, which generates a binary, and that should work independently of the architecture. So even on 32-bit platform we should support 64-bit values for memory64. For table64 as said I would argue that we do not need to support 64-bit values at all in the module builder because V8 would not accept such modules anyway.",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 41
+      },
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
