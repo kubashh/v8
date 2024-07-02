@@ -90,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "490015e7_25c38a4a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-02T14:54:22Z",
+      "side": 1,
+      "message": "we could, on the first failed check against a migration target, migrate the map and try the check again.",
+      "parentUuid": "4ad9834b_bb2f06b2",
+      "range": {
+        "startLine": 5499,
+        "startChar": 4,
+        "endLine": 5499,
+        "endChar": 67
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef488d73_f846fab7",
         "filename": "src/maglev/maglev-ir.cc",
         "patchSetId": 4
