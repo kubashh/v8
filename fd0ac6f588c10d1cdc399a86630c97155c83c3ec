@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c70e112c_fac742ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "KeyedStoreIC",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "40eb3971_70cdd294",
@@ -14,6 +37,23 @@
       "writtenOn": "2024-06-21T09:32:38Z",
       "side": 1,
       "message": "Igor, can you PTAL at the IC part of this?",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2002fb18_f65ad114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "some comments re IC area",
       "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -43,6 +83,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69b988fb_25868ea3",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "And not only for Api objects ))",
+      "parentUuid": "adc824e4_11a9cbb9",
+      "range": {
+        "startLine": 2327,
+        "startChar": 44,
+        "endLine": 2327,
+        "endChar": 51
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bc715416_813b6053",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 11
@@ -60,6 +124,274 @@
         "endLine": 4094,
         "endChar": 8
       },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "befc5e07_2cb0cc67",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "Nit: please make this a DCHECK and move the IC kind check to the caller side.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cf01d32_59a409d3",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "`TryStoreTransition` would be a better name here. And please add a comment in the header about what it does and what it does not.",
+      "range": {
+        "startLine": 2727,
+        "startChar": 34,
+        "endLine": 2727,
+        "endChar": 49
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b6c7376_2294bcb1",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "If we take this path we might miss the \"if transitioning\" store check and forget to deopt the code.\nI think we should do `MigrateDeprecated` and then proceed to the code below.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8799831_f4ff7fe7",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "I think we also need to handle private names and JSProxies as in `StoreIC::Store`.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20fb24ae_0e1c0a03",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "We can short cut it a bit by: `!receiver_map-\u003eis_dictionary_map() \u0026\u0026`",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ac9f161_15ef5825",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "Note, in general `it.transition_` might be a `PropertyCell` here but if we add a fast-map check above then it shouldn\u0027t be the case.\n\nBTW, in a follow up CL we could have supported regular dictionary objects too.",
+      "range": {
+        "startLine": 2752,
+        "startChar": 15,
+        "endLine": 2752,
+        "endChar": 34
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "935618f4_3552197b",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2753,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "Looking at `Object::SetProperty`\u0027s implementation, I think we can shortcut it straight to `Object::TransitionAndWriteDataProperty` for currently supported cases (fast receiver objects, no JSProxies, no private names).",
+      "range": {
+        "startLine": 2753,
+        "startChar": 17,
+        "endLine": 2753,
+        "endChar": 36
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e892353a_87604f15",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "Given the amount of checks we have to do to get to the fast path, please put this middle part into a helper function from which we can just `return false` in case the fast path can\u0027t be taken.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68be5c1_88b3237a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2769,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "Just double-checking... Is it guaranteed that upon deopting the store will be replayed?",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5db388d_98cea97b",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "This is not what V8 expects - to have a pending exception and not returning the exception sentinel. Please handle exception case properly: `RETURN_RESULT_OR_FAILURE`.\nAssuming that throwing an exception is a rare case there\u0027s no harm in letting it throw and not deopting.\n\nIn case deopting is strictly necessary we\u0027d need to find the caller function and deoptimize it manually (see `Runtime_DeoptimizeNow`).",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cc89ff1_6471c5b0",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "If you address the comments in `StoreTransition` then this function will never throw. So, you can make it return a boolean and add a `DCHECK(!isolate-\u003ehas_exception());` here.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8888902c_b3633eca",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "Typo: known.",
+      "range": {
+        "startLine": 57,
+        "startChar": 19,
+        "endLine": 57,
+        "endChar": 23
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846cdd2d_181d752a",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "How about calling it `kUniqueName`?",
+      "range": {
+        "startLine": 59,
+        "startChar": 27,
+        "endLine": 59,
+        "endChar": 32
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5637a873_941cf51f",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-02T18:22:49Z",
+      "side": 1,
+      "message": "`CSA_DCHECK(.., IsUniqueName(..));`",
       "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
