@@ -1983,6 +1983,88 @@ void CheckMapsWithMigration::GenerateCode(MaglevAssembler* masm,
   __ bind(*done);
 }
 
+void CheckMapsWithMigration::ClearUnstableNodeAspects(
+    KnownNodeAspects& known_node_aspects) {
+  // This instruction only migrates representations of values, not the values
+  // themselves, so cached values are still valid.
+}
+
+int MigrateMapIfNeeded::MaxCallStackArgs() const {
+  DCHECK_EQ(Runtime::FunctionForId(Runtime::kTryMigrateInstance)->nargs, 1);
+  return 1;
+}
+
+void MigrateMapIfNeeded::SetValueLocationConstraints() {
+  UseRegister(object_input());
+  UseRegister(map_input());
+  set_temporaries_needed(1);
+}
+
+void MigrateMapIfNeeded::GenerateCode(MaglevAssembler* masm,
+                                      const ProcessingState& state) {
+  MaglevAssembler::ScratchRegisterScope temps(masm);
+  Register object = ToRegister(object_input());
+  Register map = ToRegister(map_input());
+
+  ZoneLabelRef done(masm);
+
+  RegisterSnapshot save_registers = register_snapshot();
+  // Make sure that the object / map registers are not clobbered by the
+  // Runtime::kMigrateInstance runtime call.
+  save_registers.live_registers.set(object);
+  save_registers.live_tagged_registers.set(object);
+  save_registers.live_registers.set(map);
+  save_registers.live_tagged_registers.set(map);
+
+  // If the map is deprecated, jump to the deferred code which will migrate it.
+  __ TestInt32AndJumpIfAnySet(
+      FieldMemOperand(map, Map::kBitField3Offset),
+      Map::Bits3::IsDeprecatedBit::kMask,
+      __ MakeDeferredCode(
+          [](MaglevAssembler* masm, RegisterSnapshot register_snapshot,
+             ZoneLabelRef done, Register object, MigrateMapIfNeeded* node) {
+            Label* deopt = __ GetDeoptLabel(node, DeoptimizeReason::kWrongMap);
+
+            Register return_val = Register::no_reg();
+            {
+              SaveRegisterStateForCall save_register_state(masm,
+                                                           register_snapshot);
+
+              __ Push(object);
+              __ Move(kContextRegister, masm->native_context().object());
+              __ CallRuntime(Runtime::kTryMigrateInstance);
+              save_register_state.DefineSafepoint();
+
+              // Make sure the return value is preserved across the live
+              // register restoring pop all.
+              return_val = kReturnRegister0;
+              MaglevAssembler::ScratchRegisterScope temps(masm);
+              Register scratch = temps.GetDefaultScratchRegister();
+              if (register_snapshot.live_registers.has(return_val)) {
+                DCHECK(!register_snapshot.live_registers.has(scratch));
+                __ Move(scratch, return_val);
+                return_val = scratch;
+              }
+            }
+
+            // TODO(marja, v8:7700): It would be more optimal to reload the
+            // map only here, not always after MigrateMapIfNeeded.
+
+            __ Jump(*done);
+
+            // On failure, the returned value is Smi zero.
+            __ CompareTaggedAndJumpIf(return_val, Smi::zero(), kEqual, deopt);
+          },
+          save_registers, done, object, this));
+  __ bind(*done);
+}
+
+void MigrateMapIfNeeded::ClearUnstableNodeAspects(
+    KnownNodeAspects& known_node_aspects) {
+  // This instruction only migrates representations of values, not the values
+  // themselves, so cached values are still valid.
+}
+
 int DeleteProperty::MaxCallStackArgs() const {
   using D = CallInterfaceDescriptorFor<Builtin::kDeleteProperty>::type;
   return D::GetStackParameterCount();
@@ -7151,12 +7233,6 @@ void StoreMap::ClearUnstableNodeAspects(KnownNodeAspects& known_node_aspects) {
   if (v8_flags.trace_maglev_graph_building) {
     std::cout << "  ! StoreMap: Clearing unstable maps" << std::endl;
   }
-}
-
-void CheckMapsWithMigration::ClearUnstableNodeAspects(
-    KnownNodeAspects& known_node_aspects) {
-  // This instruction only migrates representations of values, not the values
-  // themselves, so cached values are still valid.
 }
 
 }  // namespace maglev
