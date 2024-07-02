@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd1183f1_02e47606",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-02T14:41:09Z",
+      "side": 1,
+      "message": "can you also add a TODO to only try migrating if a compare with a migration target failed?",
+      "range": {
+        "startLine": 5499,
+        "startChar": 4,
+        "endLine": 5499,
+        "endChar": 67
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef488d73_f846fab7",
         "filename": "src/maglev/maglev-ir.cc",
         "patchSetId": 4
