@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5214d5e_08a114d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-03T08:59:24Z",
+      "side": 1,
+      "message": "This is kind of technically an API breaking change, but I had a look through our benchmarks and tooling and don\u0027t see any uses of `console.timeStamp` or `timer-event` logs, so I think it\u0027s safe enough.",
+      "revId": "3dc26e9440c5ceb4f978f4348c4828adbf8f84ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
