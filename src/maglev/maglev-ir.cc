@@ -1875,6 +1875,37 @@ void CheckMapsWithMigration::SetValueLocationConstraints() {
   set_temporaries_needed(MapCompare::TemporaryCount(maps_.size()));
 }
 
+namespace {
+void GenerateCodeForMapMigration(MaglevAssembler* masm, Register object,
+                                 RegisterSnapshot& register_snapshot,
+                                 ZoneLabelRef done, Label* fail) {
+  Register return_val = Register::no_reg();
+  {
+    SaveRegisterStateForCall save_register_state(masm, register_snapshot);
+
+    __ Push(object);
+    __ Move(kContextRegister, masm->native_context().object());
+    __ CallRuntime(Runtime::kTryMigrateInstance);
+    save_register_state.DefineSafepoint();
+
+    // Make sure the return value is preserved across the live
+    // register restoring pop all.
+    return_val = kReturnRegister0;
+    MaglevAssembler::ScratchRegisterScope temps(masm);
+    Register scratch = temps.GetDefaultScratchRegister();
+    if (register_snapshot.live_registers.has(return_val)) {
+      DCHECK(!register_snapshot.live_registers.has(scratch));
+      __ Move(scratch, return_val);
+      return_val = scratch;
+    }
+  }
+
+  // On failure, the returned value is Smi zero.
+  __ CompareTaggedAndJumpIf(return_val, Smi::zero(), kEqual, fail);
+  __ Jump(*done);
+}
+}  // namespace
+
 void CheckMapsWithMigration::GenerateCode(MaglevAssembler* masm,
                                           const ProcessingState& state) {
   // We emit an unconditional deopt if we intersect the map sets and the
@@ -1944,43 +1975,67 @@ void CheckMapsWithMigration::GenerateCode(MaglevAssembler* masm,
                   Map::Bits3::IsDeprecatedBit::kMask, deopt);
 
               // Otherwise, try migrating the object.
-              Register return_val = Register::no_reg();
-              {
-                SaveRegisterStateForCall save_register_state(masm,
-                                                             register_snapshot);
-
-                __ Push(map_compare.GetObject());
-                __ Move(kContextRegister, masm->native_context().object());
-                __ CallRuntime(Runtime::kTryMigrateInstance);
-                save_register_state.DefineSafepoint();
-
-                // Make sure the return value is preserved across the live
-                // register restoring pop all.
-                return_val = kReturnRegister0;
-                MaglevAssembler::ScratchRegisterScope temps(masm);
-                Register scratch = temps.GetDefaultScratchRegister();
-                if (register_snapshot.live_registers.has(return_val)) {
-                  DCHECK(!register_snapshot.live_registers.has(scratch));
-                  __ Move(scratch, return_val);
-                  return_val = scratch;
-                }
-              }
-
-              // On failure, the returned value is Smi zero.
-              __ CompareTaggedAndJumpIf(return_val, Smi::zero(), kEqual, deopt);
-
-              // Otherwise, the return value is the object (it's always the same
-              // object we called TryMigrate with). We already have it in a
-              // register, so we can ignore the return value. We'll need to
-              // reload the map though since it might have changed; it's done
-              // right after the map_checks label.
-              __ Jump(*map_checks);
+              GenerateCodeForMapMigration(masm, map_compare.GetObject(),
+                                          register_snapshot, map_checks, deopt);
+              // We'll need to reload the map since it might have changed; it's
+              // done right after the map_checks label.
             },
             save_registers, map_checks, map_compare, this));
     // If the jump to deferred code was not taken, the map was equal to the
     // last map.
   }  // End of the `has_migration_targets` case.
   __ bind(*done);
+}
+
+int MigrateMapIfNeeded::MaxCallStackArgs() const {
+  DCHECK_EQ(Runtime::FunctionForId(Runtime::kTryMigrateInstance)->nargs, 1);
+  return 1;
+}
+
+void MigrateMapIfNeeded::SetValueLocationConstraints() {
+  UseRegister(object_input());
+  UseRegister(map_input());
+  set_temporaries_needed(1);
+  DefineAsRegister(this);
+}
+
+void MigrateMapIfNeeded::GenerateCode(MaglevAssembler* masm,
+                                      const ProcessingState& state) {
+  MaglevAssembler::ScratchRegisterScope temps(masm);
+  Register object = ToRegister(object_input());
+  Register map = ToRegister(map_input());
+  Register result_reg = ToRegister(result());
+
+  ZoneLabelRef done(masm);
+
+  RegisterSnapshot save_registers = register_snapshot();
+  // Make sure that the object / map registers are not clobbered by the
+  // Runtime::kMigrateInstance runtime call.
+  save_registers.live_registers.set(object);
+  save_registers.live_tagged_registers.set(object);
+  save_registers.live_registers.set(map);
+  save_registers.live_tagged_registers.set(map);
+
+  // If the map is deprecated, jump to the deferred code which will migrate it.
+  __ TestInt32AndJumpIfAnySet(
+      FieldMemOperand(map, Map::kBitField3Offset),
+      Map::Bits3::IsDeprecatedBit::kMask,
+      __ MakeDeferredCode(
+          [](MaglevAssembler* masm, RegisterSnapshot register_snapshot,
+             ZoneLabelRef done, Register object, MigrateMapIfNeeded* node) {
+            Label* deopt = __ GetDeoptLabel(node, DeoptimizeReason::kWrongMap);
+
+            GenerateCodeForMapMigration(masm, object, register_snapshot, done,
+                                        deopt);
+          },
+          save_registers, done, object, this));
+
+  // No migration needed, return the original map.
+  __ Move(result_reg, map);
+
+  __ bind(*done);
+  // Reload the map.
+  __ LoadTaggedField(result_reg, object, HeapObject::kMapOffset);
 }
 
 int DeleteProperty::MaxCallStackArgs() const {
@@ -7154,6 +7209,12 @@ void StoreMap::ClearUnstableNodeAspects(KnownNodeAspects& known_node_aspects) {
 }
 
 void CheckMapsWithMigration::ClearUnstableNodeAspects(
+    KnownNodeAspects& known_node_aspects) {
+  // This instruction only migrates representations of values, not the values
+  // themselves, so cached values are still valid.
+}
+
+void MigrateMapIfNeeded::ClearUnstableNodeAspects(
     KnownNodeAspects& known_node_aspects) {
   // This instruction only migrates representations of values, not the values
   // themselves, so cached values are still valid.
