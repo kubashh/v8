@@ -33,6 +33,24 @@
       "message": "Nit: can you add a small comment that explains what this accomplishes, e.g. that it prevents sandbox checks from relying on in-sandbox data, which is generally unsafe.",
       "revId": "37d9768f557b8d9c6e5e1a3c765f492c3bbf4818",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ec4d738_522fcf30",
+        "filename": "src/sandbox/check.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-07-03T13:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "022abe7c_b73aab9d",
+      "revId": "37d9768f557b8d9c6e5e1a3c765f492c3bbf4818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
