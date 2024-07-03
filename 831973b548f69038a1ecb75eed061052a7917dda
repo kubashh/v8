@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6e32639_23b93445",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-03T15:01:36Z",
+      "side": 1,
+      "message": "IIRC I meant to ask whether it\u0027s load or store which brings the benefits? Maybe it\u0027s enough to fix only one of those to get improvements without a lot of regressions?",
+      "parentUuid": "68c0966b_d2e8a2bd",
+      "revId": "831973b548f69038a1ecb75eed061052a7917dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1378287d_aea42172",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 2

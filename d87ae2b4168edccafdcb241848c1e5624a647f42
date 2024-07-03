@@ -34,6 +34,24 @@
       "parentUuid": "1fa3efce_882cc122",
       "revId": "d87ae2b4168edccafdcb241848c1e5624a647f42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fe4ceb6_72e7814f",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-03T15:01:36Z",
+      "side": 0,
+      "message": "Ah, sorry. You are right. Please ignore this comment.",
+      "parentUuid": "7133591e_d0e5866c",
+      "revId": "d87ae2b4168edccafdcb241848c1e5624a647f42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

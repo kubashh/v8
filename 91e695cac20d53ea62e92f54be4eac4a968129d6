@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da290872_14a2cc7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-03T15:01:36Z",
+      "side": 1,
+      "message": "some comments...",
+      "revId": "91e695cac20d53ea62e92f54be4eac4a968129d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3928175d_8af67de0",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-03T15:01:36Z",
+      "side": 1,
+      "message": "Just guessing...\n\nI wonder what if instead of disabling lookups for all objects we skip this lookup only for Api objects? This might be a trade-off between JetStream and Speedometer.\n```\n  if (use_stub_cache \u003d\u003d kUseStubCache) {\n    GotoIf(IsJSApiObjectInstanceType(instance_type), \u0026try_stub_cache);\n  }\n  DescriptorLookup ...\n```\nAnd we could even put this check before the object shape check at line 874.\n\nThe idea behind this suggestion is that \n1) Api objects are either interceptors or objects with a lot of accessor properties. The former case requires going to C++ anyway and for the latter it might be cheaper check the stub cache to get the handler than doing the lookup + other megamorphic ICs might benefit from having a handler in the stub cache,\n2) it doesn\u0027t make sense to bother looking up transitions for \nApi objects.",
+      "revId": "91e695cac20d53ea62e92f54be4eac4a968129d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
