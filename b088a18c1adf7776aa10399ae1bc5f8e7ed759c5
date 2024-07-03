@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31a055e1_6433eaf6",
+        "filename": "src/sandbox/sandbox.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-03T09:14:34Z",
+      "side": 1,
+      "message": "It\u0027s a bit sad that these are now here, which means that this file needs to be included in many more places. I wonder if we can do one of two things:\n1. Keep the macros in logging.h but make them call a C++ function instead, which then does the necessary work, or\n2. Move them into a new file src/sandbox/checks.h which makes it more clear why the file is being included",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 288,
+        "endChar": 76
+      },
+      "revId": "b088a18c1adf7776aa10399ae1bc5f8e7ed759c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
