@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc856e6a_a9abe1b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-03T11:02:31Z",
+      "side": 1,
+      "message": "Thanks! LGTM with one nit",
+      "revId": "37d9768f557b8d9c6e5e1a3c765f492c3bbf4818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "022abe7c_b73aab9d",
+        "filename": "src/sandbox/check.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-03T11:02:31Z",
+      "side": 1,
+      "message": "Nit: can you add a small comment that explains what this accomplishes, e.g. that it prevents sandbox checks from relying on in-sandbox data, which is generally unsafe.",
+      "revId": "37d9768f557b8d9c6e5e1a3c765f492c3bbf4818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
