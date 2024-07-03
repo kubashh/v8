@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "858c66de_80a8c001",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b824f96c_af61dfe5",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5498,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "Not a node with 4 successors, but a control node, like Jump/Switch/etc...",
+      "range": {
+        "startLine": 5497,
+        "startChar": 4,
+        "endLine": 5498,
+        "endChar": 43
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4de5f2c0_2af424aa",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "I meant to add to the MaglevAssembler itself: like MaglevAssembler::MigrateMap or something. But this looks good to me as well.",
+      "range": {
+        "startLine": 1879,
+        "startChar": 5,
+        "endLine": 1879,
+        "endChar": 32
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d4794df_b46381e9",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "Use the map as first input",
+      "range": {
+        "startLine": 1997,
+        "startChar": 2,
+        "endLine": 1997,
+        "endChar": 13
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59bfed5b_74c4862f",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "You could use DefineAsFirstInput",
+      "range": {
+        "startLine": 1999,
+        "startChar": 2,
+        "endLine": 1999,
+        "endChar": 18
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a60afcd0_3c777c6e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "Do we need to save the object if it is not live after this node?",
+      "range": {
+        "startLine": 2014,
+        "startChar": 0,
+        "endLine": 2015,
+        "endChar": 51
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d9e6f06_1c905f29",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "If we do DefineAsFirstInput then map will probably be live anyways. You could DCHECK!",
+      "range": {
+        "startLine": 2016,
+        "startChar": 0,
+        "endLine": 2017,
+        "endChar": 48
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "388f24ce_ebdda158",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-03T13:14:31Z",
+      "side": 1,
+      "message": "Don\u0027t need to do this move if the map is the first input!",
+      "range": {
+        "startLine": 2034,
+        "startChar": 0,
+        "endLine": 2034,
+        "endChar": 27
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
