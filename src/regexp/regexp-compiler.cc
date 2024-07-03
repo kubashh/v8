@@ -669,10 +669,11 @@ ActionNode* ActionNode::ClearCaptures(Interval range, RegExpNode* on_success) {
   return result;
 }
 
-ActionNode* ActionNode::BeginPositiveSubmatch(int stack_reg, int position_reg,
-                                              RegExpNode* on_success) {
-  ActionNode* result =
-      on_success->zone()->New<ActionNode>(BEGIN_POSITIVE_SUBMATCH, on_success);
+BeginPositiveSubmatchNode* ActionNode::BeginPositiveSubmatch(
+    int stack_reg, int position_reg, RegExpNode* body,
+    ActionNode* success_node) {
+  BeginPositiveSubmatchNode* result =
+      body->zone()->New<BeginPositiveSubmatchNode>(body, success_node);
   result->data_.u_submatch.stack_pointer_register = stack_reg;
   result->data_.u_submatch.current_position_register = position_reg;
   return result;
@@ -1390,6 +1391,16 @@ bool RegExpNode::KeepRecursing(RegExpCompiler* compiler) {
          compiler->recursion_depth() <= RegExpCompiler::kMaxRecursion;
 }
 
+void BeginPositiveSubmatchNode::FillInBMInfo(Isolate* isolate, int offset,
+                                             int budget,
+                                             BoyerMooreLookahead* bm,
+                                             bool not_at_start) {
+  // We use the node after the lookaround to fill in the eats_at_least info
+  // so we have to use the same node to fill in the Boyer-Moore info.
+  success_node()->on_success()->FillInBMInfo(isolate, offset, budget - 1, bm,
+                                             not_at_start);
+}
+
 void ActionNode::FillInBMInfo(Isolate* isolate, int offset, int budget,
                               BoyerMooreLookahead* bm, bool not_at_start) {
   base::Optional<RegExpFlags> old_flags;
@@ -1400,11 +1411,10 @@ void ActionNode::FillInBMInfo(Isolate* isolate, int offset, int budget,
     old_flags = bm->compiler()->flags();
     bm->compiler()->set_flags(flags());
   }
-  if (action_type_ == POSITIVE_SUBMATCH_SUCCESS) {
-    // Anything may follow a positive submatch success, thus we need to accept
-    // all characters from this position onwards.
-    bm->SetRest(offset);
-  } else {
+  // We don't use the node after a positive submatch success because it
+  // rewinds the position.  Since we returned 0 as the eats_at_least value
+  // for this node, we don't need to fill in any data.
+  if (action_type_ != POSITIVE_SUBMATCH_SUCCESS) {
     on_success()->FillInBMInfo(isolate, offset, budget - 1, bm, not_at_start);
   }
   SaveBMInfo(bm, not_at_start, offset);
@@ -1413,12 +1423,26 @@ void ActionNode::FillInBMInfo(Isolate* isolate, int offset, int budget,
   }
 }
 
+void BeginPositiveSubmatchNode::GetQuickCheckDetails(QuickCheckDetails* details,
+                                                     RegExpCompiler* compiler,
+                                                     int filled_in,
+                                                     bool not_at_start) {
+  // We use the node after the lookaround to fill in the eats_at_least info
+  // so we have to use the same node to fill in the QuickCheck info.
+  success_node()->on_success()->GetQuickCheckDetails(details, compiler,
+                                                     filled_in, not_at_start);
+}
+
 void ActionNode::GetQuickCheckDetails(QuickCheckDetails* details,
                                       RegExpCompiler* compiler, int filled_in,
                                       bool not_at_start) {
   if (action_type_ == SET_REGISTER_FOR_LOOP) {
     on_success()->GetQuickCheckDetailsFromLoopEntry(details, compiler,
                                                     filled_in, not_at_start);
+  } else if (action_type() == POSITIVE_SUBMATCH_SUCCESS) {
+    // We don't use the node after a positive submatch success because it
+    // rewinds the position.  Since we returned 0 as the eats_at_least value
+    // for this node, we don't need to fill in any data.
   } else {
     if (action_type() == MODIFY_FLAGS) {
       compiler->set_flags(flags());
@@ -3272,9 +3296,6 @@ int ChoiceNode::EmitOptimizedUnanchoredSearch(RegExpCompiler* compiler,
       alt0.node()->FillInBMInfo(isolate, 0, kRecursionBudget, bm, false);
     }
   }
-  if (bm != nullptr) {
-    bm->EmitSkipInstructions(macro_assembler);
-  }
   return eats_at_least;
 }
 
@@ -3642,16 +3663,24 @@ class EatsAtLeastPropagator : public AllStatic {
 
   static void VisitAction(ActionNode* that) {
     switch (that->action_type()) {
-      case ActionNode::BEGIN_POSITIVE_SUBMATCH:
+      case ActionNode::BEGIN_POSITIVE_SUBMATCH: {
+        // For a begin positive submatch we propagate the eats_at_least
+        // data from the successor of the success node, ignoring the body of
+        // the lookahead, which eats nothing, since it is a zero-width
+        // assertion.  TODO(chromium:42201836) This is better than discarding
+        // all information when there is a positive lookahead, but it loses
+        // some information that could be useful, since the body of the
+        // lookahead could tell us something about how close to the end of the
+        // string we are.
+        BeginPositiveSubmatchNode* begin =
+            reinterpret_cast<BeginPositiveSubmatchNode*>(that);
+        that->set_eats_at_least_info(
+            *begin->success_node()->on_success()->eats_at_least_info());
+        break;
+      }
       case ActionNode::POSITIVE_SUBMATCH_SUCCESS:
-        // We do not propagate eats_at_least data through positive lookarounds,
-        // because they rewind input.
-        // TODO(v8:11859) Potential approaches for fixing this include:
-        // 1. Add a dedicated choice node for positive lookaround, similar to
-        //    NegativeLookaroundChoiceNode.
-        // 2. Add an eats_at_least_inside_loop field to EatsAtLeastInfo, which
-        //    is <= eats_at_least_from_possibly_start, and use that value in
-        //    EatsAtLeastFromLoopEntry.
+        // We do not propagate eats_at_least data through positive submatch
+        // success because it rewinds input.
         DCHECK(that->eats_at_least_info()->IsZero());
         break;
       case ActionNode::SET_REGISTER_FOR_LOOP:
@@ -3894,6 +3923,7 @@ void ChoiceNode::FillInBMInfo(Isolate* isolate, int offset, int budget,
 void TextNode::FillInBMInfo(Isolate* isolate, int initial_offset, int budget,
                             BoyerMooreLookahead* bm, bool not_at_start) {
   if (initial_offset >= bm->length()) return;
+  if (read_backward()) return;
   int offset = initial_offset;
   int max_char = bm->max_char();
   for (int i = 0; i < elements()->length(); i++) {

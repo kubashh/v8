@@ -93,6 +93,9 @@ void DotPrinterImpl::PrintAttributes(RegExpNode* that) {
   printer.PrintBit("NI", info->follows_newline_interest);
   printer.PrintBit("WI", info->follows_word_interest);
   printer.PrintBit("SI", info->follows_start_interest);
+  const EatsAtLeastInfo* eats_at_least = that->eats_at_least_info();
+  os_ << "eats at least "
+      << (int)(eats_at_least->eats_at_least_from_possibly_start);
   Label* label = that->label();
   if (label->is_bound()) printer.PrintPositive("@", label->pos());
   os_ << "}\"];\n"
@@ -110,6 +113,7 @@ void DotPrinterImpl::VisitChoice(ChoiceNode* that) {
     GuardedAlternative alt = that->alternatives()->at(i);
     alt.node()->Accept(this);
   }
+  PrintAttributes(that);
 }
 
 void DotPrinterImpl::VisitLoopChoice(LoopChoiceNode* that) {
