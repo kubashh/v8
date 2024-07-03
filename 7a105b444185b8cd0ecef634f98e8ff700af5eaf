@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00c0d3ac_12b45be5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-03T11:19:52Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65cdea3c_e560bc4f",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-07-02T14:31:49Z",
       "side": 1,
       "message": "Why don\u0027t we make MigrateMapIfNeeded return the new map, instead of loading the map again? We can immediately return the map if no migration happened.",
+      "range": {
+        "startLine": 5496,
+        "startChar": 15,
+        "endLine": 5496,
+        "endChar": 33
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99fe681d_5e158ede",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5496,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-03T11:19:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65cdea3c_e560bc4f",
       "range": {
         "startLine": 5496,
         "startChar": 15,
@@ -112,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d403ba52_c3c182a9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5499,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-03T11:19:52Z",
+      "side": 1,
+      "message": "Done (added the TODO, that is)",
+      "parentUuid": "490015e7_25c38a4a",
+      "range": {
+        "startLine": 5499,
+        "startChar": 4,
+        "endLine": 5499,
+        "endChar": 67
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef488d73_f846fab7",
@@ -135,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "568c6ed1_da9a7e87",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-03T11:19:52Z",
+      "side": 1,
+      "message": "Done; only unified the call to the runtime function, not the whole deferred thing. The other impl defers everything after the last map check fails, and this version defers only the \"if the object\u0027s map is deprecated\" part.",
+      "parentUuid": "ef488d73_f846fab7",
+      "range": {
+        "startLine": 2017,
+        "startChar": 5,
+        "endLine": 2019,
+        "endChar": 76
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d07457ad_9dc9d27a",
@@ -148,6 +237,30 @@
       "writtenOn": "2024-07-02T14:31:49Z",
       "side": 1,
       "message": "+1",
+      "range": {
+        "startLine": 2043,
+        "startChar": 0,
+        "endLine": 2045,
+        "endChar": 66
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67e4f5f6_480b3237",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-03T11:19:52Z",
+      "side": 1,
+      "message": "This is now gone",
+      "parentUuid": "d07457ad_9dc9d27a",
       "range": {
         "startLine": 2043,
         "startChar": 0,
@@ -195,6 +308,30 @@
       "side": 1,
       "message": "Oops, this is a bug! Thanks for pointing it out. Jump should be last.",
       "parentUuid": "01480fcb_e7d7eeb4",
+      "range": {
+        "startLine": 2049,
+        "startChar": 0,
+        "endLine": 2050,
+        "endChar": 78
+      },
+      "revId": "7a105b444185b8cd0ecef634f98e8ff700af5eaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad17649c_160e8e7d",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2050,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-03T11:19:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a316355a_00e1a3f2",
       "range": {
         "startLine": 2049,
         "startChar": 0,
