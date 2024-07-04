@@ -3471,6 +3471,8 @@ filegroup(
             "src/maglev/maglev-register-frame-array.h",
             "src/maglev/maglev-phi-representation-selector.cc",
             "src/maglev/maglev-phi-representation-selector.h",
+            "src/maglev/maglev-post-hoc-processors.cc",
+            "src/maglev/maglev-post-hoc-processors.h",
         ],
     }),
 )
