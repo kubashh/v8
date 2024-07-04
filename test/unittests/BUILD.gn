@@ -255,6 +255,7 @@ v8_source_set("v8_unittests_sources") {
     "../common/node-observer-tester.h",
     "../common/value-helper.cc",
     "../common/value-helper.h",
+    "../fuzzer/example-fuzzer.cc",
     "api/access-check-unittest.cc",
     "api/accessor-unittest.cc",
     "api/api-icu-unittest.cc",

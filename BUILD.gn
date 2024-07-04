@@ -7727,6 +7727,22 @@ template("v8_fuzzer") {
   }
 }
 
+#v8_fuzzer("example_fuzzer") {
+#  sources = [
+#    "test/fuzzer/example-fuzzer.cc",
+#    "test/unittests/fuzztest.h",
+#  ]
+#}
+
+#v8_executable("test_example_fuzzer") {
+#  deps = [
+#    ":example_fuzzer",
+#    "//build/win:default_exe_manifest",
+#  ]
+
+#  configs = [ ":external_config" ]
+#}
+
 v8_fuzzer("json_fuzzer") {
   sources = [ "test/fuzzer/json.cc" ]
 }
