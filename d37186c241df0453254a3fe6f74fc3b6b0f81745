@@ -37,6 +37,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc6c1374_fa45bdf5",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-07-04T08:55:55Z",
+      "side": 1,
+      "message": "Please extend the comment  that this runs a GC and walks the whole heap (aka isn\u0027t a particularly fast operation)",
+      "range": {
+        "startLine": 1112,
+        "startChar": 0,
+        "endLine": 1112,
+        "endChar": 49
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28833eda_fe44977f",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-07-04T08:55:55Z",
+      "side": 1,
+      "message": "nit: Feel free to drop this comment I don\u0027t think it adds anything over the method signature :).",
+      "range": {
+        "startLine": 1114,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 54
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b146bb44_b4ef4732",
         "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
         "patchSetId": 10
