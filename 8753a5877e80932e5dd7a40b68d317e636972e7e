@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47f4b00c_d5692f52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-07-04T12:20:34Z",
+      "side": 1,
+      "message": "Merging to 12.7, PTAL.\nSome minor conflicts resolved in PS2.",
+      "revId": "8753a5877e80932e5dd7a40b68d317e636972e7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
