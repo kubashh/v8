@@ -15,6 +15,9 @@ namespace v8 {
 namespace internal {
 namespace maglev {
 
+class MaglevGraphLabeller;
+inline thread_local MaglevGraphLabeller* labeller_;
+
 class MaglevGraphLabeller {
  public:
   struct Provenance {
