@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "828494f9_c8216e23",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc6c1374_fa45bdf5",
+      "range": {
+        "startLine": 1112,
+        "startChar": 0,
+        "endLine": 1112,
+        "endChar": 49
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28833eda_fe44977f",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-07-04T08:55:55Z",
       "side": 1,
       "message": "nit: Feel free to drop this comment I don\u0027t think it adds anything over the method signature :).",
+      "range": {
+        "startLine": 1114,
+        "startChar": 0,
+        "endLine": 1114,
+        "endChar": 54
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "095d767b_36104c09",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28833eda_fe44977f",
       "range": {
         "startLine": 1114,
         "startChar": 0,
@@ -98,6 +146,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53557043_baa7189f",
+        "filename": "src/inspector/v8-heap-profiler-agent-impl.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b146bb44_b4ef4732",
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "590be314_e48e4205",
@@ -111,6 +177,30 @@
       "writtenOn": "2024-07-04T08:52:47Z",
       "side": 1,
       "message": "This can only contain `v8::Value`, might be nicer to tighten this down.",
+      "range": {
+        "startLine": 56,
+        "startChar": 14,
+        "endLine": 56,
+        "endChar": 33
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9365b57_f7c8a59f",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "I\u0027ve changed it, but I just want to clarify that you meant the vector should be a std::vector\u003cv8::local\u003cv8::value\u003e\u003e, or a std::vector\u003cv8::value\u003e?",
+      "parentUuid": "590be314_e48e4205",
       "range": {
         "startLine": 56,
         "startChar": 14,
@@ -144,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e022e516_11972a2d",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1fe4530_4138da4d",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69b1b244_cfe66d44",
@@ -167,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9a44a58_644a2b82",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69b1b244_cfe66d44",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 83
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38a659b8_f93856dd",
@@ -180,6 +318,30 @@
       "writtenOn": "2024-07-04T08:52:47Z",
       "side": 1,
       "message": "nit: line width",
+      "range": {
+        "startLine": 614,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 47
+      },
+      "revId": "d37186c241df0453254a3fe6f74fc3b6b0f81745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ae6a9b5_9aa2116f",
+        "filename": "test/unittests/heap/cppgc-js/unified-heap-snapshot-unittest.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-05T21:56:20Z",
+      "side": 1,
+      "message": "Converted the comment to one line, then ran git cl format",
+      "parentUuid": "38a659b8_f93856dd",
       "range": {
         "startLine": 614,
         "startChar": 0,
