@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8aea3cd_133d3fdd",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-05T08:06:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d095aa49_32a6ec32",
+      "range": {
+        "startLine": 1968,
+        "startChar": 0,
+        "endLine": 1968,
+        "endChar": 28
+      },
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c276b68f_6a801580",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a6b7d13_bae36f29",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-05T08:06:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c276b68f_6a801580",
+      "range": {
+        "startLine": 1997,
+        "startChar": 11,
+        "endLine": 1997,
+        "endChar": 74
+      },
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6e948ce_7a7855af",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-07-05T07:28:00Z",
       "side": 1,
       "message": "So this code is not needed in the fast path.",
+      "range": {
+        "startLine": 2001,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 58
+      },
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57cdacdb_83d0c7b9",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-05T08:06:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6e948ce_7a7855af",
       "range": {
         "startLine": 2001,
         "startChar": 0,
