@@ -5208,6 +5208,7 @@ v8_source_set("v8_turboshaft") {
       "src/maglev/maglev-interpreter-frame-state.cc",
       "src/maglev/maglev-ir.cc",
       "src/maglev/maglev-phi-representation-selector.cc",
+      "src/maglev/maglev-post-hoc-processors.cc",
     ]
   }
 
