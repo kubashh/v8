@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9941d6e0_a5f23317",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-05T13:20:41Z",
+      "side": 1,
+      "message": "PTAL. I guess, this could be called an off-by-one-error. 😊",
+      "revId": "41308974ba93c427467b4d36325571dd02cc0f27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
