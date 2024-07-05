@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72dd343d_31c77dc2",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2146,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-07-05T14:31:10Z",
+      "side": 1,
+      "message": "I undid these changes, because we\u0027ll use `uint32_t` for max and min size.",
+      "parentUuid": "d83eff4c_f3370ef0",
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05d204fa_68fccd54",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0c9de9_a913ca13",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-07-05T14:31:10Z",
+      "side": 1,
+      "message": "Done + removed unnecessary ones in the other `AddTable*()` functions. I also did the same for memories.",
+      "parentUuid": "05d204fa_68fccd54",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 531,
+        "endChar": 41
+      },
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "badddc9f_757921c8",
@@ -88,6 +130,30 @@
       "writtenOn": "2024-07-02T08:31:48Z",
       "side": 1,
       "message": "I am not sure if using `uintptr_t` makes sense here. We do not support tables bigger than 10M anyway, and *if* we would support more than 2^32 elements, I would propose to use `uint64_t` instead. Actually also for the memory64 below. This is the module builder, which generates a binary, and that should work independently of the architecture. So even on 32-bit platform we should support 64-bit values for memory64. For table64 as said I would argue that we do not need to support 64-bit values at all in the module builder because V8 would not accept such modules anyway.",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 41
+      },
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e773c50_00319bde",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-07-05T14:31:10Z",
+      "side": 1,
+      "message": "I changed back the value to uint32_t for tables. \n\nI will change the memories in a separate CL. But I just realised, the max and min size for memories are for the page size, right? So it should always fit into 32-bits, right?",
+      "parentUuid": "badddc9f_757921c8",
       "range": {
         "startLine": 356,
         "startChar": 0,
