@@ -159,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e425be13_1c0335f6",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "That\u0027s correct! The order of UseRegister here is not important, but the input order to the node in its declaration. In any case, you put kMapIndex \u003d 0, which is correct! 😊",
+      "parentUuid": "e21e2294_3848403f",
+      "range": {
+        "startLine": 1997,
+        "startChar": 2,
+        "endLine": 1997,
+        "endChar": 13
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59bfed5b_74c4862f",
@@ -206,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6887e273_15f45b6e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1999,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "499cd914_f91f6b28",
+      "range": {
+        "startLine": 1999,
+        "startChar": 2,
+        "endLine": 1999,
+        "endChar": 18
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a60afcd0_3c777c6e",
@@ -243,6 +291,30 @@
       "side": 1,
       "message": "I\u0027m reloading the map from it, don\u0027t I need to keep it alive?\n\nI don\u0027t need to keep the map alive though.",
       "parentUuid": "a60afcd0_3c777c6e",
+      "range": {
+        "startLine": 2014,
+        "startChar": 0,
+        "endLine": 2015,
+        "endChar": 51
+      },
+      "revId": "d0721ea5ed3ae3153cace4c012a7356886028cef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4943b3ab_dfe243e3",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "Right, of course!",
+      "parentUuid": "413d094b_4d4b1599",
       "range": {
         "startLine": 2014,
         "startChar": 0,

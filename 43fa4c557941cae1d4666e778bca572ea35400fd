@@ -16,6 +16,92 @@
       "message": "thanks \u0026 ptal again",
       "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6981d2bc_eded2057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "Looks good! Thanks. Just a nit: move the map re-loading to the deferred code.",
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d095aa49_32a6ec32",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "We actually don\u0027t need a temporary. TryMigrateInstance is only using the \"default\" scratch register, which is available without explicit allocating it.",
+      "range": {
+        "startLine": 1968,
+        "startChar": 0,
+        "endLine": 1968,
+        "endChar": 28
+      },
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c276b68f_6a801580",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "Why don\u0027t we reload the map after TryMigrateInstance in here?",
+      "range": {
+        "startLine": 1997,
+        "startChar": 11,
+        "endLine": 1997,
+        "endChar": 74
+      },
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6e948ce_7a7855af",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-05T07:28:00Z",
+      "side": 1,
+      "message": "So this code is not needed in the fast path.",
+      "range": {
+        "startLine": 2001,
+        "startChar": 0,
+        "endLine": 2007,
+        "endChar": 58
+      },
+      "revId": "43fa4c557941cae1d4666e778bca572ea35400fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
