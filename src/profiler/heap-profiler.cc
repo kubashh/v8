@@ -49,6 +49,33 @@ void HeapProfiler::RemoveSnapshot(HeapSnapshot* snapshot) {
                    }));
 }
 
+std::vector<v8::Local<v8::Value>> HeapProfiler::GetDetachedJSWrapperObjects() {
+  heap()->CollectAllAvailableGarbage(GarbageCollectionReason::kHeapProfiler);
+  CombinedHeapObjectIterator iterator(heap());
+  std::vector<v8::Local<v8::Value>> js_objects_found;
+
+  for (Tagged<HeapObject> obj = iterator.Next(); !obj.is_null();
+       obj = iterator.Next()) {
+    if (IsCodeSpaceObject(obj)) continue;
+    if (!IsJSApiWrapperObject(obj)) continue;
+
+    // Ensure object is wrappable, otherwise GetDetachedness() can crash
+    JSApiWrapper wrapper = JSApiWrapper(Cast<JSObject>(obj));
+    if (!wrapper.GetCppHeapWrappable(isolate(), kAnyCppHeapPointer)) continue;
+
+    v8::Local<v8::Value> data(
+        Utils::ToLocal(handle(Cast<JSObject>(obj), isolate())));
+    v8::EmbedderGraph::Node::Detachedness detachedness =
+        GetDetachedness(data.As<v8::Value>(), 0);
+
+    if (detachedness != v8::EmbedderGraph::Node::Detachedness::kDetached)
+      continue;
+
+    js_objects_found.push_back(data);
+  }
+  return js_objects_found;
+}
+
 void HeapProfiler::AddBuildEmbedderGraphCallback(
     v8::HeapProfiler::BuildEmbedderGraphCallback callback, void* data) {
   build_embedder_graph_callbacks_.push_back({callback, data});
