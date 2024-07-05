@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6d440e_72064de9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-07-05T07:21:33Z",
+      "side": 1,
+      "message": "Migrating to v35 seems to fix the issue. See android build on [patchset 2](http://ci.chromium.org/b/8743271861947837777), and on [patchset 3](http://ci.chromium.org/b/8743271375939229313).",
+      "revId": "02e23e99b5dc93f0d8239f03c8556995e28518e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
