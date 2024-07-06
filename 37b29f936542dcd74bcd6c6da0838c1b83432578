@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "520e2dfe_b5d3b31d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2024-07-06T23:27:10Z",
+      "side": 1,
+      "message": "Hi,Jo. Could you let me known why use the title \"SV39 of Svpbmt extension\"? It\u0027s seems this CL is an implementation of li_ptr and relocation sequence handling for SV39 (39bit virtual address). Meanwhile, AFAIK， SV39/SV48/SV57 and svpbmt extension are orthogonal to each other. Is there any reason?",
+      "revId": "37b29f936542dcd74bcd6c6da0838c1b83432578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03537da8_e6cb10ab",
+        "filename": "src/codegen/riscv/assembler-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2024-07-06T23:27:10Z",
+      "side": 1,
+      "message": "Should add the SV39 case to this comment. Now it\u0027s only for the SV48 case.",
+      "revId": "37b29f936542dcd74bcd6c6da0838c1b83432578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
