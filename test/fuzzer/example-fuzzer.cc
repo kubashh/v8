@@ -274,17 +274,17 @@ struct NodeBuilder {
 };
 
 struct ScopeBuilder : NodeBuilder {
-  ScopeBuilder(const std::vector<std::shared_ptr<NodeBuilder>>& builders)
-      : builders_(builders) {}
+  ScopeBuilder(std::vector<std::unique_ptr<NodeBuilder>>&& builders)
+      : builders_(std::move(builders)) {}
   Node* create(State& state) const {
     std::vector<Node*> nodes;
-    for (std::shared_ptr<NodeBuilder> builder : builders_) {
+    for (const std::unique_ptr<NodeBuilder>& builder : builders_) {
       Node* node = builder->create(state);
       if (node != nullptr) nodes.emplace_back(node);
     }
     return new Scope(nodes);
   }
-  std::vector<std::shared_ptr<NodeBuilder>> builders_;
+  std::vector<std::unique_ptr<NodeBuilder>> builders_;
 };
 
 std::string get_variable_name_ng(const State& state, int index) {
@@ -344,31 +344,31 @@ struct AddBuilder : NodeBuilder {
 // ------- Domains ------------------------------------------------------------
 
 template <typename T>
-fuzztest::Domain<std::shared_ptr<T>> NonNullSharedPtrOf(
+fuzztest::Domain<std::unique_ptr<T>> NonNullSharedPtrOf(
     fuzztest::Domain<T>&& constructor_domain) {
   return fuzztest::ReversibleMap(
-      [](T&& arg) { return std::make_shared<T>(std::move(arg)); },
-      [](std::shared_ptr<T> ptr) -> std::optional<std::tuple<T>> {
+      [](T&& arg) -> std::unique_ptr<T> { return std::make_unique<T>(arg); },
+      [](const std::unique_ptr<T>& ptr) -> std::optional<std::tuple<T>> {
         return std::optional{std::tuple{*ptr}};
       },
       std::move(constructor_domain));
 }
 
 template <typename T, typename U>
-fuzztest::Domain<std::shared_ptr<T>> BaseSharedPtrOf(
-    fuzztest::Domain<std::shared_ptr<U>>&& domain) {
+fuzztest::Domain<std::unique_ptr<T>> BaseSharedPtrOf(
+    fuzztest::Domain<std::unique_ptr<U>>&& domain) {
   return fuzztest::ReversibleMap(
-      [](const std::shared_ptr<U>& ptr) {
-        return std::static_pointer_cast<T>(ptr);
+      [](std::unique_ptr<U>& ptr) -> std::unique_ptr<T> {
+        return std::unique_ptr<T>{static_cast<T*>(ptr.release())};
       },
-      [](const std::shared_ptr<T>& ptr)
-          -> std::optional<std::tuple<std::shared_ptr<U>>> {
-        return std::optional{std::tuple{std::static_pointer_cast<U>(ptr)}};
+      [](std::unique_ptr<T>& ptr)
+          -> std::optional<std::tuple<std::unique_ptr<U>>> {
+        return std::optional{std::tuple{std::unique_ptr<U>{static_cast<U*>(ptr.release())}}};
       },
       std::move(domain));
 }
 
-fuzztest::Domain<std::shared_ptr<NodeBuilder>> ArbitraryVariableBuilder() {
+fuzztest::Domain<std::unique_ptr<NodeBuilder>> ArbitraryVariableBuilder() {
   auto constructor_domain = fuzztest::ConstructorOf<VariableBuilder>(
       fuzztest::Arbitrary<bool>(), fuzztest::Arbitrary<int>(),
       fuzztest::Arbitrary<int8_t>());
@@ -376,7 +376,7 @@ fuzztest::Domain<std::shared_ptr<NodeBuilder>> ArbitraryVariableBuilder() {
       NonNullSharedPtrOf<VariableBuilder>(constructor_domain));
 }
 
-fuzztest::Domain<std::shared_ptr<NodeBuilder>> ArbitraryAddBuilder() {
+fuzztest::Domain<std::unique_ptr<NodeBuilder>> ArbitraryAddBuilder() {
   auto constructor_domain = fuzztest::ConstructorOf<AddBuilder>(
       fuzztest::Arbitrary<bool>(), fuzztest::Arbitrary<int>(),
       fuzztest::Arbitrary<int>(), fuzztest::Arbitrary<int>());
@@ -384,35 +384,35 @@ fuzztest::Domain<std::shared_ptr<NodeBuilder>> ArbitraryAddBuilder() {
       NonNullSharedPtrOf<AddBuilder>(constructor_domain));
 }
 
-static fuzztest::Domain<std::shared_ptr<NodeBuilder>> ArbitraryNodeBuilder() {
+static fuzztest::Domain<std::unique_ptr<NodeBuilder>> ArbitraryNodeBuilder() {
   fuzztest::DomainBuilder builder;
 
-  fuzztest::Domain<std::shared_ptr<NodeBuilder>> variable_domain =
+  fuzztest::Domain<std::unique_ptr<NodeBuilder>> variable_domain =
       ArbitraryVariableBuilder();
-  fuzztest::Domain<std::shared_ptr<NodeBuilder>> add_domain =
+  fuzztest::Domain<std::unique_ptr<NodeBuilder>> add_domain =
       ArbitraryAddBuilder();
 
-  auto nodes = fuzztest::ContainerOf<std::vector<std::shared_ptr<NodeBuilder>>>(
-      builder.Get<std::shared_ptr<NodeBuilder>>("node"));
+  auto nodes = fuzztest::ContainerOf<std::vector<std::unique_ptr<NodeBuilder>>>(
+      builder.Get<std::unique_ptr<NodeBuilder>>("node"));
   auto constructor_domain = fuzztest::ConstructorOf<ScopeBuilder>(nodes);
-  fuzztest::Domain<std::shared_ptr<NodeBuilder>> scope_domain =
+  fuzztest::Domain<std::unique_ptr<NodeBuilder>> scope_domain =
       BaseSharedPtrOf<NodeBuilder, ScopeBuilder>(
           NonNullSharedPtrOf<ScopeBuilder>(constructor_domain));
 
-  builder.Set<std::shared_ptr<NodeBuilder>>(
+  builder.Set<std::unique_ptr<NodeBuilder>>(
       "node", fuzztest::OneOf(variable_domain, add_domain, scope_domain));
-  return std::move(builder).Finalize<std::shared_ptr<NodeBuilder>>("node");
+  return std::move(builder).Finalize<std::unique_ptr<NodeBuilder>>("node");
 }
 
-static fuzztest::Domain<std::shared_ptr<NodeBuilder>> ArbitraryScopeBuilder() {
-  auto nodes = fuzztest::ContainerOf<std::vector<std::shared_ptr<NodeBuilder>>>(
+static fuzztest::Domain<std::unique_ptr<NodeBuilder>> ArbitraryScopeBuilder() {
+  auto nodes = fuzztest::ContainerOf<std::vector<std::unique_ptr<NodeBuilder>>>(
       ArbitraryNodeBuilder());
   auto constructor_domain = fuzztest::ConstructorOf<ScopeBuilder>(nodes);
   return BaseSharedPtrOf<NodeBuilder, ScopeBuilder>(
       NonNullSharedPtrOf<ScopeBuilder>(constructor_domain));
 }
 
-static void FuzzBetter(std::shared_ptr<NodeBuilder> node_builder) {
+static void FuzzBetter(std::unique_ptr<NodeBuilder> node_builder) {
   State state;
   Node* root = node_builder->create(state);
   std::cout << root->to_string() << std::endl;
