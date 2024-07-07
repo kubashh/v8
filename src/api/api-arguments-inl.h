@@ -146,6 +146,36 @@ Maybe<InterceptorResult> PropertyCallbackArguments::GetBooleanReturnValue(
   return Just(result ? InterceptorResult::kTrue : InterceptorResult::kFalse);
 }
 
+Maybe<PropertyAttributes>
+PropertyCallbackArguments::GetPropertyAttributesReturnValue(
+    v8::Intercepted intercepted, const char* callback_kind_for_error_message) {
+  Isolate* isolate = this->isolate();
+  if (isolate->has_exception()) {
+    return Nothing<PropertyAttributes>();
+  }
+
+  if (intercepted == v8::Intercepted::kNo) {
+    // Not intercepted, there must be no side effects including exceptions.
+    DCHECK(!isolate->has_exception());
+    return Just(ABSENT);
+  }
+
+  DCHECK_EQ(intercepted, v8::Intercepted::kYes);
+  AcceptSideEffects();
+
+  int32_t value;
+  CHECK(Object::ToInt32(*GetReturnValue<Boolean>(isolate), &value));
+  DCHECK_IMPLIES((value & ~PropertyAttributes::ALL_ATTRIBUTES_MASK) != 0,
+                 value == PropertyAttributes::ABSENT);
+  // In case of absent property side effects are not allowed.
+  // TODO(ishell): the PropertyAttributes::ABSENT is not exposed in the Api,
+  // so it can't be officially returned. We should fix the tests instead.
+  if (value != PropertyAttributes::ABSENT) {
+    AcceptSideEffects();
+  }
+  return Just(static_cast<PropertyAttributes>(value));
+}
+
 // -------------------------------------------------------------------------
 // Named Interceptor callbacks.
 
@@ -273,8 +303,8 @@ Handle<Object> PropertyCallbackArguments::CallIndexedQuery(
   DCHECK(!interceptor->is_named());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedQueryCallback);
-  // TODO(ishell, 328104148): propagate index value.
-  slot_at(kPropertyKeyIndex).store(Smi::zero());
+  index_ = index;
+  slot_at(kPropertyKeyIndex).store(Smi::zero());  // indexed callback marker
   slot_at(kReturnValueIndex).store(Smi::FromInt(v8::None));
   IndexedPropertyQueryCallbackV2 f =
       ToCData<IndexedPropertyQueryCallbackV2>(interceptor->query());
@@ -290,8 +320,8 @@ Handle<JSAny> PropertyCallbackArguments::CallIndexedGetter(
   DCHECK(!interceptor->is_named());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kNamedGetterCallback);
-  // TODO(ishell, 328104148): propagate index value.
-  slot_at(kPropertyKeyIndex).store(Smi::zero());
+  index_ = index;
+  slot_at(kPropertyKeyIndex).store(Smi::zero());  // indexed callback marker
   slot_at(kReturnValueIndex).store(ReadOnlyRoots(isolate).undefined_value());
   IndexedPropertyGetterCallbackV2 f =
       ToCData<IndexedPropertyGetterCallbackV2>(interceptor->getter());
@@ -307,8 +337,8 @@ Handle<JSAny> PropertyCallbackArguments::CallIndexedDescriptor(
   DCHECK(!interceptor->is_named());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedDescriptorCallback);
-  // TODO(ishell, 328104148): propagate index value.
-  slot_at(kPropertyKeyIndex).store(Smi::zero());
+  index_ = index;
+  slot_at(kPropertyKeyIndex).store(Smi::zero());  // indexed callback marker
   slot_at(kReturnValueIndex).store(ReadOnlyRoots(isolate).undefined_value());
   IndexedPropertyDescriptorCallbackV2 f =
       ToCData<IndexedPropertyDescriptorCallbackV2>(interceptor->descriptor());
@@ -325,8 +355,8 @@ v8::Intercepted PropertyCallbackArguments::CallIndexedSetter(
   DCHECK(!interceptor->is_named());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedSetterCallback);
-  // TODO(ishell, 328104148): propagate index value.
-  slot_at(kPropertyKeyIndex).store(Smi::zero());
+  index_ = index;
+  slot_at(kPropertyKeyIndex).store(Smi::zero());  // indexed callback marker
   slot_at(kReturnValueIndex).store(ReadOnlyRoots(isolate).true_value());
   IndexedPropertySetterCallbackV2 f =
       ToCData<IndexedPropertySetterCallbackV2>(interceptor->setter());
@@ -344,8 +374,8 @@ v8::Intercepted PropertyCallbackArguments::CallIndexedDefiner(
   DCHECK(!interceptor->is_named());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedDefinerCallback);
-  // TODO(ishell, 328104148): propagate index value.
-  slot_at(kPropertyKeyIndex).store(Smi::zero());
+  index_ = index;
+  slot_at(kPropertyKeyIndex).store(Smi::zero());  // indexed callback marker
   slot_at(kReturnValueIndex).store(ReadOnlyRoots(isolate).true_value());
   IndexedPropertyDefinerCallbackV2 f =
       ToCData<IndexedPropertyDefinerCallbackV2>(interceptor->definer());
@@ -361,8 +391,8 @@ v8::Intercepted PropertyCallbackArguments::CallIndexedDeleter(
   DCHECK(!interceptor->is_named());
   Isolate* isolate = this->isolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kIndexedDeleterCallback);
-  // TODO(ishell, 328104148): propagate index value.
-  slot_at(kPropertyKeyIndex).store(Smi::zero());
+  index_ = index;
+  slot_at(kPropertyKeyIndex).store(Smi::zero());  // indexed callback marker
   slot_at(kReturnValueIndex).store(ReadOnlyRoots(isolate).true_value());
   IndexedPropertyDeleterCallbackV2 f =
       ToCData<IndexedPropertyDeleterCallbackV2>(interceptor->deleter());

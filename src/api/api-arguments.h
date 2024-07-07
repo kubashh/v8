@@ -190,6 +190,9 @@ class PropertyCallbackArguments final
       v8::Intercepted intercepted, const char* callback_kind_for_error_message,
       bool ignore_return_value = false);
 
+  inline Maybe<PropertyAttributes> GetPropertyAttributesReturnValue(
+      v8::Intercepted intercepted, const char* callback_kind_for_error_message);
+
   // TODO(ishell): cleanup this hack by embedding the PropertyCallbackInfo
   // into PropertyCallbackArguments object.
   template <typename T>
@@ -214,6 +217,22 @@ class PropertyCallbackArguments final
     return Handle<Object>(&info.args_[kPropertyKeyIndex]);
   }
 
+  // Returns index value passed to CallIndexedXXX(). This works as long as
+  // all the calls to indexed interceptor callbacks are done via
+  // PropertyCallbackArguments.
+  template <typename T>
+  static uint32_t GetPropertyIndex(const PropertyCallbackInfo<T>& info) {
+    // Currently all indexed interceptor callbacks are called via
+    // PropertyCallbackArguments, so it's guaranteed that
+    // v8::PropertyCallbackInfo<T>::args_ array IS the
+    // PropertyCallbackArguments::values_ array. As a result we can restore
+    // pointer to PropertyCallbackArguments object from the former.
+    Address ptr = reinterpret_cast<Address>(&info.args_) -
+                  offsetof(PropertyCallbackArguments, values_);
+    auto pca = reinterpret_cast<const PropertyCallbackArguments*>(ptr);
+    return pca->index_;
+  }
+
  private:
   // Returns JSArray-like object with property names or undefined.
   inline Handle<JSObjectOrUndefined> CallPropertyEnumerator(
@@ -221,6 +240,10 @@ class PropertyCallbackArguments final
 
   inline Tagged<JSObject> holder() const;
   inline Tagged<Object> receiver() const;
+
+  // This index value is used for propagating index value from CallIndexedXXX()
+  // to ExceptionPropagationCallback.
+  uint32_t index_ = kMaxUInt32;
 
 #ifdef DEBUG
   // This stores current value of Isolate::javascript_execution_counter().
