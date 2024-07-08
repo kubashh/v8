@@ -33,6 +33,24 @@
       "message": "Should add the SV39 case to this comment. Now it\u0027s only for the SV48 case.",
       "revId": "37b29f936542dcd74bcd6c6da0838c1b83432578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c66dc6f_0ba79d27",
+        "filename": "src/codegen/riscv/assembler-riscv.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 3456009
+      },
+      "writtenOn": "2024-07-08T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03537da8_e6cb10ab",
+      "revId": "37b29f936542dcd74bcd6c6da0838c1b83432578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
