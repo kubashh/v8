@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ea07f1d_9aafe24f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-08T14:27:21Z",
+      "side": 1,
+      "message": "Is it? What do numbers look like without it?",
+      "range": {
+        "startLine": 15,
+        "startChar": 51,
+        "endLine": 15,
+        "endChar": 60
+      },
+      "revId": "9ccef546787d1b2d96ee9de6af454446289c3a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
