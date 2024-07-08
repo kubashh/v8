@@ -22,6 +22,30 @@
       },
       "revId": "9ccef546787d1b2d96ee9de6af454446289c3a5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44bd00c2_a71a6ff2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-08T16:10:32Z",
+      "side": 1,
+      "message": "Benchmarks like S3 and J2 are not significantly affected by this line of CLs. The difference is in the range of noise (between ±0.2%).\n\nHowever, the following numbers are from S3:\n\n22% of all weak refs are maps and only 4% are really non-trivial. So, this CL reduces the number of non-trivial weak refs by a factor of roughly 5.\n\nFiltering out marked non-trivial weakrefs in parallel (in [a subsequent CL](https://crrev.com/c/5676548)) will get rid of ~75-80% of the non-trivial weakrefs. For the remaining 20-25%, we are doing two passes: one in the parallel filtering job and one for actually clearing, in the atomic pause. This CL reduces the time spent in both passes (by a factor of 5). I think this is important because the filtering job runs in parallel only to the sweeping of the external, trusted, and code pointer tables, before being joined.",
+      "parentUuid": "9ea07f1d_9aafe24f",
+      "range": {
+        "startLine": 15,
+        "startChar": 51,
+        "endLine": 15,
+        "endChar": 60
+      },
+      "revId": "9ccef546787d1b2d96ee9de6af454446289c3a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
