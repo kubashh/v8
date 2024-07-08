@@ -16,6 +16,23 @@
       "message": "Matthias, since Clemens is out next week, could you take a look at this and the subsequent CL, please?",
       "revId": "a0d3a5c1d0040f61be172f39985f69f40abcdc37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0f5e809_d2facdd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-08T08:15:46Z",
+      "side": 1,
+      "message": "LGTM 😊",
+      "revId": "a0d3a5c1d0040f61be172f39985f69f40abcdc37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
