@@ -186,6 +186,30 @@
       },
       "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "341ab321_84c1a087",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-07-08T08:23:00Z",
+      "side": 1,
+      "message": "resolving",
+      "parentUuid": "da23704a_7a4be24e",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 358,
+        "endChar": 41
+      },
+      "revId": "bb7232401ee0321cf1f7ffbc0fba403f4788138e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
