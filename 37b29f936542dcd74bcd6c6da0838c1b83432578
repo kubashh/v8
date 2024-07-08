@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1cab25e_4a8c178f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3456009
+      },
+      "writtenOn": "2024-07-08T08:03:15Z",
+      "side": 1,
+      "message": "we can optimize the address size depend on validity of virtual address,\nand RISCV Svpbmt extension define the validity, so i think we can say improved performance about SV39 extension, of course i could accept others if you have any suitable title :)",
+      "parentUuid": "520e2dfe_b5d3b31d",
+      "revId": "37b29f936542dcd74bcd6c6da0838c1b83432578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03537da8_e6cb10ab",
