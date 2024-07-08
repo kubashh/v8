@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf5c77f_0d9a5004",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4638,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-08T10:21:14Z",
+      "side": 1,
+      "message": "Ah, this is a leftover. Removed.",
+      "parentUuid": "a3772bbf_02a4f1ec",
+      "range": {
+        "startLine": 4638,
+        "startChar": 65,
+        "endLine": 4638,
+        "endChar": 69
+      },
+      "revId": "e114a973b60a262c13103dfd51ad81a6f2d9280b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97b47a87_2763db80",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03f93f5d_ca882aec",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4708,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-08T10:21:14Z",
+      "side": 1,
+      "message": "Yes, it\u0027s required. `exception` is `i::Object`, so `ToLocal` coverts it to `v8::Value` while the callback expects `v8::Object` (which is what `i::JSReceiver` would be mapped to).\nI fixed this by defining the `exception` as `Handle\u003cJSReceiver\u003e`.",
+      "parentUuid": "97b47a87_2763db80",
+      "range": {
+        "startLine": 4708,
+        "startChar": 20,
+        "endLine": 4708,
+        "endChar": 48
+      },
+      "revId": "e114a973b60a262c13103dfd51ad81a6f2d9280b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f697b3b_d735c897",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-07-08T07:32:14Z",
       "side": 1,
       "message": "Cast required?",
+      "range": {
+        "startLine": 4738,
+        "startChar": 20,
+        "endLine": 4738,
+        "endChar": 48
+      },
+      "revId": "e114a973b60a262c13103dfd51ad81a6f2d9280b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeefba19_6310ee82",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4738,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-07-08T10:21:14Z",
+      "side": 1,
+      "message": "Ditto.",
+      "parentUuid": "1f697b3b_d735c897",
       "range": {
         "startLine": 4738,
         "startChar": 20,
