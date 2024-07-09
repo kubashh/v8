@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93abe025_af6342e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "PTAL. See comments for reviewer\u0027s guidance.",
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3343f9f_502aeb04",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "Darius suggested this renaming.",
+      "range": {
+        "startLine": 829,
+        "startChar": 11,
+        "endLine": 829,
+        "endChar": 41
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f3029b6_f779dabd",
+        "filename": "src/compiler/wasm-inlining.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "Unifying the greppable substring with TS.",
+      "range": {
+        "startLine": 273,
+        "startChar": 22,
+        "endLine": 273,
+        "endChar": 39
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "096c977a_1e5a47eb",
+        "filename": "src/wasm/inlining-tree.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "This (and the next function) just moves implementation details into this file, creating a simpler public API.",
+      "range": {
+        "startLine": 41,
+        "startChar": 23,
+        "endLine": 41,
+        "endChar": 33
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5172d4cb_e8b65867",
+        "filename": "src/wasm/inlining-tree.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "Same logic as before, just in a separate function.",
+      "range": {
+        "startLine": 93,
+        "startChar": 16,
+        "endLine": 93,
+        "endChar": 33
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65045da6_99c55c2f",
+        "filename": "src/wasm/inlining-tree.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "This is where most of the actual changes are:\n\nSuperficially, this struct serves as the store for data that\u0027s shared among all `InliningTree` nodes, addressing a few TODOs. Besides sharing memory, it also deduplicates the computation of values that don\u0027t depend on a specific function, addressing another TODO.\n\nRegarding behavior, here we apply new TS-specific adjustments to `wasm_inlining_budget` and `wasm_inlining_factor`. To avoid undesirable impact on non-GC modules, we also subject the latter to the module-specific scaling that the former has already been subject to.",
+      "range": {
+        "startLine": 113,
+        "startChar": 9,
+        "endLine": 113,
+        "endChar": 13
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc62443_aa548eff",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "Here you see the simpler public API in action.",
+      "range": {
+        "startLine": 484,
+        "startChar": 46,
+        "endLine": 484,
+        "endChar": 56
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf5ebdf_d574fcb6",
+        "filename": "tools/wasm/module-inspector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-09T17:06:24Z",
+      "side": 1,
+      "message": "Drive-by `wami` improvement: a simple way to check how the inliner will classify a module.",
+      "range": {
+        "startLine": 812,
+        "startChar": 11,
+        "endLine": 812,
+        "endChar": 36
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
