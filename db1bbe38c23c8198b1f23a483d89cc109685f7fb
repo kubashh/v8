@@ -77,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dee797df_d350aeb4",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3793,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-09T08:16:13Z",
+      "side": 1,
+      "message": "I can answer that. This is Maglev specific. We don\u0027t really deal with DoubleFixedArray the same way as other objects. Other objects are simply a map + array of tagged Maglev value nodes. With DoubleFixedArray we cannot assume they are tagged value nodes. And more specifically, we only treat them with constants (an array of literal doubles). We could use a Maglev value node to wrap the double, but that felt unnecessary for our cases.",
+      "parentUuid": "d682fa4c_23781e24",
+      "range": {
+        "startLine": 3793,
+        "startChar": 5,
+        "endLine": 3793,
+        "endChar": 67
+      },
+      "revId": "db1bbe38c23c8198b1f23a483d89cc109685f7fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3be91ae8_29cd354e",
         "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
         "patchSetId": 5
