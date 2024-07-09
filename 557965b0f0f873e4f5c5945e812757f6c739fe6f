@@ -33,6 +33,23 @@
       "message": "lgtm, thanks!",
       "revId": "557965b0f0f873e4f5c5945e812757f6c739fe6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c68bda_a90fdbe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-07-09T19:22:13Z",
+      "side": 1,
+      "message": "Looks like non-v8 committers need 2 votes now. Adding @cbruni@chromium.org",
+      "revId": "557965b0f0f873e4f5c5945e812757f6c739fe6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
