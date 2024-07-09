@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e96278b2_d24417ac",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-09T12:11:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39a6183f_f08ca60b",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcbb496d_1679d398",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-07-09T11:43:46Z",
       "side": 1,
       "message": "same as above",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1036ce2a_31838a24",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2529,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-09T12:11:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcbb496d_1679d398",
       "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8872dac_b95282bc",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6872,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-09T12:11:57Z",
+      "side": 1,
+      "message": "Well caught! I am reverting the current change, but I wonder (as a follow up) if we should try to get smarter where we emit the conversion node. Or maybe add a method: EnsureTaggedAlternativeAvailable. So that we tag, but we don\u0027t return the tagged value node yet. If it is not used, it will be removed, otherwise, GetTaggedValue will use the alternative.",
+      "parentUuid": "25e90880_2db0e4b8",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa285a7b_29509bab",
@@ -99,6 +153,24 @@
       "writtenOn": "2024-07-09T11:43:46Z",
       "side": 1,
       "message": "nit: use a specialization of the template instead",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a419b2e7_592c24bf",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-09T12:11:57Z",
+      "side": 1,
+      "message": "Discussed offline to maintain as is.",
+      "parentUuid": "aa285a7b_29509bab",
       "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
