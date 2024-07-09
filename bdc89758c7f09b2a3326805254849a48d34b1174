@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4bf1a1b_4b6df654",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-07-09T08:36:54Z",
+      "side": 1,
+      "message": "Hi Paolo,\nfor the parts where I am owner (`{test,src}/wasm`), it is still LGTM. Am I understanding correctly that we are waiting for some reviews in `src/debug`, `src/execution`, and `src/snapshot`?",
+      "parentUuid": "d8b2c571_9a939dd4",
+      "revId": "bdc89758c7f09b2a3326805254849a48d34b1174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d49a9bb3_a19b0848",
         "filename": "BUILD.gn",
         "patchSetId": 33
