@@ -481,24 +481,11 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     if (inlining_enabled(decoder)) {
       if (mode_ == kRegular) {
         if (v8_flags.liftoff) {
-          inlining_decisions_ = decoder->zone_->New<InliningTree>(
-              decoder->zone_, decoder->module_, func_index_,
-              0,  // call count
-              0,  // wire byte size. We pass 0 so that the initial node is
-                  // always expanded, regardless of budget.
-              func_index_,
-              // Pass dummy values for caller, feedback slot, and case.
-              -1, -1, -1,
-              0  // inlining depth
-          );
-          inlining_decisions_->FullyExpand(
-              decoder->module_->functions[func_index_].code.length());
+          inlining_decisions_ = InliningTree::CreateRoot(
+              decoder->zone_, decoder->module_, func_index_);
         } else {
-          set_no_liftoff_inlining_budget(std::max(
-              static_cast<int>(v8_flags.wasm_inlining_min_budget),
-              static_cast<int>(
-                  v8_flags.wasm_inlining_factor *
-                  decoder->module_->functions[func_index_].code.length())));
+          set_no_liftoff_inlining_budget(
+              InliningTree::NoLiftoffBudget(decoder->module_, func_index_));
         }
       } else {
 #if DEBUG
