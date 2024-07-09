@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab398a10_8d6670f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2024-07-09T03:33:46Z",
+      "side": 1,
+      "message": "I think something like \"[riscv][assembler] Add SV39 support\" is OK for the title. And the commit message is already good enough now.",
+      "parentUuid": "d1cab25e_4a8c178f",
+      "revId": "37b29f936542dcd74bcd6c6da0838c1b83432578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03537da8_e6cb10ab",
