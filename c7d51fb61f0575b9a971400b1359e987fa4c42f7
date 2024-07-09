@@ -16,6 +16,91 @@
       "message": "PTAL!",
       "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e846bce_b841baa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-09T11:43:46Z",
+      "side": 1,
+      "message": "I like this cleanup!",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39a6183f_f08ca60b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2504,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-09T11:43:46Z",
+      "side": 1,
+      "message": "I have a feeling that this might disable optimizations. What if we have two constants which happen to have a different representation? I think for the optimization you actually want the conversion.",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcbb496d_1679d398",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2529,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-09T11:43:46Z",
+      "side": 1,
+      "message": "same as above",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25e90880_2db0e4b8",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6872,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-09T11:43:46Z",
+      "side": 1,
+      "message": "doesn\u0027t this now cause the untagging to happen inside the loop vs. before the loop?",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa285a7b_29509bab",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-09T11:43:46Z",
+      "side": 1,
+      "message": "nit: use a specialization of the template instead",
+      "revId": "c7d51fb61f0575b9a971400b1359e987fa4c42f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
