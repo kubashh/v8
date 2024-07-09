@@ -483,7 +483,7 @@ Maybe<bool> JSReceiver::SetOrCopyDataProperties(
         ASSIGN_RETURN_ON_EXCEPTION_VALUE(
             isolate, status,
             Runtime::SetObjectProperty(isolate, target, next_key, prop_value,
-                                       StoreOrigin::kMaybeKeyed,
+                                       target, StoreOrigin::kMaybeKeyed,
                                        Just(ShouldThrow::kThrowOnError)),
             Nothing<bool>());
       } else {

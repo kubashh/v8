@@ -4435,8 +4435,26 @@ Maybe<bool> v8::Object::Set(v8::Local<v8::Context> context,
   auto key_obj = Utils::OpenHandle(*key);
   auto value_obj = Utils::OpenHandle(*value);
   has_exception =
-      i::Runtime::SetObjectProperty(i_isolate, self, key_obj, value_obj,
+      i::Runtime::SetObjectProperty(i_isolate, self, key_obj, value_obj, self,
                                     i::StoreOrigin::kMaybeKeyed,
+                                    Just(i::ShouldThrow::kDontThrow))
+          .is_null();
+  RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
+  return Just(true);
+}
+
+Maybe<bool> v8::Object::Set(v8::Local<v8::Context> context,
+                            v8::Local<Value> key, v8::Local<Value> value,
+                            Local<Object> receiver) {
+  auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
+  ENTER_V8(i_isolate, context, Object, Set, i::HandleScope);
+  auto self = Utils::OpenHandle(this);
+  auto key_obj = Utils::OpenHandle(*key);
+  auto value_obj = Utils::OpenHandle(*value);
+  auto receiver_obj = Utils::OpenHandle(*receiver);
+  has_exception =
+      i::Runtime::SetObjectProperty(i_isolate, self, key_obj, value_obj,
+                                    receiver_obj, i::StoreOrigin::kMaybeKeyed,
                                     Just(i::ShouldThrow::kDontThrow))
           .is_null();
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
@@ -4694,6 +4712,20 @@ MaybeLocal<Value> v8::Object::Get(Local<v8::Context> context,
   i::Handle<i::Object> result;
   has_exception = !i::Runtime::GetObjectProperty(i_isolate, self, key_obj)
                        .ToHandle(&result);
+  RETURN_ON_FAILED_EXECUTION(Value);
+  RETURN_ESCAPED(Utils::ToLocal(result));
+}
+
+MaybeLocal<Value> v8::Object::Get(Local<v8::Context> context, Local<Value> key,
+                                  Local<Object> receiver) {
+  PREPARE_FOR_EXECUTION(context, Object, Get);
+  auto self = Utils::OpenHandle(this);
+  auto key_obj = Utils::OpenHandle(*key);
+  auto receiver_obj = Utils::OpenHandle(*receiver);
+  i::Handle<i::Object> result;
+  has_exception =
+      !i::Runtime::GetObjectProperty(i_isolate, self, key_obj, receiver_obj)
+           .ToHandle(&result);
   RETURN_ON_FAILED_EXECUTION(Value);
   RETURN_ESCAPED(Utils::ToLocal(result));
 }
