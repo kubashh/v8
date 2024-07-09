@@ -365,8 +365,11 @@ RUNTIME_FUNCTION(Runtime_ObjectCreate) {
 
 MaybeHandle<Object> Runtime::SetObjectProperty(
     Isolate* isolate, Handle<Object> object, Handle<Object> key,
-    Handle<Object> value, StoreOrigin store_origin,
+    Handle<Object> value, Handle<Object> receiver, StoreOrigin store_origin,
     Maybe<ShouldThrow> should_throw) {
+  if (receiver.is_null()) {
+    receiver = object;
+  }
   if (IsNullOrUndefined(*object, isolate)) {
     MaybeDirectHandle<String> maybe_property =
         Object::NoSideEffectsToMaybeString(isolate, key);
@@ -387,7 +390,7 @@ MaybeHandle<Object> Runtime::SetObjectProperty(
   bool success = false;
   PropertyKey lookup_key(isolate, key, &success);
   if (!success) return MaybeHandle<Object>();
-  LookupIterator it(isolate, object, lookup_key);
+  LookupIterator it(isolate, receiver, lookup_key, object);
   if (IsSymbol(*key) && Cast<Symbol>(*key)->is_private_name()) {
     Maybe<bool> can_store = JSReceiver::CheckPrivateNameStore(&it, false);
     MAYBE_RETURN_NULL(can_store);
@@ -715,7 +718,7 @@ RUNTIME_FUNCTION(Runtime_SetKeyedProperty) {
   Handle<Object> value = args.at(2);
 
   RETURN_RESULT_OR_FAILURE(
-      isolate, Runtime::SetObjectProperty(isolate, object, key, value,
+      isolate, Runtime::SetObjectProperty(isolate, object, key, value, object,
                                           StoreOrigin::kMaybeKeyed));
 }
 
@@ -741,7 +744,7 @@ RUNTIME_FUNCTION(Runtime_SetNamedProperty) {
   Handle<Object> value = args.at(2);
 
   RETURN_RESULT_OR_FAILURE(
-      isolate, Runtime::SetObjectProperty(isolate, object, key, value,
+      isolate, Runtime::SetObjectProperty(isolate, object, key, value, object,
                                           StoreOrigin::kNamed));
 }
 

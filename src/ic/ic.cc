@@ -2566,7 +2566,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
         IsDefineKeyedOwnIC()
             ? Runtime::DefineObjectOwnProperty(isolate(), object, key, value,
                                                StoreOrigin::kMaybeKeyed)
-            : Runtime::SetObjectProperty(isolate(), object, key, value,
+            : Runtime::SetObjectProperty(isolate(), object, key, value, object,
                                          StoreOrigin::kMaybeKeyed));
     return result;
   }
@@ -2637,7 +2637,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
       IsDefineKeyedOwnIC()
           ? Runtime::DefineObjectOwnProperty(isolate(), object, key, value,
                                              StoreOrigin::kMaybeKeyed)
-          : Runtime::SetObjectProperty(isolate(), object, key, value,
+          : Runtime::SetObjectProperty(isolate(), object, key, value, object,
                                        StoreOrigin::kMaybeKeyed);
   if (result.is_null()) {
     DCHECK(isolate()->has_exception());
@@ -3068,7 +3068,7 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Slow) {
   }
 
   RETURN_RESULT_OR_FAILURE(
-      isolate, Runtime::SetObjectProperty(isolate, global, name, value,
+      isolate, Runtime::SetObjectProperty(isolate, global, name, value, global,
                                           StoreOrigin::kMaybeKeyed));
 }
 
@@ -3174,7 +3174,7 @@ RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Slow) {
   Handle<Object> object = args.at(1);
   Handle<Object> key = args.at(2);
   RETURN_RESULT_OR_FAILURE(
-      isolate, Runtime::SetObjectProperty(isolate, object, key, value,
+      isolate, Runtime::SetObjectProperty(isolate, object, key, value, object,
                                           StoreOrigin::kMaybeKeyed));
 }
 
@@ -3230,7 +3230,7 @@ RUNTIME_FUNCTION(Runtime_ElementsTransitionAndStoreIC_Miss) {
         IsDefineKeyedOwnICKind(kind)
             ? Runtime::DefineObjectOwnProperty(isolate, object, key, value,
                                                StoreOrigin::kMaybeKeyed)
-            : Runtime::SetObjectProperty(isolate, object, key, value,
+            : Runtime::SetObjectProperty(isolate, object, key, value, object,
                                          StoreOrigin::kMaybeKeyed));
   }
 }
@@ -3682,9 +3682,9 @@ RUNTIME_FUNCTION(Runtime_StoreCallbackProperty) {
 
 #ifdef V8_RUNTIME_CALL_STATS
   if (V8_UNLIKELY(TracingFlags::is_runtime_stats_enabled())) {
-    RETURN_RESULT_OR_FAILURE(
-        isolate, Runtime::SetObjectProperty(isolate, receiver, name, value,
-                                            StoreOrigin::kMaybeKeyed));
+    RETURN_RESULT_OR_FAILURE(isolate, Runtime::SetObjectProperty(
+                                          isolate, receiver, name, value,
+                                          receiver, StoreOrigin::kMaybeKeyed));
   }
 #endif
 

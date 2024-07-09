@@ -915,7 +915,8 @@ class Runtime : public AllStatic {
   // does not exist on object.
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
   SetObjectProperty(Isolate* isolate, Handle<Object> object, Handle<Object> key,
-                    Handle<Object> value, StoreOrigin store_origin,
+                    Handle<Object> value, Handle<Object> receiver,
+                    StoreOrigin store_origin,
                     Maybe<ShouldThrow> should_throw = Nothing<ShouldThrow>());
 
   // Defines a property on object. If the key is a private name (i.e. this is a
