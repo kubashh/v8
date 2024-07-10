@@ -1887,8 +1887,7 @@ class Heap final {
   // ===========================================================================
 
   inline size_t OldGenerationSpaceAvailable() {
-    uint64_t bytes = OldGenerationConsumedBytes() +
-                     AllocatedExternalMemorySinceMarkCompact();
+    uint64_t bytes = OldGenerationConsumedBytes();
 
     if (old_generation_allocation_limit() <= bytes) return 0;
     return old_generation_allocation_limit() - static_cast<size_t>(bytes);

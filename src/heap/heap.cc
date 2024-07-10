@@ -5285,7 +5285,7 @@ size_t Heap::GlobalSizeOfObjects() const {
 size_t Heap::GlobalWastedBytes() const { return OldGenerationWastedBytes(); }
 
 size_t Heap::GlobalConsumedBytes() const {
-  return GlobalSizeOfObjects() + GlobalWastedBytes();
+  return GlobalSizeOfObjects() + GlobalWastedBytes() + external_memory_.total();
 }
 
 uint64_t Heap::AllocatedExternalMemorySinceMarkCompact() const {
@@ -5538,11 +5538,18 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
   }
 
 #if defined(V8_USE_PERFETTO)
-  TRACE_COUNTER(
-      TRACE_DISABLED_BY_DEFAULT("v8.gc"), "OldGenerationConsumedBytes",
-      OldGenerationConsumedBytes() + AllocatedExternalMemorySinceMarkCompact());
+  TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
+                "OldGenerationConsumedBytes", OldGenerationConsumedBytes());
   TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "GlobalConsumedBytes",
                 GlobalConsumedBytes());
+  TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
+                "AllocatedExternalMemorySinceMarkCompact",
+                AllocatedExternalMemorySinceMarkCompact());
+  TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "external_memory.total",
+                external_memory_.total());
+  TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
+                "external_memory.low_since_mark_compact",
+                external_memory_.low_since_mark_compact());
 #endif
   size_t old_generation_space_available = OldGenerationSpaceAvailable();
   size_t global_memory_available = GlobalMemoryAvailable();
