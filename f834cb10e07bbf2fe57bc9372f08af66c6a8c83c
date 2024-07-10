@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5453a6a0_c9cfe57a",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4448,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2024-07-10T18:00:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a74f357_a5531c0f",
+      "range": {
+        "startLine": 4448,
+        "startChar": 28,
+        "endLine": 4448,
+        "endChar": 33
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9051d0a2_a5e2f7ab",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee1b4d29_e1a5c622",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4720,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2024-07-10T18:00:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9051d0a2_a5e2f7ab",
+      "range": {
+        "startLine": 4720,
+        "startChar": 34,
+        "endLine": 4720,
+        "endChar": 39
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8856b284_c40e24ba",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-07-10T09:37:25Z",
       "side": 1,
       "message": "how about a `SetObjectProperty` overload without a receiver to avoid needing these changes?",
+      "range": {
+        "startLine": 486,
+        "startChar": 39,
+        "endLine": 486,
+        "endChar": 45
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86d59c3c_94fcfa3f",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2024-07-10T18:00:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8856b284_c40e24ba",
       "range": {
         "startLine": 486,
         "startChar": 39,
@@ -178,6 +250,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e85363a8_08319ea3",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2024-07-10T18:00:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2ac854c_954c2952",
+      "range": {
+        "startLine": 367,
+        "startChar": 37,
+        "endLine": 367,
+        "endChar": 43
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f8822c3_04eee3dc",
@@ -191,6 +287,30 @@
       "writtenOn": "2024-07-10T09:37:25Z",
       "side": 1,
       "message": "prefer MaybeHandle for Handles with null checks (we\u0027re not strict about in surrounding code, but it\u0027s preferred)",
+      "range": {
+        "startLine": 370,
+        "startChar": 15,
+        "endLine": 370,
+        "endChar": 22
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0ed6bc8_17c57dfa",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1437132
+      },
+      "writtenOn": "2024-07-10T18:00:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f8822c3_04eee3dc",
       "range": {
         "startLine": 370,
         "startChar": 15,
