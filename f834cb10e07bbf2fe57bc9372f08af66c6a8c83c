@@ -1,0 +1,204 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c83ca5a2_35341a97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-10T09:37:25Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a74f357_a5531c0f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4448,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-10T09:37:25Z",
+      "side": 1,
+      "message": "`v8::MaybeLocal`",
+      "range": {
+        "startLine": 4448,
+        "startChar": 28,
+        "endLine": 4448,
+        "endChar": 33
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9051d0a2_a5e2f7ab",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4720,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-10T09:37:25Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 4720,
+        "startChar": 34,
+        "endLine": 4720,
+        "endChar": 39
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8856b284_c40e24ba",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-10T09:37:25Z",
+      "side": 1,
+      "message": "how about a `SetObjectProperty` overload without a receiver to avoid needing these changes?",
+      "range": {
+        "startLine": 486,
+        "startChar": 39,
+        "endLine": 486,
+        "endChar": 45
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ac854c_954c2952",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-10T09:37:25Z",
+      "side": 1,
+      "message": "maybe rename to `lookup_start_object` to make the distinction from `receiver` clearer and match the `LookupIterator` API.",
+      "range": {
+        "startLine": 367,
+        "startChar": 37,
+        "endLine": 367,
+        "endChar": 43
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "2e8cdea7_a00e8069",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 367,
+                "startChar": 0,
+                "endLine": 368,
+                "endChar": 0
+              },
+              "replacement": "    Isolate* isolate, Handle\u003cObject\u003e lookup_start_object, Handle\u003cObject\u003e key,\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 371,
+                "startChar": 0,
+                "endLine": 372,
+                "endChar": 0
+              },
+              "replacement": "    receiver \u003d lookup_start_object;\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 373,
+                "startChar": 0,
+                "endLine": 374,
+                "endChar": 0
+              },
+              "replacement": "  if (IsNullOrUndefined(*lookup_start_object, isolate)) {\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 381,
+                "startChar": 0,
+                "endLine": 382,
+                "endChar": 0
+              },
+              "replacement": "                       lookup_start_object, property_name));\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 385,
+                "startChar": 0,
+                "endLine": 386,
+                "endChar": 0
+              },
+              "replacement": "          NewTypeError(MessageTemplate::kNonObjectPropertyStore,\n                       lookup_start_object));\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 393,
+                "startChar": 0,
+                "endLine": 394,
+                "endChar": 0
+              },
+              "replacement": "  LookupIterator it(isolate, receiver, lookup_key, lookup_start_object);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f8822c3_04eee3dc",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-10T09:37:25Z",
+      "side": 1,
+      "message": "prefer MaybeHandle for Handles with null checks (we\u0027re not strict about in surrounding code, but it\u0027s preferred)",
+      "range": {
+        "startLine": 370,
+        "startChar": 15,
+        "endLine": 370,
+        "endChar": 22
+      },
+      "revId": "f834cb10e07bbf2fe57bc9372f08af66c6a8c83c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
