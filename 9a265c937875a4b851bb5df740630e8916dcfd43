@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b19aa56_1d16873e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-10T07:59:22Z",
+      "side": 1,
+      "message": "LGTM, looks like you need to update some `message` tests. 😊",
+      "revId": "9a265c937875a4b851bb5df740630e8916dcfd43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
