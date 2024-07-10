@@ -112,6 +112,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a45638ae_2e5e3693",
+        "filename": "src/wasm/inlining-tree.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-10T10:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31d4094e_bc1f6eef",
+      "range": {
+        "startLine": 61,
+        "startChar": 18,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5172d4cb_e8b65867",
         "filename": "src/wasm/inlining-tree.h",
         "patchSetId": 2
@@ -216,6 +240,30 @@
       "writtenOn": "2024-07-10T07:59:22Z",
       "side": 1,
       "message": "Hm, is this correct?\nIf we have `function a () { b(); c(); }` wouldn\u0027t `FinishFunction()` for `c` print the total graph size including the nodes for `a` and `b` as everything is in the same graph?",
+      "range": {
+        "startLine": 567,
+        "startChar": 28,
+        "endLine": 567,
+        "endChar": 78
+      },
+      "revId": "363ff731d4862268c313dc545ca868792487adb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3017807f_c499d28a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-10T10:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b7652fb_e4d34ab6",
       "range": {
         "startLine": 567,
         "startChar": 28,
