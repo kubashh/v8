@@ -2610,8 +2610,11 @@ void MacroAssembler::Abort(AbortReason reason) {
     // We don't care if we constructed a frame. Just pretend we did.
     FrameScope assume_frame(this, StackFrame::NO_FRAME_TYPE);
     mov(r3, Operand(static_cast<int>(reason)));
-    PrepareCallCFunction(1, r4);
-    CallCFunction(ExternalReference::abort_with_reason(), 1);
+    PrepareCallCFunction(1, 0, r4);
+    Move(r4, ExternalReference::abort_with_reason());
+    // Use Call directly to avoid any unneeded overhead. The function won't
+    // return anyway.
+    Call(r4);
     return;
   }
 
