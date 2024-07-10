@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4f79a9e_9424af0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-10T15:23:23Z",
+      "side": 1,
+      "message": "Bots should be happy now, need a fresh LGTM (for `test/message/message.status`).",
+      "revId": "f50b240e06671cc75a2f337cd1a14f1de182aefe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
