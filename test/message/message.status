@@ -83,6 +83,13 @@
   '*': [SKIP],  # only relevant for mjsunit tests.
 }],
 
+##############################################################################
+['variant == no_wasm_traps', {
+  # No trap handler means no "BuildModifyThreadInWasmFlag" means fewer
+  # generated operations, which changes this test's tracing output.
+  'wasm-recognize-imports': [SKIP],
+}],  # variant == no_wasm_traps
+
 ################################################################################
 ['arch == mips64el or arch == riscv64 or arch == loong64', {
   # Tests that require Simd enabled.
