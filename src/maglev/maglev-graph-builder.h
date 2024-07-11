@@ -2138,6 +2138,12 @@ class MaglevGraphBuilder {
   ReduceResult TryBuildPropertySetterCall(
       compiler::PropertyAccessInfo const& access_info, ValueNode* receiver,
       ValueNode* value);
+  bool TryBuildGetKeyedPropertyWithEnumeratedKey(
+      ValueNode* object, const compiler::FeedbackSource& feedback_source,
+      const compiler::ProcessedFeedback& processed_feedback);
+  void BuildGetKeyedProperty(
+      ValueNode* object, const compiler::FeedbackSource& feedback_source,
+      const compiler::ProcessedFeedback& processed_feedback);
 
   ValueNode* BuildLoadFixedArrayLength(ValueNode* fixed_array);
   ValueNode* BuildLoadJSArrayLength(ValueNode* js_array,
