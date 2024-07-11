@@ -176,7 +176,6 @@ Handle<ScopeInfo> ScopeInfo::Create(IsolateT* isolate, Zone* zone, Scope* scope,
   }
 
 // Make sure the Fields enum agrees with Torque-generated offsets.
-  static_assert(OffsetOfElementAt(kFlags) == kFlagsOffset);
   static_assert(OffsetOfElementAt(kParameterCount) == kParameterCountOffset);
   static_assert(OffsetOfElementAt(kContextLocalCount) ==
                 kContextLocalCountOffset);

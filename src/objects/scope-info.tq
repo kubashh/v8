@@ -112,10 +112,10 @@ const kMaxInlinedLocalNamesSize:
 
 @generateBodyDescriptor
 extern class ScopeInfo extends HeapObject {
-  const flags: ScopeFlags;
-
   @if(TAGGED_SIZE_8_BYTES) optional_padding: uint32;
   @ifnot(TAGGED_SIZE_8_BYTES) optional_padding: void;
+
+  const flags: ScopeFlags;
 
   // The number of parameters. For non-function scopes this is 0.
   parameter_count: Smi;
