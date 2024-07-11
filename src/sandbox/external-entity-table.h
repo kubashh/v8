@@ -15,8 +15,6 @@
 #include "src/common/code-memory-access.h"
 #include "src/common/globals.h"
 
-#ifdef V8_COMPRESS_POINTERS
-
 namespace v8 {
 namespace internal {
 
@@ -404,7 +402,5 @@ class V8_EXPORT_PRIVATE ExternalEntityTable {
 
 }  // namespace internal
 }  // namespace v8
-
-#endif  // V8_COMPRESS_POINTERS
 
 #endif  // V8_SANDBOX_EXTERNAL_ENTITY_TABLE_H_

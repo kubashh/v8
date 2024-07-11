@@ -12,8 +12,6 @@
 #include "src/sandbox/external-entity-table.h"
 #include "src/utils/allocation.h"
 
-#ifdef V8_COMPRESS_POINTERS
-
 namespace v8 {
 namespace internal {
 
@@ -472,7 +470,5 @@ ExternalEntityTable<Entry, size>::WriteIterator::WriteIterator(Entry* base,
 
 }  // namespace internal
 }  // namespace v8
-
-#endif  // V8_COMPRESS_POINTERS
 
 #endif  // V8_SANDBOX_EXTERNAL_ENTITY_TABLE_INL_H_
