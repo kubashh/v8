@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a857ab19_a9c79180",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2024-07-11T15:39:53Z",
+      "side": 1,
+      "message": "Okay, thanks! I\u0027m glad to hit the lucky timing between experiments 😊.",
+      "parentUuid": "7781e1d4_56111473",
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "569b97fc_9527174d",
@@ -76,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29596c0f_860e9a22",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2024-07-11T15:39:53Z",
+      "side": 1,
+      "message": "Good point, that will be much easier to read rather than trying to discern the difference between position_after_previous_primary_expression_open_parenthesis and position_after_last_primary_expression_open_parenthesis_. Thanks!",
+      "parentUuid": "569b97fc_9527174d",
+      "range": {
+        "startLine": 2158,
+        "startChar": 0,
+        "endLine": 2160,
+        "endChar": 20
+      },
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e8bb0f0_e37932ec",
@@ -89,6 +131,30 @@
       "writtenOn": "2024-07-11T06:28:29Z",
       "side": 1,
       "message": "Could you add a test for (x \u003d (y) \u003d\u003e 0) \u003d\u003e { return x; } to test that the paren before y doesn\u0027t trigger eager compilation?",
+      "range": {
+        "startLine": 812,
+        "startChar": 4,
+        "endLine": 812,
+        "endChar": 48
+      },
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "862dbfb7_799711fe",
+        "filename": "test/unittests/parser/preparser-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2024-07-11T15:39:53Z",
+      "side": 1,
+      "message": "Good idea, thanks.",
+      "parentUuid": "7e8bb0f0_e37932ec",
       "range": {
         "startLine": 812,
         "startChar": 4,
