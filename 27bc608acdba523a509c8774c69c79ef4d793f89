@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7781e1d4_56111473",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-11T06:31:06Z",
+      "side": 1,
+      "message": "Checked w/ leszeks@, he has the same intuition that we can just ship this without complicating the rollout.",
+      "parentUuid": "05ceaa61_a8224afd",
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "569b97fc_9527174d",
