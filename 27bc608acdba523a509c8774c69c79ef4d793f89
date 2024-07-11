@@ -16,6 +16,69 @@
       "message": "Hello Marja, would you please review this change? Thanks!",
       "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05ceaa61_a8224afd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-11T06:28:29Z",
+      "side": 1,
+      "message": "lgtm, thanks for implementing this! \n\nI was thinking about how badly do we want to overengineer the rollout. We *could* add this behind a flag and do a Finch A/B experiment to see whether this has a positive effect on page load time. However, that would be slightly overkill. And the effects are probably very dependent on web pages (it\u0027s web page dependent whether they even use parenthesized arrow functions) so we might not get an interesting signal on the large scale. It\u0027s the same with IIFEs, web sites might overuse it and degrade their performance.\n\nAs we don\u0027t have current lazy compilation A/B experiments going on with this particular version, this should not interfere with anything we\u0027re measuring. (Good timing! Since we just had, and will soon have experiments in this area.)",
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "569b97fc_9527174d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-11T06:28:29Z",
+      "side": 1,
+      "message": "[Minor] We\u0027re only comparing the local variable position_after_previous_primary_expression_open_parenthesis . Looks like we first set a value to it and then compare against the wanted value later - why not check whether the value we would\u0027ve set is the wanted value?\n\nIiuc, the condition ends up being that the value of position_after_last_primary_expression_open_parenthesis_ (before we rewrote it) \u003d\u003d beg_pos, right? So we could check for that directly, around line 2137, without storing the value of position_after_last_primary_expression_open_parenthesis_ into this local variable, and we could call the variable storing that result something illustrative. Wdyt?",
+      "range": {
+        "startLine": 2158,
+        "startChar": 0,
+        "endLine": 2160,
+        "endChar": 20
+      },
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e8bb0f0_e37932ec",
+        "filename": "test/unittests/parser/preparser-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-11T06:28:29Z",
+      "side": 1,
+      "message": "Could you add a test for (x \u003d (y) \u003d\u003e 0) \u003d\u003e { return x; } to test that the paren before y doesn\u0027t trigger eager compilation?",
+      "range": {
+        "startLine": 812,
+        "startChar": 4,
+        "endLine": 812,
+        "endChar": 48
+      },
+      "revId": "27bc608acdba523a509c8774c69c79ef4d793f89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
