@@ -33,6 +33,23 @@
       "message": "Thank you.",
       "revId": "7f68347cc373d66d433e010f4824ae6c0bda6937",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a86e1964_80047ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000781
+      },
+      "writtenOn": "2024-07-11T08:54:22Z",
+      "side": 1,
+      "message": "marja@\n\nCould you please review this? I need two LGTMs to submit this CL.",
+      "revId": "7f68347cc373d66d433e010f4824ae6c0bda6937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
