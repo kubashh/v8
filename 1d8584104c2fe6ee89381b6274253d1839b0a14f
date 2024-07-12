@@ -175,6 +175,30 @@
       },
       "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0fcfef_0ef96c4b",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-12T12:49:35Z",
+      "side": 1,
+      "message": "Oh I see 😂 (please fix the typo).\n\nAfter a reset, `code_flushing_increase_s` would be 0 and the visitor (i.e. `MarkingVisitorBase\u003cConcreteVisitor\u003e::MakeOlder` in this CL) will bailout, no? We won\u0027t get to the code that sets the age to 1 imo.",
+      "parentUuid": "9f69b13d_e44e8ec2",
+      "range": {
+        "startLine": 662,
+        "startChar": 5,
+        "endLine": 662,
+        "endChar": 70
+      },
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
