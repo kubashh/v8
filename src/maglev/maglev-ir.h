@@ -5166,6 +5166,25 @@ class VirtualObject::List {
     return result;
   }
 
+  void Snapshot() const {
+    for (VirtualObject* vo : *this) {
+      if (vo->IsSnapshot()) {
+        // Stop processing once a snapshotted object is found, as all remaining
+        // objects must be snapshotted.
+        break;
+      }
+      vo->Snapshot();
+    }
+    SLOW_DCHECK(IsSnapshot());
+  }
+
+  bool IsSnapshot() const {
+    for (VirtualObject* vo : *this) {
+      if (!vo->IsSnapshot()) return false;
+    }
+    return true;
+  }
+
   void Print(std::ostream& os, const char* prefix,
              MaglevGraphLabeller* labeller) const;
 
