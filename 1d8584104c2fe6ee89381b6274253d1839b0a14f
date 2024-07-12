@@ -151,6 +151,30 @@
       },
       "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f69b13d_e44e8ec2",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-12T12:26:24Z",
+      "side": 1,
+      "message": "`rest` is a type and should have meant `reset`. \n\nThe first increment after a reset through the runtime always just sets it to 1s. This is not visible in the block below but rather done in the visitor, and it\u0027s per SFI not not related to the delta.\n\nI thought it\u0027s still good to add here as a bullet but the typo makes this hard to understand...",
+      "parentUuid": "301a2126_6e0cf685",
+      "range": {
+        "startLine": 662,
+        "startChar": 5,
+        "endLine": 662,
+        "endChar": 70
+      },
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
