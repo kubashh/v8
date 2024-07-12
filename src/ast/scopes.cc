@@ -2806,21 +2806,26 @@ void DeclarationScope::AllocateScopeInfos(ParseInfo* info,
     scope->RecalcPrivateNameContextChain();
   }
 
-  Tagged<WeakFixedArray> infos = script->shared_function_infos();
+  Tagged<WeakFixedArray> infos = script->infos();
   std::unordered_map<int, Handle<ScopeInfo>> scope_infos_to_reuse;
   if (infos->length() != 0) {
     // Look at all the existing inner functions (they are numbered id+1 until
     // max_id+1) to reattach their outer scope infos to corresponding scopes.
     for (int i = info->literal()->function_literal_id() + 1;
-         i < info->max_function_literal_id() + 1; ++i) {
-      Tagged<MaybeObject> maybe_sfi = infos->get(i);
-      if (maybe_sfi.IsWeak()) {
-        Tagged<SharedFunctionInfo> sfi =
-            Cast<SharedFunctionInfo>(maybe_sfi.GetHeapObjectAssumeWeak());
-        // Reuse outer scope infos. Don't look at sfi->scope_info() because that
-        // might be empty if the sfi isn't compiled yet.
-        if (!sfi->HasOuterScopeInfo()) continue;
-        Tagged<ScopeInfo> scope_info = sfi->GetOuterScopeInfo();
+         i < info->max_info_id() + 1; ++i) {
+      Tagged<MaybeObject> maybe_info = infos->get(i);
+      if (maybe_info.IsWeak()) {
+        Tagged<Object> info = maybe_info.GetHeapObjectAssumeWeak();
+        Tagged<ScopeInfo> scope_info;
+        if (Is<SharedFunctionInfo>(info)) {
+          Tagged<SharedFunctionInfo> sfi = Cast<SharedFunctionInfo>(info);
+          // Reuse outer scope infos. Don't look at sfi->scope_info() because
+          // that might be empty if the sfi isn't compiled yet.
+          if (!sfi->HasOuterScopeInfo()) continue;
+          scope_info = sfi->GetOuterScopeInfo();
+        } else {
+          scope_info = Cast<ScopeInfo>(info);
+        }
         while (true) {
           if (scope_info->EvalState() != scope->eval_state()) break;
           if (scope_info->StartPosition() < scope->start_position()) break;
