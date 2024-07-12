@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "231e24b4_eb48f9b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-12T11:45:01Z",
+      "side": 1,
+      "message": "ptal\n\nFrom what I saw this doesn\u0027t really change anything. A few bursty GCs in JetStream now do not advance the time as aggressively. In real world this probably fixes a corner case of too aggressive GCs.",
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2cfaf32_1ca0858d",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-12T11:45:01Z",
+      "side": 1,
+      "message": "This is a change from 1s for the first GC.",
+      "range": {
+        "startLine": 657,
+        "startChar": 27,
+        "endLine": 657,
+        "endChar": 29
+      },
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e4729c1_76143d67",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-12T11:45:01Z",
+      "side": 1,
+      "message": "This is the main change of the CL.",
+      "range": {
+        "startLine": 659,
+        "startChar": 6,
+        "endLine": 659,
+        "endChar": 7
+      },
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
