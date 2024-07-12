@@ -223,6 +223,30 @@
       },
       "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c1a78c6_201edf5c",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-12T13:23:03Z",
+      "side": 1,
+      "message": "I get it now. Thanks!",
+      "parentUuid": "495066fb_0cda5b34",
+      "range": {
+        "startLine": 662,
+        "startChar": 5,
+        "endLine": 662,
+        "endChar": 70
+      },
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
