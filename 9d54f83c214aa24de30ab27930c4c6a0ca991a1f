@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd71d437_3e262036",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-12T06:20:13Z",
+      "side": 1,
+      "message": "thanks!",
+      "revId": "9d54f83c214aa24de30ab27930c4c6a0ca991a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc9d83e2_b1b59d60",
@@ -48,6 +65,30 @@
       "writtenOn": "2024-07-11T13:22:23Z",
       "side": 1,
       "message": "it\u0027s a bit weird that some of these are mutually exclusive (e.g. it doesn\u0027t make sense to have both eager compilation and consuming code cache). Should we validate them somewhere?",
+      "range": {
+        "startLine": 660,
+        "startChar": 4,
+        "endLine": 660,
+        "endChar": 17
+      },
+      "revId": "9d54f83c214aa24de30ab27930c4c6a0ca991a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2914477d_d7a63710",
+        "filename": "include/v8-script.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-12T06:20:13Z",
+      "side": 1,
+      "message": "They are validated at the API boundary. The validation code doesn\u0027t change by this CL because the legal options stay the same. It will change in the next CL when I\u0027m adding more options. I\u0027ll also add a helper function in that CL.\n\nE.g., here:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/api/api.cc;l\u003d2728?q\u003dkNoCompileOption\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "parentUuid": "fc9d83e2_b1b59d60",
       "range": {
         "startLine": 660,
         "startChar": 4,
