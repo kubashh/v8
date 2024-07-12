@@ -199,6 +199,30 @@
       },
       "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "495066fb_0cda5b34",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-12T13:11:31Z",
+      "side": 1,
+      "message": "There\u0027s two things:\n1. The time increment between GCs that can be 0. If this is 0 nothing happens in the whole GC.\n2. The time stored in the SFI being 0 (because the runtime reset the value). If this happens _and_ we have a non-0 incremental increment, then we just use 1 there.",
+      "parentUuid": "6b0fcfef_0ef96c4b",
+      "range": {
+        "startLine": 662,
+        "startChar": 5,
+        "endLine": 662,
+        "endChar": 70
+      },
+      "revId": "1d8584104c2fe6ee89381b6274253d1839b0a14f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
