@@ -16,6 +16,23 @@
       "message": "Nico, PTAL",
       "revId": "0d95a21887460dacc6d1efb2dabd71dd884117d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ff219c8_8602c4c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-12T12:40:27Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "0d95a21887460dacc6d1efb2dabd71dd884117d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
