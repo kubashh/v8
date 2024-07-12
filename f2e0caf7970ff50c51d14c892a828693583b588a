@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec4104b0_a6b7b038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-07-12T10:36:38Z",
+      "side": 1,
+      "message": "ptal (try jobs in an earlier patch set; please ignore the failing chromium try job. chromium has been updated to not call the deprecated API any more but i guess that bot is lagging behind)",
+      "revId": "f2e0caf7970ff50c51d14c892a828693583b588a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
