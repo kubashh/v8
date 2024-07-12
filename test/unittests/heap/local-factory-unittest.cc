@@ -85,8 +85,7 @@ class LocalFactoryTest : public TestWithIsolateAndZone {
     parser.ParseOnBackground(local_isolate(), parse_info(), script_, 0, 0,
                              kFunctionLiteralIdTopLevel);
 
-    DeclarationScope::AllocateScopeInfos(parse_info(), script_,
-                                         local_isolate());
+    DeclarationScope::AllocateScopeInfos(parse_info(), local_isolate());
 
     // Create the SFI list on the script so that SFI SetScript works.
     DirectHandle<WeakFixedArray> infos = local_factory()->NewWeakFixedArray(

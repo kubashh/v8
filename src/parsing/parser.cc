@@ -1043,8 +1043,6 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
         flags().has_static_private_methods_or_accessors());
   }
 
-  info->set_max_function_literal_id(GetLastFunctionLiteralId());
-
   DCHECK_IMPLIES(result, function_literal_id == result->function_literal_id());
   return result;
 }
@@ -2964,13 +2962,8 @@ Block* Parser::BuildParameterInitializationBlock(
   return factory()->NewBlock(true, init_statements);
 }
 
-// TODO(verwaest): Consider building these try/catches in the bytecode generator
-// without hidden scopes.
 Scope* Parser::NewHiddenCatchScope() {
-  DCHECK(scope()->is_declaration_scope());
   Scope* catch_scope = NewScopeWithParent(scope(), CATCH_SCOPE);
-  catch_scope->set_start_position(position());
-  catch_scope->set_end_position(end_position());
   bool was_added;
   catch_scope->DeclareLocal(ast_value_factory()->dot_catch_string(),
                             VariableMode::kVar, NORMAL_VARIABLE, &was_added);
@@ -3090,7 +3083,7 @@ void Parser::ParseFunction(
         }
       }
       Expect(Token::kRightParen);
-      int formals_end_position = end_position();
+      int formals_end_position = scanner()->location().end_pos;
 
       CheckArityRestrictions(formals.arity, kind, formals.has_rest,
                              function_scope->start_position(),
@@ -3629,15 +3622,7 @@ void Parser::RewriteAsyncFunctionBody(ScopedPtrList<Statement>* body,
   block->statements()->Add(factory()->NewSyntheticAsyncReturnStatement(
                                return_value, return_value->position()),
                            zone());
-  if (block->statements()->length() > 1 ||
-      !(return_value->IsLiteral() &&
-        return_value->AsLiteral()->type() == Literal::kUndefined)) {
-    // We only build a promise reject try/catch if there's actually a body that
-    // can throw. Otherwise we might try to create two catch blocks with the
-    // same source position, which doesn't work for scope_info reuse through
-    // source-position-based unique scope IDs.
-    block = BuildRejectPromiseOnException(block, repl_mode);
-  }
+  block = BuildRejectPromiseOnException(block, repl_mode);
   body->Add(block);
 }
 

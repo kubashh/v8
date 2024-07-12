@@ -329,7 +329,6 @@ void DeclarationScope::SetDefaults() {
   is_skipped_function_ = false;
   preparse_data_builder_ = nullptr;
   class_scope_has_private_brand_ = false;
-  eval_state_ = false;
 #ifdef DEBUG
   DeclarationScope* outer_declaration_scope =
       outer_scope_ ? outer_scope_->GetDeclarationScope() : nullptr;
@@ -354,7 +353,6 @@ void Scope::SetDefaults() {
 
   calls_eval_ = false;
   sloppy_eval_can_extend_vars_ = false;
-  eval_state_ = false;
   scope_nonlinear_ = false;
   is_hidden_ = false;
   is_debug_evaluate_scope_ = false;
@@ -556,16 +554,6 @@ DeclarationScope* Scope::AsDeclarationScope() {
 const DeclarationScope* Scope::AsDeclarationScope() const {
   SBXCHECK(is_declaration_scope());
   return static_cast<const DeclarationScope*>(this);
-}
-
-void DeclarationScope::set_eval_state() {
-  DCHECK(is_eval_scope());
-  if (outer_scope_->scope_info_.is_null()) {
-    CHECK(outer_scope_->is_script_scope());
-    eval_state_ = true;
-  } else {
-    eval_state_ = !outer_scope_->scope_info()->EvalState();
-  }
 }
 
 ModuleScope* Scope::AsModuleScope() {
@@ -2623,23 +2611,6 @@ void ModuleScope::AllocateModuleVariables() {
   }
 }
 
-// Needs to be kept in sync with ScopeInfo::UniqueIdInScript.
-int Scope::UniqueIdInScript() const {
-  // Script scopes start "before" the script to avoid clashing with a scope that
-  // starts on character 0.
-  if (is_script_scope() || scope_type() == EVAL_SCOPE ||
-      scope_type() == MODULE_SCOPE) {
-    return -1;
-  }
-  if (is_declaration_scope()) {
-    // Default constructors have the same start position as their parent class
-    // scope. Use the next char position to distinguish this scope.
-    return start_position() +
-           IsDefaultConstructor(AsDeclarationScope()->function_kind());
-  }
-  return start_position();
-}
-
 void Scope::AllocateVariablesRecursively() {
   this->ForEach([](Scope* scope) -> Iteration {
     DCHECK(!scope->already_resolved_);
@@ -2691,59 +2662,33 @@ void Scope::AllocateVariablesRecursively() {
 }
 
 template <typename IsolateT>
-void Scope::AllocateScopeInfosRecursively(
-    IsolateT* isolate, MaybeHandle<ScopeInfo> outer_scope,
-    std::unordered_map<int, Handle<ScopeInfo>>& scope_infos_to_reuse) {
+void Scope::AllocateScopeInfosRecursively(IsolateT* isolate,
+                                          MaybeHandle<ScopeInfo> outer_scope) {
   DCHECK(scope_info_.is_null());
   MaybeHandle<ScopeInfo> next_outer_scope = outer_scope;
 
-  auto it = scope_infos_to_reuse.find(UniqueIdInScript());
-  if (it != scope_infos_to_reuse.end()) {
-    scope_info_ = it->second;
-    CHECK(NeedsContext());
-    // The ScopeInfo chain mirrors the context chain, so we only link to the
-    // next outer scope that needs a context.
-    next_outer_scope = scope_info_;
-    DCHECK(!scope_info_.is_null());
-    CHECK_EQ(scope_info_->scope_type(), scope_type_);
-    CHECK_EQ(scope_info_->ContextLength(), num_heap_slots_);
-#ifdef DEBUG
-    // Consume the scope info.
-    it->second = {};
-#endif
-  } else if (NeedsScopeInfo()) {
-#ifdef DEBUG
-    // Mark this ID as being used.
-    scope_infos_to_reuse[UniqueIdInScript()] = {};
-#endif
+  if (NeedsScopeInfo()) {
     scope_info_ = ScopeInfo::Create(isolate, zone(), this, outer_scope);
-    DCHECK_EQ(UniqueIdInScript(), scope_info_->UniqueIdInScript());
-    // The ScopeInfo chain mirrors the context chain, so we only link to the
-    // next outer scope that needs a context.
+    // The ScopeInfo chain should mirror the context chain, so we only link to
+    // the next outer scope that needs a context.
     if (NeedsContext()) next_outer_scope = scope_info_;
   }
 
   // Allocate ScopeInfos for inner scopes.
   for (Scope* scope = inner_scope_; scope != nullptr; scope = scope->sibling_) {
-    DCHECK_GT(scope->UniqueIdInScript(), UniqueIdInScript());
-    DCHECK_IMPLIES(scope->sibling_, scope->sibling_->UniqueIdInScript() !=
-                                        scope->UniqueIdInScript());
     if (!scope->is_function_scope() ||
         scope->AsDeclarationScope()->ShouldEagerCompile()) {
-      scope->AllocateScopeInfosRecursively(isolate, next_outer_scope,
-                                           scope_infos_to_reuse);
+      scope->AllocateScopeInfosRecursively(isolate, next_outer_scope);
     }
   }
 }
 
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void Scope::
-    AllocateScopeInfosRecursively<Isolate>(
-        Isolate* isolate, MaybeHandle<ScopeInfo> outer_scope,
-        std::unordered_map<int, Handle<ScopeInfo>>& scope_infos_to_reuse);
+    AllocateScopeInfosRecursively<Isolate>(Isolate* isolate,
+                                           MaybeHandle<ScopeInfo> outer_scope);
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void Scope::
     AllocateScopeInfosRecursively<LocalIsolate>(
-        LocalIsolate* isolate, MaybeHandle<ScopeInfo> outer_scope,
-        std::unordered_map<int, Handle<ScopeInfo>>& scope_infos_to_reuse);
+        LocalIsolate* isolate, MaybeHandle<ScopeInfo> outer_scope);
 
 void DeclarationScope::RecalcPrivateNameContextChain() {
   // The outermost scope in a class heritage expression is marked to skip the
@@ -2788,9 +2733,7 @@ void DeclarationScope::RecordNeedsPrivateNameContextChainRecalc() {
 
 // static
 template <typename IsolateT>
-void DeclarationScope::AllocateScopeInfos(ParseInfo* info,
-                                          Handle<Script> script,
-                                          IsolateT* isolate) {
+void DeclarationScope::AllocateScopeInfos(ParseInfo* info, IsolateT* isolate) {
   DeclarationScope* scope = info->literal()->scope();
 
   // No one else should have allocated a scope info for this scope yet.
@@ -2805,41 +2748,7 @@ void DeclarationScope::AllocateScopeInfos(ParseInfo* info,
   if (scope->needs_private_name_context_chain_recalc()) {
     scope->RecalcPrivateNameContextChain();
   }
-
-  Tagged<WeakFixedArray> infos = script->shared_function_infos();
-  std::unordered_map<int, Handle<ScopeInfo>> scope_infos_to_reuse;
-  if (infos->length() != 0) {
-    // Look at all the existing inner functions (they are numbered id+1 until
-    // max_id+1) to reattach their outer scope infos to corresponding scopes.
-    for (int i = info->literal()->function_literal_id() + 1;
-         i < info->max_function_literal_id() + 1; ++i) {
-      Tagged<MaybeObject> maybe_sfi = infos->get(i);
-      if (maybe_sfi.IsWeak()) {
-        Tagged<SharedFunctionInfo> sfi =
-            Cast<SharedFunctionInfo>(maybe_sfi.GetHeapObjectAssumeWeak());
-        // Reuse outer scope infos. Don't look at sfi->scope_info() because that
-        // might be empty if the sfi isn't compiled yet.
-        if (!sfi->HasOuterScopeInfo()) continue;
-        Tagged<ScopeInfo> scope_info = sfi->GetOuterScopeInfo();
-        while (true) {
-          if (scope_info->EvalState() != scope->eval_state()) break;
-          if (scope_info->StartPosition() < scope->start_position()) break;
-          int id = scope_info->UniqueIdInScript();
-          auto it = scope_infos_to_reuse.find(id);
-          if (it != scope_infos_to_reuse.end()) {
-            CHECK_EQ(*it->second, scope_info);
-            break;
-          }
-          scope_infos_to_reuse[id] = handle(scope_info, isolate);
-          if (!scope_info->HasOuterScopeInfo()) break;
-          scope_info = scope_info->OuterScopeInfo();
-        }
-      }
-    }
-  }
-
-  scope->AllocateScopeInfosRecursively(isolate, outer_scope,
-                                       scope_infos_to_reuse);
+  scope->AllocateScopeInfosRecursively(isolate, outer_scope);
 
   // The debugger expects all shared function infos to contain a scope info.
   // Since the top-most scope will end up in a shared function info, make sure
@@ -2858,9 +2767,9 @@ void DeclarationScope::AllocateScopeInfos(ParseInfo* info,
 }
 
 template V8_EXPORT_PRIVATE void DeclarationScope::AllocateScopeInfos(
-    ParseInfo* info, Handle<Script> script, Isolate* isolate);
+    ParseInfo* info, Isolate* isolate);
 template V8_EXPORT_PRIVATE void DeclarationScope::AllocateScopeInfos(
-    ParseInfo* info, Handle<Script> script, LocalIsolate* isolate);
+    ParseInfo* info, LocalIsolate* isolate);
 
 int Scope::ContextLocalCount() const {
   if (num_heap_slots() == 0) return 0;

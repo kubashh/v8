@@ -248,7 +248,6 @@ Handle<ScopeInfo> ScopeInfo::Create(IsolateT* isolate, Zone* zone, Scope* scope,
         PrivateNameLookupSkipsOuterClassBit::encode(
             scope->private_name_lookup_skips_outer_class()) |
         HasContextExtensionSlotBit::encode(scope->HasContextExtensionSlot()) |
-        EvalStateBit::encode(scope->eval_state()) |
         HasLocalsBlockListBit::encode(false);
     scope_info->set_flags(flags);
 
@@ -450,7 +449,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
       IsDebugEvaluateScopeBit::encode(false) |
       ForceContextAllocationBit::encode(false) |
       PrivateNameLookupSkipsOuterClassBit::encode(false) |
-      HasContextExtensionSlotBit::encode(true) | EvalStateBit::encode(false) |
+      HasContextExtensionSlotBit::encode(true) |
       HasLocalsBlockListBit::encode(false);
   scope_info->set_flags(flags);
 
@@ -465,10 +464,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
   DCHECK_EQ(index, scope_info->InferredFunctionNameIndex());
   DCHECK(index == scope_info->OuterScopeInfoIndex());
   if (has_outer_scope_info) {
-    Tagged<ScopeInfo> outer = *outer_scope.ToHandleChecked();
-    scope_info->set(index++, outer);
-    scope_info->set_flags(
-        EvalStateBit::update(scope_info->flags(), !outer->EvalState()));
+    scope_info->set(index++, *outer_scope.ToHandleChecked());
   }
   DCHECK_EQ(index, scope_info->length());
   DCHECK_EQ(0, scope_info->ParameterCount());
@@ -546,7 +542,7 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
       PrivateNameLookupSkipsOuterClassBit::encode(false) |
       HasContextExtensionSlotBit::encode(is_native_context ||
                                          has_const_tracking_let_side_data) |
-      EvalStateBit::encode(false) | HasLocalsBlockListBit::encode(false);
+      HasLocalsBlockListBit::encode(false);
   Tagged<ScopeInfo> raw_scope_info = *scope_info;
   raw_scope_info->set_flags(flags);
   raw_scope_info->set_parameter_count(parameter_count);
@@ -729,18 +725,6 @@ int ScopeInfo::ContextLength() const {
          (function_name_context_slot ? 1 : 0);
 }
 
-int ScopeInfo::UniqueIdInScript() const {
-  // Script scopes start "before" the script to avoid clashing with a scope that
-  // starts on character 0.
-  if (is_script_scope() || scope_type() == EVAL_SCOPE ||
-      scope_type() == MODULE_SCOPE) {
-    return -1;
-  }
-  // Default constructors have the same start position as their parent class
-  // scope. Use the next char position to distinguish this scope.
-  return StartPosition() + IsDefaultConstructor(function_kind());
-}
-
 bool ScopeInfo::HasContextExtensionSlot() const {
   return HasContextExtensionSlotBit::decode(Flags());
 }
@@ -828,8 +812,6 @@ bool ScopeInfo::IsReplModeScope() const {
 bool ScopeInfo::HasLocalsBlockList() const {
   return HasLocalsBlockListBit::decode(Flags());
 }
-
-bool ScopeInfo::EvalState() const { return EvalStateBit::decode(Flags()); }
 
 Tagged<StringSet> ScopeInfo::LocalsBlockList() const {
   DCHECK(HasLocalsBlockList());
