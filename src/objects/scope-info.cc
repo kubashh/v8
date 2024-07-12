@@ -450,7 +450,8 @@ Handle<ScopeInfo> ScopeInfo::CreateForWithScope(
       IsDebugEvaluateScopeBit::encode(false) |
       ForceContextAllocationBit::encode(false) |
       PrivateNameLookupSkipsOuterClassBit::encode(false) |
-      HasContextExtensionSlotBit::encode(true) | EvalStateBit::encode(false) |
+      HasContextExtensionSlotBit::encode(true) |
+      EvalStateBit::encode(kInitialEvalState) |
       HasLocalsBlockListBit::encode(false);
   scope_info->set_flags(flags);
 
@@ -546,7 +547,8 @@ Handle<ScopeInfo> ScopeInfo::CreateForBootstrapping(Isolate* isolate,
       PrivateNameLookupSkipsOuterClassBit::encode(false) |
       HasContextExtensionSlotBit::encode(is_native_context ||
                                          has_const_tracking_let_side_data) |
-      EvalStateBit::encode(false) | HasLocalsBlockListBit::encode(false);
+      EvalStateBit::encode(false) |
+      HasLocalsBlockListBit::encode(kInitialEvalState);
   Tagged<ScopeInfo> raw_scope_info = *scope_info;
   raw_scope_info->set_flags(flags);
   raw_scope_info->set_parameter_count(parameter_count);
@@ -729,6 +731,7 @@ int ScopeInfo::ContextLength() const {
          (function_name_context_slot ? 1 : 0);
 }
 
+// Needs to be kept in sync with Scope::UniqueIdInScript.
 int ScopeInfo::UniqueIdInScript() const {
   // Script scopes start "before" the script to avoid clashing with a scope that
   // starts on character 0.

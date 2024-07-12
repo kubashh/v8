@@ -2046,6 +2046,8 @@ enum class IsStaticFlag : uint8_t { kNotStatic, kStatic };
 
 enum MaybeAssignedFlag : uint8_t { kNotAssigned, kMaybeAssigned };
 
+constexpr bool kInitialEvalState = false;
+
 enum class InterpreterPushArgsMode : unsigned {
   kArrayFunction,
   kWithFinalSpread,
@@ -2567,7 +2569,7 @@ enum class StubCallMode {
 
 enum class NeedsContext { kYes, kNo };
 
-constexpr int kFunctionLiteralIdInvalid = -1;
+constexpr int kInvalidInfoId = -1;
 constexpr int kFunctionLiteralIdTopLevel = 0;
 
 constexpr int kSwissNameDictionaryInitialCapacity = 4;
