@@ -159,8 +159,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> GetFunctionFromEval(
       Handle<String> source, Handle<SharedFunctionInfo> outer_info,
       Handle<Context> context, LanguageMode language_mode,
-      ParseRestriction restriction, int parameters_end_pos,
-      int eval_scope_position, int eval_position,
+      ParseRestriction restriction, int parameters_end_pos, int eval_position,
       ParsingWhileDebugging parsing_while_debugging =
           ParsingWhileDebugging::kNo);
 
@@ -175,7 +174,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   // Create a (bound) function for a String source within a context for eval.
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> GetFunctionFromString(
       Handle<NativeContext> context, Handle<i::Object> source,
-      ParseRestriction restriction, int parameters_end_pos, bool is_code_like);
+      int parameters_end_pos, bool is_code_like);
 
   // Decompose GetFunctionFromString into two functions, to allow callers to
   // deal seperately with a case of object not handled by the embedder.
@@ -619,7 +618,6 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
   // before the compilation starts.
   Isolate* isolate_for_local_isolate_;
   UnoptimizedCompileFlags flags_;
-  UnoptimizedCompileState compile_state_;
   std::unique_ptr<Utf16CharacterStream> character_stream_;
   int stack_size_;
   WorkerThreadRuntimeCallStats* worker_thread_runtime_call_stats_;
@@ -630,6 +628,7 @@ class V8_EXPORT_PRIVATE BackgroundCompileTask {
   std::unique_ptr<PersistentHandles> persistent_handles_;
   MaybeHandle<SharedFunctionInfo> outer_function_sfi_;
   Handle<Script> script_;
+  UnoptimizedCompileState compile_state_;
   IsCompiledScope is_compiled_scope_;
   FinalizeUnoptimizedCompilationDataList finalize_unoptimized_compilation_data_;
   DeferredFinalizationJobDataList jobs_to_retry_finalization_on_main_thread_;
