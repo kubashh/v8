@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b17e0fff_abac62e2",
+        "filename": "src/runtime/runtime-test-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-12T11:24:27Z",
+      "side": 0,
+      "message": "While the examples in this file aren\u0027t security-relevant because they\u0027re not production code, they illustrate the problem that caused me to decide to drop these helper functions: from this code, it\u0027s not obvious that `exp_fun-\u003einstance_data()` and `exp_fun-\u003efunction_index()` both dereference the `exp_fun-\u003eshared()-\u003ewasm_exported_function_data()` links internally, and could hence return inconsistent values if some concurrent modification happened right between the two calls.\nPut differently, depending on Clang\u0027s LoadElimination decisions, the old code _might_ have been fine, but I\u0027d rather not have V8 security depend on invisible (and optional) compiler optimization decisions :-)\nWhile the new version is slightly more verbose, it is (1) more explicit and (2) guaranteed to not repeat unnecessary memory loads, thereby possibly providing a tiny speed improvement.",
+      "range": {
+        "startLine": 549,
+        "startChar": 2,
+        "endLine": 550,
+        "endChar": 45
+      },
+      "revId": "261ddb89c740d628026f7420276d6e6f8589a74d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
