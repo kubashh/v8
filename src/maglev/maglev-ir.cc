@@ -1426,7 +1426,8 @@ void GapMove::GenerateCode(MaglevAssembler* masm,
       __ LoadFloat64(ToDoubleRegister(target()), source_op);
     } else {
       DCHECK(target().IsAnyStackSlot());
-      __ MoveRepr(repr, masm->ToMemOperand(target()), source_op);
+      __ MoveRepr(MachineRepresentation::kTaggedPointer,
+                  masm->ToMemOperand(target()), source_op);
     }
   }
 }
