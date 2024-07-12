@@ -4165,12 +4165,14 @@ void MaglevGraphBuilder::TryBuildStoreTaggedFieldToAllocation(ValueNode* object,
   // This avoids loop in the object graph.
   if (value->Is<InlinedAllocation>()) return;
   InlinedAllocation* allocation = object->Cast<InlinedAllocation>();
-  // TODO(victorgomes): Technically if it is not sealed, we could avoid copying
-  // the object here. This does not currently work, since we need to seal
-  // objects on branches.
-  VirtualObject* vobject = DeepCopyVirtualObject(
-      current_interpreter_frame_.virtual_objects().FindAllocatedWith(
-          allocation));
+  VirtualObject* vobject = allocation->object();
+  // If it hasn't be snapshotted yet, it is the latest created version of this
+  // object and we can still modify it, we don't need to copy it.
+  if (vobject->IsSnapshot()) {
+    vobject = DeepCopyVirtualObject(
+        current_interpreter_frame_.virtual_objects().FindAllocatedWith(
+            allocation));
+  }
   vobject->set(offset, value);
   AddNonEscapingUses(allocation, 1);
   TRACE("  * Setting value in virtual object "
@@ -10815,7 +10817,6 @@ VirtualObject* MaglevGraphBuilder::CreateVirtualObject(
   ValueNode** slots = zone()->AllocateArray<ValueNode*>(slot_count);
   VirtualObject* vobject = NodeBase::New<VirtualObject>(
       zone(), 0, map, NewObjectId(), slot_count, slots);
-  current_interpreter_frame_.add_object(vobject);
   return vobject;
 }
 
@@ -10823,7 +10824,6 @@ VirtualObject* MaglevGraphBuilder::CreateHeapNumber(Float64 value) {
   // VirtualObjects are not added to the Maglev graph.
   VirtualObject* vobject = NodeBase::New<VirtualObject>(
       zone(), 0, broker()->heap_number_map(), NewObjectId(), value);
-  current_interpreter_frame_.add_object(vobject);
   return vobject;
 }
 
@@ -10833,7 +10833,6 @@ VirtualObject* MaglevGraphBuilder::CreateDoubleFixedArray(
   VirtualObject* vobject = NodeBase::New<VirtualObject>(
       zone(), 0, broker()->fixed_double_array_map(), NewObjectId(),
       elements_length, elements);
-  current_interpreter_frame_.add_object(vobject);
   return vobject;
 }
 
@@ -11139,6 +11138,7 @@ ValueNode* MaglevGraphBuilder::BuildInlinedAllocationForDoubleFixedArray(
 
 ValueNode* MaglevGraphBuilder::BuildInlinedAllocation(
     VirtualObject* vobject, AllocationType allocation_type) {
+  current_interpreter_frame_.add_object(vobject);
   if (vobject->type() == VirtualObject::kHeapNumber) {
     return BuildInlinedAllocationForHeapNumber(vobject, allocation_type);
   }
