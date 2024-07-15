@@ -32,7 +32,9 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   const instance2 = builder.instantiate({});
   assertTrue(%IsTurboFanFunction(instance2.exports.main));
   instance2.exports.main(instance.exports.callee_0);
-  assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  }
   %WasmTierUpFunction(instance2.exports.main);
   instance2.exports.main(instance.exports.callee_0);
   assertTrue(%IsTurboFanFunction(instance2.exports.main));
@@ -72,7 +74,9 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   const instance2 = builder.instantiate({});
   assertTrue(%IsTurboFanFunction(instance2.exports.main));
   instance2.exports.main(1);
-  assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  }
   %WasmTierUpFunction(instance2.exports.main);
   instance2.exports.main(1);
   assertTrue(%IsTurboFanFunction(instance2.exports.main));

@@ -60,5 +60,7 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   assertTrue(%IsTurboFanFunction(wasm.main));
   // deopt.
   assertEquals(360, wasm.main(wasm.mul));
-  assertFalse(%IsTurboFanFunction(wasm.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(wasm.main));
+  }
 })();

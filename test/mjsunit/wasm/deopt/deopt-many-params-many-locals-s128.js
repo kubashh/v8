@@ -73,7 +73,9 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   assertEquals(expectedSum, wasm.main(0, wasm.add));
   assertTrue(%IsTurboFanFunction(wasm.deopting));
   assertEquals(expectedDiff, wasm.main(0, wasm.sub));
-  assertFalse(%IsTurboFanFunction(wasm.deopting));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(wasm.deopting));
+  }
 
   // Repeat the test but this time with an additional layer of inlining.
   %WasmTierUpFunction(wasm.main);

@@ -2202,5 +2202,10 @@ RUNTIME_FUNCTION(Runtime_SetBatterySaverMode) {
   return ReadOnlyRoots(isolate).true_value();
 }
 
+RUNTIME_FUNCTION(Runtime_IsolateCountForTesting) {
+  DCHECK_EQ(args.length(), 0);
+  return Smi::FromInt(v8_flags.isolate_count_for_testing);
+}
+
 }  // namespace internal
 }  // namespace v8

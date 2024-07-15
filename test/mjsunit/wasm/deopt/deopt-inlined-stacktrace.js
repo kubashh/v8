@@ -53,7 +53,9 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   } catch (error) {
     verifyException(error);
   }
-  assertFalse(%IsTurboFanFunction(wasm.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(wasm.main));
+  }
   // Rerun unoptimized which should produce the same result.
   try {
     wasm.main(10, 0, wasm.div);

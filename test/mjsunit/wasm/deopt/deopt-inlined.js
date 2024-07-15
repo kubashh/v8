@@ -85,7 +85,7 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
     // Cause deopt.
     assertEquals(14 * 32, fct(12, 30, wasm.mul));
     // Deopt happened.
-    assertFalse(%IsTurboFanFunction(fct));
+    if (%IsolateCountForTesting() == 1) assertFalse(%IsTurboFanFunction(fct));
     assertEquals(46, fct(12, 30, wasm.add));
     // Trigger re-opt.
     %WasmTierUpFunction(fct);

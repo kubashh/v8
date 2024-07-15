@@ -42,7 +42,9 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   assertTrue(%IsTurboFanFunction(wasm.main));
   // Call with new target causing a deopt.
   assertEquals(-10, wasm.main(10, 20, wasm.sub));
-  assertFalse(%IsTurboFanFunction(wasm.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(wasm.main));
+  }
   // Re-opt. Due to the size of sub(), the target will not be inlined.
   // This causes sub() to take the slow call_ref implementation and no deopt
   // point is created.

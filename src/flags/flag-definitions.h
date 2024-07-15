@@ -1624,6 +1624,8 @@ DEFINE_INT(wasm_debug_mask_for_testing, 0,
 DEFINE_INT(wasm_turboshaft_mask_for_testing, 0,
            "bitmask of declared(!) function indices to compile with Turboshaft "
            "instead of TurboFan")
+DEFINE_INT(isolate_count_for_testing, 1,
+           "The number of isolates used for multi-isolate testing")
 // TODO(clemensb): Introduce experimental_wasm_pgo to read from a custom section
 // instead of from a local file.
 DEFINE_BOOL(

@@ -43,7 +43,9 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   assertTrue(%IsTurboFanFunction(wasm.main));
   // Non-deopt call succeeded, now causing deopt.
   assertEquals(360, wasm.main(30, wasm.mul));
-  assertFalse(%IsTurboFanFunction(wasm.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(wasm.main));
+  }
   // Deopt happened, executions are now in liftoff.
   assertEquals(42, wasm.main(30, wasm.add));
   // Re-opt.

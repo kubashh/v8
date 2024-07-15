@@ -44,12 +44,16 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   const instance2 = builder.instantiate({});
   assertTrue(%IsTurboFanFunction(instance2.exports.main));
   assertEquals(84, instance2.exports.main(instance.exports.callee_0));
-  assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  }
   %WasmTierUpFunction(instance2.exports.main);
   assertEquals(84, instance2.exports.main(instance.exports.callee_0));
   // TODO(mliedtke): Right now there isn't any feedback collection to indicate
   // that the callee was non-inlineable causing deopt loops...
-  assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  }
 })();
 
 (function TestWithRecursiveFrames() {
@@ -91,7 +95,9 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   const instance2 = builder.instantiate({});
   assertTrue(%IsTurboFanFunction(instance2.exports.main));
   assertEquals(42, instance2.exports.main(7, instance.exports.callee_0));
-  assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  if (%IsolateCountForTesting() == 1) {
+    assertFalse(%IsTurboFanFunction(instance2.exports.main));
+  }
   %WasmTierUpFunction(instance2.exports.main);
   assertEquals(42, instance2.exports.main(7, instance.exports.callee_0));
   assertTrue(%IsTurboFanFunction(instance2.exports.main));
