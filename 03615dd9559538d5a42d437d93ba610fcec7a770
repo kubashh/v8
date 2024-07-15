@@ -16,6 +16,102 @@
       "message": "i need a fresh CR on this apparently",
       "revId": "03615dd9559538d5a42d437d93ba610fcec7a770",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5a1d850_f8ff8d96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-15T08:08:25Z",
+      "side": 1,
+      "message": "lgtm with one code style comment",
+      "revId": "03615dd9559538d5a42d437d93ba610fcec7a770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "133e1855_52e4c85a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-15T08:08:25Z",
+      "side": 1,
+      "message": "Yeah, this happens when the set of changed files changes.",
+      "parentUuid": "bd041afb_9c8dfc3c",
+      "revId": "03615dd9559538d5a42d437d93ba610fcec7a770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9258cc1f_3ffb98f2",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-15T08:08:25Z",
+      "side": 1,
+      "message": "nit: call this `maybe_receiver` and do \n```\nif (!maybe_receiver.ToHandle(\u0026receiver)) {\n  receiver \u003d lookup_start_obj;\n}\n```\n\nThen you can skip the receiver.ToHandleChecked() later.",
+      "range": {
+        "startLine": 370,
+        "startChar": 6,
+        "endLine": 370,
+        "endChar": 14
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "40205bf7_389382eb",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 368,
+                "startChar": 0,
+                "endLine": 369,
+                "endChar": 0
+              },
+              "replacement": "    Handle\u003cObject\u003e value, MaybeHandle\u003cObject\u003e maybe_receiver,\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 370,
+                "startChar": 0,
+                "endLine": 371,
+                "endChar": 0
+              },
+              "replacement": "  Handle\u003cObject\u003e receiver;\n  if (!maybe_receiver.ToHandle(\u0026receiver)) {\n"
+            },
+            {
+              "path": "src/runtime/runtime-object.cc",
+              "range": {
+                "startLine": 393,
+                "startChar": 0,
+                "endLine": 395,
+                "endChar": 0
+              },
+              "replacement": "  LookupIterator it(isolate, receiver, lookup_key, lookup_start_obj);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "03615dd9559538d5a42d437d93ba610fcec7a770",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
