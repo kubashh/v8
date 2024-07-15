@@ -145,6 +145,7 @@ void DeepForEachInputAndVirtualObject(
     }
     if (auto vobject = node->template TryCast<VirtualObject>()) {
       InlinedAllocation* alloc = vobject->allocation();
+      vobject = virtual_objects.FindAllocatedWith(alloc);
       if (alloc->HasBeenAnalysed() && alloc->HasBeenElided()) {
         input_location++;  // Reserved for the inlined allocation.
         return DeepForVirtualObject<mode>(vobject, input_location,
