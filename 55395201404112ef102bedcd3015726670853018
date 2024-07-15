@@ -22,6 +22,30 @@
       },
       "revId": "55395201404112ef102bedcd3015726670853018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb61129_a91371a8",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-15T16:25:42Z",
+      "side": 1,
+      "message": "Yeah, I guess, that\u0027s a fair assessment. Do we have precedent for such globals? I\u0027m not really sure where to put that...\nIf it was wasm-specific, I guess, I\u0027d put it into the `WasmEngine`, but it isn\u0027t.",
+      "parentUuid": "78dce2d4_e608f761",
+      "range": {
+        "startLine": 1618,
+        "startChar": 0,
+        "endLine": 1619,
+        "endChar": 67
+      },
+      "revId": "55395201404112ef102bedcd3015726670853018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
