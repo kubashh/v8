@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6933b93_af81d455",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-15T15:46:32Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.\n@clemensb@chromium.org: Please component-review `src/d8`.",
+      "revId": "e7d46da3712ee68e7f5e9616c1e097e10acb5212",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
