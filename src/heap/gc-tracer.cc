@@ -1675,12 +1675,12 @@ void GCTracer::ReportFullCycleToRecorder() {
   event.objects.bytes_before = current_.start_object_size;
   event.objects.bytes_after = current_.end_object_size;
   event.objects.bytes_freed =
-      current_.end_object_size - current_.start_object_size;
+      current_.start_object_size - current_.end_object_size;
   // Memory:
   event.memory.bytes_before = current_.start_memory_size;
   event.memory.bytes_after = current_.end_memory_size;
   event.memory.bytes_freed =
-      current_.end_memory_size - current_.start_memory_size;
+      current_.start_memory_size - current_.end_memory_size;
   // Collection Rate:
   if (event.objects.bytes_before == 0) {
     event.collection_rate_in_percent = 0;
