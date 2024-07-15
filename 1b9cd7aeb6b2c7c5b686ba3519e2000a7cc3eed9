@@ -16,6 +16,23 @@
       "message": "PTAL\nOf course I got it wrong the first time :)",
       "revId": "1b9cd7aeb6b2c7c5b686ba3519e2000a7cc3eed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6879866b_ebd47533",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-07-15T17:42:26Z",
+      "side": 1,
+      "message": "+nikolaos@",
+      "revId": "1b9cd7aeb6b2c7c5b686ba3519e2000a7cc3eed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
