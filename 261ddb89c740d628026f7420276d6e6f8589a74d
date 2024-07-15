@@ -22,6 +22,30 @@
       },
       "revId": "261ddb89c740d628026f7420276d6e6f8589a74d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20faaafa_595e09a2",
+        "filename": "src/runtime/runtime-test-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-15T12:26:00Z",
+      "side": 0,
+      "message": "Ack, these accessors that reach into other objects are dangerous, and we should generally try to avoid them, or remove them where we already have them.",
+      "parentUuid": "b17e0fff_abac62e2",
+      "range": {
+        "startLine": 549,
+        "startChar": 2,
+        "endLine": 550,
+        "endChar": 45
+      },
+      "revId": "261ddb89c740d628026f7420276d6e6f8589a74d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

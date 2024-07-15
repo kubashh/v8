@@ -16,6 +16,57 @@
       "message": "PTAL.",
       "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d46ea8_a287887b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-15T12:26:00Z",
+      "side": 1,
+      "message": "LGTM with one naming nit and one optional suggestion.",
+      "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e078267f_57719e84",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-15T12:26:00Z",
+      "side": 1,
+      "message": "Hm, I don\u0027t find `wtid` and `wefd` easy to read. Can we use something like `function_data` and `instance_data` instead?",
+      "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab5caf01_2c7d1c4d",
+        "filename": "test/mjsunit/sandbox/wasm-imports-concurrent-mutation.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-15T12:26:00Z",
+      "side": 1,
+      "message": "nit (maybe for future CLs): using `type: \u0027function\u0027` results in better stack traces on exceptions and gives some syntax highlighting for the code. For passing dynamic information (like `writer_sfi` and the others) you can pass arguments like here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/regress/wasm/regress-1517559.js;l\u003d26;drc\u003d1118bb1ee3e2eae448739d008031127dd0deaeb8",
+      "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
