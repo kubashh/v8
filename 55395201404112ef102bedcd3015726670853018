@@ -46,6 +46,30 @@
       },
       "revId": "55395201404112ef102bedcd3015726670853018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cd9bd4c_201d3264",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-15T16:30:22Z",
+      "side": 1,
+      "message": "As it\u0027s only used for the runtime function, I would put it somewhere there. I.e. a declaration in `runtime.h` and a definition in `runtime-test.cc`. And name it appropriately, like `g_num_isolates_for_testing`.",
+      "parentUuid": "abb61129_a91371a8",
+      "range": {
+        "startLine": 1618,
+        "startChar": 0,
+        "endLine": 1619,
+        "endChar": 67
+      },
+      "revId": "55395201404112ef102bedcd3015726670853018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
