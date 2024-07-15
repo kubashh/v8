@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82c84abe_1fb06911",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-15T18:08:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e078267f_57719e84",
+      "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab5caf01_2c7d1c4d",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-07-15T12:26:00Z",
       "side": 1,
       "message": "nit (maybe for future CLs): using `type: \u0027function\u0027` results in better stack traces on exceptions and gives some syntax highlighting for the code. For passing dynamic information (like `writer_sfi` and the others) you can pass arguments like here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/test/mjsunit/regress/wasm/regress-1517559.js;l\u003d26;drc\u003d1118bb1ee3e2eae448739d008031127dd0deaeb8",
+      "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2af5691_ad870dc9",
+        "filename": "test/mjsunit/sandbox/wasm-imports-concurrent-mutation.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-15T18:08:59Z",
+      "side": 1,
+      "message": "Done, but for the record, I don\u0027t think it\u0027s an improvement: while the big string literal is admittedly not great, relying on `Function.prototype.toString()` and `new Function(...)` isn\u0027t much better. It does provide syntax highlighting; it does _not_ give better stack traces (it would if a function could be used directly, but not when `new Function(...)`-constructing one from a string), and it\u0027s less efficient (perhaps not measurably so, but still).",
+      "parentUuid": "ab5caf01_2c7d1c4d",
       "revId": "1b03bd02f32ba337f6b14b5ac5cd23e0d201b94f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
