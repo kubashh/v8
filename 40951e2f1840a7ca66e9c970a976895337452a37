@@ -16,6 +16,24 @@
       "message": "Hi，I\u0027m not entirely sure if the function you added could be called. As far as I know, none of the current invocation scenarios include it. I mean all the codegen of ByteSwap will be handled with a scratch register now and it never fails due to register pressure. Will you be adding code in the future that calls this scenario?",
       "revId": "40951e2f1840a7ca66e9c970a976895337452a37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1462eaf_e3d53d42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3521903
+      },
+      "writtenOn": "2024-07-15T15:10:46Z",
+      "side": 1,
+      "message": "For now, this implementation is not used in code generation. \nHowever, in the future it is planned to use it (in maglev).",
+      "parentUuid": "b69bc7dc_f1ab7f0a",
+      "revId": "40951e2f1840a7ca66e9c970a976895337452a37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
