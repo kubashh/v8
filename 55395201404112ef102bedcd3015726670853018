@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78dce2d4_e608f761",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-15T16:19:56Z",
+      "side": 1,
+      "message": "This flag is only there to have a global variable to store the number of isolates, right? In that case it shouldn\u0027t be a flag, but a global variable.",
+      "range": {
+        "startLine": 1618,
+        "startChar": 0,
+        "endLine": 1619,
+        "endChar": 67
+      },
+      "revId": "55395201404112ef102bedcd3015726670853018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
