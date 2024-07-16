@@ -10277,7 +10277,7 @@ int64_t Isolate::AdjustAmountOfExternalAllocatedMemory(
 
   if (change_in_bytes <= 0) return amount;
 
-  if (amount > i_isolate->heap()->external_memory_limit()) {
+  if (amount > i_isolate->heap()->external_memory_hard_limit()) {
     ReportExternalAllocationLimitReached();
   }
   return amount;
