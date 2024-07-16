@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1634d59a_50e71755",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-16T14:56:56Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "0e7dd3f2fe958fd3c144506716fbea92f9a60017",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "45af6956_20341577",
         "filename": "test/mjsunit/regress/wasm/regress-352720899.js",
         "patchSetId": 1
@@ -31,6 +48,29 @@
       "writtenOn": "2024-07-16T14:11:32Z",
       "side": 1,
       "message": "This reproducer is a bit smaller than the other one but depends on disabling loop peeling and loop unrolling.",
+      "revId": "0e7dd3f2fe958fd3c144506716fbea92f9a60017",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1efb319_b02a610d",
+        "filename": "test/mjsunit/regress/wasm/regress-352720899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-16T14:56:56Z",
+      "side": 1,
+      "message": "nit: Could\u0027ve cleaned up the test cases a bit more, e.g.\n```\nlet $sig0 \u003d builder.addType(kSig_i_i);\n```\nand `$sig1` in the next line, and similarly in the other test; but it\u0027s hard to argue that that\u0027s worth the time...",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 11
+      },
       "revId": "0e7dd3f2fe958fd3c144506716fbea92f9a60017",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
