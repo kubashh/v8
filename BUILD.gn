@@ -1738,9 +1738,13 @@ config("toolchain") {
     ]
   }
 
-  # Chromium uses a hand-picked subset of UBSan coverage. We want everything.
   if (is_ubsan) {
+    # Chromium uses a hand-picked subset of UBSan coverage. We want everything.
     cflags += [ "-fsanitize=undefined" ]
+  } else if (is_clang && v8_enable_safe_stack) {
+    # This enables the safe stack feature for clang.
+    cflags += [ "-fsanitize=safe-stack" ]
+    ldflags += [ "-fsanitize=safe-stack" ]
   }
 }
 

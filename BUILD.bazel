@@ -86,6 +86,7 @@ load(":bazel/v8-non-pointer-compression.bzl", "v8_binary_non_pointer_compression
 # v8_enable_javascript_promise_hooks
 # v8_enable_allocation_folding
 # v8_allocation_site_tracking
+# v8_enable_safe_stack
 
 v8_flag(name = "v8_android_log_stdout")
 

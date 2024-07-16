@@ -172,6 +172,9 @@ declare_args() {
 
   # Emit CET IBT landing pad instructions in JIT generated code (experimental).
   v8_enable_cet_ibt = false
+
+  # Enable clang's safe stack feature.
+  v8_enable_safe_stack = false
 }
 
 if (v8_use_external_startup_data == "") {
