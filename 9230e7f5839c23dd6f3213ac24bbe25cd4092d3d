@@ -16,6 +16,46 @@
       "message": "PTAL. 😊",
       "revId": "9230e7f5839c23dd6f3213ac24bbe25cd4092d3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea07fd42_2c43a096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T09:07:05Z",
+      "side": 1,
+      "message": "LGTM % question",
+      "revId": "9230e7f5839c23dd6f3213ac24bbe25cd4092d3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea79e2d_3079516f",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4320,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T09:07:05Z",
+      "side": 1,
+      "message": "Do we have an even more precise type for that? Not exactly sure what the result here is (is it a `SeqTwoByteString`)? Otherwise LGTM",
+      "range": {
+        "startLine": 4320,
+        "startChar": 4,
+        "endLine": 4320,
+        "endChar": 10
+      },
+      "revId": "9230e7f5839c23dd6f3213ac24bbe25cd4092d3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
