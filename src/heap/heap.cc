@@ -1562,35 +1562,17 @@ void Heap::ReportExternalMemoryPressure() {
           kGCCallbackFlagCollectAllExternalMemory);
   int64_t current = external_memory_.total();
   int64_t baseline = external_memory_.low_since_mark_compact();
-  int64_t limit = external_memory_.limit();
-  TRACE_EVENT2(
-      "devtools.timeline,v8", "V8.ExternalMemoryPressure", "external_memory_mb",
-      static_cast<int>((current - baseline) / MB), "external_memory_limit_mb",
-      static_cast<int>((limit - baseline) / MB));
-  if (current > baseline + external_memory_hard_limit()) {
-    CollectAllGarbage(
-        GCFlag::kReduceMemoryFootprint,
-        GarbageCollectionReason::kExternalMemoryPressure,
-        static_cast<GCCallbackFlags>(kGCCallbackFlagCollectAllAvailableGarbage |
-                                     kGCCallbackFlagsForExternalMemory));
-    return;
-  }
-  if (incremental_marking()->IsStopped()) {
-    if (incremental_marking()->CanAndShouldBeStarted()) {
-      StartIncrementalMarking(GCFlagsForIncrementalMarking(),
-                              GarbageCollectionReason::kExternalMemoryPressure,
-                              kGCCallbackFlagsForExternalMemory);
-    } else {
-      CollectAllGarbage(i::GCFlag::kNoFlags,
-                        GarbageCollectionReason::kExternalMemoryPressure,
-                        kGCCallbackFlagsForExternalMemory);
-    }
-  } else {
-    // Incremental marking is turned on and has already been started.
-    current_gc_callback_flags_ = static_cast<GCCallbackFlags>(
-        current_gc_callback_flags_ | kGCCallbackFlagsForExternalMemory);
-    incremental_marking()->AdvanceAndFinalizeIfNecessary();
-  }
+  int64_t limit = external_memory_hard_limit();
+  TRACE_EVENT2("devtools.timeline,v8", "V8.ExternalMemoryPressure",
+               "external_memory_mb",
+               static_cast<int>((current - baseline) / MB),
+               "external_memory_hard_limit_mb",
+               static_cast<int>((limit - baseline) / MB));
+  CollectAllGarbage(
+      GCFlag::kReduceMemoryFootprint,
+      GarbageCollectionReason::kExternalMemoryPressure,
+      static_cast<GCCallbackFlags>(kGCCallbackFlagCollectAllAvailableGarbage |
+                                   kGCCallbackFlagsForExternalMemory));
 }
 
 int64_t Heap::external_memory_limit() { return external_memory_.limit(); }
@@ -5308,8 +5290,7 @@ bool Heap::AllocationLimitOvershotByLargeMargin() const {
   // The number is chosen based on v8.browsing_mobile on Nexus 7v2.
   constexpr size_t kMarginForSmallHeaps = 32u * MB;
 
-  uint64_t size_now =
-      OldGenerationConsumedBytes() + AllocatedExternalMemorySinceMarkCompact();
+  uint64_t size_now = OldGenerationConsumedBytes();
   if (v8_flags.minor_ms && incremental_marking()->IsMajorMarking()) {
     size_now += YoungGenerationConsumedBytes();
   }
@@ -5549,11 +5530,12 @@ Heap::IncrementalMarkingLimit Heap::IncrementalMarkingLimitReached() {
   }
 
 #if defined(V8_USE_PERFETTO)
-  TRACE_COUNTER(
-      TRACE_DISABLED_BY_DEFAULT("v8.gc"), "OldGenerationConsumedBytes",
-      OldGenerationConsumedBytes() + AllocatedExternalMemorySinceMarkCompact());
+  TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
+                "OldGenerationConsumedBytes", OldGenerationConsumedBytes());
   TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "GlobalConsumedBytes",
                 GlobalConsumedBytes());
+  TRACE_COUNTER(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "external_memory.total",
+                external_memory_.total());
 #endif
   size_t old_generation_space_available = OldGenerationSpaceAvailable();
   size_t global_memory_available = GlobalMemoryAvailable();
@@ -7634,6 +7616,11 @@ void Heap::EnsureSweepingCompleted(SweepingForcedFinalizationMode mode) {
   DCHECK_IMPLIES(
       mode == SweepingForcedFinalizationMode::kUnifiedHeap || !cpp_heap(),
       !tracer()->IsSweepingInProgress());
+
+  auto new_limits = ComputeNewAllocationLimits(this);
+  SetOldGenerationAndGlobalAllocationLimit(
+      new_limits.old_generation_allocation_limit,
+      new_limits.global_allocation_limit);
 }
 
 void Heap::EnsureYoungSweepingCompleted() {
