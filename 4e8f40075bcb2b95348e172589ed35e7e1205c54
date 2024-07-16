@@ -56,6 +56,30 @@
       },
       "revId": "4e8f40075bcb2b95348e172589ed35e7e1205c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25bdb0f_b35d05e7",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3159,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-16T08:51:15Z",
+      "side": 1,
+      "message": "I don\u0027t feel very strongly about it.\n\nOne good think with that is that it makes it a bit clearer what input builtins take. Otherwise, one has to look at the BuiltinCallDescriptor, and realize that kNeedsContext/kNeedsFrameState mean that it needs a context and frame_state input. And even for the \"regular\" inputs/outputs, it\u0027s probably easier for beginners to have a CallBuiltin_ToString function with explicit typed arguments rather than having to realize from the descriptor what the types of the arguments are...",
+      "parentUuid": "5f4279bc_e499e647",
+      "range": {
+        "startLine": 3159,
+        "startChar": 12,
+        "endLine": 3159,
+        "endChar": 32
+      },
+      "revId": "4e8f40075bcb2b95348e172589ed35e7e1205c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
