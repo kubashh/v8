@@ -1513,6 +1513,7 @@ class MaglevFrameTranslationBuilder {
         VirtualObject* vobject = value->Cast<InlinedAllocation>()->object();
         if (vobject->IsSnapshot()) {
           vobject = virtual_objects.FindAllocatedWith(vobject->allocation());
+          CHECK_NOT_NULL(vobject);
         }
         BuildDeoptFrameSingleValue(vobject, input_location, virtual_objects);
         break;
@@ -1559,6 +1560,8 @@ class MaglevFrameTranslationBuilder {
     size_t input_locations_to_advance = 1;
     if (const VirtualObject* vobject = value->TryCast<VirtualObject>()) {
       if (vobject->allocation()->HasBeenElided()) {
+        vobject = virtual_objects.FindAllocatedWith(vobject->allocation());
+        CHECK_NOT_NULL(vobject);
         input_location++;
         BuildVirtualObject(vobject, input_location, virtual_objects);
         return;
