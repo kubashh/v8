@@ -4084,7 +4084,6 @@ ParserBase<Impl>::ParseSuperExpression() {
         impl()->ReportMessage(MessageTemplate::kOptionalChainingNoSuper);
         return impl()->FailureExpression();
       }
-      scope->RecordSuperPropertyUsage();
       UseThis();
       return impl()->NewSuperPropertyReference(pos);
     }

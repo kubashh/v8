@@ -1349,22 +1349,6 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   RareData* rare_data_ = nullptr;
 };
 
-void Scope::RecordEvalCall() {
-  calls_eval_ = true;
-  if (is_sloppy(language_mode())) {
-    GetDeclarationScope()->RecordDeclarationScopeEvalCall();
-  }
-  RecordInnerScopeEvalCall();
-  // The eval contents might access "super" (if it's inside a function that
-  // binds super).
-  DeclarationScope* receiver_scope = GetReceiverScope();
-  DCHECK(!receiver_scope->is_arrow_scope());
-  FunctionKind function_kind = receiver_scope->function_kind();
-  if (BindsSuper(function_kind)) {
-    receiver_scope->RecordSuperPropertyUsage();
-  }
-}
-
 Scope::Snapshot::Snapshot(Scope* scope)
     : outer_scope_(scope),
       declaration_scope_(scope->GetDeclarationScope()),
@@ -1557,6 +1541,8 @@ class PrivateNameScopeIterator {
   // Add an unresolved private name to the current scope.
   void AddUnresolvedPrivateName(VariableProxy* proxy);
 
+  void RecordSuperPropertyUsage();
+
   ClassScope* GetScope() const {
     DCHECK(!Done());
     return current_scope_->AsClassScope();
@@ -1567,6 +1553,24 @@ class PrivateNameScopeIterator {
   Scope* start_scope_;
   Scope* current_scope_;
 };
+
+void Scope::RecordEvalCall() {
+  calls_eval_ = true;
+  if (is_sloppy(language_mode())) {
+    GetDeclarationScope()->RecordDeclarationScopeEvalCall();
+  }
+  RecordInnerScopeEvalCall();
+  // The eval contents might access "super" (if it's inside a function that
+  // binds super).
+  DeclarationScope* receiver_scope = GetReceiverScope();
+  DCHECK(!receiver_scope->is_arrow_scope());
+  FunctionKind function_kind = receiver_scope->function_kind();
+  if (BindsSuper(function_kind)) {
+    receiver_scope->RecordSuperPropertyUsage();
+    PrivateNameScopeIterator private_name_scope_iter(this);
+    private_name_scope_iter.RecordSuperPropertyUsage();
+  }
+}
 
 }  // namespace internal
 }  // namespace v8

@@ -3081,8 +3081,8 @@ VariableProxy* ClassScope::ResolvePrivateNamesPartially() {
       }
     }
 
-    // If the current scope does not have declared private names,
-    // try looking from the outer class scope later.
+    // If the current scope does not have declared private names, try looking
+    // from the outer class scope later.
     if (var == nullptr) {
       // There's no outer private name scope so we are certain that the variable
       // cannot be resolved later.
@@ -3175,6 +3175,21 @@ void PrivateNameScopeIterator::AddUnresolvedPrivateName(VariableProxy* proxy) {
   }
 
   GetScope()->EnsureRareData()->unresolved_private_names.Add(proxy);
+  // Any closure scope that contain uses of private names that skips over a
+  // class scope due to heritage expressions need private name context chain
+  // recalculation, since not all scopes require a Context or ScopeInfo. See
+  // comment in DeclarationScope::RecalcPrivateNameContextChain.
+  if (V8_UNLIKELY(skipped_any_scopes_)) {
+    start_scope_->GetClosureScope()->RecordNeedsPrivateNameContextChainRecalc();
+  }
+}
+
+void PrivateNameScopeIterator::RecordSuperPropertyUsage() {
+  // Use dynamic lookup for top-level scopes in debug-evaluate.
+  if (Done()) {
+    return;
+  }
+
   // Any closure scope that contain uses of private names that skips over a
   // class scope due to heritage expressions need private name context chain
   // recalculation, since not all scopes require a Context or ScopeInfo. See
