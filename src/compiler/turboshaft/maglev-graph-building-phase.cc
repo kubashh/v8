@@ -579,7 +579,13 @@ class GraphBuilder {
     // same InitialValues in Turboshaft as in Maglev, in order to simplify
     // things.
 #ifdef DEBUG
-    char* debug_name = strdup(node->source().ToString().c_str());
+    // We cannot use strdup or something that simple for {debug_name}, because
+    // it has to be zone allocated rather than heap-allocated, since it won't be
+    // freed and this would thus cause a leak.
+    std::string reg_string_name = node->source().ToString();
+    base::Vector<char> debug_name =
+        graph_zone()->NewVector<char>(reg_string_name.length() + /* \n */ 1);
+    strcpy(debug_name.data(), reg_string_name.c_str());
 #else
     char* debug_name = nullptr;
 #endif
@@ -589,7 +595,7 @@ class GraphBuilder {
       // The function closure is a Parameter rather than an OsrValue even when
       // OSR-compiling.
       value = __ Parameter(Linkage::kJSCallClosureParamIndex,
-                           RegisterRepresentation::Tagged(), debug_name);
+                           RegisterRepresentation::Tagged(), debug_name.data());
     } else if (maglev_compilation_unit_->is_osr()) {
       int index;
       if (source.is_current_context()) {
@@ -613,7 +619,8 @@ class GraphBuilder {
       } else {
         index = source.ToParameterIndex();
       }
-      value = __ Parameter(index, RegisterRepresentation::Tagged(), debug_name);
+      value = __ Parameter(index, RegisterRepresentation::Tagged(),
+                           debug_name.data());
     }
     SetMap(node, value);
     return maglev::ProcessResult::kContinue;
