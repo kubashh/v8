@@ -16,6 +16,46 @@
       "message": "PTAL :)",
       "revId": "4e8f40075bcb2b95348e172589ed35e7e1205c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a038b19a_7d274e24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T08:45:07Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4e8f40075bcb2b95348e172589ed35e7e1205c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f4279bc_e499e647",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3159,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T08:45:07Z",
+      "side": 1,
+      "message": "Do you think it\u0027s not worth to have all those `CallBuiltin_Xyz` wrappers around the actual `CallBuiltin` with the descriptor? It makes such changes more annoying. The reason I added them was to have a bit better IDE support for argument types and such and not have to do the ugly `__ template CallBuiltin\u003c...\u003e` thing, but I don\u0027t feel strongly about it.",
+      "range": {
+        "startLine": 3159,
+        "startChar": 12,
+        "endLine": 3159,
+        "endChar": 32
+      },
+      "revId": "4e8f40075bcb2b95348e172589ed35e7e1205c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
