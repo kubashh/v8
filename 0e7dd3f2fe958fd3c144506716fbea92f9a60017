@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21ef5af_2c61f871",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-16T14:11:32Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: PTAL",
+      "revId": "0e7dd3f2fe958fd3c144506716fbea92f9a60017",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45af6956_20341577",
+        "filename": "test/mjsunit/regress/wasm/regress-352720899.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-16T14:11:32Z",
+      "side": 1,
+      "message": "This reproducer is a bit smaller than the other one but depends on disabling loop peeling and loop unrolling.",
+      "revId": "0e7dd3f2fe958fd3c144506716fbea92f9a60017",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
