@@ -3933,6 +3933,7 @@ class GraphBuilder {
             value->Cast<maglev::InlinedAllocation>()->object();
         if (vobject->IsSnapshot()) {
           vobject = virtual_objects.FindAllocatedWith(vobject->allocation());
+          CHECK_NOT_NULL(vobject);
         }
         AddDeoptInput(builder, virtual_objects, vobject);
         break;
