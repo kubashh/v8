@@ -109,6 +109,7 @@ void DeepForVirtualObject(VirtualObject* vobject,
         // Check if it has escaped.
         if (alloc->HasBeenAnalysed() && alloc->HasBeenElided()) {
           VirtualObject* vobject = virtual_objects.FindAllocatedWith(alloc);
+          CHECK_NOT_NULL(vobject);
           input_location++;  // Reserved for the inlined allocation.
           DeepForVirtualObject<mode>(vobject, input_location, virtual_objects,
                                      f);
@@ -145,6 +146,8 @@ void DeepForEachInputAndVirtualObject(
     }
     if (auto vobject = node->template TryCast<VirtualObject>()) {
       InlinedAllocation* alloc = vobject->allocation();
+      vobject = virtual_objects.FindAllocatedWith(alloc);
+      CHECK_NOT_NULL(vobject);
       if (alloc->HasBeenAnalysed() && alloc->HasBeenElided()) {
         input_location++;  // Reserved for the inlined allocation.
         return DeepForVirtualObject<mode>(vobject, input_location,
