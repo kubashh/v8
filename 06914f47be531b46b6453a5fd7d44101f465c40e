@@ -16,6 +16,69 @@
       "message": "PTAL :)",
       "revId": "06914f47be531b46b6453a5fd7d44101f465c40e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c97a5e5_a30c1bc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T09:02:31Z",
+      "side": 1,
+      "message": "LGTM % nits",
+      "revId": "06914f47be531b46b6453a5fd7d44101f465c40e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c1d034a_16033989",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T09:02:31Z",
+      "side": 1,
+      "message": "nit: Maybe put a 1 line comment here that we are iterating Turboshaft predecessors from the end.\nAnd the reason that you don\u0027t distinguish `skip_backedge` here is that this is not bound yet, right?",
+      "range": {
+        "startLine": 354,
+        "startChar": 47,
+        "endLine": 354,
+        "endChar": 69
+      },
+      "revId": "06914f47be531b46b6453a5fd7d44101f465c40e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d70de688_1a765a45",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T09:02:31Z",
+      "side": 1,
+      "message": "nit: For such things you can use `*base::index_of(container, value);`",
+      "range": {
+        "startLine": 357,
+        "startChar": 6,
+        "endLine": 360,
+        "endChar": 76
+      },
+      "revId": "06914f47be531b46b6453a5fd7d44101f465c40e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
