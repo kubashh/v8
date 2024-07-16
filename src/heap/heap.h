@@ -634,7 +634,7 @@ class Heap final {
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);
 
-  int64_t external_memory_hard_limit() { return max_old_generation_size() / 2; }
+  int64_t external_memory_hard_limit() { return max_global_memory_size_ / 2; }
 
   V8_INLINE int64_t external_memory();
   V8_EXPORT_PRIVATE int64_t external_memory_limit();
@@ -1892,8 +1892,7 @@ class Heap final {
   // ===========================================================================
 
   inline size_t OldGenerationSpaceAvailable() {
-    uint64_t bytes = OldGenerationConsumedBytes() +
-                     AllocatedExternalMemorySinceMarkCompact();
+    uint64_t bytes = OldGenerationConsumedBytes();
 
     if (old_generation_allocation_limit() <= bytes) return 0;
     return old_generation_allocation_limit() - static_cast<size_t>(bytes);
