@@ -16,6 +16,23 @@
       "message": "PTAL. I hope I am not missing something, but it looks like we can greatly simplify the handling of relocation info on constants.",
       "revId": "3c9d9d9c4deb8e0786d01a89018be1c54406ce88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c6bc666_bf9d2f57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-16T10:22:32Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "3c9d9d9c4deb8e0786d01a89018be1c54406ce88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
