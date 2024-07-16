@@ -146,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "182c9a8e_2b7148ca",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3808,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-16T06:56:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3be91ae8_29cd354e",
+      "range": {
+        "startLine": 3808,
+        "startChar": 30,
+        "endLine": 3808,
+        "endChar": 42
+      },
+      "revId": "db1bbe38c23c8198b1f23a483d89cc109685f7fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c2dc3a6_2f6288ec",
@@ -159,6 +183,30 @@
       "writtenOn": "2024-07-09T07:00:29Z",
       "side": 1,
       "message": "Could this get expensive? Is the number of tracked object id\u0027s sufficiently bounded that the linear scan doesn\u0027t hurt here?",
+      "range": {
+        "startLine": 3921,
+        "startChar": 6,
+        "endLine": 3925,
+        "endChar": 7
+      },
+      "revId": "db1bbe38c23c8198b1f23a483d89cc109685f7fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac50428_3316e920",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3925,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-16T06:56:49Z",
+      "side": 1,
+      "message": "Yes, it could. This is currently the same implementation as what Maglev does. I\u0027ve added a TODO to improve this.",
+      "parentUuid": "1c2dc3a6_2f6288ec",
       "range": {
         "startLine": 3921,
         "startChar": 6,
