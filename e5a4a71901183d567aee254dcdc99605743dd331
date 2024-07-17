@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685139bd_08f6a4dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-17T12:29:33Z",
+      "side": 1,
+      "message": "PTAL\n\n\nNote that a very similar bug has happened before: https://crrev.com/c/4427550.\n\nI\u0027m not sure if there are other cases where we should check for Cleared objects when printing. But maybe this is rare enough and just fixing the bugs when they occur is good enough. What do you think?",
+      "revId": "e5a4a71901183d567aee254dcdc99605743dd331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
