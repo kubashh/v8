@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3a5efd6_1c2d2f36",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-17T13:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd4e98a2_c0bb1a5e",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 4
+      },
+      "revId": "5205198877fb2e6bdc935006203da74c9b55a0ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c5c2d32_2ff4ba75",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5cfb8ab_66c81501",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-17T13:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c5c2d32_2ff4ba75",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 5
+      },
+      "revId": "5205198877fb2e6bdc935006203da74c9b55a0ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79b36c1c_0f995407",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-07-17T13:53:47Z",
       "side": 1,
       "message": "Nit: GetInitialOptimisticType(unmerged_type);",
+      "range": {
+        "startLine": 879,
+        "startChar": 27,
+        "endLine": 882,
+        "endChar": 47
+      },
+      "revId": "5205198877fb2e6bdc935006203da74c9b55a0ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7126ceae_c0da46f9",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-17T13:59:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79b36c1c_0f995407",
       "range": {
         "startLine": 879,
         "startChar": 27,
