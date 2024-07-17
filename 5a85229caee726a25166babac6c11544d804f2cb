@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b45b685e_7484a858",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-07-17T12:56:04Z",
+      "side": 1,
+      "message": "It\u0027s weird that the `V8 Linux64 TSAN - isolates` bot is failing on the waterfall, but the `v8_linux64_tsan_isolates_rel` check bot passed here.",
+      "revId": "5a85229caee726a25166babac6c11544d804f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
