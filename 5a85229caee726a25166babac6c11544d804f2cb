@@ -34,6 +34,24 @@
       "parentUuid": "b45b685e_7484a858",
       "revId": "5a85229caee726a25166babac6c11544d804f2cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1803f624_16ff81c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-07-17T13:57:44Z",
+      "side": 1,
+      "message": "Yeah, Matthias showed it to me then.\nMichael said that on trybots, flakes are successes. On CI they are failures (and flaky failures also don\u0027t close the tree).",
+      "parentUuid": "3d8ba891_dce9bc0f",
+      "revId": "5a85229caee726a25166babac6c11544d804f2cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
