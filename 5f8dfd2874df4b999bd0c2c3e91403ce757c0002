@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec82087f_a92b5e31",
+        "filename": "src/trap-handler/handler-outside.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-07-18T21:22:30Z",
+      "side": 1,
+      "message": "I don\u0027t think this check is necessary, is it?  memcpy() with a zero size is valid.\n\nIs the potential problem that the destination (data-\u003einstructions) points to the end of a malloc() allocation if num_protected_instructions \u003d\u003d 0?  I think that shouldn\u0027t be a problem either, because the data-\u003einstructions pointer is still valid in that case.",
+      "revId": "5f8dfd2874df4b999bd0c2c3e91403ce757c0002",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
