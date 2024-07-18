@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99b7daf8_1251b47c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4153,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-18T14:16:09Z",
+      "side": 1,
+      "message": "how about not exposing raw set here, and having a `Set` helper which also contains the above copy-on-write logic",
+      "range": {
+        "startLine": 4153,
+        "startChar": 11,
+        "endLine": 4153,
+        "endChar": 14
+      },
+      "revId": "46fbf5ed02431c4382e70966ad57cc557bf1b4ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab0e9e49_6c5ab35a",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-18T14:16:09Z",
+      "side": 1,
+      "message": "This should be doing the snapshot, since we might otherwise \"unwind\" some VO operations afaik.",
+      "range": {
+        "startLine": 1052,
+        "startChar": 38,
+        "endLine": 1052,
+        "endChar": 64
+      },
+      "revId": "46fbf5ed02431c4382e70966ad57cc557bf1b4ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f758741_562481c7",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-18T14:16:09Z",
+      "side": 1,
+      "message": "maybe also this should take the snapshot.",
+      "range": {
+        "startLine": 1071,
+        "startChar": 18,
+        "endLine": 1071,
+        "endChar": 43
+      },
+      "revId": "46fbf5ed02431c4382e70966ad57cc557bf1b4ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
