@@ -1510,6 +1510,22 @@ void FunctionTemplate::SetClassName(Local<String> name) {
   info->set_class_name(*Utils::OpenDirectHandle(*name));
 }
 
+void FunctionTemplate::SetInterfaceName(Local<String> name) {
+  auto info = Utils::OpenDirectHandle(this);
+  EnsureNotPublished(info, "v8::FunctionTemplate::SetInterfaceName");
+  i::Isolate* i_isolate = info->GetIsolateChecked();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+  info->set_interface_name(*Utils::OpenDirectHandle(*name));
+}
+
+void FunctionTemplate::SetExceptionContext(ExceptionContext context) {
+  auto info = Utils::OpenDirectHandle(this);
+  EnsureNotPublished(info, "v8::FunctionTemplate::SetExceptionContext");
+  i::Isolate* i_isolate = info->GetIsolateChecked();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+  info->set_exception_context(static_cast<uint32_t>(context));
+}
+
 void FunctionTemplate::SetAcceptAnyReceiver(bool value) {
   auto info = Utils::OpenDirectHandle(this);
   EnsureNotPublished(info, "v8::FunctionTemplate::SetAcceptAnyReceiver");
@@ -10992,6 +11008,26 @@ Maybe<bool> Exception::CaptureStackTrace(Local<Context> context,
   i::Handle<i::Object> handle;
   has_exception = !result.ToHandle(&handle);
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
+  return Just(true);
+}
+
+Maybe<bool> Exception::OverrideOriginalErrorMessage(Local<Object> object,
+                                                    Local<String> message) {
+  if (!i::v8_flags.use_original_message_for_stack_trace) return Just(false);
+  auto obj = Utils::OpenHandle(*object);
+  if (!IsJSObject(*obj)) return Just(false);
+  auto msg = Utils::OpenHandle(*message);
+  if (!IsString(*msg)) return Just(false);
+
+  auto js_obj = i::Cast<i::JSObject>(obj);
+  auto js_msg = i::Cast<i::String>(msg);
+  i::Isolate* i_isolate = js_obj->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+
+  auto result = i::JSObject::SetOwnPropertyIgnoreAttributes(
+      js_obj, i_isolate->factory()->error_message_symbol(), js_msg,
+      i::DONT_ENUM);
+  if (result.is_null()) return Nothing<bool>();
   return Just(true);
 }
 
