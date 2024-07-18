@@ -79,7 +79,7 @@ class V8_BASE_EXPORT RandomNumberGenerator final {
   // is that one 64-bit int value is pseudorandomly generated and returned.
   // All 2^64 possible integer values are produced with (approximately) equal
   // probability.
-  int64_t NextInt64() V8_WARN_UNUSED_RESULT;
+  int64_t N inextInt64() V8_WARN_UNUSED_RESULT;
 
   // Fills the elements of a specified array of bytes with random numbers.
   void NextBytes(void* buffer, size_t buflen);
