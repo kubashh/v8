@@ -4141,12 +4141,15 @@ void MaglevGraphBuilder::TryBuildStoreTaggedFieldToAllocation(ValueNode* object,
   // This avoids loop in the object graph.
   if (value->Is<InlinedAllocation>()) return;
   InlinedAllocation* allocation = object->Cast<InlinedAllocation>();
-  // TODO(victorgomes): Technically if it is not sealed, we could avoid copying
-  // the object here. This does not currently work, since we need to seal
-  // objects on branches.
-  VirtualObject* vobject = DeepCopyVirtualObject(
-      current_interpreter_frame_.virtual_objects().FindAllocatedWith(
-          allocation));
+  // If it hasn't be snapshotted yet, it is the latest created version of this
+  // object and we can still modify it, we don't need to copy it.
+  VirtualObject* vobject = allocation->object();
+  if (vobject->IsSnapshot()) {
+    vobject = DeepCopyVirtualObject(
+        current_interpreter_frame_.virtual_objects().FindAllocatedWith(
+            allocation));
+  }
+  CHECK_NOT_NULL(vobject);
   vobject->set(offset, value);
   AddNonEscapingUses(allocation, 1);
   TRACE("  * Setting value in virtual object "

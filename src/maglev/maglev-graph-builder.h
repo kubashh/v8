@@ -1048,6 +1048,7 @@ class MaglevGraphBuilder {
   template <typename NodeT>
   void AttachDeoptCheckpoint(NodeT* node) {
     if constexpr (NodeT::kProperties.is_deopt_checkpoint()) {
+      current_interpreter_frame_.virtual_objects().Snapshot();
       node->SetEagerDeoptInfo(zone(), GetLatestCheckpointedFrame());
     }
   }
@@ -1055,6 +1056,7 @@ class MaglevGraphBuilder {
   template <typename NodeT>
   void AttachEagerDeoptInfo(NodeT* node) {
     if constexpr (NodeT::kProperties.can_eager_deopt()) {
+      current_interpreter_frame_.virtual_objects().Snapshot();
       node->SetEagerDeoptInfo(zone(), GetLatestCheckpointedFrame(),
                               current_speculation_feedback_);
     }
@@ -1063,6 +1065,7 @@ class MaglevGraphBuilder {
   template <typename NodeT>
   void AttachLazyDeoptInfo(NodeT* node) {
     if constexpr (NodeT::kProperties.can_lazy_deopt()) {
+      current_interpreter_frame_.virtual_objects().Snapshot();
       auto [register_result, register_count] = GetResultLocationAndSize();
       new (node->lazy_deopt_info()) LazyDeoptInfo(
           zone(), GetDeoptFrameForLazyDeopt(register_result, register_count),
