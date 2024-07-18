@@ -1819,6 +1819,8 @@ class WasmDecoder : public Decoder {
       case kExprS128Store32Lane:
         num_lanes = 4;
         break;
+      case kExprF16x8ExtractLane:
+      case kExprF16x8ReplaceLane:
       case kExprI16x8ExtractLaneS:
       case kExprI16x8ExtractLaneU:
       case kExprI16x8ReplaceLane:
@@ -4556,6 +4558,16 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     switch (opcode) {
       case kExprF64x2ExtractLane:
         return SimdExtractLane(opcode, kWasmF64, opcode_length);
+      case kExprF16x8ExtractLane: {
+        if (!v8_flags.experimental_wasm_fp16) {
+          this->DecodeError(
+              "invalid simd opcode: 0x%x, "
+              "enable with --experimental-wasm-fp16",
+              opcode);
+          return 0;
+        }
+        [[fallthrough]];
+      }
       case kExprF32x4ExtractLane:
         return SimdExtractLane(opcode, kWasmF32, opcode_length);
       case kExprI64x2ExtractLane:
@@ -4568,6 +4580,16 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         return SimdExtractLane(opcode, kWasmI32, opcode_length);
       case kExprF64x2ReplaceLane:
         return SimdReplaceLane(opcode, kWasmF64, opcode_length);
+      case kExprF16x8ReplaceLane: {
+        if (!v8_flags.experimental_wasm_fp16) {
+          this->DecodeError(
+              "invalid simd opcode: 0x%x, "
+              "enable with --experimental-wasm-fp16",
+              opcode);
+          return 0;
+        }
+        [[fallthrough]];
+      }
       case kExprF32x4ReplaceLane:
         return SimdReplaceLane(opcode, kWasmF32, opcode_length);
       case kExprI64x2ReplaceLane:
