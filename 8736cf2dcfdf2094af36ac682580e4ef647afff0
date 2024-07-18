@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc0717f_446194c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-18T16:03:15Z",
+      "side": 1,
+      "message": "Thanks! PTAL again.\n\nI\u0027ve ran all the tests in Patchset 4 with the flag enabled.",
+      "revId": "8736cf2dcfdf2094af36ac682580e4ef647afff0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
