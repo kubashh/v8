@@ -16,11 +16,12 @@ class Float16 {
   Float16() : bits_(0) {}
 
   static Float16 Read(base::Address source) {
-    return Float16(base::ReadUnalignedValue<uint16_t>(source));
+    return Float16(
+        static_cast<uint16_t>(base::ReadUnalignedValue<uint32_t>(source)));
   }
 
   void Write(base::Address destination) {
-    return base::WriteUnalignedValue<uint16_t>(destination, bits_);
+    return base::WriteUnalignedValue<uint32_t>(destination, bits_);
   }
 
   static Float16 FromFloat32(float f32) {
