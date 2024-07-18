@@ -70,6 +70,24 @@
       "parentUuid": "67d73c3f_a4bcea56",
       "revId": "6f6a9b7be59e53075af6aa8b49e89dda897d363c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a34e7d_91f56345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3521903
+      },
+      "writtenOn": "2024-07-18T08:43:52Z",
+      "side": 1,
+      "message": "Could you, please, take a look at changes and put the patchset to CQ? I`m not permitted to do this yet.",
+      "parentUuid": "2d7ef5a6_1a4db067",
+      "revId": "6f6a9b7be59e53075af6aa8b49e89dda897d363c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
