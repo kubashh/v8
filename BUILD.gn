@@ -2443,6 +2443,7 @@ template("run_mksnapshot") {
       # but the target OS is really |current_os|.
       "--target_os=$current_os",
       "--target_arch=$current_cpu",
+      "--verify-predictable",
 
       "--embedded_src",
       rebase_path("$target_gen_dir/embedded${suffix}.${ext}", root_build_dir),

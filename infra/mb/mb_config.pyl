@@ -508,7 +508,7 @@
 
     # Debug configs for arm.
     'debug_android_arm_verify_deterministic': [
-      'debug_bot', 'arm', 'android', 'minimal_symbols', 'v8_verify_deterministic'],
+      'debug_bot', 'arm', 'android', 'minimal_symbols', 'v8_verify_deterministic', 'v8_enable_verify_predictable'],
     'debug_android_arm64': [
       'debug_bot', 'arm64', 'android', 'minimal_symbols'],
     'debug_arm': [
