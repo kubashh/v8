@@ -39,6 +39,30 @@
       },
       "revId": "4c7359587bc887cdd82c62764ccc4cd38cad94ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "664a3ab2_26ff67b4",
+        "filename": "src/objects/script-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-18T12:33:35Z",
+      "side": 1,
+      "message": "The torque-generated setter uses `WRITE_FIELD`, which uses `TaggedField::store`, which is atomic if `V8_ATOMIC_OBJECT_FIELD_WRITES` is set (which is the case by default).\n\nBut you are right, we should probably define the setter explicitly and always use a relaxed store.",
+      "parentUuid": "ecbe4469_afbdfaad",
+      "range": {
+        "startLine": 123,
+        "startChar": 17,
+        "endLine": 123,
+        "endChar": 22
+      },
+      "revId": "4c7359587bc887cdd82c62764ccc4cd38cad94ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
