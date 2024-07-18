@@ -103,10 +103,12 @@ bool Heap::IsMainThread() const {
   return isolate()->thread_id() == ThreadId::Current();
 }
 
-int64_t Heap::external_memory() { return external_memory_.total(); }
+int64_t Heap::external_memory() const {
+  return external_memory_.load(std::memory_order_relaxed);
+}
 
 int64_t Heap::update_external_memory(int64_t delta) {
-  return external_memory_.Update(delta);
+  return external_memory_.fetch_add(delta, std::memory_order_relaxed) + delta;
 }
 
 RootsTable& Heap::roots_table() { return isolate()->roots_table(); }
