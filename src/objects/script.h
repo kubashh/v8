@@ -115,9 +115,12 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   bool ContainsAsmModule();
 #endif  // V8_ENABLE_WEBASSEMBLY
 
+  // Read the raw 'flags' field.
+  inline uint32_t flags() const;
+
   // [compilation_type]: how the the script was compiled. Encoded in the
   // 'flags' field.
-  inline CompilationType compilation_type();
+  inline CompilationType compilation_type() const;
   inline void set_compilation_type(CompilationType type);
 
   inline bool produce_compile_hints() const;
