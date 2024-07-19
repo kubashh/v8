@@ -52,6 +52,7 @@ inline MemOperand GetInstanceDataOperand() {
 
 inline CPURegister GetRegFromType(const LiftoffRegister& reg, ValueKind kind) {
   switch (kind) {
+    case kI16:
     case kI32:
       return reg.gp().W();
     case kI64:

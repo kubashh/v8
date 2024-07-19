@@ -48,6 +48,9 @@ inline void Load(LiftoffAssembler* assm, LiftoffRegister dst, Register base,
                  int32_t offset, ValueKind kind) {
   Operand src(base, offset);
   switch (kind) {
+    case kI16:
+      assm->mov_w(dst.gp(), src);
+      break;
     case kI32:
     case kRefNull:
     case kRef:
@@ -76,6 +79,9 @@ inline void Store(LiftoffAssembler* assm, Register base, int32_t offset,
                   LiftoffRegister src, ValueKind kind) {
   Operand dst(base, offset);
   switch (kind) {
+    case kI16:
+      assm->mov_w(dst, src.gp());
+      break;
     case kI32:
     case kRefNull:
     case kRef:
