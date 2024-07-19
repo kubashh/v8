@@ -797,8 +797,20 @@ Handle<Number> String::ToNumber(Isolate* isolate, Handle<String> subject) {
   }
 
   // Slower case.
-  int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
-  return isolate->factory()->NewNumber(StringToDouble(isolate, subject, flags));
+  // Before we create a new number, check if we converted this particular String
+  // already.
+  auto maybe_number = isolate->factory()->StringToNumberCacheGet(subject);
+  Handle<Number> cached_number;
+  if (maybe_number.ToHandle(&cached_number)) {
+    return cached_number;
+  }
+  // Cached version didn't exist, actually convert the string.
+  const int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
+  Handle<Number> result =
+      isolate->factory()->NewNumber(StringToDouble(isolate, subject, flags));
+  // Cache for this exact string in case it gets converted again.
+  isolate->factory()->StringToNumberCacheSet(subject, result);
+  return result;
 }
 
 String::FlatContent String::SlowGetFlatContent(

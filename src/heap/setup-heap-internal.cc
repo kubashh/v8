@@ -1311,6 +1311,8 @@ void Heap::CreateInitialMutableObjects() {
 
   set_number_string_cache(*factory->NewFixedArray(
       kInitialNumberStringCacheSize * 2, AllocationType::kOld));
+  set_string_number_cache(
+      *EphemeronHashTable::New(isolate(), 10, AllocationType::kOld));
 
   // Unchecked to skip failing checks since required roots are uninitialized.
   set_basic_block_profiling_data(roots.unchecked_empty_array_list());

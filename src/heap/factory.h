@@ -1210,6 +1210,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     uint16_t parameter_count_ = 0;
   };
 
+  V8_INLINE MaybeDirectHandle<Number> StringToNumberCacheGet(
+      DirectHandle<String> string);
+  V8_INLINE void StringToNumberCacheSet(DirectHandle<String> string,
+                                        DirectHandle<Number> number);
+
  private:
   friend class FactoryBase<Factory>;
 
