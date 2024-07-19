@@ -797,8 +797,8 @@ Handle<Number> String::ToNumber(Isolate* isolate, Handle<String> subject) {
   }
 
   // Slower case.
-  int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
-  return isolate->factory()->NewNumber(StringToDouble(isolate, subject, flags));
+  return isolate->factory()->NewNumber(
+      StringToDouble(isolate, subject, ALLOW_NON_DECIMAL_PREFIX));
 }
 
 String::FlatContent String::SlowGetFlatContent(
