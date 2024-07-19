@@ -16,6 +16,24 @@
       "message": "Please take a look at https://chromium-review.googlesource.com/c/v8/v8/+/5722510\nIt uses conversion functions as well. I hope it is the last change what is supposed to use conversion functions directly.",
       "revId": "2ac691f29524385b7bb5e8e9934526b4582e1906",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c516a756_b5d891e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-07-19T18:44:07Z",
+      "side": 1,
+      "message": "Thanks Ilya, I have also changed them to i16 in this CL.",
+      "parentUuid": "a067ad15_5e184b20",
+      "revId": "2ac691f29524385b7bb5e8e9934526b4582e1906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
