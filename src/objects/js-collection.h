@@ -87,10 +87,10 @@ class JSWeakCollection
  public:
   static void Initialize(DirectHandle<JSWeakCollection> collection,
                          Isolate* isolate);
-  V8_EXPORT_PRIVATE static void Set(DirectHandle<JSWeakCollection> collection,
-                                    Handle<Object> key,
-                                    DirectHandle<Object> value, int32_t hash);
-  static bool Delete(DirectHandle<JSWeakCollection> collection,
+  V8_EXPORT_PRIVATE static void Set(
+      DirectHandle<JSWeakCollection> weak_collection, Handle<Object> key,
+      DirectHandle<Object> value, int32_t hash);
+  static bool Delete(DirectHandle<JSWeakCollection> weak_collection,
                      Handle<Object> key, int32_t hash);
   static Handle<JSArray> GetEntries(DirectHandle<JSWeakCollection> holder,
                                     int max_entries);

@@ -374,6 +374,9 @@ class RootVisitor;
 #define STRONG_MUTABLE_MOVABLE_ROOT_LIST(V)                                 \
   /* Caches */                                                              \
   V(FixedArray, number_string_cache, NumberStringCache)                     \
+  /* Caches number conversions for Strings in case they cannot be otherwise \
+   * optimized away. */                                                     \
+  V(EphemeronHashTable, string_number_cache, StringNumberCache)             \
   /* Lists and dictionaries */                                              \
   V(RegisteredSymbolTable, public_symbol_table, PublicSymbolTable)          \
   V(RegisteredSymbolTable, api_symbol_table, ApiSymbolTable)                \

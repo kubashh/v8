@@ -186,6 +186,26 @@ Handle<Object> Factory::NumberToStringCacheGet(Tagged<Object> number,
   return undefined_value();
 }
 
+MaybeDirectHandle<Number> Factory::StringToNumberCacheGet(
+    DirectHandle<String> string) {
+  Tagged<EphemeronHashTable> cache = *string_number_cache();
+  Tagged<Object> cached_result = cache->Lookup(Cast<Object>(string));
+  if (!IsHole(cached_result)) {
+    return handle(Cast<Number>(cached_result), isolate());
+  }
+  return {};
+}
+
+void Factory::StringToNumberCacheSet(DirectHandle<String> string,
+                                     DirectHandle<Number> number) {
+  DirectHandle<EphemeronHashTable> cache =
+      handle(*string_number_cache(), isolate());
+
+  auto new_cache = EphemeronHashTable::Put(cache, Cast<Object>(string),
+                                           Cast<Object>(number));
+  isolate()->heap()->set_string_number_cache(*new_cache);
+}
+
 }  // namespace internal
 }  // namespace v8
 
