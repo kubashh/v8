@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f3a3ded_fac73cc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-19T11:45:30Z",
+      "side": 1,
+      "message": "Nice, LGTM with one additional suggestion.",
+      "revId": "f15e9d02f92b3ea656823140d0bde8326e09df15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee71c05_e04b5f18",
+        "filename": "test/mjsunit/wasm/fast-api-calls-with-wellknown-imports-conflict.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-19T11:45:30Z",
+      "side": 1,
+      "message": "Just to be sure, can we also check that the `fast_call_count` is still `1` at this point?",
+      "revId": "f15e9d02f92b3ea656823140d0bde8326e09df15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
