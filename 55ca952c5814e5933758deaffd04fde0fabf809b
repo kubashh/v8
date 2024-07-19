@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "55ca952c5814e5933758deaffd04fde0fabf809b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a3e7385_803b77ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-19T08:49:32Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "55ca952c5814e5933758deaffd04fde0fabf809b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90bf8993_9d254848",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-07-19T08:49:32Z",
+      "side": 1,
+      "message": "How long does this  have to stay alive? Where does the string end up?\nJust a reminder that the `graph_zone` is freed eventually towards the end of the pipeline.",
+      "range": {
+        "startLine": 586,
+        "startChar": 4,
+        "endLine": 587,
+        "endChar": 77
+      },
+      "revId": "55ca952c5814e5933758deaffd04fde0fabf809b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
