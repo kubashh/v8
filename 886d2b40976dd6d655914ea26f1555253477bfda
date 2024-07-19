@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b719bdaa_fcd75bdf",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-07-19T09:00:26Z",
+      "side": 1,
+      "message": "The reason to the previous bug is that on resumable loop headers, all values are dropped:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5723307/2/src/maglev/maglev-regalloc.cc#158\n\nAnd given that `current_for_in_state.enum_cache_indices` is now hoist out of the loop and it is not stored in any local register, we will lose this value in the loop body.\n\nCould you please take a look if this is the right place to fix this issue?",
+      "revId": "886d2b40976dd6d655914ea26f1555253477bfda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
