@@ -3645,7 +3645,7 @@ class LiftoffCompiler {
         LiftoffRegister dst = __ GetUnusedRegister(kFpReg, {});
         auto conv_ref = ExternalReference::wasm_float16_to_float32();
         GenerateCCallWithStackBuffer(&dst, kVoid, kF32,
-                                     {VarState{kI32, value, 0}}, conv_ref);
+                                     {VarState{kI16, value, 0}}, conv_ref);
         __ PushRegister(kF32, dst);
       } else {
         __ PushRegister(kind, value);
@@ -3674,7 +3674,7 @@ class LiftoffCompiler {
         LiftoffRegister dst = __ GetUnusedRegister(kFpReg, {});
         auto conv_ref = ExternalReference::wasm_float16_to_float32();
         GenerateCCallWithStackBuffer(&dst, kVoid, kF32,
-                                     {VarState{kI32, value, 0}}, conv_ref);
+                                     {VarState{kI16, value, 0}}, conv_ref);
         __ PushRegister(kF32, dst);
       } else {
         __ PushRegister(kind, value);
@@ -3798,7 +3798,7 @@ class LiftoffCompiler {
       DCHECK_EQ(kF32, kind);
       LiftoffRegister i16 = pinned.set(__ GetUnusedRegister(kGpReg, {}));
       auto conv_ref = ExternalReference::wasm_float32_to_float16();
-      GenerateCCallWithStackBuffer(&i16, kVoid, kI32,
+      GenerateCCallWithStackBuffer(&i16, kVoid, kI16,
                                    {VarState{kF32, value, 0}}, conv_ref);
       value = i16;
     }
