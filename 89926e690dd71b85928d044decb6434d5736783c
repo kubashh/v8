@@ -16,6 +16,24 @@
       "message": "I don\u0027t think this is the right fix. The class `Float16` should be a generic helper, and as such should only touch 16 bits of memory in `Read`/`Write` (so that in the future these functions can be used to read/write densely packed fp16 values in arrays/structs etc).\n\nSo I think the specific `GenerateCCallWithStackBuffer` machinery is the special case, and we should add the required endianness handling to that code somewhere. I don\u0027t feel strongly about how exactly we do that:\n\nOne way would be to continue putting all helper functions into `class Float16`, which would mean keeping `Read`/`Write` as they are, and adding new `ReadFromSpilledFourByteRegister` (and `WriteTo...`) with your suggested change as body, and an appropriate comment to explain what they\u0027re good for.\n\nAnother way would be to stop using the `Float16` helpers in the two functions in `wasm-external-refs.cc`, and inlining the required special case there directly, I think that would be:\n```\nvoid float16_to_float32_wrapper(Address data) {\n  // When Liftoff passes float16 values to this helper, it writes an entire\n  // four-byte GP register (as \"i32\") to the stack, half of which is the fp16\n  // value we care about. So here we must be careful to read that value in an\n  // endianness-independent manner.\n  uint32_t spilled_gpreg \u003d base::ReadUnalignedValue\u003cuint32_t\u003e(data);\n  uint16_t fp16_payload \u003d static_cast\u003cuint16_t\u003e(spilled_gpreg);\n  float f32 \u003d fp16_ieee_to_fp32_value(fp16_payload);\n  base::WriteUnalignedValue(data, f32);\n}\n```\nand similar for the reverse direction.\n\nAnother way, which may be more work but is also most elegant and could be useful again in the future, would be to teach all the platform-specific versions of `liftoff::LoadFromStack` and `liftoff::StoreToMemory` (which should probably be called \"StoreToStack\"?) how to handle i16 values. There\u0027s some inspiration in `LiftoffAssembler::Load` and `...::Store`.\n\nA fourth, but probably uglier option, would be to use an `#if V8_TARGET_BIG_ENDIAN` condition and adjust the `data` pointer by two bytes, but that feels more magical/surprising/brittle.",
       "revId": "89926e690dd71b85928d044decb6434d5736783c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbce9bea_e3269ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-07-19T15:13:52Z",
+      "side": 1,
+      "message": "Thank you for the information Jakob. I\u0027ve added support for handling I16 types, tho on arm64 it still load/stores 32 bits as it\u0027s defined in the macro-asm LoadOpFor/StoreOpFor (which is fine for little ednian):\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/arm64/assembler-arm64-inl.h;l\u003d757",
+      "parentUuid": "84946911_2b1c70d5",
+      "revId": "89926e690dd71b85928d044decb6434d5736783c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
