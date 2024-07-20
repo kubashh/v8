@@ -16,6 +16,24 @@
       "message": "I\u0027ve confirmed that this fixes the failure locally. But it\u0027s not easy to run the tests—luckily I was able to reproduce with just a single test case. But the \"obvious\" thing didn\u0027t work:\n\n```\n$ ./v8_unittests --gtest_filter\u003dGCTracerTest\\*\nNote: Google Test filter \u003d GCTracerTest*\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 14 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 14 tests from GCTracerTest\n[ RUN      ] GCTracerTest.AllocationThroughput\n[       OK ] GCTracerTest.AllocationThroughput (25 ms)\n[ RUN      ] GCTracerTest.PerGenerationAllocationThroughput\n\n\n#\n# Fatal error in , line 0\n# The platform was initialized before. Note that running multiple tests in the same process is not supported.\n#\n#\n#\n#FailureMessage Object: 0x7ffcd31ca970Trace/breakpoint trap\n```",
       "revId": "28a41f4e3592ac4b1cc34b6f9c5140ea67d63348",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a888c250_ca219694",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-07-20T08:53:43Z",
+      "side": 1,
+      "message": "Yes, we don\u0027t use the gtest runner in V8. The platform needs to run in separate processes. We typically use our test framework to run these tests: https://v8.dev/docs/test",
+      "parentUuid": "e557dd7b_96e0c9ce",
+      "revId": "28a41f4e3592ac4b1cc34b6f9c5140ea67d63348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28c7906a_49e60d76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-07-20T08:53:43Z",
+      "side": 1,
+      "message": "Thanks for the fix, I\u0027m not an owner of this folder though, so handing it over to gc folks.",
+      "revId": "776324ee8325bc238754c01ab85875c5373d9235",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
