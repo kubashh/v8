@@ -57,7 +57,7 @@ vars = {
   'checkout_fuchsia_no_hooks': False,
 
   # reclient CIPD package version
-  'reclient_version': 're_client_version:0.148.0.41b09b51-gomaip',
+  'reclient_version': 're_client_version:0.150.1.d9707319-gomaip',
 
   # Fetch configuration files required for the 'use_remoteexec' gn arg
   'download_remoteexec_cfg': False,
@@ -83,7 +83,7 @@ vars = {
   'siso_version': 'git_revision:b41f9eaf44dfdaec51ab2d7089aaa4cb6d9e7f5e',
 
   # luci-go CIPD package version.
-  'luci_go': 'git_revision:c9c95dda5f310610a3fc574af44faeed298b3938',
+  'luci_go': 'git_revision:771ea9a614a104c71655f699ef82219a2a474817',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Fuchsia sdk
@@ -126,7 +126,7 @@ vars = {
 
 deps = {
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'ad2f859fc3b655b9a69157d7f82478ac5f3902bf',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + '7a8285c06acd753e6228263f48e5595e20ca1577',
   'buildtools':
     Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'adc2a53a411826b429a01363ad0ff598325c1f73',
   'buildtools/linux64': {
@@ -236,7 +236,7 @@ deps = {
     'condition': "checkout_centipede_deps",
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '29445d0e3f4de0f20d4894506716584e9d604e04',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + '16999365265c9850d7b5c46e53ddd52aca56f8dc',
     'condition': 'checkout_android',
   },
   'third_party/clang-format/script':
@@ -250,7 +250,7 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'b4102e43a02805cf7bcb100446d27caef1b4e51d',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '397bf12548652b88da026fe94eb76f12f8d6ae00',
   'third_party/fp16/src':
     Var('chromium_url') + '/external/github.com/Maratyszcza/FP16.git' + '@' + '0a92994d729ff76a58f692d3028ca1b64b145d91',
   'third_party/fuchsia-gn-sdk': {
@@ -426,7 +426,7 @@ deps = {
   'third_party/logdog/logdog':
     Var('chromium_url') + '/infra/luci/luci-py/client/libs/logdog' + '@' + '0b2078a90f7a638d576b3a7c407d136f2fb62399',
   'third_party/markupsafe':
-    Var('chromium_url') + '/chromium/src/third_party/markupsafe.git' + '@' + 'e582d7f0edb9d67499b0f5abd6ae5550e91da7f2',
+    Var('chromium_url') + '/chromium/src/third_party/markupsafe.git' + '@' + '6638e9b0a79afc2ff7edd9e84b518fe7d5d5fea9',
   'third_party/ninja': {
     'packages': [
       {
@@ -460,7 +460,7 @@ deps = {
   'third_party/zlib':
     Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + 'c2469fdd73f192383d2d94288da0ff5b9a3869f5',
   'tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'a5953b107df1aa821e0f9e890cd3ba1afa180e37',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '4dc76da47b1145e53e508a23c1bf2204cf5ee7ee',
   'tools/luci-go': {
       'packages': [
         {
