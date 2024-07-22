@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7206bb06_9b82a3ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-07-22T07:37:28Z",
+      "side": 1,
+      "message": "PTAL! Still getting those... hopefully the last one!",
+      "revId": "c520e5d858ea96b919fb3782059b3924db901244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
