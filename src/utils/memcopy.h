@@ -236,6 +236,10 @@ inline void CopyImpl(T* dst_ptr, const T* src_ptr, size_t count) {
 #endif
   if (count == 0) return;
 
+#if defined(V8_OPTIMIZE_WITH_NEON)
+  // Just do overlapping word/vector writes.
+  MemCopy(dst_ptr, src_ptr, count * kTWordSize);
+#else   // !defined(V8_OPTIMIZE_WITH_NEON)
   // Use block copying MemCopy if the segment we're copying is
   // enough to justify the extra call/setup overhead.
   if (count < kBlockCopyLimit) {
@@ -245,6 +249,7 @@ inline void CopyImpl(T* dst_ptr, const T* src_ptr, size_t count) {
     } while (count > 0);
   } else {
     MemCopy(dst_ptr, src_ptr, count * kTWordSize);
+#endif  // !defined(V8_OPTIMIZE_WITH_NEON)
   }
 }
 
