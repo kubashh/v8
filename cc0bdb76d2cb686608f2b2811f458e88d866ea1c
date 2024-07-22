@@ -33,6 +33,23 @@
       "message": "Pinging again to request a quick review for this V8 CL to see if it\u0027s ready to land. Thanks @Camillo",
       "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92b9e6c6_e12bcb53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-07-22T08:15:40Z",
+      "side": 1,
+      "message": "Omer could you have a quick look from the GC side? \nMostly fine from me otherwise.",
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
