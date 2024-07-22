@@ -33,6 +33,24 @@
       "message": "Just to be sure, can we also check that the `fast_call_count` is still `1` at this point?",
       "revId": "f15e9d02f92b3ea656823140d0bde8326e09df15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec8cbfb8_8d7aacc1",
+        "filename": "test/mjsunit/wasm/fast-api-calls-with-wellknown-imports-conflict.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-07-22T08:04:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ee71c05_e04b5f18",
+      "revId": "f15e9d02f92b3ea656823140d0bde8326e09df15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
