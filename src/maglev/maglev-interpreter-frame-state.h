@@ -455,7 +455,17 @@ struct KnownNodeAspects {
     }
   }
   // Flushed after side-effecting calls.
-  using LoadedContextSlotsKey = std::tuple<ValueNode*, int>;
+  struct LoadedContextSlotsKey {
+    ValueNode* context;
+    int index;
+    bool operator==(const LoadedContextSlotsKey& other) const {
+      return index == other.index && context == other.context;
+    }
+    bool operator<(const LoadedContextSlotsKey& other) const {
+      return index == other.index ? context < other.context
+                                  : index < other.index;
+    }
+  };
   using LoadedContextSlots = ZoneMap<LoadedContextSlotsKey, ValueNode*>;
   LoadedContextSlots loaded_context_slots;
 
