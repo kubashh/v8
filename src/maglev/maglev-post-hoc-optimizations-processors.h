@@ -175,6 +175,10 @@ class DeadNodeSweepingProcessor {
     return ProcessResult::kContinue;
   }
 
+  ProcessResult Process(Dead* node, const ProcessingState& state) {
+    return ProcessResult::kRemove;
+  }
+
   template <typename NodeT>
   ProcessResult Process(NodeT* node, const ProcessingState& state) {
     if constexpr (IsValueNode(Node::opcode_of<NodeT>) &&
