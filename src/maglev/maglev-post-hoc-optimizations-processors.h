@@ -48,6 +48,10 @@ class AnyUseMarkingProcessor {
     return ProcessResult::kContinue;
   }
 
+  ProcessResult Process(Dead* node, const ProcessingState& state) {
+    return ProcessResult::kRemove;
+  }
+
   void PostProcessGraph(Graph* graph) {
     RunEscapeAnalysis(graph);
     DropUseOfValueInStoresToCapturedAllocations();
