@@ -103,10 +103,19 @@ bool Heap::IsMainThread() const {
   return isolate()->thread_id() == ThreadId::Current();
 }
 
-int64_t Heap::external_memory() { return external_memory_.total(); }
+int64_t Heap::external_memory() const {
+  return external_memory_.load(std::memory_order_relaxed);
+}
 
 int64_t Heap::update_external_memory(int64_t delta) {
-  return external_memory_.Update(delta);
+  const int64_t amount =
+      external_memory_.fetch_add(delta, std::memory_order_relaxed) + delta;
+  if (amount < static_cast<int64_t>(external_memory_at_last_gc_)) {
+    global_allocation_limit_.fetch_sub(external_memory_at_last_gc_ - amount,
+                                       std::memory_order_relaxed);
+    external_memory_at_last_gc_ = amount;
+  }
+  return amount;
 }
 
 RootsTable& Heap::roots_table() { return isolate()->roots_table(); }
