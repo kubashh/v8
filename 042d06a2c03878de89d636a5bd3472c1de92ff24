@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f5736fa_04cadb6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-07-22T12:45:39Z",
+      "side": 1,
+      "message": "Since we spoke about the rollout of call indirect inlining: Could you PTAL at enabling fuzzing? (Even though you already enabled it for the wasm-deopt fuzzer, thanks!)",
+      "revId": "042d06a2c03878de89d636a5bd3472c1de92ff24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d2011e5_d9027d4d",
+        "filename": "test/mjsunit/wasm/generate-random-module.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-07-22T12:45:39Z",
+      "side": 1,
+      "message": "Two questions that are drive-by / not directly related to my feature: \n1. According to the comment in `wasm-fuzzer-comment.cc` we shall enable the same flags here as there, but `wasm_memory64_trap_handling` is not enabled in the test, presumably because it was only supported on some architectures, right?\n2. Since two months, `--wasm-memory64-trap-handling` is enabled by default anyway, shall we hence remove the explicit setting from `wasm-fuzzer-common.cc`?",
+      "revId": "042d06a2c03878de89d636a5bd3472c1de92ff24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
