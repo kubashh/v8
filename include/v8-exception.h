@@ -66,6 +66,14 @@ class V8_EXPORT Exception {
    */
   static Maybe<bool> CaptureStackTrace(Local<Context> context,
                                        Local<Object> object);
+
+  /**
+   * This is a part of experimental Api and might be changed without further
+   * notice.
+   * Do not use it.
+   */
+  static Maybe<bool> OverrideOriginalErrorMessage(Local<Object> object,
+                                                  Local<String> message);
 };
 
 /**
