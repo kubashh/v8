@@ -734,6 +734,11 @@ class MaglevGraphBuilder {
 
     MergePointInterpreterFrameState* merge_state = merge_states_[offset];
     if (V8_UNLIKELY(merge_state != nullptr)) {
+      // Clear unobserved context slot stores when there is any controlflow.
+      // TODO(olivf): More precision could be achieved by tracking dominating
+      // stores within known_node_aspects. For this we could use a stack of
+      // stores, which we push on split and pop on merge.
+      unobserved_context_slot_stores_.clear();
       bool preserve_known_node_aspects = in_optimistic_peeling_iteration() &&
                                          loop_headers_to_peel_.Contains(offset);
       if (current_block_ != nullptr) {
@@ -1638,6 +1643,12 @@ class MaglevGraphBuilder {
 
   template <typename NodeT>
   void MarkPossibleSideEffect(NodeT* node) {
+    if constexpr (NodeT::kProperties.can_read() ||
+                  NodeT::kProperties.can_deopt() ||
+                  NodeT::kProperties.can_throw()) {
+      unobserved_context_slot_stores_.clear();
+    }
+
     // Don't do anything for nodes without side effects.
     if constexpr (!NodeT::kProperties.can_write()) return;
 
@@ -2091,8 +2102,8 @@ class MaglevGraphBuilder {
   void TryBuildStoreTaggedFieldToAllocation(ValueNode* object, ValueNode* value,
                                             int offset);
   ValueNode* BuildLoadTaggedField(ValueNode* object, int offset);
-  void BuildStoreTaggedField(ValueNode* object, ValueNode* value, int offset,
-                             StoreTaggedMode store_mode);
+  Node* BuildStoreTaggedField(ValueNode* object, ValueNode* value, int offset,
+                              StoreTaggedMode store_mode);
   void BuildStoreTaggedFieldNoWriteBarrier(ValueNode* object, ValueNode* value,
                                            int offset,
                                            StoreTaggedMode store_mode);
@@ -2836,7 +2847,6 @@ class MaglevGraphBuilder {
   std::unordered_set<Node*> new_nodes_;
 #endif
 
- private:
   // Some helpers for CSE
 
   static size_t fast_hash_combine(size_t seed, size_t h) {
@@ -2890,6 +2900,16 @@ class MaglevGraphBuilder {
   bool CanSpeculateCall() const {
     return current_speculation_feedback_.IsValid();
   }
+
+  inline void DeleteNode(Node* node) {
+    for (int i = 0; i < node->input_count(); ++i) {
+      node->change_input(i, GetSmiConstant(0));
+    }
+    node->OverwriteWith(Opcode::kDead);
+  }
+
+  ZoneMap<KnownNodeAspects::LoadedContextSlotsKey, Node*>
+      unobserved_context_slot_stores_;
 };
 
 }  // namespace maglev
