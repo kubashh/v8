@@ -83,6 +83,8 @@ int StaticInputCount(NodeBase*) { UNREACHABLE(); }
 
 void NodeBase::CheckCanOverwriteWith(Opcode new_opcode,
                                      OpProperties new_properties) {
+  if (new_opcode == Opcode::kDead) return;
+
   DCHECK_IMPLIES(new_properties.can_eager_deopt(),
                  properties().can_eager_deopt());
   DCHECK_IMPLIES(new_properties.can_lazy_deopt(),
