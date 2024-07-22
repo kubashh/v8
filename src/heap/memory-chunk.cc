@@ -259,12 +259,21 @@ void MemoryChunk::SetYoungGenerationPageFlags(MarkingMode marking_mode) {
 
 #ifdef V8_ENABLE_SANDBOX
 bool MemoryChunk::SandboxSafeInReadOnlySpace() const {
+  if (!InReadOnlySpace()) {
+    return false;
+  }
+
   // When the sandbox is enabled, only the ReadOnlyPageMetadata are stored
   // inline in the MemoryChunk.
   // ReadOnlyPageMetadata::ChunkAddress() is a special version that boils down
   // to `metadata_address - kMemoryChunkHeaderSize`.
-  return static_cast<const ReadOnlyPageMetadata*>(Metadata())->ChunkAddress() ==
-         address();
+  MemoryChunkMetadata* metadata =
+      metadata_pointer_table_[metadata_index_ & kMetadataPointerTableSizeMask];
+  SBXCHECK_EQ(
+      static_cast<const ReadOnlyPageMetadata*>(metadata)->ChunkAddress(),
+      address());
+
+  return true;
 }
 #endif
 
