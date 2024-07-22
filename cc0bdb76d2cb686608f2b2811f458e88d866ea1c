@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ef4f84_69762206",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-22T11:32:30Z",
+      "side": 1,
+      "message": "I read the design doc but I don\u0027t fully understand the usecase.\nThe output example in the doc is a list of all detached objects. Can you elaborate how you intend for it to be used?\nThe doc mentions that the intention is to detect leaking DOM objects, but not all detached objects are leaking.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b8719d64_81c5e14b",
@@ -48,6 +71,121 @@
       "writtenOn": "2024-07-22T08:15:40Z",
       "side": 1,
       "message": "Omer could you have a quick look from the GC side? \nMostly fine from me otherwise.",
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb6d0ea_8d8b754e",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-22T11:32:30Z",
+      "side": 1,
+      "message": "Newline between comment and previous method.",
+      "range": {
+        "startLine": 1111,
+        "startChar": 0,
+        "endLine": 1111,
+        "endChar": 2
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f97fd83c_781dbfc6",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-22T11:32:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is guaranteed to get you all detached objects. You iterate over V8 objects. Minor GCs in V8 can drop the V8 object in some cases (i.e. if it is unmodified), while the DOM object remain live. I\u0027m not sure such objects cannot be detached, in which case the returned vector will be missing objects.",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8429f1ec_9fb45694",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-22T11:32:30Z",
+      "side": 1,
+      "message": "This iterator iterates over code space and read only space as well. This are not needed for your purposes. You could use `HeapObjectIterator` to at least skip the read only space.",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 54,
+        "endChar": 28
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14b543e4_521dfdb5",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-22T11:32:30Z",
+      "side": 1,
+      "message": "Since you\u0027re only interested in `JSApiWrapperObjects`, and their CppHeap counterparts IIRC all must inherit from `ScriptWrappable`, you could just iterate over `traced_handles` instead of iterating over the whole heap.",
+      "range": {
+        "startLine": 60,
+        "startChar": 9,
+        "endLine": 60,
+        "endChar": 29
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d57533a_97f97ab6",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-22T11:32:30Z",
+      "side": 1,
+      "message": "`data` is already a `v8::Local\u003cv8::Value\u003e`. I believe this case here is redundant.",
+      "range": {
+        "startLine": 69,
+        "startChar": 28,
+        "endLine": 69,
+        "endChar": 44
+      },
       "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
