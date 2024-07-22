@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "36617b12_1a685d91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-22T09:55:34Z",
+      "side": 1,
+      "message": "I don\u0027t get what this sentence says, and it\u0027s split by a newline unnecessarily. This makes the last line part of the footer. Please fix this.",
+      "range": {
+        "startLine": 12,
+        "startChar": 45,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "40951e2f1840a7ca66e9c970a976895337452a37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b69bc7dc_f1ab7f0a",
@@ -67,6 +90,23 @@
       "writtenOn": "2024-07-22T01:16:50Z",
       "side": 1,
       "message": "Hi, Ilya, you still need a CR+1 from the owner of the AUTHORS file.",
+      "revId": "40951e2f1840a7ca66e9c970a976895337452a37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cbef5c6_df9bc7e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-22T09:55:34Z",
+      "side": 1,
+      "message": "Rubber-stamp for `AUTHORS` file; I didn\u0027t check the rest. One comment on the commit message.",
       "revId": "40951e2f1840a7ca66e9c970a976895337452a37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
