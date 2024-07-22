@@ -1638,6 +1638,10 @@ class MaglevGraphBuilder {
 
   template <typename NodeT>
   void MarkPossibleSideEffect(NodeT* node) {
+    if constexpr (NodeT::kProperties.can_read()) {
+      known_node_aspects().context_slot_stores_.clear();
+    }
+
     // Don't do anything for nodes without side effects.
     if constexpr (!NodeT::kProperties.can_write()) return;
 
@@ -2091,8 +2095,8 @@ class MaglevGraphBuilder {
   void TryBuildStoreTaggedFieldToAllocation(ValueNode* object, ValueNode* value,
                                             int offset);
   ValueNode* BuildLoadTaggedField(ValueNode* object, int offset);
-  void BuildStoreTaggedField(ValueNode* object, ValueNode* value, int offset,
-                             StoreTaggedMode store_mode);
+  Node* BuildStoreTaggedField(ValueNode* object, ValueNode* value, int offset,
+                              StoreTaggedMode store_mode);
   void BuildStoreTaggedFieldNoWriteBarrier(ValueNode* object, ValueNode* value,
                                            int offset,
                                            StoreTaggedMode store_mode);

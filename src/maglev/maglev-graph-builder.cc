@@ -2742,7 +2742,8 @@ void MaglevGraphBuilder::StoreAndCacheContextSlot(ValueNode* context,
   DCHECK_EQ(
       known_node_aspects().loaded_context_constants.count({context, offset}),
       0);
-  BuildStoreTaggedField(context, value, offset, StoreTaggedMode::kDefault);
+  Node* store =
+      BuildStoreTaggedField(context, value, offset, StoreTaggedMode::kDefault);
 
   if (v8_flags.trace_maglev_graph_building) {
     std::cout << "  * Recording context slot store "
@@ -2789,6 +2790,15 @@ void MaglevGraphBuilder::StoreAndCacheContextSlot(ValueNode* context,
     }
   } else {
     loaded_context_slots[key] = value;
+  }
+  auto last_store = known_node_aspects().context_slot_stores_.find(key);
+  if (last_store != known_node_aspects().context_slot_stores_.end()) {
+    last_store->second->OverwriteWith(Opcode::kDead2);
+    last_store->second->change_input(0, GetSmiConstant(0));
+    last_store->second->change_input(1, GetSmiConstant(0));
+    last_store->second = store;
+  } else {
+    known_node_aspects().context_slot_stores_.emplace(key, store);
   }
 }
 
@@ -4162,9 +4172,9 @@ void MaglevGraphBuilder::TryBuildStoreTaggedFieldToAllocation(ValueNode* object,
         << "]: " << PrintNode(graph_labeller(), value));
 }
 
-void MaglevGraphBuilder::BuildStoreTaggedField(ValueNode* object,
-                                               ValueNode* value, int offset,
-                                               StoreTaggedMode store_mode) {
+Node* MaglevGraphBuilder::BuildStoreTaggedField(ValueNode* object,
+                                                ValueNode* value, int offset,
+                                                StoreTaggedMode store_mode) {
   // The value may be used to initialize a VO, which can leak to IFS.
   // It should NOT be a conversion node, UNLESS it's an initializing value.
   // Initializing values are tagged before allocation, since conversion nodes
@@ -4175,11 +4185,11 @@ void MaglevGraphBuilder::BuildStoreTaggedField(ValueNode* object,
     TryBuildStoreTaggedFieldToAllocation(object, value, offset);
   }
   if (CanElideWriteBarrier(object, value)) {
-    AddNewNode<StoreTaggedFieldNoWriteBarrier>({object, value}, offset,
-                                               store_mode);
+    return AddNewNode<StoreTaggedFieldNoWriteBarrier>({object, value}, offset,
+                                                      store_mode);
   } else {
-    AddNewNode<StoreTaggedFieldWithWriteBarrier>({object, value}, offset,
-                                                 store_mode);
+    return AddNewNode<StoreTaggedFieldWithWriteBarrier>({object, value}, offset,
+                                                        store_mode);
   }
 }
 

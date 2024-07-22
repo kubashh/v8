@@ -266,6 +266,7 @@ struct KnownNodeAspects {
         loaded_properties(zone),
         loaded_context_constants(zone),
         loaded_context_slots(zone),
+        context_slot_stores_(zone),
         available_expressions(zone),
         node_infos(zone),
         effect_epoch_(0) {}
@@ -458,6 +459,7 @@ struct KnownNodeAspects {
   using LoadedContextSlotsKey = std::tuple<ValueNode*, int>;
   using LoadedContextSlots = ZoneMap<LoadedContextSlotsKey, ValueNode*>;
   LoadedContextSlots loaded_context_slots;
+  ZoneMap<LoadedContextSlotsKey, Node*> context_slot_stores_;
 
   struct AvailableExpression {
     NodeBase* node;
