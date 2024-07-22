@@ -6,7 +6,7 @@
 // Also enable all features that are used in the randomly generated module. This
 // should stay in sync with `EnableExperimentalWasmFeatures` in
 // `wasm-fuzzer-common.cc`.
-// Flags: --wasm-staging
+// Flags: --wasm-staging --wasm-inlining-call-indirect
 
 (function TestGenerateRandomModule() {
   print(arguments.callee.name);
