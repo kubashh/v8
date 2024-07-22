@@ -315,6 +315,7 @@ class ExceptionHandlerInfo;
   V(CheckValueEqualsString)                 \
   V(CheckInstanceType)                      \
   V(DebugBreak)                             \
+  V(Dead2)                                  \
   V(FunctionEntryStackCheck)                \
   V(GeneratorStore)                         \
   V(TryOnStackReplacement)                  \
@@ -6322,6 +6323,20 @@ class DebugBreak : public FixedInputNodeT<0, DebugBreak> {
   void SetValueLocationConstraints();
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
+class Dead2 : public FixedInputNodeT<2, Dead2> {
+  using Base = FixedInputNodeT<2, Dead2>;
+
+ public:
+  static constexpr typename Base::InputTypes kInputTypes{
+      ValueRepresentation::kTagged, ValueRepresentation::kTagged};
+  void SetValueLocationConstraints() {}
+  void GenerateCode(MaglevAssembler*, const ProcessingState&) { UNREACHABLE(); }
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+
+ private:
+  explicit Dead2(uint64_t bitfield) : Base(bitfield) {}
 };
 
 class FunctionEntryStackCheck
