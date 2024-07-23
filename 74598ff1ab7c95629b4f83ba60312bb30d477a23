@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f95e6b99_b4fd55b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-23T17:36:12Z",
+      "side": 1,
+      "message": "PTAL.\n\nInitially, I thought that heap verification should crash after this CL, because we may end up with a trusted object that\u0027s not reclaimed (a false positive of CSS), while its table entry is reclaimed. Going through the code again, I think that the marking visitor ensures that the table entry is marked, if a trusted object is marked. So I believe that the fix is OK.\n\nIt would be nice to add these consistency checks to the marking verifier, which currently ignores table entries.",
+      "revId": "74598ff1ab7c95629b4f83ba60312bb30d477a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
