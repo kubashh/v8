@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a7608e_68cb7ddb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-07-23T12:30:18Z",
+      "side": 1,
+      "message": "+1 for the delta since my last +1",
+      "revId": "4ba3d7bc7b2fb5456db4c91d3ab19d672698b6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
