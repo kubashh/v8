@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56a3041c_69af99ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-07-23T14:48:40Z",
+      "side": 1,
+      "message": "Hi Daniel, I think no other approval is needed. If it is ok for you, I would merge this huge CL tomorrow morning.",
+      "parentUuid": "7441c3c8_d70b28a7",
+      "revId": "bdc89758c7f09b2a3326805254849a48d34b1174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d49a9bb3_a19b0848",
