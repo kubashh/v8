@@ -904,7 +904,8 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
                       ? bytecode_analysis_.osr_entry_point()
                       : 0),
       inlining_id_(inlining_id),
-      catch_block_stack_(zone()) {
+      catch_block_stack_(zone()),
+      unobserved_context_slot_stores_(zone()) {
   memset(merge_states_, 0,
          (bytecode().length() + 1) * sizeof(InterpreterFrameState*));
   // Default construct basic block refs.
@@ -2779,16 +2780,18 @@ void MaglevGraphBuilder::StoreAndCacheContextSlot(ValueNode* context,
     }
   }
   KnownNodeAspects::LoadedContextSlotsKey key{context, offset};
-  if (WithinAnEffectRecordingPeelingIteration()) {
-    auto updated = loaded_context_slots.emplace(key, value);
-    if (updated.second) {
-      GetCurrentPeeledLoopEffects().context_slot_written.insert(key);
-    } else if (updated.first->second != value) {
-      updated.first->second = value;
+  auto updated = loaded_context_slots.emplace(key, value);
+  if (updated.second) {
+    if (WithinAnEffectRecordingPeelingIteration()) {
       GetCurrentPeeledLoopEffects().context_slot_written.insert(key);
     }
   } else {
-    loaded_context_slots[key] = value;
+    if (updated.first->second != value) {
+      updated.first->second = value;
+      if (WithinAnEffectRecordingPeelingIteration()) {
+        GetCurrentPeeledLoopEffects().context_slot_written.insert(key);
+      }
+    }
   }
 }
 
@@ -4162,9 +4165,9 @@ void MaglevGraphBuilder::TryBuildStoreTaggedFieldToAllocation(ValueNode* object,
         << "]: " << PrintNode(graph_labeller(), value));
 }
 
-void MaglevGraphBuilder::BuildStoreTaggedField(ValueNode* object,
-                                               ValueNode* value, int offset,
-                                               StoreTaggedMode store_mode) {
+Node* MaglevGraphBuilder::BuildStoreTaggedField(ValueNode* object,
+                                                ValueNode* value, int offset,
+                                                StoreTaggedMode store_mode) {
   // The value may be used to initialize a VO, which can leak to IFS.
   // It should NOT be a conversion node, UNLESS it's an initializing value.
   // Initializing values are tagged before allocation, since conversion nodes
@@ -4175,11 +4178,11 @@ void MaglevGraphBuilder::BuildStoreTaggedField(ValueNode* object,
     TryBuildStoreTaggedFieldToAllocation(object, value, offset);
   }
   if (CanElideWriteBarrier(object, value)) {
-    AddNewNode<StoreTaggedFieldNoWriteBarrier>({object, value}, offset,
-                                               store_mode);
+    return AddNewNode<StoreTaggedFieldNoWriteBarrier>({object, value}, offset,
+                                                      store_mode);
   } else {
-    AddNewNode<StoreTaggedFieldWithWriteBarrier>({object, value}, offset,
-                                                 store_mode);
+    return AddNewNode<StoreTaggedFieldWithWriteBarrier>({object, value}, offset,
+                                                        store_mode);
   }
 }
 
