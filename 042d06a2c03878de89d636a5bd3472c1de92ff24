@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c21c4b9_cbfdf3f0",
+        "filename": "test/fuzzer/wasm-fuzzer-common.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-07-23T08:44:30Z",
+      "side": 1,
+      "message": "Ah, good point. I extended the comment/`Note:` to mention this as well.",
+      "parentUuid": "683e5f59_2a560167",
+      "range": {
+        "startLine": 300,
+        "startChar": 15,
+        "endLine": 300,
+        "endChar": 42
+      },
+      "revId": "042d06a2c03878de89d636a5bd3472c1de92ff24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d2011e5_d9027d4d",
@@ -72,6 +96,24 @@
       "side": 1,
       "message": "1. This is only needed if you add a new \"feature\", i.e. something that can appear in a module and is not enabled by default. Looking at the test case failures, it might also make sense to remove it here so you don\u0027t have to bother about the exact  correct flags to make all configurations pass with this extra flag.\n2. Sounds good, let\u0027s remove it.",
       "parentUuid": "0d2011e5_d9027d4d",
+      "revId": "042d06a2c03878de89d636a5bd3472c1de92ff24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac5b4f92_6eb73cd3",
+        "filename": "test/mjsunit/wasm/generate-random-module.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-07-23T08:44:30Z",
+      "side": 1,
+      "message": "Alright, removed the flag setting here, since it\u0027s not relevant (1) and also removed the explicit setting of `wasm_memory64_trap_handling` in the fuzzer since it\u0027s default anyway (2).",
+      "parentUuid": "5386904f_08b91fd5",
       "revId": "042d06a2c03878de89d636a5bd3472c1de92ff24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
