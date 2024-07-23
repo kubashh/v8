@@ -156,9 +156,11 @@ class WasmLoweringReducer : public Next {
     V<Float64> float_value = __ template LoadField<Float64>(
         object, AccessBuilder::ForHeapNumberValue());
     // Check range of float value.
-    GOTO_IF(__ Float64LessThan(float_value, __ Float64Constant(kInt31MinValue)),
+    GOTO_IF(__ Float64LessThan(float_value,
+                               __ Float64ConstantNoHole(kInt31MinValue)),
             end_label, object);
-    GOTO_IF(__ Float64LessThan(__ Float64Constant(kInt31MaxValue), float_value),
+    GOTO_IF(__ Float64LessThan(__ Float64ConstantNoHole(kInt31MaxValue),
+                               float_value),
             end_label, object);
     // Check if value is -0.
     V<Word32> is_minus_zero;

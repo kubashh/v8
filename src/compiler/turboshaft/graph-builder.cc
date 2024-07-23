@@ -420,9 +420,9 @@ OpIndex GraphBuilder::Process(
     case IrOpcode::kInt32Constant:
       return __ Word32Constant(static_cast<uint32_t>(OpParameter<int32_t>(op)));
     case IrOpcode::kFloat64Constant:
-      return __ Float64Constant(OpParameter<double>(op));
+      return __ Float64Constant(i::Float64(OpParameter<double>(op)));
     case IrOpcode::kFloat32Constant:
-      return __ Float32Constant(OpParameter<float>(op));
+      return __ Float32Constant(i::Float32(OpParameter<float>(op)));
     case IrOpcode::kNumberConstant:
       return __ NumberConstant(OpParameter<double>(op));
     case IrOpcode::kTaggedIndexConstant:

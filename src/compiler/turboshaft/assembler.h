@@ -1925,18 +1925,40 @@ class TurboshaftAssemblerOpInterface
     return V<Smi>::Cast(
         ReduceIfReachableConstant(ConstantOp::Kind::kSmi, value));
   }
-  V<Float32> Float32Constant(float value) {
+  V<Float32> Float32Constant(i::Float32 value) {
     return ReduceIfReachableConstant(ConstantOp::Kind::kFloat32, value);
   }
-  V<Float64> Float64Constant(double value) {
+  V<Float32> Float32ConstantNoHole(float value) {
+    // Passing the NaN Hole as input it allowed, but there is no guarantee that
+    // it will remain a hole (it will remain NaN though).
+    if (std::isnan(value)) {
+      return Float32Constant(
+          i::Float32::FromBits(base::bit_cast<uint32_t>(value)));
+    } else {
+      return Float32Constant(i::Float32(value));
+    }
+  }
+  V<Float64> Float64Constant(i::Float64 value) {
     return ReduceIfReachableConstant(ConstantOp::Kind::kFloat64, value);
   }
-  OpIndex FloatConstant(double value, FloatRepresentation rep) {
+  V<Float64> Float64ConstantNoHole(double value) {
+    // Passing the NaN Hole as input it allowed, but there is no guarantee that
+    // it will remain a hole (it will remain NaN though).
+    if (std::isnan(value)) {
+      return Float64Constant(
+          i::Float64::FromBits(base::bit_cast<uint64_t>(value)));
+    } else {
+      return Float64Constant(i::Float64(value));
+    }
+  }
+  OpIndex FloatConstantNoHole(double value, FloatRepresentation rep) {
+    // Passing the NaN Hole as input it allowed, but there is no guarantee that
+    // it will remain a hole (it will remain NaN though).
     switch (rep.value()) {
       case FloatRepresentation::Float32():
-        return Float32Constant(static_cast<float>(value));
+        return Float32ConstantNoHole(static_cast<float>(value));
       case FloatRepresentation::Float64():
-        return Float64Constant(value);
+        return Float64ConstantNoHole(value);
     }
   }
   OpIndex NumberConstant(double value) {
@@ -4516,10 +4538,12 @@ class TurboshaftAssemblerOpInterface
     return v.is_constant() ? Word64Constant(v.constant_value()) : v.value();
   }
   V<Float32> resolve(const ConstOrV<Float32>& v) {
-    return v.is_constant() ? Float32Constant(v.constant_value()) : v.value();
+    return v.is_constant() ? Float32ConstantNoHole(v.constant_value())
+                           : v.value();
   }
   V<Float64> resolve(const ConstOrV<Float64>& v) {
-    return v.is_constant() ? Float64Constant(v.constant_value()) : v.value();
+    return v.is_constant() ? Float64ConstantNoHole(v.constant_value())
+                           : v.value();
   }
 
  private:

@@ -521,22 +521,24 @@ void ConstantOp::PrintOptions(std::ostream& os) const {
       os << "smi: " << smi();
       break;
     case Kind::kNumber:
-      os << "number: " << number();
+      os << "number: " << number().get_scalar();
       break;
     case Kind::kTaggedIndex:
       os << "tagged index: " << tagged_index();
       break;
     case Kind::kFloat64:
-      os << "float64: " << float64();
-      if (std::isnan(float64())) {
+      os << "float64: " << float64().get_scalar();
+      if (float64().is_hole_nan()) {
+        os << " (hole nan: 0x" << std::hex << float64().get_bits() << std::dec
+           << ')';
+      } else if (float64().is_nan()) {
         // Do not use float64() here as it may alter the bit representation.
-        os << " (0x" << std::hex << base::bit_cast<uint64_t>(storage.float64)
-           << std::dec << ')';
+        os << " (0x" << std::hex << float64().get_bits() << std::dec << ')';
       }
       break;
     case Kind::kFloat32:
-      os << "float32: " << float32();
-      if (std::isnan(float32())) {
+      os << "float32: " << float32().get_scalar();
+      if (float32().is_nan()) {
         // Do not use float32() here as it may alter the bit representation.
         os << " (0x" << std::hex << base::bit_cast<uint32_t>(storage.float32)
            << std::dec << ')';

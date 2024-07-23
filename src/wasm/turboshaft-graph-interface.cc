@@ -1046,11 +1046,11 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
   }
 
   void F32Const(FullDecoder* decoder, Value* result, float value) {
-    result->op = __ Float32Constant(value);
+    result->op = __ Float32ConstantNoHole(value);
   }
 
   void F64Const(FullDecoder* decoder, Value* result, double value) {
-    result->op = __ Float64Constant(value);
+    result->op = __ Float64ConstantNoHole(value);
   }
 
   void S128Const(FullDecoder* decoder, const Simd128Immediate& imm,
@@ -2399,7 +2399,8 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         if (args[0].type.is_nullable()) {
           Label<Float64> done(&asm_);
           GOTO_IF(__ IsNull(args[0].op, args[0].type), done,
-                  __ Float64Constant(std::numeric_limits<double>::quiet_NaN()));
+                  __ Float64ConstantNoHole(
+                      std::numeric_limits<double>::quiet_NaN()));
 
           BuildModifyThreadInWasmFlag(decoder->zone(), false);
           V<Float64> not_null_res = CallBuiltinThroughJumptable<
@@ -5748,9 +5749,9 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         return __ Word64Constant(int64_t{0});
       case kF16:
       case kF32:
-        return __ Float32Constant(0.0f);
+        return __ Float32ConstantNoHole(0.0f);
       case kF64:
-        return __ Float64Constant(0.0);
+        return __ Float64ConstantNoHole(0.0);
       case kRefNull:
         return __ Null(type);
       case kS128: {
@@ -7777,11 +7778,11 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
           __ SetVariable(result, __ Word32Constant(0));
           break;
         case MemoryRepresentation::Float32():
-          __ SetVariable(result, __ Float32Constant(
+          __ SetVariable(result, __ Float32ConstantNoHole(
                                      std::numeric_limits<float>::quiet_NaN()));
           break;
         case MemoryRepresentation::Float64():
-          __ SetVariable(result, __ Float64Constant(
+          __ SetVariable(result, __ Float64ConstantNoHole(
                                      std::numeric_limits<double>::quiet_NaN()));
           break;
         default:

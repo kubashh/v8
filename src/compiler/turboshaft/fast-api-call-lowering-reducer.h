@@ -388,8 +388,8 @@ class FastApiCallLoweringReducer : public Next {
     V<Float64> clamped =
         __ Conditional(__ Float64LessThan(min, argument),
                        __ Conditional(__ Float64LessThan(argument, max),
-                                      argument, __ Float64Constant(max)),
-                       __ Float64Constant(min));
+                                      argument, __ Float64ConstantNoHole(max)),
+                       __ Float64ConstantNoHole(min));
 
     Label<Float64> done(this);
     V<Float64> rounded = __ Float64RoundTiesEven(clamped);

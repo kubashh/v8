@@ -2663,8 +2663,9 @@ class MachineLoweringReducer : public Next {
           goto no_change;
         }
         // Otherwise we have to lower it.
-        V<Float64> two_52 = __ Float64Constant(4503599627370496.0E0);
-        V<Float64> minus_two_52 = __ Float64Constant(-4503599627370496.0E0);
+        V<Float64> two_52 = __ Float64ConstantNoHole(4503599627370496.0E0);
+        V<Float64> minus_two_52 =
+            __ Float64ConstantNoHole(-4503599627370496.0E0);
 
         if (kind == FloatUnaryOp::Kind::kRoundUp) {
           // General case for ceil.

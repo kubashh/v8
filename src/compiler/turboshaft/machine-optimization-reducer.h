@@ -209,17 +209,17 @@ class MachineOptimizationReducer : public Next {
           return __ Word64Constant(uint64_t{static_cast<uint32_t>(value)});
         case multi(Kind::kBitcast, Rep::Word32(), Rep::Float32()):
           return __ Float32Constant(
-              base::bit_cast<float>(static_cast<uint32_t>(value)));
+              i::Float32::FromBits(static_cast<uint32_t>(value)));
         case multi(Kind::kBitcast, Rep::Word64(), Rep::Float64()):
-          return __ Float64Constant(base::bit_cast<double>(value));
+          return __ Float64Constant(i::Float64::FromBits(value));
         case multi(Kind::kSignedToFloat, Rep::Word32(), Rep::Float64()):
-          return __ Float64Constant(
+          return __ Float64ConstantNoHole(
               static_cast<double>(static_cast<int32_t>(value)));
         case multi(Kind::kSignedToFloat, Rep::Word64(), Rep::Float64()):
-          return __ Float64Constant(
+          return __ Float64ConstantNoHole(
               static_cast<double>(static_cast<int64_t>(value)));
         case multi(Kind::kUnsignedToFloat, Rep::Word32(), Rep::Float64()):
-          return __ Float64Constant(
+          return __ Float64ConstantNoHole(
               static_cast<double>(static_cast<uint32_t>(value)));
         case multi(Kind::kTruncate, Rep::Word64(), Rep::Word32()):
           return __ Word32Constant(static_cast<uint32_t>(value));
@@ -231,23 +231,24 @@ class MachineOptimizationReducer : public Next {
                      matcher.MatchFloat32Constant(input, &value)) {
       if (kind == Kind::kFloatConversion &&
           to == RegisterRepresentation::Float64()) {
-        return __ Float64Constant(value);
+        return __ Float64ConstantNoHole(value);
       }
       if (kind == Kind::kBitcast && to == WordRepresentation::Word32()) {
         return __ Word32Constant(base::bit_cast<uint32_t>(value));
       }
     }
-    if (double value; from == RegisterRepresentation::Float64() &&
-                      matcher.MatchFloat64Constant(input, &value)) {
+    if (i::Float64 value; from == RegisterRepresentation::Float64() &&
+                          matcher.MatchFloat64Constant(input, &value)) {
       if (kind == Kind::kFloatConversion &&
           to == RegisterRepresentation::Float32()) {
-        return __ Float32Constant(DoubleToFloat32_NoInline(value));
+        return __ Float32ConstantNoHole(
+            DoubleToFloat32_NoInline(value.get_scalar()));
       }
       if (kind == Kind::kBitcast && to == WordRepresentation::Word64()) {
         return __ Word64Constant(base::bit_cast<uint64_t>(value));
       }
       if (kind == Kind::kSignedFloatTruncateOverflowToMin) {
-        double truncated = std::trunc(value);
+        double truncated = std::trunc(value.get_scalar());
         if (to == WordRepresentation::Word64()) {
           int64_t result = std::numeric_limits<int64_t>::min();
           if (truncated >= std::numeric_limits<int64_t>::min() &&
@@ -267,24 +268,22 @@ class MachineOptimizationReducer : public Next {
       }
       if (kind == Kind::kJSFloatTruncate &&
           to == WordRepresentation::Word32()) {
-        return __ Word32Constant(DoubleToInt32_NoInline(value));
+        return __ Word32Constant(DoubleToInt32_NoInline(value.get_scalar()));
       }
       if (kind == Kind::kExtractHighHalf) {
         DCHECK_EQ(to, RegisterRepresentation::Word32());
-        return __ Word32Constant(
-            static_cast<uint32_t>(base::bit_cast<uint64_t>(value) >> 32));
+        return __ Word32Constant(static_cast<uint32_t>(value.get_bits() >> 32));
       }
       if (kind == Kind::kExtractLowHalf) {
         DCHECK_EQ(to, RegisterRepresentation::Word32());
-        return __ Word32Constant(
-            static_cast<uint32_t>(base::bit_cast<uint64_t>(value)));
+        return __ Word32Constant(static_cast<uint32_t>(value.get_bits()));
       }
     }
     if (float value; from == RegisterRepresentation::Float32() &&
                      matcher.MatchFloat32Constant(input, &value)) {
       if (kind == Kind::kFloatConversion &&
           to == RegisterRepresentation::Float64()) {
-        return __ Float64Constant(value);
+        return __ Float64ConstantNoHole(value);
       }
     }
 
@@ -306,7 +305,7 @@ class MachineOptimizationReducer : public Next {
     uint32_t lo, hi;
     if (matcher.MatchIntegralWord32Constant(hi_word32, &hi) &&
         matcher.MatchIntegralWord32Constant(lo_word32, &lo)) {
-      return __ Float64Constant(
+      return __ Float64ConstantNoHole(
           base::bit_cast<double>(uint64_t{hi} << 32 | uint64_t{lo}));
     }
     return Next::ReduceBitcastWord32PairToFloat64(hi_word32, lo_word32);
@@ -383,130 +382,132 @@ class MachineOptimizationReducer : public Next {
     if (float k; rep == FloatRepresentation::Float32() &&
                  matcher.MatchFloat32Constant(input, &k)) {
       if (std::isnan(k) && !signalling_nan_possible) {
-        return __ Float32Constant(std::numeric_limits<float>::quiet_NaN());
+        return __ Float32ConstantNoHole(
+            std::numeric_limits<float>::quiet_NaN());
       }
       switch (kind) {
         case FloatUnaryOp::Kind::kAbs:
-          return __ Float32Constant(std::abs(k));
+          return __ Float32ConstantNoHole(std::abs(k));
         case FloatUnaryOp::Kind::kNegate:
-          return __ Float32Constant(-k);
+          return __ Float32ConstantNoHole(-k);
         case FloatUnaryOp::Kind::kSilenceNaN:
           DCHECK(!std::isnan(k));
-          return __ Float32Constant(k);
+          return __ Float32ConstantNoHole(k);
         case FloatUnaryOp::Kind::kRoundDown:
-          return __ Float32Constant(std::floor(k));
+          return __ Float32ConstantNoHole(std::floor(k));
         case FloatUnaryOp::Kind::kRoundUp:
-          return __ Float32Constant(std::ceil(k));
+          return __ Float32ConstantNoHole(std::ceil(k));
         case FloatUnaryOp::Kind::kRoundToZero:
-          return __ Float32Constant(std::trunc(k));
+          return __ Float32ConstantNoHole(std::trunc(k));
         case FloatUnaryOp::Kind::kRoundTiesEven:
           DCHECK_EQ(std::nearbyint(1.5), 2);
           DCHECK_EQ(std::nearbyint(2.5), 2);
-          return __ Float32Constant(std::nearbyint(k));
+          return __ Float32ConstantNoHole(std::nearbyint(k));
         case FloatUnaryOp::Kind::kLog:
-          return __ Float32Constant(base::ieee754::log(k));
+          return __ Float32ConstantNoHole(base::ieee754::log(k));
         case FloatUnaryOp::Kind::kSqrt:
-          return __ Float32Constant(std::sqrt(k));
+          return __ Float32ConstantNoHole(std::sqrt(k));
         case FloatUnaryOp::Kind::kExp:
-          return __ Float32Constant(base::ieee754::exp(k));
+          return __ Float32ConstantNoHole(base::ieee754::exp(k));
         case FloatUnaryOp::Kind::kExpm1:
-          return __ Float32Constant(base::ieee754::expm1(k));
+          return __ Float32ConstantNoHole(base::ieee754::expm1(k));
         case FloatUnaryOp::Kind::kSin:
-          return __ Float32Constant(SIN_IMPL(k));
+          return __ Float32ConstantNoHole(SIN_IMPL(k));
         case FloatUnaryOp::Kind::kCos:
-          return __ Float32Constant(COS_IMPL(k));
+          return __ Float32ConstantNoHole(COS_IMPL(k));
         case FloatUnaryOp::Kind::kSinh:
-          return __ Float32Constant(base::ieee754::sinh(k));
+          return __ Float32ConstantNoHole(base::ieee754::sinh(k));
         case FloatUnaryOp::Kind::kCosh:
-          return __ Float32Constant(base::ieee754::cosh(k));
+          return __ Float32ConstantNoHole(base::ieee754::cosh(k));
         case FloatUnaryOp::Kind::kAcos:
-          return __ Float32Constant(base::ieee754::acos(k));
+          return __ Float32ConstantNoHole(base::ieee754::acos(k));
         case FloatUnaryOp::Kind::kAsin:
-          return __ Float32Constant(base::ieee754::asin(k));
+          return __ Float32ConstantNoHole(base::ieee754::asin(k));
         case FloatUnaryOp::Kind::kAsinh:
-          return __ Float32Constant(base::ieee754::asinh(k));
+          return __ Float32ConstantNoHole(base::ieee754::asinh(k));
         case FloatUnaryOp::Kind::kAcosh:
-          return __ Float32Constant(base::ieee754::acosh(k));
+          return __ Float32ConstantNoHole(base::ieee754::acosh(k));
         case FloatUnaryOp::Kind::kTan:
-          return __ Float32Constant(base::ieee754::tan(k));
+          return __ Float32ConstantNoHole(base::ieee754::tan(k));
         case FloatUnaryOp::Kind::kTanh:
-          return __ Float32Constant(base::ieee754::tanh(k));
+          return __ Float32ConstantNoHole(base::ieee754::tanh(k));
         case FloatUnaryOp::Kind::kLog2:
-          return __ Float32Constant(base::ieee754::log2(k));
+          return __ Float32ConstantNoHole(base::ieee754::log2(k));
         case FloatUnaryOp::Kind::kLog10:
-          return __ Float32Constant(base::ieee754::log10(k));
+          return __ Float32ConstantNoHole(base::ieee754::log10(k));
         case FloatUnaryOp::Kind::kLog1p:
-          return __ Float32Constant(base::ieee754::log1p(k));
+          return __ Float32ConstantNoHole(base::ieee754::log1p(k));
         case FloatUnaryOp::Kind::kCbrt:
-          return __ Float32Constant(base::ieee754::cbrt(k));
+          return __ Float32ConstantNoHole(base::ieee754::cbrt(k));
         case FloatUnaryOp::Kind::kAtan:
-          return __ Float32Constant(base::ieee754::atan(k));
+          return __ Float32ConstantNoHole(base::ieee754::atan(k));
         case FloatUnaryOp::Kind::kAtanh:
-          return __ Float32Constant(base::ieee754::atanh(k));
+          return __ Float32ConstantNoHole(base::ieee754::atanh(k));
       }
     } else if (double k; rep == FloatRepresentation::Float64() &&
                          matcher.MatchFloat64Constant(input, &k)) {
       if (std::isnan(k) && !signalling_nan_possible) {
-        return __ Float64Constant(std::numeric_limits<double>::quiet_NaN());
+        return __ Float64ConstantNoHole(
+            std::numeric_limits<double>::quiet_NaN());
       }
       switch (kind) {
         case FloatUnaryOp::Kind::kAbs:
-          return __ Float64Constant(std::abs(k));
+          return __ Float64ConstantNoHole(std::abs(k));
         case FloatUnaryOp::Kind::kNegate:
-          return __ Float64Constant(-k);
+          return __ Float64ConstantNoHole(-k);
         case FloatUnaryOp::Kind::kSilenceNaN:
           DCHECK(!std::isnan(k));
-          return __ Float64Constant(k);
+          return __ Float64ConstantNoHole(k);
         case FloatUnaryOp::Kind::kRoundDown:
-          return __ Float64Constant(std::floor(k));
+          return __ Float64ConstantNoHole(std::floor(k));
         case FloatUnaryOp::Kind::kRoundUp:
-          return __ Float64Constant(std::ceil(k));
+          return __ Float64ConstantNoHole(std::ceil(k));
         case FloatUnaryOp::Kind::kRoundToZero:
-          return __ Float64Constant(std::trunc(k));
+          return __ Float64ConstantNoHole(std::trunc(k));
         case FloatUnaryOp::Kind::kRoundTiesEven:
           DCHECK_EQ(std::nearbyint(1.5), 2);
           DCHECK_EQ(std::nearbyint(2.5), 2);
-          return __ Float64Constant(std::nearbyint(k));
+          return __ Float64ConstantNoHole(std::nearbyint(k));
         case FloatUnaryOp::Kind::kLog:
-          return __ Float64Constant(base::ieee754::log(k));
+          return __ Float64ConstantNoHole(base::ieee754::log(k));
         case FloatUnaryOp::Kind::kSqrt:
-          return __ Float64Constant(std::sqrt(k));
+          return __ Float64ConstantNoHole(std::sqrt(k));
         case FloatUnaryOp::Kind::kExp:
-          return __ Float64Constant(base::ieee754::exp(k));
+          return __ Float64ConstantNoHole(base::ieee754::exp(k));
         case FloatUnaryOp::Kind::kExpm1:
-          return __ Float64Constant(base::ieee754::expm1(k));
+          return __ Float64ConstantNoHole(base::ieee754::expm1(k));
         case FloatUnaryOp::Kind::kSin:
-          return __ Float64Constant(SIN_IMPL(k));
+          return __ Float64ConstantNoHole(SIN_IMPL(k));
         case FloatUnaryOp::Kind::kCos:
-          return __ Float64Constant(COS_IMPL(k));
+          return __ Float64ConstantNoHole(COS_IMPL(k));
         case FloatUnaryOp::Kind::kSinh:
-          return __ Float64Constant(base::ieee754::sinh(k));
+          return __ Float64ConstantNoHole(base::ieee754::sinh(k));
         case FloatUnaryOp::Kind::kCosh:
-          return __ Float64Constant(base::ieee754::cosh(k));
+          return __ Float64ConstantNoHole(base::ieee754::cosh(k));
         case FloatUnaryOp::Kind::kAcos:
-          return __ Float64Constant(base::ieee754::acos(k));
+          return __ Float64ConstantNoHole(base::ieee754::acos(k));
         case FloatUnaryOp::Kind::kAsin:
-          return __ Float64Constant(base::ieee754::asin(k));
+          return __ Float64ConstantNoHole(base::ieee754::asin(k));
         case FloatUnaryOp::Kind::kAsinh:
-          return __ Float64Constant(base::ieee754::asinh(k));
+          return __ Float64ConstantNoHole(base::ieee754::asinh(k));
         case FloatUnaryOp::Kind::kAcosh:
-          return __ Float64Constant(base::ieee754::acosh(k));
+          return __ Float64ConstantNoHole(base::ieee754::acosh(k));
         case FloatUnaryOp::Kind::kTan:
-          return __ Float64Constant(base::ieee754::tan(k));
+          return __ Float64ConstantNoHole(base::ieee754::tan(k));
         case FloatUnaryOp::Kind::kTanh:
-          return __ Float64Constant(base::ieee754::tanh(k));
+          return __ Float64ConstantNoHole(base::ieee754::tanh(k));
         case FloatUnaryOp::Kind::kLog2:
-          return __ Float64Constant(base::ieee754::log2(k));
+          return __ Float64ConstantNoHole(base::ieee754::log2(k));
         case FloatUnaryOp::Kind::kLog10:
-          return __ Float64Constant(base::ieee754::log10(k));
+          return __ Float64ConstantNoHole(base::ieee754::log10(k));
         case FloatUnaryOp::Kind::kLog1p:
-          return __ Float64Constant(base::ieee754::log1p(k));
+          return __ Float64ConstantNoHole(base::ieee754::log1p(k));
         case FloatUnaryOp::Kind::kCbrt:
-          return __ Float64Constant(base::ieee754::cbrt(k));
+          return __ Float64ConstantNoHole(base::ieee754::cbrt(k));
         case FloatUnaryOp::Kind::kAtan:
-          return __ Float64Constant(base::ieee754::atan(k));
+          return __ Float64ConstantNoHole(base::ieee754::atan(k));
         case FloatUnaryOp::Kind::kAtanh:
-          return __ Float64Constant(base::ieee754::atanh(k));
+          return __ Float64ConstantNoHole(base::ieee754::atanh(k));
       }
     }
     return Next::ReduceFloatUnary(input, kind, rep);
@@ -577,21 +578,21 @@ class MachineOptimizationReducer : public Next {
                       matcher.MatchFloat32Constant(rhs, &k2)) {
       switch (kind) {
         case Kind::kAdd:
-          return __ Float32Constant(k1 + k2);
+          return __ Float32ConstantNoHole(k1 + k2);
         case Kind::kMul:
-          return __ Float32Constant(k1 * k2);
+          return __ Float32ConstantNoHole(k1 * k2);
         case Kind::kSub:
-          return __ Float32Constant(k1 - k2);
+          return __ Float32ConstantNoHole(k1 - k2);
         case Kind::kMin:
-          return __ Float32Constant(JSMin(k1, k2));
+          return __ Float32ConstantNoHole(JSMin(k1, k2));
         case Kind::kMax:
-          return __ Float32Constant(JSMax(k1, k2));
+          return __ Float32ConstantNoHole(JSMax(k1, k2));
         case Kind::kDiv:
-          return __ Float32Constant(k1 / k2);
+          return __ Float32ConstantNoHole(k1 / k2);
         case Kind::kPower:
-          return __ Float32Constant(base::ieee754::pow(k1, k2));
+          return __ Float32ConstantNoHole(base::ieee754::pow(k1, k2));
         case Kind::kAtan2:
-          return __ Float32Constant(base::ieee754::atan2(k1, k2));
+          return __ Float32ConstantNoHole(base::ieee754::atan2(k1, k2));
         case Kind::kMod:
           UNREACHABLE();
       }
@@ -601,23 +602,23 @@ class MachineOptimizationReducer : public Next {
                        matcher.MatchFloat64Constant(rhs, &k2)) {
       switch (kind) {
         case Kind::kAdd:
-          return __ Float64Constant(k1 + k2);
+          return __ Float64ConstantNoHole(k1 + k2);
         case Kind::kMul:
-          return __ Float64Constant(k1 * k2);
+          return __ Float64ConstantNoHole(k1 * k2);
         case Kind::kSub:
-          return __ Float64Constant(k1 - k2);
+          return __ Float64ConstantNoHole(k1 - k2);
         case Kind::kMin:
-          return __ Float64Constant(JSMin(k1, k2));
+          return __ Float64ConstantNoHole(JSMin(k1, k2));
         case Kind::kMax:
-          return __ Float64Constant(JSMax(k1, k2));
+          return __ Float64ConstantNoHole(JSMax(k1, k2));
         case Kind::kDiv:
-          return __ Float64Constant(k1 / k2);
+          return __ Float64ConstantNoHole(k1 / k2);
         case Kind::kMod:
-          return __ Float64Constant(Modulo(k1, k2));
+          return __ Float64ConstantNoHole(Modulo(k1, k2));
         case Kind::kPower:
-          return __ Float64Constant(base::ieee754::pow(k1, k2));
+          return __ Float64ConstantNoHole(base::ieee754::pow(k1, k2));
         case Kind::kAtan2:
-          return __ Float64Constant(base::ieee754::atan2(k1, k2));
+          return __ Float64ConstantNoHole(base::ieee754::atan2(k1, k2));
       }
     }
 
@@ -626,7 +627,8 @@ class MachineOptimizationReducer : public Next {
         (matcher.MatchNaN(lhs) && kind != Kind::kPower)) {
       // Return a quiet NaN since Wasm operations could have signalling NaN as
       // input but not as output.
-      return __ FloatConstant(std::numeric_limits<double>::quiet_NaN(), rep);
+      return __ FloatConstantNoHole(std::numeric_limits<double>::quiet_NaN(),
+                                    rep);
     }
 
     if (matcher.Is<ConstantOp>(rhs)) {
@@ -663,7 +665,7 @@ class MachineOptimizationReducer : public Next {
               matcher.MatchFloat32Constant(rhs, &k) && std::isnormal(k) &&
               k != 0 && std::isfinite(k) &&
               base::bits::IsPowerOfTwo(base::Double(k).Significand())) {
-            return __ FloatMul(lhs, __ FloatConstant(1.0 / k, rep), rep);
+            return __ FloatMul(lhs, __ FloatConstantNoHole(1.0 / k, rep), rep);
           }
         } else {
           DCHECK_EQ(rep, FloatRepresentation::Float64());
@@ -671,7 +673,7 @@ class MachineOptimizationReducer : public Next {
               matcher.MatchFloat64Constant(rhs, &k) && std::isnormal(k) &&
               k != 0 && std::isfinite(k) &&
               base::bits::IsPowerOfTwo(base::Double(k).Significand())) {
-            return __ FloatMul(lhs, __ FloatConstant(1.0 / k, rep), rep);
+            return __ FloatMul(lhs, __ FloatConstantNoHole(1.0 / k, rep), rep);
           }
         }
       }
@@ -679,8 +681,8 @@ class MachineOptimizationReducer : public Next {
       if (kind == Kind::kMod) {
         // x % 0  =>  NaN
         if (matcher.MatchFloat(rhs, 0.0)) {
-          return __ FloatConstant(std::numeric_limits<double>::quiet_NaN(),
-                                  rep);
+          return __ FloatConstantNoHole(
+              std::numeric_limits<double>::quiet_NaN(), rep);
         }
       }
 
@@ -694,7 +696,7 @@ class MachineOptimizationReducer : public Next {
       if (kind == Kind::kPower) {
         if (matcher.MatchFloat(rhs, 0.0) || matcher.MatchFloat(rhs, -0.0)) {
           // lhs ** 0  ==>  1
-          return __ FloatConstant(1.0, rep);
+          return __ FloatConstantNoHole(1.0, rep);
         }
         if (matcher.MatchFloat(rhs, 2.0)) {
           // lhs ** 2  ==>  lhs * lhs
@@ -705,8 +707,8 @@ class MachineOptimizationReducer : public Next {
           // (unless if lhs is -infinity)
           Variable result = __ NewLoopInvariantVariable(rep);
           IF (UNLIKELY(__ FloatLessThanOrEqual(
-                  lhs, __ FloatConstant(-V8_INFINITY, rep), rep))) {
-            __ SetVariable(result, __ FloatConstant(V8_INFINITY, rep));
+                  lhs, __ FloatConstantNoHole(-V8_INFINITY, rep), rep))) {
+            __ SetVariable(result, __ FloatConstantNoHole(V8_INFINITY, rep));
           } ELSE {
             __ SetVariable(result, __ FloatSqrt(lhs, rep));
           }
@@ -2256,7 +2258,7 @@ class MachineOptimizationReducer : public Next {
     }
     if (double c;
         matcher.MatchFloat64Constant(value, &c) && DoubleToFloat32(c) == c) {
-      return __ Float32Constant(DoubleToFloat32(c));
+      return __ Float32ConstantNoHole(DoubleToFloat32(c));
     }
     UNREACHABLE();
   }

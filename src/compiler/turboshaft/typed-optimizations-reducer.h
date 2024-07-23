@@ -95,22 +95,22 @@ class TypedOptimizationsReducer
       case Type::Kind::kFloat32: {
         auto f32 = type.AsFloat32();
         if (f32.is_only_nan()) {
-          return Asm().Float32Constant(nan_v<32>);
+          return Asm().Float32ConstantNoHole(nan_v<32>);
         } else if (f32.is_only_minus_zero()) {
-          return Asm().Float32Constant(-0.0f);
+          return Asm().Float32ConstantNoHole(-0.0f);
         } else if (auto c = f32.try_get_constant()) {
-          return Asm().Float32Constant(*c);
+          return Asm().Float32ConstantNoHole(*c);
         }
         break;
       }
       case Type::Kind::kFloat64: {
         auto f64 = type.AsFloat64();
         if (f64.is_only_nan()) {
-          return Asm().Float64Constant(nan_v<64>);
+          return Asm().Float64ConstantNoHole(nan_v<64>);
         } else if (f64.is_only_minus_zero()) {
-          return Asm().Float64Constant(-0.0);
+          return Asm().Float64ConstantNoHole(-0.0);
         } else if (auto c = f64.try_get_constant()) {
-          return Asm().Float64Constant(*c);
+          return Asm().Float64ConstantNoHole(*c);
         }
         break;
       }
