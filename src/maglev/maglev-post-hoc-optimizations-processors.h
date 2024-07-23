@@ -48,6 +48,12 @@ class AnyUseMarkingProcessor {
     return ProcessResult::kContinue;
   }
 
+#ifdef DEBUG
+  ProcessResult Process(Dead* node, const ProcessingState& state) {
+    UNREACHABLE();
+  }
+#endif  // DEBUG
+
   void PostProcessGraph(Graph* graph) {
     RunEscapeAnalysis(graph);
     DropUseOfValueInStoresToCapturedAllocations();
