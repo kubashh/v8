@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43986356_80c13aac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-24T21:11:07Z",
+      "side": 1,
+      "message": "Thanks! Did only a qick skim as it\u0027s really late here. Will look in more details tomorrow.",
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527465f9_3f536d09",
+        "filename": "src/api/api.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 10280,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-24T21:11:07Z",
+      "side": 1,
+      "message": "IIUC, the way this is set up we loose the ability to relibably trigger GC here based on our limit.\n\nMore specifically: We are not checking global limits here and if the relaxed limit flag is enabled then the `external_memory_limit()` is actually something rather large, right?\n\nI think what we would want here is to check the regular global limit. We may need to check it behind some other interrupt flag to avoid checking it too often though as `AdjustAmountOfExternalAllocatedMemory()` was perf sensitive call in the past.",
+      "range": {
+        "startLine": 10280,
+        "startChar": 34,
+        "endLine": 10280,
+        "endChar": 55
+      },
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29e7b5f2_6147cab0",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-24T21:11:07Z",
+      "side": 1,
+      "message": "I think with the `external_memory_relaxed_limits` the limit and hard limit are a bit confusing as we essentially just have a hard limi, no?",
+      "range": {
+        "startLine": 591,
+        "startChar": 17,
+        "endLine": 591,
+        "endChar": 47
+      },
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
