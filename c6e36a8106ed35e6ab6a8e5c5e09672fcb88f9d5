@@ -69,6 +69,24 @@
       "parentUuid": "aa586f33_f8b92308",
       "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6cb67b2_7b2c3007",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T16:52:13Z",
+      "side": 1,
+      "message": "Hm, so at least playing around with a small test case the `WasmStackCheck` doesn\u0027t seem to prevent loads from wasm struct or loads from wasm array to be eliminated, so maybe it isn\u0027t as bad as I just thought. 😊",
+      "parentUuid": "41f9c0a1_259c4869",
+      "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
