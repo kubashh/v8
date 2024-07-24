@@ -106,7 +106,8 @@ bool NextInIgnoreList(typename ZoneSet<Key>::const_iterator& ignore,
 }  // namespace
 
 KnownNodeAspects* KnownNodeAspects::CloneForLoopHeader(
-    Zone* zone, bool optimistic, LoopEffects* loop_effects) const {
+    Zone* zone, bool optimistic, const compiler::LoopInfo* loop_info,
+    LoopEffects* loop_effects) const {
   KnownNodeAspects* clone = zone->New<KnownNodeAspects>(zone);
   if (!any_map_for_any_node_is_unstable) {
     clone->node_infos = node_infos;
@@ -115,7 +116,8 @@ KnownNodeAspects* KnownNodeAspects::CloneForLoopHeader(
       DCHECK(!it.second.any_map_is_unstable());
     }
 #endif
-  } else if (optimistic && !loop_effects->unstable_aspects_cleared) {
+  } else if (!loop_info->effects().any() ||
+             (optimistic && !loop_effects->unstable_aspects_cleared)) {
     clone->node_infos = node_infos;
     clone->any_map_for_any_node_is_unstable = any_map_for_any_node_is_unstable;
   } else {
@@ -168,8 +170,9 @@ KnownNodeAspects* KnownNodeAspects::CloneForLoopHeader(
   clone->effect_epoch_ = effect_epoch_;
   // To account for the back-jump we must not allow effects to be reshuffled
   // across loop headers.
-  // TODO(olivf): Only do this if the loop contains write effects.
-  clone->increment_effect_epoch();
+  if (loop_info->effects().any()) {
+    clone->increment_effect_epoch();
+  }
   for (const auto& e : available_expressions) {
     if (e.second.effect_epoch >= clone->effect_epoch()) {
       clone->available_expressions.emplace(e);
@@ -624,7 +627,7 @@ void MergePointInterpreterFrameState::InitializeLoop(
   DCHECK(is_unmerged_loop());
   DCHECK_EQ(predecessors_so_far_, 0);
   known_node_aspects_ = unmerged.known_node_aspects()->CloneForLoopHeader(
-      builder->zone(), optimistic_initial_state, loop_effects);
+      builder->zone(), optimistic_initial_state, *loop_info_, loop_effects);
   unmerged.virtual_objects().Snapshot();
   frame_state_.set_virtual_objects(unmerged.virtual_objects());
   if (v8_flags.trace_maglev_graph_building) {

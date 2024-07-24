@@ -96,6 +96,18 @@ struct V8_EXPORT_PRIVATE LoopInfo {
   BytecodeLoopAssignments& assignments() { return assignments_; }
   const BytecodeLoopAssignments& assignments() const { return assignments_; }
 
+  struct StaticLoopEffects {
+    void set_any() { any_ = true; }
+    bool any() const { return any_; }
+    void merge(StaticLoopEffects other) { any_ = any_ || other.any_; }
+
+   private:
+    bool any_ : 1;
+  };
+
+  inline const StaticLoopEffects& effects() const { return effects_; }
+  inline StaticLoopEffects& effects() { return effects_; }
+
  private:
   // The offset to the parent loop, or -1 if there is no parent.
   int parent_offset_;
@@ -105,6 +117,7 @@ struct V8_EXPORT_PRIVATE LoopInfo {
   bool innermost_ = true;
   BytecodeLoopAssignments assignments_;
   ZoneVector<ResumeJumpTarget> resume_jump_targets_;
+  StaticLoopEffects effects_;
 };
 
 // Analyze the bytecodes to find the loop ranges, loop nesting, loop assignments
