@@ -141,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f55cc78_d05ecf3c",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T14:33:26Z",
+      "side": 1,
+      "message": "OK, great, then this is indeed resolved, thanks for checking!",
+      "parentUuid": "e222fc19_4815e0fa",
+      "range": {
+        "startLine": 74,
+        "startChar": 16,
+        "endLine": 74,
+        "endChar": 49
+      },
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8523eb92_d048d57f",
