@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3a5b68a_4c1bbc42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-24T12:32:28Z",
+      "side": 1,
+      "message": "ptal.\nFix in https://chromium-review.googlesource.com/c/v8/v8/+/5736201/1..2",
+      "revId": "eebd4215af16f10f0c56b56b91ebdcd83975c37b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
