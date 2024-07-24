@@ -16,6 +16,120 @@
       "message": "PTAL! :)",
       "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c8750d7_64309ca5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T12:26:52Z",
+      "side": 1,
+      "message": "LGTM with comments",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d144cfa_424ac74a",
+        "filename": "src/compiler/backend/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T12:26:52Z",
+      "side": 1,
+      "message": "This whole function doesn\u0027t make sense as `CanBeImmediate` and `GetImmediateIntegerValue` seem to be out of sync (the first accepts relocatable int32s and relocatable int64s, this one doesn\u0027t. Not sure why, can we just remove it? I can\u0027t find a use of this...",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab16748a_673c0ca9",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T12:26:52Z",
+      "side": 1,
+      "message": "I think this should break: https://chromium-review.googlesource.com/c/v8/v8/+/5557703\n(You can blame me that this was just a quick-fix.)\nI added `v8_linux_dbg` now, we should make sure that it succeeds (not part of CQ unfortunatley).",
+      "range": {
+        "startLine": 74,
+        "startChar": 16,
+        "endLine": 74,
+        "endChar": 49
+      },
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8523eb92_d048d57f",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T12:26:52Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 82,
+        "startChar": 28,
+        "endLine": 82,
+        "endChar": 46
+      },
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6123f282_9b6e2488",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T12:26:52Z",
+      "side": 1,
+      "message": "This is now the worst kind of comment because we still have `float64()` here but the comment doesn\u0027t make any sense any more. Please remove. 😊",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f9032db_c6454d19",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T12:26:52Z",
+      "side": 1,
+      "message": "Same as above, remove.",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
