@@ -118,10 +118,11 @@ declare_args() {
   # Scan the call stack conservatively during garbage collection.
   v8_enable_conservative_stack_scanning = false
 
-  # Use direct pointers in internal (direct) handles.
+  # Use direct pointers in handles (v8::internal::Handle and v8::Local).
   v8_enable_direct_handle = ""
 
   # Use direct pointers in local handles.
+  # This is deprecated and will soon be removed.
   v8_enable_direct_local = ""
 
   # Check for off-stack allocated local handles.
@@ -241,6 +242,9 @@ if (v8_enable_direct_handle == "") {
 if (v8_enable_direct_local == "") {
   v8_enable_direct_local = v8_enable_conservative_stack_scanning
 }
+assert(
+    v8_enable_direct_handle == v8_enable_direct_local,
+    "The values of v8_enable_direct_handle and v8_enable_direct_local must agree. The latter is deprecated and will soon be removed.")
 
 # Points to // in v8 stand-alone or to //v8/ in chromium. We need absolute
 # paths for all configs in templates as they are shared in different
