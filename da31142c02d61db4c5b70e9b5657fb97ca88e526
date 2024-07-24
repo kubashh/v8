@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43192d91_57dcaba2",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2904,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-24T08:07:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a47e1b5_a64256b4",
+      "range": {
+        "startLine": 2904,
+        "startChar": 14,
+        "endLine": 2904,
+        "endChar": 24
+      },
+      "revId": "da31142c02d61db4c5b70e9b5657fb97ca88e526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50c4f316_61f5149b",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db43a12d_88a3955f",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-24T08:07:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50c4f316_61f5149b",
+      "range": {
+        "startLine": 2906,
+        "startChar": 28,
+        "endLine": 2906,
+        "endChar": 42
+      },
+      "revId": "da31142c02d61db4c5b70e9b5657fb97ca88e526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ece3b82_03523730",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-07-22T15:22:09Z",
       "side": 1,
       "message": "Nit: We can remove this earlier in the AnyUseMarkingProcessor.",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 3
+      },
+      "revId": "da31142c02d61db4c5b70e9b5657fb97ca88e526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3524cc04_b4829134",
+        "filename": "src/maglev/maglev-post-hoc-optimizations-processors.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-24T08:07:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ece3b82_03523730",
       "range": {
         "startLine": 177,
         "startChar": 0,
