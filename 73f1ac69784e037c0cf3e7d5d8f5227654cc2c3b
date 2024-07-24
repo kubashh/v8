@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36e0af6d_baf10d16",
+        "filename": "src/compiler/backend/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-24T13:46:02Z",
+      "side": 1,
+      "message": "Seems to be the same in the x64 ISEL. I\u0027ll try to clean up in a subsequent CL, to have cleaner bisects if I make a mistake :)",
+      "parentUuid": "0d144cfa_424ac74a",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab16748a_673c0ca9",
         "filename": "src/compiler/turboshaft/operation-matcher.h",
         "patchSetId": 6
@@ -65,6 +83,30 @@
       "writtenOn": "2024-07-24T12:26:52Z",
       "side": 1,
       "message": "I think this should break: https://chromium-review.googlesource.com/c/v8/v8/+/5557703\n(You can blame me that this was just a quick-fix.)\nI added `v8_linux_dbg` now, we should make sure that it succeeds (not part of CQ unfortunatley).",
+      "range": {
+        "startLine": 74,
+        "startChar": 16,
+        "endLine": 74,
+        "endChar": 49
+      },
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "131f5bd1_d2272eb3",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-24T13:46:02Z",
+      "side": 1,
+      "message": "This didn\u0027t break the test, but I\u0027m very surprised by the fix in the CL you linked. I\u0027ll do a bit more digging.",
+      "parentUuid": "ab16748a_673c0ca9",
       "range": {
         "startLine": 74,
         "startChar": 16,
@@ -115,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eda47c4_4edc33cb",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-24T13:46:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6123f282_9b6e2488",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f9032db_c6454d19",
@@ -128,6 +188,24 @@
       "writtenOn": "2024-07-24T12:26:52Z",
       "side": 1,
       "message": "Same as above, remove.",
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f50128d_95662418",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-24T13:46:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f9032db_c6454d19",
       "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
