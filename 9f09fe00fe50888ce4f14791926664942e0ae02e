@@ -16,6 +16,23 @@
       "message": "Ready to merge as soon as it is ok for you! :)",
       "revId": "9f09fe00fe50888ce4f14791926664942e0ae02e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f894e37f_9d9cb6cb",
+        "filename": "src/trap-handler/handler-inside.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2024-07-24T06:41:53Z",
+      "side": 1,
+      "message": "One thing to consider for a later change:\n\nIt\u0027s not great that the interpreter does not benefit from this check by the trap handler.  IIRC, one of the benefits of the interpreter is that it is potentially more secure, so it is unfortunate to weaken this check, which was intended to be a security check.\n\nIt should be relatively easy to get this check back by changing the code generation code in src/wasm/interpreter/x64/interpreter-builtins-x64.cc and the arm64 equivalent to record the offsets of the instructions that are expected to trap.  For example, test/unittests/wasm/trap-handler-native-unittest.cc does that by calling pc_offset() to get the offsets.  You\u0027d probably just need to pass around an extra std::vector to record the offsets.\n\nThis might be worth doing in a later CL.  I don\u0027t mean to suggest that you change it in this CL!  I realise that you just got the go-ahead for landing it.\n\n(I meant to mention this earlier, nearer my first review pass, but I was on holiday at the time and I lost track of where I\u0027d got to in looking at this.  Sorry about that!)",
+      "revId": "9f09fe00fe50888ce4f14791926664942e0ae02e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
