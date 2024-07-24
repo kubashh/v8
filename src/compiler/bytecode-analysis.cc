@@ -471,6 +471,22 @@ class BytecodeAnalysis::BytecodeAnalysisImpl {
 
  private:
   template <Bytecode BC>
+  inline void TrackEffectsOfBCInLoop(int current_offset,
+                                     LoopInfo* current_loop_info) {
+    if constexpr (!Bytecodes::IsWithoutExternalSideEffects(BC)) {
+      if constexpr (BC == Bytecode::kStaContextSlot ||
+                    BC == Bytecode::kStaCurrentScriptContextSlot ||
+                    BC == Bytecode::kStaScriptContextSlot ||
+                    BC == Bytecode::kStaCurrentScriptContextSlot) {
+        current_loop_info->effects().add(
+            LoopInfo::StaticLoopEffects::kContextStore);
+      } else {
+        current_loop_info->effects().set_any();
+      }
+    }
+  }
+
+  template <Bytecode BC>
   inline void AnalyzeBCInLoop(int current_offset, LoopInfo* current_loop_info) {
   }
 
@@ -602,6 +618,8 @@ void BytecodeAnalysis::BytecodeAnalysisImpl::Analyze() {
       switch (bytecode) {
 #define CASE(BC, ...)                                                    \
   case Bytecode::k##BC:                                                  \
+    TrackEffectsOfBCInLoop<Bytecode::k##BC>(current_offset,              \
+                                            current_loop_info);          \
     AnalyzeBCInLoop<Bytecode::k##BC>(current_offset, current_loop_info); \
     break;
         BYTECODE_LIST(CASE)
@@ -614,6 +632,8 @@ void BytecodeAnalysis::BytecodeAnalysisImpl::Analyze() {
         if (loop_stack_.size() > 1) {
           // If there is still an outer loop, propagate inner loop assignments.
           LoopInfo* parent_loop_info = loop_stack_.top().loop_info;
+
+          parent_loop_info->effects().merge(current_loop_info->effects());
 
           if (current_loop_info->resumable()) {
             parent_loop_info->mark_resumable();

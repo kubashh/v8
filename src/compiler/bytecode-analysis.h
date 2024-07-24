@@ -96,6 +96,27 @@ struct V8_EXPORT_PRIVATE LoopInfo {
   BytecodeLoopAssignments& assignments() { return assignments_; }
   const BytecodeLoopAssignments& assignments() const { return assignments_; }
 
+  struct StaticLoopEffects {
+    enum Effect {
+      kContextStore,
+      kChangeMap,
+    };
+    void add(Effect effect) { effects_.Add(effect); }
+    void set_any() {
+      effects_ = base::EnumSet<Effect>::FromIntegral(
+          ~base::EnumSet<Effect>().ToIntegral());
+    }
+    bool has(Effect effect) const { return effects_.contains(effect); }
+    bool any() const { return !effects_.empty(); }
+    void merge(StaticLoopEffects other) { effects_.Add(other.effects_); }
+
+   private:
+    base::EnumSet<Effect> effects_;
+  };
+
+  inline const StaticLoopEffects& effects() const { return effects_; }
+  inline StaticLoopEffects& effects() { return effects_; }
+
  private:
   // The offset to the parent loop, or -1 if there is no parent.
   int parent_offset_;
@@ -105,6 +126,7 @@ struct V8_EXPORT_PRIVATE LoopInfo {
   bool innermost_ = true;
   BytecodeLoopAssignments assignments_;
   ZoneVector<ResumeJumpTarget> resume_jump_targets_;
+  StaticLoopEffects effects_;
 };
 
 // Analyze the bytecodes to find the loop ranges, loop nesting, loop assignments

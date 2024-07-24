@@ -286,6 +286,7 @@ struct KnownNodeAspects {
   // calls, and we don't know about these until it's too late.
   KnownNodeAspects* CloneForLoopHeader(Zone* zone,
                                        bool optimistic_initial_state,
+                                       const compiler::LoopInfo* loop_info,
                                        LoopEffects* loop_effects) const;
 
   void ClearUnstableMaps() {
