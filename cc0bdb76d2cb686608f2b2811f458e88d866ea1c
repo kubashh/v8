@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ac6d1f_fba15cd8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-24T23:02:10Z",
+      "side": 1,
+      "message": "We have customers that are running into memory leak issues due to accidentally leaving DOM objects detached from the tree without cleaning up. This tool is aiming to help those customers quickly identify the DOM nodes that are detached that is causing memory leaks, so they\u0027re able to root cause the issue in their code by cleaning up the corresponding detached elements.",
+      "parentUuid": "b1ef4f84_69762206",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b8719d64_81c5e14b",
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c01be5e_f1e9891e",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-24T23:02:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeb6d0ea_8d8b754e",
+      "range": {
+        "startLine": 1111,
+        "startChar": 0,
+        "endLine": 1111,
+        "endChar": 2
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f97fd83c_781dbfc6",
@@ -111,6 +159,30 @@
       "writtenOn": "2024-07-22T11:32:30Z",
       "side": 1,
       "message": "I\u0027m not sure this is guaranteed to get you all detached objects. You iterate over V8 objects. Minor GCs in V8 can drop the V8 object in some cases (i.e. if it is unmodified), while the DOM object remain live. I\u0027m not sure such objects cannot be detached, in which case the returned vector will be missing objects.",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b80531d4_d3b34935",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-24T23:02:10Z",
+      "side": 1,
+      "message": "Could you elaborate on the cases where V8 objects getting GC\u0027ed while DOM objects remain alive when it\u0027s associated to the mentioned V8 objects? In our observation so far, even if we associate a javascript variable with a DOM object without any additional modification, it seems like the V8 object will be kept alive in the heap. It would be an interesting case to further look into as that could also cause memory issue, but I\u0027d like to limit the scope of this CL as the current implementation is able to address the customers\u0027 needs to identify detached elements.",
+      "parentUuid": "f97fd83c_781dbfc6",
       "range": {
         "startLine": 52,
         "startChar": 48,
@@ -144,6 +216,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18438762_ec570282",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-24T23:02:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8429f1ec_9fb45694",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 54,
+        "endChar": 28
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14b543e4_521dfdb5",
@@ -167,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de9115cb_e9ebe522",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-24T23:02:10Z",
+      "side": 1,
+      "message": "Yes this works, and iterating over `tracd_handles` rather than the heap seems to be the faster solution. Good catch! This has been implemented.",
+      "parentUuid": "14b543e4_521dfdb5",
+      "range": {
+        "startLine": 60,
+        "startChar": 9,
+        "endLine": 60,
+        "endChar": 29
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d57533a_97f97ab6",
@@ -180,6 +300,30 @@
       "writtenOn": "2024-07-22T11:32:30Z",
       "side": 1,
       "message": "`data` is already a `v8::Local\u003cv8::Value\u003e`. I believe this case here is redundant.",
+      "range": {
+        "startLine": 69,
+        "startChar": 28,
+        "endLine": 69,
+        "endChar": 44
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfae02ec_ac393f28",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-24T23:02:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d57533a_97f97ab6",
       "range": {
         "startLine": 69,
         "startChar": 28,
