@@ -554,8 +554,38 @@ class GraphBuilder {
   }
   maglev::ProcessResult Process(maglev::Float64Constant* node,
                                 const maglev::ProcessingState& state) {
-    SetMap(node, __ Float64Constant(
-                     base::bit_cast<double>(node->value().get_bits())));
+    // std::cout << "Converting Float64Constant: "
+    //           <<
+    //           maglev::PrintNode{maglev_compilation_unit_->graph_labeller(),
+    //                                node}
+    //           << "\n";
+    // uint64_t u64_value = node->value().get_bits();
+    // PrintF("Uint64 value: %llx\n", static_cast<unsigned long
+    // long>(u64_value));
+
+    // double f64_value = std::bit_cast<double>(u64_value);
+    // std::cout << "Double value = " << f64_value << "\n";
+    // PrintF(
+    //     "Double value bits: %llx\n",
+    //     static_cast<unsigned long
+    //     long>(base::bit_cast<uint64_t>(f64_value)));
+
+    // double memcpy_val;
+    // memcpy(&memcpy_val, &u64_value, sizeof(double));
+    // std::cout << "memcpy Double value = " << memcpy_val << "\n";
+    // PrintF(
+    //     "memcpy Double value bits: %llx\n",
+    //     static_cast<unsigned long
+    //     long>(base::bit_cast<uint64_t>(memcpy_val)));
+
+    // double f64_direct = node->value().get_scalar();
+    // std::cout << "direct Double value = " << f64_direct << "\n";
+    // PrintF(
+    //     "direct Double value bits: %llx\n",
+    //     static_cast<unsigned long
+    //     long>(base::bit_cast<uint64_t>(f64_direct)));
+
+    SetMap(node, __ Float64Constant(node->value()));
     return maglev::ProcessResult::kContinue;
   }
   maglev::ProcessResult Process(maglev::SmiConstant* node,
