@@ -16,6 +16,23 @@
       "message": "PTAL! :)",
       "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3fccdbd_aa4420b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T14:44:22Z",
+      "side": 1,
+      "message": "I don\u0027t know how many times side-effects in stack checks have hurt us already (both in wasm and js)... 😞",
+      "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
