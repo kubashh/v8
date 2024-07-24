@@ -183,23 +183,31 @@ namespace {
 // Takes two ordered maps and ensures that every element in `as` is
 //  * also present in `bs` and
 //  * `Compare(a, b)` holds for each value.
-template <typename As, typename Bs, typename Function, bool kSkipEmpty = false>
-bool AspectIncludes(const As& as, const Bs& bs, const Function& Compare) {
+template <typename As, typename Bs, typename Function1,
+          typename Function2 = std::nullptr_t>
+bool AspectIncludes(const As& as, const Bs& bs, const Function1& Compare,
+                    const Function2 IsEmpty = nullptr) {
   typename As::const_iterator a = as.begin();
   typename Bs::const_iterator b = bs.begin();
   while (a != as.end()) {
-    if constexpr (kSkipEmpty) {
-      if (a->second.empty()) {
+    if constexpr (!std::is_same<Function2, std::nullptr_t>::value) {
+      if (IsEmpty(a->second)) {
         ++a;
         continue;
       }
     }
-    if (b == bs.end()) return false;
+    if (b == bs.end()) {
+      return false;
+    }
     while (b->first < a->first) {
       ++b;
-      if (b == bs.end()) return false;
+      if (b == bs.end()) {
+        return false;
+      }
     }
-    if (!(a->first == b->first)) return false;
+    if (!(a->first == b->first)) {
+      return false;
+    }
     if (!Compare(a->second, b->second)) {
       return false;
     }
@@ -214,17 +222,16 @@ bool AspectIncludes(const As& as, const Bs& bs, const Function& Compare) {
 template <typename As, typename Bs, typename Function>
 bool MaybeEmptyAspectIncludes(const As& as, const Bs& bs,
                               const Function& Compare) {
-  return AspectIncludes<As, Bs, Function, true>(as, bs, Compare);
+  return AspectIncludes<As, Bs, Function>(as, bs, Compare,
+                                          [](auto x) { return x.empty(); });
 }
 
 bool NodeInfoIncludes(const NodeInfo& before, const NodeInfo& after) {
   if (!NodeTypeIs(after.type(), before.type())) {
     return false;
   }
-  if (before.possible_maps_are_known()) {
-    if (!after.possible_maps_are_known() ||
-        (!before.possible_maps_are_unstable() &&
-         after.possible_maps_are_unstable())) {
+  if (before.possible_maps_are_known() && before.any_map_is_unstable()) {
+    if (!after.possible_maps_are_known()) {
       return false;
     }
     if (!before.possible_maps().contains(after.possible_maps())) {
@@ -232,6 +239,10 @@ bool NodeInfoIncludes(const NodeInfo& before, const NodeInfo& after) {
     }
   }
   return true;
+}
+
+bool NodeInfoIsEmpty(const NodeInfo& info) {
+  return info.type() == NodeType::kUnknown && !info.possible_maps_are_known();
 }
 
 bool NodeInfoTypeIs(const NodeInfo& before, const NodeInfo& after) {
@@ -249,7 +260,11 @@ bool KnownNodeAspects::IsCompatibleWithLoopHeader(
   bool had_effects = effect_epoch() != loop_header.effect_epoch();
 
   if (!had_effects) {
-    if (!AspectIncludes(loop_header.node_infos, node_infos, NodeInfoTypeIs)) {
+    if (!AspectIncludes(loop_header.node_infos, node_infos, NodeInfoTypeIs,
+                        NodeInfoIsEmpty)) {
+      if (V8_UNLIKELY(v8_flags.trace_maglev_loop_speeling)) {
+        std::cout << "KNA after effectless loop has incompatible node_infos\n";
+      }
       return false;
     }
     // In debug builds we do a full comparison to ensure that without an effect
@@ -259,7 +274,8 @@ bool KnownNodeAspects::IsCompatibleWithLoopHeader(
 #endif
   }
 
-  if (!AspectIncludes(loop_header.node_infos, node_infos, NodeInfoIncludes)) {
+  if (!AspectIncludes(loop_header.node_infos, node_infos, NodeInfoIncludes,
+                      NodeInfoIsEmpty)) {
     if (V8_UNLIKELY(v8_flags.trace_maglev_loop_speeling)) {
       std::cout << "KNA after loop has incompatible node_infos\n";
     }
