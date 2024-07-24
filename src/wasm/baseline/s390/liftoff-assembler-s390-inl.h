@@ -2690,15 +2690,22 @@ SIMD_RELAXED_UNOP_LIST(SIMD_VISIT_RELAXED_UNOP)
 #undef SIMD_VISIT_RELAXED_UNOP
 #undef SIMD_RELAXED_UNOP_LIST
 
-#define F16_UNOP_LIST(V) \
-  V(f16x8_splat)         \
-  V(f16x8_abs)           \
-  V(f16x8_neg)           \
-  V(f16x8_sqrt)          \
-  V(f16x8_ceil)          \
-  V(f16x8_floor)         \
-  V(f16x8_trunc)         \
-  V(f16x8_nearest_int)
+#define F16_UNOP_LIST(V)     \
+  V(f16x8_splat)             \
+  V(f16x8_abs)               \
+  V(f16x8_neg)               \
+  V(f16x8_sqrt)              \
+  V(f16x8_ceil)              \
+  V(f16x8_floor)             \
+  V(f16x8_trunc)             \
+  V(f16x8_nearest_int)       \
+  V(i16x8_sconvert_f16x8)    \
+  V(i16x8_uconvert_f16x8)    \
+  V(f16x8_sconvert_i16x8)    \
+  V(f16x8_uconvert_i16x8)    \
+  V(f16x8_demote_f32x4_zero) \
+  V(f32x4_promote_low_f16x8) \
+  V(f16x8_demote_f64x2_zero)
 
 #define VISIT_F16_UNOP(name)                                \
   bool LiftoffAssembler::emit_##name(LiftoffRegister dst,   \
@@ -3129,7 +3136,7 @@ void LiftoffAssembler::CallCWithStackBuffer(
   int arg_offset = 0;
   for (const VarState& arg : args) {
     MemOperand dst{sp, arg_offset};
-    liftoff::StoreToMemory(this, dst, arg, r0);
+    liftoff::StoreToMemory(this, dst, arg, ip);
     arg_offset += value_kind_size(arg.kind());
   }
   DCHECK_LE(arg_offset, stack_bytes);
@@ -3174,7 +3181,7 @@ void LiftoffAssembler::CallCWithStackBuffer(
         LoadF64(result_reg->fp(), MemOperand(sp));
         break;
       case kS128:
-        LoadV128(result_reg->fp(), MemOperand(sp), r0);
+        LoadV128(result_reg->fp(), MemOperand(sp), ip);
         break;
       default:
         UNREACHABLE();
@@ -3206,7 +3213,7 @@ void LiftoffAssembler::CallC(const std::initializer_list<VarState> args,
       int offset =
           (kStackFrameExtraParamSlot + stack_args) * kSystemPointerSize;
       MemOperand dst{sp, offset + bias};
-      liftoff::StoreToMemory(this, dst, arg, r0);
+      liftoff::StoreToMemory(this, dst, arg, ip);
       ++stack_args;
     }
   }
