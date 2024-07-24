@@ -51,6 +51,24 @@
       "parentUuid": "e3fccdbd_aa4420b7",
       "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41f9c0a1_259c4869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-24T15:19:11Z",
+      "side": 1,
+      "message": "\u003e Wasm stack checks currently have CanCallAnything effects\n\nWait what?\nSeems like this was the effects for all stack checks prior to your refactoring here? https://chromium-review.googlesource.com/c/v8/v8/+/5621891\n\nThanks for the pointers, this could potentially have effects on load elimination and other things. Given that the deopt nodes should enable more aggressive optimizations, getting rid of the `CanCallAnything` on each loop iteration could increase the performance improvements for wasm-deopts.\nAlso, this might heavily reduce the benefits from loop peeling, doesn\u0027t it?",
+      "parentUuid": "aa586f33_f8b92308",
+      "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
