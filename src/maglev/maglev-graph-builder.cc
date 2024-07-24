@@ -4613,7 +4613,7 @@ ReduceResult MaglevGraphBuilder::TryBuildPropertyLoad(
     }
     case compiler::PropertyAccessInfo::kStringLength: {
       DCHECK_EQ(receiver, lookup_start_object);
-      ValueNode* result = AddNewNode<StringLength>({receiver});
+      ValueNode* result = BuildLoadStringLength(receiver);
       RecordKnownProperty(lookup_start_object, name, result,
                           AccessInfoGuaranteedConst(access_info),
                           compiler::AccessMode::kLoad);
@@ -4889,7 +4889,7 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccessOnString(
   // Ensure that {object} is actually a String.
   BuildCheckString(object);
 
-  ValueNode* length = AddNewNode<StringLength>({object});
+  ValueNode* length = BuildLoadStringLength(object);
   ValueNode* index = GetInt32ElementIndex(index_object);
   auto emit_load = [&] { return AddNewNode<StringAt>({object, index}); };
 
@@ -5744,6 +5744,9 @@ void MaglevGraphBuilder::RecordKnownProperty(
         case KnownNodeAspects::LoadedPropertyMapKey::kTypedArrayLength:
           std::cout << "TypedArray length";
           break;
+        case KnownNodeAspects::LoadedPropertyMapKey::kStringLength:
+          std::cout << "String length";
+          break;
       }
       std::cout << std::endl;
     }
@@ -5764,6 +5767,9 @@ void MaglevGraphBuilder::RecordKnownProperty(
         break;
       case KnownNodeAspects::LoadedPropertyMapKey::kTypedArrayLength:
         std::cout << "TypedArray length";
+        break;
+      case KnownNodeAspects::LoadedPropertyMapKey::kStringLength:
+        std::cout << "String length";
         break;
     }
     std::cout << "] = " << PrintNodeLabel(graph_labeller(), value) << ": "
@@ -5808,6 +5814,25 @@ ReduceResult MaglevGraphBuilder::TryReuseKnownPropertyLoad(
     return result;
   }
   return ReduceResult::Fail();
+}
+
+ValueNode* MaglevGraphBuilder::BuildLoadStringLength(ValueNode* string) {
+  if (ReduceResult result = TryFindLoadedProperty(
+          known_node_aspects().loaded_constant_properties, string,
+          KnownNodeAspects::LoadedPropertyMapKey::StringLength());
+      result.IsDone()) {
+    if (v8_flags.trace_maglev_graph_building && result.IsDoneWithValue()) {
+      std::cout << "  * Reusing constant [String length]"
+                << PrintNodeLabel(graph_labeller(), result.value()) << ": "
+                << PrintNode(graph_labeller(), result.value()) << std::endl;
+    }
+    return result.value();
+  }
+  ValueNode* result = AddNewNode<StringLength>({string});
+  RecordKnownProperty(string,
+                      KnownNodeAspects::LoadedPropertyMapKey::StringLength(),
+                      result, true, compiler::AccessMode::kLoad);
+  return result;
 }
 
 ReduceResult MaglevGraphBuilder::TryBuildLoadNamedProperty(
@@ -7361,7 +7386,7 @@ ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeCharCodeAt(
   // Ensure that {receiver} is actually a String.
   BuildCheckString(receiver);
   // And index is below length.
-  ValueNode* length = AddNewNode<StringLength>({receiver});
+  ValueNode* length = BuildLoadStringLength(receiver);
   AddNewNode<CheckInt32Condition>({index, length},
                                   AssertCondition::kUnsignedLessThan,
                                   DeoptimizeReason::kOutOfBounds);
@@ -7387,7 +7412,7 @@ ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeCodePointAt(
   // Ensure that {receiver} is actually a String.
   BuildCheckString(receiver);
   // And index is below length.
-  ValueNode* length = AddNewNode<StringLength>({receiver});
+  ValueNode* length = BuildLoadStringLength(receiver);
   AddNewNode<CheckInt32Condition>({index, length},
                                   AssertCondition::kUnsignedLessThan,
                                   DeoptimizeReason::kOutOfBounds);
