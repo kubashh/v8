@@ -117,6 +117,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e222fc19_4815e0fa",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-24T14:31:03Z",
+      "side": 1,
+      "message": "Ok, I\u0027ve looked more at this other CL and at the repro and the fix.\n\nThe \"fix\" of using `op-\u003estorage.float32` instead of `op-\u003efloat32()` sounds incredibly brittle.\n\nThe proper fix is what I did in machine-optimization-reducer.h: using `.get_bits()` on the `Float32`/`Float64` rather than getting the `float`/`double` and bitcasting it.",
+      "parentUuid": "131f5bd1_d2272eb3",
+      "range": {
+        "startLine": 74,
+        "startChar": 16,
+        "endLine": 74,
+        "endChar": 49
+      },
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8523eb92_d048d57f",
@@ -130,6 +154,30 @@
       "writtenOn": "2024-07-24T12:26:52Z",
       "side": 1,
       "message": "Same as above.",
+      "range": {
+        "startLine": 82,
+        "startChar": 28,
+        "endLine": 82,
+        "endChar": 46
+      },
+      "revId": "73f1ac69784e037c0cf3e7d5d8f5227654cc2c3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea844ef9_d116e9ae",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-24T14:31:03Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "8523eb92_d048d57f",
       "range": {
         "startLine": 82,
         "startChar": 28,
