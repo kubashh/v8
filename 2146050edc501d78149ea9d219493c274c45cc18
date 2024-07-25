@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8c6b742_cba96550",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115930
+      },
+      "writtenOn": "2024-07-25T21:14:35Z",
+      "side": 1,
+      "message": "mlippautz, are you a good reviewer for this? This is hopefully the last of the v8-side plumbing for the new exception propagation system. This CL is a mix of code written by me and by ishell.",
+      "revId": "2146050edc501d78149ea9d219493c274c45cc18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
