@@ -87,6 +87,24 @@
       "parentUuid": "41f9c0a1_259c4869",
       "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f2461cc_e82cedbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-25T06:15:56Z",
+      "side": 1,
+      "message": "WasmLoadElimination has a special case for WasmStackCheck, which is always ignored :)\n\nHowever, Jakob mentioned something about assuming that WasmStackCheck cannot change string shapes, which isn\u0027t really true :/ We\u0027ll need to spend a bit of time on it to see if violating this assumption can break anything.",
+      "parentUuid": "e6cb67b2_7b2c3007",
+      "revId": "c6e36a8106ed35e6ab6a8e5c5e09672fcb88f9d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
