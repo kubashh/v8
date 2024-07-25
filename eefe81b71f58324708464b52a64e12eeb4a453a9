@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccfc3225_263f05ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-25T07:36:04Z",
+      "side": 1,
+      "message": "All I can find is a neg-neg implication from css. Afaict, there is no implication to enable direct handle when css is enabled.\nI assume the code is correct and the description here is wrong.",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 61
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6993224f_62460e47",
         "filename": "gni/v8.gni",
         "patchSetId": 1
@@ -19,6 +42,52 @@
         "startChar": 2,
         "endLine": 126,
         "endChar": 24
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c295abbc_01a1d337",
+        "filename": "gni/v8.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-25T07:36:04Z",
+      "side": 1,
+      "message": "why not remove it now?",
+      "range": {
+        "startLine": 247,
+        "startChar": 111,
+        "endLine": 247,
+        "endChar": 131
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6236c8dd_23054670",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-25T07:36:04Z",
+      "side": 1,
+      "message": "The external parenthesis here are redundant.",
+      "range": {
+        "startLine": 68,
+        "startChar": 26,
+        "endLine": 68,
+        "endChar": 59
       },
       "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
