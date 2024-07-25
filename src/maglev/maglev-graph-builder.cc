@@ -4242,6 +4242,29 @@ void MaglevGraphBuilder::BuildStoreTrustedPointerField(
 #endif  // V8_ENABLE_SANDBOX
 }
 
+ValueNode* MaglevGraphBuilder::BuildLoadFixedArrayElement(ValueNode* elements,
+                                                          int index) {
+  compiler::OptionalHeapObjectRef maybe_constant;
+  if ((maybe_constant = TryGetConstant(elements)) &&
+      maybe_constant.value().IsFixedArray()) {
+    compiler::FixedArrayRef fixed_array_ref =
+        maybe_constant.value().AsFixedArray();
+    compiler::OptionalObjectRef maybe_value =
+        fixed_array_ref.TryGet(broker(), index);
+    if (maybe_value) return GetConstant(*maybe_value);
+  }
+  return AddNewNode<LoadTaggedField>({elements},
+                                     FixedArray::OffsetOfElementAt(index));
+}
+
+ValueNode* MaglevGraphBuilder::BuildLoadFixedArrayElement(ValueNode* elements,
+                                                          ValueNode* index) {
+  if (Int32Constant* constant = index->TryCast<Int32Constant>()) {
+    return BuildLoadFixedArrayElement(elements, constant->value());
+  }
+  return AddNewNode<LoadFixedArrayElement>({elements, index});
+}
+
 void MaglevGraphBuilder::BuildStoreFixedArrayElement(ValueNode* elements,
                                                      ValueNode* index,
                                                      ValueNode* value) {
@@ -5158,7 +5181,7 @@ ReduceResult MaglevGraphBuilder::TryBuildElementLoadOnJSArrayOrJSObject(
       result = AddNewNode<LoadFixedDoubleArrayElement>({elements_array, index});
     } else {
       DCHECK(!IsDoubleElementsKind(elements_kind));
-      result = AddNewNode<LoadFixedArrayElement>({elements_array, index});
+      result = BuildLoadFixedArrayElement(elements_array, index);
       if (IsHoleyElementsKind(elements_kind)) {
         if (CanTreatHoleAsUndefined(maps) && LoadModeHandlesHoles(load_mode)) {
           result = AddNewNode<ConvertHoleToUndefined>({result});
@@ -6004,8 +6027,8 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
       current_for_in_state.receiver_needs_map_check = false;
     }
     // TODO(leszeks): Cache the field index per iteration.
-    auto* field_index = AddNewNode<LoadFixedArrayElement>(
-        {current_for_in_state.enum_cache_indices, current_for_in_state.index});
+    auto* field_index = BuildLoadFixedArrayElement(
+        current_for_in_state.enum_cache_indices, current_for_in_state.index);
     SetAccumulator(
         AddNewNode<LoadTaggedFieldByFieldIndex>({object, field_index}));
     return;
@@ -7098,7 +7121,7 @@ ReduceResult MaglevGraphBuilder::TryReduceArrayForEach(
   if (IsDoubleElementsKind(elements_kind)) {
     element = AddNewNode<LoadFixedDoubleArrayElement>({elements, index_int32});
   } else {
-    element = AddNewNode<LoadFixedArrayElement>({elements, index_int32});
+    element = BuildLoadFixedArrayElement(elements, index_int32);
   }
 
   base::Optional<MaglevSubGraphBuilder::Label> skip_call;
@@ -8073,13 +8096,10 @@ ReduceResult MaglevGraphBuilder::TryReduceArrayPrototypePop(
            GetFloat64Constant(Float64::FromBits(kHoleNanInt64))});
     } else {
       DCHECK(IsSmiElementsKind(kind) || IsObjectElementsKind(kind));
-      value = AddNewNode<LoadFixedArrayElement>(
-          {writable_elements_array, new_array_length});
-      DCHECK(CanElideWriteBarrier(writable_elements_array,
-                                  GetRootConstant(RootIndex::kTheHoleValue)));
-      AddNewNode<StoreFixedArrayElementNoWriteBarrier>(
-          {writable_elements_array, new_array_length,
-           GetRootConstant(RootIndex::kTheHoleValue)});
+      value =
+          BuildLoadFixedArrayElement(writable_elements_array, new_array_length);
+      BuildStoreFixedArrayElement(writable_elements_array, new_array_length,
+                                  GetRootConstant(RootIndex::kTheHoleValue));
     }
 
     if (IsHoleyElementsKind(kind)) {
@@ -12470,7 +12490,7 @@ void MaglevGraphBuilder::VisitForInNext() {
       auto* receiver_map =
           BuildLoadTaggedField(receiver, HeapObject::kMapOffset);
       AddNewNode<CheckDynamicValue>({receiver_map, cache_type});
-      auto* key = AddNewNode<LoadFixedArrayElement>({cache_array, index});
+      auto* key = BuildLoadFixedArrayElement(cache_array, index);
       EnsureType(key, NodeType::kInternalizedString);
       SetAccumulator(key);
 
