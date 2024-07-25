@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7b3f6a2_41a8116e",
+        "filename": "src/api/api.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 10280,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-25T11:36:34Z",
+      "side": 1,
+      "message": "To make this a bit more concretely: If we want to treat it the same way as other memory in the global memory counters, we\u0027d do something along the lines of Oilpan like in https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc-js/cpp-heap.cc;drc\u003d2017cd8a8925f180257662f78eaf9eb93e8e394d;bpv\u003d1;bpt\u003d1;l\u003d981\n\nIn essensce:\n- Update the counter;\n- On updates that cross thresholds of a few KB check whether we need to start GC\n\nA hard limit then can be kept separately if we want but I am inclined to try to remove that as well.",
+      "parentUuid": "527465f9_3f536d09",
+      "range": {
+        "startLine": 10280,
+        "startChar": 34,
+        "endLine": 10280,
+        "endChar": 55
+      },
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29e7b5f2_6147cab0",
         "filename": "src/heap/heap.h",
         "patchSetId": 23
