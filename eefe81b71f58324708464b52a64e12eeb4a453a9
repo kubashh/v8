@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de2e657b_bfa22fff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-25T13:33:01Z",
+      "side": 1,
+      "message": "All these are compile-time flags. The implications are in v8.gni and src/flags is only checking for consistency. Both the code and the description here should be correct.",
+      "parentUuid": "ccfc3225_263f05ae",
+      "range": {
+        "startLine": 13,
+        "startChar": 3,
+        "endLine": 13,
+        "endChar": 61
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6993224f_62460e47",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-07-25T07:24:34Z",
       "side": 1,
       "message": "Why is not removing in this CL?",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 24
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cc279a1_a94e9a3a",
+        "filename": "gni/v8.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-25T13:33:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6993224f_62460e47",
       "range": {
         "startLine": 126,
         "startChar": 2,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54250e2a_955a6632",
+        "filename": "gni/v8.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-25T13:33:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c295abbc_01a1d337",
+      "range": {
+        "startLine": 247,
+        "startChar": 111,
+        "endLine": 247,
+        "endChar": 131
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6236c8dd_23054670",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-07-25T07:36:04Z",
       "side": 1,
       "message": "The external parenthesis here are redundant.",
+      "range": {
+        "startLine": 68,
+        "startChar": 26,
+        "endLine": 68,
+        "endChar": 59
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "885b5bae_ab1b5de0",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-25T13:33:01Z",
+      "side": 1,
+      "message": "Done, here and in line 55.",
+      "parentUuid": "6236c8dd_23054670",
       "range": {
         "startLine": 68,
         "startChar": 26,
