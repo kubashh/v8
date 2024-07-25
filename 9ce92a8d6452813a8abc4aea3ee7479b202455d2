@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d96daaa7_93cce91c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2024-07-25T18:15:55Z",
+      "side": 1,
+      "message": "Is there any chance this can be revisited, or you could take over this patch and make it into the codebase? We are nearing a 1 year anniversary of this PR being opened.",
+      "revId": "9ce92a8d6452813a8abc4aea3ee7479b202455d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
