@@ -374,6 +374,33 @@ class MaglevEarlyLoweringReducer : public Next {
     return result;
   }
 
+  void GeneratorStore(V<Context> context, V<JSGeneratorObject> generator,
+                      base::SmallVector<OpIndex, 32> parameters_and_registers,
+                      int num_parameters_and_registers, int suspend_id,
+                      int bytecode_offset) {
+    V<FixedArray> array = __ template LoadTaggedField<FixedArray>(
+        generator, JSGeneratorObject::kParametersAndRegistersOffset);
+    for (int i = 0; i < num_parameters_and_registers; i++) {
+      __ Store(array, parameters_and_registers[i], StoreOp::Kind::TaggedBase(),
+               MemoryRepresentation::AnyTagged(),
+               WriteBarrierKind::kFullWriteBarrier,
+               FixedArray::OffsetOfElementAt(i));
+    }
+    __ Store(generator, __ SmiConstant(Smi::FromInt(suspend_id)),
+             StoreOp::Kind::TaggedBase(), MemoryRepresentation::TaggedSigned(),
+             WriteBarrierKind::kNoWriteBarrier,
+             JSGeneratorObject::kContinuationOffset);
+    __ Store(generator, __ SmiConstant(Smi::FromInt(bytecode_offset)),
+             StoreOp::Kind::TaggedBase(), MemoryRepresentation::TaggedSigned(),
+             WriteBarrierKind::kNoWriteBarrier,
+             JSGeneratorObject::kInputOrDebugPosOffset);
+
+    __ Store(generator, context, StoreOp::Kind::TaggedBase(),
+             MemoryRepresentation::AnyTagged(),
+             WriteBarrierKind::kFullWriteBarrier,
+             JSGeneratorObject::kContextOffset);
+  }
+
  private:
   V<Word32> CheckInstanceTypeIsInRange(V<Map> map,
                                        InstanceType first_instance_type,
