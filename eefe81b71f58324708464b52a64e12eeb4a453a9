@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6993224f_62460e47",
+        "filename": "gni/v8.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-25T07:24:34Z",
+      "side": 1,
+      "message": "Why is not removing in this CL?",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 24
+      },
+      "revId": "eefe81b71f58324708464b52a64e12eeb4a453a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
