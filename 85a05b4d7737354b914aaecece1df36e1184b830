@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b418376_2673f2bb",
+        "filename": "src/api/api.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 10280,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-07-25T13:30:11Z",
+      "side": 1,
+      "message": "The logic here is kept only to support hard limit, whereas the regular limit is enforced through including external_memory() in GlobalConsumedBytes(), which is checked in IncrementalMarkingLimitReached() (I think that\u0027s similar to what you\u0027re describing for oilpan?).\nI\u0027m also happy to remove this codepath entirely under `external_memory_relaxed_limits` as I don\u0027t think hard limit contributes much.",
+      "parentUuid": "b7b3f6a2_41a8116e",
+      "range": {
+        "startLine": 10280,
+        "startChar": 34,
+        "endLine": 10280,
+        "endChar": 55
+      },
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "29e7b5f2_6147cab0",
         "filename": "src/heap/heap.h",
         "patchSetId": 23
@@ -78,6 +102,30 @@
       "writtenOn": "2024-07-24T21:11:07Z",
       "side": 1,
       "message": "I think with the `external_memory_relaxed_limits` the limit and hard limit are a bit confusing as we essentially just have a hard limi, no?",
+      "range": {
+        "startLine": 591,
+        "startChar": 17,
+        "endLine": 591,
+        "endChar": 47
+      },
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6291626d_cae067ad",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-07-25T13:30:11Z",
+      "side": 1,
+      "message": "Essentially only external_memory_hard_limit() is kept under `external_memory_relaxed_limits `.\nThe extra complexity here is to retrofit the old behavior when the flag is disabled. Pathset 18 shows the end state without `external_memory_relaxed_limits `:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5688913/18",
+      "parentUuid": "29e7b5f2_6147cab0",
       "range": {
         "startLine": 591,
         "startChar": 17,
