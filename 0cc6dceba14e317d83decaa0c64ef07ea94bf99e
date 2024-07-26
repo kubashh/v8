@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44f1686a_e1fee6a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-26T10:27:17Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0cc6dceba14e317d83decaa0c64ef07ea94bf99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a350bbd_69fd0667",
@@ -14,6 +31,24 @@
       "writtenOn": "2024-07-26T08:42:18Z",
       "side": 1,
       "message": "I am not sure if these two are indeed required. PTAL.",
+      "revId": "0cc6dceba14e317d83decaa0c64ef07ea94bf99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdc5a502_2df53e89",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5365,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-26T10:27:17Z",
+      "side": 1,
+      "message": "I see no reason why they wouldn\u0027t be required, same as the untrusted shared spaces above.",
+      "parentUuid": "2a350bbd_69fd0667",
       "revId": "0cc6dceba14e317d83decaa0c64ef07ea94bf99e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
