@@ -256,7 +256,7 @@ class Heap final {
       return amount;
     }
 
-    int64_t AllocatedSinceMarkCompact() const {
+    uint64_t AllocatedSinceMarkCompact() const {
       int64_t total_bytes = total();
       int64_t low_since_mark_compact_bytes = low_since_mark_compact();
 
@@ -634,9 +634,14 @@ class Heap final {
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);
 
-  int64_t external_memory_hard_limit() { return max_old_generation_size() / 2; }
+  int64_t external_memory_hard_limit() {
+    if (v8_flags.external_memory_relaxed_limits) {
+      return max_global_memory_size_ / 2;
+    }
+    return max_old_generation_size() / 2;
+  }
 
-  V8_INLINE int64_t external_memory();
+  V8_INLINE int64_t external_memory() const;
   V8_EXPORT_PRIVATE int64_t external_memory_limit();
   V8_INLINE int64_t update_external_memory(int64_t delta);
 
@@ -1892,8 +1897,10 @@ class Heap final {
   // ===========================================================================
 
   inline size_t OldGenerationSpaceAvailable() {
-    uint64_t bytes = OldGenerationConsumedBytes() +
-                     AllocatedExternalMemorySinceMarkCompact();
+    uint64_t bytes = OldGenerationConsumedBytes();
+    if (!v8_flags.external_memory_relaxed_limits) {
+      bytes += AllocatedExternalMemorySinceMarkCompact();
+    }
 
     if (old_generation_allocation_limit() <= bytes) return 0;
     return old_generation_allocation_limit() - static_cast<size_t>(bytes);
