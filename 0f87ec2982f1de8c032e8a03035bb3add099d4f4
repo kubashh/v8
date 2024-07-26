@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "729f8cb7_53e83088",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-07-26T22:22:03Z",
+      "side": 1,
+      "message": "To check my understanding, there\u0027s no conditional check for F16C or AVX2 support because `kF32LoadF16` is replaced by an I32 load if the these features aren\u0027t supported, and this `CpuFeatureScope` will `DCHECK` that.",
+      "revId": "0f87ec2982f1de8c032e8a03035bb3add099d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20aeef13_0440113e",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-07-26T22:22:03Z",
+      "side": 1,
+      "message": "https://www.felixcloutier.com/x86/vpbroadcastb:vpbroadcastw:vpbroadcastd:vpbroadcastq lists `vpbroadcastw` as AVX512, not AVX2. Does AVX2 include AVX512 in V8\u0027s codebase?",
+      "revId": "0f87ec2982f1de8c032e8a03035bb3add099d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9d62420_b97b87f0",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-07-26T22:22:03Z",
+      "side": 1,
+      "message": "Stupid question: why can\u0027t you use `vmovss`?",
+      "revId": "0f87ec2982f1de8c032e8a03035bb3add099d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
