@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a1ed137_4d51ff66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 27
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-26T14:41:37Z",
+      "side": 1,
+      "message": "Can we only have one flag that moves the accounting over and just preserves the existing max limit for this CL?\n\nGiven that there\u0027s still some mixups in here I would suggest to keep the change minimal.",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "79eb9e90834eeb8d5f4bc4bb8e7d4aa95b2bb1ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7249674e_aa341762",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 1587,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-26T14:41:37Z",
+      "side": 1,
+      "message": "We would always start incremental marking here anyways. In that sense the above branch doesn\u0027t really make sense?",
+      "range": {
+        "startLine": 1587,
+        "startChar": 31,
+        "endLine": 1587,
+        "endChar": 52
+      },
+      "revId": "79eb9e90834eeb8d5f4bc4bb8e7d4aa95b2bb1ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ccf6d32_ee51787e",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 2308,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-26T14:41:37Z",
+      "side": 1,
+      "message": "This is also adjusted in `AdjustAmountOf...()` outside of GC. At the very least the naming is off.",
+      "range": {
+        "startLine": 2308,
+        "startChar": 22,
+        "endLine": 2308,
+        "endChar": 49
+      },
+      "revId": "79eb9e90834eeb8d5f4bc4bb8e7d4aa95b2bb1ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
