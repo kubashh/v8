@@ -16,6 +16,40 @@
       "message": "Could you please review this patch?",
       "revId": "3e661e4fcf5920b09fa6fe75105a229c93e1cb3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82cdf049_059e644a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-07-26T12:09:12Z",
+      "side": 1,
+      "message": "+1 with comment\nAdding pthier as backup reviewer because I\u0027ll be OOO soon.",
+      "revId": "3e661e4fcf5920b09fa6fe75105a229c93e1cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e61c55ba_384aec35",
+        "filename": "src/objects/transitions-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-07-26T12:09:12Z",
+      "side": 1,
+      "message": "Can this happen if the `transition_name` is a string and equal to the `key_chars`? If not move that `transition_name` check first and drop this check (or make it a DCHECK or a CHECK)",
+      "revId": "3e661e4fcf5920b09fa6fe75105a229c93e1cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
