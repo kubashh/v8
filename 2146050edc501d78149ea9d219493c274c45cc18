@@ -57,6 +57,30 @@
       },
       "revId": "2146050edc501d78149ea9d219493c274c45cc18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd6d2dc0_0e1f1f08",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1115930
+      },
+      "writtenOn": "2024-07-26T20:36:44Z",
+      "side": 1,
+      "message": "For templates included in the snapshot, yes. But that\u0027s only 6 templates in chromium. The vast majority of FunctionTemplates are initialized and cached on first use, so this will be set during that initialization.",
+      "parentUuid": "19caa071_eef5ca08",
+      "range": {
+        "startLine": 1513,
+        "startChar": 23,
+        "endLine": 1513,
+        "endChar": 39
+      },
+      "revId": "2146050edc501d78149ea9d219493c274c45cc18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
