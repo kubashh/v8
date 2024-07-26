@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ede7a9d1_8069a0c2",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 16789,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-26T07:00:26Z",
+      "side": 1,
+      "message": "maybe we should split this one up further, and have two switches (one on the trusted instance type, one on the untrusted one)",
+      "range": {
+        "startLine": 16789,
+        "startChar": 2,
+        "endLine": 16789,
+        "endChar": 10
+      },
+      "revId": "0267e7cac688aec4b4f577d39aa9293446b4e456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
