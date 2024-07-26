@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a456f5a9_5d2a5b42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-26T09:35:51Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "6b02ee0331f207610d43dcd34d4d2f6a79c68a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "273d7120_60130e7c",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-26T09:35:51Z",
+      "side": 1,
+      "message": "You don\u0027t need this, as the `CpuFeatureScope` constructor contains the same check.",
+      "range": {
+        "startLine": 720,
+        "startChar": 6,
+        "endLine": 720,
+        "endChar": 45
+      },
+      "revId": "6b02ee0331f207610d43dcd34d4d2f6a79c68a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c72c8dbc_83a1cf16",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-26T09:35:51Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 763,
+        "startChar": 6,
+        "endLine": 763,
+        "endChar": 45
+      },
+      "revId": "6b02ee0331f207610d43dcd34d4d2f6a79c68a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
