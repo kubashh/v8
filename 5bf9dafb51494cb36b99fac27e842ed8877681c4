@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26b3723b_e10df13d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-26T14:14:02Z",
+      "side": 1,
+      "message": "Comments to be addressed in https://chromium-review.googlesource.com/c/v8/v8/+/5739810",
+      "revId": "5bf9dafb51494cb36b99fac27e842ed8877681c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7a326d0_0e4a8c66",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-07-26T13:24:22Z",
       "side": 1,
       "message": "nit: this is overly specific (it\u0027s shared for struct and array)",
+      "range": {
+        "startLine": 624,
+        "startChar": 39,
+        "endLine": 624,
+        "endChar": 57
+      },
+      "revId": "5bf9dafb51494cb36b99fac27e842ed8877681c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46191626_f7315ebf",
+        "filename": "src/runtime/runtime-test-wasm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-26T14:14:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7a326d0_0e4a8c66",
       "range": {
         "startLine": 624,
         "startChar": 39,
@@ -71,6 +112,24 @@
       "writtenOn": "2024-07-26T13:24:22Z",
       "side": 1,
       "message": "There\u0027s no need to disallow the runtime function in official builds, or did I miss something?",
+      "revId": "5bf9dafb51494cb36b99fac27e842ed8877681c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96014c07_eb2e2c73",
+        "filename": "src/runtime/runtime.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-26T14:14:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1eb40db5_905d2184",
       "revId": "5bf9dafb51494cb36b99fac27e842ed8877681c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
