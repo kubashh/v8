@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2347672c_acc11e7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-26T10:26:26Z",
+      "side": 1,
+      "message": "Yes, a wasm struct / array can only exist with a user-defined type. There aren\u0027t any \"built-in\" ones (ignoring the magic array types for imported strings), so their maps point to other objects that only exist within wasm modules.\nAs there is a module cache and the liftoff compilation of such a small function is very cheap, this should be fine however.",
+      "parentUuid": "b2cc57d9_01e495eb",
+      "revId": "7b532b0abf1a4a3a2670e960142658d31a7c8fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30f6f0ac_3f037ae1",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-07-26T09:29:21Z",
       "side": 1,
       "message": "So the object will always have one i32 field? What value is that being set to? I wonder if we should give it at least two i32 fields or maybe even i64 and set them to some magic value that guarantees a crash if they are treated as tagged pointers (e.g. 0xffffffff, or 0x41414141, or whatever). One type of bug we\u0027re trying to fuzz for is JSObject \u003c-\u003e WasmObject confusion. The JSObject will have it\u0027s properties and elements pointers at offset 4 and 8, so if those are inaccessible pointers in the WasmObjects, that might uncover the bug more easily. WDYT?",
+      "range": {
+        "startLine": 663,
+        "startChar": 0,
+        "endLine": 663,
+        "endChar": 76
+      },
+      "revId": "7b532b0abf1a4a3a2670e960142658d31a7c8fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc51f076_359ce489",
+        "filename": "src/runtime/runtime-test-wasm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-26T10:26:26Z",
+      "side": 1,
+      "message": "The value was 42 (it was the same module I passed to you a few months ago). Sure, we can change the value and size, changing it now to 64 bits contents, each of them being interpreted as a tagged pointer with pointer compression enabled.",
+      "parentUuid": "30f6f0ac_3f037ae1",
       "range": {
         "startLine": 663,
         "startChar": 0,
