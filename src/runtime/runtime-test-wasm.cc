@@ -11,6 +11,7 @@
 #include "src/execution/arguments-inl.h"
 #include "src/execution/frames-inl.h"
 #include "src/heap/heap-inl.h"
+#include "src/objects/property-descriptor.h"
 #include "src/objects/smi.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/wasm/fuzzing/random-module-generation.h"
@@ -616,6 +617,109 @@ RUNTIME_FUNCTION(Runtime_WasmTierUpFunction) {
 RUNTIME_FUNCTION(Runtime_WasmNull) {
   HandleScope scope(isolate);
   return ReadOnlyRoots(isolate).wasm_null();
+}
+
+static Handle<Object> CreateWasmObject(
+    Isolate* isolate, base::Vector<const uint8_t> module_bytes) {
+  wasm::ErrorThrower thrower(isolate, "Runtime_WasmStruct");
+  wasm::ModuleWireBytes bytes(base::VectorOf(module_bytes));
+  wasm::WasmEngine* engine = wasm::GetWasmEngine();
+  Handle<WasmModuleObject> module_object =
+      engine
+          ->SyncCompile(isolate, wasm::WasmEnabledFeatures(),
+                        wasm::CompileTimeImports(), &thrower, bytes)
+          .ToHandleChecked();
+  Handle<WasmInstanceObject> instance =
+      engine
+          ->SyncInstantiate(isolate, &thrower, module_object,
+                            Handle<JSReceiver>::null(),
+                            MaybeHandle<JSArrayBuffer>())
+          .ToHandleChecked();
+  Handle<Name> exports = isolate->factory()->InternalizeUtf8String("exports");
+  Handle<JSObject> exports_object = Cast<JSObject>(
+      JSObject::GetProperty(isolate, instance, exports).ToHandleChecked());
+
+  Handle<Name> main_name = isolate->factory()->NewStringFromAsciiChecked("s");
+  PropertyDescriptor desc;
+  Maybe<bool> property_found = JSReceiver::GetOwnPropertyDescriptor(
+      isolate, exports_object, main_name, &desc);
+  CHECK(property_found.FromMaybe(false));
+  Handle<JSFunction> function = Cast<JSFunction>(desc.value());
+  // TODO: Instead call the function and return the result.
+  return Execution::Call(isolate, function,
+                         isolate->factory()->undefined_value(), 0, nullptr)
+      .ToHandleChecked();
+}
+
+// Creates a new wasm array of type i32 with exactly one entry (42).
+RUNTIME_FUNCTION(Runtime_WasmStruct) {
+  HandleScope scope(isolate);
+  static constexpr uint8_t wasm_module_bytes[] = {
+      0x00, 0x61, 0x73, 0x6d,  // wasm magic
+      0x01, 0x00, 0x00, 0x00,  // wasm version
+      0x01,                    // section kind: Type
+      0x0b,                    // section length 11
+      0x02,                    // types count 2
+      0x50, 0x00,              //  subtype extensible, supertype count 0
+      0x5f, 0x01, 0x7f, 0x01,  //  kind: struct, field count 1:  i32 mutable
+      0x60,                    //  kind: func
+      0x00,                    // param count 0
+      0x01, 0x6e,              // return count 1:  anyref
+      0x03,                    // section kind: Function
+      0x02,                    // section length 2
+      0x01, 0x01,              // functions count 1: 0 $s (result anyref)
+      0x07,                    // section kind: Export
+      0x05,                    // section length 5
+      0x01,                    // exports count 1: export # 0
+      0x01,                    // field name length: 1
+      0x73,                    // field name: s
+      0x00, 0x00,              // kind: function index: 0
+      0x0a,                    // section kind: Code
+      0x09,                    // section length 9
+      0x01,                    // functions count 1
+                               // function #0 $s
+      0x07,                    // body size 7
+      0x00,                    // 0 entries in locals list
+      0x41, 0x2a,              // i32.const 42
+      0xfb, 0x00, 0x00,        // struct.new $type0
+      0x0b,                    // end
+  };
+  return *CreateWasmObject(isolate, base::VectorOf(wasm_module_bytes));
+}
+
+RUNTIME_FUNCTION(Runtime_WasmArray) {
+  HandleScope scope(isolate);
+  static constexpr uint8_t wasm_module_bytes[] = {
+      0x00, 0x61, 0x73, 0x6d,  // wasm magic
+      0x01, 0x00, 0x00, 0x00,  // wasm version
+      0x01,                    // section kind: Type
+      0x0a,                    // section length 10
+      0x02,                    // types count 2
+      0x50, 0x00,              //  subtype extensible, supertype count 0
+      0x5e, 0x7f, 0x01,        //  kind: array i32 mutable
+      0x60,                    //  kind: func
+      0x00,                    // param count 0
+      0x01, 0x6e,              // return count 1:  anyref
+      0x03,                    // section kind: Function
+      0x02,                    // section length 2
+      0x01, 0x01,              // functions count 1: 0 $s (result anyref)
+      0x07,                    // section kind: Export
+      0x05,                    // section length 5
+      0x01,                    // exports count 1: export # 0
+      0x01,                    // field name length: 1
+      0x73,                    // field name: s
+      0x00, 0x00,              // kind: function index: 0
+      0x0a,                    // section kind: Code
+      0x0a,                    // section length 10
+      0x01,                    // functions count 1
+                               // function #0 $s
+      0x08,                    // body size 8
+      0x00,                    // 0 entries in locals list
+      0x41, 0x2a,              // i32.const 42
+      0xfb, 0x08, 0x00, 0x01,  // array.new_fixed $type0 1
+      0x0b,                    // end
+  };
+  return *CreateWasmObject(isolate, base::VectorOf(wasm_module_bytes));
 }
 
 RUNTIME_FUNCTION(Runtime_WasmEnterDebugging) {
