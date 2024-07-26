@@ -60,8 +60,8 @@ class MaglevAssembler::ScratchRegisterScope {
     SetAvailableDouble(Assembler::DefaultFPTmpList());
   }
 
-  Register GetDefaultScratchRegister() { return Acquire(); }
-  DoubleRegister GetDefaultScratchDoubleRegister() { return AcquireDouble(); }
+  Register AcquireScratchRegister() { return Acquire(); }
+  DoubleRegister AcquireScratchDoubleRegister() { return AcquireDouble(); }
 
   Register Acquire() { return wrapped_scope_.Acquire(); }
   void Include(Register reg) { wrapped_scope_.Include(reg); }

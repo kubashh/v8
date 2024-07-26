@@ -113,21 +113,11 @@ void BuiltinStringFromCharCode::GenerateCode(MaglevAssembler* masm,
     if (0 <= char_code && char_code < String::kMaxOneByteCharCode) {
       __ LoadSingleCharacterString(result_string, char_code);
     } else {
-      // Ensure that {result_string} never aliases {scratch}, otherwise the
-      // store will fail.
-      bool reallocate_result = scratch.Aliases(result_string);
-      if (reallocate_result) {
-        result_string = temps.Acquire();
-      }
-      DCHECK(!scratch.Aliases(result_string));
       __ AllocateTwoByteString(register_snapshot(), result_string, 1);
       __ Move(scratch, char_code);
       __ Strh(scratch.W(),
               FieldMemOperand(result_string,
                               OFFSET_OF_DATA_START(SeqTwoByteString)));
-      if (reallocate_result) {
-        __ Move(ToRegister(result()), result_string);
-      }
     }
   } else {
     __ StringFromCharCode(register_snapshot(), nullptr, result_string,
@@ -231,7 +221,7 @@ void Int32MultiplyWithOverflow::GenerateCode(MaglevAssembler* masm,
   bool out_alias_input = out == left || out == right;
   Register res = out.X();
   if (out_alias_input) {
-    res = temps.Acquire();
+    res = temps.AcquireScratchRegister();
   }
 
   __ Smull(res, left, right);
@@ -246,7 +236,7 @@ void Int32MultiplyWithOverflow::GenerateCode(MaglevAssembler* masm,
   __ CompareAndBranch(res, Immediate(0), ne, &end);
   {
     MaglevAssembler::ScratchRegisterScope temps(masm);
-    Register temp = temps.Acquire().W();
+    Register temp = temps.AcquireScratchRegister().W();
     __ Orr(temp, left, right);
     // If one of them is negative, we must have a -0 result, which is non-int32,
     // so deopt.
@@ -317,12 +307,12 @@ void Int32DivideWithOverflow::GenerateCode(MaglevAssembler* masm,
   bool out_alias_input = out == left || out == right;
   Register res = out;
   if (out_alias_input) {
-    res = temps.Acquire().W();
+    res = temps.AcquireScratchRegister().W();
   }
   __ Sdiv(res, left, right);
 
   // Check that the remainder is zero.
-  Register temp = temps.Acquire().W();
+  Register temp = temps.AcquireScratchRegister().W();
   __ Msub(temp, res, right, left);
   __ CompareAndBranch(temp, Immediate(0), ne,
                       __ GetDeoptLabel(this, DeoptimizeReason::kNotInt32));
@@ -397,7 +387,7 @@ void Int32ModulusWithOverflow::GenerateCode(MaglevAssembler* masm,
       [](MaglevAssembler* masm, ZoneLabelRef done, Register lhs, Register rhs,
          Register out, Int32ModulusWithOverflow* node) {
         MaglevAssembler::ScratchRegisterScope temps(masm);
-        Register res = temps.Acquire().W();
+        Register res = temps.AcquireScratchRegister().W();
         __ Neg(lhs, lhs);
         __ Udiv(res, lhs, rhs);
         __ Msub(out, res, rhs, lhs);
@@ -411,7 +401,7 @@ void Int32ModulusWithOverflow::GenerateCode(MaglevAssembler* masm,
 
   Label rhs_not_power_of_2;
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register mask = temps.Acquire().W();
+  Register mask = temps.AcquireScratchRegister().W();
   __ Add(mask, rhs, Immediate(-1));
   __ Tst(mask, rhs);
   __ JumpIf(ne, &rhs_not_power_of_2);
@@ -588,8 +578,8 @@ void Float64Round::GenerateCode(MaglevAssembler* masm,
   DoubleRegister out = ToDoubleRegister(result());
   if (kind_ == Kind::kNearest) {
     MaglevAssembler::ScratchRegisterScope temps(masm);
-    DoubleRegister temp = temps.AcquireDouble();
-    DoubleRegister half_one = temps.AcquireDouble();
+    DoubleRegister temp = temps.AcquireScratchDoubleRegister();
+    DoubleRegister half_one = temps.AcquireScratchDoubleRegister();
     __ Move(temp, in);
     // Frintn rounds to even on tie, while JS expects it to round towards
     // +Infinity. Fix the difference by checking if we rounded down by exactly

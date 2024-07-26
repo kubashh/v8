@@ -107,20 +107,11 @@ void BuiltinStringFromCharCode::GenerateCode(MaglevAssembler* masm,
     if (0 <= char_code && char_code < String::kMaxOneByteCharCode) {
       __ LoadSingleCharacterString(result_string, char_code);
     } else {
-      // Ensure that {result_string} never aliases {scratch}, otherwise the
-      // store will fail.
-      bool reallocate_result = (scratch == result_string);
-      if (reallocate_result) {
-        result_string = temps.Acquire();
-      }
-      DCHECK(scratch != result_string);
+      DCHECK_NE(scratch, result_string);
       __ AllocateTwoByteString(register_snapshot(), result_string, 1);
       __ Move(scratch, char_code);
       __ strh(scratch, FieldMemOperand(result_string,
                                        OFFSET_OF_DATA_START(SeqTwoByteString)));
-      if (reallocate_result) {
-        __ Move(ToRegister(result()), result_string);
-      }
     }
   } else {
     __ StringFromCharCode(register_snapshot(), nullptr, result_string,
@@ -212,7 +203,6 @@ void Int32MultiplyWithOverflow::SetValueLocationConstraints() {
   UseRegister(left_input());
   UseRegister(right_input());
   DefineAsRegister(this);
-  set_temporaries_needed(1);
 }
 void Int32MultiplyWithOverflow::GenerateCode(MaglevAssembler* masm,
                                              const ProcessingState& state) {
@@ -226,9 +216,9 @@ void Int32MultiplyWithOverflow::GenerateCode(MaglevAssembler* masm,
   bool out_alias_input = out == left || out == right;
   Register res_low = out;
   if (out_alias_input) {
-    res_low = temps.Acquire();
+    res_low = temps.AcquireScratchRegister();
   }
-  Register res_high = temps.Acquire();
+  Register res_high = temps.AcquireScratchRegister();
   __ smull(res_low, res_high, left, right);
 
   // ARM doesn't set the overflow flag for multiplication, so we need to
@@ -256,10 +246,6 @@ void Int32DivideWithOverflow::SetValueLocationConstraints() {
   UseRegister(left_input());
   UseRegister(right_input());
   DefineAsRegister(this);
-  if (!CpuFeatures::IsSupported(SUDIV)) {
-    // We use the standard low double register and an extra one.
-    set_double_temporaries_needed(1);
-  }
 }
 void Int32DivideWithOverflow::GenerateCode(MaglevAssembler* masm,
                                            const ProcessingState& state) {
@@ -312,7 +298,7 @@ void Int32DivideWithOverflow::GenerateCode(MaglevAssembler* masm,
   bool out_alias_input = out == left || out == right;
   Register res = out;
   if (out_alias_input) {
-    res = temps.Acquire();
+    res = temps.AcquireScratchRegister();
   }
   if (CpuFeatures::IsSupported(SUDIV)) {
     CpuFeatureScope scope(masm, SUDIV);
@@ -333,7 +319,7 @@ void Int32DivideWithOverflow::GenerateCode(MaglevAssembler* masm,
   }
 
   // Check that the remainder is zero.
-  Register temp = temps.Acquire();
+  Register temp = temps.AcquireScratchRegister();
   __ mul(temp, res, right);
   __ cmp(temp, left);
   __ EmitEagerDeoptIf(ne, DeoptimizeReason::kNotInt32, this);
@@ -345,7 +331,7 @@ namespace {
 void Uint32Mod(MaglevAssembler* masm, Register out, Register left,
                Register right) {
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register res = temps.Acquire();
+  Register res = temps.AcquireScratchRegister();
   if (CpuFeatures::IsSupported(SUDIV)) {
     CpuFeatureScope scope(masm, SUDIV);
     __ udiv(res, left, right);
@@ -376,10 +362,6 @@ void Int32ModulusWithOverflow::SetValueLocationConstraints() {
   UseAndClobberRegister(left_input());
   UseAndClobberRegister(right_input());
   DefineAsRegister(this);
-  if (!CpuFeatures::IsSupported(SUDIV)) {
-    // We use the standard low double register and an extra one.
-    set_double_temporaries_needed(1);
-  }
 }
 void Int32ModulusWithOverflow::GenerateCode(MaglevAssembler* masm,
                                             const ProcessingState& state) {
@@ -453,17 +435,18 @@ void Int32ModulusWithOverflow::GenerateCode(MaglevAssembler* masm,
       done, lhs, rhs, out, this);
 
   Label rhs_not_power_of_2;
-  MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register mask = temps.Acquire();
-  __ add(mask, rhs, Operand(-1));
-  __ tst(mask, rhs);
-  __ JumpIf(ne, &rhs_not_power_of_2);
+  {
+    MaglevAssembler::ScratchRegisterScope temps(masm);
+    Register mask = temps.AcquireScratchRegister();
+    __ add(mask, rhs, Operand(-1));
+    __ tst(mask, rhs);
+    __ JumpIf(ne, &rhs_not_power_of_2);
 
-  // {rhs} is power of 2.
-  __ and_(out, mask, lhs);
-  __ Jump(*done);
-  // {mask} can be reused from now on.
-  temps.Include(mask);
+    // {rhs} is power of 2.
+    __ and_(out, mask, lhs);
+    __ Jump(*done);
+    // {mask} can be reused from now on.
+  }
 
   __ bind(&rhs_not_power_of_2);
   Uint32Mod(masm, out, lhs, rhs);
@@ -516,7 +499,7 @@ DEF_BITWISE_BINOP(Int32BitwiseXor, eor)
       }                                                                        \
     } else {                                                                   \
       MaglevAssembler::ScratchRegisterScope temps(masm);                       \
-      Register scratch = temps.Acquire();                                      \
+      Register scratch = temps.AcquireScratchRegister();                       \
       Register right = ToRegister(right_input());                              \
       __ and_(scratch, right, Operand(31));                                    \
       __ opcode(out, left, Operand(scratch));                                  \
@@ -638,13 +621,13 @@ void Float64Round::GenerateCode(MaglevAssembler* masm,
   if (kind_ == Kind::kNearest) {
     MaglevAssembler::ScratchRegisterScope temps(masm);
     DoubleRegister temp = temps.AcquireDouble();
-    DoubleRegister half_one = temps.AcquireDouble();
     __ Move(temp, in);
     // vrintn rounds to even on tie, while JS expects it to round towards
     // +Infinity. Fix the difference by checking if we rounded down by exactly
     // 0.5, and if so, round to the other side.
     __ vrintn(out, in);
     __ vsub(temp, temp, out);
+    DoubleRegister half_one = temps.AcquireScratchDoubleRegister();
     __ Move(half_one, 0.5);
     __ VFPCompareAndSetFlags(temp, half_one);
     Label done;

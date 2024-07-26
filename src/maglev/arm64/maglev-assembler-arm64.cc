@@ -42,7 +42,7 @@ void AllocateRaw(MaglevAssembler* masm, Isolate* isolate,
   ExternalReference limit = SpaceAllocationLimitAddress(isolate, alloc_type);
   ZoneLabelRef done(masm);
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register scratch = temps.Acquire();
+  Register scratch = temps.AcquireScratchRegister();
   // We are a bit short on registers, so we use the same register for {object}
   // and {new_top}. Once we have defined {new_top}, we don't use {object} until
   // {new_top} is used for the last time. And there (at the end of this
@@ -93,7 +93,7 @@ void MaglevAssembler::OSRPrologue(Graph* graph) {
 
   if (v8_flags.maglev_assert_stack_size && v8_flags.debug_code) {
     ScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
+    Register scratch = temps.AcquireScratchRegister();
     Add(scratch, sp,
         source_frame_size * kSystemPointerSize +
             StandardFrameConstants::kFixedFrameSizeFromFp);
@@ -195,7 +195,7 @@ void MaglevAssembler::Prologue(Graph* graph) {
       }
     } else {
       ScratchRegisterScope temps(this);
-      Register count = temps.Acquire();
+      Register count = temps.AcquireScratchRegister();
       // Extract the first few slots to round to the unroll size.
       int first_slots = tagged_two_slots_count % kLoopUnrollSize;
       for (int i = 0; i < first_slots; ++i) {
@@ -236,7 +236,7 @@ void MaglevAssembler::MaybeEmitDeoptBuiltinsCall(size_t eager_deopt_count,
       static_cast<int>(deopt_count) * Deoptimizer::kLazyDeoptExitSize);
 
   ScratchRegisterScope scope(this);
-  Register scratch = scope.Acquire();
+  Register scratch = scope.AcquireScratchRegister();
   if (eager_deopt_count > 0) {
     Bind(eager_deopt_entry);
     LoadEntryFromBuiltin(Builtin::kDeoptimizationEntry_Eager, scratch);
@@ -406,7 +406,7 @@ void MaglevAssembler::StringCharCodeOrCodePointAt(
     // Fallthrough to thin string.
 #else
     ScratchRegisterScope temps(this);
-    Register representation = temps.Acquire().W();
+    Register representation = temps.AcquireScratchRegister().W();
 
     // TODO(victorgomes): Add fast path for external strings.
     And(representation, instance_type.W(),
@@ -432,7 +432,7 @@ void MaglevAssembler::StringCharCodeOrCodePointAt(
   bind(&sliced_string);
   {
     ScratchRegisterScope temps(this);
-    Register offset = temps.Acquire();
+    Register offset = temps.AcquireScratchRegister();
 
     LoadAndUntagTaggedSignedField(offset, string,
                                   offsetof(SlicedString, offset_));
@@ -585,7 +585,7 @@ void MaglevAssembler::TruncateDoubleToInt32(Register dst, DoubleRegister src) {
 void MaglevAssembler::TryTruncateDoubleToInt32(Register dst, DoubleRegister src,
                                                Label* fail) {
   ScratchRegisterScope temps(this);
-  DoubleRegister converted_back = temps.AcquireDouble();
+  DoubleRegister converted_back = temps.AcquireScratchDoubleRegister();
 
   // Convert the input float64 value to int32.
   Fcvtzs(dst.W(), src);
@@ -601,7 +601,7 @@ void MaglevAssembler::TryTruncateDoubleToInt32(Register dst, DoubleRegister src,
   Cbnz(dst, &check_done);
 
   // In case of 0, we need to check for the IEEE 0 pattern (which is all zeros).
-  Register input_bits = temps.Acquire();
+  Register input_bits = temps.AcquireScratchRegister();
   Fmov(input_bits, src);
   Cbnz(input_bits, fail);
 
@@ -612,7 +612,7 @@ void MaglevAssembler::TryTruncateDoubleToUint32(Register dst,
                                                 DoubleRegister src,
                                                 Label* fail) {
   ScratchRegisterScope temps(this);
-  DoubleRegister converted_back = temps.AcquireDouble();
+  DoubleRegister converted_back = temps.AcquireScratchDoubleRegister();
 
   // Convert the input float64 value to uint32.
   Fcvtzu(dst.W(), src);
@@ -628,7 +628,7 @@ void MaglevAssembler::TryTruncateDoubleToUint32(Register dst,
   Cbnz(dst, &check_done);
 
   // In case of 0, we need to check for the IEEE 0 pattern (which is all zeros).
-  Register input_bits = temps.Acquire();
+  Register input_bits = temps.AcquireScratchRegister();
   Fmov(input_bits, src);
   Cbnz(input_bits, fail);
 
@@ -639,7 +639,7 @@ void MaglevAssembler::TryChangeFloat64ToIndex(Register result,
                                               DoubleRegister value,
                                               Label* success, Label* fail) {
   ScratchRegisterScope temps(this);
-  DoubleRegister converted_back = temps.AcquireDouble();
+  DoubleRegister converted_back = temps.AcquireScratchDoubleRegister();
   // Convert the input float64 value to int32.
   Fcvtzs(result.W(), value);
   // Convert that int32 value back to float64.

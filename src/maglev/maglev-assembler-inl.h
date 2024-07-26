@@ -162,22 +162,20 @@ class DeferredCodeInfoImpl final : public DeferredCodeInfo {
       typename FunctionArgumentsTupleHelper<Function>::Tuple>::Stripped;
 
   template <typename... InArgs>
-  explicit DeferredCodeInfoImpl(MaglevCompilationInfo* compilation_info,
-                                RegList general_temporaries,
-                                DoubleRegList double_temporaries,
-                                FunctionPointer function, InArgs&&... args)
+  explicit DeferredCodeInfoImpl(
+      MaglevCompilationInfo* compilation_info,
+      MaglevAssembler::ScratchRegisterScope::DeferredData deferred_scratch,
+      FunctionPointer function, InArgs&&... args)
       : function(function),
         args(CopyForDeferred(compilation_info, std::forward<InArgs>(args))...),
-        general_temporaries_(general_temporaries),
-        double_temporaries_(double_temporaries) {}
+        deferred_scratch_(deferred_scratch) {}
 
   DeferredCodeInfoImpl(DeferredCodeInfoImpl&&) = delete;
   DeferredCodeInfoImpl(const DeferredCodeInfoImpl&) = delete;
 
   void Generate(MaglevAssembler* masm) override {
-    MaglevAssembler::ScratchRegisterScope scratch_scope(masm);
-    scratch_scope.SetAvailable(general_temporaries_);
-    scratch_scope.SetAvailableDouble(double_temporaries_);
+    MaglevAssembler::ScratchRegisterScope scratch_scope(masm,
+                                                        deferred_scratch_);
 #ifdef DEBUG
     masm->set_allow_call(allow_call_);
     masm->set_allow_deferred_call(allow_call_);
@@ -200,8 +198,7 @@ class DeferredCodeInfoImpl final : public DeferredCodeInfo {
  private:
   FunctionPointer function;
   Tuple args;
-  RegList general_temporaries_;
-  DoubleRegList double_temporaries_;
+  MaglevAssembler::ScratchRegisterScope::DeferredData deferred_scratch_;
 
 #ifdef DEBUG
   bool allow_call_ = false;
@@ -228,8 +225,7 @@ inline Label* MaglevAssembler::MakeDeferredCode(Function&& deferred_code_gen,
   using DeferredCodeInfoT = detail::DeferredCodeInfoImpl<Function>;
   DeferredCodeInfoT* deferred_code =
       compilation_info()->zone()->New<DeferredCodeInfoT>(
-          compilation_info(), scratch_scope.Available(),
-          scratch_scope.AvailableDouble(), deferred_code_gen,
+          compilation_info(), scratch_scope.Defer(), deferred_code_gen,
           std::forward<Args>(args)...);
 
 #ifdef DEBUG
@@ -709,7 +705,7 @@ inline void MaglevAssembler::CallRuntime(Runtime::FunctionId fid,
 
 inline void MaglevAssembler::SetMapAsRoot(Register object, RootIndex map) {
   ScratchRegisterScope temps(this);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
   LoadTaggedRoot(scratch, map);
   StoreTaggedFieldNoWriteBarrier(object, HeapObject::kMapOffset, scratch);
 }
@@ -828,7 +824,7 @@ inline void MaglevAssembler::JumpIfStringMap(Register map, Label* target,
 inline void MaglevAssembler::JumpIfString(Register heap_object, Label* target,
                                           Label::Distance distance) {
   ScratchRegisterScope temps(this);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
 #ifdef V8_COMPRESS_POINTERS
   LoadCompressedMap(scratch, heap_object);
 #else
@@ -841,7 +837,7 @@ inline void MaglevAssembler::JumpIfNotString(Register heap_object,
                                              Label* target,
                                              Label::Distance distance) {
   ScratchRegisterScope temps(this);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
 #ifdef V8_COMPRESS_POINTERS
   LoadCompressedMap(scratch, heap_object);
 #else
@@ -856,7 +852,7 @@ inline void MaglevAssembler::CheckJSAnyIsStringAndBranch(
     bool fallthrough_when_false) {
 #if V8_STATIC_ROOTS_BOOL
   ScratchRegisterScope temps(this);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
   // All string maps are allocated at the start of the read only heap. Thus,
   // non-strings must have maps with larger (compressed) addresses.
 #ifdef V8_COMPRESS_POINTERS
@@ -881,7 +877,7 @@ inline void MaglevAssembler::StringLength(Register result, Register string) {
   if (v8_flags.debug_code) {
     // Check if {string} is a string.
     ScratchRegisterScope temps(this);
-    Register scratch = temps.GetDefaultScratchRegister();
+    Register scratch = temps.AcquireScratchRegister();
     AssertNotSmi(string);
     LoadMap(scratch, string);
     CompareInstanceTypeRange(scratch, scratch, FIRST_STRING_TYPE,

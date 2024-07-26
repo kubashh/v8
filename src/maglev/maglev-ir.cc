@@ -1736,7 +1736,7 @@ void EmitTruncateNumberOrOddballToInt32(
   JumpToFailIfNotHeapNumberOrOddball(masm, value, conversion_type,
                                      not_a_number);
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  DoubleRegister double_value = temps.GetDefaultScratchDoubleRegister();
+  DoubleRegister double_value = temps.AcquireScratchDoubleRegister();
   __ LoadHeapNumberOrOddballValue(double_value, value);
   __ TruncateDoubleToInt32(result_reg, double_value);
   __ bind(&done);
@@ -1760,7 +1760,7 @@ void CheckedObjectToIndex::GenerateCode(MaglevAssembler* masm,
           [](MaglevAssembler* masm, Register object, Register result_reg,
              ZoneLabelRef done, CheckedObjectToIndex* node) {
             MaglevAssembler::ScratchRegisterScope temps(masm);
-            Register map = temps.GetDefaultScratchRegister();
+            Register map = temps.AcquireScratchRegister();
             Label check_string;
             __ LoadMapForCompare(map, object);
             __ JumpIfNotRoot(
@@ -4369,25 +4369,33 @@ void Int32ToNumber::GenerateCode(MaglevAssembler* masm,
   Register value = ToRegister(input());
   ZoneLabelRef done(masm);
   MaglevAssembler::ScratchRegisterScope temps(masm);
+  // Object is not allowed to alias value, because SmiTagInt32AndJumpIfFail will
+  // clobber `object` even if the tagging fails, and we don't want it to clobber
+  // `value`.
   bool input_output_alias = (object == value);
   Register res = object;
   if (input_output_alias) {
-    res = temps.GetDefaultScratchRegister();
+    res = temps.AcquireScratchRegister();
   }
   __ SmiTagInt32AndJumpIfFail(
       res, value,
       __ MakeDeferredCode(
           [](MaglevAssembler* masm, Register object, Register value,
-             ZoneLabelRef done, Int32ToNumber* node) {
+             Register scratch, ZoneLabelRef done, Int32ToNumber* node) {
             MaglevAssembler::ScratchRegisterScope temps(masm);
-            DoubleRegister double_value =
-                temps.GetDefaultScratchDoubleRegister();
+            // AllocateHeapNumber needs a scratch register, and the res scratch
+            // register isn't needed anymore, so return it to the pool.
+            if (scratch.is_valid()) {
+              temps.IncludeScratchRegister(scratch);
+            }
+            DoubleRegister double_value = temps.AcquireScratchDoubleRegister();
             __ Int32ToDouble(double_value, value);
             __ AllocateHeapNumber(node->register_snapshot(), object,
                                   double_value);
             __ Jump(*done);
           },
-          object, value, done, this));
+          object, value, input_output_alias ? res : Register::no_reg(), done,
+          this));
   if (input_output_alias) {
     __ Move(object, res);
   }
@@ -4408,14 +4416,16 @@ void Uint32ToNumber::GenerateCode(MaglevAssembler* masm,
   ZoneLabelRef done(masm);
   Register value = ToRegister(input());
   Register object = ToRegister(result());
+  // Unlike Int32ToNumber, object is allowed to alias value here (indeed, the
+  // code is better if it does). The difference is that Uint32 smi tagging first
+  // does a range check, and doesn't clobber `object` on failure.
   __ SmiTagUint32AndJumpIfFail(
       object, value,
       __ MakeDeferredCode(
           [](MaglevAssembler* masm, Register object, Register value,
              ZoneLabelRef done, Uint32ToNumber* node) {
             MaglevAssembler::ScratchRegisterScope temps(masm);
-            DoubleRegister double_value =
-                temps.GetDefaultScratchDoubleRegister();
+            DoubleRegister double_value = temps.AcquireScratchDoubleRegister();
             __ Uint32ToDouble(double_value, value);
             __ AllocateHeapNumber(node->register_snapshot(), object,
                                   double_value);
@@ -4752,6 +4762,12 @@ void TestTypeOf::SetValueLocationConstraints() {
 }
 void TestTypeOf::GenerateCode(MaglevAssembler* masm,
                               const ProcessingState& state) {
+#ifdef V8_TARGET_ARCH_ARM
+  // Arm32 needs one extra scratch register for TestTypeOf, so take a maglev
+  // temporary and allow it to be used as a macro assembler scratch register.
+  MaglevAssembler::ScratchRegisterScope temps(masm);
+  temps.IncludeScratchRegister(temps.Acquire());
+#endif
   Register object = ToRegister(value());
   Label is_true, is_false, done;
   __ TestTypeOf(object, literal_, &is_true, Label::Distance::kNear, true,
@@ -5200,7 +5216,7 @@ void CheckNumber::GenerateCode(MaglevAssembler* masm,
                                const ProcessingState& state) {
   Label done;
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
   Register value = ToRegister(receiver_input());
   // If {value} is a Smi or a HeapNumber, we're done.
   __ JumpIfSmi(
@@ -5230,7 +5246,7 @@ void CheckedInternalizedString::GenerateCode(MaglevAssembler* masm,
                                              const ProcessingState& state) {
   Register object = ToRegister(object_input());
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register instance_type = temps.GetDefaultScratchRegister();
+  Register instance_type = temps.AcquireScratchRegister();
   if (check_type() == CheckType::kOmitHeapObjectCheck) {
     __ AssertNotSmi(object);
   } else {
@@ -6021,7 +6037,7 @@ void SetPendingMessage::GenerateCode(MaglevAssembler* masm,
   Register new_message = ToRegister(value());
   Register return_value = ToRegister(result());
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
   MemOperand pending_message_operand = __ ExternalReferenceAsOperand(
       ExternalReference::address_of_pending_message(masm->isolate()), scratch);
   if (new_message != return_value) {
@@ -6044,7 +6060,7 @@ void StoreDoubleField::GenerateCode(MaglevAssembler* masm,
   DoubleRegister value = ToDoubleRegister(value_input());
 
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register tmp = temps.GetDefaultScratchRegister();
+  Register tmp = temps.AcquireScratchRegister();
 
   __ AssertNotSmi(object);
   __ LoadTaggedField(tmp, object, offset());
@@ -6778,7 +6794,7 @@ void HandleNoHeapWritesInterrupt::GenerateCode(MaglevAssembler* masm,
       done, this);
 
   MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register scratch = temps.GetDefaultScratchRegister();
+  Register scratch = temps.AcquireScratchRegister();
   MemOperand check = __ ExternalReferenceAsOperand(
       ExternalReference::address_of_no_heap_write_interrupt_request(
           masm->isolate()),

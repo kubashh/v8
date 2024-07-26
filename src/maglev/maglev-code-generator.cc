@@ -577,7 +577,7 @@ class ExceptionHandlerTrampolineBuilder {
 
     __ RecordComment("EmitMoves");
     MaglevAssembler::ScratchRegisterScope temps(masm_);
-    Register scratch = temps.GetDefaultScratchRegister();
+    Register scratch = temps.AcquireScratchRegister();
     direct_moves.EmitMoves(scratch);
     EmitPopMaterialisedResults(materialising_moves, save_accumulator, scratch);
     __ Jump(catch_block->label());
@@ -885,8 +885,8 @@ class MaglevCodeGeneratingNodeProcessor {
     int predecessor_id = state.block()->predecessor_id();
 
     MaglevAssembler::ScratchRegisterScope temps(masm_);
-    Register scratch = temps.GetDefaultScratchRegister();
-    DoubleRegister double_scratch = temps.GetDefaultScratchDoubleRegister();
+    Register scratch = temps.AcquireScratchRegister();
+    DoubleRegister double_scratch = temps.AcquireScratchDoubleRegister();
 
     // TODO(leszeks): Move these to fields, to allow their data structure
     // allocations to be reused. Will need some sort of state resetting.

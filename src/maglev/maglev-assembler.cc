@@ -5,6 +5,7 @@
 #include "src/maglev/maglev-assembler.h"
 
 #include "src/builtins/builtins-inl.h"
+#include "src/codegen/reglist.h"
 #include "src/maglev/maglev-assembler-inl.h"
 #include "src/maglev/maglev-code-generator.h"
 #include "src/numbers/conversions.h"
@@ -163,7 +164,7 @@ void MaglevAssembler::ToBoolean(Register value, CheckType check_type,
                                 ZoneLabelRef is_true, ZoneLabelRef is_false,
                                 bool fallthrough_when_true) {
   ScratchRegisterScope temps(this);
-  Register map = temps.GetDefaultScratchRegister();
+  Register map = temps.AcquireScratchRegister();
 
   if (check_type == CheckType::kCheckHeapObject) {
     // Check if {{value}} is Smi.
@@ -255,7 +256,7 @@ void MaglevAssembler::ToBoolean(Register value, CheckType check_type,
                  [](MaglevAssembler* masm, Register value, Register map,
                     ZoneLabelRef is_true, ZoneLabelRef is_false) {
                    ScratchRegisterScope temps(masm);
-                   temps.Include(map);
+                   temps.IncludeScratchRegister(map);
                    __ TestInt32AndJumpIfAllClear(
                        FieldMemOperand(value, offsetof(BigInt, bitfield_)),
                        BigInt::LengthBits::kMask, *is_false);
@@ -302,7 +303,7 @@ void MaglevAssembler::MaterialiseValueNode(Register dst, ValueNode* value) {
     case ValueRepresentation::kInt32: {
       Label done;
       ScratchRegisterScope temps(this);
-      Register scratch = temps.GetDefaultScratchRegister();
+      Register scratch = temps.AcquireScratchRegister();
       Move(scratch, src);
       SmiTagInt32AndJumpIfSuccess(dst, scratch, &done, Label::kNear);
       // If smi tagging fails, instead of bailing out (deopting), we change
@@ -316,7 +317,7 @@ void MaglevAssembler::MaterialiseValueNode(Register dst, ValueNode* value) {
     case ValueRepresentation::kUint32: {
       Label done;
       ScratchRegisterScope temps(this);
-      Register scratch = temps.GetDefaultScratchRegister();
+      Register scratch = temps.AcquireScratchRegister();
       Move(scratch, src);
       SmiTagUint32AndJumpIfSuccess(dst, scratch, &done, Label::kNear);
       // If smi tagging fails, instead of bailing out (deopting), we change
@@ -365,7 +366,7 @@ void MaglevAssembler::TestTypeOf(
   switch (literal) {
     case LiteralFlag::kNumber: {
       MaglevAssembler::ScratchRegisterScope temps(this);
-      Register scratch = temps.GetDefaultScratchRegister();
+      Register scratch = temps.AcquireScratchRegister();
       JumpIfSmi(object, is_true, true_distance);
       CompareMapWithRoot(object, RootIndex::kHeapNumberMap, scratch);
       Branch(kEqual, is_true, true_distance, fallthrough_when_true, is_false,
@@ -401,7 +402,7 @@ void MaglevAssembler::TestTypeOf(
     }
     case LiteralFlag::kUndefined: {
       MaglevAssembler::ScratchRegisterScope temps(this);
-      Register scratch = temps.GetDefaultScratchRegister();
+      Register scratch = temps.AcquireScratchRegister();
       // Make sure `object` isn't a valid temp here, since we re-use it.
       DCHECK(!temps.Available().has(object));
       JumpIfSmi(object, is_false, false_distance);
@@ -417,7 +418,7 @@ void MaglevAssembler::TestTypeOf(
     }
     case LiteralFlag::kFunction: {
       MaglevAssembler::ScratchRegisterScope temps(this);
-      Register scratch = temps.GetDefaultScratchRegister();
+      Register scratch = temps.AcquireScratchRegister();
       JumpIfSmi(object, is_false, false_distance);
       // Check if callable bit is set and not undetectable.
       LoadMap(scratch, object);
@@ -428,7 +429,7 @@ void MaglevAssembler::TestTypeOf(
     }
     case LiteralFlag::kObject: {
       MaglevAssembler::ScratchRegisterScope temps(this);
-      Register scratch = temps.GetDefaultScratchRegister();
+      Register scratch = temps.AcquireScratchRegister();
       JumpIfSmi(object, is_false, false_distance);
       // If the object is null then return true.
       JumpIfRoot(object, RootIndex::kNullValue, is_true, true_distance);
@@ -470,7 +471,7 @@ void MaglevAssembler::CheckAndEmitDeferredWriteBarrier(
           // Use the value as the scratch register if possible, since
           // CheckPageFlag emits slightly better code when value == scratch.
           MaglevAssembler::ScratchRegisterScope temp(masm);
-          Register scratch = temp.GetDefaultScratchRegister();
+          Register scratch = temp.AcquireScratchRegister();
           if (value != object && !register_snapshot.live_registers.has(value)) {
             scratch = value;
           }
@@ -483,6 +484,11 @@ void MaglevAssembler::CheckAndEmitDeferredWriteBarrier(
         Register slot_reg = WriteBarrierDescriptor::SlotAddressRegister();
 
         RegList saved;
+        // The RecordWrite stub promises to restore all allocatable registers,
+        // but not necessarily non-allocatable registers like temporaries. Make
+        // sure we're not trying to keep any non-allocatable registers alive.
+        DCHECK((register_snapshot.live_registers - kAllocatableGeneralRegisters)
+                   .is_empty());
         if (object != stub_object_reg &&
             register_snapshot.live_registers.has(stub_object_reg)) {
           saved.set(stub_object_reg);
@@ -524,7 +530,7 @@ void MaglevAssembler::CheckAndEmitDeferredWriteBarrier(
   }
 
   MaglevAssembler::ScratchRegisterScope temp(this);
-  Register scratch = temp.GetDefaultScratchRegister();
+  Register scratch = temp.AcquireScratchRegister();
   CheckPageFlag(object, scratch,
                 MemoryChunk::kPointersFromHereAreInterestingMask, kNotEqual,
                 deferred_write_barrier);
@@ -667,7 +673,7 @@ void MaglevAssembler::TryMigrateInstance(Register object,
     // restoring pop all.
     return_val = kReturnRegister0;
     MaglevAssembler::ScratchRegisterScope temps(this);
-    Register scratch = temps.GetDefaultScratchRegister();
+    Register scratch = temps.AcquireScratchRegister();
     if (register_snapshot.live_registers.has(return_val)) {
       DCHECK(!register_snapshot.live_registers.has(scratch));
       Move(scratch, return_val);
