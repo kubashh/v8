@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90358a63_bf3571e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-07-26T18:16:04Z",
+      "side": 1,
+      "message": "Leszek, PTAL while Toon is OOO.",
+      "revId": "d169d08ede082cae2712bd74820b584f2f20a471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "251929f0_cb166452",
@@ -31,6 +48,24 @@
       "writtenOn": "2024-07-24T12:14:12Z",
       "side": 1,
       "message": "Arrow functions aren\u0027t receiver scopes I guess, so I presume we can DCHECK that we won\u0027t hit this case? All the functions that do \"bind super\" can\u0027t be nested in arrow functions, so after the first iteration this should also not happen?\n\nAlso receiver scopes need to be funciton scopes, so at least 1530 is a tautology for the first iteration.\n\nAll the BindsSuper function kinds will be nested directly in a home_object_scope I presume, so I\u0027m not sure we even need the loop?\n\nCould this become something like:\n\n```\nScope* Scope::GetHomeObjectScope() {\n  Scope* scope \u003d GetReceiverScope();\n  CHECK(scope-\u003eis_function_scope());\n  FunctionKind kind \u003d scope-\u003eAsDeclarationScope()-\u003efunction_kind();\n  CHECK(!IsArrowFunction(kind);\n  if (!BindsSuper(kind)) return nullptr;\n  Scope* outer_scope \u003d scope-\u003eouter_scope();\n  CHECK(outer_scope-\u003eis_home_object_scope());\n  return outer_scope;\n}\n```",
+      "revId": "d169d08ede082cae2712bd74820b584f2f20a471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "235af707_299589ea",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-07-26T18:16:04Z",
+      "side": 1,
+      "message": "Nice simplification. That logic seems correct to me. I\u0027ve updated the comments and left the first 2 `CHECK`s as `DCHECK`s since I think it\u0027s the last one that\u0027s security sensitive.",
+      "parentUuid": "251929f0_cb166452",
       "revId": "d169d08ede082cae2712bd74820b584f2f20a471",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
