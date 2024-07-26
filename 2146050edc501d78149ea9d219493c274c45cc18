@@ -16,6 +16,47 @@
       "message": "mlippautz, are you a good reviewer for this? This is hopefully the last of the v8-side plumbing for the new exception propagation system. This CL is a mix of code written by me and by ishell.",
       "revId": "2146050edc501d78149ea9d219493c274c45cc18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea344dd3_187e742e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-26T08:30:16Z",
+      "side": 1,
+      "message": "Igor would be the most appropriate because of having all the context. Since he is out, maybe Toon can help?",
+      "parentUuid": "b8c6b742_cba96550",
+      "revId": "2146050edc501d78149ea9d219493c274c45cc18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19caa071_eef5ca08",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-26T08:30:16Z",
+      "side": 1,
+      "message": "This would be set before taking the snapshot and as such be automatically deserialized via context snapshot in blink, right?",
+      "range": {
+        "startLine": 1513,
+        "startChar": 23,
+        "endLine": 1513,
+        "endChar": 39
+      },
+      "revId": "2146050edc501d78149ea9d219493c274c45cc18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
