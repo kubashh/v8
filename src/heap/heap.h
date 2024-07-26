@@ -256,7 +256,11 @@ class Heap final {
       return amount;
     }
 
-    int64_t AllocatedSinceMarkCompact() const {
+    void UpdateLimit(int64_t amount) {
+      set_limit(amount + kExternalAllocationSoftLimit);
+    }
+
+    uint64_t AllocatedSinceMarkCompact() const {
       int64_t total_bytes = total();
       int64_t low_since_mark_compact_bytes = low_since_mark_compact();
 
@@ -634,11 +638,19 @@ class Heap final {
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);
 
-  int64_t external_memory_hard_limit() { return max_old_generation_size() / 2; }
+  int64_t external_memory_hard_limit() {
+    if (v8_flags.external_memory_relaxed_limits) {
+      return (external_memory_.low_since_mark_compact() +
+              max_global_memory_size_) /
+             2;
+    }
+    return external_memory_.low_since_mark_compact() +
+           max_old_generation_size() / 2;
+  }
 
-  V8_INLINE int64_t external_memory();
+  V8_INLINE int64_t external_memory() const;
   V8_EXPORT_PRIVATE int64_t external_memory_limit();
-  V8_INLINE int64_t update_external_memory(int64_t delta);
+  int64_t UpdateExternalMemory(int64_t delta);
 
   V8_EXPORT_PRIVATE size_t YoungArrayBufferBytes();
   V8_EXPORT_PRIVATE size_t OldArrayBufferBytes();
@@ -1892,8 +1904,10 @@ class Heap final {
   // ===========================================================================
 
   inline size_t OldGenerationSpaceAvailable() {
-    uint64_t bytes = OldGenerationConsumedBytes() +
-                     AllocatedExternalMemorySinceMarkCompact();
+    uint64_t bytes = OldGenerationConsumedBytes();
+    if (!v8_flags.external_memory_relaxed_limits) {
+      bytes += AllocatedExternalMemorySinceMarkCompact();
+    }
 
     if (old_generation_allocation_limit() <= bytes) return 0;
     return old_generation_allocation_limit() - static_cast<size_t>(bytes);
@@ -1935,7 +1949,10 @@ class Heap final {
   }
 
   size_t global_allocation_limit() const {
-    return global_allocation_limit_.load(std::memory_order_relaxed);
+    return global_allocation_limit_.load(std::memory_order_relaxed) +
+           (v8_flags.external_memory_relaxed_limits
+                ? external_memory_.low_since_mark_compact()
+                : 0);
   }
 
   bool old_generation_allocation_limit_configured() const {
