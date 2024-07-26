@@ -8,6 +8,7 @@
 #include <memory>
 #include <tuple>
 
+#include "heap.h"
 #include "src/base/logging.h"
 #include "src/heap/gc-tracer-inl.h"
 #include "src/heap/gc-tracer.h"
@@ -373,7 +374,7 @@ void ArrayBufferSweeper::DecrementExternalMemoryCounters(size_t bytes) {
       ExternalBackingStoreType::kArrayBuffer, bytes);
   // Unlike IncrementExternalMemoryCounters we don't use
   // AdjustAmountOfExternalAllocatedMemory such that we never start a GC here.
-  heap_->update_external_memory(-static_cast<int64_t>(bytes));
+  heap_->UpdateExternalMemory(-static_cast<int64_t>(bytes));
 }
 
 void ArrayBufferSweeper::FinalizeAndDelete(ArrayBufferExtension* extension) {
