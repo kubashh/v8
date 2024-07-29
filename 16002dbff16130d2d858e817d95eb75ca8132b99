@@ -224,6 +224,24 @@
       "parentUuid": "79a6dbe2_ad3df933",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68be5add_56867269",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T10:17:51Z",
+      "side": 1,
+      "message": "right. the idea was to prevent people from taking a new scope in deferred code, without using the DeferredData. And the implementation would walk the scope chain and ensure that at least one of the parent scopes was created from deferred data (which indeed would probably need some flag on the scope). but only if you also think that would be useful at preventing bugs...",
+      "parentUuid": "abb3ffc0_e40c74bc",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
