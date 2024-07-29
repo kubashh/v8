@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "66bceb97_4b8ce9f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-29T20:28:58Z",
+      "side": 1,
+      "message": "Ideally, we will add a \"reveal in retainer path\" option which would take a full heap snapshot and will provide the user with more information about the retained objects. This is briefly touched upon in the explainer, however, isn\u0027t at this time implemented in the front end. These are next steps. Currently, the detached nodes this API provides are evaluated in blink to find the entire detached tree that contains the retained nodes. This will show the detached tree to the user in the front end. Here is the blink CL if it helps: https://chromium-review.googlesource.com/c/chromium/src/+/5634107\n\nSo users will have the surrounding tree and objects as context, as well as a retainer path to analyze.",
+      "parentUuid": "70496a32_789d4a6f",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b8719d64_81c5e14b",
