@@ -22,6 +22,30 @@
       },
       "revId": "0267e7cac688aec4b4f577d39aa9293446b4e456",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af1ec09_22eaf997",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 16789,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-29T08:50:32Z",
+      "side": 1,
+      "message": "Yeah I think we should do that. I\u0027ll give it a shot in a follow-up CL.",
+      "parentUuid": "ede7a9d1_8069a0c2",
+      "range": {
+        "startLine": 16789,
+        "startChar": 2,
+        "endLine": 16789,
+        "endChar": 10
+      },
+      "revId": "0267e7cac688aec4b4f577d39aa9293446b4e456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
