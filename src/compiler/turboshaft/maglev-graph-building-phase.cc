@@ -4004,6 +4004,13 @@ class GraphBuilder {
               __ SmiConstant(value->Cast<maglev::SmiConstant>()->value()));
           break;
 
+        case maglev::Opcode::kTrustedConstant:
+          builder.AddInput(
+              MachineType::AnyTagged(),
+              __ HeapConstant(
+                  value->Cast<maglev::TrustedConstant>()->object().object()));
+          break;
+
         case maglev::Opcode::kTaggedIndexConstant:
         case maglev::Opcode::kExternalConstant:
         default:
