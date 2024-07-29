@@ -188,6 +188,24 @@
       "parentUuid": "ad022451_0f4707f9",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a6dbe2_ad3df933",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T10:06:55Z",
+      "side": 1,
+      "message": "right, but we could check that there is at least one deferred scope in the scope chain?",
+      "parentUuid": "a5f318e0_2c7b7b9b",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
