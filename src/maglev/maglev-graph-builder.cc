@@ -2516,6 +2516,12 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       SetAccumulator(AddNewNode<Int32Compare>({left, right}, kOperation));
       return;
     }
+    case CompareOperationHint::kNumberOrBoolean:
+      if (kOperation != Operation::kEqual) {
+        if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
+        break;
+      }
+      [[fallthrough]];
     case CompareOperationHint::kNumber: {
       // TODO(leszeks): we could support kNumberOrOddball with
       // BranchIfFloat64Compare, but we'd need to special case comparing
@@ -2608,7 +2614,6 @@ void MaglevGraphBuilder::VisitCompareOperation() {
     case CompareOperationHint::kAny:
     case CompareOperationHint::kBigInt64:
     case CompareOperationHint::kBigInt:
-    case CompareOperationHint::kNumberOrBoolean:
     case CompareOperationHint::kNumberOrOddball:
     case CompareOperationHint::kReceiverOrNullOrUndefined:
       if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
