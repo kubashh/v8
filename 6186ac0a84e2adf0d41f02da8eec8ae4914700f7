@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84a07c08_b2b5d9dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-29T14:49:22Z",
+      "side": 1,
+      "message": "All these functions convert handles to locals. The isolate parameter was required in mixed configurations, when direct handles were converted to indirect locals. This configuration is no longer supported, after the configuration cleanup.\n\nThis CL is just removing redundant things. It does not introduce new retrievals of the isolate, from anywhere. In general, there is `HandleScope::CreateHandleForCurrentIsolate` (in the direct handle configuration), which is used only in `Utils::OpenHandle`, i.e., when creating an indirect handle from a direct local. This is progressively avoided, as more handles are migrated to direct handles and `Utils::OpenHandle` is migrated to `Utils::OpenDirectHandle`.",
+      "parentUuid": "c0016384_0953e9ad",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 66
+      },
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "183aebfc_d3b73125",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d1d2bd13_fc0b3d93",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-29T14:49:22Z",
+      "side": 1,
+      "message": "They are only used from `Utils::Name` (defined above).  \nThis should indeed be `TO_LOCAL_LIST`, and the one above `TO_LOCAL_NAME_LIST`.\n\nThe former defines one instance for all From/To pairs.  \nThe latter defines one instance for each name.",
+      "parentUuid": "183aebfc_d3b73125",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 13
+      },
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5dcd0e4f_641555a5",
         "filename": "src/api/api.cc",
         "patchSetId": 1
@@ -60,6 +108,30 @@
       "writtenOn": "2024-07-29T10:46:17Z",
       "side": 1,
       "message": "Was this missing from an earlier CL? Or was it intentionally an indirect handle until now?",
+      "range": {
+        "startLine": 5593,
+        "startChar": 26,
+        "endLine": 5593,
+        "endChar": 42
+      },
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c270b0_66c44f2d",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5593,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-07-29T14:49:22Z",
+      "side": 1,
+      "message": "Not sure. But:\n- In the configuration with indirect handles/locals, it doesn\u0027t make a difference, as `i::direct_handle` is the same as `i::handle`.\n- In the configuration with direct handle/locals, we don\u0027t need to create an indirect handle and then convert that to a direct local. We\u0027d be just wasting a handle slot. If we actually intended to create an indirect handle here, it should have been better documented. My interpretation is that it\u0027s not required.",
+      "parentUuid": "5dcd0e4f_641555a5",
       "range": {
         "startLine": 5593,
         "startChar": 26,
