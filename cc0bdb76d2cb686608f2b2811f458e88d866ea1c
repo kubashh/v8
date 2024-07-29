@@ -243,6 +243,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7dfec5c_f9576b3c",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-29T17:32:15Z",
+      "side": 1,
+      "message": "This method only follows V8-\u003eBlink traced handles. There\u0027s _many_ more detached DOM nodes. Since the method only seems to be interested in JS wrappers this seems sufficient.",
+      "parentUuid": "c46ce759_349ed4ff",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8429f1ec_9fb45694",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 11

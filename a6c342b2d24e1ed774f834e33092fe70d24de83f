@@ -55,6 +55,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "300193ed_cf038119",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-29T17:32:15Z",
+      "side": 1,
+      "message": "This method can be implemented on top of the existing heap snapshot on the user side as we do set the detached bit for nodes.\n\nWhy is there a need for a V8 API that needs to be maintained?",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a27de1df_62f39f61",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 12
