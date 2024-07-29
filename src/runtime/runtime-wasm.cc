@@ -189,14 +189,10 @@ RUNTIME_FUNCTION(Runtime_WasmGenericJSToWasmObject) {
   int raw_type = args.smi_value_at(2);
 
   wasm::ValueType type = wasm::ValueType::FromRawBitField(raw_type);
-  uint32_t canonical_index = wasm::kInvalidCanonicalIndex;
-  if (type.has_index()) {
-    DirectHandle<WasmTrustedInstanceData> trusted_instance_data(
-        Cast<WasmTrustedInstanceData>(args[0]), isolate);
-    const wasm::WasmModule* module = trusted_instance_data->module();
-    DCHECK_NOT_NULL(module);
-    canonical_index = module->isorecursive_canonical_type_ids[type.ref_index()];
-  }
+  // {WasmExportedFunctionData::sig} is already canonicalized, so the type index
+  // is the canonical index.
+  uint32_t canonical_index =
+      type.has_index() ? type.ref_index() : wasm::kInvalidCanonicalIndex;
   const char* error_message;
   Handle<Object> result;
   if (!JSToWasmObject(isolate, value, type, canonical_index, &error_message)
@@ -617,23 +613,21 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
   DCHECK(isolate->context().is_null());
   isolate->set_context(import_data->native_context());
 
-  std::unique_ptr<wasm::ValueType[]> reps;
-  wasm::FunctionSig sig = wasm::SerializedSignatureHelper::DeserializeSignature(
-      import_data->sig(), &reps);
+  const auto* sig = import_data->sig();
   DirectHandle<Object> origin(import_data->call_origin(), isolate);
 
   if (IsWasmFuncRef(*origin)) {
     // The tierup for `WasmInternalFunction is special, as there may not be an
     // instance.
     int suspender_count = import_data->suspend() == wasm::kSuspendWithSuspender;
-    size_t expected_arity = sig.parameter_count() - suspender_count;
+    size_t expected_arity = sig->parameter_count() - suspender_count;
     wasm::ImportCallKind kind = wasm::kDefaultImportCallKind;
     if (IsJSFunction(import_data->callable())) {
       Tagged<SharedFunctionInfo> shared =
           Cast<JSFunction>(import_data->callable())->shared();
       expected_arity =
           shared->internal_formal_parameter_count_without_receiver();
-      if (expected_arity != sig.parameter_count() - suspender_count) {
+      if (expected_arity != sig->parameter_count() - suspender_count) {
         kind = wasm::ImportCallKind::kJSFunctionArityMismatch;
       }
     }
@@ -644,7 +638,7 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
 
     DirectHandle<Code> wasm_to_js_wrapper_code =
         compiler::CompileWasmToJSWrapper(
-            isolate, module, &sig, kind, static_cast<int>(expected_arity),
+            isolate, module, sig, kind, static_cast<int>(expected_arity),
             static_cast<wasm::Suspend>(import_data->suspend()))
             .ToHandleChecked();
 
@@ -706,7 +700,7 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
 
   wasm::NativeModule* native_module = trusted_data->native_module();
 
-  wasm::ResolvedWasmImport resolved({}, -1, callable, &sig, canonical_sig_index,
+  wasm::ResolvedWasmImport resolved({}, -1, callable, sig, canonical_sig_index,
                                     wasm::WellKnownImport::kUninstantiated);
   wasm::ImportCallKind kind = resolved.kind();
   callable = resolved.callable();  // Update to ultimate target.
@@ -715,7 +709,7 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
   // {expected_arity} should only be used if kind != kJSFunctionArityMismatch.
   int suspender_count = resolved.suspend() == wasm::kSuspendWithSuspender;
   int expected_arity =
-      static_cast<int>(sig.parameter_count()) - suspender_count;
+      static_cast<int>(sig->parameter_count()) - suspender_count;
   if (kind == wasm::ImportCallKind ::kJSFunctionArityMismatch) {
     expected_arity = Cast<JSFunction>(callable)
                          ->shared()
@@ -727,7 +721,7 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
       cache->MaybeGet(kind, canonical_sig_index, expected_arity, suspend);
   if (!wasm_code) {
     wasm::WasmCompilationResult result = compiler::CompileWasmImportCallWrapper(
-        &env, kind, &sig, false, expected_arity, suspend);
+        &env, kind, sig, false, expected_arity, suspend);
     std::unique_ptr<wasm::WasmCode> compiled_code = native_module->AddCode(
         result.func_index, result.code_desc, result.frame_slot_count,
         result.ool_spill_count, result.tagged_parameter_slots,

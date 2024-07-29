@@ -2795,7 +2795,7 @@ void WasmCapiFunctionData::WasmCapiFunctionDataPrint(std::ostream& os) {
   PrintHeader(os, "WasmCapiFunctionData");
   WasmFunctionDataPrint(os);
   os << "\n - embedder_data: " << Brief(embedder_data());
-  os << "\n - serialized_signature: " << Brief(serialized_signature());
+  os << "\n - sig: " << sig();
   os << "\n";
 }
 
