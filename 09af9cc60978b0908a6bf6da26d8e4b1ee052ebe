@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ce4381f_50ac8892",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7010,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-29T12:49:02Z",
+      "side": 0,
+      "message": "Implemented in lines 7033-7064, unfortunately I didn\u0027t remove the `TODO` when adding the implementation.",
+      "revId": "09af9cc60978b0908a6bf6da26d8e4b1ee052ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2897964_257596ea",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-29T12:49:02Z",
+      "side": 0,
+      "message": "This was introduced in https://chromium-review.googlesource.com/c/v8/v8/+/2757688 which also contains code that uses this member.",
+      "range": {
+        "startLine": 1015,
+        "startChar": 6,
+        "endLine": 1015,
+        "endChar": 18
+      },
+      "revId": "09af9cc60978b0908a6bf6da26d8e4b1ee052ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
