@@ -33,6 +33,125 @@
       "message": "Oli, PTAL. This is pretty ugly and messy tbh, but I think that\u0027s because our whole story around temporaries in Maglev is ugly and messy and now the code reflects this ugliness a bit better. I generally don\u0027t like the macro assembler\u0027s approach to scratch registers, and think they should always be passed in externally, but that\u0027s a bigger refactoring that I don\u0027t want to do here.",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f77e534_0d7b8f10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "I find it very confusing that the `Acquire` method of the #Scratch#RegisterScope returns a maglev temporary. Conversely, the variable called `temporaries_scope` manages scratch registers and not (maglev) temporaries. I think we need two clearly distinct names for the two register sets and be consistent about them.\n\nAlso, it would help to add explicit invariant checks where they exist (e.g., ensure two sets are distinct).",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b73f2b6d_0b40429c",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "should we ensure here that this is not a register that is in `available_`?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "221ac034_1d3c8253",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "aren\u0027t these exactly *not* the (maglev) temporaries...",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c03ad5_6ce7b7e5",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "how about we actively clobber all registers we return here (and all other archs) in debug builds?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace1aec2_e4af1484",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "`AcquireTemporary`?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ef5737_1cb8e03c",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "CHECK?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad022451_0f4707f9",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T09:48:20Z",
+      "side": 1,
+      "message": "can we have a check that we are not in deferred code here?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
