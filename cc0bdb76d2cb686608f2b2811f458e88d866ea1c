@@ -291,6 +291,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2c40805_b0fefd53",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-29T20:13:57Z",
+      "side": 1,
+      "message": "This function is intended as a quicker way to get the list of objects which would be flagged as detached in a full heap snapshot. Like in a full heap snapshot, this function doesn\u0027t enumerate every detached object, just those directly referenced by V8 wrapper objects. If a Blink object never had a JS wrapper, or if its JS wrapper has been garbage-collected, then it\u0027s okay to skip that object.",
+      "parentUuid": "30159f0a_b7c1feae",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8429f1ec_9fb45694",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 11
