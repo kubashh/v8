@@ -16,6 +16,23 @@
       "message": "lgtm, let\u0027s ship it!!",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c2e5472_f1e274e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T08:10:07Z",
+      "side": 1,
+      "message": "Oli, PTAL. This is pretty ugly and messy tbh, but I think that\u0027s because our whole story around temporaries in Maglev is ugly and messy and now the code reflects this ugliness a bit better. I generally don\u0027t like the macro assembler\u0027s approach to scratch registers, and think they should always be passed in externally, but that\u0027s a bigger refactoring that I don\u0027t want to do here.",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
