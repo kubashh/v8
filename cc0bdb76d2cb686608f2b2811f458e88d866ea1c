@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "70496a32_789d4a6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-29T16:06:38Z",
+      "side": 1,
+      "message": "I understand that, but what I don\u0027t understand is how, given a list of detached DOM objects, will your clients identify which one is leaking. Not all detached objects are leaking, and some detached objects are retained by other detached objects (so I expect at least retraining paths will also be needed). I\u0027m not sure I understandf how this list of nodes is sufficient without the rest of the snapshot in order to get the full picture.\nCan you elaborate a bit more? I\u0027m trying to make sure that this new api this CL is adding is actually doing what it needs to do.",
+      "parentUuid": "f8ac6d1f_fba15cd8",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b8719d64_81c5e14b",
@@ -183,6 +207,30 @@
       "side": 1,
       "message": "Could you elaborate on the cases where V8 objects getting GC\u0027ed while DOM objects remain alive when it\u0027s associated to the mentioned V8 objects? In our observation so far, even if we associate a javascript variable with a DOM object without any additional modification, it seems like the V8 object will be kept alive in the heap. It would be an interesting case to further look into as that could also cause memory issue, but I\u0027d like to limit the scope of this CL as the current implementation is able to address the customers\u0027 needs to identify detached elements.",
       "parentUuid": "f97fd83c_781dbfc6",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c46ce759_349ed4ff",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-29T16:06:38Z",
+      "side": 1,
+      "message": "Please take a look in the code at parts guarded by `v8_flags.reclaim_unmodified_wrappers`. It\u0027s been around for a while and can reclaim, during a minor GC, the JS counterparts of DOM objects if they are unmodified and belong to a subset of types that can be reconstructed from the DOM object.\nI don\u0027t how you tested it and what tests you wrote for it, so I can\u0027t comment on why you\u0027ve never observed it. Note though that adding an object to a hash map for example would also count as modifying it (since the hash is cached on the object).\nLike I mentioned above, if we\u0027re adding a new api to V8, I\u0027d like to make sure it does what it should.",
+      "parentUuid": "b80531d4_d3b34935",
       "range": {
         "startLine": 52,
         "startChar": 48,
