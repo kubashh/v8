@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0016384_0953e9ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-29T11:32:52Z",
+      "side": 1,
+      "message": "To double check: We don\u0027t need the Isolate at all? We should not retrieve it through `object-\u003eGetIsolate()` anywhere else.",
+      "range": {
+        "startLine": 10,
+        "startChar": 47,
+        "endLine": 10,
+        "endChar": 66
+      },
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "183aebfc_d3b73125",
         "filename": "src/api/api-inl.h",
         "patchSetId": 1
