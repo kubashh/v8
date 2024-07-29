@@ -260,6 +260,24 @@
       "parentUuid": "68be5add_56867269",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e8fa71f_53bb91d7",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-29T11:26:22Z",
+      "side": 1,
+      "message": "ok. basically the correct scope is used by the deferred code generation mechanism already and one would not manually need to pick it. sgtm",
+      "parentUuid": "3991ce5e_7e4034d8",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
