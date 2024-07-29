@@ -48,6 +48,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4fde37a_aa2916f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-29T14:55:20Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "183aebfc_d3b73125",
@@ -95,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44e8ed2f_4d836d04",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-29T14:55:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d1d2bd13_fc0b3d93",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 13
+      },
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dcd0e4f_641555a5",
@@ -132,6 +173,30 @@
       "side": 1,
       "message": "Not sure. But:\n- In the configuration with indirect handles/locals, it doesn\u0027t make a difference, as `i::direct_handle` is the same as `i::handle`.\n- In the configuration with direct handle/locals, we don\u0027t need to create an indirect handle and then convert that to a direct local. We\u0027d be just wasting a handle slot. If we actually intended to create an indirect handle here, it should have been better documented. My interpretation is that it\u0027s not required.",
       "parentUuid": "5dcd0e4f_641555a5",
+      "range": {
+        "startLine": 5593,
+        "startChar": 26,
+        "endLine": 5593,
+        "endChar": 42
+      },
+      "revId": "6186ac0a84e2adf0d41f02da8eec8ae4914700f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1240804_0f5017ff",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5593,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-29T14:55:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "57c270b0_66c44f2d",
       "range": {
         "startLine": 5593,
         "startChar": 26,
