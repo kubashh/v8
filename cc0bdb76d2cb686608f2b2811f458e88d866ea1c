@@ -267,6 +267,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30159f0a_b7c1feae",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-29T17:43:58Z",
+      "side": 1,
+      "message": "What do you mean by \"sufficient\" in this context?\nIf this method intends to return *all* JSWrapper DOM objects and does so by following V8 to DOM edges, and some V8 objects are dropped, then the current implementation is not sufficient to fulfill the intention.",
+      "parentUuid": "c7dfec5c_f9576b3c",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8429f1ec_9fb45694",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 11
