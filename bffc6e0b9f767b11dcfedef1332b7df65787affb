@@ -16,6 +16,23 @@
       "message": "@clemensb@chromium.org: PTAL.",
       "revId": "bffc6e0b9f767b11dcfedef1332b7df65787affb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8418f63_457bafb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-07-29T13:03:50Z",
+      "side": 1,
+      "message": "LGTM, thanks for cleaning up!",
+      "revId": "bffc6e0b9f767b11dcfedef1332b7df65787affb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
