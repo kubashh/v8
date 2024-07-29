@@ -81,6 +81,30 @@
       },
       "revId": "09af9cc60978b0908a6bf6da26d8e4b1ee052ebe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05c346e_be6d9e25",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-29T13:05:57Z",
+      "side": 0,
+      "message": "Nice, thanks for the context. Git blame doesn\u0027t work well for removed lines, so I didn\u0027t even try to figure out when this became outdated. 😊",
+      "parentUuid": "a942921c_a3e8b036",
+      "range": {
+        "startLine": 1015,
+        "startChar": 6,
+        "endLine": 1015,
+        "endChar": 18
+      },
+      "revId": "09af9cc60978b0908a6bf6da26d8e4b1ee052ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
