@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8294428_268bf8f9",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T14:17:36Z",
+      "side": 1,
+      "message": "nice idea.",
+      "parentUuid": "b73f2b6d_0b40429c",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "221ac034_1d3c8253",
@@ -104,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b92ebeb_33faead8",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T14:17:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b148c598_701ef21b",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6c03ad5_6ce7b7e5",
@@ -117,6 +153,24 @@
       "writtenOn": "2024-07-29T09:48:20Z",
       "side": 1,
       "message": "how about we actively clobber all registers we return here (and all other archs) in debug builds?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af6f663_7ec7b02a",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T14:17:36Z",
+      "side": 1,
+      "message": "I like this idea, but it\u0027s a bit awkward with the inline header ordering (since clobbering needs the move functions to be defined). Added a TODO for now.",
+      "parentUuid": "c6c03ad5_6ce7b7e5",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -138,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d00bfe7a_8cb5d46d",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T14:17:36Z",
+      "side": 1,
+      "message": "I left as-is but renamed the scope to TemporaryRegisterScope. WDYT?",
+      "parentUuid": "ace1aec2_e4af1484",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8ef5737_1cb8e03c",
@@ -151,6 +223,24 @@
       "writtenOn": "2024-07-29T09:48:20Z",
       "side": 1,
       "message": "CHECK?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44a08af6_3e01a7ed",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T14:17:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8ef5737_1cb8e03c",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
