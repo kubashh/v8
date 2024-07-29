@@ -49,6 +49,66 @@ void HeapProfiler::RemoveSnapshot(HeapSnapshot* snapshot) {
                    }));
 }
 
+class JSApiWrapperEnumerator : public RootVisitor {
+ public:
+  JSApiWrapperEnumerator(Isolate* isolate,
+                         std::function<void(Handle<HeapObject>)> handler)
+      : isolate_(isolate), handler_(handler) {}
+
+  void VisitRootPointers(Root root, const char* description,
+                         FullObjectSlot start, FullObjectSlot end) override {
+    VisitRootPointersImpl(root, description, start, end);
+  }
+
+  void VisitRootPointers(Root root, const char* description,
+                         OffHeapObjectSlot start,
+                         OffHeapObjectSlot end) override {
+    VisitRootPointersImpl(root, description, start, end);
+  }
+
+ private:
+  template <typename TSlot>
+  void VisitRootPointersImpl(Root root, const char* description, TSlot start,
+                             TSlot end) {
+    for (TSlot p = start; p < end; ++p) {
+      DCHECK(!MapWord::IsPacked(p.Relaxed_Load(isolate_).ptr()));
+      Tagged<Object> o = p.load(isolate_);
+      Tagged<HeapObject> heap_object = Cast<HeapObject>(o);
+      DCHECK(!IsCodeSpaceObject(heap_object));
+      if (!IsJSApiWrapperObject(heap_object)) continue;
+      JSApiWrapper wrapper = JSApiWrapper(Cast<JSObject>(heap_object));
+      if (!wrapper.GetCppHeapWrappable(isolate_, kAnyCppHeapPointer)) continue;
+
+      handler_(handle(heap_object, isolate_));
+    }
+  }
+
+  Isolate* isolate_;
+  std::function<void(Handle<HeapObject>)> handler_;
+};
+
+std::vector<v8::Local<v8::Value>> HeapProfiler::GetDetachedJSWrapperObjects() {
+  heap()->CollectAllAvailableGarbage(GarbageCollectionReason::kHeapProfiler);
+  std::vector<v8::Local<v8::Value>> js_objects_found;
+
+  Isolate* v8isolate = isolate();
+  JSApiWrapperEnumerator enumerator(
+      v8isolate,
+      [this, v8isolate, &js_objects_found](Handle<HeapObject> global_object) {
+        v8::Local<v8::Value> data(
+            Utils::ToLocal(Cast<JSObject>(global_object), v8isolate));
+        v8::EmbedderGraph::Node::Detachedness detachedness =
+            GetDetachedness(data, 0);
+
+        if (detachedness == v8::EmbedderGraph::Node::Detachedness::kDetached) {
+          js_objects_found.push_back(data);
+        }
+      });
+
+  v8isolate->traced_handles()->Iterate(&enumerator);
+  return js_objects_found;
+}
+
 void HeapProfiler::AddBuildEmbedderGraphCallback(
     v8::HeapProfiler::BuildEmbedderGraphCallback callback, void* data) {
   build_embedder_graph_callbacks_.push_back({callback, data});
