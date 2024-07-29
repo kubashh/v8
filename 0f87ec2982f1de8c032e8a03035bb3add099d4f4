@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e11942c3_fa8e3321",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1545467
+      },
+      "writtenOn": "2024-07-29T16:27:36Z",
+      "side": 1,
+      "message": "I believe it is a part of AVX2 as stated here https://www.felixcloutier.com/x86/vpbroadcast",
+      "parentUuid": "20aeef13_0440113e",
+      "revId": "0f87ec2982f1de8c032e8a03035bb3add099d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e72932a_e6e1ab9f",
@@ -66,6 +84,30 @@
       "writtenOn": "2024-07-29T10:50:19Z",
       "side": 1,
       "message": "I\u0027m pretty sure this is a bug: Liftoff considers all \"src\" registers to be read-only, and the value could still be in use. To perform a register-to-register conversion operation, you\u0027ll need to use a temp register.\n\nTo reproduce the bug, store the same value into two locals, and assert that reading one doesn\u0027t write to the other. Roughly:\n```\n  (func test (param $var0 f32)\n  (local $var1 f32)\n  local.get $var0\n  local.set $var1\n  local.get $var0\n  SomethingThatCallsLiftoffAssemblerStore\n  local.get $var1\n  )\n```\nI predict that with this code as  written, $var1\u0027s value will be the result of the `ps2ph` conversion of the parameter, rather than its unmodified value as it should be. (I haven\u0027t tested the snippet; if it doesn\u0027t work then check generated code; I think an f32 param should be passed in a register, but if for any reason it isn\u0027t then you may need to force it there, e.g. by performing some arithmetic operation on it.)",
+      "range": {
+        "startLine": 588,
+        "startChar": 6,
+        "endLine": 588,
+        "endChar": 39
+      },
+      "revId": "0f87ec2982f1de8c032e8a03035bb3add099d4f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a09daff_5a817174",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1545467
+      },
+      "writtenOn": "2024-07-29T16:27:36Z",
+      "side": 1,
+      "message": "Nice catch. Fixed with a temp register.",
+      "parentUuid": "0e72932a_e6e1ab9f",
       "range": {
         "startLine": 588,
         "startChar": 6,
