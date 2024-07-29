@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b148c598_701ef21b",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T09:56:18Z",
+      "side": 1,
+      "message": "yeah good point, I should think of a different name",
+      "parentUuid": "221ac034_1d3c8253",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6c03ad5_6ce7b7e5",
         "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
         "patchSetId": 1
@@ -150,6 +168,24 @@
       "writtenOn": "2024-07-29T09:48:20Z",
       "side": 1,
       "message": "can we have a check that we are not in deferred code here?",
+      "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f318e0_2c7b7b9b",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-29T09:56:18Z",
+      "side": 1,
+      "message": "no, we still want to be able to add additional scopes inside deferred code.",
+      "parentUuid": "ad022451_0f4707f9",
       "revId": "16002dbff16130d2d858e817d95eb75ca8132b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
