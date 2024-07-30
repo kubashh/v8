@@ -457,6 +457,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e660f45_d180b068",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-30T21:14:51Z",
+      "side": 1,
+      "message": "I believe I misunderstood your intention. I thought you were trying to collect all detached DOM objects matching JSWrappers. I see now that what you\u0027re after is actually the JS objects. In that case, I agree that enumerating the Oilpan heap is not needed and this method does do what you intended. Resolving and sorry for the confusion.",
+      "parentUuid": "d4b504de_2a9eef78",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8429f1ec_9fb45694",
