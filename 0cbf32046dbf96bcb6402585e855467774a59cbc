@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5afbc59_378b0e01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-30T16:32:26Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL as general reviewer.\n@sroettger@google.com: PTAL from a security perspective. I\u0027ll incorporate this in the design doc as I think it\u0027s a clear step forward vs. the previous solution and doesn\u0027t really increase maintainability / decrease readability.",
+      "revId": "0cbf32046dbf96bcb6402585e855467774a59cbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
