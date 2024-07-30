@@ -126,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a36806af_62c978bc",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1329477
+      },
+      "writtenOn": "2024-07-30T22:21:19Z",
+      "side": 1,
+      "message": "Giovanni has considered whether it would be beneficial to remove the GC call here. What I can point out is that, for our target customers who want this, a full heap snapshot is in the 30-60 second range for gathering, and this is in the ~2-second range for gathering. If we\u0027re talking an order of magnitude improvement, I\u0027d suggest not letting the perfect be the enemy of the good.\n\nStill, if we want to make the CollectAllAvailableGarbage call be made independently, I\u0027m sure we can make that change.",
+      "parentUuid": "15fc717e_b338cb9d",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a27de1df_62f39f61",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 12
