@@ -1083,6 +1083,11 @@ inline void MaglevAssembler::LoadHeapNumberValue(DoubleRegister result,
   vldr(result, FieldMemOperand(heap_number, offsetof(HeapNumber, value_)));
 }
 
+inline void MaglevAssembler::LoadOddballKind(Register result,
+                                             Register oddball) {
+  ldr(result, FieldMemOperand(oddball, offsetof(Oddball, kind_)));
+}
+
 inline void MaglevAssembler::Int32ToDouble(DoubleRegister result,
                                            Register src) {
   UseScratchRegisterScope temps(this);

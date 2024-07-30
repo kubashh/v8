@@ -175,6 +175,7 @@ enum class ToNumberHint {
   kDisallowToNumber,
   kAssumeSmi,
   kAssumeNumber,
+  kAssumeNumberOrBoolean,
   kAssumeNumberOrOddball
 };
 
@@ -1459,10 +1460,10 @@ class MaglevGraphBuilder {
   // node.
   //
   // Deopts if the value is not exactly representable as a Float64.
-  ValueNode* GetFloat64(ValueNode* value);
+  ValueNode* GetFloat64(ValueNode* value, ToNumberHint hint);
 
-  ValueNode* GetFloat64(interpreter::Register reg) {
-    return GetFloat64(current_interpreter_frame_.get(reg));
+  ValueNode* GetFloat64(interpreter::Register reg, ToNumberHint hint) {
+    return GetFloat64(current_interpreter_frame_.get(reg), hint);
   }
 
   // Get a Float64 representation node whose value is the result of ToNumber on
@@ -1767,7 +1768,7 @@ class MaglevGraphBuilder {
         return GetInt32(input);
       case ValueRepresentation::kFloat64:
       case ValueRepresentation::kHoleyFloat64:
-        return GetFloat64(input);
+        return GetFloat64(input, ToNumberHint::kDisallowToNumber);
       case ValueRepresentation::kUint32:
       case ValueRepresentation::kIntPtr:
         // These conversion should be explicitly done beforehand.

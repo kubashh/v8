@@ -700,6 +700,7 @@ inline bool NodeTypeMayBeNullOrUndefined(NodeType type) {
 
 enum class TaggedToFloat64ConversionType : uint8_t {
   kOnlyNumber,
+  kNumberOrBoolean,
   kNumberOrOddball,
 };
 
@@ -745,6 +746,8 @@ inline std::ostream& operator<<(
   switch (conversion_type) {
     case TaggedToFloat64ConversionType::kOnlyNumber:
       return os << "Number";
+    case TaggedToFloat64ConversionType::kNumberOrBoolean:
+      return os << "NumberOrBoolean";
     case TaggedToFloat64ConversionType::kNumberOrOddball:
       return os << "NumberOrOddball";
   }
@@ -3908,7 +3911,7 @@ class CheckedNumberOrOddballToFloat64
 
  private:
   using TaggedToFloat64ConversionTypeOffset =
-      NextBitField<TaggedToFloat64ConversionType, 1>;
+      NextBitField<TaggedToFloat64ConversionType, 2>;
 };
 
 class UncheckedNumberOrOddballToFloat64
@@ -3940,7 +3943,7 @@ class UncheckedNumberOrOddballToFloat64
 
  private:
   using TaggedToFloat64ConversionTypeOffset =
-      NextBitField<TaggedToFloat64ConversionType, 1>;
+      NextBitField<TaggedToFloat64ConversionType, 2>;
 };
 
 class CheckedHoleyFloat64ToFloat64
@@ -4027,7 +4030,7 @@ class TruncateNumberOrOddballToInt32
 
  private:
   using TaggedToFloat64ConversionTypeOffset =
-      NextBitField<TaggedToFloat64ConversionType, 1>;
+      NextBitField<TaggedToFloat64ConversionType, 2>;
 };
 
 class CheckedTruncateNumberOrOddballToInt32
@@ -4059,7 +4062,7 @@ class CheckedTruncateNumberOrOddballToInt32
 
  private:
   using TaggedToFloat64ConversionTypeOffset =
-      NextBitField<TaggedToFloat64ConversionType, 1>;
+      NextBitField<TaggedToFloat64ConversionType, 2>;
 };
 
 class LogicalNot : public FixedInputValueNodeT<1, LogicalNot> {
