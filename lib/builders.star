@@ -71,7 +71,10 @@ def v8_builder(defaults = None, **kwargs):
     if barrier.closes_tree:
         notifies = kwargs.pop("notifies", [])
         if kwargs.get("executable") != "recipe:v8":
-            notifies.append("generic tree closer")
+            if "Blink" in kwargs["name"]:
+                notifies.append("blink tree closer")
+            else:
+                notifies.append("generic tree closer")
         notifies.append("infra-failure")
         kwargs["notifies"] = notifies
     parent_builder = kwargs.pop("parent_builder", None)
