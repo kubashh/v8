@@ -4585,9 +4585,9 @@ Handle<JSFunction> Factory::JSFunctionBuilder::BuildRaw(
   function->set_shared(*sfi_, mode);
   function->set_context(*context_, kReleaseStore, mode);
   function->set_raw_feedback_cell(*feedback_cell, mode);
-#ifdef V8_ENABLE_SANDBOX
+#ifdef V8_ENABLE_LEAPTIERING
   function->set_dispatch_handle(feedback_cell->dispatch_handle());
-#endif  // V8_ENABLE_SANDBOX
+#endif  // V8_ENABLE_LEAPTIERING
   function->set_code(*code, kReleaseStore, mode);
   if (function->has_prototype_slot()) {
     function->set_prototype_or_initial_map(
