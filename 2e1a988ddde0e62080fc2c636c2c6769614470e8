@@ -16,6 +16,23 @@
       "message": "@saelo@chromium.org: PTAL",
       "revId": "2e1a988ddde0e62080fc2c636c2c6769614470e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "312990b2_2842a791",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-30T10:55:01Z",
+      "side": 1,
+      "message": "So how are those prevented from being used by fuzzers now? Shouldn\u0027t this list be used here somewhere: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/runtime/runtime.cc;l\u003d272;drc\u003d1d9d1030b9771541f405fa0634ac43129dfffd56\n\nFor other non-fuzzing function, I\u0027ve also added a comment into the implementation of the function, e.g. here https://source.chromium.org/chromium/chromium/src/+/main:v8/src/runtime/runtime-test-wasm.cc;l\u003d240;drc\u003ddb293610cd720cf14e77a6c77f9414f66512257e if you think that\u0027s useful, feel free to do the same for these functions, too",
+      "revId": "2e1a988ddde0e62080fc2c636c2c6769614470e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
