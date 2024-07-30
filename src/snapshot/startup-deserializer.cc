@@ -43,6 +43,7 @@ void StartupDeserializer::DeserializeIntoIsolate() {
         this,
         base::EnumSet<SkipRoot>{SkipRoot::kUnserializable, SkipRoot::kWeak,
                                 SkipRoot::kTracedHandles});
+    InitializeBuiltinJSDispatchTable();
     IterateStartupObjectCache(isolate(), this);
 
     isolate()->heap()->IterateWeakRoots(
@@ -90,6 +91,31 @@ void StartupDeserializer::DeserializeIntoIsolate() {
     const double ms = timer.Elapsed().InMillisecondsF();
     PrintF("[Deserializing isolate (%d bytes) took %0.3f ms]\n", bytes, ms);
   }
+}
+
+void StartupDeserializer::InitializeBuiltinJSDispatchTable() {
+#ifdef V8_ENABLE_LEAPTIERING
+  Builtins* builtins = isolate()->builtins();
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    Tagged<Code> code = builtins->code(builtin);
+    // Each builtin with JS linkage also needs an entry in the JSDispatch table.
+    if (code->entrypoint_tag() == CodeEntrypointTag::kJSEntrypointTag) {
+      // TODO(olivf, 40931165): It might be more robust to get the static
+      // parameter count of this builtin.
+      JSDispatchHandle* slot =
+          &isolate()->builtin_dispatch_table()[Builtins::ToInt(builtin)];
+      JSDispatchTable::Space* space =
+          IsolateForSandbox(isolate()).GetJSDispatchTableSpaceFor(
+              reinterpret_cast<Address>(slot));
+      JSDispatchHandle handle =
+          GetProcessWideJSDispatchTable()->AllocateAndInitializeEntry(
+              space, code->parameter_count());
+      GetProcessWideJSDispatchTable()->SetCode(handle, code);
+      *slot = handle;
+    }
+  }
+#endif
 }
 
 void StartupDeserializer::DeserializeAndCheckExternalReferenceTable() {
