@@ -704,7 +704,6 @@ namespace internal {
   F(DisallowWasmCodegen, 1, 1)                             \
   F(FlushLiftoffCode, 0, 1)                                \
   F(EstimateCurrentMemoryConsumption, 0, 1)                \
-  F(FreezeWasmLazyCompilation, 1, 1)                       \
   F(GetWasmExceptionTagId, 2, 1)                           \
   F(GetWasmExceptionValues, 1, 1)                          \
   F(GetWasmRecoveredTrapCount, 0, 1)                       \
@@ -736,9 +735,15 @@ namespace internal {
   F(WasmTraceEnter, 0, 1)                                  \
   F(WasmTraceExit, 1, 1)                                   \
   F(WasmTraceMemory, 1, 1)                                 \
-  F(WasmNull, 0, 1)                                        \
   F(WasmArray, 0, 1)                                       \
   F(WasmStruct, 0, 1)
+
+#define FOR_EACH_INTRINSIC_WASM_TEST_NO_FUZZING(F, I)                        \
+  /* WasmNulls may not appear in JS! */                                      \
+  F(WasmNull, 0, 1)                                                          \
+  /* Freezing lazy compilation is for testing only and does not disable lazy \
+   * compilation.*/                                                          \
+  F(FreezeWasmLazyCompilation, 1, 1)
 
 #define FOR_EACH_INTRINSIC_WASM_DRUMBRAKE_TEST(F, I) \
   F(WasmTraceBeginExecution, 0, 1)                   \
@@ -819,6 +824,7 @@ namespace internal {
   FOR_EACH_INTRINSIC_TYPEDARRAY(F, I)                             \
   IF_WASM(FOR_EACH_INTRINSIC_WASM, F, I)                          \
   IF_WASM(FOR_EACH_INTRINSIC_WASM_TEST, F, I)                     \
+  IF_WASM(FOR_EACH_INTRINSIC_WASM_TEST_NO_FUZZING, F, I)          \
   IF_WASM_DRUMBRAKE(FOR_EACH_INTRINSIC_WASM_DRUMBRAKE_TEST, F, I) \
   FOR_EACH_INTRINSIC_WEAKREF(F, I)
 
