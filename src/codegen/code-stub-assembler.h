@@ -1080,6 +1080,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                                        CodeEntrypointTag tag);
   TNode<RawPtrT> LoadCodeEntryFromIndirectPointerHandle(
       TNode<IndirectPointerHandleT> handle, CodeEntrypointTag tag);
+
+  TNode<UintPtrT> ComputeJSDispatchTableEntryOffset(
+      TNode<JSDispatchHandleT> handle);
 #endif
 
   TNode<Object> LoadProtectedPointerField(TNode<TrustedObject> object,
@@ -4176,6 +4179,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   // Load a builtin's code from the builtin array in the isolate.
   TNode<Code> LoadBuiltin(TNode<Smi> builtin_id);
+#ifdef V8_ENABLE_LEAPTIERING
+  TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(Builtin builtin);
+  TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(TNode<Smi> builtin_id);
+#endif
 
   // Figure out the SFI's code object using its data field.
   // If |data_type_out| is provided, the instance type of the function data will
@@ -4191,6 +4198,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<JSFunction> AllocateFunctionWithMapAndContext(
       TNode<Map> map, TNode<SharedFunctionInfo> shared_info,
       TNode<Context> context);
+
+#ifdef V8_ENABLE_LEAPTIERING
+  TNode<Code> ResolveJSDispatchHandle(TNode<JSDispatchHandleT> dispatch_handle);
+  TNode<JSFunction> AllocateFunctionWithContext(
+      TNode<SharedFunctionInfo> shared_info,
+      TNode<JSDispatchHandleT> dispatch_handle, TNode<Context> context);
+#endif  // V8_ENABLE_LEAPTIERING
 
   // Promise helpers
   TNode<Uint32T> PromiseHookFlags();

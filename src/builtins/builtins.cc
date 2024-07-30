@@ -142,6 +142,21 @@ void Builtins::set_code(Builtin builtin, Tagged<Code> code) {
   DCHECK(Internals::HasHeapObjectTag(code.ptr()));
   // The given builtin may be uninitialized thus we cannot check its type here.
   isolate_->builtin_table()[Builtins::ToInt(builtin)] = code.ptr();
+#ifdef V8_ENABLE_LEAPTIERING
+  if (code->entrypoint_tag() == CodeEntrypointTag::kJSEntrypointTag) {
+    JSDispatchTable::Space* space =
+        IsolateForSandbox(isolate_).GetJSDispatchTableSpaceFor(
+            reinterpret_cast<Address>(
+                &isolate_->builtin_dispatch_table()[Builtins::ToInt(builtin)]));
+    // TODO(olivf): Might be more robust to get the static parameter count of
+    // this builtin.
+    JSDispatchHandle handle =
+        GetProcessWideJSDispatchTable()->AllocateAndInitializeEntry(
+            space, code->parameter_count());
+    GetProcessWideJSDispatchTable()->SetCode(handle, code);
+    isolate_->builtin_dispatch_table()[Builtins::ToInt(builtin)] = handle;
+  }
+#endif
 }
 
 Tagged<Code> Builtins::code(Builtin builtin) {

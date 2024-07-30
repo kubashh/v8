@@ -43,6 +43,15 @@ void StartupDeserializer::DeserializeIntoIsolate() {
         this,
         base::EnumSet<SkipRoot>{SkipRoot::kUnserializable, SkipRoot::kWeak,
                                 SkipRoot::kTracedHandles});
+#ifdef V8_ENABLE_LEAPTIERING
+    // TODO(olivf): Do this less stupidly
+    for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+         ++builtin) {
+      isolate()->builtins()->set_code(builtin,
+                                      isolate()->builtins()->code(builtin));
+    }
+#endif
+
     IterateStartupObjectCache(isolate(), this);
 
     isolate()->heap()->IterateWeakRoots(
