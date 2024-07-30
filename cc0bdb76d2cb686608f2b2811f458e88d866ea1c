@@ -435,6 +435,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d4b504de_2a9eef78",
+        "filename": "src/profiler/heap-profiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-30T07:36:31Z",
+      "side": 1,
+      "message": "\u003e What do you mean by \"sufficient\" in this context?\n\nThe functionality tries to find detached JS wrappers and this is exactly what is implemented.\n\n\u003e If this method intends to return all JSWrapper DOM objects and does so by following V8 to DOM edges, and some V8 objects are dropped, then the current implementation is not sufficient to fulfill the intention.\n\nIf a JS objects is reclaimed it\u0027s not showing up but also not a detached JS wrapper object. \n\nIn order to find a V8-\u003eDOM-\u003eV8 wrapper object this is sufficient because all DOM-\u003eV8 references are considered. Since all wrappers are always created via DOM there\u0027s always a DOM-\u003eV8 references present for them which is exactly what is considered here.",
+      "parentUuid": "b49b64c3_b3cf16bf",
+      "range": {
+        "startLine": 52,
+        "startChar": 48,
+        "endLine": 52,
+        "endChar": 75
+      },
+      "revId": "cc0bdb76d2cb686608f2b2811f458e88d866ea1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8429f1ec_9fb45694",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 11
