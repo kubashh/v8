@@ -27,6 +27,7 @@ class StartupDeserializer final : public Deserializer<Isolate> {
   void FlushICache();
   void LogNewMapEvents();
   void DeserializeAndCheckExternalReferenceTable();
+  void InitializeBuiltinJSDispatchTable();
 };
 
 }  // namespace internal
