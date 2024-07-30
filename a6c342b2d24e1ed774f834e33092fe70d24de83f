@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15fc717e_b338cb9d",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-30T08:24:44Z",
+      "side": 1,
+      "message": "The API calls `CollectAllAvailableGarbage()` which are synchronous last-resort GCs that are very expensive on their own. The API performs up to 7 GCs back to back. Any performance is already gone at this point.\n\nIIUC your use case then users would merely presses a button in some form of debugging interface (DevTools). I don\u0027t think it matters whether the user waits 1, 2, or 3 sec here.\n\nThe API as proposed below hooks into a GC remembered set directly which limits our flexibility in future as we need to drag this API along.",
+      "parentUuid": "3e41df17_16dfed8b",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a27de1df_62f39f61",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 12
