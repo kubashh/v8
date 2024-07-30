@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db2f98e_91c8624b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-07-30T08:49:02Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "bc9d616e6c003a986f749e21f482851c3f3fdd11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "778ffec5_e89035c9",
+        "filename": "builders/integration.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-07-30T08:49:02Z",
+      "side": 1,
+      "message": "It\u0027s easier for now to configure a one-off right here at the builder level instead of changing how the BARRIER implementation works. The infra-failure is part of tree closing...",
+      "range": {
+        "startLine": 51,
+        "startChar": 30,
+        "endLine": 51,
+        "endChar": 68
+      },
+      "revId": "bc9d616e6c003a986f749e21f482851c3f3fdd11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
