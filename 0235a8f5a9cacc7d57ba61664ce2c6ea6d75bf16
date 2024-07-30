@@ -56,6 +56,30 @@
       },
       "revId": "0235a8f5a9cacc7d57ba61664ce2c6ea6d75bf16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8f0ed28_37b7dd22",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3964,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-30T07:34:02Z",
+      "side": 1,
+      "message": "No, it\u0027s fine in Maglev because Maglev eagerly allocates constant heap numbers in BuildVirtualObject\u003eBuildHeapNumber (and doesn\u0027t GVN them).\n\nHowever, it might make sense to not allocate elided heap numbers eagerly in Maglev.",
+      "parentUuid": "e1378328_224345be",
+      "range": {
+        "startLine": 3964,
+        "startChar": 6,
+        "endLine": 3964,
+        "endChar": 75
+      },
+      "revId": "0235a8f5a9cacc7d57ba61664ce2c6ea6d75bf16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
