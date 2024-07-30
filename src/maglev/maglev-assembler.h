@@ -657,6 +657,7 @@ class V8_EXPORT_PRIVATE MaglevAssembler : public MacroAssembler {
   inline void LoadHeapNumberValue(DoubleRegister result, Register heap_number);
   inline void LoadHeapNumberOrOddballValue(DoubleRegister result,
                                            Register object);
+  inline void LoadOddballKind(Register result, Register oddball);
 
   void LoadDataField(const PolymorphicAccessInfo& access_info, Register result,
                      Register object, Register scratch);

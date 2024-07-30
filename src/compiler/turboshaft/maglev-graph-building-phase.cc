@@ -3870,6 +3870,7 @@ class GraphBuilder {
       case maglev::TaggedToFloat64ConversionType::kOnlyNumber:
         kind = ConvertJSPrimitiveToUntaggedOrDeoptOp::JSPrimitiveKind::kNumber;
         break;
+      case maglev::TaggedToFloat64ConversionType::kNumberOrBoolean:
       case maglev::TaggedToFloat64ConversionType::kNumberOrOddball:
         kind = ConvertJSPrimitiveToUntaggedOrDeoptOp::JSPrimitiveKind::
             kNumberOrOddball;
@@ -3985,6 +3986,7 @@ class GraphBuilder {
         input_requirement =
             TruncateJSPrimitiveToUntaggedOrDeoptOp::InputRequirement::kNumber;
         break;
+      case maglev::TaggedToFloat64ConversionType::kNumberOrBoolean:
       case maglev::TaggedToFloat64ConversionType::kNumberOrOddball:
         input_requirement = TruncateJSPrimitiveToUntaggedOrDeoptOp::
             InputRequirement::kNumberOrOddball;

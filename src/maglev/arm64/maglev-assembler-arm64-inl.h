@@ -1252,6 +1252,11 @@ inline void MaglevAssembler::LoadHeapNumberValue(DoubleRegister result,
   Ldr(result, FieldMemOperand(heap_number, offsetof(HeapNumber, value_)));
 }
 
+inline void MaglevAssembler::LoadOddballKind(Register result,
+                                             Register oddball) {
+  Ldr(result, FieldMemOperand(oddball, offsetof(Oddball, kind_)));
+}
+
 inline void MaglevAssembler::Int32ToDouble(DoubleRegister result,
                                            Register src) {
   Scvtf(result, src.W());
