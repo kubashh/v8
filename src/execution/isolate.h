@@ -1250,6 +1250,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   }
 
   Address* builtin_entry_table() { return isolate_data_.builtin_entry_table(); }
+#ifdef V8_ENABLE_LEAPTIERING
+  V8_INLINE JSDispatchHandle* builtin_dispatch_table() {
+    return isolate_data_.builtin_dispatch_table();
+  }
+#endif
   V8_INLINE Address* builtin_table() { return isolate_data_.builtin_table(); }
   V8_INLINE Address* builtin_tier0_table() {
     return isolate_data_.builtin_tier0_table();
@@ -2236,6 +2241,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return wasm_revec_verifier_for_test_;
   }
 #endif  // V8_ENABLE_WASM_SIMD256_REVEC
+
+  void InitializeBuiltinJSDispatchTable();
 
  private:
   explicit Isolate(IsolateGroup* isolate_group);

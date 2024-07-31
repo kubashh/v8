@@ -19,6 +19,7 @@
 #include "src/objects/heap-object-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/smi.h"
+#include "src/sandbox/js-dispatch-table-inl.h"
 #include "src/snapshot/read-only-deserializer.h"
 #include "src/utils/allocation.h"
 
@@ -51,6 +52,7 @@ std::shared_ptr<ReadOnlyArtifacts> InitializeSharedReadOnlyArtifacts() {
 ReadOnlyHeap::~ReadOnlyHeap() {
 #ifdef V8_ENABLE_SANDBOX
   GetProcessWideCodePointerTable()->TearDownSpace(&code_pointer_space_);
+  GetProcessWideJSDispatchTable()->TearDownSpace(&js_dispatch_table_space_);
 #endif
 }
 
@@ -98,6 +100,7 @@ void ReadOnlyHeap::SetUp(Isolate* isolate,
             isolate->heap()->read_only_external_pointer_space(),
             artifacts.get());
 #endif  // V8_COMPRESS_POINTERS
+        isolate->InitializeBuiltinJSDispatchTable();
       }
       artifacts->VerifyChecksum(read_only_snapshot_data,
                                 read_only_heap_created);
@@ -123,6 +126,7 @@ void ReadOnlyHeap::SetUp(Isolate* isolate,
     if (read_only_snapshot_data != nullptr) {
       ro_heap->DeserializeIntoIsolate(isolate, read_only_snapshot_data,
                                       can_rehash);
+      isolate->InitializeBuiltinJSDispatchTable();
     }
   }
 }
@@ -244,6 +248,9 @@ ReadOnlyHeap::ReadOnlyHeap(ReadOnlySpace* ro_space)
     : read_only_space_(ro_space) {
 #ifdef V8_ENABLE_SANDBOX
   GetProcessWideCodePointerTable()->InitializeSpace(&code_pointer_space_);
+  GetProcessWideJSDispatchTable()->InitializeSpace(&js_dispatch_table_space_);
+  GetProcessWideJSDispatchTable()->AttachSpaceToReadOnlySegment(
+      &js_dispatch_table_space_);
 #endif
 }
 

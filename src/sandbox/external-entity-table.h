@@ -325,6 +325,7 @@ class V8_EXPORT_PRIVATE ExternalEntityTable {
   //
   // The memory of this segment will afterwards be inaccessible.
   void FreeTableSegment(Segment segment);
+  void TearDownTableSegment(Segment segment);
 
   // Iterate over all entries in the given space.
   //
