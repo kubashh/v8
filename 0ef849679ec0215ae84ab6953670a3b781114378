@@ -20,6 +20,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d245ee1_e7399bc8",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-31T11:51:26Z",
+      "side": 1,
+      "message": "why add this when `GetFloat64ForToNumber` exists?",
+      "range": {
+        "startLine": 1737,
+        "startChar": 60,
+        "endLine": 1737,
+        "endChar": 77
+      },
+      "revId": "0ef849679ec0215ae84ab6953670a3b781114378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2014fbf4_21b7f066",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-31T11:51:26Z",
+      "side": 1,
+      "message": "not in this CL, but would be nice to make this (and below) a faster check with static roots.",
+      "range": {
+        "startLine": 1660,
+        "startChar": 11,
+        "endLine": 1660,
+        "endChar": 37
+      },
+      "revId": "0ef849679ec0215ae84ab6953670a3b781114378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c73f046c_fb5a8179",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-07-31T11:51:26Z",
+      "side": 1,
+      "message": "instead of passing a scratch in here, you could use an AcquireScratch scoped to this code (this is what CompareObjectTypeAndJumpIf does internally)",
+      "range": {
+        "startLine": 1663,
+        "startChar": 27,
+        "endLine": 1663,
+        "endChar": 34
+      },
+      "revId": "0ef849679ec0215ae84ab6953670a3b781114378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e17a9ee6_e5c43847",
         "filename": "src/maglev/maglev-ir.cc",
         "patchSetId": 9
