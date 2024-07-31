@@ -244,6 +244,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f715075f_e1f1a721",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-31T20:32:50Z",
+      "side": 1,
+      "message": "I suppose your point is that the goal is to check if an object is retained but not why. I see how this new api is useful for that. Once concluded that an object is retained, I have my doubts that a full heap snapshot could generally be avoided if we want to fix the leak, but I\u0027ll put these aside for now.",
+      "parentUuid": "133148fb_28022aaa",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a27de1df_62f39f61",
