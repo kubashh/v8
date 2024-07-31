@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a372dbfa_2d87169c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T11:48:01Z",
+      "side": 1,
+      "message": "ptal,\n\nsamuel overall,\nleszek mainly codegen/* and execution/*",
+      "revId": "bfb84d5593d9316b0c690529537a503a1e1c45c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
