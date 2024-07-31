@@ -222,6 +222,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "133148fb_28022aaa",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-07-31T18:42:39Z",
+      "side": 1,
+      "message": "Reverting back to heap iteration per the discussion.\n\nHow this is intended to be used for UX: We have a thread on clarifying the intention here: https://chromium-review.googlesource.com/c/v8/v8/+/5629921/comment/b1ef4f84_69762206/\n\nRetainer path support is something we\u0027ll continuously look into for this tool; however, the biggest value we want to provide to the customer with this detached element tool is the ability to rapidly iterate and validate whether elements have been retained or not. It has been proven from our customers that even without v8 walking through the retainer path, being able to see the shape of the html elements being retained is tremendously helpful in tackling memory leak issue cause by detached elements.",
+      "parentUuid": "535d12de_c4c58833",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a27de1df_62f39f61",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 12
