@@ -1,6 +1,69 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60951ebd_0ae4ea29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T10:47:24Z",
+      "side": 1,
+      "message": "Thanks, just a minor typo left 😊",
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4705942_bdf27d6a",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T10:47:24Z",
+      "side": 1,
+      "message": "O.O",
+      "range": {
+        "startLine": 1805,
+        "startChar": 33,
+        "endLine": 1805,
+        "endChar": 38
+      },
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b62b62fb_837dbf26",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1824,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T10:47:24Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 1824,
+        "startChar": 33,
+        "endLine": 1824,
+        "endChar": 38
+      },
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edb97039_13817bb1",
@@ -24,6 +87,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0c30203_3ab19622",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T10:47:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "edb97039_13817bb1",
+      "range": {
+        "startLine": 149,
+        "startChar": 11,
+        "endLine": 149,
+        "endChar": 33
+      },
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d982091_c731fa43",
@@ -37,6 +124,30 @@
       "writtenOn": "2024-07-31T10:39:37Z",
       "side": 1,
       "message": "The implementations are identical as to what was in X64OperandGenerator.",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 1
+      },
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e3bb2a8_6f657393",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T10:47:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6d982091_c731fa43",
       "range": {
         "startLine": 118,
         "startChar": 0,
