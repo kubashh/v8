@@ -156,7 +156,7 @@ void ExternalEntityTable<Entry, size>::TearDownSpace(Space* space) {
   DCHECK(is_initialized());
   DCHECK(space->BelongsTo(this));
   for (auto segment : space->segments_) {
-    FreeTableSegment(segment);
+    TearDownTableSegment(segment);
   }
   space->segments_.clear();
 }
@@ -444,11 +444,16 @@ ExternalEntityTable<Entry, size>::AllocateTableSegment() {
 }
 
 template <typename Entry, size_t size>
+void ExternalEntityTable<Entry, size>::TearDownTableSegment(Segment segment) {
+  Address segment_start = vas_->base() + segment.offset();
+  vas_->FreePages(segment_start, kSegmentSize);
+}
+
+template <typename Entry, size_t size>
 void ExternalEntityTable<Entry, size>::FreeTableSegment(Segment segment) {
   // Segment zero is reserved.
   DCHECK_NE(segment.number(), 0);
-  Address segment_start = vas_->base() + segment.offset();
-  vas_->FreePages(segment_start, kSegmentSize);
+  TearDownTableSegment(segment);
 }
 
 template <typename Entry, size_t size>
