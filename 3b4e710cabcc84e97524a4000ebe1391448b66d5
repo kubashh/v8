@@ -1,0 +1,210 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a91cf8ca_41701739",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nit: be populated?",
+      "range": {
+        "startLine": 13,
+        "startChar": 36,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0314cf3c_128539c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nice! \\o/",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5207ee0e_c178e9cc",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nit: JSDispatchTable?",
+      "range": {
+        "startLine": 1913,
+        "startChar": 43,
+        "endLine": 1913,
+        "endChar": 61
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aabd36af_5c0ee487",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 4204,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "This is optional only for non-leaptiering builds? Otherwise the caller must provide a handle, correct?",
+      "range": {
+        "startLine": 4204,
+        "startChar": 6,
+        "endLine": 4204,
+        "endChar": 61
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0440b10_bc140965",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nit: outdated comment?",
+      "range": {
+        "startLine": 333,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 66
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ea5203_3fe1ece4",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nit: somewhat odd indention, but maybe `cl format` does it this way for some reason?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53df779c_dd34e508",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 7370,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nit: do we need an explicit `slot` here or can this just be `builtin_dispatch_table()[idx] \u003d handle`? Fine either way though",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d3f75e9_731f76d0",
+        "filename": "src/sandbox/external-entity-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Why was this introduced?",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8d6c1a3_693723ad",
+        "filename": "src/sandbox/js-dispatch-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Nit: it\u0027s not really intuitively clear to me what this parameter expresses. From the callsites, it seems to basically state whether the caller is initializing the table?",
+      "range": {
+        "startLine": 203,
+        "startChar": 34,
+        "endLine": 203,
+        "endChar": 51
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd45d7b3_e35f82b0",
+        "filename": "src/sandbox/js-dispatch-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Maybe add to that: \"Remove this and the GetProcessWideCodePointerTable() accessor\"",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

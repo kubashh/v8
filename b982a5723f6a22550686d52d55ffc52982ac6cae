@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "759215f2_b09151a0",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-07-31T12:49:44Z",
+      "side": 1,
+      "message": "Is the expectation that eventually all builtins will have a list in this array, or just those that need one for e.g. `AllocateFunctionWithContext`?",
+      "revId": "b982a5723f6a22550686d52d55ffc52982ac6cae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
