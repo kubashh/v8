@@ -16,6 +16,98 @@
       "message": "PTAL :)",
       "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a865c08b_e1b7e5d7",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T09:33:33Z",
+      "side": 1,
+      "message": "Any reason why we run this code on all platforms for Turbofan but only on x64 for Turboshaft?",
+      "range": {
+        "startLine": 1791,
+        "startChar": 0,
+        "endLine": 1791,
+        "endChar": 22
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fea94366_e58fe9e0",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T09:33:33Z",
+      "side": 1,
+      "message": "Not sure what the difference is between `CanBeImmediate` and `ValueFitsIntoImmediate`. Ideally `CanBeImmediate\u0027 would call `ValueFitsIntoImmediate` and we wouldn\u0027t have two implementations checking the actual integer value that could be different.",
+      "range": {
+        "startLine": 105,
+        "startChar": 5,
+        "endLine": 105,
+        "endChar": 27
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44dd44c9_0905cdb5",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T09:33:33Z",
+      "side": 1,
+      "message": "Following up on my comment above, could this be?\n\n```suggestion\n    if (CanBeImmediate(load_transform-\u003eindex()) {\n      result.index \u003d {};\n      result.displacement \u003d GetImmediateIntegerValue(load_transform-\u003eindex());\n```",
+      "range": {
+        "startLine": 349,
+        "startChar": 4,
+        "endLine": 353,
+        "endChar": 48
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b944c9a6_f463305b",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7399,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-07-31T09:33:33Z",
+      "side": 1,
+      "message": "I would\u0027ve thought that only applies to \"protected\" loads, i.e. ones with a trap handler. But anyways, seems to be the same for Turbofan.",
+      "range": {
+        "startLine": 7399,
+        "startChar": 6,
+        "endLine": 7399,
+        "endChar": 44
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
