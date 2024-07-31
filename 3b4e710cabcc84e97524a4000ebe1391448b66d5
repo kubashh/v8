@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c95a264a_e25b9687",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1913,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5207ee0e_c178e9cc",
+      "range": {
+        "startLine": 1913,
+        "startChar": 43,
+        "endLine": 1913,
+        "endChar": 61
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aabd36af_5c0ee487",
@@ -77,6 +101,30 @@
       "writtenOn": "2024-07-31T12:49:44Z",
       "side": 1,
       "message": "This is optional only for non-leaptiering builds? Otherwise the caller must provide a handle, correct?",
+      "range": {
+        "startLine": 4204,
+        "startChar": 6,
+        "endLine": 4204,
+        "endChar": 61
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "772817f0_91769950",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 4204,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "Yeah, a bit ugly. Let\u0027s enforce it with an ifdef instead..",
+      "parentUuid": "aabd36af_5c0ee487",
       "range": {
         "startLine": 4204,
         "startChar": 6,
@@ -110,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de1fe25_aa9bd866",
+        "filename": "src/codegen/external-reference.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0440b10_bc140965",
+      "range": {
+        "startLine": 333,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 66
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57ea5203_3fe1ece4",
@@ -123,6 +195,30 @@
       "writtenOn": "2024-07-31T12:49:44Z",
       "side": 1,
       "message": "Nit: somewhat odd indention, but maybe `cl format` does it this way for some reason?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 13
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9609e1f_43d75b9e",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "yeah, that\u0027s cl format.",
+      "parentUuid": "57ea5203_3fe1ece4",
       "range": {
         "startLine": 48,
         "startChar": 0,
@@ -150,6 +246,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f4d0a7c_e4d5520c",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 7370,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53df779c_dd34e508",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d3f75e9_731f76d0",
@@ -163,6 +277,24 @@
       "writtenOn": "2024-07-31T12:49:44Z",
       "side": 1,
       "message": "Why was this introduced?",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "668a108b_cbbb540b",
+        "filename": "src/sandbox/external-entity-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "removed it again",
+      "parentUuid": "5d3f75e9_731f76d0",
       "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -192,6 +324,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdcddba4_71a04aad",
+        "filename": "src/sandbox/js-dispatch-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "yes, just to check we don\u0027t double initialize and (what I was actually worried about) we don\u0027t use it before it is initialized. How about I\u0027ll rename the parameter to \"is_initializing\"?",
+      "parentUuid": "c8d6c1a3_693723ad",
+      "range": {
+        "startLine": 203,
+        "startChar": 34,
+        "endLine": 203,
+        "endChar": 51
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd45d7b3_e35f82b0",
         "filename": "src/sandbox/js-dispatch-table.h",
         "patchSetId": 14
@@ -203,6 +359,24 @@
       "writtenOn": "2024-07-31T12:49:44Z",
       "side": 1,
       "message": "Maybe add to that: \"Remove this and the GetProcessWideCodePointerTable() accessor\"",
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebdb1631_9c483b2f",
+        "filename": "src/sandbox/js-dispatch-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd45d7b3_e35f82b0",
       "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

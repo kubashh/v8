@@ -16,6 +16,24 @@
       "message": "Is the expectation that eventually all builtins will have a list in this array, or just those that need one for e.g. `AllocateFunctionWithContext`?",
       "revId": "b982a5723f6a22550686d52d55ffc52982ac6cae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1afa522_717e755f",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-07-31T13:15:55Z",
+      "side": 1,
+      "message": "Initially I wanted to just add all of them (with js linkage) and used Builtin as the index. But since we probably only need like 10 I found it a bit wasteful, so I resorted to this manually curated list. If we ever find that we add hundreds, we can still go back to just add all of them and use the Builtin enum instead of JSBuiltinDispatchHandleRoot::Idx.",
+      "parentUuid": "759215f2_b09151a0",
+      "revId": "b982a5723f6a22550686d52d55ffc52982ac6cae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
