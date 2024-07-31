@@ -174,6 +174,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5d35c09_e427bd9d",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-07-31T09:11:27Z",
+      "side": 1,
+      "message": "The issue is the call to `v8isolate-\u003etraced_handles()-\u003eIterate(\u0026enumerator)` which an implementation detail we want to get rid of. Essentially this is a remembered set that we should not need in a better world. \n\nThe first patch set was iterating the heap which we will always be able to do after GC, so moving back to that version would be future proof (but a little slower).\n\nWhat\u0027s the UX story here though: In order to actually work with detached wrappers, you\u0027d very likely need the retaining path which pulls in a heap snapshot again.",
+      "parentUuid": "861c5a68_14c4b947",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a27de1df_62f39f61",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 12
