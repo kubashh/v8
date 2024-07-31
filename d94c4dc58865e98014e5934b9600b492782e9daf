@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b854c96_df185274",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-31T10:39:37Z",
+      "side": 1,
+      "message": "Yup: The optimization only exists on x64, and Turbofan really should do a `#if V8_TARGET_ARCH_X64`, otherwise it\u0027s doing something weird with source positions. I\u0027ve updated the Turbofan version.",
+      "parentUuid": "a865c08b_e1b7e5d7",
+      "range": {
+        "startLine": 1791,
+        "startChar": 0,
+        "endLine": 1791,
+        "endChar": 22
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fea94366_e58fe9e0",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1953869d_2dd99a23",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-31T10:39:37Z",
+      "side": 1,
+      "message": "Good point, I\u0027ve made CanBeImmediate call ValueFitsIntoImmediate.",
+      "parentUuid": "fea94366_e58fe9e0",
+      "range": {
+        "startLine": 105,
+        "startChar": 5,
+        "endLine": 105,
+        "endChar": 27
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44dd44c9_0905cdb5",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-07-31T09:33:33Z",
       "side": 1,
       "message": "Following up on my comment above, could this be?\n\n```suggestion\n    if (CanBeImmediate(load_transform-\u003eindex()) {\n      result.index \u003d {};\n      result.displacement \u003d GetImmediateIntegerValue(load_transform-\u003eindex());\n```",
+      "range": {
+        "startLine": 349,
+        "startChar": 4,
+        "endLine": 353,
+        "endChar": 48
+      },
+      "revId": "d94c4dc58865e98014e5934b9600b492782e9daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52cc1663_84f13133",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-31T10:39:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44dd44c9_0905cdb5",
       "range": {
         "startLine": 349,
         "startChar": 4,

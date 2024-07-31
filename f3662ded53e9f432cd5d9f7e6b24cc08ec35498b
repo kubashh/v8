@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edb97039_13817bb1",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-31T10:39:37Z",
+      "side": 1,
+      "message": "This is the only part that changed compared to what was in X64OperandGenerator",
+      "range": {
+        "startLine": 149,
+        "startChar": 11,
+        "endLine": 149,
+        "endChar": 33
+      },
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d982091_c731fa43",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-07-31T10:39:37Z",
+      "side": 1,
+      "message": "The implementations are identical as to what was in X64OperandGenerator.",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 1
+      },
+      "revId": "f3662ded53e9f432cd5d9f7e6b24cc08ec35498b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
