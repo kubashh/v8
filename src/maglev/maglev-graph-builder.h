@@ -2813,6 +2813,9 @@ class MaglevGraphBuilder {
   // The set of loop headers for which we decided to do loop peeling.
   BitVector loop_headers_to_peel_;
 
+  // Allocations since the last loop.
+  ZoneSet<InlinedAllocation*> allocations_since_last_loop_;
+
   // Current block information.
   bool in_prologue_ = true;
   BasicBlock* current_block_ = nullptr;

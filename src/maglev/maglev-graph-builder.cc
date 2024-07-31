@@ -893,6 +893,7 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
                                        : nullptr),
       decremented_predecessor_offsets_(zone()),
       loop_headers_to_peel_(bytecode().length(), zone()),
+      allocations_since_last_loop_(zone()),
       call_frequency_(call_frequency),
       // Add an extra jump_target slot for the inline exit if needed.
       jump_targets_(zone()->AllocateArray<BasicBlockRef>(
@@ -4141,21 +4142,21 @@ bool MaglevGraphBuilder::CanTrackObjectChanges(ValueNode* receiver,
   DCHECK(!receiver->Is<VirtualObject>());
   if (!v8_flags.maglev_object_tracking) return false;
   if (offset == HeapObject::kMapOffset) return false;
-  // We don't support loop phis inside VirtualObjects, so any access inside a
-  // loop should escape the object.
+  if (!receiver->Is<InlinedAllocation>()) return false;
+  InlinedAllocation* alloc = receiver->Cast<InlinedAllocation>();
+  if (alloc->IsEscaping()) return false;
+  // TODO(victorgomes): Support modifying contexts. Currently
+  // StaLookupSlotFunction can implicitly modify the active context.
+  if (alloc->object()->map().IsContextMap()) return false;
+  // TODO(victorgomes): Support double fixed array.
+  if (alloc->object()->type() != VirtualObject::kDefault) return false;
   if (bytecode_analysis().GetLoopOffsetFor(iterator_.current_offset()) != -1) {
-    return false;
+    // We don't support loop phis inside VirtualObjects, so any access inside a
+    // loop should escape the object, except for objects that were created since
+    // the last loop.
+    if (!allocations_since_last_loop_.contains(alloc)) return false;
   }
-  if (InlinedAllocation* alloc = receiver->TryCast<InlinedAllocation>()) {
-    if (alloc->IsEscaping()) return false;
-    // TODO(victorgomes): Support modifying contexts. Currently
-    // StaLookupSlotFunction can implicitly modify the active context.
-    if (alloc->object()->map().IsContextMap()) return false;
-    // TODO(victorgomes): Support double fixed array.
-    if (alloc->object()->type() != VirtualObject::kDefault) return false;
-    return true;
-  }
-  return false;
+  return true;
 }
 
 ValueNode* MaglevGraphBuilder::BuildLoadTaggedField(ValueNode* object,
@@ -11341,6 +11342,10 @@ ValueNode* MaglevGraphBuilder::BuildInlinedAllocation(
   for (uint32_t i = 0; i < vobject->slot_count(); i++) {
     BuildInitializeStore(allocation, values[i], (i + 1) * kTaggedSize);
   }
+  if (bytecode_analysis().GetLoopOffsetFor(iterator_.current_offset()) != -1) {
+    // If we are inside a loop, add the allocation to the set.
+    allocations_since_last_loop_.insert(allocation);
+  }
   return allocation;
 }
 
@@ -11966,6 +11971,7 @@ void MaglevGraphBuilder::VisitJumpLoop() {
       }
     }
   } else {
+    allocations_since_last_loop_.clear();
     BasicBlock* block = FinishLoopBlock();
     merge_states_[target]->MergeLoop(this, current_interpreter_frame_, block);
     block->set_predecessor_id(merge_states_[target]->predecessor_count() - 1);
