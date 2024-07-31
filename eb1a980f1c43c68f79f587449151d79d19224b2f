@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0db14b47_78be7160",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-07-31T14:12:16Z",
+      "side": 1,
+      "message": "LGTM.\n\nHardware support is where this will get interesting 😊",
+      "revId": "eb1a980f1c43c68f79f587449151d79d19224b2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
