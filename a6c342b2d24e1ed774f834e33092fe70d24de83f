@@ -198,6 +198,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "535d12de_c4c58833",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-07-31T09:28:55Z",
+      "side": 1,
+      "message": "(The move from heap iteration to `v8isolate-\u003etraced_handles()-\u003eIterate(\u0026enumerator)` was due to my suggestion but I didn\u0027t realize there are plans/hopes to get rid of it; sorry)",
+      "parentUuid": "e5d35c09_e427bd9d",
+      "range": {
+        "startLine": 1116,
+        "startChar": 36,
+        "endLine": 1116,
+        "endChar": 63
+      },
+      "revId": "a6c342b2d24e1ed774f834e33092fe70d24de83f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a27de1df_62f39f61",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 12
