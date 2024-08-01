@@ -141,6 +141,13 @@ in_category(
         use_remoteexec = RECLIENT.DEFAULT,
     ),
     main_multibranch_builder(
+        name = "V8 Linux64 - no leaptiering - debug",
+        dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
+        use_remoteexec = RECLIENT.DEFAULT,
+        barrier = BARRIER.TREE_CLOSER,
+        first_branch_version = "12.9",
+    ),
+    main_multibranch_builder(
         name = "V8 Linux64 gcc light - debug builder",
         dimensions = {"host_class": "strong", "os": "Ubuntu-20.04", "cpu": "x86-64"},
         properties = {"default_targets": ["v8_gcc_light"]},
