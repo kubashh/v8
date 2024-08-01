@@ -3682,15 +3682,15 @@ void LiftoffAssembler::emit_i64x2_abs(LiftoffRegister dst,
   Abs(dst.fp().V2D(), src.fp().V2D());
 }
 
-#define EMIT_QFMOP(instr, format)                                              \
+#define EMIT_QFMOP(instr, format, ret)                                         \
   if (dst == src3) {                                                           \
     instr(dst.fp().V##format(), src1.fp().V##format(), src2.fp().V##format()); \
-    return;                                                                    \
+    return ret;                                                                \
   }                                                                            \
   if (dst != src1 && dst != src2) {                                            \
     Mov(dst.fp().V##format(), src3.fp().V##format());                          \
     instr(dst.fp().V##format(), src1.fp().V##format(), src2.fp().V##format()); \
-    return;                                                                    \
+    return ret;                                                                \
   }                                                                            \
   DCHECK(dst == src1 || dst == src2);                                          \
   UseScratchRegisterScope temps(this);                                         \
@@ -3699,32 +3699,48 @@ void LiftoffAssembler::emit_i64x2_abs(LiftoffRegister dst,
   instr(tmp, src1.fp().V##format(), src2.fp().V##format());                    \
   Mov(dst.fp().V##format(), tmp);
 
+bool LiftoffAssembler::emit_f16x8_qfma(LiftoffRegister dst,
+                                       LiftoffRegister src1,
+                                       LiftoffRegister src2,
+                                       LiftoffRegister src3) {
+  EMIT_QFMOP(Fmla, 8H, true);
+  return true;
+}
+
+bool LiftoffAssembler::emit_f16x8_qfms(LiftoffRegister dst,
+                                       LiftoffRegister src1,
+                                       LiftoffRegister src2,
+                                       LiftoffRegister src3) {
+  EMIT_QFMOP(Fmls, 8H, true);
+  return true;
+}
+
 void LiftoffAssembler::emit_f32x4_qfma(LiftoffRegister dst,
                                        LiftoffRegister src1,
                                        LiftoffRegister src2,
                                        LiftoffRegister src3) {
-  EMIT_QFMOP(Fmla, 4S);
+  EMIT_QFMOP(Fmla, 4S, );
 }
 
 void LiftoffAssembler::emit_f32x4_qfms(LiftoffRegister dst,
                                        LiftoffRegister src1,
                                        LiftoffRegister src2,
                                        LiftoffRegister src3) {
-  EMIT_QFMOP(Fmls, 4S);
+  EMIT_QFMOP(Fmls, 4S, );
 }
 
 void LiftoffAssembler::emit_f64x2_qfma(LiftoffRegister dst,
                                        LiftoffRegister src1,
                                        LiftoffRegister src2,
                                        LiftoffRegister src3) {
-  EMIT_QFMOP(Fmla, 2D);
+  EMIT_QFMOP(Fmla, 2D, );
 }
 
 void LiftoffAssembler::emit_f64x2_qfms(LiftoffRegister dst,
                                        LiftoffRegister src1,
                                        LiftoffRegister src2,
                                        LiftoffRegister src3) {
-  EMIT_QFMOP(Fmls, 2D);
+  EMIT_QFMOP(Fmls, 2D, );
 }
 
 #undef EMIT_QFMOP
@@ -4033,20 +4049,6 @@ bool LiftoffAssembler::emit_f32x4_promote_low_f16x8(LiftoffRegister dst,
   }
   Fcvtl(dst.fp().V4S(), src.fp().V4H());
   return true;
-}
-
-bool LiftoffAssembler::emit_f16x8_qfma(LiftoffRegister dst,
-                                       LiftoffRegister src1,
-                                       LiftoffRegister src2,
-                                       LiftoffRegister src3) {
-  return false;
-}
-
-bool LiftoffAssembler::emit_f16x8_qfms(LiftoffRegister dst,
-                                       LiftoffRegister src1,
-                                       LiftoffRegister src2,
-                                       LiftoffRegister src3) {
-  return false;
 }
 
 bool LiftoffAssembler::supports_f16_mem_access() {
