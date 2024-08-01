@@ -1825,6 +1825,18 @@ void MacroAssembler::CompareObjectType(Register object, Register map,
   CompareInstanceType(map, temp, type);
 }
 
+void MacroAssembler::CompareObjectTypeRange(Register object, Register map,
+                                            Register type_reg,
+                                            InstanceType lower_limit,
+                                            InstanceType upper_limit) {
+  ASM_CODE_COMMENT(this);
+  UseScratchRegisterScope temps(this);
+  const Register temp = type_reg == no_reg ? temps.Acquire() : type_reg;
+
+  LoadMap(map, object);
+  CompareInstanceTypeRange(map, temp, lower_limit, upper_limit);
+}
+
 void MacroAssembler::CompareInstanceType(Register map, Register type_reg,
                                          InstanceType type) {
   ldrh(type_reg, FieldMemOperand(map, Map::kInstanceTypeOffset));

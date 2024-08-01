@@ -1652,26 +1652,24 @@ void JumpToFailIfNotHeapNumberOrOddball(
       static_assert(InstanceType::HEAP_NUMBER_TYPE + 1 ==
                     InstanceType::ODDBALL_TYPE);
       if (fail) {
-        __ CompareObjectTypeRange(value, InstanceType::HEAP_NUMBER_TYPE,
-                                  InstanceType::ODDBALL_TYPE);
-        __ JumpIf(kUnsignedGreaterThan, fail);
+        __ JumpIfObjectTypeNotInRange(value, InstanceType::HEAP_NUMBER_TYPE,
+                                      InstanceType::ODDBALL_TYPE, fail);
       } else {
         if (v8_flags.debug_code) {
-          __ CompareObjectTypeRange(value, InstanceType::HEAP_NUMBER_TYPE,
-                                    InstanceType::ODDBALL_TYPE);
-          __ Assert(kUnsignedLessThanEqual, AbortReason::kUnexpectedValue);
+          __ AssertObjectTypeInRange(value, InstanceType::HEAP_NUMBER_TYPE,
+                                     InstanceType::ODDBALL_TYPE,
+                                     AbortReason::kUnexpectedValue);
         }
       }
       break;
     case TaggedToFloat64ConversionType::kOnlyNumber:
       // Check if HeapNumber, jump to fail otherwise.
       if (fail) {
-        __ CompareObjectTypeAndJumpIf(value, InstanceType::HEAP_NUMBER_TYPE,
-                                      kNotEqual, fail);
+        __ JumpIfNotObjectType(value, InstanceType::HEAP_NUMBER_TYPE, fail);
       } else {
         if (v8_flags.debug_code) {
-          __ CompareObjectTypeAndAssert(value, InstanceType::HEAP_NUMBER_TYPE,
-                                        kEqual, AbortReason::kUnexpectedValue);
+          __ AssertObjectType(value, InstanceType::HEAP_NUMBER_TYPE,
+                              AbortReason::kUnexpectedValue);
         }
       }
       break;
@@ -2590,8 +2588,8 @@ void StoreFixedDoubleArrayElement::GenerateCode(MaglevAssembler* masm,
   Register index = ToRegister(index_input());
   DoubleRegister value = ToDoubleRegister(value_input());
   if (v8_flags.debug_code) {
-    __ CompareObjectTypeAndAssert(elements, FIXED_DOUBLE_ARRAY_TYPE, kEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectType(elements, FIXED_DOUBLE_ARRAY_TYPE,
+                        AbortReason::kUnexpectedValue);
     __ CompareInt32AndAssert(index, 0, kUnsignedGreaterThanEqual,
                              AbortReason::kUnexpectedNegativeValue);
   }
@@ -2688,11 +2686,11 @@ void LoadSignedIntDataViewElement::GenerateCode(MaglevAssembler* masm,
   Register index = ToRegister(index_input());
   Register result_reg = ToRegister(result());
 
-  __ AssertNotSmi(object);
   if (v8_flags.debug_code) {
-    __ CompareObjectTypeAndAssert(object, JS_DATA_VIEW_TYPE,
-                                  kUnsignedGreaterThanEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectTypeInRange(object,
+                               FIRST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               LAST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               AbortReason::kUnexpectedValue);
   }
 
   int element_size = compiler::ExternalArrayElementSize(type_);
@@ -2762,11 +2760,11 @@ void StoreSignedIntDataViewElement::GenerateCode(MaglevAssembler* masm,
   Register index = ToRegister(index_input());
   Register value = ToRegister(value_input());
 
-  __ AssertNotSmi(object);
   if (v8_flags.debug_code) {
-    __ CompareObjectTypeAndAssert(object, JS_DATA_VIEW_TYPE,
-                                  kUnsignedGreaterThanEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectTypeInRange(object,
+                               FIRST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               LAST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               AbortReason::kUnexpectedValue);
   }
 
   int element_size = compiler::ExternalArrayElementSize(type_);
@@ -2817,11 +2815,11 @@ void LoadDoubleDataViewElement::GenerateCode(MaglevAssembler* masm,
   DoubleRegister result_reg = ToDoubleRegister(result());
   Register data_pointer = temps.Acquire();
 
-  __ AssertNotSmi(object);
   if (v8_flags.debug_code) {
-    __ CompareObjectTypeAndAssert(object, JS_DATA_VIEW_TYPE,
-                                  kUnsignedGreaterThanEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectTypeInRange(object,
+                               FIRST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               LAST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               AbortReason::kUnexpectedValue);
   }
 
   // Load data pointer.
@@ -2875,11 +2873,11 @@ void StoreDoubleDataViewElement::GenerateCode(MaglevAssembler* masm,
   MaglevAssembler::TemporaryRegisterScope temps(masm);
   Register data_pointer = temps.Acquire();
 
-  __ AssertNotSmi(object);
   if (v8_flags.debug_code) {
-    __ CompareObjectTypeAndAssert(object, JS_DATA_VIEW_TYPE,
-                                  kUnsignedGreaterThanEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectTypeInRange(object,
+                               FIRST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               LAST_JS_DATA_VIEW_OR_RAB_GSAB_DATA_VIEW_TYPE,
+                               AbortReason::kUnexpectedValue);
   }
 
   // Load data pointer.
@@ -3186,16 +3184,12 @@ void CheckSymbol::GenerateCode(MaglevAssembler* masm,
   } else {
     __ EmitEagerDeoptIfSmi(this, object, DeoptimizeReason::kNotASymbol);
   }
-  __ CompareObjectTypeAndJumpIf(
-      object, SYMBOL_TYPE, kNotEqual,
-      __ GetDeoptLabel(this, DeoptimizeReason::kNotASymbol));
+  __ JumpIfNotObjectType(object, SYMBOL_TYPE,
+                         __ GetDeoptLabel(this, DeoptimizeReason::kNotASymbol));
 }
 
 void CheckInstanceType::SetValueLocationConstraints() {
   UseRegister(receiver_input());
-  if (first_instance_type_ != last_instance_type_) {
-    set_temporaries_needed(1);
-  }
 }
 void CheckInstanceType::GenerateCode(MaglevAssembler* masm,
                                      const ProcessingState& state) {
@@ -3206,17 +3200,13 @@ void CheckInstanceType::GenerateCode(MaglevAssembler* masm,
     __ EmitEagerDeoptIfSmi(this, object, DeoptimizeReason::kWrongInstanceType);
   }
   if (first_instance_type_ == last_instance_type_) {
-    __ CompareObjectTypeAndJumpIf(
-        object, first_instance_type_, kNotEqual,
+    __ JumpIfNotObjectType(
+        object, first_instance_type_,
         __ GetDeoptLabel(this, DeoptimizeReason::kWrongInstanceType));
   } else {
-    MaglevAssembler::TemporaryRegisterScope temps(masm);
-    Register map = temps.Acquire();
-    __ LoadMap(map, object);
-    __ CompareInstanceTypeRange(map, map, first_instance_type_,
-                                last_instance_type_);
-    __ EmitEagerDeoptIf(kUnsignedGreaterThan,
-                        DeoptimizeReason::kWrongInstanceType, this);
+    __ JumpIfObjectTypeNotInRange(
+        object, first_instance_type_, last_instance_type_,
+        __ GetDeoptLabel(this, DeoptimizeReason::kWrongInstanceType));
   }
 }
 
@@ -3231,10 +3221,8 @@ void CheckCacheIndicesNotCleared::GenerateCode(MaglevAssembler* masm,
   __ AssertNotSmi(indices);
 
   if (v8_flags.debug_code) {
-    Label ok;
-    __ CompareObjectTypeAndAssert(indices, FIXED_ARRAY_TYPE, kEqual,
-                                  AbortReason::kOperandIsNotAFixedArray);
-    __ bind(&ok);
+    __ AssertObjectType(indices, FIXED_ARRAY_TYPE,
+                        AbortReason::kOperandIsNotAFixedArray);
   }
   Label done;
   // If the cache length is zero, we don't have any indices, so we know this is
@@ -3952,8 +3940,7 @@ void UpdateJSArrayLength::GenerateCode(MaglevAssembler* masm,
 
   Label done, tag_length;
   if (v8_flags.debug_code) {
-    __ CompareObjectTypeAndAssert(object, JS_ARRAY_TYPE, kEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectType(object, JS_ARRAY_TYPE, AbortReason::kUnexpectedValue);
     static_assert(Internals::IsValidSmi(FixedArray::kMaxLength),
                   "MaxLength not a Smi");
     __ CompareInt32AndAssert(index, FixedArray::kMaxLength, kUnsignedLessThan,
@@ -4933,8 +4920,8 @@ void ToString::GenerateCode(MaglevAssembler* masm,
   __ JumpIfSmi(value, &call_builtin, Label::Distance::kNear);
   __ JumpIfString(value, &done, Label::Distance::kNear);
   if (mode() == kConvertSymbol) {
-    __ CompareObjectTypeAndJumpIf(value, SYMBOL_TYPE, kNotEqual, &call_builtin,
-                                  Label::Distance::kNear);
+    __ JumpIfNotObjectType(value, SYMBOL_TYPE, &call_builtin,
+                           Label::Distance::kNear);
     __ Push(value);
     __ CallRuntime(Runtime::kSymbolDescriptiveString, 1);
     __ Jump(&done, Label::kNear);
@@ -6217,8 +6204,8 @@ void GenerateTypedArrayLoad(MaglevAssembler* masm, NodeT* node, Register object,
   __ AssertNotSmi(object);
   if (v8_flags.debug_code) {
     MaglevAssembler::TemporaryRegisterScope temps(masm);
-    __ CompareObjectTypeAndAssert(object, JS_TYPED_ARRAY_TYPE, kEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectType(object, JS_TYPED_ARRAY_TYPE,
+                        AbortReason::kUnexpectedValue);
   }
 
   MaglevAssembler::TemporaryRegisterScope temps(masm);
@@ -6263,8 +6250,8 @@ void GenerateTypedArrayStore(MaglevAssembler* masm, NodeT* node,
   __ AssertNotSmi(object);
   if (v8_flags.debug_code) {
     MaglevAssembler::TemporaryRegisterScope temps(masm);
-    __ CompareObjectTypeAndAssert(object, JS_TYPED_ARRAY_TYPE, kEqual,
-                                  AbortReason::kUnexpectedValue);
+    __ AssertObjectType(object, JS_TYPED_ARRAY_TYPE,
+                        AbortReason::kUnexpectedValue);
   }
 
   MaglevAssembler::TemporaryRegisterScope temps(masm);
