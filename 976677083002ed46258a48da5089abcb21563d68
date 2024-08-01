@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3988790c_e689c04a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-01T16:45:29Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4db375b7_fa0adcd3",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-01T16:45:29Z",
+      "side": 1,
+      "message": "I\u0027m not sure if this actually makes a difference tbh.",
+      "range": {
+        "startLine": 289,
+        "startChar": 42,
+        "endLine": 289,
+        "endChar": 64
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85201a35_5dfd6a62",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-01T16:45:29Z",
+      "side": 1,
+      "message": "I wonder if TS should have helpers for these range checks",
+      "range": {
+        "startLine": 3480,
+        "startChar": 35,
+        "endLine": 3480,
+        "endChar": 56
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
