@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa9f2f43_85f79340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T06:48:43Z",
+      "side": 1,
+      "message": "LGTM, thanks :)",
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4db375b7_fa0adcd3",
@@ -43,6 +60,76 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b049d9e_f0ecdd3e",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T06:48:43Z",
+      "side": 1,
+      "message": "Yea, I don\u0027t think that Turboshaft has any way of taking advantage of this happening before loading the map. And we certainly don\u0027t short-circuit Word32BitwiseOr.\n\nSo, for simplicity, I think that this could go inside the relevant `case`.",
+      "parentUuid": "4db375b7_fa0adcd3",
+      "range": {
+        "startLine": 289,
+        "startChar": 42,
+        "endLine": 289,
+        "endChar": 64
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74e482d0_f0bb1dc0",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T06:48:43Z",
+      "side": 1,
+      "message": "This will force decompression of `input` because Turboshaft doesn\u0027t realize that we only care about the lower 32 bits. We probably should introduced a `BitcastHeapObjectToWord32` and teach DecompressionOptimization about it though.\n\nThis can go in a follow up.",
+      "range": {
+        "startLine": 298,
+        "startChar": 14,
+        "endLine": 299,
+        "endChar": 47
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "491da520_2782a5c1",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T06:48:43Z",
+      "side": 1,
+      "message": "Can you rename to `is_number`?",
+      "range": {
+        "startLine": 3465,
+        "startChar": 18,
+        "endLine": 3465,
+        "endChar": 30
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85201a35_5dfd6a62",
         "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
         "patchSetId": 1
@@ -54,6 +141,30 @@
       "writtenOn": "2024-08-01T16:45:29Z",
       "side": 1,
       "message": "I wonder if TS should have helpers for these range checks",
+      "range": {
+        "startLine": 3480,
+        "startChar": 35,
+        "endLine": 3480,
+        "endChar": 56
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaefe495_bfc4c5e0",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T06:48:43Z",
+      "side": 1,
+      "message": "+1!\n\nThis can go in a follow up though :)",
+      "parentUuid": "85201a35_5dfd6a62",
       "range": {
         "startLine": 3480,
         "startChar": 35,
