@@ -63,6 +63,29 @@
       },
       "revId": "76f6cffd8aa3011e4b89509b7e24b9cde19c85e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e6b18df_595e7d77",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7109,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-08-02T14:04:05Z",
+      "side": 1,
+      "message": "Nit: Would it make sense to have a proper flag for that, similar to the maglev print feedback?\n\nWe can add flag implications for those that make sense, for instance, one probably wants to print it when printing the maglev graph. But I am not sure about trace-maglev-regalloc or phi untagging for instance... Even trace-maglev-graph-building, the bytecode would be printed in the middle of the trace.\n\nThe same argument applies to the top-level one. Maybe we should have\n--print-maglev-bytecode\n--print-maglev-inline-bytecode\ninstead.",
+      "range": {
+        "startLine": 7107,
+        "startChar": 6,
+        "endLine": 7109,
+        "endChar": 75
+      },
+      "revId": "76f6cffd8aa3011e4b89509b7e24b9cde19c85e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
