@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "9aa0ef9f50c6bb798bb874918514533412a3b99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15dd01f3_1754ce8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T11:57:25Z",
+      "side": 1,
+      "message": "LGTM % comments :)",
+      "revId": "9aa0ef9f50c6bb798bb874918514533412a3b99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42c6e22d_ff1453d8",
+        "filename": "src/compiler/js-graph.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T11:57:25Z",
+      "side": 1,
+      "message": "I like the DCHECK, but are you really allowed to dereference a Handle there?",
+      "range": {
+        "startLine": 162,
+        "startChar": 2,
+        "endLine": 162,
+        "endChar": 34
+      },
+      "revId": "9aa0ef9f50c6bb798bb874918514533412a3b99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fefee36a_4e732f67",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-02T11:57:25Z",
+      "side": 1,
+      "message": "Same thing, is it OK to dereference `value` in the background?",
+      "range": {
+        "startLine": 2007,
+        "startChar": 4,
+        "endLine": 2007,
+        "endChar": 36
+      },
+      "revId": "9aa0ef9f50c6bb798bb874918514533412a3b99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
