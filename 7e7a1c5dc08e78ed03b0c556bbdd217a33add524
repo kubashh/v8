@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "7e7a1c5dc08e78ed03b0c556bbdd217a33add524",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9f4693_1f145919",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-08-02T08:12:30Z",
+      "side": 1,
+      "message": "lgtm, thanks. I guess this was missed when we removed inheritance from GarbageCollected?",
+      "revId": "7e7a1c5dc08e78ed03b0c556bbdd217a33add524",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
