@@ -34,6 +34,24 @@
       "parentUuid": "759215f2_b09151a0",
       "revId": "b982a5723f6a22550686d52d55ffc52982ac6cae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d174b50e_b26b2e8f",
+        "filename": "src/execution/isolate-data.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-02T08:04:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b1afa522_717e755f",
+      "revId": "b982a5723f6a22550686d52d55ffc52982ac6cae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

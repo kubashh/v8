@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "90e846b8_dc4b8c5d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-02T08:04:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a91cf8ca_41701739",
+      "range": {
+        "startLine": 13,
+        "startChar": 36,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0314cf3c_128539c7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 14
@@ -125,6 +149,30 @@
       "side": 1,
       "message": "Yeah, a bit ugly. Let\u0027s enforce it with an ifdef instead..",
       "parentUuid": "aabd36af_5c0ee487",
+      "range": {
+        "startLine": 4204,
+        "startChar": 6,
+        "endLine": 4204,
+        "endChar": 61
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbd36d8_30bdf4be",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 4204,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-02T08:04:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "772817f0_91769950",
       "range": {
         "startLine": 4204,
         "startChar": 6,
@@ -336,6 +384,30 @@
       "side": 1,
       "message": "yes, just to check we don\u0027t double initialize and (what I was actually worried about) we don\u0027t use it before it is initialized. How about I\u0027ll rename the parameter to \"is_initializing\"?",
       "parentUuid": "c8d6c1a3_693723ad",
+      "range": {
+        "startLine": 203,
+        "startChar": 34,
+        "endLine": 203,
+        "endChar": 51
+      },
+      "revId": "3b4e710cabcc84e97524a4000ebe1391448b66d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "300d4d44_68bbeafc",
+        "filename": "src/sandbox/js-dispatch-table.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-02T08:04:44Z",
+      "side": 1,
+      "message": "Cool, yeah I think that\u0027s better, thanks!",
+      "parentUuid": "cdcddba4_71a04aad",
       "range": {
         "startLine": 203,
         "startChar": 34,
