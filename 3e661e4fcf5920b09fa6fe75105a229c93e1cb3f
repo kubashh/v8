@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98233756_78bc981e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-02T13:06:22Z",
+      "side": 1,
+      "message": "Sorry for the late reply, I was sick.\n\nLGTM",
+      "revId": "3e661e4fcf5920b09fa6fe75105a229c93e1cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e61c55ba_384aec35",
@@ -83,6 +100,24 @@
       "side": 1,
       "message": "No.\nI think check whether ```transition_name``` is equal to the ```key_chars``` is expensive, move ```transition_name``` check first may introduce regression in the case of map check fail. \nThis check is needed by the next line TransitionsAccessor::GetSimpleTargetDetails() -\u003e Map::GetLastDescriptorDetails() -\u003e Map::LastAdded() -\u003e DCHECK_GT(number_of_own_descriptors, 0), it also works that move this line into TransitionsAccessor::GetSimpleTargetDetails(), which is better?",
       "parentUuid": "e61c55ba_384aec35",
+      "revId": "3e661e4fcf5920b09fa6fe75105a229c93e1cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e4bdf3_fca9a453",
+        "filename": "src/objects/transitions-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-02T13:06:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "112f6d78_1ec1d2b1",
       "revId": "3e661e4fcf5920b09fa6fe75105a229c93e1cb3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
