@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "709a198c_e1e55e2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-02T12:09:04Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "562cb48d1c3e3f6ec5aec1e36ce4834601e3f9a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d14f04_ce64fccc",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3706,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-02T12:09:04Z",
+      "side": 1,
+      "message": "Isn\u0027t this missing a check `if (!CpuFeatures::IsSupported(FP16)) return false;`?\n\nSame below.",
+      "range": {
+        "startLine": 3706,
+        "startChar": 2,
+        "endLine": 3706,
+        "endChar": 12
+      },
+      "revId": "562cb48d1c3e3f6ec5aec1e36ce4834601e3f9a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fcfc65e_cabed572",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3722,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-02T12:09:04Z",
+      "side": 1,
+      "message": "I suppose this is acceptable, but it won\u0027t win any prizes for code beauty.\n\n\nPossible alternative: change the macro to generate an if-then-else cascade, then you don\u0027t need to pass in a return value:\n```\n#define EMIT_QFMOP(instr, format)          \\\n  if (dst \u003d\u003d src3) {                       \\\n    ...                                    \\\n  } else if (dst !\u003d src1 \u0026\u0026 dst !\u003d src2) { \\\n    ...                                    \\\n  } else {                                 \\\n    ...                                    \\\n  }\n```\nI\u0027ll leave it up to you which approach you prefer.",
+      "range": {
+        "startLine": 3722,
+        "startChar": 21,
+        "endLine": 3722,
+        "endChar": 23
+      },
+      "revId": "562cb48d1c3e3f6ec5aec1e36ce4834601e3f9a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
