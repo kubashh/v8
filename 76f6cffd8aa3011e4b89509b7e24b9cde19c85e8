@@ -86,6 +86,30 @@
       },
       "revId": "76f6cffd8aa3011e4b89509b7e24b9cde19c85e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9243bfff_1322151a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7109,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-08-02T14:05:21Z",
+      "side": 1,
+      "message": "This would also allow to disable bytecode printing when printing a graph if we want to.",
+      "parentUuid": "6e6b18df_595e7d77",
+      "range": {
+        "startLine": 7107,
+        "startChar": 6,
+        "endLine": 7109,
+        "endChar": 75
+      },
+      "revId": "76f6cffd8aa3011e4b89509b7e24b9cde19c85e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
