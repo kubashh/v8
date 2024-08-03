@@ -1653,6 +1653,7 @@ class Heap final {
   V8_EXPORT_PRIVATE uint64_t AllocatedExternalMemorySinceMarkCompact() const;
 
   std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner() const;
+  std::shared_ptr<v8::TaskRunner> GetForegroundUserVisibleTaskRunner() const;
 
   bool ShouldUseBackgroundThreads() const;
   bool ShouldUseIncrementalMarking() const;
@@ -2292,6 +2293,7 @@ class Heap final {
   std::unique_ptr<EphemeronRememberedSet> ephemeron_remembered_set_;
 
   std::shared_ptr<v8::TaskRunner> task_runner_;
+  std::shared_ptr<v8::TaskRunner> user_visible_task_runner_;
 
   // This object controls virtual space reserved for code on the V8 heap. This
   // is only valid for 64-bit architectures where kPlatformRequiresCodeRange.
