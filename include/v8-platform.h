@@ -1121,9 +1121,7 @@ class Platform {
    * TODO(chromium:1448758): Make pure virtual once embedders implement it.
    */
   virtual std::shared_ptr<v8::TaskRunner> GetForegroundTaskRunner(
-      Isolate* isolate, TaskPriority priority) {
-    return nullptr;
-  }
+      Isolate* isolate, TaskPriority priority) = 0;
 
   /**
    * Schedules a task to be invoked on a worker thread.
