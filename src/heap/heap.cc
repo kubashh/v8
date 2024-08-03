@@ -5670,6 +5670,9 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
 
   task_runner_ = V8::GetCurrentPlatform()->GetForegroundTaskRunner(
       reinterpret_cast<v8::Isolate*>(isolate()));
+  user_visible_task_runner_ = V8::GetCurrentPlatform()->GetForegroundTaskRunner(
+      reinterpret_cast<v8::Isolate*>(isolate()),
+      v8::TaskPriority::kUserVisible);
 
   collection_barrier_.reset(new CollectionBarrier(this, this->task_runner_));
 
@@ -5962,6 +5965,11 @@ void Heap::InitializeHashSeed() {
 
 std::shared_ptr<v8::TaskRunner> Heap::GetForegroundTaskRunner() const {
   return task_runner_;
+}
+
+std::shared_ptr<v8::TaskRunner> Heap::GetForegroundUserVisibleTaskRunner()
+    const {
+  return user_visible_task_runner_;
 }
 
 // static
