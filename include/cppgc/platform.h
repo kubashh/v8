@@ -52,6 +52,11 @@ class V8_EXPORT Platform {
    * Foreground task runner that should be used by a Heap.
    */
   virtual std::shared_ptr<TaskRunner> GetForegroundTaskRunner() {
+    return GetForegroundTaskRunner(TaskPriority::kUserBlocking);
+  }
+
+  virtual std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
+      TaskPriority priority) {
     return nullptr;
   }
 
