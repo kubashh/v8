@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83bceecb_5d3e28dd",
+        "filename": "src/compiler/js-graph.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-05T07:44:09Z",
+      "side": 1,
+      "message": "Oh indeed. Ok, then I guess it\u0027s fine 😄",
+      "parentUuid": "ad7c6c3b_7012d858",
+      "range": {
+        "startLine": 162,
+        "startChar": 2,
+        "endLine": 162,
+        "endChar": 34
+      },
+      "revId": "9aa0ef9f50c6bb798bb874918514533412a3b99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fefee36a_4e732f67",
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "Also same thing here. It\u0027s also done in line 1997 in this file.",
       "parentUuid": "fefee36a_4e732f67",
+      "range": {
+        "startLine": 2007,
+        "startChar": 4,
+        "endLine": 2007,
+        "endChar": 36
+      },
+      "revId": "9aa0ef9f50c6bb798bb874918514533412a3b99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa913b02_40fde62f",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2007,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-05T07:44:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "75e2072c_ffbbe2cb",
       "range": {
         "startLine": 2007,
         "startChar": 4,
