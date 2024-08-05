@@ -108,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4577b17_becf43f5",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-05T06:37:29Z",
+      "side": 1,
+      "message": "I don\u0027t think so: because we don\u0027t do any scheduling in Turboshaft, `is_null_or_undefined` is computed for every cases rather than just for `kReceiverOrNullOrUndefined`.",
+      "parentUuid": "f4e37786_0ed2f209",
+      "range": {
+        "startLine": 289,
+        "startChar": 42,
+        "endLine": 289,
+        "endChar": 64
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "74e482d0_f0bb1dc0",
         "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
         "patchSetId": 1
@@ -143,6 +167,30 @@
       "side": 1,
       "message": "maybe I can rely on a bit of assistance for that followup 😇",
       "parentUuid": "74e482d0_f0bb1dc0",
+      "range": {
+        "startLine": 298,
+        "startChar": 14,
+        "endLine": 299,
+        "endChar": 47
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77224ae2_119fdbd3",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-05T06:37:29Z",
+      "side": 1,
+      "message": "Sure; I can even do it myself :)",
+      "parentUuid": "d0645ad9_7ea76f78",
       "range": {
         "startLine": 298,
         "startChar": 14,
