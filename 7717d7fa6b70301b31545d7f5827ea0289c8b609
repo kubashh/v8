@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29f36486_30e3b532",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-08-05T09:47:04Z",
+      "side": 1,
+      "message": "LGTM, is there a bug ID you could link?",
+      "revId": "7717d7fa6b70301b31545d7f5827ea0289c8b609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6aa79b6_6a8550e0",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 7557,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-08-05T09:47:04Z",
+      "side": 1,
+      "message": "suggestion: How about `MANDATORY` instead of `NON_OPTIONAL`?",
+      "range": {
+        "startLine": 7557,
+        "startChar": 31,
+        "endLine": 7557,
+        "endChar": 43
+      },
+      "revId": "7717d7fa6b70301b31545d7f5827ea0289c8b609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
