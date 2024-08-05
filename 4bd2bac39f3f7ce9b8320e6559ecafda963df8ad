@@ -16,6 +16,41 @@
       "message": "The reason of the failure caused revert was a bug in F16x8Splat implementation. Fixed now",
       "revId": "4bd2bac39f3f7ce9b8320e6559ecafda963df8ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e6bbdf_d7b62945",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-08-05T15:43:39Z",
+      "side": 1,
+      "message": "Ack, please also add a quick explanation in the commit description.",
+      "parentUuid": "2273ceae_c4cddaf9",
+      "revId": "4bd2bac39f3f7ce9b8320e6559ecafda963df8ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "177716f9_38b91ab4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-08-05T15:43:39Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4bd2bac39f3f7ce9b8320e6559ecafda963df8ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
