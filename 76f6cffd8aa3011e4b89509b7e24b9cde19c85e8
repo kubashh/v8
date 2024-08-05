@@ -110,6 +110,30 @@
       },
       "revId": "76f6cffd8aa3011e4b89509b7e24b9cde19c85e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a19bf1e7_fa7fb1ae",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7109,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-08-05T09:37:18Z",
+      "side": 1,
+      "message": "Added a flag similar to maglev_print_feedback, which is true by default. So here we check that flag and that one of the flags print_maglev_code or print_maglev_graph or print_maglev_graphs is on.\n\nNot sure why we printout the bytecode for trace-maglev-regalloc or trace-maglev-phi-untagging in the first place... leaving those out of this for now.",
+      "parentUuid": "9243bfff_1322151a",
+      "range": {
+        "startLine": 7107,
+        "startChar": 6,
+        "endLine": 7109,
+        "endChar": 75
+      },
+      "revId": "76f6cffd8aa3011e4b89509b7e24b9cde19c85e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
