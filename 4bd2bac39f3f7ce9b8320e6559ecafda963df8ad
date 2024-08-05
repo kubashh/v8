@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2273ceae_c4cddaf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1545467
+      },
+      "writtenOn": "2024-08-05T15:31:02Z",
+      "side": 1,
+      "message": "The reason of the failure caused revert was a bug in F16x8Splat implementation. Fixed now",
+      "revId": "4bd2bac39f3f7ce9b8320e6559ecafda963df8ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
