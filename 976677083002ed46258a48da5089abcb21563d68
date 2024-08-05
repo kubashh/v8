@@ -154,6 +154,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f333b976_d6e12bbe",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-05T07:08:14Z",
+      "side": 1,
+      "message": "Ah right nevermind, I forgot about this. Interestingly, the 1st time I read the CL I thought \"well, he is doing this when he shoudln\u0027t\", and then I saw the `kind \u003d\u003d ObjectIsOp::Kind::kReceiverOrNullOrUndefined` and realized that it was fine, and now I re-read the code too quickly and missed the `kind \u003d\u003d ObjectIsOp::Kind::kReceiverOrNullOrUndefined` 😄\n\nAll right, all good then, you can keep this like that :)",
+      "parentUuid": "ba06190c_24fd767d",
+      "range": {
+        "startLine": 289,
+        "startChar": 42,
+        "endLine": 289,
+        "endChar": 64
+      },
+      "revId": "976677083002ed46258a48da5089abcb21563d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74e482d0_f0bb1dc0",
