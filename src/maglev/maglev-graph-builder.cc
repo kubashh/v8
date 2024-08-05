@@ -7098,11 +7098,18 @@ ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
     return ReduceResult::Fail();
   }
 
-  if (v8_flags.trace_maglev_graph_building) {
-    std::cout << "== Inlining " << shared.object() << std::endl;
+  compiler::BytecodeArrayRef bytecode = shared.GetBytecodeArray(broker());
+
+  if (v8_flags.maglev_print_inlined &&
+      (v8_flags.print_maglev_code || v8_flags.print_maglev_graph ||
+       v8_flags.print_maglev_graphs)) {
+    std::cout << "== Inlining " << Brief(*shared.object()) << std::endl;
+    BytecodeArray::Disassemble(bytecode.object(), std::cout);
+    if (v8_flags.maglev_print_feedback) {
+      i::Print(*feedback_vector->object(), std::cout);
+    }
   }
 
-  compiler::BytecodeArrayRef bytecode = shared.GetBytecodeArray(broker());
   graph()->inlined_functions().push_back(
       OptimizedCompilationInfo::InlinedFunctionHolder(
           shared.object(), bytecode.object(), current_source_position_));
