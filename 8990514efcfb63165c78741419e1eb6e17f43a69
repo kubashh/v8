@@ -74,6 +74,29 @@
       ],
       "revId": "8990514efcfb63165c78741419e1eb6e17f43a69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb7acd9_2e2ceea4",
+        "filename": "src/parsing/parsing.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-05T08:48:26Z",
+      "side": 1,
+      "message": "I see it.",
+      "range": {
+        "startLine": 78,
+        "startChar": 31,
+        "endLine": 78,
+        "endChar": 42
+      },
+      "revId": "8990514efcfb63165c78741419e1eb6e17f43a69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
