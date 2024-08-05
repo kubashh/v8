@@ -33,6 +33,47 @@
       "message": "oops oops no no no, cancelling cq",
       "revId": "8990514efcfb63165c78741419e1eb6e17f43a69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c5d5c3_c0af3341",
+        "filename": "src/parsing/parsing.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-08-05T08:47:56Z",
+      "side": 1,
+      "message": "this should be StartPosition, no?",
+      "range": {
+        "startLine": 78,
+        "startChar": 31,
+        "endLine": 78,
+        "endChar": 42
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "449a256c_f3492949",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/parsing/parsing.cc",
+              "range": {
+                "startLine": 78,
+                "startChar": 0,
+                "endLine": 79,
+                "endChar": 0
+              },
+              "replacement": "  int start_pos \u003d shared_info-\u003eStartPosition();\n"
+            }
+          ]
+        }
+      ],
+      "revId": "8990514efcfb63165c78741419e1eb6e17f43a69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
