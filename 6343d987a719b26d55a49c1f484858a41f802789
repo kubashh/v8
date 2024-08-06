@@ -50,6 +50,41 @@
       "message": "This CL is still a cherry pick, which should only be used for security backmerges",
       "revId": "6343d987a719b26d55a49c1f484858a41f802789",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e806a26_786bf81e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1610537
+      },
+      "writtenOn": "2024-08-06T15:34:43Z",
+      "side": 1,
+      "message": "Hi Camillo, got a quick question about how to make this CL not a cherry pick CL. Thanks!",
+      "revId": "6343d987a719b26d55a49c1f484858a41f802789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b18a885_9444cf7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1610537
+      },
+      "writtenOn": "2024-08-06T15:34:43Z",
+      "side": 1,
+      "message": "Hi Camillo, I previously needed to create a brand-new CL to make it not a cherry pick CL. Do you know how we\u0027re able to do so in the current branch?",
+      "parentUuid": "bb8b3943_8ca084f6",
+      "revId": "6343d987a719b26d55a49c1f484858a41f802789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
