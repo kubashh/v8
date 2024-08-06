@@ -376,6 +376,7 @@ void EventHandler(const JitCodeEvent* event) {
   uint32_t script_column = -1;
 
   Tagged<SharedFunctionInfo> sfi = GetSharedFunctionInfo(event);
+
   if (!sfi.is_null() && IsScript(sfi->script())) {
     Tagged<Script> script = Cast<Script>(sfi->script());
 
@@ -410,6 +411,14 @@ void EventHandler(const JitCodeEvent* event) {
     script->GetPositionInfo(sfi->StartPosition(), &info);
     script_line = info.line + 1;
     script_column = info.column + 1;
+  }
+
+  auto code = isolate->heap()->GcSafeTryFindCodeForInnerPointer(
+      Address(event->code_start));
+  if (code && code.value()->is_builtin()) {
+    // Skip logging functions with BuiltinIds as they are already present in
+    // the PDB.
+    return;
   }
 
   constexpr static auto method_load_event_meta =
