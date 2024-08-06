@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd95a723_9b1b9987",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-08-06T07:50:09Z",
+      "side": 1,
+      "message": "PTAL. I just realized that casting `enum_index` to `TaggedIndex` is unnecessary :)",
+      "revId": "4f403a137d7059c95491dec85d6f154d8fed084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
