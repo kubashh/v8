@@ -85,6 +85,24 @@
       "parentUuid": "bb8b3943_8ca084f6",
       "revId": "6343d987a719b26d55a49c1f484858a41f802789",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ec60d6_68c8df31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3439269
+      },
+      "writtenOn": "2024-08-06T20:50:45Z",
+      "side": 1,
+      "message": "We\u0027ve been attempting to convert this cherry pick CL to a non-cherry pick CL. It seems Gerrit is treating both of these CLs as cherry picks of each other due to the change id accidentally uploaded initially. We weren\u0027t able to figure out how to revert the change id to fix this problem.\n\nSo, we\u0027ve created a new identical CL here that doesn\u0027t exist as a cherry pick:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5767438\n\nI will link this old CL in the new CL description to preserve discussion history.",
+      "parentUuid": "4b18a885_9444cf7b",
+      "revId": "6343d987a719b26d55a49c1f484858a41f802789",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
