@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdbf90af_eca2e03e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2024-08-06T20:05:39Z",
+      "side": 1,
+      "message": "Hi,\n\nas far as our stakeholders are concerned, I think this is what we want to do. Hopefully this is upstreamable in some form.",
+      "revId": "8838b1a7d9f948249600709966395dfdcc5ba153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
