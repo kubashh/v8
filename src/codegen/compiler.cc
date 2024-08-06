@@ -3449,7 +3449,11 @@ struct ScriptCompileTimerScope {
     consuming_code_cache_failed_ = true;
   }
 
- private:
+  bool hit_isolate_cache() const { return hit_isolate_cache_; }
+  bool consuming_code_cache() const { return consuming_code_cache_; }
+  bool consuming_code_cache_failed() const { return consuming_code_cache_failed_; }
+
+//  private:
   Isolate* isolate_;
   LazyTimedHistogramScope histogram_scope_;
   // TODO(leszeks): This timer is the sum of the other times, consider removing
@@ -3921,6 +3925,18 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     Cast<Script>(result->script())->set_produce_compile_hints(true);
   }
 
+  Handle<Object> name_obj;
+  if (script_details.name_obj.ToHandle(&name_obj) &&
+      IsString(*name_obj) &&
+      Cast<String>(*name_obj)->length() > 0) {
+    fprintf(stderr, "\n>>>>>>>>>>>>>>>> GetSharedFunctionInfoForScriptImpl, GetCacheBehaviour()=%d, hit_isolate=%d, code_cache=%d, code_cache_failed=%d, %s\n",
+    static_cast<int>(compile_timer.GetCacheBehaviour()),
+    compile_timer.hit_isolate_cache(),
+    compile_timer.consuming_code_cache(),
+    compile_timer.consuming_code_cache_failed(),
+    Cast<String>(*name_obj)->ToCString().get());
+  }
+
   return maybe_result;
 }
 
@@ -4098,6 +4114,18 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
 
   DCHECK(is_compiled_scope.is_compiled());
 
+  Handle<Object> name_obj;
+  if (script_details.name_obj.ToHandle(&name_obj) &&
+      IsString(*name_obj) &&
+      Cast<String>(*name_obj)->length() > 0) {
+    fprintf(stderr, "\n>>>>>>>>>>>>>>>> GetSharedFunctionInfoForScriptImpl, GetCacheBehaviour()=%d, hit_isolate=%d, code_cache=%d, code_cache_failed=%d, %s\n",
+    static_cast<int>(compile_timer.GetCacheBehaviour()),
+    compile_timer.hit_isolate_cache(),
+    compile_timer.consuming_code_cache(),
+    compile_timer.consuming_code_cache_failed(),
+    Cast<String>(*name_obj)->ToCString().get());
+  }
+
   return Factory::JSFunctionBuilder{isolate, result, context}
       .set_allocation_type(AllocationType::kYoung)
       .Build();
@@ -4171,6 +4199,20 @@ Compiler::GetSharedFunctionInfoForStreamedScript(
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.StreamingFinalization.Release");
   streaming_data->Release();
+
+
+  Handle<Object> name_obj;
+  if (script_details.name_obj.ToHandle(&name_obj) &&
+      IsString(*name_obj) &&
+      Cast<String>(*name_obj)->length() > 0) {
+    fprintf(stderr, "\n>>>>>>>>>>>>>>>> GetSharedFunctionInfoForScriptImpl, GetCacheBehaviour()=%d, hit_isolate=%d, code_cache=%d, code_cache_failed=%d, %s\n",
+    static_cast<int>(compile_timer.GetCacheBehaviour()),
+    compile_timer.hit_isolate_cache(),
+    compile_timer.consuming_code_cache(),
+    compile_timer.consuming_code_cache_failed(),
+    Cast<String>(*name_obj)->ToCString().get());
+  }
+
   return maybe_result;
 }  // namespace internal
 
