@@ -3320,6 +3320,20 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                                    wasm_f64x2_trunc)
       HANDLE_UNARY_OPTIONAL_OPCODE(F64x2NearestInt, float64_round_ties_even,
                                    wasm_f64x2_nearest_int)
+      HANDLE_UNARY_OPTIONAL_OPCODE(I16x8SConvertF16x8, float16,
+                                   wasm_i16x8_sconvert_f16x8)
+      HANDLE_UNARY_OPTIONAL_OPCODE(I16x8UConvertF16x8, float16,
+                                   wasm_i16x8_uconvert_f16x8)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F16x8SConvertI16x8, float16,
+                                   wasm_f16x8_sconvert_i16x8)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F16x8UConvertI16x8, float16,
+                                   wasm_f16x8_uconvert_i16x8)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F16x8DemoteF32x4Zero, float16,
+                                   wasm_f16x8_demote_f32x4_zero)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F16x8DemoteF64x2Zero, float16,
+                                   wasm_f16x8_demote_f64x2_zero)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F32x4PromoteLowF16x8, float16,
+                                   wasm_f32x4_promote_low_f16x8)
 #undef HANDLE_UNARY_OPTIONAL_OPCODE
 
 #define HANDLE_SHIFT_OPCODE(kind)                                             \
@@ -3428,16 +3442,6 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         HANDLE_F16X8_UN_OPCODE(F16x8Floor, wasm_f16x8_floor)
         HANDLE_F16X8_UN_OPCODE(F16x8Trunc, wasm_f16x8_trunc)
         HANDLE_F16X8_UN_OPCODE(F16x8NearestInt, wasm_f16x8_nearest_int)
-        HANDLE_F16X8_UN_OPCODE(I16x8SConvertF16x8, wasm_i16x8_sconvert_f16x8)
-        HANDLE_F16X8_UN_OPCODE(I16x8UConvertF16x8, wasm_i16x8_uconvert_f16x8)
-        HANDLE_F16X8_UN_OPCODE(F16x8SConvertI16x8, wasm_f16x8_sconvert_i16x8)
-        HANDLE_F16X8_UN_OPCODE(F16x8UConvertI16x8, wasm_f16x8_uconvert_i16x8)
-        HANDLE_F16X8_UN_OPCODE(F16x8DemoteF32x4Zero,
-                               wasm_f16x8_demote_f32x4_zero)
-        HANDLE_F16X8_UN_OPCODE(F16x8DemoteF64x2Zero,
-                               wasm_f16x8_demote_f64x2_zero)
-        HANDLE_F16X8_UN_OPCODE(F32x4PromoteLowF16x8,
-                               wasm_f32x4_promote_low_f16x8)
 #undef HANDLE_F16X8_UN_OPCODE
 #define HANDLE_F16X8_TERN_OPCODE(kind, extern_ref)                        \
   case kExpr##kind:                                                       \
