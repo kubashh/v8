@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0d78467_d33b783a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-07T10:33:26Z",
+      "side": 1,
+      "message": "@dmercadier@chromium.org: PTAL. I guess, in this case, we can just fix it on top instead of the huge revert as there isn\u0027t a risk for this as long as we don\u0027t start finching turboshaft on any version between the land yesterday and this fix.\n\nI ran with the arm64 simulator and the benchmark now passes (vs. crashing due to the `UNIMPLEMENTED()` call in the recreate schedule phase.",
+      "revId": "f7f118c7e0d8fec3e7b84ffc1225c4e230c8f629",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
