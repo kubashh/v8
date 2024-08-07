@@ -16,6 +16,23 @@
       "message": "@dmercadier@chromium.org: PTAL. I guess, in this case, we can just fix it on top instead of the huge revert as there isn\u0027t a risk for this as long as we don\u0027t start finching turboshaft on any version between the land yesterday and this fix.\n\nI ran with the arm64 simulator and the benchmark now passes (vs. crashing due to the `UNIMPLEMENTED()` call in the recreate schedule phase.",
       "revId": "f7f118c7e0d8fec3e7b84ffc1225c4e230c8f629",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ad7c74e_9cdb8fa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-07T10:35:52Z",
+      "side": 1,
+      "message": "Ah right, I was wondering why the UNIMPLEMENTED in recreate-schedule didn\u0027t cause issues on any bots... Well, the answer is that it does 😄",
+      "revId": "f7f118c7e0d8fec3e7b84ffc1225c4e230c8f629",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
