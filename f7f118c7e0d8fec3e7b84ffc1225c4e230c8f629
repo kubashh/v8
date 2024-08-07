@@ -33,6 +33,24 @@
       "message": "Ah right, I was wondering why the UNIMPLEMENTED in recreate-schedule didn\u0027t cause issues on any bots... Well, the answer is that it does 😄",
       "revId": "f7f118c7e0d8fec3e7b84ffc1225c4e230c8f629",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7d6ce5_8b54f48d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2024-08-07T10:38:30Z",
+      "side": 1,
+      "message": "Thanks for fixing it!",
+      "parentUuid": "9ad7c74e_9cdb8fa3",
+      "revId": "f7f118c7e0d8fec3e7b84ffc1225c4e230c8f629",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
