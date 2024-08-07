@@ -16,6 +16,24 @@
       "message": "I\u0027ll leave the actual review to Paolo. This is the first time I\u0027m hearing about this file or ETW.",
       "revId": "6307821e1476a32507bc8ef1f639657f8f40eff9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1043e6d6_0eef8ec5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2024-08-07T14:45:57Z",
+      "side": 1,
+      "message": "I was actually thinking about you for commentary on the use of the GcSafeCode and lookup of it in response to JitCodeEvents, in case there are better options that might be worth considering. I don\u0027t think it should matter a ton since this would only happen with FLAG_enable_etw_stack_walk, but I am not 100% clear how robust this is, or how much it would drag back profiling.",
+      "parentUuid": "fc19f585_bdd545fd",
+      "revId": "6307821e1476a32507bc8ef1f639657f8f40eff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
