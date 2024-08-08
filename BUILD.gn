@@ -1508,7 +1508,8 @@ config("toolchain") {
   # TODO(infra): Add support for compiling with simulators.
 
   if (v8_enable_debugging_features || v8_dcheck_always_on) {
-    defines += [ "DEBUG" ]
+    # Some code uses `#ifdef DEBUG`, some uses `#if DEBUG`; support both.
+    defines += [ "DEBUG=1" ]
     if (v8_enable_slow_dchecks) {
       defines += [ "ENABLE_SLOW_DCHECKS" ]
     }
