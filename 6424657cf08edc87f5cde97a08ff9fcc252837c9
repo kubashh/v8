@@ -16,6 +16,29 @@
       "message": "I asked around a bit and the general consensus was that this is fine.",
       "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a6bf6b7_370a6f65",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-08-08T09:44:23Z",
+      "side": 1,
+      "message": "Should we also avoid logging builtins when the trace session starts, in ExistingCodeLogger::LogBuiltins() / ExistingCodeLogger::LogCodeObjects() ?",
+      "range": {
+        "startLine": 415,
+        "startChar": 2,
+        "endLine": 415,
+        "endChar": 64
+      },
+      "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
