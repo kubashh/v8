@@ -19,6 +19,13 @@
 namespace v8 {
 namespace internal {
 
+#include "src/codegen/define-code-stub-assembler-macros.inc"
+
+// This is a check that always calls into the runtime if it aborts.
+// This also exits silently when --hole-fuzzing is enabled.
+#define CSA_HOLE_SECURITY_CHECK(csa, x) \
+  (csa)->Check([&]() -> TNode<BoolT> { return x; }, #x, __FILE__, __LINE__)
+
 template <class T>
 using TVariable = compiler::TypedCodeAssemblerVariable<T>;
 
@@ -3046,6 +3053,10 @@ TF_BUILTIN(WeakSetPrototypeHas, WeakCollectionsBuiltinsAssembler) {
   BIND(&return_false);
   Return(FalseConstant());
 }
+
+#undef CSA_HOLE_SECURITY_CHECK
+
+#include "src/codegen/undef-code-stub-assembler-macros.inc"
 
 }  // namespace internal
 }  // namespace v8

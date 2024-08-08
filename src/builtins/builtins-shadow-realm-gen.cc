@@ -12,6 +12,8 @@
 namespace v8 {
 namespace internal {
 
+#include "src/codegen/define-code-stub-assembler-macros.inc"
+
 class ShadowRealmBuiltinsAssembler : public CodeStubAssembler {
  public:
   explicit ShadowRealmBuiltinsAssembler(compiler::CodeAssemblerState* state)
@@ -427,6 +429,8 @@ TF_BUILTIN(ShadowRealmImportValueRejected, ShadowRealmBuiltinsAssembler) {
   ShadowRealmThrow(context, MessageTemplate::kImportShadowRealmRejected,
                    exception);
 }
+
+#include "src/codegen/undef-code-stub-assembler-macros.inc"
 
 }  // namespace internal
 }  // namespace v8

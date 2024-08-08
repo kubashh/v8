@@ -17,6 +17,9 @@
 
 namespace v8 {
 namespace internal {
+
+#include "src/codegen/define-code-stub-assembler-macros.inc"
+
 // fp16_ieee_to_fp32_value()
 TNode<Float32T> CodeStubAssembler::ChangeFloat16ToFloat32(
     TNode<Float16T> value) {
@@ -227,6 +230,8 @@ TNode<Float16T> CodeStubAssembler::TruncateFloat32ToFloat16(
   return ReinterpretCast<Float16T>(
       Word32Or(Word32Shr(sign, 16), result.value()));
 }
+
+#include "src/codegen/undef-code-stub-assembler-macros.inc"
 
 }  // namespace internal
 }  // namespace v8
