@@ -104,6 +104,30 @@
       },
       "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eefed184_9fb0c91a",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-08-08T14:19:52Z",
+      "side": 1,
+      "message": "No, my first comment was wrong. I remembered that all existing functions are logged when a ETW tracing starts, in LogCodeObjects(), but I had not realized that even in that case we emit the events here in `EventHandler`, so your code was correctly handling that case.",
+      "parentUuid": "9fd83944_67230e99",
+      "range": {
+        "startLine": 415,
+        "startChar": 2,
+        "endLine": 415,
+        "endChar": 64
+      },
+      "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
