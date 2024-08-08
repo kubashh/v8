@@ -80,6 +80,30 @@
       },
       "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fd83944_67230e99",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2024-08-08T14:12:03Z",
+      "side": 1,
+      "message": "Thanks for the insightful comments, it\u0027s appreciated.\n\nhmm, it doesn\u0027t seem like the lookup table should have a huge impact, I would expect the worst of this to be from the thread synchronization in accessing the CurrentEmbeddedBlob, which it probably isn\u0027t possible to completely avoid. But, since the code object isn\u0027t really needed, it doesn\u0027t seem too bad to avoid digging up a Code object for it. I\u0027ll add that.\n\nQuestion: with regards to the LogCodeObjects thing, is this like \"make sure we do actually log this in the event where the LogExisting flag is used\"?",
+      "parentUuid": "73e79453_362630c3",
+      "range": {
+        "startLine": 415,
+        "startChar": 2,
+        "endLine": 415,
+        "endChar": 64
+      },
+      "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
