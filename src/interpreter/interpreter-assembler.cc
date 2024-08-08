@@ -19,6 +19,17 @@ namespace v8 {
 namespace internal {
 namespace interpreter {
 
+#include "src/codegen/define-code-stub-assembler-macros.inc"
+
+#ifdef DEBUG
+#define TYPED_VARIABLE_CONSTRUCTOR(name, ...) \
+  name(CSA_DEBUG_INFO(name), __VA_ARGS__)
+#else
+#define TYPED_VARIABLE_CONSTRUCTOR(name, ...) name(__VA_ARGS__)
+#endif
+#define TVARIABLE_CONSTRUCTOR(...) \
+  EXPAND(TYPED_VARIABLE_CONSTRUCTOR(__VA_ARGS__, this))
+
 using compiler::CodeAssemblerState;
 
 InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
@@ -1710,6 +1721,10 @@ void InterpreterAssembler::ToNumberOrNumeric(Object::Conversion mode) {
   SetAccumulator(var_result.value());
   Dispatch();
 }
+
+#undef TVARIABLE_CONSTRUCTOR
+
+#include "src/codegen/undef-code-stub-assembler-macros.inc"
 
 }  // namespace interpreter
 }  // namespace internal

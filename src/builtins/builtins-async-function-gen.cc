@@ -13,6 +13,25 @@
 namespace v8 {
 namespace internal {
 
+#include "src/codegen/define-code-stub-assembler-macros.inc"
+
+#ifdef DEBUG
+#define CSA_DCHECK_JS_ARGC_EQ(csa, expected)                            \
+  (csa)->Dcheck(                                                        \
+      [&]() -> TNode<BoolT> {                                           \
+        const TNode<Word32T> argc = (csa)->UncheckedParameter<Word32T>( \
+            Descriptor::kJSActualArgumentsCount);                       \
+        return (csa)->Word32Equal(                                      \
+            argc, (csa)->Int32Constant(i::JSParameterCount(expected))); \
+      },                                                                \
+      "argc == " #expected, __FILE__, __LINE__,                         \
+      {{SmiFromInt32((csa)->UncheckedParameter<Int32T>(                 \
+            Descriptor::kJSActualArgumentsCount)),                      \
+        "argc"}})
+#else
+#define CSA_DCHECK_JS_ARGC_EQ(csa, expected) ((void)0)
+#endif
+
 class AsyncFunctionBuiltinsAssembler : public AsyncBuiltinsAssembler {
  public:
   explicit AsyncFunctionBuiltinsAssembler(compiler::CodeAssemblerState* state)
@@ -218,6 +237,10 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait() {
 TF_BUILTIN(AsyncFunctionAwait, AsyncFunctionBuiltinsAssembler) {
   AsyncFunctionAwait<Descriptor>();
 }
+
+#undef CSA_DCHECK_JS_ARGC_EQ
+
+#include "src/codegen/undef-code-stub-assembler-macros.inc"
 
 }  // namespace internal
 }  // namespace v8
