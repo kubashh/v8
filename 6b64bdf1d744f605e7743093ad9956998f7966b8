@@ -1,0 +1,45 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d53e982_a542cd9d",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2193,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-08T07:02:45Z",
+      "side": 1,
+      "message": "maybe crash instead of undefined?",
+      "range": {
+        "startLine": 2193,
+        "startChar": 2,
+        "endLine": 2193,
+        "endChar": 50
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "66f55605_c91009e7",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/runtime/runtime-test.cc",
+              "range": {
+                "startLine": 2193,
+                "startChar": 0,
+                "endLine": 2194,
+                "endChar": 0
+              },
+              "replacement": "  return CrashUnlessFuzzing(isolate);\n"
+            }
+          ]
+        }
+      ],
+      "revId": "6b64bdf1d744f605e7743093ad9956998f7966b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
