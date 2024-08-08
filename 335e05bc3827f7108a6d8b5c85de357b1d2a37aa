@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf610f7c_129ce19f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2024-08-08T15:57:37Z",
+      "side": 1,
+      "message": "I guess there is still a lookup algorithm involved, but maybe this is marginally quicker, and should be basically equivalent in this case.\n\nSince this seems tentatively fine, going to go ahead and merge it. Thanks for the look",
+      "revId": "335e05bc3827f7108a6d8b5c85de357b1d2a37aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
