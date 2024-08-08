@@ -15,6 +15,7 @@
 #include "src/diagnostics/etw-jit-metadata-win.h"
 #include "src/logging/log.h"
 #include "src/objects/shared-function-info.h"
+#include "src/snapshot/embedded-data.h"
 #include "src/tasks/cancelable-task.h"
 #include "src/tasks/task-utils.h"
 
@@ -410,6 +411,14 @@ void EventHandler(const JitCodeEvent* event) {
     script->GetPositionInfo(sfi->StartPosition(), &info);
     script_line = info.line + 1;
     script_column = info.column + 1;
+  }
+
+  Builtin maybe_builtin =
+      OffHeapInstructionStream::TryLookupCode(isolate, event->code_start);
+  if (Builtins::IsBuiltinId(maybe_builtin)) {
+    // Skip logging functions with BuiltinIds as they are already present in
+    // the PDB.
+    return;
   }
 
   constexpr static auto method_load_event_meta =
