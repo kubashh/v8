@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b1a16d_d6cabe1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-08-08T10:01:00Z",
+      "side": 1,
+      "message": "I cannot give a +1 but it looks good to me, with one comment.",
+      "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a6bf6b7_370a6f65",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-08-08T09:44:23Z",
       "side": 1,
       "message": "Should we also avoid logging builtins when the trace session starts, in ExistingCodeLogger::LogBuiltins() / ExistingCodeLogger::LogCodeObjects() ?",
+      "range": {
+        "startLine": 415,
+        "startChar": 2,
+        "endLine": 415,
+        "endChar": 64
+      },
+      "revId": "6424657cf08edc87f5cde97a08ff9fcc252837c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e79453_362630c3",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-08-08T10:01:00Z",
+      "side": 1,
+      "message": "I see, `LogCodeObjects()` still ends up calling this function. \nThe only minor issue is that `GcSafeTryFindCodeForInnerPointer` does a lookup and coulb be slow. Another option might be to compare `event-\u003ecode_start`, which for builtins points to code in the text section of the executable, with the heap code space where jitted code lives.",
+      "parentUuid": "7a6bf6b7_370a6f65",
       "range": {
         "startLine": 415,
         "startChar": 2,
