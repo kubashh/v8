@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c81b87a3_49c38e5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-09T17:24:14Z",
+      "side": 1,
+      "message": "Are you planning a followup that actually uses lower priority task runners in V8 or cppgc? Or will this be merely an api change?",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ba1d1626_2d159527",
@@ -14,6 +37,98 @@
       "writtenOn": "2024-08-08T16:30:26Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd6c997d_fa064172",
+        "filename": "src/d8/d8-platforms.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-09T17:24:14Z",
+      "side": 1,
+      "message": "Should this call get the `priority` argument as well?",
+      "range": {
+        "startLine": 64,
+        "startChar": 10,
+        "endLine": 64,
+        "endChar": 33
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8c8e889_c592ba00",
+        "filename": "src/d8/d8-platforms.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-09T17:24:14Z",
+      "side": 1,
+      "message": "Should this call get the `priority` argument as well?",
+      "range": {
+        "startLine": 149,
+        "startChar": 19,
+        "endLine": 149,
+        "endChar": 42
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fea0d2ee_6d92120a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5671,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-09T17:24:14Z",
+      "side": 1,
+      "message": "Let\u0027s make this one explicitly `kUserBlocking` and avoid the implicit priority where possible.",
+      "range": {
+        "startLine": 5671,
+        "startChar": 43,
+        "endLine": 5671,
+        "endChar": 66
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8191bb0e_97e4ab11",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2296,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-09T17:24:14Z",
+      "side": 1,
+      "message": "This runner is never used. Is there a reason to introduce it now? I\u0027d rather introduce it when we need it.",
+      "range": {
+        "startLine": 2296,
+        "startChar": 34,
+        "endLine": 2296,
+        "endChar": 59
+      },
       "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
