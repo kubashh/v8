@@ -198,6 +198,21 @@ std::ostream& operator<<(std::ostream& os, WordUnaryOp::Kind kind) {
   }
 }
 
+// static
+bool OverflowCheckedUnaryOp::IsSupported(Kind kind, WordRepresentation rep) {
+  switch (kind) {
+    case Kind::kAbs:
+      return true;
+  }
+}
+
+std::ostream& operator<<(std::ostream& os, OverflowCheckedUnaryOp::Kind kind) {
+  switch (kind) {
+    case OverflowCheckedUnaryOp::Kind::kAbs:
+      return os << "kAbs";
+  }
+}
+
 std::ostream& operator<<(std::ostream& os, FloatUnaryOp::Kind kind) {
   switch (kind) {
     case FloatUnaryOp::Kind::kAbs:
