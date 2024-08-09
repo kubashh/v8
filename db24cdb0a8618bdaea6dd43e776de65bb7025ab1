@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e23b218_e9b26c76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-09T10:42:14Z",
+      "side": 1,
+      "message": "@evih@chromium.org: PTAL. Also see https://ci.chromium.org/p/v8/g/memory/console, a few flakes are still there for many-modules although way less than before the first fix / workaround.",
+      "revId": "db24cdb0a8618bdaea6dd43e776de65bb7025ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
