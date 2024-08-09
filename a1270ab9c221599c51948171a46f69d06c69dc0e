@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f9188f3_48ced32c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-09T19:06:23Z",
+      "side": 1,
+      "message": "As a non-committer, I\u0027ll need two votes to land (they don\u0027t need to have both reviewed everything). Adding dlehmann@ as \"Gerrit autosuggested you\".",
+      "revId": "a1270ab9c221599c51948171a46f69d06c69dc0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

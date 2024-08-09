@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7b4f04ac_13e2c113",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-09T19:06:23Z",
+      "side": 1,
+      "message": "Not yet. The subject is politically loaded and I\u0027m trying to have my ducks in a row before going anywhere.\n\nMy hope is to land patches based on whether they\u0027re a net improvement on their own, without regard to whether we ever do anything with jumbo, so you should review accordingly. In this case, I tend to think isolating and separating the macros makes the rest of the header more readable and is a maintenance win, but perhaps I\u0027m wrong.",
+      "parentUuid": "66231695_d923ec01",
+      "range": {
+        "startLine": 19,
+        "startChar": 5,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "234bc8ba_914a47b2",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2024-08-09T08:03:27Z",
       "side": 1,
       "message": "it would be preferable to keep all the macros in the .inc file, even if they\u0027re currently only used in one assembler.",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bffaad4c_7dc8c8ff",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-09T19:06:23Z",
+      "side": 1,
+      "message": "Done for the two `CSA_` macros I split out.\n\nDo you want me to also recombine the `T[YPED_]VARIABLE_CONSTRUCTOR` macros in src/interpreter/interpreter-assembler.cc?",
+      "parentUuid": "b4c609c2_ed1f7964",
       "range": {
         "startLine": 19,
         "startChar": 8,
