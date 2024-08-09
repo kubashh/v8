@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e563701_7d78d451",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-08-09T12:57:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "122b9a6a_22be8905",
+      "range": {
+        "startLine": 618,
+        "startChar": 62,
+        "endLine": 618,
+        "endChar": 70
+      },
+      "revId": "53befc490b9afe1ab401d595c86dfe8065ac4ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb7b44b4_9ad5d213",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-08-09T12:36:02Z",
       "side": 1,
       "message": "IsBooleanMap? or do we not have that? there would also alternatively be `map \u003d\u003d broker()-\u003eboolean_map()`",
+      "range": {
+        "startLine": 639,
+        "startChar": 18,
+        "endLine": 639,
+        "endChar": 30
+      },
+      "revId": "53befc490b9afe1ab401d595c86dfe8065ac4ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc7f9ca9_cc828bbc",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-08-09T12:57:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb7b44b4_9ad5d213",
       "range": {
         "startLine": 639,
         "startChar": 18,

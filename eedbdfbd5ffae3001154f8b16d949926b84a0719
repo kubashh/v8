@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e222cd7a_55b91f29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-08-09T12:57:26Z",
+      "side": 1,
+      "message": "thanks, ptal again (files added to the diff)",
+      "revId": "eedbdfbd5ffae3001154f8b16d949926b84a0719",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
