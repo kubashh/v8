@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "842f2e7f_21565595",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-08-09T12:32:23Z",
+      "side": 1,
+      "message": "ptal (a previous patch set passed the try run, the later patch sets add some ascii art)",
+      "revId": "53befc490b9afe1ab401d595c86dfe8065ac4ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
