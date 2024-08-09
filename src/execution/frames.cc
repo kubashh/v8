@@ -1614,7 +1614,7 @@ class DrumBrakeWasmCode {
 #endif  // V8_ENABLE_DRUMBRAKE
 
 void WasmFrame::Iterate(RootVisitor* v) const {
-  DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
+  DBG_DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
 
   //  ===  WasmFrame ===
   //  +-------------------------+-----------------------------------------
@@ -1876,7 +1876,7 @@ void TypedFrame::IterateParamsOfOptimizedWasmToJSWrapper(RootVisitor* v) const {
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 void TypedFrame::Iterate(RootVisitor* v) const {
-  DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
+  DBG_DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
 
   //  ===  TypedFrame ===
   //  +-----------------+-----------------------------------------
@@ -1982,7 +1982,7 @@ void TypedFrame::Iterate(RootVisitor* v) const {
 }
 
 void MaglevFrame::Iterate(RootVisitor* v) const {
-  DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
+  DBG_DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
 
   //  ===  MaglevFrame ===
   //  +-----------------+-----------------------------------------
@@ -2162,7 +2162,7 @@ Tagged<HeapObject> TurbofanStubWithContextFrame::unchecked_code() const {
 }
 
 void CommonFrame::IterateTurbofanOptimizedFrame(RootVisitor* v) const {
-  DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
+  DBG_DCHECK(!iterator_->IsStackFrameIteratorForProfiler());
 
   //  ===  TurbofanFrame ===
   //  +-----------------+-----------------------------------------
@@ -2502,8 +2502,8 @@ Tagged<Object> CommonFrameWithJSLinkage::GetParameter(int index) const {
 }
 
 int CommonFrameWithJSLinkage::ComputeParametersCount() const {
-  DCHECK(!iterator_->IsStackFrameIteratorForProfiler() &&
-         isolate()->heap()->gc_state() == Heap::NOT_IN_GC);
+  DBG_DCHECK(!iterator_->IsStackFrameIteratorForProfiler() &&
+             isolate()->heap()->gc_state() == Heap::NOT_IN_GC);
   return function()
       ->shared()
       ->internal_formal_parameter_count_without_receiver();

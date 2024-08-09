@@ -476,10 +476,10 @@ void Map::CopyUnusedPropertyFieldsAdjustedForInstanceSize(Tagged<Map> map) {
 void Map::AccountAddedPropertyField() {
   // Update used instance size and unused property fields number.
   static_assert(JSObject::kFieldsAdded == JSObject::kHeaderSize / kTaggedSize);
-#ifdef DEBUG
+  // #ifdef DEBUG
   int new_unused = UnusedPropertyFields() - 1;
   if (new_unused < 0) new_unused += JSObject::kFieldsAdded;
-#endif
+  // #endif
   int value = used_or_unused_instance_size_in_words();
   if (value >= JSObject::kFieldsAdded) {
     if (value == instance_size_in_words()) {

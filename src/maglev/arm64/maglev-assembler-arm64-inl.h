@@ -1067,7 +1067,7 @@ inline void MaglevAssembler::PrepareCallCFunction(int num_reg_arguments,
                                                   int num_double_registers) {}
 
 inline void MaglevAssembler::CallSelf() {
-  DCHECK(allow_call());
+  DBG_DCHECK(allow_call());
   DCHECK(code_gen_state()->entry_label()->is_bound());
   Bl(code_gen_state()->entry_label());
 }
@@ -1129,7 +1129,7 @@ void MaglevAssembler::JumpIfHoleNan(DoubleRegister value, Register scratch,
   // This works because all callsites are jumping to either a deopt, deferred
   // code, or a basic block. If we ever need to jump to an on-stack label, we
   // have to add support for it here change the caller to pass a ZoneLabelRef.
-  DCHECK(compilation_info()->zone()->Contains(target));
+  DBG_DCHECK(compilation_info()->zone()->Contains(target));
   ZoneLabelRef is_hole = ZoneLabelRef::UnsafeFromLabelPointer(target);
   ZoneLabelRef is_not_hole(this);
   Fcmp(value, value);

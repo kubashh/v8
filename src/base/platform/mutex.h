@@ -88,8 +88,8 @@ class V8_BASE_EXPORT Mutex final {
     return native_handle_;
   }
 
-  V8_INLINE void AssertHeld() const { DCHECK_EQ(1, level_); }
-  V8_INLINE void AssertUnheld() const { DCHECK_EQ(0, level_); }
+  V8_INLINE void AssertHeld() const { DBG_DCHECK_EQ(1, level_); }
+  V8_INLINE void AssertUnheld() const { DBG_DCHECK_EQ(0, level_); }
 
  private:
   NativeHandle native_handle_;
@@ -174,7 +174,7 @@ class V8_BASE_EXPORT RecursiveMutex final {
   // successfully locked.
   bool TryLock() V8_WARN_UNUSED_RESULT;
 
-  V8_INLINE void AssertHeld() const { DCHECK_LT(0, level_); }
+  V8_INLINE void AssertHeld() const { DBG_DCHECK_LT(0, level_); }
 
  private:
   // The implementation-defined native handle type.

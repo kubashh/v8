@@ -232,7 +232,7 @@ class SnapshotTable {
   // the newly set value will be returned rather than the predecessor value.
   const Value& GetPredecessorValue(Key key, int predecessor_index) {
     DCHECK(!current_snapshot_->IsSealed());
-    DCHECK(snapshot_was_created_with_merge);
+    DBG_DCHECK(snapshot_was_created_with_merge);
     if (key.entry_->merge_offset == kNoMergeOffset) return Get(key);
     return merge_values_[key.entry_->merge_offset + predecessor_index];
   }

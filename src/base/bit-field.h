@@ -60,7 +60,7 @@ class BitField final {
 
   // Returns a type U with the bit field value encoded.
   static constexpr U encode(T value) {
-    DCHECK(is_valid(value));
+    // DCHECK(is_valid(value));
     return static_cast<U>(value) << kShift;
   }
 

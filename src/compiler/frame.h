@@ -117,9 +117,7 @@ class V8_EXPORT_PRIVATE Frame : public ZoneObject {
 
   void AlignSavedCalleeRegisterSlots(int alignment = kDoubleSize) {
     DCHECK(!frame_aligned_);
-#if DEBUG
     spill_slots_finished_ = true;
-#endif
     DCHECK(base::bits::IsPowerOfTwo(alignment));
     DCHECK_LE(alignment, kSimd128Size);
     int alignment_in_slots = AlignedSlotAllocator::NumSlotsForWidth(alignment);
@@ -129,9 +127,7 @@ class V8_EXPORT_PRIVATE Frame : public ZoneObject {
 
   void AllocateSavedCalleeRegisterSlots(int count) {
     DCHECK(!frame_aligned_);
-#if DEBUG
     spill_slots_finished_ = true;
-#endif
     slot_allocator_.AllocateUnaligned(count);
   }
 
@@ -198,10 +194,8 @@ class V8_EXPORT_PRIVATE Frame : public ZoneObject {
   BitVector* allocated_double_registers_;
   Zone* zone_;
   GrowableBitVector tagged_slots_bits_;
-#if DEBUG
   bool spill_slots_finished_ = false;
   bool frame_aligned_ = false;
-#endif
 };
 
 // Represents an offset from either the stack pointer or frame pointer.

@@ -193,13 +193,11 @@ class V8_EXPORT_PRIVATE PreparseDataBuilder : public ZoneObject,
 
   bool bailed_out() const { return bailed_out_; }
 
-#ifdef DEBUG
   bool ThisOrParentBailedOut() const {
     if (bailed_out_) return true;
     if (parent_ == nullptr) return false;
     return parent_->ThisOrParentBailedOut();
   }
-#endif  // DEBUG
 
   bool HasInnerFunctions() const;
   bool HasData() const;

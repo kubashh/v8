@@ -500,9 +500,7 @@ class JSFunctionData : public JSObjectData {
  private:
   void Cache(JSHeapBroker* broker);
 
-#ifdef DEBUG
   bool serialized_ = false;
-#endif  // DEBUG
 
   using UsedFields = base::Flags<UsedField>;
   UsedFields used_fields_;
@@ -678,9 +676,7 @@ void JSFunctionData::Cache(JSHeapBroker* broker) {
       broker, function->raw_feedback_cell(kAcquireLoad));
   feedback_cell_ = feedback_cell.data();
 
-#ifdef DEBUG
   serialized_ = true;
-#endif  // DEBUG
 }
 
 // IMPORTANT: Keep this sync'd with JSFunctionData::Cache.

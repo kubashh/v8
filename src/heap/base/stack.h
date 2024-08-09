@@ -82,7 +82,7 @@ class V8_EXPORT_PRIVATE Stack final {
       TrampolineCallbackHelper(static_cast<void*>(&callback),
                                &SetMarkerAndCallbackImpl<Callback>);
     } else {
-      DCHECK(IsOnCurrentStack(current_segment_.top));
+      DBG_DCHECK(IsOnCurrentStack(current_segment_.top));
       callback();
     }
   }
@@ -180,7 +180,7 @@ class V8_EXPORT_PRIVATE Stack final {
   template <typename Callback>
   static void SetMarkerForBackgroundThreadAndCallbackImpl(
       Stack* stack, void* argument, const void* stack_end) {
-    DCHECK(IsOnCurrentStack(stack_end));
+    DBG_DCHECK(IsOnCurrentStack(stack_end));
     auto [thread, callback] =
         *static_cast<std::pair<ThreadId, Callback*>*>(argument);
     auto& background_stacks = stack->background_stacks_;

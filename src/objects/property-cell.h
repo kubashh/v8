@@ -89,12 +89,10 @@ class PropertyCell
   DECL_SETTER(property_details_raw, Tagged<Smi>)
   DECL_RELEASE_SETTER(property_details_raw, Tagged<Smi>)
 
-#ifdef DEBUG
   // Whether the property cell can transition to the given state. This is an
   // approximation with false positives.
   bool CanTransitionTo(PropertyDetails new_details,
                        Tagged<Object> new_value) const;
-#endif  // DEBUG
 };
 
 class ConstTrackingLetCell

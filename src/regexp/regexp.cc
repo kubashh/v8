@@ -543,7 +543,7 @@ bool RegExpImpl::CompileIrregexp(Isolate* isolate,
   Zone zone(isolate->allocator(), ZONE_NAME);
   PostponeInterruptsScope postpone(isolate);
 
-  DCHECK(RegExpCodeIsValidForPreCompilation(isolate, re_data, is_one_byte));
+  DBG_DCHECK(RegExpCodeIsValidForPreCompilation(isolate, re_data, is_one_byte));
 
   RegExpFlags flags = JSRegExp::AsRegExpFlags(re_data->flags());
 

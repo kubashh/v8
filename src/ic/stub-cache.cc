@@ -82,7 +82,7 @@ bool CommonStubCacheChecks(StubCache* stub_cache, Tagged<Name> name,
 
 void StubCache::Set(Tagged<Name> name, Tagged<Map> map,
                     Tagged<MaybeObject> handler) {
-  DCHECK(CommonStubCacheChecks(this, name, map, handler));
+  DBG_DCHECK(CommonStubCacheChecks(this, name, map, handler));
 
   // Compute the primary entry.
   int primary_offset = PrimaryOffset(name, map);
@@ -113,7 +113,7 @@ void StubCache::Set(Tagged<Name> name, Tagged<Map> map,
 }
 
 Tagged<MaybeObject> StubCache::Get(Tagged<Name> name, Tagged<Map> map) {
-  DCHECK(CommonStubCacheChecks(this, name, map, Tagged<MaybeObject>()));
+  DBG_DCHECK(CommonStubCacheChecks(this, name, map, Tagged<MaybeObject>()));
   int primary_offset = PrimaryOffset(name, map);
   Entry* primary = entry(primary_, primary_offset);
   if (primary->key == name && primary->map == map) {

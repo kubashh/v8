@@ -193,7 +193,7 @@ void PagedSpaceBase::RefineAllocatedBytesAfterSweeping(PageMetadata* page) {
     size_t counter_diff = old_counter - new_counter;
     if (identity() == NEW_SPACE) size_at_last_gc_ -= counter_diff;
     DecreaseAllocatedBytes(counter_diff, page);
-    DCHECK_EQ(new_counter, accounting_stats_.AllocatedOnPage(page));
+    DBG_DCHECK_EQ(new_counter, accounting_stats_.AllocatedOnPage(page));
     AdjustDifferenceInAllocatedBytes(counter_diff);
   }
   if (!v8_flags.sticky_mark_bits) {

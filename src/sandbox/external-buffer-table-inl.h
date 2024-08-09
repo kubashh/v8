@@ -108,7 +108,7 @@ std::pair<Address, size_t> ExternalBufferTable::Get(
 ExternalBufferHandle ExternalBufferTable::AllocateAndInitializeEntry(
     Space* space, std::pair<Address, size_t> initial_buffer,
     ExternalBufferTag tag) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   uint32_t index = AllocateEntry(space);
   at(index).MakeExternalBufferEntry(initial_buffer, tag);
 
@@ -117,7 +117,7 @@ ExternalBufferHandle ExternalBufferTable::AllocateAndInitializeEntry(
 
 void ExternalBufferTable::Mark(Space* space, ExternalBufferHandle handle,
                                Address handle_location) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   // The null entry is immortal and immutable, so no need to mark it as alive.
   if (handle == kNullExternalBufferHandle) return;

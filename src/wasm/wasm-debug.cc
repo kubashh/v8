@@ -732,7 +732,7 @@ class DebugInfoImpl {
                                      kSystemPointerSize);
 #endif
     // The frame position should still be the same after OSR.
-    DCHECK_EQ(old_position, frame->position());
+    DBG_DCHECK_EQ(old_position, frame->position());
   }
 
   bool IsAtReturn(WasmFrame* frame) {

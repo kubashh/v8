@@ -237,9 +237,7 @@ class MaglevPhiRepresentationSelector {
   // it, in order to save memory and not reallocate it for each merge.
   ZoneVector<Snapshot> predecessors_;
 
-#ifdef DEBUG
   std::unordered_set<NodeBase*> new_nodes_;
-#endif
 };
 
 }  // namespace maglev

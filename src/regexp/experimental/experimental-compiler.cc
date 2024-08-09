@@ -19,9 +19,7 @@ namespace {
 // TODO(mbid, v8:10765): Currently the experimental engine doesn't support
 // UTF-16, but this shouldn't be too hard to implement.
 constexpr base::uc32 kMaxSupportedCodepoint = 0xFFFFu;
-#ifdef DEBUG
 constexpr base::uc32 kMaxCodePoint = 0x10ffff;
-#endif  // DEBUG
 
 class CanBeHandledVisitor final : private RegExpVisitor {
   // Visitor to implement `ExperimentalRegExp::CanBeHandled`.

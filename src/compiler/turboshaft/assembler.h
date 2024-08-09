@@ -5490,7 +5490,7 @@ class CatchScopeImpl {
   }
 
   ~CatchScopeImpl() {
-    DCHECK_EQ(assembler_.current_catch_block_, catch_block);
+    DBG_DCHECK_EQ(assembler_.current_catch_block_, catch_block);
     assembler_.current_catch_block_ = previous_catch_block_;
   }
 

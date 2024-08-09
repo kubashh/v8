@@ -69,9 +69,7 @@ static const CachedPower kCachedPowers[] = {
     {0xAF87'023B'9BF0'EE6B, 1066, 340},
 };
 
-#ifdef DEBUG
 static const int kCachedPowersLength = arraysize(kCachedPowers);
-#endif
 
 static const int kCachedPowersOffset = 348;  // -1 * the first decimal_exponent.
 static const double kD_1_LOG2_10 = 0.30102999566398114;  //  1 / lg(10)

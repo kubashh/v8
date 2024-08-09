@@ -1645,7 +1645,7 @@ static void PrintFrames(Isolate* isolate, StringStream* accumulator,
 
 void Isolate::PrintStack(StringStream* accumulator, PrintStackMode mode) {
   HandleScope scope(this);
-  DCHECK(accumulator->IsMentionedObjectCacheClear(this));
+  DBG_DCHECK(accumulator->IsMentionedObjectCacheClear(this));
 
   // Avoid printing anything if there are no frames.
   if (c_entry_fp(thread_local_top()) == 0) return;

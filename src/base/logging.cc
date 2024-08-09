@@ -15,6 +15,8 @@
 namespace v8 {
 namespace base {
 
+bool g_dchecks_are_enabled = false;
+
 namespace {
 
 void DefaultDcheckHandler(const char* file, int line, const char* message);

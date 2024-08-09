@@ -150,7 +150,7 @@ int SafepointTableBuilder::UpdateDeoptimizationInfo(int pc, int trampoline,
 }
 
 void SafepointTableBuilder::Emit(Assembler* assembler, int tagged_slots_size) {
-  DCHECK_LT(max_stack_index_, tagged_slots_size);
+  DBG_DCHECK_LT(max_stack_index_, tagged_slots_size);
 
 #ifdef DEBUG
   int last_pc = -1;

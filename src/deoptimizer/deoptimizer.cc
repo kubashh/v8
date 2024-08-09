@@ -361,7 +361,7 @@ class ActivationsFinder : public ThreadVisitor {
           // builtin Code is still inside the sandbox while runtime-generated
           // Code is in trusted space.
           static_assert(!kAllCodeObjectsLiveInTrustedSpace);
-          DCHECK_IMPLIES(code.SafeEquals(topmost_), safe_to_deopt_);
+          DBG_DCHECK_IMPLIES(code.SafeEquals(topmost_), safe_to_deopt_);
           static_assert(SafepointEntry::kNoTrampolinePC == -1);
           CHECK_GE(trampoline_pc, 0);
           // Replace the current pc on the stack with the trampoline.
@@ -672,7 +672,7 @@ Handle<Code> Deoptimizer::compiled_code() const {
 
 Deoptimizer::~Deoptimizer() {
   DCHECK(input_ == nullptr && output_ == nullptr);
-  DCHECK_NULL(disallow_garbage_collection_);
+  DBG_DCHECK_NULL(disallow_garbage_collection_);
   delete trace_scope_;
 }
 

@@ -1381,7 +1381,8 @@ class MaglevGraphBuilder {
   void MoveNodeBetweenRegisters(interpreter::Register src,
                                 interpreter::Register dst) {
     // We shouldn't be moving newly created nodes between registers.
-    DCHECK(!IsNodeCreatedForThisBytecode(current_interpreter_frame_.get(src)));
+    DBG_DCHECK(
+        !IsNodeCreatedForThisBytecode(current_interpreter_frame_.get(src)));
     DCHECK_NOT_NULL(current_interpreter_frame_.get(src));
 
     current_interpreter_frame_.set(dst, current_interpreter_frame_.get(src));
@@ -1602,14 +1603,14 @@ class MaglevGraphBuilder {
 
     // Make sure the lazy deopt info of this value, if any, is registered as
     // mutating this register.
-    DCHECK_IMPLIES(value->properties().can_lazy_deopt() &&
-                       IsNodeCreatedForThisBytecode(value),
-                   value->lazy_deopt_info()->IsResultRegister(target));
+    DBG_DCHECK_IMPLIES(value->properties().can_lazy_deopt() &&
+                           IsNodeCreatedForThisBytecode(value),
+                       value->lazy_deopt_info()->IsResultRegister(target));
   }
 
   void SetAccumulatorInBranch(ValueNode* value) {
-    DCHECK_IMPLIES(value->properties().can_lazy_deopt(),
-                   !IsNodeCreatedForThisBytecode(value));
+    DBG_DCHECK_IMPLIES(value->properties().can_lazy_deopt(),
+                       !IsNodeCreatedForThisBytecode(value));
     current_interpreter_frame_.set(interpreter::Register::virtual_accumulator(),
                                    value);
   }
@@ -1626,32 +1627,30 @@ class MaglevGraphBuilder {
 
     if (!v8_flags.maglev_cse) {
       // TODO(olivf): CSE might deduplicate this value and the one below.
-      DCHECK_NE(0, new_nodes_.count(value));
+      DBG_DCHECK_NE(0, new_nodes_.count(value));
     }
     DCHECK(HasOutputRegister(target0));
     current_interpreter_frame_.set(target0, value);
 
     ValueNode* second_value = GetSecondValue(value);
     if (!v8_flags.maglev_cse) {
-      DCHECK_NE(0, new_nodes_.count(second_value));
+      DBG_DCHECK_NE(0, new_nodes_.count(second_value));
     }
     DCHECK(HasOutputRegister(target1));
     current_interpreter_frame_.set(target1, second_value);
 
     // Make sure the lazy deopt info of this value, if any, is registered as
     // mutating these registers.
-    DCHECK_IMPLIES(value->properties().can_lazy_deopt() &&
-                       IsNodeCreatedForThisBytecode(value),
-                   value->lazy_deopt_info()->IsResultRegister(target0));
-    DCHECK_IMPLIES(value->properties().can_lazy_deopt() &&
-                       IsNodeCreatedForThisBytecode(value),
-                   value->lazy_deopt_info()->IsResultRegister(target1));
+    DBG_DCHECK_IMPLIES(value->properties().can_lazy_deopt() &&
+                           IsNodeCreatedForThisBytecode(value),
+                       value->lazy_deopt_info()->IsResultRegister(target0));
+    DBG_DCHECK_IMPLIES(value->properties().can_lazy_deopt() &&
+                           IsNodeCreatedForThisBytecode(value),
+                       value->lazy_deopt_info()->IsResultRegister(target1));
   }
 
   std::pair<interpreter::Register, int> GetResultLocationAndSize() const;
-#ifdef DEBUG
   bool HasOutputRegister(interpreter::Register reg) const;
-#endif
 
   DeoptFrame* GetParentDeoptFrame();
   DeoptFrame GetDeoptFrameForLazyDeopt(interpreter::Register result_location,

@@ -16,7 +16,7 @@ namespace internal {
 // TODO(saelo): Reduce duplication with EPT::SweepAndCompact.
 uint32_t CppHeapPointerTable::SweepAndCompact(Space* space,
                                               Counters* counters) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   // Lock the space. Technically this is not necessary since no other thread can
   // allocate entries at this point, but some of the methods we call on the

@@ -600,7 +600,7 @@ class SmallOrderedHashTable : public HeapObject {
   }
 
   static constexpr Offset DataTableStartOffset() {
-    return PaddingOffset() + PaddingSize();
+    return static_cast<Offset>(PaddingOffset() + PaddingSize());
   }
 
   static constexpr int DataTableSizeFor(int capacity) {

@@ -391,7 +391,6 @@ void Bootstrapper::LogAllMaps() {
 
 namespace {
 
-#ifdef DEBUG
 bool IsFunctionMapOrSpecialBuiltin(DirectHandle<Map> map, Builtin builtin,
                                    DirectHandle<Context> context) {
   // During bootstrapping some of these maps could be not created yet.
@@ -406,7 +405,6 @@ bool IsFunctionMapOrSpecialBuiltin(DirectHandle<Map> map, Builtin builtin,
           (builtin == Builtin::kEmptyFunction ||
            builtin == Builtin::kProxyConstructor));
 }
-#endif  // DEBUG
 
 V8_NOINLINE Handle<JSFunction> CreateFunctionForBuiltin(Isolate* isolate,
                                                         Handle<String> name,

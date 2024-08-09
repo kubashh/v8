@@ -44,7 +44,7 @@ template <typename Entry, size_t size>
 typename CompactibleExternalEntityTable<Entry, size>::CompactionResult
 CompactibleExternalEntityTable<Entry, size>::FinishCompaction(
     Space* space, Histogram* counter) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   DCHECK(!space->is_internal_read_only_space());
 
   // When compacting, we can compute the number of unused segments at the end of

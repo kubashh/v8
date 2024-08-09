@@ -764,7 +764,7 @@ int GetCaseIndependentLetters(Isolate* isolate, base::uc16 character,
 #ifdef V8_INTL_SUPPORT
   if (RegExpCaseFolding::IgnoreSet().contains(character)) {
     letters[0] = character;
-    DCHECK(ContainsOnlyUtf16CodeUnits(letters, 1));
+    DBG_DCHECK(ContainsOnlyUtf16CodeUnits(letters, 1));
     return 1;
   }
   bool in_special_add_set =
@@ -793,7 +793,7 @@ int GetCaseIndependentLetters(Isolate* isolate, base::uc16 character,
       letters[items++] = static_cast<unibrow::uchar>(cu);
     }
   }
-  DCHECK(ContainsOnlyUtf16CodeUnits(letters, items));
+  DBG_DCHECK(ContainsOnlyUtf16CodeUnits(letters, items));
   return items;
 #else
   int length =

@@ -440,6 +440,7 @@ void LateLoadEliminationAnalyzer::DcheckWordBinop(OpIndex op_idx,
     if (auto key = non_aliasing_objects_.TryGetKeyFor(left);
         key.has_value() && non_aliasing_objects_.Get(*key)) {
       int64_t cst;
+      USE(cst);
       DCHECK_EQ(binop.kind, WordBinopOp::Kind::kBitwiseAnd);
       DCHECK(OperationMatcher(graph_).MatchSignedIntegralConstant(right, &cst));
       DCHECK_EQ(cst, kSmiTagMask);

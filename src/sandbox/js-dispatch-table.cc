@@ -49,7 +49,7 @@ void JSDispatchTable::SetCode(JSDispatchHandle handle, Tagged<Code> new_code) {
 
 JSDispatchHandle JSDispatchTable::AllocateAndInitializeEntry(
     Space* space, uint16_t parameter_count) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   uint32_t index = AllocateEntry(space);
   CFIMetadataWriteScope write_scope("JSDispatchTable initialize");
   at(index).MakeJSDispatchEntry(kNullAddress, kNullAddress, parameter_count,

@@ -113,10 +113,8 @@ class WellKnownImportsList {
 
   // Regular initialization. Allocates size-dependent internal data.
   void Initialize(int size) {
-#if DEBUG
     DCHECK_EQ(-1, size_);
     size_ = size;
-#endif
     static_assert(static_cast<int>(WellKnownImport::kUninstantiated) == 0);
     statuses_ = std::make_unique<std::atomic<WellKnownImport>[]>(size);
 #if !defined(__cpp_lib_atomic_value_initialization) || \
@@ -148,9 +146,7 @@ class WellKnownImportsList {
   base::Mutex mutex_;
   std::unique_ptr<std::atomic<WellKnownImport>[]> statuses_;
 
-#if DEBUG
   int size_{-1};
-#endif
 };
 
 }  // namespace v8::internal::wasm

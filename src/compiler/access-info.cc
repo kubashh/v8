@@ -113,7 +113,7 @@ PropertyAccessInfo PropertyAccessInfo::DataField(
     Type field_type, MapRef field_owner_map, OptionalMapRef field_map,
     OptionalJSObjectRef holder, OptionalMapRef transition_map) {
   DCHECK(!field_representation.IsNone());
-  DCHECK_IMPLIES(
+  DBG_DCHECK_IMPLIES(
       field_representation.IsDouble(),
       HasFieldRepresentationDependenciesOnMap(
           dependencies, transition_map.has_value() ? transition_map->object()

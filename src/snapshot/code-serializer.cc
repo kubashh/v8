@@ -535,7 +535,7 @@ CodeSerializer::StartDeserializeOffThread(LocalIsolate* local_isolate,
                                           AlignedCachedData* cached_data) {
   OffThreadDeserializeData result;
 
-  DCHECK(!local_isolate->heap()->HasPersistentHandles());
+  DBG_DCHECK(!local_isolate->heap()->HasPersistentHandles());
 
   const SerializedCodeData scd =
       SerializedCodeData::FromCachedDataWithoutSource(
@@ -611,7 +611,7 @@ MaybeHandle<SharedFunctionInfo> CodeSerializer::FinishOffThreadDeserialize(
   }
 
   // Change the result persistent handle into a regular handle.
-  DCHECK(data.persistent_handles->Contains(result.location()));
+  DBG_DCHECK(data.persistent_handles->Contains(result.location()));
   result = handle(*result, isolate);
 
   if (background_merge_task &&
@@ -639,7 +639,7 @@ MaybeHandle<SharedFunctionInfo> CodeSerializer::FinishOffThreadDeserialize(
     for (Handle<Script> script : data.scripts) {
       script->set_deserialized(true);
       BaselineBatchCompileIfSparkplugCompiled(isolate, *script);
-      DCHECK(data.persistent_handles->Contains(script.location()));
+      DBG_DCHECK(data.persistent_handles->Contains(script.location()));
       list = WeakArrayList::AddToEnd(isolate, list,
                                      MaybeObjectHandle::Weak(script));
     }

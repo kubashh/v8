@@ -329,13 +329,11 @@ void DeclarationScope::SetDefaults() {
   is_skipped_function_ = false;
   preparse_data_builder_ = nullptr;
   class_scope_has_private_brand_ = false;
-#ifdef DEBUG
   DeclarationScope* outer_declaration_scope =
       outer_scope_ ? outer_scope_->GetDeclarationScope() : nullptr;
   is_being_lazily_parsed_ =
       outer_declaration_scope ? outer_declaration_scope->is_being_lazily_parsed_
                               : false;
-#endif
 }
 
 void Scope::SetDefaults() {
@@ -686,7 +684,7 @@ void DeclarationScope::HoistSloppyBlockFunctions(AstNodeFactory* factory) {
 }
 
 void DeclarationScope::TakeUnresolvedReferencesFromParent() {
-  DCHECK(outer_scope_->reparsing_for_class_initializer_);
+  DBG_DCHECK(outer_scope_->reparsing_for_class_initializer_);
   unresolved_list_.MoveTail(&outer_scope_->unresolved_list_,
                             outer_scope_->unresolved_list_.begin());
 }
@@ -715,8 +713,9 @@ bool DeclarationScope::Analyze(ParseInfo* info) {
   // 2) a function/eval/module on the top-level
   // 4) a class member initializer function scope
   // 3) 4 function/eval in a scope that was already resolved.
-  DCHECK(scope->is_script_scope() || scope->outer_scope()->is_script_scope() ||
-         scope->outer_scope()->already_resolved_);
+  DBG_DCHECK(scope->is_script_scope() ||
+             scope->outer_scope()->is_script_scope() ||
+             scope->outer_scope()->already_resolved_);
 
   // The outer scope is never lazy.
   scope->set_should_eager_compile();
@@ -902,7 +901,7 @@ Scope* Scope::FinalizeBlockScope() {
 }
 
 void DeclarationScope::AddLocal(Variable* var) {
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   // Temporaries are only placed in ClosureScopes.
   DCHECK_EQ(GetClosureScope(), this);
   locals_.Add(var);
@@ -1028,7 +1027,7 @@ Variable* DeclarationScope::DeclareParameter(const AstRawString* name,
                                              bool is_optional, bool is_rest,
                                              AstValueFactory* ast_value_factory,
                                              int position) {
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   DCHECK(is_function_scope() || is_module_scope());
   DCHECK(!has_rest_);
   DCHECK(!is_optional || !is_rest);
@@ -1058,7 +1057,7 @@ Variable* DeclarationScope::DeclareParameter(const AstRawString* name,
 }
 
 void DeclarationScope::RecordParameter(bool is_rest) {
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   DCHECK(is_function_scope() || is_module_scope());
   DCHECK(is_being_lazily_parsed_);
   DCHECK(!has_rest_);
@@ -1069,7 +1068,7 @@ void DeclarationScope::RecordParameter(bool is_rest) {
 Variable* Scope::DeclareLocal(const AstRawString* name, VariableMode mode,
                               VariableKind kind, bool* was_added,
                               InitializationFlag init_flag) {
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   // Private methods should be declared with ClassScope::DeclarePrivateName()
   DCHECK(!IsPrivateMethodOrAccessorVariableMode(mode));
   // This function handles VariableMode::kVar, VariableMode::kLet,
@@ -1110,7 +1109,7 @@ Variable* Scope::DeclareVariable(
   // Private methods should be declared with ClassScope::DeclarePrivateName()
   DCHECK(!IsPrivateMethodOrAccessorVariableMode(mode));
   DCHECK(IsDeclaredVariableMode(mode));
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   DCHECK(!GetDeclarationScope()->is_being_lazily_parsed());
   DCHECK(!GetDeclarationScope()->was_lazily_parsed());
 
@@ -1192,7 +1191,7 @@ Variable* Scope::DeclareVariableName(const AstRawString* name,
                                      VariableMode mode, bool* was_added,
                                      VariableKind kind) {
   DCHECK(IsDeclaredVariableMode(mode));
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   DCHECK(GetDeclarationScope()->is_being_lazily_parsed());
   // Private methods should be declared with ClassScope::DeclarePrivateName()
   DCHECK(!IsPrivateMethodOrAccessorVariableMode(mode));
@@ -1225,7 +1224,7 @@ Variable* Scope::DeclareVariableName(const AstRawString* name,
 }
 
 Variable* Scope::DeclareCatchVariableName(const AstRawString* name) {
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   DCHECK(is_catch_scope());
   DCHECK(scope_info_.is_null());
 
@@ -1240,7 +1239,7 @@ void Scope::AddUnresolved(VariableProxy* proxy) {
   // The scope is only allowed to already be resolved if we're reparsing a class
   // initializer. Class initializers will manually resolve these references
   // separate from regular variable resolution.
-  DCHECK_IMPLIES(already_resolved_, reparsing_for_class_initializer_);
+  DBG_DCHECK_IMPLIES(already_resolved_, reparsing_for_class_initializer_);
   DCHECK(!proxy->is_resolved());
   unresolved_list_.Add(proxy);
 }
@@ -1494,7 +1493,7 @@ DeclarationScope* Scope::GetClosureScope() {
 }
 
 bool Scope::NeedsScopeInfo() const {
-  DCHECK(!already_resolved_);
+  DBG_DCHECK(!already_resolved_);
   DCHECK(GetClosureScope()->ShouldEagerCompile());
   // The debugger expects all functions to have scope infos.
   // TODO(yangguo): Remove this requirement.
@@ -1680,8 +1679,8 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
 
 #ifdef DEBUG
   needs_migration_ = false;
-  is_being_lazily_parsed_ = false;
 #endif
+  is_being_lazily_parsed_ = false;
 
   was_lazily_parsed_ = !aborted;
 }
@@ -2211,7 +2210,7 @@ Variable* Scope::LookupWith(VariableProxy* proxy, Scope* scope,
   // accessed from inside of an inner with scope (the property may not be in
   // the 'with' object).
   if (!var->is_dynamic() && var->IsUnallocated()) {
-    DCHECK(!scope->already_resolved_);
+    DBG_DCHECK(!scope->already_resolved_);
     var->set_is_used();
     var->ForceContextAllocation();
     if (proxy->is_assigned()) var->SetMaybeAssigned();
@@ -2633,7 +2632,7 @@ int Scope::UniqueIdInScript() const {
 
 void Scope::AllocateVariablesRecursively() {
   this->ForEach([](Scope* scope) -> Iteration {
-    DCHECK(!scope->already_resolved_);
+    DBG_DCHECK(!scope->already_resolved_);
     if (WasLazilyParsed(scope)) return Iteration::kContinue;
     if (scope->sloppy_eval_can_extend_vars_) {
       scope->num_heap_slots_ = Context::MIN_CONTEXT_EXTENDED_SLOTS;

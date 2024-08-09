@@ -3870,7 +3870,7 @@ void DescriptorArray::Sort() {
       parent_index = child_index;
     }
   }
-  DCHECK(IsSortedNoDuplicates());
+  SLOW_DCHECK(IsSortedNoDuplicates());
 }
 
 void DescriptorArray::CheckNameCollisionDuringInsertion(Descriptor* desc,
@@ -4011,9 +4011,7 @@ void WriteFixedArrayToFlat(Tagged<FixedArray> fixed_array, int length,
   DisallowGarbageCollection no_gc;
   CHECK_GT(length, 0);
   CHECK_LE(length, fixed_array->length());
-#ifdef DEBUG
   sinkchar* sink_end = sink + sink_length;
-#endif
 
   const int separator_length = separator->length();
   const bool use_one_byte_separator_fast_path =
@@ -6329,7 +6327,6 @@ bool PropertyCell::CheckDataIsCompatible(PropertyDetails details,
   return true;
 }
 
-#ifdef DEBUG
 bool PropertyCell::CanTransitionTo(PropertyDetails new_details,
                                    Tagged<Object> new_value) const {
   // Extending the implementation of PropertyCells with additional states
@@ -6355,7 +6352,6 @@ bool PropertyCell::CanTransitionTo(PropertyDetails new_details,
       UNREACHABLE();
   }
 }
-#endif  // DEBUG
 
 int JSGeneratorObject::code_offset() const {
   DCHECK(IsSmi(input_or_debug_pos()));

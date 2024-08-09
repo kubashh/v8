@@ -3651,7 +3651,7 @@ class GraphBuilder {
     if constexpr (SmiValuesAre31Bits()) {
       result = __ BitcastWord32ToSmi(__ Word32SignedAddDeoptOnOverflow(
           __ BitcastSmiToWord32(Map(node->value_input())),
-          Smi::FromInt(1).ptr(), frame_state,
+          static_cast<unsigned>(Smi::FromInt(1).ptr()), frame_state,
           node->eager_deopt_info()->feedback_to_update()));
     } else {
       // Remember that 32-bit Smis are stored in the upper 32 bits of 64-bit
@@ -3659,7 +3659,7 @@ class GraphBuilder {
       // despite Smis being only 32 bits.
       result = __ BitcastWordPtrToSmi(__ WordPtrSignedAddDeoptOnOverflow(
           __ BitcastSmiToWordPtr(Map(node->value_input())),
-          Smi::FromInt(1).ptr(), frame_state,
+          static_cast<unsigned>(Smi::FromInt(1).ptr()), frame_state,
           node->eager_deopt_info()->feedback_to_update()));
     }
     SetMap(node, result);
@@ -3672,7 +3672,7 @@ class GraphBuilder {
     if constexpr (SmiValuesAre31Bits()) {
       result = __ BitcastWord32ToSmi(__ Word32SignedSubDeoptOnOverflow(
           __ BitcastSmiToWord32(Map(node->value_input())),
-          Smi::FromInt(1).ptr(), frame_state,
+          static_cast<unsigned>(Smi::FromInt(1).ptr()), frame_state,
           node->eager_deopt_info()->feedback_to_update()));
     } else {
       result = __ BitcastWordPtrToSmi(__ WordPtrSignedSubDeoptOnOverflow(

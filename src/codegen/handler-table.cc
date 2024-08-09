@@ -40,9 +40,7 @@ HandlerTable::HandlerTable(Address handler_table, int handler_table_size,
                            EncodingMode encoding_mode)
     : number_of_entries_(handler_table_size / EntrySizeFromMode(encoding_mode) /
                          sizeof(int32_t)),
-#ifdef DEBUG
       mode_(encoding_mode),
-#endif
       raw_encoded_data_(handler_table) {
   // Check padding.
   static_assert(4 < kReturnEntrySize * sizeof(int32_t), "allowed padding");
@@ -184,12 +182,10 @@ int HandlerTable::NumberOfReturnEntries() const {
 
 int HandlerTable::LookupHandlerIndexForRange(int pc_offset) const {
   int innermost_handler = kNoHandlerFound;
-#ifdef DEBUG
   // Assuming that ranges are well nested, we don't need to track the innermost
   // offsets. This is just to verify that the table is actually well nested.
   int innermost_start = std::numeric_limits<int>::min();
   int innermost_end = std::numeric_limits<int>::max();
-#endif
   for (int i = 0; i < NumberOfRangeEntries(); ++i) {
     int start_offset = GetRangeStart(i);
     int end_offset = GetRangeEnd(i);
@@ -198,10 +194,8 @@ int HandlerTable::LookupHandlerIndexForRange(int pc_offset) const {
     DCHECK_GE(start_offset, innermost_start);
     DCHECK_LT(end_offset, innermost_end);
     innermost_handler = i;
-#ifdef DEBUG
     innermost_start = start_offset;
     innermost_end = end_offset;
-#endif
   }
   return innermost_handler;
 }

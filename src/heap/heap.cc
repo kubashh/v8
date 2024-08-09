@@ -7545,8 +7545,8 @@ void Heap::FinishSweepingIfOutOfWork() {
     // At this point we know that all concurrent sweeping tasks have run
     // out of work and quit: all pages are swept. The main thread still needs
     // to complete sweeping though.
-    DCHECK_IMPLIES(!delay_sweeper_tasks_for_testing_,
-                   !sweeper()->HasUnsweptPagesForMajorSweeping());
+    DBG_DCHECK_IMPLIES(!delay_sweeper_tasks_for_testing_,
+                       !sweeper()->HasUnsweptPagesForMajorSweeping());
     EnsureSweepingCompleted(SweepingForcedFinalizationMode::kV8Only);
   }
   if (cpp_heap()) {

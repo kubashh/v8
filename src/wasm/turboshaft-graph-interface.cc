@@ -5385,9 +5385,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                   WasmTrustedInstanceData::kNativeContextOffset);
 
       if (!mod->memories.empty()) {
-#if DEBUG
         has_memory_ = true;
-#endif
         const WasmMemory& mem = mod->memories[0];
         memory_can_grow_ = mem.initial_pages != mem.maximum_pages;
         // For now, we don't cache the size of shared growable memories.
@@ -5524,9 +5522,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     uint8_t memory_size_index_{kUnused};
     uint8_t memory_start_index_{kUnused};
     uint8_t num_mutable_fields_{0};
-#if DEBUG
     bool has_memory_{false};
-#endif
   };
 
   enum class CheckForException { kNo, kCatchInThisFrame, kCatchInParentFrame };

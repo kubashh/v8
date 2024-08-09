@@ -766,7 +766,7 @@ void SharedFunctionInfo::UpdateFromFunctionLiteralForLiveEdit(
     // Updating the ScopeInfo is safe since they are identical modulo
     // source positions.
     Tagged<ScopeInfo> new_scope_info = *lit->scope()->scope_info();
-    DCHECK(new_scope_info->Equals(Cast<ScopeInfo>(maybe_scope_info), true));
+    DBG_DCHECK(new_scope_info->Equals(Cast<ScopeInfo>(maybe_scope_info), true));
     SetScopeInfo(new_scope_info);
   } else if (!is_compiled()) {
     CHECK(HasUncompiledData());

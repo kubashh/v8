@@ -123,10 +123,8 @@ class V8_EXPORT_PRIVATE BytecodeLivenessMap {
  public:
   BytecodeLivenessMap(int bytecode_size, Zone* zone)
       : liveness_(zone->AllocateArray<BytecodeLiveness>(bytecode_size))
-#ifdef DEBUG
         ,
         size_(bytecode_size)
-#endif
   {
   }
 
@@ -170,9 +168,7 @@ class V8_EXPORT_PRIVATE BytecodeLivenessMap {
 
  private:
   BytecodeLiveness* liveness_;
-#ifdef DEBUG
   size_t size_;
-#endif
 };
 
 V8_EXPORT_PRIVATE std::string ToString(const BytecodeLivenessState& liveness);

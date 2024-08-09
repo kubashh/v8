@@ -227,6 +227,8 @@ DEFINE_BOOL(experimental, false,
   FLAG(BOOL, bool, nam, false, cmt " (experimental)") \
   DEFINE_IMPLICATION(nam, experimental)
 
+DEFINE_BOOL(dchecks_are_enabled, false, "enable dchecks in release build")
+
 // ATTENTION: This is set to true by default in d8. But for API compatibility,
 // it generally defaults to false.
 DEFINE_BOOL(abort_on_contradictory_flags, false,

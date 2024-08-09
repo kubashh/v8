@@ -153,9 +153,9 @@ PersistentHandlesScope::PersistentHandlesScope(Isolate* isolate)
 }
 
 PersistentHandlesScope::~PersistentHandlesScope() {
-  DCHECK(handles_detached_);
+  DBG_DCHECK(handles_detached_);
   impl_->isolate()->handle_scope_data()->level--;
-  DCHECK_EQ(impl_->isolate()->handle_scope_data()->level, prev_level_);
+  DBG_DCHECK_EQ(impl_->isolate()->handle_scope_data()->level, prev_level_);
 }
 
 std::unique_ptr<PersistentHandles> PersistentHandlesScope::Detach() {

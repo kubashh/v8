@@ -434,7 +434,7 @@ void MarkCompactCollector::MaybeEnableBackgroundThreadsInCycle(
 void MarkCompactCollector::CollectGarbage() {
   // Make sure that Prepare() has been called. The individual steps below will
   // update the state as they proceed.
-  DCHECK(state_ == PREPARE_GC);
+  DBG_DCHECK(state_ == PREPARE_GC);
 
   MaybeEnableBackgroundThreadsInCycle(CallOrigin::kAtomicGC);
 

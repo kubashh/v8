@@ -719,8 +719,8 @@ void RegExpBytecodePeephole::EmitOptimization(
     // to destinations inside the sequence.
     EmitArgument(start_pc, bytecode, arg_map);
   }
-  DCHECK_EQ(pc(), optimized_start_pc +
-                      RegExpBytecodeLength(last_node.OptimizedBytecode()));
+  DBG_DCHECK_EQ(pc(), optimized_start_pc +
+                          RegExpBytecodeLength(last_node.OptimizedBytecode()));
 
   // Remove jumps from arguments we ignore.
   if (last_node.HasIgnoredArguments()) {

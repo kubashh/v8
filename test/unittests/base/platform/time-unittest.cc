@@ -398,23 +398,23 @@ TEST(ElapsedTimer, StartStop) {
   EXPECT_GE(delta, wait_time);
   EXPECT_LT(delta, wait_time + noise);
 
-  DCHECK(!timer.IsPaused());
+  DBG_DCHECK(!timer.IsPaused());
   timer.Pause();
-  DCHECK(timer.IsPaused());
+  DBG_DCHECK(timer.IsPaused());
   Sleep(wait_time);
 
   timer.Resume();
   DCHECK(timer.IsStarted());
   delta = timer.Elapsed();
-  DCHECK(!timer.IsPaused());
+  DBG_DCHECK(!timer.IsPaused());
   timer.Pause();
-  DCHECK(timer.IsPaused());
+  DBG_DCHECK(timer.IsPaused());
   EXPECT_GE(delta, wait_time);
   EXPECT_LT(delta, wait_time + noise);
 
   Sleep(wait_time);
   timer.Resume();
-  DCHECK(!timer.IsPaused());
+  DBG_DCHECK(!timer.IsPaused());
   DCHECK(timer.IsStarted());
   delta = timer.Elapsed();
   EXPECT_GE(delta, wait_time);
@@ -457,18 +457,18 @@ TEST(ElapsedTimer, StartStopArgs) {
   now = TimeTicks::Now();
   timer1.Pause(now);
   timer2.Pause(now);
-  DCHECK(timer1.IsPaused());
-  DCHECK(timer2.IsPaused());
+  DBG_DCHECK(timer1.IsPaused());
+  DBG_DCHECK(timer2.IsPaused());
   Sleep(wait_time);
 
   now = TimeTicks::Now();
   timer1.Resume(now);
-  DCHECK(!timer1.IsPaused());
-  DCHECK(timer2.IsPaused());
+  DBG_DCHECK(!timer1.IsPaused());
+  DBG_DCHECK(timer2.IsPaused());
   Sleep(wait_time);
   timer2.Resume(now);
-  DCHECK(!timer1.IsPaused());
-  DCHECK(!timer2.IsPaused());
+  DBG_DCHECK(!timer1.IsPaused());
+  DBG_DCHECK(!timer2.IsPaused());
   DCHECK(timer1.IsStarted());
   DCHECK(timer2.IsStarted());
 

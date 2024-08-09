@@ -314,7 +314,7 @@ void Serializer::PutSmiRoot(FullObjectSlot slot) {
 
 void Serializer::PutBackReference(Tagged<HeapObject> object,
                                   SerializerReference reference) {
-  DCHECK_EQ(object, *back_refs_[reference.back_ref_index()]);
+  DBG_DCHECK_EQ(object, *back_refs_[reference.back_ref_index()]);
   sink_.PutUint30(reference.back_ref_index(), "BackRefIndex");
   hot_objects_.Add(object);
 }
@@ -547,8 +547,8 @@ void Serializer::ObjectSerializer::SerializePrologue(SnapshotSpace space,
     SerializerReference back_reference =
         SerializerReference::BackReference(serializer_->num_back_refs_ - 1);
     serializer_->reference_map()->Add(*object_, back_reference);
-    DCHECK_EQ(*object_,
-              *serializer_->back_refs_[back_reference.back_ref_index()]);
+    DBG_DCHECK_EQ(*object_,
+                  *serializer_->back_refs_[back_reference.back_ref_index()]);
     DCHECK_EQ(back_reference.back_ref_index(), serializer_->reference_map()
                                                    ->LookupReference(object_)
                                                    ->back_ref_index());

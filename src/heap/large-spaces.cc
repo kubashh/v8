@@ -109,8 +109,8 @@ AllocationResult OldLargeObjectSpace::AllocateRaw(LocalHeap* local_heap,
                                                   Executability executable) {
   object_size = ALIGN_TO_ALLOCATION_ALIGNMENT(object_size);
   DCHECK(!v8_flags.enable_third_party_heap);
-  DCHECK_IMPLIES(identity() == SHARED_LO_SPACE,
-                 !allocation_counter_.HasAllocationObservers());
+  DBG_DCHECK_IMPLIES(identity() == SHARED_LO_SPACE,
+                     !allocation_counter_.HasAllocationObservers());
   DCHECK_IMPLIES(identity() == SHARED_LO_SPACE,
                  pending_object() == kNullAddress);
 

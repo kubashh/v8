@@ -123,7 +123,7 @@ void PreparseDataBuilder::DataGatheringScope::Close() {
 }
 
 void PreparseDataBuilder::ByteData::Start(std::vector<uint8_t>* buffer) {
-  DCHECK(!is_finalized_);
+  DBG_DCHECK(!is_finalized_);
   byte_data_ = buffer;
   DCHECK_EQ(byte_data_->size(), 0);
   DCHECK_EQ(index_, 0);
@@ -162,7 +162,7 @@ void PreparseDataBuilder::ByteData::Add(uint8_t byte) {
 
 #ifdef DEBUG
 void PreparseDataBuilder::ByteData::WriteUint32(uint32_t data) {
-  DCHECK(!is_finalized_);
+  DBG_DCHECK(!is_finalized_);
   Add(kUint32Size);
   Add(data & 0xFF);
   Add((data >> 8) & 0xFF);
@@ -200,7 +200,7 @@ void PreparseDataBuilder::ByteData::WriteVarint32(uint32_t data) {
 }
 
 void PreparseDataBuilder::ByteData::WriteUint8(uint8_t data) {
-  DCHECK(!is_finalized_);
+  DBG_DCHECK(!is_finalized_);
 #ifdef DEBUG
   // Save expected item size in debug mode.
   Add(kUint8Size);
@@ -210,7 +210,7 @@ void PreparseDataBuilder::ByteData::WriteUint8(uint8_t data) {
 }
 
 void PreparseDataBuilder::ByteData::WriteQuarter(uint8_t data) {
-  DCHECK(!is_finalized_);
+  DBG_DCHECK(!is_finalized_);
   DCHECK_LE(data, 3);
   if (free_quarters_in_last_byte_ == 0) {
 #ifdef DEBUG
@@ -250,12 +250,12 @@ bool PreparseDataBuilder::HasDataForParent() const {
 }
 
 void PreparseDataBuilder::AddChild(PreparseDataBuilder* child) {
-  DCHECK(!finalized_children_);
+  DBG_DCHECK(!finalized_children_);
   children_buffer_.Add(child);
 }
 
 void PreparseDataBuilder::FinalizeChildren(Zone* zone) {
-  DCHECK(!finalized_children_);
+  DBG_DCHECK(!finalized_children_);
   base::Vector<PreparseDataBuilder*> children =
       CloneVector(zone, children_buffer_.ToConstVector());
   children_buffer_.Rewind();
@@ -325,7 +325,7 @@ void PreparseDataBuilder::SaveScopeAllocationData(DeclarationScope* scope,
   byte_data_.WriteUint32(0);
 #endif
   byte_data_.Reserve(children_.size() * kSkippableFunctionMaxDataSize);
-  DCHECK(finalized_children_);
+  DBG_DCHECK(finalized_children_);
   for (const auto& builder : children_) {
     // Keep track of functions with inner data. {children_} contains also the
     // builders that have no inner functions at all.
@@ -430,7 +430,7 @@ void PreparseDataBuilder::SaveDataForInnerScopes(Scope* scope) {
 
 Handle<PreparseData> PreparseDataBuilder::ByteData::CopyToHeap(
     Isolate* isolate, int children_length) {
-  DCHECK(is_finalized_);
+  DBG_DCHECK(is_finalized_);
   int data_length = zone_byte_data_.length();
   Handle<PreparseData> data =
       isolate->factory()->NewPreparseData(data_length, children_length);
@@ -440,7 +440,7 @@ Handle<PreparseData> PreparseDataBuilder::ByteData::CopyToHeap(
 
 Handle<PreparseData> PreparseDataBuilder::ByteData::CopyToLocalHeap(
     LocalIsolate* isolate, int children_length) {
-  DCHECK(is_finalized_);
+  DBG_DCHECK(is_finalized_);
   int data_length = zone_byte_data_.length();
   Handle<PreparseData> data =
       isolate->factory()->NewPreparseData(data_length, children_length);
@@ -454,7 +454,7 @@ Handle<PreparseData> PreparseDataBuilder::Serialize(Isolate* isolate) {
   Handle<PreparseData> data =
       byte_data_.CopyToHeap(isolate, num_inner_with_data_);
   int i = 0;
-  DCHECK(finalized_children_);
+  DBG_DCHECK(finalized_children_);
   for (const auto& builder : children_) {
     if (!builder->HasData()) continue;
     DirectHandle<PreparseData> child_data = builder->Serialize(isolate);
@@ -470,7 +470,7 @@ Handle<PreparseData> PreparseDataBuilder::Serialize(LocalIsolate* isolate) {
   Handle<PreparseData> data =
       byte_data_.CopyToLocalHeap(isolate, num_inner_with_data_);
   int i = 0;
-  DCHECK(finalized_children_);
+  DBG_DCHECK(finalized_children_);
   for (const auto& builder : children_) {
     if (!builder->HasData()) continue;
     DirectHandle<PreparseData> child_data = builder->Serialize(isolate);
@@ -485,7 +485,7 @@ ZonePreparseData* PreparseDataBuilder::Serialize(Zone* zone) {
   DCHECK(!ThisOrParentBailedOut());
   ZonePreparseData* data = byte_data_.CopyToZone(zone, num_inner_with_data_);
   int i = 0;
-  DCHECK(finalized_children_);
+  DBG_DCHECK(finalized_children_);
   for (const auto& builder : children_) {
     if (!builder->HasData()) continue;
     ZonePreparseData* child = builder->Serialize(zone);
@@ -530,8 +530,8 @@ class OnHeapProducedPreparseData final : public ProducedPreparseData {
 
   Handle<PreparseData> Serialize(LocalIsolate* isolate) final {
     DCHECK(!data_.is_null());
-    DCHECK_IMPLIES(!isolate->is_main_thread(),
-                   isolate->heap()->ContainsLocalHandle(data_.location()));
+    DBG_DCHECK_IMPLIES(!isolate->is_main_thread(),
+                       isolate->heap()->ContainsLocalHandle(data_.location()));
     return data_;
   }
 
@@ -781,7 +781,7 @@ OnHeapConsumedPreparseData::OnHeapConsumedPreparseData(
       data_(data) {
   DCHECK_NOT_NULL(isolate);
   DCHECK(IsPreparseData(*data));
-  DCHECK(VerifyDataStart());
+  DBG_DCHECK(VerifyDataStart());
 }
 
 ZonePreparseData::ZonePreparseData(Zone* zone, base::Vector<uint8_t>* byte_data,
@@ -824,7 +824,7 @@ Handle<PreparseData> ZonePreparseData::Serialize(LocalIsolate* isolate) {
 ZoneConsumedPreparseData::ZoneConsumedPreparseData(Zone* zone,
                                                    ZonePreparseData* data)
     : data_(data), scope_data_wrapper_(data_->byte_data()) {
-  DCHECK(VerifyDataStart());
+  DBG_DCHECK(VerifyDataStart());
 }
 
 ZoneVectorWrapper ZoneConsumedPreparseData::GetScopeData() {

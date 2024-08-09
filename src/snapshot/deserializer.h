@@ -357,9 +357,9 @@ class StringTableInsertionKey final : public StringTableKey {
   void PrepareForInsertion(Isolate* isolate) {
     // When sharing the string table, all string table lookups during snapshot
     // deserialization are hits.
-    DCHECK(isolate->OwnsStringTables() ||
-           deserializing_user_code_ ==
-               DeserializingUserCodeOption::kIsDeserializingUserCode);
+    DBG_DCHECK(isolate->OwnsStringTables() ||
+               deserializing_user_code_ ==
+                   DeserializingUserCodeOption::kIsDeserializingUserCode);
   }
   void PrepareForInsertion(LocalIsolate* isolate) {}
   V8_WARN_UNUSED_RESULT DirectHandle<String> GetHandleForInsertion() {

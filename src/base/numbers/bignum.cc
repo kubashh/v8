@@ -710,7 +710,7 @@ void Bignum::SubtractTimes(const Bignum& other, int factor) {
     borrow = difference >> (kChunkSize - 1);
   }
   Clamp();
-  DCHECK(Bignum::Equal(a, *this));
+  DBG_DCHECK(Bignum::Equal(a, *this));
 }
 
 }  // namespace base

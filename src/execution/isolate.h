@@ -1107,14 +1107,14 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   static const int kBMMaxShift = 250;        // See StringSearchBase.
 
   // Accessors.
-#define GLOBAL_ACCESSOR(type, name, initialvalue)                 \
-  inline type name() const {                                      \
-    DCHECK_EQ(OFFSET_OF(Isolate, name##_), name##_debug_offset_); \
-    return name##_;                                               \
-  }                                                               \
-  inline void set_##name(type value) {                            \
-    DCHECK_EQ(OFFSET_OF(Isolate, name##_), name##_debug_offset_); \
-    name##_ = value;                                              \
+#define GLOBAL_ACCESSOR(type, name, initialvalue)                     \
+  inline type name() const {                                          \
+    DBG_DCHECK_EQ(OFFSET_OF(Isolate, name##_), name##_debug_offset_); \
+    return name##_;                                                   \
+  }                                                                   \
+  inline void set_##name(type value) {                                \
+    DBG_DCHECK_EQ(OFFSET_OF(Isolate, name##_), name##_debug_offset_); \
+    name##_ = value;                                                  \
   }
   ISOLATE_INIT_LIST(GLOBAL_ACCESSOR)
 #undef GLOBAL_ACCESSOR
@@ -1130,10 +1130,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
     return detailed_source_positions_for_profiling_;
   }
 
-#define GLOBAL_ARRAY_ACCESSOR(type, name, length)                \
-  inline type* name() {                                          \
-    DCHECK(OFFSET_OF(Isolate, name##_) == name##_debug_offset_); \
-    return &(name##_)[0];                                        \
+#define GLOBAL_ARRAY_ACCESSOR(type, name, length)                    \
+  inline type* name() {                                              \
+    DBG_DCHECK(OFFSET_OF(Isolate, name##_) == name##_debug_offset_); \
+    return &(name##_)[0];                                            \
   }
   ISOLATE_INIT_ARRAY_LIST(GLOBAL_ARRAY_ACCESSOR)
 #undef GLOBAL_ARRAY_ACCESSOR

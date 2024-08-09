@@ -602,8 +602,6 @@ void Context::set_extension(Tagged<HeapObject> object, WriteBarrierMode mode) {
   set(EXTENSION_INDEX, object, mode);
 }
 
-#ifdef DEBUG
-
 bool Context::IsBootstrappingOrValidParentContext(Tagged<Object> object,
                                                   Tagged<Context> child) {
   // During bootstrapping we allow all objects to pass as
@@ -614,8 +612,6 @@ bool Context::IsBootstrappingOrValidParentContext(Tagged<Object> object,
   return IsNativeContext(context) || context->IsScriptContext() ||
          context->IsModuleContext() || !child->IsModuleContext();
 }
-
-#endif
 
 void NativeContext::ResetErrorsThrown() { set_errors_thrown(Smi::FromInt(0)); }
 

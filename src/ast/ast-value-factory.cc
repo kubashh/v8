@@ -59,7 +59,7 @@ class OneByteStringStream {
 
 template <typename IsolateT>
 void AstRawString::Internalize(IsolateT* isolate) {
-  DCHECK(!has_string_);
+  DBG_DCHECK(!has_string_);
   if (literal_bytes_.empty()) {
     set_string(isolate->factory()->empty_string());
   } else if (is_one_byte()) {

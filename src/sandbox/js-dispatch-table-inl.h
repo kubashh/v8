@@ -112,7 +112,7 @@ uint16_t JSDispatchTable::GetParameterCount(JSDispatchHandle handle) {
 }
 
 void JSDispatchTable::Mark(Space* space, JSDispatchHandle handle) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   // The null entry is immortal and immutable, so no need to mark it as alive.
   if (handle == kNullJSDispatchHandle) return;
 

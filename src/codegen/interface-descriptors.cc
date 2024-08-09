@@ -80,7 +80,7 @@ void CallInterfaceDescriptorData::InitializeTypes(
     for (int i = 0; i < types_length; i++) machine_types_[i] = machine_types[i];
   }
 
-  if (!(flags_ & kNoStackScan)) DCHECK(AllStackParametersAreTagged());
+  if (!(flags_ & kNoStackScan)) DBG_DCHECK(AllStackParametersAreTagged());
 }
 
 #ifdef DEBUG

@@ -1179,9 +1179,7 @@ class LiftoffCompiler {
   void FinishFunction(FullDecoder* decoder) {
     if (DidAssemblerBailout(decoder)) return;
     __ AlignFrameSize();
-#if DEBUG
     int frame_size = __ GetTotalFrameSize();
-#endif
     for (OutOfLineCode& ool : out_of_line_code_) {
       GenerateOutOfLineCode(&ool);
     }
@@ -4005,7 +4003,6 @@ class LiftoffCompiler {
       DebugSideTableBuilder::AssumeSpilling assume_spilling) {
     auto& stack_state = __ cache_state()->stack_state;
 
-#ifdef DEBUG
     // For value types, we use the cached {stack_value_types_for_debugging_}
     // vector (gathered in {NextInstruction}). This still includes call
     // arguments, which Liftoff has already popped at this point. Hence the size
@@ -4015,7 +4012,6 @@ class LiftoffCompiler {
         stack_state.size() - num_exceptions_ - __ num_locals();
     DCHECK_LE(expected_value_stack_size,
               stack_value_types_for_debugging_.size());
-#endif
 
     auto values =
         base::OwnedVector<DebugSideTable::Entry::Value>::NewForOverwrite(
@@ -6181,7 +6177,7 @@ class LiftoffCompiler {
     if (size.is_reg()) pinned.set(size.reg());
     VarState src = __ PopVarState();
     if (src.is_reg()) pinned.set(src.reg());
-    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory.memory));
+    DBG_DCHECK(MatchingMemTypeOnTopOfStack(imm.memory.memory));
     VarState dst = PopIndexToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
@@ -6245,12 +6241,13 @@ class LiftoffCompiler {
     LiftoffRegList pinned;
 
     // The type of {size} is the min of {src} and {dst} (where {kI32 < kI64}).
-    DCHECK(MatchingIndexTypeOnTopOfStack(imm.memory_dst.memory->is_memory64 &&
-                                         imm.memory_src.memory->is_memory64));
+    DBG_DCHECK(
+        MatchingIndexTypeOnTopOfStack(imm.memory_dst.memory->is_memory64 &&
+                                      imm.memory_src.memory->is_memory64));
     VarState size = PopIndexToVarState(&mem_offsets_high_word, &pinned);
-    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_src.memory));
+    DBG_DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_src.memory));
     VarState src = PopIndexToVarState(&mem_offsets_high_word, &pinned);
-    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
+    DBG_DCHECK(MatchingMemTypeOnTopOfStack(imm.memory_dst.memory));
     VarState dst = PopIndexToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
@@ -6290,11 +6287,11 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     Register mem_offsets_high_word = no_reg;
     LiftoffRegList pinned;
-    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
+    DBG_DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
     VarState size = PopIndexToVarState(&mem_offsets_high_word, &pinned);
     VarState value = __ PopVarState();
     if (value.is_reg()) pinned.set(value.reg());
-    DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
+    DBG_DCHECK(MatchingMemTypeOnTopOfStack(imm.memory));
     VarState dst = PopIndexToVarState(&mem_offsets_high_word, &pinned);
 
     Register instance_data = __ cache_state() -> cached_instance_data;
@@ -7527,7 +7524,7 @@ class LiftoffCompiler {
 
     VarState& size_var = __ cache_state()->stack_state.end()[-1];
 
-    DCHECK(MatchingMemType(imm.memory, 1));
+    DBG_DCHECK(MatchingMemType(imm.memory, 1));
     VarState address = IndexToVarStateSaturating(1, &pinned);
 
     CallBuiltin(
@@ -7582,7 +7579,7 @@ class LiftoffCompiler {
     VarState& size_var = __ cache_state()->stack_state.end()[-1];
 
     LiftoffRegList pinned;
-    DCHECK(MatchingMemType(imm.memory, 1));
+    DBG_DCHECK(MatchingMemType(imm.memory, 1));
     VarState address = IndexToVarStateSaturating(1, &pinned);
 
     CallBuiltin(Builtin::kWasmStringNewWtf16,
@@ -7686,7 +7683,7 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
-    DCHECK(MatchingMemType(imm.memory, 0));
+    DBG_DCHECK(MatchingMemType(imm.memory, 0));
     VarState offset_var = IndexToVarStateSaturating(0, &pinned);
 
     LiftoffRegister string_reg = pinned.set(
@@ -7753,7 +7750,7 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
-    DCHECK(MatchingMemType(imm.memory, 0));
+    DBG_DCHECK(MatchingMemType(imm.memory, 0));
     VarState offset_var = IndexToVarStateSaturating(0, &pinned);
 
     LiftoffRegister string_reg = pinned.set(
@@ -7975,7 +7972,7 @@ class LiftoffCompiler {
     VarState& bytes_var = __ cache_state()->stack_state.end()[-1];
     VarState& pos_var = __ cache_state()->stack_state.end()[-2];
 
-    DCHECK(MatchingMemType(imm.memory, 2));
+    DBG_DCHECK(MatchingMemType(imm.memory, 2));
     VarState addr_var = IndexToVarStateSaturating(2, &pinned);
 
     LiftoffRegister view_reg = pinned.set(
@@ -8086,7 +8083,7 @@ class LiftoffCompiler {
     VarState& codeunits_var = __ cache_state()->stack_state.end()[-1];
     VarState& pos_var = __ cache_state()->stack_state.end()[-2];
 
-    DCHECK(MatchingMemType(imm.memory, 2));
+    DBG_DCHECK(MatchingMemType(imm.memory, 2));
     VarState offset_var = IndexToVarStateSaturating(2, &pinned);
 
     LiftoffRegister view_reg = pinned.set(

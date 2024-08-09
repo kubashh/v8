@@ -125,7 +125,7 @@ void CppHeapPointerTable::Set(CppHeapPointerHandle handle, Address value,
 
 CppHeapPointerHandle CppHeapPointerTable::AllocateAndInitializeEntry(
     Space* space, Address initial_value, CppHeapPointerTag tag) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   uint32_t index = AllocateEntry(space);
   at(index).MakePointerEntry(initial_value, tag);
 
@@ -136,7 +136,7 @@ CppHeapPointerHandle CppHeapPointerTable::AllocateAndInitializeEntry(
 
 void CppHeapPointerTable::Mark(Space* space, CppHeapPointerHandle handle,
                                Address handle_location) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   // The handle_location must always contain the given handle. Except if the
   // slot is lazily-initialized. In that case, the handle may transition from
@@ -188,7 +188,7 @@ CppHeapPointerHandle CppHeapPointerTable::IndexToHandle(uint32_t index) {
 
 bool CppHeapPointerTable::Contains(Space* space,
                                    CppHeapPointerHandle handle) const {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   return space->Contains(HandleToIndex(handle));
 }
 

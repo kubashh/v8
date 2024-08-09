@@ -527,7 +527,7 @@ class ObjectDescriptor {
             next_enumeration_index_);
       }
     } else {
-      DCHECK(descriptor_array_template_->IsSortedNoDuplicates());
+      DBG_DCHECK(descriptor_array_template_->IsSortedNoDuplicates());
     }
   }
 

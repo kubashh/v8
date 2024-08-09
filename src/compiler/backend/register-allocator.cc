@@ -3833,7 +3833,7 @@ void LinearScanAllocator::AddToInactive(LiveRange* range) {
 void LinearScanAllocator::AddToUnhandled(LiveRange* range) {
   if (range == nullptr || range->IsEmpty()) return;
   DCHECK(!range->HasRegisterAssigned() && !range->spilled());
-  DCHECK(allocation_finger_ <= range->Start());
+  DBG_DCHECK(allocation_finger_ <= range->Start());
 
   TRACE("Add live range %d:%d to unhandled\n", range->TopLevel()->vreg(),
         range->relative_id());

@@ -1010,7 +1010,7 @@ bool FastInitializeDerivedMap(Isolate* isolate, Handle<JSFunction> new_target,
     return true;
   }
   InstanceType instance_type = constructor_initial_map->instance_type();
-  DCHECK(CanSubclassHaveInobjectProperties(instance_type));
+  DBG_DCHECK(CanSubclassHaveInobjectProperties(instance_type));
   // Create a new map with the size and number of in-object properties
   // suggested by |function|.
 

@@ -369,9 +369,9 @@ void MinorMarkSweepCollector::StartMarking(bool force_use_background_threads) {
   DCHECK_NULL(main_marking_visitor_);
   DCHECK_NULL(pretenuring_feedback_);
   if (v8_flags.sticky_mark_bits) {
-    DCHECK(ExternalPointerRememberedSetsEmpty(heap_->sticky_space()));
+    DBG_DCHECK(ExternalPointerRememberedSetsEmpty(heap_->sticky_space()));
   } else {
-    DCHECK(ExternalPointerRememberedSetsEmpty(
+    DBG_DCHECK(ExternalPointerRememberedSetsEmpty(
         heap_->paged_new_space()->paged_space()));
   }
   pretenuring_feedback_ =
@@ -421,7 +421,7 @@ void MinorMarkSweepCollector::Finish() {
 }
 
 void MinorMarkSweepCollector::CollectGarbage() {
-  DCHECK(!heap_->mark_compact_collector()->in_use());
+  DBG_DCHECK(!heap_->mark_compact_collector()->in_use());
   DCHECK(heap_->use_new_space());
   DCHECK(!heap_->array_buffer_sweeper()->sweeping_in_progress());
   DCHECK(!sweeper()->AreMinorSweeperTasksRunning());

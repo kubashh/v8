@@ -369,7 +369,6 @@ inline void MaglevAssembler::LoadHeapNumberOrOddballValue(DoubleRegister result,
 
 namespace detail {
 
-#ifdef DEBUG
 inline bool ClobberedBy(RegList written_registers, Register reg) {
   return written_registers.has(reg);
 }
@@ -499,13 +498,6 @@ void CheckArgs(MaglevAssembler* masm, const std::tuple<Args...>& args) {
   }
 }
 
-#else  // DEBUG
-
-template <typename Descriptor, typename... Args>
-void CheckArgs(Args&&... args) {}
-
-#endif  // DEBUG
-
 template <typename Descriptor, typename... Args>
 void PushArgumentsForBuiltin(MaglevAssembler* masm, std::tuple<Args...> args) {
   std::apply(
@@ -589,10 +581,8 @@ void MoveArgumentsForBuiltin(MaglevAssembler* masm, Args&&... args) {
 // Then, set register arguments.
 // TODO(leszeks): Use the parallel move helper to do register moves, instead
 // of detecting clobbering.
-#ifdef DEBUG
   RegList written_registers = {};
   DoubleRegList written_double_registers = {};
-#endif  // DEBUG
 
   base::tuple_for_each_with_index(register_args, [&](auto&& arg, auto index) {
     using Arg = decltype(arg);
@@ -612,9 +602,7 @@ void MoveArgumentsForBuiltin(MaglevAssembler* masm, Args&&... args) {
       } else {
         masm->Move(target, std::forward<Arg>(arg));
       }
-#ifdef DEBUG
       written_double_registers.set(target);
-#endif  // DEBUG
     } else {
       Register target = Descriptor::GetRegisterParameter(index);
       if constexpr (std::is_same_v<Input, std::decay_t<Arg>>) {
@@ -623,9 +611,7 @@ void MoveArgumentsForBuiltin(MaglevAssembler* masm, Args&&... args) {
       } else {
         masm->Move(target, std::forward<Arg>(arg));
       }
-#ifdef DEBUG
       written_registers.set(target);
-#endif  // DEBUG
     }
 
     // TODO(leszeks): Support iterator range for register args.
@@ -657,7 +643,7 @@ void MoveArgumentsForBuiltin(MaglevAssembler* masm, Args&&... args) {
 inline void MaglevAssembler::CallBuiltin(Builtin builtin) {
   // Special case allowing calls to DoubleToI, which takes care to preserve all
   // registers and therefore doesn't require special spill handling.
-  DCHECK(allow_call() || builtin == Builtin::kDoubleToI);
+  DBG_DCHECK(allow_call() || builtin == Builtin::kDoubleToI);
 
   // Temporaries have to be reset before calling CallBuiltin, in case it uses
   // temporaries that alias register parameters.
@@ -685,7 +671,7 @@ inline void MaglevAssembler::CallBuiltin(Args&&... args) {
 }
 
 inline void MaglevAssembler::CallRuntime(Runtime::FunctionId fid) {
-  DCHECK(allow_call());
+  DBG_DCHECK(allow_call());
   // Temporaries have to be reset before calling CallRuntime, in case it uses
   // temporaries that alias register parameters.
   TemporaryRegisterScope reset_temps(this);
@@ -695,7 +681,7 @@ inline void MaglevAssembler::CallRuntime(Runtime::FunctionId fid) {
 
 inline void MaglevAssembler::CallRuntime(Runtime::FunctionId fid,
                                          int num_args) {
-  DCHECK(allow_call());
+  DBG_DCHECK(allow_call());
   // Temporaries have to be reset before calling CallRuntime, in case it uses
   // temporaries that alias register parameters.
   TemporaryRegisterScope reset_temps(this);
