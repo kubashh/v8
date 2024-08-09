@@ -2329,7 +2329,6 @@ Handle<WasmContinuationObject> WasmContinuationObject::New(
   auto parent = ReadOnlyRoots(isolate).undefined_value();
   return New(isolate, stack, state, handle(parent, isolate), allocation_type);
 }
-#ifdef DEBUG
 
 namespace {
 
@@ -2343,8 +2342,6 @@ size_t ComputeEncodedElementSize(wasm::ValueType type) {
 }
 
 }  // namespace
-
-#endif  // DEBUG
 
 // static
 uint32_t WasmExceptionPackage::GetEncodedSize(const wasm::WasmTag* tag) {

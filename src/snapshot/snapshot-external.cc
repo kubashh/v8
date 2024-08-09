@@ -30,7 +30,7 @@ void SetSnapshotFromFile(StartupData* snapshot_blob) {
   DCHECK(snapshot_blob->data);
   DCHECK_GT(snapshot_blob->raw_size, 0);
   DCHECK(!external_startup_blob.data);
-  DCHECK(Snapshot::SnapshotIsValid(snapshot_blob));
+  DBG_DCHECK(Snapshot::SnapshotIsValid(snapshot_blob));
   external_startup_blob = *snapshot_blob;
 #ifdef V8_TARGET_OS_ANDROID
   external_startup_checksum_verified = false;

@@ -128,7 +128,7 @@ void CodePointerTable::SetCodeObject(CodePointerHandle handle, Address value) {
 
 CodePointerHandle CodePointerTable::AllocateAndInitializeEntry(
     Space* space, Address code, Address entrypoint, CodeEntrypointTag tag) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   uint32_t index = AllocateEntry(space);
   CFIMetadataWriteScope write_scope("CodePointerTable write");
   at(index).MakeCodePointerEntry(code, entrypoint, tag,
@@ -137,7 +137,7 @@ CodePointerHandle CodePointerTable::AllocateAndInitializeEntry(
 }
 
 void CodePointerTable::Mark(Space* space, CodePointerHandle handle) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   // The null entry is immortal and immutable, so no need to mark it as alive.
   if (handle == kNullCodePointerHandle) return;
 

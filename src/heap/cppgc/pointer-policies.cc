@@ -32,7 +32,7 @@ bool IsOnStack(const void* address) {
 void SameThreadEnabledCheckingPolicyBase::CheckPointerImpl(
     const void* ptr, bool points_to_payload, bool check_off_heap_assignments) {
   // `ptr` must not reside on stack.
-  DCHECK(!IsOnStack(ptr));
+  DBG_DCHECK(!IsOnStack(ptr));
 #if defined(CPPGC_CAGED_HEAP)
   // `ptr` must reside in the cage.
   DCHECK(CagedHeapBase::IsWithinCage(ptr));

@@ -120,11 +120,9 @@ class V8_EXPORT_PRIVATE HandlerTable {
   // Number of entries in the loaded handler table.
   const int number_of_entries_;
 
-#ifdef DEBUG
   // The encoding mode of the table. Mostly useful for debugging to check that
   // used accessors and constructors fit together.
   const EncodingMode mode_;
-#endif
 
   // Direct pointer into the encoded data. This pointer potentially points into
   // objects on the GC heap (either {TrustedByteArray} or {InstructionStream})

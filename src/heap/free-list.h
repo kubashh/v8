@@ -239,7 +239,7 @@ class FreeList {
 #endif
 
   void VerifyAvailable() {
-    DCHECK(IsVeryLong() || available_ == SumFreeLists());
+    DBG_DCHECK(IsVeryLong() || available_ == SumFreeLists());
   }
 
   // Tries to retrieve a node from the first category in a given |type|.

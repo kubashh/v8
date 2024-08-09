@@ -316,7 +316,6 @@ class V8_EXPORT_PRIVATE GCTracer {
   void NotifyYoungCppGCRunning();
   void NotifyYoungCppGCCompleted();
 
-#ifdef DEBUG
   bool IsInObservablePause() const;
   bool IsInAtomicPause() const;
 
@@ -326,7 +325,6 @@ class V8_EXPORT_PRIVATE GCTracer {
   // Checks if the current event corresponds to a full GC cycle whose sweeping
   // has not finalized yet.
   bool IsSweepingInProgress() const;
-#endif
 
   // Sample and accumulate bytes allocated since the last GC.
   void SampleAllocation(base::TimeTicks current, size_t new_space_counter_bytes,

@@ -207,6 +207,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
     allow_macro_instructions_ = value;
   }
   bool allow_macro_instructions() const { return allow_macro_instructions_; }
+#else
+  bool allow_macro_instructions() const { return true; }
 #endif
 
   // We should not use near calls or jumps for calls to external references,
@@ -564,11 +566,11 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void Cbz(const Register& rt, Label* label);
 
   void Pacibsp() {
-    DCHECK(allow_macro_instructions_);
+    DCHECK(allow_macro_instructions());
     pacibsp();
   }
   void Autibsp() {
-    DCHECK(allow_macro_instructions_);
+    DCHECK(allow_macro_instructions());
     autibsp();
   }
 
@@ -591,13 +593,13 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   //     __ Mov(x16, modifier);
   //     __ Pacib1716();
   void Pacib1716() {
-    DCHECK(allow_macro_instructions_);
+    DCHECK(allow_macro_instructions());
     DCHECK(!TmpList()->IncludesAliasOf(x16));
     DCHECK(!TmpList()->IncludesAliasOf(x17));
     pacib1716();
   }
   void Autib1716() {
-    DCHECK(allow_macro_instructions_);
+    DCHECK(allow_macro_instructions());
     DCHECK(!TmpList()->IncludesAliasOf(x16));
     DCHECK(!TmpList()->IncludesAliasOf(x17));
     autib1716();

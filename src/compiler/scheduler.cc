@@ -1457,12 +1457,10 @@ class ScheduleEarlyNodeVisitor {
     }
   }
 
-#if DEBUG
   bool InsideSameDominatorChain(BasicBlock* b1, BasicBlock* b2) {
     BasicBlock* dominator = BasicBlock::GetCommonDominator(b1, b2);
     return dominator == b1 || dominator == b2;
   }
-#endif
 
   Scheduler* scheduler_;
   Schedule* schedule_;

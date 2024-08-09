@@ -607,7 +607,7 @@ void WasmModuleBuilder::SetIndirectFunction(
 uint32_t WasmModuleBuilder::AddImport(base::Vector<const char> name,
                                       const FunctionSig* sig,
                                       base::Vector<const char> module) {
-  DCHECK(adding_imports_allowed_);
+  DBG_DCHECK(adding_imports_allowed_);
   function_imports_.push_back(
       {.module = module, .name = name, .sig_index = AddSignature(sig, true)});
   return static_cast<uint32_t>(function_imports_.size() - 1);

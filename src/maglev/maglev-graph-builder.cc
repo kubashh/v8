@@ -1221,7 +1221,6 @@ MaglevGraphBuilder::GetResultLocationAndSize() const {
   UNREACHABLE();
 }
 
-#ifdef DEBUG
 bool MaglevGraphBuilder::HasOutputRegister(interpreter::Register reg) const {
   interpreter::Bytecode bytecode = iterator_.current_bytecode();
   if (reg == interpreter::Register::virtual_accumulator()) {
@@ -1240,7 +1239,6 @@ bool MaglevGraphBuilder::HasOutputRegister(interpreter::Register reg) const {
   }
   return false;
 }
-#endif
 
 DeoptFrame* MaglevGraphBuilder::GetParentDeoptFrame() {
   if (parent_ == nullptr) return nullptr;
@@ -12144,7 +12142,7 @@ void MaglevGraphBuilder::BeginLoopEffects(int loop_header) {
 
 void MaglevGraphBuilder::EndLoopEffects(int loop_header) {
   DCHECK_EQ(loop_effects_, &loop_effects_stack_.back());
-  DCHECK_EQ(loop_effects_->loop_header, loop_header);
+  DBG_DCHECK_EQ(loop_effects_->loop_header, loop_header);
   // TODO(olivf): Update merge states dominated by the loop header with
   // information we know to be unaffected by the loop.
   if (loop_effects_stack_.size() > 1) {
@@ -12367,7 +12365,7 @@ bool IsNumberRootConstant(RootIndex root_index) {
 MaglevGraphBuilder::BranchResult MaglevGraphBuilder::BuildBranchIfRootConstant(
     BranchBuilder& builder, ValueNode* node, RootIndex root_index) {
   // We assume that Maglev never emits a comparison to a root number.
-  DCHECK(!IsNumberRootConstant(root_index));
+  DBG_DCHECK(!IsNumberRootConstant(root_index));
 
   // If the node we're checking is in the accumulator, swap it in the branch
   // with the checked value. Cache whether we want to swap, since after we've

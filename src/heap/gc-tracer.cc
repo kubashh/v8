@@ -1879,7 +1879,6 @@ GarbageCollector GCTracer::GetCurrentCollector() const {
   }
 }
 
-#ifdef DEBUG
 bool GCTracer::IsInObservablePause() const {
   return start_of_observable_pause_.has_value();
 }
@@ -1908,7 +1907,6 @@ bool GCTracer::IsSweepingInProgress() const {
           current_.type == Event::Type::INCREMENTAL_MINOR_MARK_SWEEPER) &&
          current_.state == Event::State::SWEEPING;
 }
-#endif
 
 }  // namespace internal
 }  // namespace v8

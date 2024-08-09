@@ -369,7 +369,7 @@ void LazyCompileDispatcher::AbortAll() {
     }
     jobs_to_dispose_.clear();
 
-    DCHECK_EQ(all_jobs_.size(), 0);
+    DBG_DCHECK_EQ(all_jobs_.size(), 0);
     num_jobs_for_background_ = 0;
     VerifyBackgroundTaskCount(lock);
   }

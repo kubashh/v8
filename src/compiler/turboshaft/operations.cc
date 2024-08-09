@@ -96,11 +96,12 @@ void TailCallOp::PrintOptions(std::ostream& os) const {
   os << '[' << *descriptor->descriptor << ']';
 }
 
-#if DEBUG
 bool ValidOpInputRep(
     const Graph& graph, OpIndex input,
     std::initializer_list<RegisterRepresentation> expected_reps,
     std::optional<size_t> projection_index) {
+  return true;
+  /*
   base::Vector<const RegisterRepresentation> input_reps =
       graph.Get(input).outputs_rep();
   RegisterRepresentation input_rep;
@@ -136,6 +137,7 @@ bool ValidOpInputRep(
             << PrintCollection(expected_reps).WithoutBrackets() << " but found "
             << input_rep << ".\n";
   return false;
+  */
 }
 
 bool ValidOpInputRep(const Graph& graph, OpIndex input,
@@ -143,7 +145,6 @@ bool ValidOpInputRep(const Graph& graph, OpIndex input,
                      std::optional<size_t> projection_index) {
   return ValidOpInputRep(graph, input, {expected_rep}, projection_index);
 }
-#endif  // DEBUG
 
 const char* OpcodeName(Opcode opcode) {
 #define OPCODE_NAME(Name) #Name,

@@ -209,7 +209,6 @@ void UpdateInLiveness(BytecodeLivenessState* in_liveness,
       std::make_index_sequence<sizeof...(operand_types)>());
 }
 
-#ifdef DEBUG
 void UpdateInLiveness(Bytecode bytecode, BytecodeLivenessState* in_liveness,
                       const interpreter::BytecodeArrayIterator& iterator) {
   switch (bytecode) {
@@ -221,7 +220,6 @@ void UpdateInLiveness(Bytecode bytecode, BytecodeLivenessState* in_liveness,
 #undef BYTECODE_UPDATE_IN_LIVENESS
   }
 }
-#endif  // DEBUG
 
 template <bool IsFirstUpdate = false>
 void EnsureOutLivenessIsNotAlias(
@@ -497,7 +495,6 @@ class BytecodeAnalysis::BytecodeAnalysisImpl {
     loop_stack_.push({loop_header, loop_info});
   }
 
-#if DEBUG
   bool ResumeJumpTargetsAreValid();
   bool ResumeJumpTargetLeavesResolveSuspendIds(
       int parent_offset,
@@ -505,7 +502,6 @@ class BytecodeAnalysis::BytecodeAnalysisImpl {
       std::map<int, int>* unresolved_suspend_ids);
 
   bool LivenessIsValid();
-#endif
 
   bool analyze_liveness() const { return res_.analyze_liveness_; }
   Zone* zone() const { return zone_; }
@@ -680,7 +676,7 @@ void BytecodeAnalysis::BytecodeAnalysisImpl::Analyze() {
   DCHECK_EQ(loop_stack_.size(), 1u);
   DCHECK_EQ(loop_stack_.top().header_offset, -1);
 
-  DCHECK(ResumeJumpTargetsAreValid());
+  DBG_DCHECK(ResumeJumpTargetsAreValid());
 
   if (!analyze_liveness()) return;
 
@@ -843,7 +839,6 @@ std::ostream& BytecodeAnalysis::BytecodeAnalysisImpl::PrintLivenessTo(
   return os;
 }
 
-#if DEBUG
 bool BytecodeAnalysis::BytecodeAnalysisImpl::ResumeJumpTargetsAreValid() {
   bool valid = true;
 
@@ -1160,7 +1155,6 @@ bool BytecodeAnalysis::BytecodeAnalysisImpl::LivenessIsValid() {
 
   return invalid_offset == -1;
 }
-#endif
 
 BytecodeAnalysis::BytecodeAnalysis(Handle<BytecodeArray> bytecode_array,
                                    Zone* zone, BytecodeOffset osr_bailout_id,

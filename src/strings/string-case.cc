@@ -120,7 +120,7 @@ int FastAsciiConvert(char* dst, const char* src, int length,
     ++dst;
   }
 
-  DCHECK(
+  DBG_DCHECK(
       CheckFastAsciiConvert(saved_dst, saved_src, length, changed, is_lower));
 
   *changed_out = changed;

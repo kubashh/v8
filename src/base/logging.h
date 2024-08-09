@@ -87,6 +87,7 @@ V8_BASE_EXPORT void SetDcheckFunction(void (*dcheck_Function)(const char*, int,
 // Override the default function invoked during V8_Fatal.
 V8_BASE_EXPORT void SetFatalFunction(void (*fatal_Function)(const char*, int,
                                                             const char*));
+extern bool g_dchecks_are_enabled;
 
 enum class OOMType {
   // We ran out of memory in the JavaScript heap.
@@ -178,7 +179,17 @@ enum class OOMType {
     CHECK_WITH_MSG(_cmp, #lhs " " #op " " #rhs);                             \
   } while (false)
 
-#define DCHECK_WITH_MSG(condition, msg) void(0);
+#define DCHECK_OP(name, op, lhs, rhs)                                        \
+  do {                                                                       \
+    if (!std::is_constant_evaluated() &&                                     \
+        !V8_UNLIKELY(v8::base::g_dchecks_are_enabled))                       \
+      break;                                                                 \
+    bool _cmp = ::v8::base::Cmp##name##Impl<                                 \
+        typename ::v8::base::pass_value_or_ref<decltype(lhs)>::type,         \
+        typename ::v8::base::pass_value_or_ref<decltype(rhs)>::type>((lhs),  \
+                                                                     (rhs)); \
+    CHECK_WITH_MSG(_cmp, #lhs " " #op " " #rhs);                             \
+  } while (false)
 
 #endif
 
@@ -484,6 +495,7 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 // The DCHECK macro is equivalent to CHECK except that it only
 // generates code in debug builds.
 #ifdef DEBUG
+
 #define DCHECK_EQ(lhs, rhs) DCHECK_OP(EQ, ==, lhs, rhs)
 #define DCHECK_NE(lhs, rhs) DCHECK_OP(NE, !=, lhs, rhs)
 #define DCHECK_GT(lhs, rhs) DCHECK_OP(GT, >, lhs, rhs)
@@ -496,20 +508,39 @@ DEFINE_CHECK_OP_IMPL(GT, > )
   DCHECK_WITH_MSG(!(lhs) || (rhs), #lhs " implies " #rhs)
 #define DCHECK_BOUNDS(index, limit) \
   DCHECK_LT(v8::base::ToUnsigned(index), v8::base::ToUnsigned(limit))
-#else
-#define DCHECK(condition)      ((void) 0)
-#define DCHECK_WITH_LOC(condition, location) ((void)0)
-#define DCHECK_WITH_MSG_AND_LOC(condition, message, location) ((void)0)
-#define DCHECK_EQ(v1, v2)      ((void) 0)
-#define DCHECK_NE(v1, v2)      ((void) 0)
-#define DCHECK_GT(v1, v2)      ((void) 0)
-#define DCHECK_GE(v1, v2)      ((void) 0)
-#define DCHECK_LT(v1, v2)      ((void) 0)
-#define DCHECK_LE(v1, v2)      ((void) 0)
-#define DCHECK_NULL(val)       ((void) 0)
-#define DCHECK_NOT_NULL(val)   ((void) 0)
-#define DCHECK_IMPLIES(v1, v2) ((void) 0)
-#define DCHECK_BOUNDS(index, limit) ((void)0)
-#endif
+
+#else  // DEBUG
+
+#define DCHECK(condition)               \
+  CHECK(std::is_constant_evaluated() || \
+        !V8_UNLIKELY(v8::base::g_dchecks_are_enabled) || condition)
+#define DCHECK_WITH_LOC(condition, loc) DCHECK(condition)
+#define DCHECK_WITH_MSG(condition, msg) DCHECK(condition)
+#define DCHECK_WITH_MSG_AND_LOC(condition, message, location) DCHECK(condition)
+#define DCHECK_EQ(lhs, rhs) DCHECK_OP(EQ, ==, lhs, rhs)
+#define DCHECK_NE(lhs, rhs) DCHECK_OP(NE, !=, lhs, rhs)
+#define DCHECK_GT(lhs, rhs) DCHECK_OP(GT, >, lhs, rhs)
+#define DCHECK_GE(lhs, rhs) DCHECK_OP(GE, >=, lhs, rhs)
+#define DCHECK_LT(lhs, rhs) DCHECK_OP(LT, <, lhs, rhs)
+#define DCHECK_LE(lhs, rhs) DCHECK_OP(LE, <=, lhs, rhs)
+#define DCHECK_NULL(val) DCHECK((val) == nullptr)
+#define DCHECK_NOT_NULL(val) DCHECK((val) != nullptr)
+#define DCHECK_IMPLIES(lhs, rhs) \
+  DCHECK_WITH_MSG(!(lhs) || (rhs), #lhs " implies " #rhs)
+#define DCHECK_BOUNDS(index, limit) \
+  DCHECK_LT(v8::base::ToUnsigned(index), v8::base::ToUnsigned(limit))
+
+#define DBG_DCHECK(condition) ((void)0)
+#define DBG_DCHECK_EQ(lhs, rhs) ((void)0)
+#define DBG_DCHECK_NE(lhs, rhs) ((void)0)
+#define DBG_DCHECK_GT(lhs, rhs) ((void)0)
+#define DBG_DCHECK_GE(lhs, rhs) ((void)0)
+#define DBG_DCHECK_LT(lhs, rhs) ((void)0)
+#define DBG_DCHECK_LE(lhs, rhs) ((void)0)
+#define DBG_DCHECK_NULL(val) ((void)0)
+#define DBG_DCHECK_NOT_NULL(val) ((void)0)
+#define DBG_DCHECK_IMPLIES(lhs, rhs) ((void)0)
+
+#endif  // DEBUG
 
 #endif  // V8_BASE_LOGGING_H_

@@ -18,12 +18,12 @@ class BaseTimedHistogramScope {
       : histogram_(histogram) {}
 
   void StartInternal() {
-    DCHECK(histogram_->ToggleRunningState(true));
+    DBG_DCHECK(histogram_->ToggleRunningState(true));
     timer_.Start();
   }
 
   base::TimeDelta StopInternal() {
-    DCHECK(histogram_->ToggleRunningState(false));
+    DBG_DCHECK(histogram_->ToggleRunningState(false));
     base::TimeDelta elapsed = timer_.Elapsed();
     histogram_->AddTimedSample(elapsed);
     timer_.Stop();
@@ -130,7 +130,8 @@ class V8_NODISCARD LazyTimedHistogramScope : public BaseTimedHistogramScope {
   }
 
   void set_histogram(TimedHistogram* histogram) {
-    DCHECK_IMPLIES(histogram->Enabled(), histogram->ToggleRunningState(true));
+    DBG_DCHECK_IMPLIES(histogram->Enabled(),
+                       histogram->ToggleRunningState(true));
     histogram_ = histogram;
   }
 

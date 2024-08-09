@@ -335,12 +335,12 @@ CAS_PAIR_MACRO_LIST(DEFINE_FUNCTION)
 #define DEFINE_LOAD_FUNCTION(FN, OP)                              \
   void MacroAssembler::FN(const Register& rs, const Register& rt, \
                           const MemOperand& src) {                \
-    DCHECK(allow_macro_instructions_);                            \
+    DCHECK(allow_macro_instructions());                           \
     OP(rs, rt, src);                                              \
   }
 #define DEFINE_STORE_FUNCTION(FN, OP)                                  \
   void MacroAssembler::FN(const Register& rs, const MemOperand& src) { \
-    DCHECK(allow_macro_instructions_);                                 \
+    DCHECK(allow_macro_instructions());                                \
     OP(rs, src);                                                       \
   }
 
@@ -352,7 +352,7 @@ ATOMIC_MEMORY_SIMPLE_MACRO_LIST(ATOMIC_MEMORY_STORE_MACRO_MODES,
 #define DEFINE_SWP_FUNCTION(FN, OP)                               \
   void MacroAssembler::FN(const Register& rs, const Register& rt, \
                           const MemOperand& src) {                \
-    DCHECK(allow_macro_instructions_);                            \
+    DCHECK(allow_macro_instructions());                           \
     OP(rs, rt, src);                                              \
   }
 

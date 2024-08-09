@@ -141,10 +141,8 @@ class GrowingOpIndexSidetable : public detail::GrowingSidetable<T, OpIndex> {
  public:
   explicit GrowingOpIndexSidetable(Zone* zone, const Graph* graph)
       : Base(zone)
-#ifdef DEBUG
         ,
         graph_(graph)
-#endif
   {
     USE(graph);
   }
@@ -152,21 +150,19 @@ class GrowingOpIndexSidetable : public detail::GrowingSidetable<T, OpIndex> {
   GrowingOpIndexSidetable(size_t size, const T& initial_value, Zone* zone,
                           const Graph* graph)
       : Base(size, initial_value, zone)
-#ifdef DEBUG
         ,
         graph_(graph)
-#endif
   {
     USE(graph);
   }
 
   T& operator[](OpIndex index) {
-    DCHECK(OpIndexBelongsToTableGraph(graph_, index));
+    DBG_DCHECK(OpIndexBelongsToTableGraph(graph_, index));
     return Base::operator[](index);
   }
 
   const T& operator[](OpIndex index) const {
-    DCHECK(OpIndexBelongsToTableGraph(graph_, index));
+    DBG_DCHECK(OpIndexBelongsToTableGraph(graph_, index));
     return Base::operator[](index);
   }
 
@@ -175,9 +171,7 @@ class GrowingOpIndexSidetable : public detail::GrowingSidetable<T, OpIndex> {
   }
 
  public:
-#ifdef DEBUG
   const Graph* graph_;
-#endif
 };
 
 template <class T>
@@ -187,29 +181,25 @@ class FixedOpIndexSidetable : public detail::FixedSidetable<T, OpIndex> {
  public:
   FixedOpIndexSidetable(size_t size, Zone* zone, const Graph* graph)
       : Base(size, zone)
-#ifdef DEBUG
         ,
         graph_(graph)
-#endif
   {
   }
   FixedOpIndexSidetable(size_t size, const T& default_value, Zone* zone,
                         const Graph* graph)
       : Base(size, default_value, zone)
-#ifdef DEBUG
         ,
         graph_(graph)
-#endif
   {
   }
 
   T& operator[](OpIndex index) {
-    DCHECK(OpIndexBelongsToTableGraph(graph_, index));
+    DBG_DCHECK(OpIndexBelongsToTableGraph(graph_, index));
     return Base::operator[](index);
   }
 
   const T& operator[](OpIndex index) const {
-    DCHECK(OpIndexBelongsToTableGraph(graph_, index));
+    DBG_DCHECK(OpIndexBelongsToTableGraph(graph_, index));
     return Base::operator[](index);
   }
 
@@ -218,9 +208,7 @@ class FixedOpIndexSidetable : public detail::FixedSidetable<T, OpIndex> {
   }
 
  public:
-#ifdef DEBUG
   const Graph* graph_;
-#endif
 };
 
 }  // namespace v8::internal::compiler::turboshaft

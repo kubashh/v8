@@ -6,10 +6,8 @@
 
 #include "src/codegen/reloc-info.h"
 
-#ifdef DEBUG
 #include "src/objects/instruction-stream-inl.h"
 #include "src/objects/smi.h"
-#endif  // DEBUG
 
 namespace v8 {
 namespace internal {

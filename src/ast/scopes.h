@@ -228,7 +228,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   VariableProxy* NewUnresolved(AstNodeFactory* factory,
                                const AstRawString* name, int start_pos,
                                VariableKind kind = NORMAL_VARIABLE) {
-    DCHECK_IMPLIES(already_resolved_, reparsing_for_class_initializer_);
+    DBG_DCHECK_IMPLIES(already_resolved_, reparsing_for_class_initializer_);
     DCHECK_EQ(factory->zone(), zone());
     VariableProxy* proxy = factory->NewVariableProxy(name, kind, start_pos);
     AddUnresolved(proxy);
@@ -345,7 +345,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   }
 
   void ForceContextAllocationForParameters() {
-    DCHECK(!already_resolved_);
+    DBG_DCHECK(!already_resolved_);
     force_context_allocation_for_parameters_ = true;
   }
   bool has_forced_context_allocation_for_parameters() const {
@@ -947,12 +947,10 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 
   void DeserializeReceiver(AstValueFactory* ast_value_factory);
 
-#ifdef DEBUG
   void set_is_being_lazily_parsed(bool is_being_lazily_parsed) {
     is_being_lazily_parsed_ = is_being_lazily_parsed;
   }
   bool is_being_lazily_parsed() const { return is_being_lazily_parsed_; }
-#endif
 
   void set_zone(Zone* zone) {
 #ifdef DEBUG
@@ -1279,9 +1277,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   bool should_eager_compile_ : 1;
   // Set to true after we have finished lazy parsing the scope.
   bool was_lazily_parsed_ : 1;
-#if DEBUG
   bool is_being_lazily_parsed_ : 1;
-#endif
   bool is_skipped_function_ : 1;
   bool has_inferred_function_name_ : 1;
   bool has_checked_syntax_ : 1;

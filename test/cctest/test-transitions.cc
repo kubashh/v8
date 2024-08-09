@@ -77,7 +77,7 @@ TEST(TransitionArray_SimpleFieldTransitions) {
             (key == *name2 && target == *map2));
     }
 
-    DCHECK(transitions.IsSortedNoDuplicates());
+    DBG_DCHECK(transitions.IsSortedNoDuplicates());
   }
 }
 
@@ -140,7 +140,7 @@ TEST(TransitionArray_FullFieldTransitions) {
             (key == *name2 && target == *map2));
     }
 
-    DCHECK(transitions.IsSortedNoDuplicates());
+    DBG_DCHECK(transitions.IsSortedNoDuplicates());
   }
 }
 
@@ -190,7 +190,7 @@ TEST(TransitionArray_DifferentFieldNames) {
     }
   }
 
-  DCHECK(transitions.IsSortedNoDuplicates());
+  DBG_DCHECK(transitions.IsSortedNoDuplicates());
 }
 
 
@@ -233,7 +233,7 @@ TEST(TransitionArray_SameFieldNamesDifferentAttributesSimple) {
     CHECK_EQ(*name, transitions.GetKey(i));
   }
 
-  DCHECK(transitions.IsSortedNoDuplicates());
+  DBG_DCHECK(transitions.IsSortedNoDuplicates());
 }
 
 
@@ -313,7 +313,7 @@ TEST(TransitionArray_SameFieldNamesDifferentAttributes) {
     }
   }
 
-  DCHECK(transitions.IsSortedNoDuplicates());
+  DBG_DCHECK(transitions.IsSortedNoDuplicates());
 }
 
 }  // namespace internal

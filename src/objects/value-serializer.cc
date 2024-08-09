@@ -1366,10 +1366,10 @@ Maybe<T> ValueDeserializer::ReadVarint() {
   auto expected_position = position_;
   position_ = previous_position;
 #endif  // DEBUG
-#define EXIT_DCHECK()                      \
-  DCHECK_LE(position_, end_);              \
-  DCHECK_EQ(position_, expected_position); \
-  DCHECK_EQ(value, expected_value)
+#define EXIT_DCHECK()                          \
+  DBG_DCHECK_LE(position_, end_);              \
+  DBG_DCHECK_EQ(position_, expected_position); \
+  DBG_DCHECK_EQ(value, expected_value)
 
   T value = 0;
 #define ITERATION_SHIFTED(shift)                     \

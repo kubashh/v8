@@ -16,7 +16,7 @@ namespace internal {
 // TODO(v8:14585): Reduce duplication with EPT::SweepAndCompact.
 uint32_t ExternalBufferTable::SweepAndCompact(Space* space,
                                               Counters* counters) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   DCHECK(!space->is_internal_read_only_space());
 
   // Lock the space. Technically this is not necessary since no other thread can

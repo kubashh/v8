@@ -1054,9 +1054,7 @@ void MaglevPhiRepresentationSelector::RegisterNewNode(ValueNode* node) {
   if (builder_->has_graph_labeller()) {
     builder_->graph_labeller()->RegisterNode(node);
   }
-#ifdef DEBUG
   new_nodes_.insert(node);
-#endif
 }
 
 void MaglevPhiRepresentationSelector::MergeNewNodesInBlock(BasicBlock* block) {

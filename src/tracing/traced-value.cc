@@ -17,8 +17,9 @@ namespace tracing {
 
 namespace {
 
-#define DCHECK_CURRENT_CONTAINER_IS(x) DCHECK_EQ(x, nesting_stack_.back())
-#define DCHECK_CONTAINER_STACK_DEPTH_EQ(x) DCHECK_EQ(x, nesting_stack_.size())
+#define DCHECK_CURRENT_CONTAINER_IS(x) DBG_DCHECK_EQ(x, nesting_stack_.back())
+#define DCHECK_CONTAINER_STACK_DEPTH_EQ(x) \
+  DBG_DCHECK_EQ(x, nesting_stack_.size())
 #ifdef DEBUG
 const bool kStackTypeDict = false;
 const bool kStackTypeArray = true;

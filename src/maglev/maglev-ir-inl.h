@@ -236,7 +236,7 @@ inline RegList GetGeneralRegistersUsedAsInputs(
 
 // Helper macro for checking that a reglist is empty which prints the contents
 // when non-empty.
-#define DCHECK_REGLIST_EMPTY(...) DCHECK_EQ((__VA_ARGS__), RegList{})
+#define DCHECK_REGLIST_EMPTY(...) DBG_DCHECK_EQ((__VA_ARGS__), RegList{})
 
 // ---
 // Value location constraint setting helpers.

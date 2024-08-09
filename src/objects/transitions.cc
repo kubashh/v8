@@ -818,7 +818,7 @@ void TransitionArray::Sort() {
     SetKey(j + 1, key);
     SetRawTarget(j + 1, target);
   }
-  DCHECK(IsSortedNoDuplicates());
+  SLOW_DCHECK(IsSortedNoDuplicates());
 }
 
 bool TransitionsAccessor::HasIntegrityLevelTransitionTo(

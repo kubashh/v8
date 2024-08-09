@@ -691,11 +691,9 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
 #endif
 
  private:
-#ifdef DEBUG
   // Bootstrapping-aware type checks.
   static bool IsBootstrappingOrValidParentContext(Tagged<Object> object,
                                                   Tagged<Context> kid);
-#endif
 
   friend class Factory;
   inline void set_previous(Tagged<Context> context,

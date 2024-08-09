@@ -339,10 +339,10 @@ OneOrTwoByteAnalysis::State StringBuilderOptimizer::GetOneOrTwoByte(
 
 bool StringBuilderOptimizer::IsStringBuilderEnd(Node* node) {
   Status status = GetStatus(node);
-  DCHECK_IMPLIES(status.state == State::kEndStringBuilder ||
-                     status.state == State::kEndStringBuilderLoopPhi,
-                 status.id != kInvalidId &&
-                     StringBuilderIsValid(string_builders_[status.id]));
+  DBG_DCHECK_IMPLIES(status.state == State::kEndStringBuilder ||
+                         status.state == State::kEndStringBuilderLoopPhi,
+                     status.id != kInvalidId &&
+                         StringBuilderIsValid(string_builders_[status.id]));
   return status.state == State::kEndStringBuilder ||
          status.state == State::kEndStringBuilderLoopPhi;
 }
@@ -353,20 +353,20 @@ bool StringBuilderOptimizer::IsNonLoopPhiStringBuilderEnd(Node* node) {
 
 bool StringBuilderOptimizer::IsStringBuilderConcatInput(Node* node) {
   Status status = GetStatus(node);
-  DCHECK_IMPLIES(status.state == State::kConfirmedInStringBuilder,
-                 status.id != kInvalidId &&
-                     StringBuilderIsValid(string_builders_[status.id]));
+  DBG_DCHECK_IMPLIES(status.state == State::kConfirmedInStringBuilder,
+                     status.id != kInvalidId &&
+                         StringBuilderIsValid(string_builders_[status.id]));
   return status.state == State::kConfirmedInStringBuilder;
 }
 
 bool StringBuilderOptimizer::ConcatIsInStringBuilder(Node* node) {
   DCHECK(IsConcat(node));
   Status status = GetStatus(node);
-  DCHECK_IMPLIES(status.state == State::kConfirmedInStringBuilder ||
-                     status.state == State::kBeginStringBuilder ||
-                     status.state == State::kEndStringBuilder,
-                 status.id != kInvalidId &&
-                     StringBuilderIsValid(string_builders_[status.id]));
+  DBG_DCHECK_IMPLIES(status.state == State::kConfirmedInStringBuilder ||
+                         status.state == State::kBeginStringBuilder ||
+                         status.state == State::kEndStringBuilder,
+                     status.id != kInvalidId &&
+                         StringBuilderIsValid(string_builders_[status.id]));
   return status.state == State::kConfirmedInStringBuilder ||
          status.state == State::kBeginStringBuilder ||
          status.state == State::kEndStringBuilder;

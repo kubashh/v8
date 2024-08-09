@@ -123,7 +123,7 @@ void TrustedPointerTable::Set(TrustedPointerHandle handle, Address pointer,
 
 TrustedPointerHandle TrustedPointerTable::AllocateAndInitializeEntry(
     Space* space, Address pointer, IndirectPointerTag tag) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   Validate(pointer, tag);
   uint32_t index = AllocateEntry(space);
   at(index).MakeTrustedPointerEntry(pointer, tag, space->allocate_black());
@@ -131,7 +131,7 @@ TrustedPointerHandle TrustedPointerTable::AllocateAndInitializeEntry(
 }
 
 void TrustedPointerTable::Mark(Space* space, TrustedPointerHandle handle) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   // The null entry is immortal and immutable, so no need to mark it as alive.
   if (handle == kNullTrustedPointerHandle) return;
 

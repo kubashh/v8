@@ -132,46 +132,24 @@ PER_ISOLATE_CHECK_TYPE(PER_ISOLATE_ASSERT_ENABLE_SCOPE, true)
 PER_ISOLATE_DCHECK_TYPE(PER_ISOLATE_ASSERT_DISABLE_SCOPE, false)
 PER_ISOLATE_CHECK_TYPE(PER_ISOLATE_ASSERT_DISABLE_SCOPE, false)
 
-#ifdef DEBUG
 #define PER_ISOLATE_DCHECK_ENABLE_SCOPE(EnableType, DisableType, field, _)    \
   class EnableType##DebugOnly : public EnableType {                           \
    public:                                                                    \
     explicit EnableType##DebugOnly(Isolate* isolate) : EnableType(isolate) {} \
   };
-#else
-#define PER_ISOLATE_DCHECK_ENABLE_SCOPE(EnableType, DisableType, field, _) \
-  class V8_NODISCARD EnableType##DebugOnly {                               \
-   public:                                                                 \
-    explicit EnableType##DebugOnly(Isolate* isolate) {}                    \
-  };
-#endif
 
-#ifdef DEBUG
 #define PER_ISOLATE_DCHECK_DISABLE_SCOPE(EnableType, DisableType, field, _) \
   class DisableType##DebugOnly : public DisableType {                       \
    public:                                                                  \
     explicit DisableType##DebugOnly(Isolate* isolate)                       \
         : DisableType(isolate) {}                                           \
   };
-#else
-#define PER_ISOLATE_DCHECK_DISABLE_SCOPE(EnableType, DisableType, field, _) \
-  class V8_NODISCARD DisableType##DebugOnly {                               \
-   public:                                                                  \
-    explicit DisableType##DebugOnly(Isolate* isolate) {}                    \
-  };
-#endif
 
 PER_ISOLATE_DCHECK_TYPE(PER_ISOLATE_DCHECK_ENABLE_SCOPE, true)
 PER_ISOLATE_DCHECK_TYPE(PER_ISOLATE_DCHECK_DISABLE_SCOPE, false)
 
-#ifdef DEBUG
 template <bool kAllow, PerThreadAssertType... kTypes>
 using PerThreadAssertScopeDebugOnly = PerThreadAssertScope<kAllow, kTypes...>;
-#else
-template <bool kAllow, PerThreadAssertType... kTypes>
-using PerThreadAssertScopeDebugOnly =
-    PerThreadAssertScopeEmpty<kAllow, kTypes...>;
-#endif
 
 // Per-thread assert scopes.
 

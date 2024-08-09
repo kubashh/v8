@@ -1529,7 +1529,7 @@ Handle<Map> Map::CopyReplaceDescriptors(
     DirectHandle<DescriptorArray> descriptors, TransitionFlag flag,
     MaybeHandle<Name> maybe_name, const char* reason,
     TransitionKindFlag transition_kind) {
-  DCHECK(descriptors->IsSortedNoDuplicates());
+  DBG_DCHECK(descriptors->IsSortedNoDuplicates());
 
   Handle<Map> result = CopyDropDescriptors(isolate, map);
   bool is_connected = false;
@@ -1580,7 +1580,7 @@ Handle<Map> Map::CopyReplaceDescriptors(
 Handle<Map> Map::AddMissingTransitions(
     Isolate* isolate, Handle<Map> split_map,
     DirectHandle<DescriptorArray> descriptors) {
-  DCHECK(descriptors->IsSortedNoDuplicates());
+  DBG_DCHECK(descriptors->IsSortedNoDuplicates());
   int split_nof = split_map->NumberOfOwnDescriptors();
   int nof_descriptors = descriptors->number_of_descriptors();
   DCHECK_LT(split_nof, nof_descriptors);
@@ -1627,7 +1627,7 @@ void Map::InstallDescriptors(Isolate* isolate, Handle<Map> parent,
                              Handle<Map> child, InternalIndex new_descriptor,
                              DirectHandle<DescriptorArray> descriptors,
                              bool force_connect) {
-  DCHECK(descriptors->IsSortedNoDuplicates());
+  DBG_DCHECK(descriptors->IsSortedNoDuplicates());
 
   child->SetInstanceDescriptors(isolate, *descriptors,
                                 new_descriptor.as_int() + 1);

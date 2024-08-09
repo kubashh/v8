@@ -491,7 +491,6 @@ void LiftoffAssembler::PrepareForBranch(uint32_t arity, LiftoffRegList pinned) {
   }
 }
 
-#ifdef DEBUG
 namespace {
 bool SlotInterference(const VarState& a, const VarState& b) {
   return a.is_stack() && b.is_stack() &&
@@ -509,7 +508,6 @@ bool SlotInterference(const VarState& a, base::Vector<const VarState> v) {
   return false;
 }
 }  // namespace
-#endif
 
 void LiftoffAssembler::MergeFullStackWith(CacheState& target) {
   DCHECK_EQ(cache_state_.stack_height(), target.stack_height());
@@ -1172,7 +1170,7 @@ LiftoffRegister LiftoffAssembler::SpillAdjacentFpRegisters(
 }
 
 void LiftoffAssembler::SpillRegister(LiftoffRegister reg) {
-  DCHECK(!cache_state_.frozen);
+  DBG_DCHECK(!cache_state_.frozen);
   int remaining_uses = cache_state_.get_use_count(reg);
   DCHECK_LT(0, remaining_uses);
   for (uint32_t idx = cache_state_.stack_height() - 1;; --idx) {
@@ -1218,13 +1216,11 @@ std::ostream& operator<<(std::ostream& os, LiftoffVarState slot) {
   UNREACHABLE();
 }
 
-#if DEBUG
 bool CompatibleStackSlotTypes(ValueKind a, ValueKind b) {
   // Since Liftoff doesn't do accurate type tracking (e.g. on loop back edges,
   // ref.as_non_null/br_on_cast results), we only care that pointer types stay
   // amongst pointer types. It's fine if ref/ref null overwrite each other.
   return a == b || (is_object_reference(a) && is_object_reference(b));
 }
-#endif
 
 }  // namespace v8::internal::wasm

@@ -300,9 +300,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
     std::atomic<uint8_t> raw_state_;
   };
 
-#ifdef DEBUG
   bool IsSafeForConservativeStackScanning() const;
-#endif
 
   template <typename Callback>
   V8_INLINE void ExecuteWithStackMarker(Callback callback);

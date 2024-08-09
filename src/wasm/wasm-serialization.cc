@@ -752,7 +752,7 @@ NativeModuleDeserializer::NativeModuleDeserializer(NativeModule* native_module)
     : native_module_(native_module) {}
 
 bool NativeModuleDeserializer::Read(Reader* reader) {
-  DCHECK(!read_called_);
+  DBG_DCHECK(!read_called_);
 #ifdef DEBUG
   read_called_ = true;
 #endif

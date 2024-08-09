@@ -181,7 +181,7 @@ class ExpressionScope {
 
   void RecordStrictModeParameterError(const Scanner::Location& loc,
                                       MessageTemplate message) {
-    DCHECK_IMPLIES(!has_error(), loc.IsValid());
+    DBG_DCHECK_IMPLIES(!has_error(), loc.IsValid());
     if (!CanBeParameterDeclaration()) return;
     if (IsCertainlyParameterDeclaration()) {
       if (is_strict(parser_->language_mode())) {
@@ -503,7 +503,7 @@ class ExpressionParsingScope : public ExpressionScope<Types> {
     }
   }
 
-  ~ExpressionParsingScope() { DCHECK(this->has_error() || verified_); }
+  ~ExpressionParsingScope() { DBG_DCHECK(this->has_error() || verified_); }
 
   ExpressionT ValidateAndRewriteReference(ExpressionT expression, int beg_pos,
                                           int end_pos) {
@@ -546,7 +546,7 @@ class ExpressionParsingScope : public ExpressionScope<Types> {
   }
 
   void ClearExpressionError() {
-    DCHECK(verified_);
+    DBG_DCHECK(verified_);
 #ifdef DEBUG
     verified_ = false;
 #endif
@@ -554,7 +554,7 @@ class ExpressionParsingScope : public ExpressionScope<Types> {
   }
 
   void ClearPatternError() {
-    DCHECK(verified_);
+    DBG_DCHECK(verified_);
 #ifdef DEBUG
     verified_ = false;
 #endif
@@ -621,7 +621,7 @@ class ExpressionParsingScope : public ExpressionScope<Types> {
   bool is_valid(int index) const { return !locations_[index].IsValid(); }
   void Record(int index, const Scanner::Location& loc,
               MessageTemplate message) {
-    DCHECK_IMPLIES(!this->has_error(), loc.IsValid());
+    DBG_DCHECK_IMPLIES(!this->has_error(), loc.IsValid());
     if (!is_valid(index)) return;
     messages_[index] = message;
     locations_[index] = loc;
@@ -819,7 +819,7 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
 
   void RecordDeclarationError(const Scanner::Location& loc,
                               MessageTemplate message) {
-    DCHECK_IMPLIES(!this->has_error(), loc.IsValid());
+    DBG_DCHECK_IMPLIES(!this->has_error(), loc.IsValid());
     declaration_error_location = loc;
     declaration_error_message = message;
   }

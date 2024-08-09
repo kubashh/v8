@@ -1115,7 +1115,7 @@ TEST(TransitionLookup) {
       Cast<TransitionArray>(
           root_map->raw_transitions().GetHeapObjectAssumeStrong()),
       isolate);
-  DCHECK(transitions->IsSortedNoDuplicates());
+  DBG_DCHECK(transitions->IsSortedNoDuplicates());
 
   // Ensure we didn't overflow transition array and therefore all the
   // combinations of cases are covered.

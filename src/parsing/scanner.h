@@ -469,7 +469,6 @@ class V8_EXPORT_PRIVATE Scanner {
     uint32_t smi_value = 0;
     bool after_line_terminator = false;
 
-#ifdef DEBUG
     bool CanAccessLiteral() const {
       return token == Token::kPrivateName || token == Token::kIllegal ||
              token == Token::kEscapedKeyword ||
@@ -482,7 +481,6 @@ class V8_EXPORT_PRIVATE Scanner {
       return token == Token::kIllegal || token == Token::kUninitialized ||
              base::IsInRange(token, Token::kTemplateSpan, Token::kTemplateTail);
     }
-#endif  // DEBUG
   };
 
   inline bool IsValidBigIntKind(NumberKind kind) {

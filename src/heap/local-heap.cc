@@ -370,7 +370,6 @@ void LocalHeap::SleepInSafepoint() {
   });
 }
 
-#ifdef DEBUG
 bool LocalHeap::IsSafeForConservativeStackScanning() const {
 #ifdef V8_ENABLE_DIRECT_HANDLE
   // There must be no direct handles on the stack below the stack marker.
@@ -390,7 +389,6 @@ bool LocalHeap::IsSafeForConservativeStackScanning() const {
   // not be interesting.
   return true;
 }
-#endif  // DEBUG
 
 void LocalHeap::FreeLinearAllocationAreas() {
   heap_allocator_.FreeLinearAllocationAreas();

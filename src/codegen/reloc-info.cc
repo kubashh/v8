@@ -65,9 +65,7 @@ void RelocInfoWriter::WriteIntData(int number) {
 
 void RelocInfoWriter::Write(const RelocInfo* rinfo) {
   RelocInfo::Mode rmode = rinfo->rmode();
-#ifdef DEBUG
   uint8_t* begin_pos = pos_;
-#endif
   DCHECK(rinfo->rmode() < RelocInfo::NUMBER_OF_MODES);
   DCHECK_GE(rinfo->pc() - reinterpret_cast<Address>(last_pc_), 0);
   // Use unsigned delta-encoding for pc.
@@ -96,9 +94,7 @@ void RelocInfoWriter::Write(const RelocInfo* rinfo) {
     }
   }
   last_pc_ = reinterpret_cast<uint8_t*>(rinfo->pc());
-#ifdef DEBUG
   DCHECK_LE(begin_pos - pos_, kMaxSize);
-#endif
 }
 
 template <typename RelocInfoT>

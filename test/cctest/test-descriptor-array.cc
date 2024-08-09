@@ -52,7 +52,7 @@ void CheckDescriptorArrayLookups(Isolate* isolate, Handle<Map> map,
   {
     DisallowGarbageCollection no_gc;
     Tagged<DescriptorArray> descriptors = map->instance_descriptors(isolate);
-    DCHECK(descriptors->IsSortedNoDuplicates());
+    DBG_DCHECK(descriptors->IsSortedNoDuplicates());
     int nof_descriptors = descriptors->number_of_descriptors();
 
     for (size_t i = 0; i < names.size(); ++i) {
@@ -82,7 +82,7 @@ void CheckTransitionArrayLookups(Isolate* isolate,
   // Test C++ implementation.
   {
     DisallowGarbageCollection no_gc;
-    DCHECK(transitions->IsSortedNoDuplicates());
+    DBG_DCHECK(transitions->IsSortedNoDuplicates());
 
     for (size_t i = 0; i < maps.size(); ++i) {
       Tagged<Map> expected_map = *maps[i];

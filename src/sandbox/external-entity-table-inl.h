@@ -154,7 +154,7 @@ void ExternalEntityTable<Entry, size>::InitializeSpace(Space* space) {
 template <typename Entry, size_t size>
 void ExternalEntityTable<Entry, size>::TearDownSpace(Space* space) {
   DCHECK(is_initialized());
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   for (auto segment : space->segments_) {
     FreeTableSegment(segment);
   }
@@ -165,7 +165,7 @@ template <typename Entry, size_t size>
 void ExternalEntityTable<Entry, size>::AttachSpaceToReadOnlySegment(
     Space* space) {
   DCHECK(is_initialized());
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   DCHECK(!space->is_internal_read_only_space());
   space->is_internal_read_only_space_ = true;
@@ -189,7 +189,7 @@ template <typename Entry, size_t size>
 void ExternalEntityTable<Entry, size>::DetachSpaceFromReadOnlySegment(
     Space* space) {
   DCHECK(is_initialized());
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   // Remove the RO segment from the space's segment list without freeing it.
   // The table itself manages the RO segment's lifecycle.
   base::MutexGuard guard(&space->mutex_);
@@ -216,7 +216,7 @@ void ExternalEntityTable<Entry, size>::SealReadOnlySegment() {
 template <typename Entry, size_t size>
 uint32_t ExternalEntityTable<Entry, size>::AllocateEntry(Space* space) {
   DCHECK(is_initialized());
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   // We currently don't want entry allocation to trigger garbage collection as
   // this may cause seemingly harmless pointer field assignments to trigger
@@ -366,7 +366,7 @@ ExternalEntityTable<Entry, size>::Extend(Space* space, Segment segment) {
 
 template <typename Entry, size_t size>
 uint32_t ExternalEntityTable<Entry, size>::GenericSweep(Space* space) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   // Lock the space. Technically this is not necessary since no other thread can
   // allocate entries at this point, but some of the methods we call on the
@@ -455,7 +455,7 @@ template <typename Entry, size_t size>
 template <typename Callback>
 void ExternalEntityTable<Entry, size>::IterateEntriesIn(Space* space,
                                                         Callback callback) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   base::MutexGuard guard(&space->mutex_);
   for (auto segment : space->segments_) {

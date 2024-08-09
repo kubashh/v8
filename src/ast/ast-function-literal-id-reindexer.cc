@@ -25,7 +25,7 @@ void AstFunctionLiteralIdReindexer::Reindex(Expression* pattern) {
 
 void AstFunctionLiteralIdReindexer::VisitFunctionLiteral(FunctionLiteral* lit) {
   // Make sure we're not already in the visited set.
-  DCHECK(visited_.insert(lit).second);
+  DBG_DCHECK(visited_.insert(lit).second);
 
   AstTraversalVisitor::VisitFunctionLiteral(lit);
   lit->set_function_literal_id(lit->function_literal_id() + delta_);

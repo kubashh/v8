@@ -43,8 +43,8 @@ class ElapsedTimer final {
 
   // Returns |true| if this timer was started previously.
   bool IsStarted() const {
-    DCHECK(!paused_);
-    DCHECK_NE(started_, start_ticks_.IsNull());
+    DBG_DCHECK(!paused_);
+    DBG_DCHECK_NE(started_, start_ticks_.IsNull());
     return !start_ticks_.IsNull();
   }
 
@@ -84,8 +84,8 @@ class ElapsedTimer final {
 
   void Resume(TimeTicks now) {
     DCHECK(!now.IsNull());
-    DCHECK(started_);
-    DCHECK(paused_);
+    DBG_DCHECK(started_);
+    DBG_DCHECK(paused_);
     TimeDelta elapsed = paused_elapsed();
 #ifdef DEBUG
     paused_ = false;
@@ -123,23 +123,23 @@ class ElapsedTimer final {
 
   TimeDelta paused_elapsed() {
     // Only used started_ since paused_elapsed_ can be 0.
-    DCHECK(paused_);
-    DCHECK(started_);
+    DBG_DCHECK(paused_);
+    DBG_DCHECK(started_);
     return paused_elapsed_;
   }
 
   void set_paused_elapsed(TimeDelta delta) {
-    DCHECK(paused_);
-    DCHECK(started_);
+    DBG_DCHECK(paused_);
+    DBG_DCHECK(started_);
     paused_elapsed_ = delta;
   }
 
   TimeTicks start_ticks() const {
-    DCHECK(!paused_);
+    DBG_DCHECK(!paused_);
     return start_ticks_;
   }
   void set_start_ticks(TimeTicks start_ticks) {
-    DCHECK(!paused_);
+    DBG_DCHECK(!paused_);
     start_ticks_ = start_ticks;
   }
 

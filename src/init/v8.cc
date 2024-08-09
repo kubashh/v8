@@ -145,6 +145,10 @@ void V8::Initialize() {
 
   FlagList::EnforceFlagImplications();
 
+  if (v8_flags.dchecks_are_enabled) {
+    base::g_dchecks_are_enabled = true;
+  }
+
   // Initialize the default FlagList::Hash.
   FlagList::Hash();
 

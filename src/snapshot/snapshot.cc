@@ -701,7 +701,7 @@ base::Vector<const uint8_t> ExtractData(const v8::StartupData* snapshot,
 
 base::Vector<const uint8_t> SnapshotImpl::ExtractStartupData(
     const v8::StartupData* data) {
-  DCHECK(Snapshot::SnapshotIsValid(data));
+  DBG_DCHECK(Snapshot::SnapshotIsValid(data));
 
   uint32_t num_contexts = ExtractNumContexts(data);
   return ExtractData(data, StartupSnapshotOffset(num_contexts),
@@ -710,7 +710,7 @@ base::Vector<const uint8_t> SnapshotImpl::ExtractStartupData(
 
 base::Vector<const uint8_t> SnapshotImpl::ExtractReadOnlyData(
     const v8::StartupData* data) {
-  DCHECK(Snapshot::SnapshotIsValid(data));
+  DBG_DCHECK(Snapshot::SnapshotIsValid(data));
 
   return ExtractData(data, GetHeaderValue(data, kReadOnlyOffsetOffset),
                      GetHeaderValue(data, kSharedHeapOffsetOffset));
@@ -718,7 +718,7 @@ base::Vector<const uint8_t> SnapshotImpl::ExtractReadOnlyData(
 
 base::Vector<const uint8_t> SnapshotImpl::ExtractSharedHeapData(
     const v8::StartupData* data) {
-  DCHECK(Snapshot::SnapshotIsValid(data));
+  DBG_DCHECK(Snapshot::SnapshotIsValid(data));
 
   return ExtractData(data, GetHeaderValue(data, kSharedHeapOffsetOffset),
                      GetHeaderValue(data, ContextSnapshotOffsetOffset(0)));

@@ -262,9 +262,9 @@ AllocationResult Heap::AllocateMap(AllocationType allocation_type,
                                    int inobject_properties) {
   static_assert(LAST_JS_OBJECT_TYPE == LAST_TYPE);
   Tagged<HeapObject> result;
-  DCHECK_EQ(allocation_type, IsMutableMap(instance_type, elements_kind)
-                                 ? AllocationType::kMap
-                                 : AllocationType::kReadOnly);
+  DBG_DCHECK_EQ(allocation_type, IsMutableMap(instance_type, elements_kind)
+                                     ? AllocationType::kMap
+                                     : AllocationType::kReadOnly);
   AllocationResult allocation = AllocateRaw(Map::kSize, allocation_type);
   if (!allocation.To(&result)) return allocation;
 

@@ -153,7 +153,7 @@ StringShape::StringShape(InstanceType t) : type_(static_cast<uint32_t>(t)) {
 }
 
 bool StringShape::IsInternalized() const {
-  DCHECK(valid());
+  DBG_DCHECK(valid());
   static_assert(kNotInternalizedTag != 0);
   return (type_ & (kIsNotStringMask | kIsNotInternalizedMask)) ==
          (kStringTag | kInternalizedTag);

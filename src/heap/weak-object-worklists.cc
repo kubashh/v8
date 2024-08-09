@@ -220,7 +220,6 @@ void WeakObjects::UpdateBaselineFlushingCandidates(
       });
 }
 
-#ifdef DEBUG
 // static
 template <typename Type>
 bool WeakObjects::ContainsYoungObjects(
@@ -233,7 +232,6 @@ bool WeakObjects::ContainsYoungObjects(
   });
   return result;
 }
-#endif
 
 }  // namespace internal
 }  // namespace v8

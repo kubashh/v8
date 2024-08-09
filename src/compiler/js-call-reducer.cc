@@ -4195,12 +4195,10 @@ bool IsSafeArgumentsElements(Node* node) {
   return true;
 }
 
-#ifdef DEBUG
 bool IsCallOrConstructWithArrayLike(Node* node) {
   return node->opcode() == IrOpcode::kJSCallWithArrayLike ||
          node->opcode() == IrOpcode::kJSConstructWithArrayLike;
 }
-#endif
 
 bool IsCallOrConstructWithSpread(Node* node) {
   return node->opcode() == IrOpcode::kJSCallWithSpread ||

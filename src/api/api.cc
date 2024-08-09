@@ -11804,9 +11804,7 @@ char* HandleScopeImplementer::RestoreThread(char* storage) {
 }
 
 void HandleScopeImplementer::IterateThis(RootVisitor* v) {
-#ifdef DEBUG
   bool found_block_before_deferred = false;
-#endif
   // Iterate over all handles in the blocks except for the last.
   for (int i = static_cast<int>(blocks()->size()) - 2; i >= 0; --i) {
     Address* block = blocks()->at(i);
@@ -11820,9 +11818,7 @@ void HandleScopeImplementer::IterateThis(RootVisitor* v) {
       v->VisitRootPointers(Root::kHandleScope, nullptr, FullObjectSlot(block),
                            FullObjectSlot(last_handle_before_deferred_block_));
       DCHECK(!found_block_before_deferred);
-#ifdef DEBUG
       found_block_before_deferred = true;
-#endif
     } else {
       v->VisitRootPointers(Root::kHandleScope, nullptr, FullObjectSlot(block),
                            FullObjectSlot(&block[kHandleBlockSize]));

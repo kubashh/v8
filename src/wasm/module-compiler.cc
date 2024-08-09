@@ -2937,10 +2937,10 @@ class AsyncCompileJob::CompilationStateCallback
       case CompilationEvent::kFinishedExportWrappers:
         // Even if baseline compilation units finish first, we trigger the
         // "kFinishedExportWrappers" event first.
-        DCHECK(!last_event_.has_value());
+        DBG_DCHECK(!last_event_.has_value());
         break;
       case CompilationEvent::kFinishedBaselineCompilation:
-        DCHECK_EQ(CompilationEvent::kFinishedExportWrappers, last_event_);
+        DBG_DCHECK_EQ(CompilationEvent::kFinishedExportWrappers, last_event_);
         if (job_->DecrementAndCheckFinisherCount()) {
           // Install the native module in the cache, or reuse a conflicting one.
           // If we get a conflicting module, wait until we are back in the
@@ -2956,12 +2956,13 @@ class AsyncCompileJob::CompilationStateCallback
         }
         break;
       case CompilationEvent::kFinishedCompilationChunk:
-        DCHECK(CompilationEvent::kFinishedBaselineCompilation == last_event_ ||
-               CompilationEvent::kFinishedCompilationChunk == last_event_);
+        DBG_DCHECK(CompilationEvent::kFinishedBaselineCompilation ==
+                       last_event_ ||
+                   CompilationEvent::kFinishedCompilationChunk == last_event_);
         break;
       case CompilationEvent::kFailedCompilation:
-        DCHECK(!last_event_.has_value() ||
-               last_event_ == CompilationEvent::kFinishedExportWrappers);
+        DBG_DCHECK(!last_event_.has_value() ||
+                   last_event_ == CompilationEvent::kFinishedExportWrappers);
         if (job_->DecrementAndCheckFinisherCount()) {
           // Don't update {job_->native_module_} to avoid data races with other
           // compilation threads. Use a copy of the shared pointer instead.

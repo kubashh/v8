@@ -212,7 +212,7 @@ void ExternalPointerTable::Zap(ExternalPointerHandle handle) {
 
 ExternalPointerHandle ExternalPointerTable::AllocateAndInitializeEntry(
     Space* space, Address initial_value, ExternalPointerTag tag) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   uint32_t index = AllocateEntry(space);
   at(index).MakeExternalPointerEntry(initial_value, tag);
   ExternalPointerHandle handle = IndexToHandle(index);
@@ -222,7 +222,7 @@ ExternalPointerHandle ExternalPointerTable::AllocateAndInitializeEntry(
 
 void ExternalPointerTable::Mark(Space* space, ExternalPointerHandle handle,
                                 Address handle_location) {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
 
   // The handle_location must always contain the given handle. Except if the
   // slot is lazily-initialized. In that case, the handle may transition from
@@ -254,8 +254,8 @@ void ExternalPointerTable::Evacuate(Space* from_space, Space* to_space,
                                     ExternalPointerHandle handle,
                                     Address handle_location,
                                     EvacuateMarkMode mode) {
-  DCHECK(from_space->BelongsTo(this));
-  DCHECK(to_space->BelongsTo(this));
+  DBG_DCHECK(from_space->BelongsTo(this));
+  DBG_DCHECK(to_space->BelongsTo(this));
 
   auto handle_ptr = reinterpret_cast<ExternalPointerHandle*>(handle_location);
 
@@ -325,7 +325,7 @@ ExternalPointerHandle ExternalPointerTable::IndexToHandle(uint32_t index) {
 
 bool ExternalPointerTable::Contains(Space* space,
                                     ExternalPointerHandle handle) const {
-  DCHECK(space->BelongsTo(this));
+  DBG_DCHECK(space->BelongsTo(this));
   return space->Contains(HandleToIndex(handle));
 }
 

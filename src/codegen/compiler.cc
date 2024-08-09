@@ -2000,7 +2000,7 @@ void BackgroundCompileTask::Run(
   }
 
   outer_function_sfi_ = isolate->heap()->NewPersistentMaybeHandle(maybe_result);
-  DCHECK(isolate->heap()->ContainsPersistentHandle(script_.location()));
+  DBG_DCHECK(isolate->heap()->ContainsPersistentHandle(script_.location()));
   persistent_handles_ = isolate->heap()->DetachPersistentHandles();
 }
 

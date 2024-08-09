@@ -158,7 +158,7 @@ Mutex::Mutex() {
 
 Mutex::~Mutex() {
   DestroyNativeHandle(&native_handle_);
-  DCHECK_EQ(0, level_);
+  DBG_DCHECK_EQ(0, level_);
 }
 
 
@@ -193,14 +193,14 @@ RecursiveMutex::RecursiveMutex() {
 
 RecursiveMutex::~RecursiveMutex() {
   DestroyNativeHandle(&native_handle_);
-  DCHECK_EQ(0, level_);
+  DBG_DCHECK_EQ(0, level_);
 }
 
 
 void RecursiveMutex::Lock() {
   LockNativeHandle(&native_handle_);
 #ifdef DEBUG
-  DCHECK_LE(0, level_);
+  DBG_DCHECK_LE(0, level_);
   level_++;
 #endif
 }
@@ -208,7 +208,7 @@ void RecursiveMutex::Lock() {
 
 void RecursiveMutex::Unlock() {
 #ifdef DEBUG
-  DCHECK_LT(0, level_);
+  DBG_DCHECK_LT(0, level_);
   level_--;
 #endif
   UnlockNativeHandle(&native_handle_);
@@ -220,7 +220,7 @@ bool RecursiveMutex::TryLock() {
     return false;
   }
 #ifdef DEBUG
-  DCHECK_LE(0, level_);
+  DBG_DCHECK_LE(0, level_);
   level_++;
 #endif
   return true;
@@ -232,36 +232,36 @@ SharedMutex::SharedMutex() = default;
 SharedMutex::~SharedMutex() = default;
 
 void SharedMutex::LockShared() {
-  DCHECK(TryHoldSharedMutex(this));
+  DBG_DCHECK(TryHoldSharedMutex(this));
   native_handle_.lock_shared();
 }
 
 void SharedMutex::LockExclusive() {
-  DCHECK(TryHoldSharedMutex(this));
+  DBG_DCHECK(TryHoldSharedMutex(this));
   native_handle_.lock();
 }
 
 void SharedMutex::UnlockShared() {
-  DCHECK(TryReleaseSharedMutex(this));
+  DBG_DCHECK(TryReleaseSharedMutex(this));
   native_handle_.unlock_shared();
 }
 
 void SharedMutex::UnlockExclusive() {
-  DCHECK(TryReleaseSharedMutex(this));
+  DBG_DCHECK(TryReleaseSharedMutex(this));
   native_handle_.unlock();
 }
 
 bool SharedMutex::TryLockShared() {
-  DCHECK(SharedMutexNotHeld(this));
+  DBG_DCHECK(SharedMutexNotHeld(this));
   bool result = native_handle_.try_lock_shared();
-  if (result) DCHECK(TryHoldSharedMutex(this));
+  if (result) DBG_DCHECK(TryHoldSharedMutex(this));
   return result;
 }
 
 bool SharedMutex::TryLockExclusive() {
-  DCHECK(SharedMutexNotHeld(this));
+  DBG_DCHECK(SharedMutexNotHeld(this));
   bool result = native_handle_.try_lock();
-  if (result) DCHECK(TryHoldSharedMutex(this));
+  if (result) DBG_DCHECK(TryHoldSharedMutex(this));
   return result;
 }
 
@@ -325,11 +325,7 @@ Mutex::Mutex() : native_handle_(SRWLOCK_INIT) {
 #endif
 }
 
-
-Mutex::~Mutex() {
-  DCHECK_EQ(0, level_);
-}
-
+Mutex::~Mutex() { DBG_DCHECK_EQ(0, level_); }
 
 void Mutex::Lock() {
   AcquireSRWLockExclusive(V8ToWindowsType(&native_handle_));
@@ -362,7 +358,7 @@ RecursiveMutex::RecursiveMutex() {
 
 RecursiveMutex::~RecursiveMutex() {
   DeleteCriticalSection(V8ToWindowsType(&native_handle_));
-  DCHECK_EQ(0, level_);
+  DBG_DCHECK_EQ(0, level_);
 }
 
 

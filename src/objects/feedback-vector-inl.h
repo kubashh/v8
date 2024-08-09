@@ -276,7 +276,7 @@ bool FeedbackVector::IsOfLegacyType(Tagged<MaybeObject> value) {
 
 Tagged<MaybeObject> FeedbackVector::Get(FeedbackSlot slot) const {
   Tagged<MaybeObject> value = raw_feedback_slots(GetIndex(slot), kRelaxedLoad);
-  DCHECK(!IsOfLegacyType(value));
+  DBG_DCHECK(!IsOfLegacyType(value));
   return value;
 }
 
@@ -284,7 +284,7 @@ Tagged<MaybeObject> FeedbackVector::Get(PtrComprCageBase cage_base,
                                         FeedbackSlot slot) const {
   Tagged<MaybeObject> value =
       raw_feedback_slots(cage_base, GetIndex(slot), kRelaxedLoad);
-  DCHECK(!IsOfLegacyType(value));
+  DBG_DCHECK(!IsOfLegacyType(value));
   return value;
 }
 
@@ -305,14 +305,14 @@ Tagged<MaybeObject> FeedbackVector::SynchronizedGet(FeedbackSlot slot) const {
   const int offset = kRawFeedbackSlotsOffset + i * kTaggedSize;
   Tagged<MaybeObject> value =
       TaggedField<MaybeObject>::Acquire_Load(*this, offset);
-  DCHECK(!IsOfLegacyType(value));
+  DBG_DCHECK(!IsOfLegacyType(value));
   return value;
 }
 
 void FeedbackVector::SynchronizedSet(FeedbackSlot slot,
                                      Tagged<MaybeObject> value,
                                      WriteBarrierMode mode) {
-  DCHECK(!IsOfLegacyType(value));
+  DBG_DCHECK(!IsOfLegacyType(value));
   const int i = slot.ToInt();
   DCHECK_LT(static_cast<unsigned>(i), static_cast<unsigned>(this->length()));
   const int offset = kRawFeedbackSlotsOffset + i * kTaggedSize;
@@ -322,7 +322,7 @@ void FeedbackVector::SynchronizedSet(FeedbackSlot slot,
 
 void FeedbackVector::Set(FeedbackSlot slot, Tagged<MaybeObject> value,
                          WriteBarrierMode mode) {
-  DCHECK(!IsOfLegacyType(value));
+  DBG_DCHECK(!IsOfLegacyType(value));
   set_raw_feedback_slots(GetIndex(slot), value, mode);
 }
 

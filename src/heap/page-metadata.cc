@@ -89,7 +89,6 @@ void PageMetadata::MarkNeverAllocateForTesting() {
   reinterpret_cast<PagedSpace*>(owner())->free_list()->EvictFreeListItems(this);
 }
 
-#ifdef DEBUG
 namespace {
 // Skips filler starting from the given filler until the end address.
 // Returns the first address after the skipped fillers.
@@ -104,7 +103,6 @@ Address SkipFillers(PtrComprCageBase cage_base, Tagged<HeapObject> filler,
   return addr;
 }
 }  // anonymous namespace
-#endif  // DEBUG
 
 size_t PageMetadata::ShrinkToHighWaterMark() {
   // Shrinking only makes sense outside of the CodeRange, where we don't care

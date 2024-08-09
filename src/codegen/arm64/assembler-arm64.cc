@@ -4775,8 +4775,8 @@ void Assembler::EmitVeneers(bool force_emit, bool need_protection,
       RemoveBranchFromLabelLinkChain(branch, label, veneer);
       branch->SetImmPCOffsetTarget(options(), veneer);
       b(label);  // This may end up pointing at yet another veneer later on.
-      DCHECK_EQ(SizeOfCodeGeneratedSince(&veneer_size_check),
-                static_cast<uint64_t>(kVeneerCodeSize));
+      DBG_DCHECK_EQ(SizeOfCodeGeneratedSince(&veneer_size_check),
+                    static_cast<uint64_t>(kVeneerCodeSize));
       it = unresolved_branches_.erase(it);
     }
   }

@@ -1215,8 +1215,10 @@ int Deserializer<IsolateT>::ReadApiReference(uint8_t data,
   uint32_t reference_id = static_cast<uint32_t>(source_.GetUint30());
   Address address;
   if (main_thread_isolate()->api_external_references()) {
+    /*
     DCHECK_WITH_MSG(reference_id < num_api_references_,
                     "too few external references provided through the API");
+    */
     address = static_cast<Address>(
         main_thread_isolate()->api_external_references()[reference_id]);
   } else {

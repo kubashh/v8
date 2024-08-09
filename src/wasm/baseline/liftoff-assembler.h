@@ -205,7 +205,7 @@ class LiftoffAssembler : public MacroAssembler {
     }
 
     LiftoffRegister take_volatile_register(LiftoffRegList candidates) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       DCHECK(has_volatile_register(candidates));
       Register reg = no_reg;
       if (cached_instance_data != no_reg &&
@@ -227,7 +227,7 @@ class LiftoffAssembler : public MacroAssembler {
     }
 
     void SetCacheRegister(Register* cache, Register reg) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       DCHECK_EQ(no_reg, *cache);
       *cache = reg;
       int liftoff_code = LiftoffRegister{reg}.liftoff_code();
@@ -262,7 +262,7 @@ class LiftoffAssembler : public MacroAssembler {
     }
 
     V8_INLINE void ClearCacheRegister(Register* cache) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       V8_ASSUME(cache == &cached_instance_data || cache == &cached_mem_start);
       if (*cache == no_reg) return;
       int liftoff_code = LiftoffRegister{*cache}.liftoff_code();
@@ -290,7 +290,7 @@ class LiftoffAssembler : public MacroAssembler {
     }
 
     void inc_used(LiftoffRegister reg) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       if (reg.is_pair()) {
         inc_used(reg.low());
         inc_used(reg.high());
@@ -303,7 +303,7 @@ class LiftoffAssembler : public MacroAssembler {
 
     // Returns whether this was the last use.
     void dec_used(LiftoffRegister reg) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       DCHECK(is_used(reg));
       if (reg.is_pair()) {
         dec_used(reg.low());
@@ -333,7 +333,7 @@ class LiftoffAssembler : public MacroAssembler {
     }
 
     void clear_used(LiftoffRegister reg) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       if (reg.is_pair()) {
         clear_used(reg.low());
         clear_used(reg.high());
@@ -346,13 +346,13 @@ class LiftoffAssembler : public MacroAssembler {
     bool is_free(LiftoffRegister reg) const { return !is_used(reg); }
 
     void reset_used_registers() {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       used_registers = {};
       memset(register_use_count, 0, sizeof(register_use_count));
     }
 
     LiftoffRegister GetNextSpillReg(LiftoffRegList candidates) {
-      DCHECK(!frozen);
+      DBG_DCHECK(!frozen);
       DCHECK(!candidates.is_empty());
       // This method should only be called if none of the candidates is free.
       DCHECK(candidates.MaskOut(used_registers).is_empty());
@@ -506,7 +506,7 @@ class LiftoffAssembler : public MacroAssembler {
   LiftoffRegister GetUnusedRegister(
       RegClass rc, std::initializer_list<LiftoffRegister> try_first,
       LiftoffRegList pinned) {
-    DCHECK(!cache_state_.frozen);
+    DBG_DCHECK(!cache_state_.frozen);
     for (LiftoffRegister reg : try_first) {
       DCHECK_EQ(reg.reg_class(), rc);
       if (cache_state_.is_free(reg)) return reg;
@@ -517,7 +517,7 @@ class LiftoffAssembler : public MacroAssembler {
   // Get an unused register for class {rc}, excluding registers from {pinned},
   // potentially spilling to free one.
   LiftoffRegister GetUnusedRegister(RegClass rc, LiftoffRegList pinned) {
-    DCHECK(!cache_state_.frozen);
+    DBG_DCHECK(!cache_state_.frozen);
     if (kNeedI64RegPair && rc == kGpRegPair) {
       LiftoffRegList candidates = kGpCacheRegList.MaskOut(pinned);
       Register low = candidates.clear(GetUnusedRegister(candidates)).gp();
@@ -538,7 +538,7 @@ class LiftoffAssembler : public MacroAssembler {
 
   // Get an unused register of {candidates}, potentially spilling to free one.
   LiftoffRegister GetUnusedRegister(LiftoffRegList candidates) {
-    DCHECK(!cache_state_.frozen);
+    DBG_DCHECK(!cache_state_.frozen);
     DCHECK(!candidates.is_empty());
     if (V8_LIKELY(cache_state_.has_unused_register(candidates))) {
       return cache_state_.unused_register(candidates);
@@ -1684,9 +1684,7 @@ class LiftoffStackSlots {
   LiftoffAssembler* const asm_;
 };
 
-#if DEBUG
 bool CompatibleStackSlotTypes(ValueKind a, ValueKind b);
-#endif
 
 }  // namespace v8::internal::wasm
 

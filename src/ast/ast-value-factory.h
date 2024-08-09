@@ -87,7 +87,7 @@ class AstRawString final : public ZoneObject {
 
   // This function can be called after internalizing.
   V8_INLINE Handle<String> string() const {
-    DCHECK(has_string_);
+    DBG_DCHECK(has_string_);
     return string_;
   }
 
@@ -109,17 +109,17 @@ class AstRawString final : public ZoneObject {
         raw_hash_field_(raw_hash_field),
         is_one_byte_(is_one_byte) {}
   AstRawString* next() {
-    DCHECK(!has_string_);
+    DBG_DCHECK(!has_string_);
     return next_;
   }
   AstRawString** next_location() {
-    DCHECK(!has_string_);
+    DBG_DCHECK(!has_string_);
     return &next_;
   }
 
   void set_string(Handle<String> string) {
     DCHECK(!string.is_null());
-    DCHECK(!has_string_);
+    DBG_DCHECK(!has_string_);
     string_ = string;
 #ifdef DEBUG
     has_string_ = true;

@@ -113,26 +113,26 @@ void StringStream::Add(base::Vector<const char> format,
     FmtElm current = elms[elm++];
     switch (type) {
       case 's': {
-        DCHECK_EQ(FmtElm::C_STR, current.type_);
+        DBG_DCHECK_EQ(FmtElm::C_STR, current.type_);
         const char* value = current.data_.u_c_str_;
         Add(value);
         break;
       }
       case 'w': {
-        DCHECK_EQ(FmtElm::LC_STR, current.type_);
+        DBG_DCHECK_EQ(FmtElm::LC_STR, current.type_);
         base::Vector<const base::uc16> value = *current.data_.u_lc_str_;
         for (int i = 0; i < value.length(); i++)
           Put(static_cast<char>(value[i]));
         break;
       }
       case 'o': {
-        DCHECK_EQ(FmtElm::OBJ, current.type_);
+        DBG_DCHECK_EQ(FmtElm::OBJ, current.type_);
         Tagged<Object> obj(current.data_.u_obj_);
         PrintObject(obj);
         break;
       }
       case 'k': {
-        DCHECK_EQ(FmtElm::INT, current.type_);
+        DBG_DCHECK_EQ(FmtElm::INT, current.type_);
         int value = current.data_.u_int_;
         if (0x20 <= value && value <= 0x7F) {
           Put(value);

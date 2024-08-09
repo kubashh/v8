@@ -120,7 +120,6 @@ class OpIndex {
     return offset_ >= other.offset_;
   }
 
-#ifdef DEBUG
   int generation_mod2() const {
     return (offset_ & kGenerationMask) >> kGenerationMaskShift;
   }
@@ -137,7 +136,6 @@ class OpIndex {
     static_assert(sizeof(OperationStorageSlot) == 8);
     return (offset_ & 0b101) == 0;
   }
-#endif
 
  protected:
   static constexpr uint32_t kGenerationMaskShift = 1;

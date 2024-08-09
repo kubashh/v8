@@ -84,14 +84,14 @@ ReadOnlyRoots::ReadOnlyRoots(LocalIsolate* isolate)
 
 #define ROOT_ACCESSOR(Type, name, CamelName)                        \
   Tagged<Type> ReadOnlyRoots::name() const {                        \
-    DCHECK(CheckType_##name());                                     \
+    DBG_DCHECK(CheckType_##name());                                 \
     return unchecked_##name();                                      \
   }                                                                 \
   Tagged<Type> ReadOnlyRoots::unchecked_##name() const {            \
     return UncheckedCast<Type>(object_at(RootIndex::k##CamelName)); \
   }                                                                 \
   Handle<Type> ReadOnlyRoots::name##_handle() const {               \
-    DCHECK(CheckType_##name());                                     \
+    DBG_DCHECK(CheckType_##name());                                 \
     Address* location = GetLocation(RootIndex::k##CamelName);       \
     return Handle<Type>(location);                                  \
   }

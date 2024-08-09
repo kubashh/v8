@@ -226,7 +226,6 @@ void Schedule::AddGoto(BasicBlock* block, BasicBlock* succ) {
   AddSuccessor(block, succ);
 }
 
-#if DEBUG
 namespace {
 
 bool IsPotentiallyThrowingCall(IrOpcode::Value opcode) {
@@ -243,7 +242,6 @@ bool IsPotentiallyThrowingCall(IrOpcode::Value opcode) {
 }
 
 }  // namespace
-#endif  // DEBUG
 
 void Schedule::AddCall(BasicBlock* block, Node* call, BasicBlock* success_block,
                        BasicBlock* exception_block) {

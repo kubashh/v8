@@ -44,12 +44,12 @@ class V8_EXPORT_PRIVATE BitVector : public ZoneObject {
 
     int operator*() const {
       DCHECK_NE(end_, ptr_);
-      DCHECK(target_->Contains(current_index_));
+      DBG_DCHECK(target_->Contains(current_index_));
       return current_index_;
     }
 
     bool operator==(const Iterator& other) const {
-      DCHECK_EQ(target_, other.target_);
+      DBG_DCHECK_EQ(target_, other.target_);
       DCHECK_EQ(end_, other.end_);
       DCHECK_IMPLIES(current_index_ == other.current_index_,
                      ptr_ == other.ptr_);

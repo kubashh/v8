@@ -170,7 +170,7 @@ void BytecodeArrayWriter::BindLoopHeader(BytecodeLoopHeader* loop_header) {
 
 void BytecodeArrayWriter::BindJumpTableEntry(BytecodeJumpTable* jump_table,
                                              int case_value) {
-  DCHECK(!jump_table->is_bound(case_value));
+  DBG_DCHECK(!jump_table->is_bound(case_value));
 
   size_t current_offset = bytecodes()->size();
   size_t relative_jump = current_offset - jump_table->switch_bytecode_offset();

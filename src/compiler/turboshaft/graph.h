@@ -222,9 +222,7 @@ class DominatorForwardTreeNode {
   }
 
  private:
-#ifdef DEBUG
   friend class RandomAccessStackDominatorNode<Derived>;
-#endif
   Derived* neighboring_child_ = nullptr;
   Derived* last_child_ = nullptr;
 };
@@ -256,9 +254,7 @@ class RandomAccessStackDominatorNode
 
  private:
   friend class DominatorForwardTreeNode<Derived>;
-#ifdef DEBUG
   friend class Block;
-#endif
 
   // Myers' original datastructure requires to often check jmp_->len_, which is
   // not so great on modern computers (memory access, caches & co). To speed up
@@ -407,8 +403,8 @@ class Block : public RandomAccessStackDominatorNode<Block> {
   // has to be updated to be the last block that contributed operations to the
   // current block to ensure that phi nodes are created correctly.
   void SetOrigin(const Block* origin) {
-    DCHECK_IMPLIES(origin != nullptr,
-                   origin->graph_generation_ + 1 == graph_generation_);
+    DBG_DCHECK_IMPLIES(origin != nullptr,
+                       origin->graph_generation_ + 1 == graph_generation_);
     origin_ = origin;
   }
   // The block from the input graph that is equivalent as a predecessor. It is
@@ -498,7 +494,7 @@ class Block : public RandomAccessStackDominatorNode<Block> {
   }
 
   uint32_t get_custom_data(CustomDataKind kind_for_debug_check) const {
-    DCHECK_EQ(custom_data_kind_for_debug_check_, kind_for_debug_check);
+    DBG_DCHECK_EQ(custom_data_kind_for_debug_check_, kind_for_debug_check);
     return custom_data_;
   }
 
@@ -600,7 +596,7 @@ class Graph {
 
   V8_INLINE const Operation& Get(OpIndex i) const {
     DCHECK(i.valid());
-    DCHECK(BelongsToThisGraph(i));
+    DBG_DCHECK(BelongsToThisGraph(i));
     // `Operation` contains const fields and can be overwritten with placement
     // new. Therefore, std::launder is necessary to avoid undefined behavior.
     const Operation* ptr =
@@ -611,7 +607,7 @@ class Graph {
   }
   V8_INLINE Operation& Get(OpIndex i) {
     DCHECK(i.valid());
-    DCHECK(BelongsToThisGraph(i));
+    DBG_DCHECK(BelongsToThisGraph(i));
     // `Operation` contains const fields and can be overwritten with placement
     // new. Therefore, std::launder is necessary to avoid undefined behavior.
     Operation* ptr =
@@ -708,7 +704,7 @@ class Graph {
     Op& op = Op::New(this, args...);
     IncrementInputUses(op);
 
-    DCHECK_EQ(result, Index(op));
+    DBG_DCHECK_EQ(result, Index(op));
 #ifdef DEBUG
     for (OpIndex input : op.inputs()) {
       DCHECK_LT(input, result);
@@ -764,7 +760,7 @@ class Graph {
   }
 
   V8_INLINE bool Add(Block* block) {
-    DCHECK_EQ(block->graph_generation_, generation_);
+    DBG_DCHECK_EQ(block->graph_generation_, generation_);
     if (!bound_blocks_.empty() && !block->HasPredecessors()) return false;
 
     DCHECK(!block->begin_.valid());
@@ -1213,14 +1209,14 @@ V8_INLINE const Operation& Get(const Graph& graph, OpIndex index) {
 }
 
 V8_INLINE const Operation& Block::FirstOperation(const Graph& graph) const {
-  DCHECK_EQ(graph_generation_, graph.generation());
+  DBG_DCHECK_EQ(graph_generation_, graph.generation());
   DCHECK(begin_.valid());
   DCHECK(end_.valid());
   return graph.Get(begin_);
 }
 
 V8_INLINE const Operation& Block::LastOperation(const Graph& graph) const {
-  DCHECK_EQ(graph_generation_, graph.generation());
+  DBG_DCHECK_EQ(graph_generation_, graph.generation());
   return graph.Get(graph.PreviousIndex(end()));
 }
 
@@ -1229,7 +1225,7 @@ V8_INLINE bool Block::HasPhis(const Graph& graph) const {
   // always at the begining of a block to speed up such functions. Currently,
   // in practice, Phis do not appear after the first non-FrameState non-Constant
   // operation, but this is not enforced.
-  DCHECK_EQ(graph_generation_, graph.generation());
+  DBG_DCHECK_EQ(graph_generation_, graph.generation());
   for (const auto& op : graph.operations(*this)) {
     if (op.Is<PhiOp>()) return true;
   }

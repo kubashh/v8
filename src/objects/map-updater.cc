@@ -457,10 +457,8 @@ void MapUpdater::CompleteInobjectSlackTracking(Isolate* isolate,
   if (slack != 0) {
     // Resize the initial map and all maps in its transition tree.
     callback = [slack](Tagged<Map> map) {
-#ifdef DEBUG
       int old_visitor_id = Map::GetVisitorId(map);
       int new_unused = map->UnusedPropertyFields() - slack;
-#endif
       map->set_instance_size(map->InstanceSizeFromSlack(slack));
       map->set_construction_counter(Map::kNoSlackTracking);
       DCHECK_EQ(old_visitor_id, Map::GetVisitorId(map));
@@ -1031,10 +1029,8 @@ Handle<Map> MapUpdater::FindSplitMap(
 }
 
 MapUpdater::State MapUpdater::ConstructNewMap() {
-#ifdef DEBUG
   DirectHandle<EnumCache> old_enum_cache(
       old_map_->instance_descriptors()->enum_cache(), isolate_);
-#endif
   DirectHandle<DescriptorArray> new_descriptors = BuildDescriptorArray();
 
   Handle<Map> split_map = FindSplitMap(new_descriptors);

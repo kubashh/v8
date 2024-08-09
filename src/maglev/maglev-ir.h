@@ -841,7 +841,7 @@ class BasicBlockRef {
   // Change this ref to a direct basic block pointer, returning the old "next"
   // pointer of the current ref.
   BasicBlockRef* SetToBlockAndReturnNext(BasicBlock* block) {
-    DCHECK_EQ(state_, kRefList);
+    DBG_DCHECK_EQ(state_, kRefList);
 
     BasicBlockRef* old_next_ptr = next_ref_;
     block_ptr_ = block;
@@ -854,7 +854,7 @@ class BasicBlockRef {
   // Reset this ref list to null, returning the old ref list (i.e. the old
   // "next" pointer).
   BasicBlockRef* Reset() {
-    DCHECK_EQ(state_, kRefList);
+    DBG_DCHECK_EQ(state_, kRefList);
 
     BasicBlockRef* old_next_ptr = next_ref_;
     next_ref_ = nullptr;
@@ -864,8 +864,8 @@ class BasicBlockRef {
   // Move this ref to the given ref list, returning the old "next" pointer of
   // the current ref.
   BasicBlockRef* MoveToRefList(BasicBlockRef* ref_list_head) {
-    DCHECK_EQ(state_, kRefList);
-    DCHECK_EQ(ref_list_head->state_, kRefList);
+    DBG_DCHECK_EQ(state_, kRefList);
+    DBG_DCHECK_EQ(ref_list_head->state_, kRefList);
 
     BasicBlockRef* old_next_ptr = next_ref_;
     next_ref_ = ref_list_head->next_ref_;
@@ -874,7 +874,7 @@ class BasicBlockRef {
   }
 
   void Bind(BasicBlock* block) {
-    DCHECK_EQ(state_, kRefList);
+    DBG_DCHECK_EQ(state_, kRefList);
 
     BasicBlockRef* next_ref = SetToBlockAndReturnNext(block);
     while (next_ref != nullptr) {
@@ -884,22 +884,22 @@ class BasicBlockRef {
   }
 
   BasicBlock* block_ptr() const {
-    DCHECK_EQ(state_, kBlockPointer);
+    DBG_DCHECK_EQ(state_, kBlockPointer);
     return block_ptr_;
   }
 
   void set_block_ptr(BasicBlock* block) {
-    DCHECK_EQ(state_, kBlockPointer);
+    DBG_DCHECK_EQ(state_, kBlockPointer);
     block_ptr_ = block;
   }
 
   BasicBlockRef* next_ref() const {
-    DCHECK_EQ(state_, kRefList);
+    DBG_DCHECK_EQ(state_, kRefList);
     return next_ref_;
   }
 
   bool has_ref() const {
-    DCHECK_EQ(state_, kRefList);
+    DBG_DCHECK_EQ(state_, kRefList);
     return next_ref_ != nullptr;
   }
 
@@ -1564,7 +1564,6 @@ class LazyDeoptInfo : public DeoptInfo {
                              int result_size);
 
  private:
-#ifdef DEBUG
   bool IsConsideredForResultLocation() const {
     switch (top_frame().type()) {
       case DeoptFrame::FrameType::kInterpretedFrame:
@@ -1587,7 +1586,6 @@ class LazyDeoptInfo : public DeoptInfo {
         }
     }
   }
-#endif  // DEBUG
 
   using DeoptingCallReturnPcField = base::BitField<unsigned int, 0, 30>;
   using ResultSizeField = DeoptingCallReturnPcField::Next<unsigned int, 2>;
@@ -2198,12 +2196,12 @@ class ValueNode : public Node {
   }
 
   bool is_loadable() const {
-    DCHECK_EQ(state_, kSpill);
+    DBG_DCHECK_EQ(state_, kSpill);
     return spill_.IsConstant() || spill_.IsAnyStackSlot();
   }
 
   bool is_spilled() const {
-    DCHECK_EQ(state_, kSpill);
+    DBG_DCHECK_EQ(state_, kSpill);
     return spill_.IsAnyStackSlot();
   }
 
@@ -2239,13 +2237,13 @@ class ValueNode : public Node {
   }
 
   compiler::InstructionOperand loadable_slot() const {
-    DCHECK_EQ(state_, kSpill);
+    DBG_DCHECK_EQ(state_, kSpill);
     DCHECK(is_loadable());
     return spill_;
   }
 
   void record_next_use(NodeIdT id, InputLocation* input_location) {
-    DCHECK_EQ(state_, kLastUse);
+    DBG_DCHECK_EQ(state_, kLastUse);
     DCHECK_NE(id, kInvalidNodeId);
     DCHECK_LT(start_id(), id);
     DCHECK_IMPLIES(has_valid_live_range(), id >= end_id_);

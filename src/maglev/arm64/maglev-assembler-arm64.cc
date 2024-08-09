@@ -33,7 +33,7 @@ void AllocateRaw(MaglevAssembler* masm, Isolate* isolate,
                  AllocationAlignment alignment) {
   // TODO(victorgomes): Call the runtime for large object allocation.
   // TODO(victorgomes): Support double alignment.
-  DCHECK(masm->allow_allocate());
+  DBG_DCHECK(masm->allow_allocate());
   DCHECK_EQ(alignment, kTaggedAligned);
   if (v8_flags.single_generation) {
     alloc_type = AllocationType::kOld;

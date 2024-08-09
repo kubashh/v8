@@ -64,7 +64,7 @@ class StructType : public ZoneObject {
   uint32_t field_offset(uint32_t index) const {
     DCHECK_LT(index, field_count());
     if (index == 0) return 0;
-    DCHECK(offsets_initialized_);
+    DBG_DCHECK(offsets_initialized_);
     return field_offsets_[index - 1];
   }
   uint32_t total_fields_size() const {
@@ -77,7 +77,7 @@ class StructType : public ZoneObject {
 
   void InitializeOffsets() {
     if (field_count() == 0) return;
-    DCHECK(!offsets_initialized_);
+    DBG_DCHECK(!offsets_initialized_);
     uint32_t offset = field(0).value_kind_size();
     // Optimization: we track the last gap that was introduced by alignment,
     // and place any sufficiently-small fields in it.

@@ -172,11 +172,9 @@ void MainAllocator::InvokeAllocationObservers(Address soon_object,
     space_heap()->CreateFillerObjectAt(soon_object,
                                        static_cast<int>(size_in_bytes));
 
-#if DEBUG
     // Ensure that allocation_info_ isn't modified during one of the
     // AllocationObserver::Step methods.
     LinearAllocationArea saved_allocation_info = allocation_info();
-#endif
 
     // Run AllocationObserver::Step through the AllocationCounter.
     allocation_counter().InvokeAllocationObservers(soon_object, size_in_bytes,

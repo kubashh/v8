@@ -4919,9 +4919,7 @@ void JSObject::OptimizeAsPrototype(Handle<JSObject> object,
   } else {
     Handle<Map> new_map;
     if (enable_setup_mode && PrototypeBenefitsFromNormalization(*object)) {
-#if DEBUG
       DirectHandle<Map> old_map(object->map(isolate), isolate);
-#endif  // DEBUG
       // First normalize to ensure all JSFunctions are DATA_CONSTANT. Don't use
       // the cache, since we're going to use the normalized version directly,
       // without making a copy.
@@ -5199,9 +5197,7 @@ void JSObject::InvalidatePrototypeValidityCell(Tagged<JSGlobalObject> global) {
 Maybe<bool> JSObject::SetPrototype(Isolate* isolate, Handle<JSObject> object,
                                    Handle<Object> value, bool from_javascript,
                                    ShouldThrow should_throw) {
-#ifdef DEBUG
   int size = object->Size();
-#endif
 
   if (from_javascript) {
     if (IsAccessCheckNeeded(*object) &&

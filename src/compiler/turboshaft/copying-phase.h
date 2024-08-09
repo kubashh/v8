@@ -679,8 +679,8 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
       }
     }
 #ifdef DEBUG
-    DCHECK_IMPLIES(new_index.valid(),
-                   Asm().output_graph().BelongsToThisGraph(new_index));
+    DBG_DCHECK_IMPLIES(new_index.valid(),
+                       Asm().output_graph().BelongsToThisGraph(new_index));
     if (V8_UNLIKELY(v8_flags.turboshaft_verify_reductions)) {
       if (new_index.valid()) {
         const Operation& new_op = Asm().output_graph().Get(new_index);
@@ -913,9 +913,9 @@ class GraphVisitor : public OutputGraphAssembler<GraphVisitor<AfterNext>,
 
   void CreateOldToNewMapping(OpIndex old_index, OpIndex new_index) {
     DCHECK(old_index.valid());
-    DCHECK(Asm().input_graph().BelongsToThisGraph(old_index));
-    DCHECK_IMPLIES(new_index.valid(),
-                   Asm().output_graph().BelongsToThisGraph(new_index));
+    DBG_DCHECK(Asm().input_graph().BelongsToThisGraph(old_index));
+    DBG_DCHECK_IMPLIES(new_index.valid(),
+                       Asm().output_graph().BelongsToThisGraph(new_index));
 
     if (current_block_needs_variables_) {
       MaybeVariable var = GetVariableFor(old_index);

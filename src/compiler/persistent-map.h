@@ -355,10 +355,8 @@ class PersistentMap<Key, Value, Hasher>::double_iterator {
   }
 
   double_iterator& operator++() {
-#ifdef DEBUG
     iterator old_first = first_;
     iterator old_second = second_;
-#endif
     if (first_current_) {
       ++first_;
       DCHECK(old_first < first_);

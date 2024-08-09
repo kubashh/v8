@@ -821,9 +821,7 @@ class BytecodeGenerator::TopLevelDeclarationsBuilder final : public ZoneObject {
         Variable* var = decl->var();
         if (!var->is_used()) continue;
         if (var->location() != VariableLocation::MODULE) continue;
-#ifdef DEBUG
         int start = array_index;
-#endif
         if (decl->IsFunctionDeclaration()) {
           FunctionLiteral* f = static_cast<FunctionDeclaration*>(decl)->fun();
           Handle<SharedFunctionInfo> sfi(
@@ -847,9 +845,7 @@ class BytecodeGenerator::TopLevelDeclarationsBuilder final : public ZoneObject {
         Variable* var = decl->var();
         if (!var->is_used()) continue;
         if (var->location() != VariableLocation::UNALLOCATED) continue;
-#ifdef DEBUG
         int start = array_index;
-#endif
         if (decl->IsVariableDeclaration()) {
           data->set(array_index++, *var->raw_name()->string());
           DCHECK_EQ(start + kGlobalVariableDeclarationSize, array_index);
@@ -1113,7 +1109,7 @@ class V8_NODISCARD BytecodeGenerator::HoleCheckElisionMergeScope final {
 
   ~HoleCheckElisionMergeScope() {
     // Did you forget to call Merge or MergeIf?
-    DCHECK(merge_called_);
+    DBG_DCHECK(merge_called_);
   }
 
   void Merge() {
@@ -1955,7 +1951,7 @@ void BytecodeGenerator::VisitFunctionDeclaration(FunctionDeclaration* decl) {
       break;
     }
   }
-  DCHECK_IMPLIES(
+  DBG_DCHECK_IMPLIES(
       eager_inner_literals_ != nullptr && decl->fun()->ShouldEagerCompile(),
       IsInEagerLiterals(decl->fun(), *eager_inner_literals_));
 }
@@ -3018,7 +3014,7 @@ void BytecodeGenerator::AddToEagerLiteralsIfEager(FunctionLiteral* literal) {
                                     info()->character_stream()->Clone());
     }
   } else if (eager_inner_literals_ && literal->ShouldEagerCompile()) {
-    DCHECK(!IsInEagerLiterals(literal, *eager_inner_literals_));
+    DBG_DCHECK(!IsInEagerLiterals(literal, *eager_inner_literals_));
     DCHECK(!literal->should_parallel_compile());
     eager_inner_literals_->push_back(literal);
   }

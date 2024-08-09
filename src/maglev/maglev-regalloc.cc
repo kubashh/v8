@@ -777,9 +777,10 @@ void StraightForwardRegisterAllocator::AllocateNode(Node* node) {
   }
 
   // Result register should not be in temporaries.
-  DCHECK_IMPLIES(GetNodeResultRegister(node) != Register::no_reg(),
-                 !node->general_temporaries().has(GetNodeResultRegister(node)));
-  DCHECK_IMPLIES(
+  DBG_DCHECK_IMPLIES(
+      GetNodeResultRegister(node) != Register::no_reg(),
+      !node->general_temporaries().has(GetNodeResultRegister(node)));
+  DBG_DCHECK_IMPLIES(
       GetNodeResultDoubleRegister(node) != DoubleRegister::no_reg(),
       !node->double_temporaries().has(GetNodeResultDoubleRegister(node)));
 
@@ -1395,7 +1396,7 @@ void StraightForwardRegisterAllocator::AssignArbitraryRegisterInput(
   // Clobbered inputs should no longer be in the allocated location, as far as
   // the register allocator is concerned. This will happen either via
   // clobbering, or via this being the last use.
-  DCHECK_IMPLIES(is_clobbered, !IsInRegisterLocation(node, location));
+  DBG_DCHECK_IMPLIES(is_clobbered, !IsInRegisterLocation(node, location));
 }
 
 void StraightForwardRegisterAllocator::AssignAnyInput(Input& input) {
@@ -2317,7 +2318,7 @@ void StraightForwardRegisterAllocator::MergeRegisterValues(ControlNode* control,
         // in a liveness hole, and none of its uses should be reachable from
         // {target} (for simplicity/speed, we only check the first and last use
         // though).
-        DCHECK_IMPLIES(
+        DBG_DCHECK_IMPLIES(
             !incoming->is_loadable() && !IsInRegister(target_state, incoming),
             !IsForwardReachable(target, incoming->current_next_use(),
                                 incoming->live_range().end));
