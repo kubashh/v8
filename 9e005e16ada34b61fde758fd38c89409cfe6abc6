@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66231695_d923ec01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-09T08:03:27Z",
+      "side": 1,
+      "message": "no tracking bug for this experiment? it would be nice to have one to point at.",
+      "range": {
+        "startLine": 19,
+        "startChar": 5,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "234bc8ba_914a47b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-09T08:03:27Z",
+      "side": 1,
+      "message": "this is for reviving jumbo builds I guess? It\u0027s mildly awkward but we don\u0027t add new builtin assembler files often enough for it to be an issue, and there\u0027s precendent elsewhere with our object macros coming in def/undef pairs, so lgtm % comments",
+      "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4c609c2_ed1f7964",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-09T08:03:27Z",
+      "side": 1,
+      "message": "it would be preferable to keep all the macros in the .inc file, even if they\u0027re currently only used in one assembler.",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
