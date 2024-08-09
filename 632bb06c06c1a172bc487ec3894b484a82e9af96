@@ -134,6 +134,30 @@
       },
       "revId": "632bb06c06c1a172bc487ec3894b484a82e9af96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "514bf27c_95f05f72",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1898,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-08-09T12:20:37Z",
+      "side": 1,
+      "message": "makes sense, removed both the declaration and its definition.",
+      "parentUuid": "5ae77a8b_f74ba30f",
+      "range": {
+        "startLine": 1898,
+        "startChar": 2,
+        "endLine": 1898,
+        "endChar": 79
+      },
+      "revId": "632bb06c06c1a172bc487ec3894b484a82e9af96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
