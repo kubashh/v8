@@ -110,6 +110,30 @@
       },
       "revId": "632bb06c06c1a172bc487ec3894b484a82e9af96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae77a8b_f74ba30f",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1898,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-08-09T12:01:43Z",
+      "side": 1,
+      "message": "Maybe better to remove it for now, rather to have an implementation that may or may not be what we want. SupportedOperations should be enough for now.",
+      "parentUuid": "1d3574dc_7ff08813",
+      "range": {
+        "startLine": 1898,
+        "startChar": 2,
+        "endLine": 1898,
+        "endChar": 79
+      },
+      "revId": "632bb06c06c1a172bc487ec3894b484a82e9af96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
