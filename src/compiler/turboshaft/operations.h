@@ -7525,6 +7525,13 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
   V(F16x8Floor)                                                               \
   V(F16x8Trunc)                                                               \
   V(F16x8NearestInt)                                                          \
+  V(I16x8SConvertF16x8)                                                       \
+  V(I16x8UConvertF16x8)                                                       \
+  V(F16x8SConvertI16x8)                                                       \
+  V(F16x8UConvertI16x8)                                                       \
+  V(F16x8DemoteF32x4Zero)                                                     \
+  V(F16x8DemoteF64x2Zero)                                                     \
+  V(F32x4PromoteLowF16x8)                                                     \
   V(F32x4Ceil)                                                                \
   V(F32x4Floor)                                                               \
   V(F32x4Trunc)                                                               \

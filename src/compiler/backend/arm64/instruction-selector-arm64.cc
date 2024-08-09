@@ -7035,6 +7035,13 @@ void InstructionSelectorT<Adapter>::VisitInt64AbsWithOverflow(node_t node) {
   V(F32x4SConvertI32x4, kArm64F32x4SConvertI32x4)               \
   V(F32x4UConvertI32x4, kArm64F32x4UConvertI32x4)               \
   V(F32x4DemoteF64x2Zero, kArm64F32x4DemoteF64x2Zero)           \
+  V(F16x8SConvertI16x8, kArm64F16x8SConvertI16x8)               \
+  V(F16x8UConvertI16x8, kArm64F16x8UConvertI16x8)               \
+  V(I16x8SConvertF16x8, kArm64I16x8SConvertF16x8)               \
+  V(I16x8UConvertF16x8, kArm64I16x8UConvertF16x8)               \
+  V(F16x8DemoteF32x4Zero, kArm64F16x8DemoteF32x4Zero)           \
+  V(F16x8DemoteF64x2Zero, kArm64F16x8DemoteF64x2Zero)           \
+  V(F32x4PromoteLowF16x8, kArm64F32x4PromoteLowF16x8)           \
   V(I64x2BitMask, kArm64I64x2BitMask)                           \
   V(I32x4SConvertF32x4, kArm64I32x4SConvertF32x4)               \
   V(I32x4UConvertF32x4, kArm64I32x4UConvertF32x4)               \
