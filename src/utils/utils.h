@@ -10,9 +10,14 @@
 #include <string.h>
 
 #include <cmath>
+#include <concepts>
+#include <functional>
+#include <ostream>
 #include <string>
 #include <type_traits>
+#include <utility>
 
+#include "include/v8config.h"
 #include "src/base/bits.h"
 #include "src/base/compiler-specific.h"
 #include "src/base/logging.h"
@@ -20,6 +25,7 @@
 #include "src/base/safe_conversions.h"
 #include "src/base/vector.h"
 #include "src/common/globals.h"
+#include "src/utils/ostreams.h"
 
 #if defined(V8_USE_SIPHASH)
 #include "src/third_party/siphash/halfsiphash.h"
@@ -734,6 +740,152 @@ V8_EXPORT_PRIVATE std::string ReadFile(const char* filename, bool* exists,
                                        bool verbose = true);
 V8_EXPORT_PRIVATE std::string ReadFile(FILE* file, bool* exists,
                                        bool verbose = true);
+
+// ----------------------------------------------------------------------------
+// Debug tracing.
+
+// Some tracing may incur expensive overhead, even if the trace condition is
+// false. For example, code like the following would do a recursive traversal:
+//
+// #define TRACE(...) TraceIf(v8_flags.trace_my_tree, __VA_ARGS__)
+//
+// void MyTree::TraceTree(const Node* node) const {
+//   TRACE("Node name: %s", node->name);
+//   for (int i = 0; i < node->num_children; ++i) {
+//     TraceTree(node->child[i]);
+//   }
+// }
+//
+// void MyTree::DoStuff() {
+//   ...
+//   TraceTree(head_);
+//   ...
+// }
+//
+// If the compiler doesn't know that everything in `TraceTree()` is
+// side-effect-free, `DoStuff()` could still pay runtime cost to invoke this,
+// even if `v8_flags.trace_my_tree` is false. This can be avoided by guarding
+// the `TraceTree()` call in `DoStuff()` with a check of the tracing flag, but
+// that litters the code with repeated references to the specific flag name.
+// Instead, create a zero-arg function or lambda that does the costly tracing
+// and returns whatever you want in the trace output. Then wrap this function in
+// a `CostlyTrace` instance when passing it to one of the tracing helpers below.
+// The helper will invoke the underlying function only when it will actually
+// print the result. (To ensure `PrintF()`-style tracing calls can accept the
+// output, if the result is string-like, `CostlyTrace` will automatically lower
+// it to a C-style string.)
+//
+// #define TRACE(...) TraceIf(v8_flags.trace_my_tree, __VA_ARGS__)
+//
+// std::string MyTree::TraceTree(const Node* node) const {
+//   std::string output = "Node name: " + node->name;
+//   for (int i = 0; i < node->num_children; ++i) {
+//     output += '\n';
+//     output += TraceTree(node->child[i]);
+//   }
+//   return output;
+// }
+//
+// void MyTree::DoStuff() {
+//   ...
+//   TRACE("%s", CostlyTrace([&] { return TraceTree(head_); }));
+//   ...
+// }
+//
+// Note that invoking `TraceTree()` directly in the `TRACE()` call here would
+// still be slow, because the invocation would occur before checking the trace
+// condition, not after.
+template <typename Invocable>
+  requires std::regular_invocable<Invocable> &&
+           (!std::is_void_v<std::invoke_result_t<Invocable>>)
+class CostlyTrace {
+ public:
+  V8_INLINE explicit CostlyTrace(Invocable invocable)
+      : invocable_(std::move(invocable)) {}
+
+  auto Unwrap() const { return cache_.InvokeAndReturn(invocable_); }
+
+ private:
+  // A type to cache the result value if needed. This is only necessary when
+  // `Result` is a string-like; otherwise it can be returned directly.
+  template <typename Result>
+  class Cache {
+   public:
+    static Result InvokeAndReturn(const Invocable& invocable) {
+      return std::invoke(invocable);
+    }
+  };
+
+  // For string-like `Result`s that aren't already `[const] char*`,
+  // `InvokeAndReturn` should lower to a C-style string instead of returning the
+  // result directly. This ensures `PrintF()`-style tracing can accept the
+  // returned value.
+  template <typename Result>
+    requires std::convertible_to<Result, std::string> &&
+             (!std::is_pointer_v<Result>)
+  class Cache<Result> {
+   public:
+    const char* InvokeAndReturn(const Invocable& invocable) const {
+      // Simply returning `std::invoke(invocable).c_str()` would immediately
+      // detroy the underlying `std::string`, resulting in a dangling pointer.
+      // To avoid this, cache the result in a member. This wouldn't be suitable
+      // for multi-thread or reentrant usage of a single `CostlyTrace` instance,
+      // but there's no reason callers should ever attempt such things.
+      output = std::invoke(invocable);
+      return output.c_str();
+    }
+
+   private:
+    mutable std::string output;
+  };
+
+  // If the result type is not string-like, `Cache<>` is empty, so mark it
+  // no_unique_address to allow collapsing it away.
+  V8_NO_UNIQUE_ADDRESS Cache<std::invoke_result_t<Invocable>> cache_;
+  Invocable invocable_;
+};
+
+template <typename T>
+CostlyTrace(T) -> CostlyTrace<T>;
+
+// A boolean that is true iff `T` is an instance of `CostlyTrace<>`.
+template <typename T>
+inline constexpr bool kIsCostlyTrace = false;
+template <typename Invocable>
+inline constexpr bool kIsCostlyTrace<CostlyTrace<Invocable>> = true;
+
+// Helper to unwrap trace args before outputting them. This invokes `Unwrap()`
+// on any `CostlyTrace<>` args, and passes others through unchanged.
+template <typename T>
+decltype(auto) UnwrapTraceArg(const T& t) {
+  if constexpr (kIsCostlyTrace<T>) {
+    return t.Unwrap();
+  } else {
+    return t;
+  }
+}
+
+// Conditional trace functions. Both of these print output to the console only
+// if `cond` is true (it is assumed to usually be false).
+
+// Format string version, a la `printf(format_str "\n", args...)`.
+template <typename... Args>
+V8_INLINE void TraceIf(bool cond, const char* format_str, Args&&... args) {
+  if (V8_UNLIKELY(cond)) {
+    PrintF(format_str, UnwrapTraceArg(std::forward<Args>(args))...);
+    PrintF("\n");
+  }
+}
+// Stream version, a la `(std::cout << ... << args) << '\n'`.
+template <typename... Args>
+V8_INLINE void StreamTraceIf(bool cond, Args&&... args) {
+  if (V8_UNLIKELY(cond)) {
+    (StdoutStream() << ... << UnwrapTraceArg(std::forward<Args>(args))) << '\n';
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Miscellaneous.
 
 bool DoubleToBoolean(double d);
 
