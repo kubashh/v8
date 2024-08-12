@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80f5c6b2_6b9c1331",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 27
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-08-12T18:44:18Z",
+      "side": 1,
+      "message": "Updated, now external memory is included in global limit, but without grow factor.",
+      "parentUuid": "a883c789_aa904ece",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "79eb9e90834eeb8d5f4bc4bb8e7d4aa95b2bb1ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7249674e_aa341762",
