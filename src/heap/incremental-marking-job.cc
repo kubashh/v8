@@ -44,7 +44,11 @@ class IncrementalMarkingJob::Task final : public CancelableTask {
 };
 
 IncrementalMarkingJob::IncrementalMarkingJob(Heap* heap)
-    : heap_(heap), foreground_task_runner_(heap->GetForegroundTaskRunner()) {
+    : heap_(heap),
+      foreground_task_runner_(heap->GetForegroundTaskRunner(
+          v8_flags.incremental_marking_user_visible
+              ? TaskPriority::kUserVisible
+              : TaskPriority::kUserBlocking)) {
   CHECK(v8_flags.incremental_marking_task);
 }
 
