@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a4eb340_7b914370",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-12T20:23:19Z",
+      "side": 1,
+      "message": "I think this makes sense for marking steps. However, the job is also used for finalizing a GC once marking is out of work. I\u0027m not sure finalizing should also be downgraded from user blocking to user visible. If marking is out of work, I believe it would be preferable to finalize as soon as possible, as otherwise we are paying for write barriers without gaining anything. Problem\nis that the tasks for marking and the tasks for finalizing are the same tasks, and there\u0027s no easy way to distinguish between them to send different tasks to different runners.\nWhile there\u0027s no doubt that it improves S3 scores, I\u0027m concerned about the edge cases (e.g. where we can get a task for finalizing and end up finalizing on allocation). I think this deserves a bit more thought and perhaps a design doc.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "cd3ca0dde4d5e8f1704a8835c22817b8fd7066e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f492b794_5699b7d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-12T20:23:19Z",
+      "side": 1,
+      "message": "+mlippatuz to take another look as I\u0027m OOO.",
+      "revId": "cd3ca0dde4d5e8f1704a8835c22817b8fd7066e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
