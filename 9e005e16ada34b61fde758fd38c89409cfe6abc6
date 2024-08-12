@@ -110,6 +110,30 @@
       },
       "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbf953b1_0099ea3f",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-12T07:59:03Z",
+      "side": 1,
+      "message": "yes please -- it\u0027s good to keep TVARIABLE_CONSTRUCTOR next to TVARIABLE since they do much the same thing.",
+      "parentUuid": "bffaad4c_7dc8c8ff",
+      "range": {
+        "startLine": 19,
+        "startChar": 8,
+        "endLine": 19,
+        "endChar": 29
+      },
+      "revId": "9e005e16ada34b61fde758fd38c89409cfe6abc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
