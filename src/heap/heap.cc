@@ -5960,8 +5960,10 @@ void Heap::InitializeHashSeed() {
           kInt64Size);
 }
 
-std::shared_ptr<v8::TaskRunner> Heap::GetForegroundTaskRunner() const {
-  return task_runner_;
+std::shared_ptr<v8::TaskRunner> Heap::GetForegroundTaskRunner(
+    TaskPriority priority) const {
+  return V8::GetCurrentPlatform()->GetForegroundTaskRunner(
+      reinterpret_cast<v8::Isolate*>(isolate()), priority);
 }
 
 // static
