@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "32e8854f_121af347",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-08-12T14:54:31Z",
+      "side": 1,
+      "message": "Yes, I want to use this for incremental marking in a follow-up (I think that was the original intention as well and was dropped).\nThis showed 0.6% improvement on Sp3 and I\u0027d like to run an experiment.\nUpdated CL description.",
+      "parentUuid": "c81b87a3_49c38e5b",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 5
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ba1d1626_2d159527",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e479826_cf1abe2c",
+        "filename": "src/d8/d8-platforms.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-08-12T14:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd6c997d_fa064172",
+      "range": {
+        "startLine": 64,
+        "startChar": 10,
+        "endLine": 64,
+        "endChar": 33
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8c8e889_c592ba00",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-08-09T17:24:14Z",
       "side": 1,
       "message": "Should this call get the `priority` argument as well?",
+      "range": {
+        "startLine": 149,
+        "startChar": 19,
+        "endLine": 149,
+        "endChar": 42
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e5600b_320d2e6a",
+        "filename": "src/d8/d8-platforms.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-08-12T14:54:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8c8e889_c592ba00",
       "range": {
         "startLine": 149,
         "startChar": 19,
@@ -112,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11538794_1e31d9d7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5671,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-08-12T14:54:31Z",
+      "side": 1,
+      "message": "There are many calls to GetForegroundTaskRunner() throughout the code base, I\u0027d rather update them all in 1 batch if we remove the default priority.",
+      "parentUuid": "fea0d2ee_6d92120a",
+      "range": {
+        "startLine": 5671,
+        "startChar": 43,
+        "endLine": 5671,
+        "endChar": 66
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8191bb0e_97e4ab11",
         "filename": "src/heap/heap.h",
         "patchSetId": 9
@@ -123,6 +219,30 @@
       "writtenOn": "2024-08-09T17:24:14Z",
       "side": 1,
       "message": "This runner is never used. Is there a reason to introduce it now? I\u0027d rather introduce it when we need it.",
+      "range": {
+        "startLine": 2296,
+        "startChar": 34,
+        "endLine": 2296,
+        "endChar": 59
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3c15a76_952268af",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2296,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-08-12T14:54:31Z",
+      "side": 1,
+      "message": "I meant to do this in the follow-up. Fixed.",
+      "parentUuid": "8191bb0e_97e4ab11",
       "range": {
         "startLine": 2296,
         "startChar": 34,
