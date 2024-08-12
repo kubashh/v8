@@ -33,6 +33,24 @@
       "message": "I think we could add this to LoopEffect now",
       "revId": "34e8169da7848c9a5ff83d9557c4234d0d06329d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "261d45b4_27ef592c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-08-12T14:30:59Z",
+      "side": 1,
+      "message": "Yes! I was planning to do this. I am fixing some other bugs now. But I\u0027ll come back to it.",
+      "parentUuid": "b7d463c0_a9c3e310",
+      "revId": "34e8169da7848c9a5ff83d9557c4234d0d06329d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
