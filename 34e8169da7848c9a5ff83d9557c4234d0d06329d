@@ -16,6 +16,23 @@
       "message": "PTAL!",
       "revId": "34e8169da7848c9a5ff83d9557c4234d0d06329d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d463c0_a9c3e310",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1558707
+      },
+      "writtenOn": "2024-08-12T14:20:47Z",
+      "side": 1,
+      "message": "I think we could add this to LoopEffect now",
+      "revId": "34e8169da7848c9a5ff83d9557c4234d0d06329d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
