@@ -16,6 +16,23 @@
       "message": "As a non-committer, I\u0027ll need two votes to land (they don\u0027t need to have both reviewed everything). Adding dlehmann@ as \"Gerrit autosuggested you\".",
       "revId": "a1270ab9c221599c51948171a46f69d06c69dc0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d52042_82e7be1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-12T09:58:42Z",
+      "side": 1,
+      "message": "LGTM modulo Leszek\u0027s comments",
+      "revId": "a1270ab9c221599c51948171a46f69d06c69dc0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
