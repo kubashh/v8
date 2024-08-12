@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ad96300_34cc3e8b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5671,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-08-12T20:22:36Z",
+      "side": 1,
+      "message": "Now that there\u0027s only one task runner here, I think it\u0027s fine as is. This bothered me more when there were 2 and only one used an explicit priority.",
+      "parentUuid": "11538794_1e31d9d7",
+      "range": {
+        "startLine": 5671,
+        "startChar": 43,
+        "endLine": 5671,
+        "endChar": 66
+      },
+      "revId": "84c62fea261cdbbb1a46e3ea8dfb52bbc7b56397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8191bb0e_97e4ab11",
