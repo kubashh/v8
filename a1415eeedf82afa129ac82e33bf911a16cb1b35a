@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7ff69af_10c8385f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-08-13T08:41:57Z",
+      "side": 1,
+      "message": "PTAL.\nAre we good to reland this, exactly as it was?\nI think it was not reverted because it caused a problem, but because of dependencies.",
+      "revId": "a1415eeedf82afa129ac82e33bf911a16cb1b35a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
