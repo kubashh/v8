@@ -4020,6 +4020,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Boolean> StrictEqual(TNode<Object> lhs, TNode<Object> rhs,
                              TVariable<Smi>* var_type_feedback = nullptr);
 
+  void DetectType(TNode<Object> lhs);
+
   void GotoIfStringEqual(TNode<String> lhs, TNode<IntPtrT> lhs_length,
                          TNode<String> rhs, Label* if_true) {
     Label if_false(this);

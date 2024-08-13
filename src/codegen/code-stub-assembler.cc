@@ -15050,8 +15050,112 @@ TNode<Boolean> CodeStubAssembler::Equal(TNode<Object> left, TNode<Object> right,
   return result.value();
 }
 
+void CodeStubAssembler::DetectType(TNode<Object> lhs) {
+  Label if_lhsissmi(this), if_lhsisnotsmi(this), done(this);
+  Branch(TaggedIsSmi(lhs), &if_lhsissmi, &if_lhsisnotsmi);
+
+  BIND(&if_lhsisnotsmi);
+  {
+    TNode<Map> lhs_map = LoadMap(CAST(lhs));
+    TNode<Uint16T> lhs_instance_type = LoadMapInstanceType(lhs_map);
+
+    Label if_lhsisnumber(this), if_lhsisstring(this), if_lhsisbigint(this),
+        if_lhsissymbol(this), if_lhsisreceiver(this), if_lhsisboolean(this),
+        if_lhsisoddball(this);
+
+    GotoIf(IsHeapNumberMap(lhs_map), &if_lhsisnumber);
+    GotoIf(IsStringInstanceType(lhs_instance_type), &if_lhsisstring);
+    GotoIf(IsBigIntInstanceType(lhs_instance_type), &if_lhsisbigint);
+    GotoIf(IsJSReceiverInstanceType(lhs_instance_type), &if_lhsisreceiver);
+    GotoIf(IsBooleanMap(lhs_map), &if_lhsisboolean);
+    GotoIf(IsOddballInstanceType(lhs_instance_type), &if_lhsisoddball);
+    GotoIf(IsSymbolInstanceType(lhs_instance_type), &if_lhsissymbol);
+    Print("Fail");
+    Goto(&done);
+
+    BIND(&if_lhsisnumber);
+    {
+      Print("HeapNumber");
+      Goto(&done);
+    }
+
+    BIND(&if_lhsisstring);
+    {
+      Print("String");
+      Goto(&done);
+    }
+
+    BIND(&if_lhsisbigint);
+    {
+      Print("BigInt");
+      Goto(&done);
+    }
+
+    BIND(&if_lhsissymbol);
+    {
+      Print("Symbol");
+      Goto(&done);
+    }
+
+    BIND(&if_lhsisreceiver);
+    {
+      Print("Receiver");
+      Goto(&done);
+    }
+
+    BIND(&if_lhsisboolean);
+    {
+      Print("Boolean");
+      Goto(&done);
+    }
+
+    BIND(&if_lhsisoddball);
+    {
+      Print("NonBooleanOddball");
+      Goto(&done);
+    }
+  }
+  BIND(&if_lhsissmi);
+  {
+    Print("Smi");
+    Goto(&done);
+  }
+  BIND(&done);
+}
+
 TNode<Boolean> CodeStubAssembler::StrictEqual(
     TNode<Object> lhs, TNode<Object> rhs, TVariable<Smi>* var_type_feedback) {
+  Label detect(this), nodetect(this);
+  GotoIf(Word32And(TaggedIsSmi(lhs), TaggedIsSmi(rhs)), &nodetect);
+
+  GotoIf(TaggedIsSmi(lhs), &detect);
+  GotoIf(TaggedIsSmi(rhs), &detect);
+
+  // Here both are non-smi
+  {
+    TNode<Map> lhs_map = LoadMap(CAST(lhs));
+    TNode<Uint16T> lhs_instance_type = LoadMapInstanceType(lhs_map);
+    TNode<Map> rhs_map = LoadMap(CAST(rhs));
+    TNode<Uint16T> rhs_instance_type = LoadMapInstanceType(rhs_map);
+
+    GotoIf(Word32And(IsStringInstanceType(lhs_instance_type),
+                     IsStringInstanceType(rhs_instance_type)),
+           &nodetect);
+    GotoIf(Word32And(IsJSReceiverInstanceType(lhs_instance_type),
+                     IsJSReceiverInstanceType(rhs_instance_type)),
+           &nodetect);
+    Goto(&detect);
+  }
+
+  BIND(&detect);
+  Print("lhs");
+  DetectType(lhs);
+  Print("rhs");
+  DetectType(rhs);
+  Goto(&nodetect);
+
+  BIND(&nodetect);
+
   // Pseudo-code for the algorithm below:
   //
   // if (lhs == rhs) {
