@@ -225,6 +225,8 @@ class Deserializer : public SerializerDeserializer {
   int ReadInitializeSelfIndirectPointer(uint8_t data,
                                         SlotAccessor slot_accessor);
   template <typename SlotAccessor>
+  int ReadInitializeJSDispatchHandle(uint8_t data, SlotAccessor slot_accessor);
+  template <typename SlotAccessor>
   int ReadProtectedPointerPrefix(uint8_t data, SlotAccessor slot_accessor);
   template <typename SlotAccessor>
   int ReadRootArrayConstants(uint8_t data, SlotAccessor slot_accessor);

@@ -26,6 +26,7 @@
 #include "src/objects/slots.h"
 #include "src/objects/string.h"
 #include "src/roots/roots.h"
+#include "src/sandbox/js-dispatch-table-inl.h"
 #include "src/snapshot/embedded/embedded-data-inl.h"
 #include "src/snapshot/references.h"
 #include "src/snapshot/serializer-deserializer.h"
@@ -944,6 +945,8 @@ int Deserializer<IsolateT>::ReadSingleBytecodeData(uint8_t data,
       return ReadIndirectPointerPrefix(data, slot_accessor);
     case kInitializeSelfIndirectPointer:
       return ReadInitializeSelfIndirectPointer(data, slot_accessor);
+    case kInitializeJSDispatchHandle:
+      return ReadInitializeJSDispatchHandle(data, slot_accessor);
     case kProtectedPointerPrefix:
       return ReadProtectedPointerPrefix(data, slot_accessor);
     case CASE_RANGE(kRootArrayConstants, 32):
@@ -1275,6 +1278,36 @@ int Deserializer<IsolateT>::ReadInitializeSelfIndirectPointer(
   Tagged<ExposedTrustedObject> host =
       Cast<ExposedTrustedObject>(*slot_accessor.object());
   host->init_self_indirect_pointer(isolate());
+
+  return 1;
+#else
+  UNREACHABLE();
+#endif  // V8_ENABLE_SANDBOX
+}
+
+template <typename IsolateT>
+template <typename SlotAccessor>
+int Deserializer<IsolateT>::ReadInitializeJSDispatchHandle(
+    uint8_t data, SlotAccessor slot_accessor) {
+#ifdef V8_ENABLE_LEAPTIERING
+  DCHECK_NE(slot_accessor.object()->address(), kNullAddress);
+  Handle<HeapObject> host = slot_accessor.object();
+
+  // TODO(saelo): here we might end up duplicating entries that were originally
+  // shared. This can only happen in certain testing modes (e.g. snapshot
+  // stress mode) so isn't much of a problem in practice.
+
+  uint32_t parameter_count = source_.GetUint30();
+  DCHECK_LE(parameter_count, kMaxUInt16);
+
+  // TODO(saelo): maybe move this logic into a JSDispatchHandleSlot::Initialize?
+  Address field_address = host->address() + slot_accessor.offset();
+  JSDispatchTable::Space* space =
+      IsolateForSandbox(isolate()).GetJSDispatchTableSpaceFor(field_address);
+  JSDispatchHandle handle =
+      GetProcessWideJSDispatchTable()->AllocateAndInitializeEntry(
+          space, parameter_count);
+  host->WriteField<JSDispatchHandle>(slot_accessor.offset(), handle);
 
   return 1;
 #else
