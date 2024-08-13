@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fbc7ae3_b86cbb45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1545467
+      },
+      "writtenOn": "2024-08-13T16:55:39Z",
+      "side": 1,
+      "message": "Thanks for the review!",
+      "revId": "1de320151940710bdfbd1e9ded6d242c12463c89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14d43b9e_027f044c",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-08-13T16:48:40Z",
       "side": 1,
       "message": "Would it make sense to force dst !\u003d src in the instruction selector (using `UseUniqueRegister`) to avoid the temp?",
+      "range": {
+        "startLine": 2491,
+        "startChar": 0,
+        "endLine": 2493,
+        "endChar": 0
+      },
+      "revId": "1de320151940710bdfbd1e9ded6d242c12463c89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d1dcaeb_87cd7bda",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2493,
+      "author": {
+        "id": 1545467
+      },
+      "writtenOn": "2024-08-13T16:55:39Z",
+      "side": 1,
+      "message": "I still would need a temp here, even if dst !\u003d src. Because if I use dst for conversion of a lower part first, then I cannot use it for scalar conversion of high part and need a temp register anyway.\nMy comment highlights a fact what if I convert a low part to dst first, it clobbers high part if src and dst overlap.",
+      "parentUuid": "14d43b9e_027f044c",
       "range": {
         "startLine": 2491,
         "startChar": 0,
