@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d09394ed_aab05774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-08-13T08:55:39Z",
+      "side": 1,
+      "message": "I had an outdated lucicfg compiler on my machine and needed to rebuild the configs. ptal.",
+      "revId": "8f23efd5f72ca7eb9e08a321e665a82d6c52209b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
