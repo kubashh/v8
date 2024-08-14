@@ -13139,6 +13139,7 @@ void MaglevGraphBuilder::VisitSwitchOnGeneratorState() {
                                       StoreTaggedMode::kDefault);
   ValueNode* context =
       BuildLoadTaggedField(generator, JSGeneratorObject::kContextOffset);
+  graph()->record_scope_info(context, {});
   SetContext(context);
 
   // Guarantee that we have something in the accumulator.
