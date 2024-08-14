@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990eb5f2_6c19c259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1343844
+      },
+      "writtenOn": "2024-08-14T22:32:18Z",
+      "side": 1,
+      "message": "Hi Shu, would you mind taking a look at this? This cleans up following https://chromium-review.googlesource.com/c/v8/v8/+/5191569. Thanks!",
+      "revId": "fd49846101e0368dc5c915234fea6b178d54c0ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
