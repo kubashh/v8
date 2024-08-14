@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c81d30ac_1ffdd0a6",
+        "filename": "src/common/segmented-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-14T10:31:24Z",
+      "side": 1,
+      "message": "Nit: \"freeing\"? Not 100% sure what the right word is though",
+      "range": {
+        "startLine": 18,
+        "startChar": 49,
+        "endLine": 18,
+        "endChar": 53
+      },
+      "revId": "0dd65ce6c7512731b85c7d9b057bd20cf0134146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d668563_2e23c520",
+        "filename": "src/common/segmented-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-14T10:31:24Z",
+      "side": 1,
+      "message": "Nit: \"A\"",
+      "range": {
+        "startLine": 88,
+        "startChar": 5,
+        "endLine": 88,
+        "endChar": 7
+      },
+      "revId": "0dd65ce6c7512731b85c7d9b057bd20cf0134146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07fdde9f_cf5d2ac4",
+        "filename": "src/common/segmented-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-14T10:31:24Z",
+      "side": 1,
+      "message": "Should we call this \"AllocateAndInitializeSegment()\"?",
+      "revId": "0dd65ce6c7512731b85c7d9b057bd20cf0134146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd75e0c4_7c349409",
+        "filename": "src/sandbox/external-entity-table-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-14T10:31:24Z",
+      "side": 1,
+      "message": "Nit: I guess this comment is slightly outdated now. Maybe just \"prevent reordering of earlier stores (for example during initialization of the segment) ...\" or so",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 73
+      },
+      "revId": "0dd65ce6c7512731b85c7d9b057bd20cf0134146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04538fc4_d8b9bfd8",
+        "filename": "src/sandbox/external-entity-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-14T10:31:24Z",
+      "side": 1,
+      "message": "I think you can remove this now since the same comments exists on the SegmentedTable class. No strong opinion though, so fine either way",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 36
+      },
+      "revId": "0dd65ce6c7512731b85c7d9b057bd20cf0134146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
