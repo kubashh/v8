@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0410ccd_9f67fb82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-14T09:55:05Z",
+      "side": 1,
+      "message": "For regular marking steps we indeed have fallback steps on allocation and the steps on tasks can be deprioritized a little. \n\nI experimented with something very similar in the past where I wanted to delay the finalization with an idle task that has a fallback posted as delayed task. \n\nEtienne, can you (in a timely way) experiment here whether the improvement is coming from (1) deprioritizing steps or (2) deprioritizing finaliztion.\n\nIf it\u0027s (2) then I think we should do something differently based on idle/delayed fallback rather than just deprioritizing the whole event overall.\n\nSince this is a S3 improvement: If you cannot pick this up timely, we can take over here.",
+      "parentUuid": "5a4eb340_7b914370",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "cd3ca0dde4d5e8f1704a8835c22817b8fd7066e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f492b794_5699b7d4",
