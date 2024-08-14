@@ -260,6 +260,37 @@ class RootVisitor;
     EmptyTrustedWeakFixedArray)                                           \
   V(ProtectedFixedArray, empty_protected_fixed_array, EmptyProtectedFixedArray)
 
+#define BUILTINS_WITH_SFI_LIST_GENERATOR(V, _)                               \
+  V(_, ProxyRevoke, proxy_revoke)                                            \
+  V(_, ArrayFromAsyncArrayLikeOnFulfilled,                                   \
+    array_from_async_array_like_on_fulfilled)                                \
+  V(_, ArrayFromAsyncArrayLikeOnRejected,                                    \
+    array_from_async_array_like_on_rejected)                                 \
+  V(_, ArrayFromAsyncIterableOnFulfilled,                                    \
+    array_from_async_iterable_on_fulfilled)                                  \
+  V(_, ArrayFromAsyncIterableOnRejected,                                     \
+    array_from_async_iterable_on_rejected)                                   \
+  V(_, PromiseCapabilityDefaultResolve, promise_capability_default_resolve)  \
+  V(_, PromiseCapabilityDefaultReject, promise_capability_default_reject)    \
+  V(_, PromiseGetCapabilitiesExecutor, promise_get_capabilities_executor)    \
+  V(_, PromiseAllSettledResolveElementClosure,                               \
+    promise_all_settled_resolve_element_closure)                             \
+  V(_, PromiseAllSettledRejectElementClosure,                                \
+    promise_all_settled_reject_element_closure)                              \
+  V(_, PromiseAllResolveElementClosure, promise_all_resolve_element_closure) \
+  V(_, PromiseAnyRejectElementClosure, promise_any_reject_element_closure)   \
+  V(_, PromiseThrowerFinally, promise_thrower_finally)                       \
+  V(_, PromiseValueThunkFinally, promise_value_thunk_finally)                \
+  V(_, PromiseThenFinally, promise_then_finally)                             \
+  V(_, PromiseCatchFinally, promise_catch_finally)
+
+#define BUILTINS_WITH_SFI_ROOTS_LIST_ADAPTER(V, CamelName, underscore_name, \
+                                             ...)                           \
+  V(SharedFunctionInfo, underscore_name##_shared_fun, CamelName##SharedFun)
+
+#define BUILTINS_WITH_SFI_ROOTS_LIST(V) \
+  BUILTINS_WITH_SFI_LIST_GENERATOR(BUILTINS_WITH_SFI_ROOTS_LIST_ADAPTER, V)
+
 // Mutable roots that are known to be immortal immovable, for which we can
 // safely skip write barriers.
 #define STRONG_MUTABLE_IMMOVABLE_ROOT_LIST(V)                                  \
@@ -323,43 +354,12 @@ class RootVisitor;
     AsyncFromSyncIteratorCloseSyncAndRethrowSharedFun)                         \
   V(SharedFunctionInfo, async_iterator_value_unwrap_shared_fun,                \
     AsyncIteratorValueUnwrapSharedFun)                                         \
-  V(SharedFunctionInfo, promise_all_resolve_element_shared_fun,                \
-    PromiseAllResolveElementClosureSharedFun)                                  \
-  V(SharedFunctionInfo, promise_all_settled_resolve_element_shared_fun,        \
-    PromiseAllSettledResolveElementClosureSharedFun)                           \
-  V(SharedFunctionInfo, promise_all_settled_reject_element_shared_fun,         \
-    PromiseAllSettledRejectElementClosureSharedFun)                            \
-  V(SharedFunctionInfo, promise_any_reject_element_shared_fun,                 \
-    PromiseAnyRejectElementClosureSharedFun)                                   \
-  V(SharedFunctionInfo, promise_capability_default_reject_shared_fun,          \
-    PromiseCapabilityDefaultRejectSharedFun)                                   \
-  V(SharedFunctionInfo, promise_capability_default_resolve_shared_fun,         \
-    PromiseCapabilityDefaultResolveSharedFun)                                  \
-  V(SharedFunctionInfo, promise_catch_finally_shared_fun,                      \
-    PromiseCatchFinallySharedFun)                                              \
-  V(SharedFunctionInfo, promise_get_capabilities_executor_shared_fun,          \
-    PromiseGetCapabilitiesExecutorSharedFun)                                   \
-  V(SharedFunctionInfo, promise_then_finally_shared_fun,                       \
-    PromiseThenFinallySharedFun)                                               \
-  V(SharedFunctionInfo, promise_thrower_finally_shared_fun,                    \
-    PromiseThrowerFinallySharedFun)                                            \
-  V(SharedFunctionInfo, promise_value_thunk_finally_shared_fun,                \
-    PromiseValueThunkFinallySharedFun)                                         \
-  V(SharedFunctionInfo, proxy_revoke_shared_fun, ProxyRevokeSharedFun)         \
   V(SharedFunctionInfo, shadow_realm_import_value_fulfilled_sfi,               \
     ShadowRealmImportValueFulfilledSFI)                                        \
   V(SharedFunctionInfo, source_text_module_execute_async_module_fulfilled_sfi, \
     SourceTextModuleExecuteAsyncModuleFulfilledSFI)                            \
   V(SharedFunctionInfo, source_text_module_execute_async_module_rejected_sfi,  \
     SourceTextModuleExecuteAsyncModuleRejectedSFI)                             \
-  V(SharedFunctionInfo, array_from_async_iterable_on_fulfilled_shared_fun,     \
-    ArrayFromAsyncIterableOnFulfilledSharedFun)                                \
-  V(SharedFunctionInfo, array_from_async_iterable_on_rejected_shared_fun,      \
-    ArrayFromAsyncIterableOnRejectedSharedFun)                                 \
-  V(SharedFunctionInfo, array_from_async_array_like_on_fulfilled_shared_fun,   \
-    ArrayFromAsyncArrayLikeOnFulfilledSharedFun)                               \
-  V(SharedFunctionInfo, array_from_async_array_like_on_rejected_shared_fun,    \
-    ArrayFromAsyncArrayLikeOnRejectedSharedFun)                                \
   V(SharedFunctionInfo, atomics_mutex_async_unlock_resolve_handler_sfi,        \
     AtomicsMutexAsyncUnlockResolveHandlerSFI)                                  \
   V(SharedFunctionInfo, atomics_mutex_async_unlock_reject_handler_sfi,         \
@@ -372,6 +372,7 @@ class RootVisitor;
     AsyncDisposableStackOnRejectedSharedFun)                                   \
   V(SharedFunctionInfo, async_dispose_from_sync_dispose_shared_fun,            \
     AsyncDisposeFromSyncDisposeSharedFun)                                      \
+  BUILTINS_WITH_SFI_ROOTS_LIST(V)                                              \
   TRUSTED_ROOT_LIST(V)
 
 // These root references can be updated by the mutator.
