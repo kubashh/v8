@@ -304,6 +304,10 @@ void MarkingVisitorBase<ConcreteVisitor>::VisitJSDispatchTableEntry(
 #endif  // DEBUG
 
   table->Mark(handle);
+
+  // The code objects referenced from a dispatch table entry are treated as weak
+  // references for the purpose of bytecode/baseline flushing, so they are not
+  // marked here. See also VisitJSFunction below.
 #endif  // V8_ENABLE_LEAPTIERING
 }
 
@@ -326,6 +330,20 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitJSFunction(
 #else
     VisitPointer(js_function, js_function->RawField(JSFunction::kCodeOffset));
 #endif  // V8_ENABLE_SANDBOX
+#ifdef V8_ENABLE_LEAPTIERING
+    JSDispatchHandle handle = js_function->Relaxed_ReadField<JSDispatchHandle>(
+        JSFunction::kDispatchHandleOffset);
+    if (GetProcessWideJSDispatchTable()->HasCode(handle)) {
+      Tagged<HeapObject> obj = GetProcessWideJSDispatchTable()->GetCode(handle);
+      // TODO(saelo): maybe factor out common code with VisitIndirectPointer
+      // into a helper routine?
+      SynchronizePageAccess(obj);
+      const auto target_worklist = MarkingHelper::ShouldMarkObject(heap_, obj);
+      if (target_worklist) {
+        MarkObject(js_function, obj, target_worklist.value());
+      }
+    }
+#endif
     // TODO(mythria): Consider updating the check for ShouldFlushBaselineCode to
     // also include cases where there is old bytecode even when there is no
     // baseline code and remove this check here.

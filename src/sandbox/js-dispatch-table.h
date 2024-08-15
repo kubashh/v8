@@ -147,6 +147,9 @@ class V8_EXPORT_PRIVATE JSDispatchTable
   // return a Tagged<Union<Code, BytecodeArray>>.
   Tagged<Code> GetCode(JSDispatchHandle handle);
 
+  // Returns the address of the Code object stored in the specified entry.
+  inline Address GetCodeAddress(JSDispatchHandle handle);
+
   // Retrieves the parameter count of the entry referenced by the given handle.
   inline uint16_t GetParameterCount(JSDispatchHandle handle);
 
@@ -154,6 +157,8 @@ class V8_EXPORT_PRIVATE JSDispatchTable
   // entrypoint. The code must be compatible with the specified entry. In
   // particular, the two must use the same parameter count.
   void SetCode(JSDispatchHandle handle, Tagged<Code> new_code);
+  // TODO(saelo): once every entry of the table has a Code object, many calls
+  // to this function can probably be deleted.
   bool HasCode(JSDispatchHandle handle);
 
   // Allocates a new entry in the table and initialize it.
@@ -180,7 +185,6 @@ class V8_EXPORT_PRIVATE JSDispatchTable
   // The callback function will be invoked once for every entry that is
   // currently in use, i.e. has been allocated and not yet freed, and will
   // receive the handle of that entry.
-  // TODO(saelo): does it also need to get the referenced object pointer?
   template <typename Callback>
   void IterateActiveEntriesIn(Space* space, Callback callback);
 
