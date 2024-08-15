@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8896f9b9_a2a18278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3529302
+      },
+      "writtenOn": "2024-08-15T15:41:34Z",
+      "side": 1,
+      "message": "These are asm/masm-only changes, all remaining parts will be integrated later as a part of https://chromium-review.googlesource.com/c/v8/v8/+/5729672.",
+      "revId": "57c0b057b870f75f4bd8671ada30de5a5e8064db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
