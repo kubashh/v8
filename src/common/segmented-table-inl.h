@@ -86,6 +86,12 @@ void SegmentedTable<Entry, size>::Initialize() {
         nullptr, "SegmentedTable::InitializeTable (subspace allocation)");
   }
   base_ = reinterpret_cast<Entry*>(vas_->base());
+
+  if constexpr (kIsWriteProtected) {
+    CHECK(ThreadIsolation::WriteProtectMemory(
+        base(), kCodePointerTableReservationSize,
+        PageAllocator::Permission::kNoAccess));
+  }
 }
 
 template <typename Entry, size_t size>
