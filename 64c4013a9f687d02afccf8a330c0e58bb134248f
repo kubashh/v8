@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8414ca_d1079de2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-15T09:09:19Z",
+      "side": 1,
+      "message": "ptal. In case you don\u0027t have time on friday, feel free to reassign to victor for monday 😊",
+      "revId": "64c4013a9f687d02afccf8a330c0e58bb134248f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
