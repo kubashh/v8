@@ -16,6 +16,23 @@
       "message": "Hi Shu, would you mind taking a look at this? This cleans up following https://chromium-review.googlesource.com/c/v8/v8/+/5191569. Thanks!",
       "revId": "fd49846101e0368dc5c915234fea6b178d54c0ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ade50db9_f4abde1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-08-15T18:28:02Z",
+      "side": 1,
+      "message": "lgtm, thanks for the cleanup!",
+      "revId": "fd49846101e0368dc5c915234fea6b178d54c0ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
