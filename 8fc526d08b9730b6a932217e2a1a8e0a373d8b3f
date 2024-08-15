@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "8fc526d08b9730b6a932217e2a1a8e0a373d8b3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b026b1b_01e103e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-15T11:39:05Z",
+      "side": 1,
+      "message": "Ah very nice! Feel free to reference issue 359812662 as Bug for this change :)",
+      "revId": "8fc526d08b9730b6a932217e2a1a8e0a373d8b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
