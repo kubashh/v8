@@ -41,7 +41,7 @@
 
 #if defined(_MSC_VER)
 #include <crtdbg.h>
-#endif               // defined(_MSC_VER)
+#endif  // defined(_MSC_VER)
 
 // Check that type sizes and alignments match.
 static_assert(sizeof(V8_CONDITION_VARIABLE) == sizeof(CONDITION_VARIABLE));
@@ -69,7 +69,6 @@ static_assert(offsetof(V8_CRITICAL_SECTION, SpinCount) ==
 // the Microsoft Visual Studio C++ CRT.
 #ifdef __MINGW32__
 
-
 #ifndef __MINGW64_VERSION_MAJOR
 
 #define _TRUNCATE 0
@@ -77,18 +76,16 @@ static_assert(offsetof(V8_CRITICAL_SECTION, SpinCount) ==
 
 inline void MemoryFence() {
   int barrier = 0;
-  __asm__ __volatile__("xchgl %%eax,%0 ":"=r" (barrier));
+  __asm__ __volatile__("xchgl %%eax,%0 " : "=r"(barrier));
 }
 
 #endif  // __MINGW64_VERSION_MAJOR
-
 
 int localtime_s(tm* out_tm, const time_t* time) {
   tm* posix_local_time_struct = localtime_r(time, out_tm);
   if (posix_local_time_struct == nullptr) return 1;
   return 0;
 }
-
 
 int fopen_s(FILE** pFile, const char* filename, const char* mode) {
   *pFile = fopen(filename, mode);
@@ -105,7 +102,6 @@ int _vsnprintf_s(char* buffer, size_t sizeOfBuffer, size_t count,
   DCHECK(count == _TRUNCATE);
   return _vsnprintf(buffer, sizeOfBuffer, format, argptr);
 }
-
 
 int strncpy_s(char* dest, size_t dest_size, const char* source, size_t count) {
   CHECK(source != nullptr);
@@ -188,13 +184,11 @@ class WindowsTimezoneCache : public TimezoneCache {
     // To properly resolve the resource identifier requires a library load,
     // which is not possible in a sandbox.
     if (std_tz_name_[0] == '\0' || std_tz_name_[0] == '@') {
-      OS::SNPrintF(std_tz_name_, kTzNameSize - 1,
-                   "%s Standard Time",
+      OS::SNPrintF(std_tz_name_, kTzNameSize - 1, "%s Standard Time",
                    GuessTimezoneNameFromBias(tzinfo_.Bias));
     }
     if (dst_tz_name_[0] == '\0' || dst_tz_name_[0] == '@') {
-      OS::SNPrintF(dst_tz_name_, kTzNameSize - 1,
-                   "%s Daylight Time",
+      OS::SNPrintF(dst_tz_name_, kTzNameSize - 1, "%s Daylight Time",
                    GuessTimezoneNameFromBias(tzinfo_.Bias));
     }
     // Timezone information initialized.
@@ -206,24 +200,38 @@ class WindowsTimezoneCache : public TimezoneCache {
   const char* GuessTimezoneNameFromBias(int bias) {
     static const int kHour = 60;
     switch (-bias) {
-      case -9*kHour: return "Alaska";
-      case -8*kHour: return "Pacific";
-      case -7*kHour: return "Mountain";
-      case -6*kHour: return "Central";
-      case -5*kHour: return "Eastern";
-      case -4*kHour: return "Atlantic";
-      case  0*kHour: return "GMT";
-      case +1*kHour: return "Central Europe";
-      case +2*kHour: return "Eastern Europe";
-      case +3*kHour: return "Russia";
-      case +5*kHour + 30: return "India";
-      case +8*kHour: return "China";
-      case +9*kHour: return "Japan";
-      case +12*kHour: return "New Zealand";
-      default: return "Local";
+      case -9 * kHour:
+        return "Alaska";
+      case -8 * kHour:
+        return "Pacific";
+      case -7 * kHour:
+        return "Mountain";
+      case -6 * kHour:
+        return "Central";
+      case -5 * kHour:
+        return "Eastern";
+      case -4 * kHour:
+        return "Atlantic";
+      case 0 * kHour:
+        return "GMT";
+      case +1 * kHour:
+        return "Central Europe";
+      case +2 * kHour:
+        return "Eastern Europe";
+      case +3 * kHour:
+        return "Russia";
+      case +5 * kHour + 30:
+        return "India";
+      case +8 * kHour:
+        return "China";
+      case +9 * kHour:
+        return "Japan";
+      case +12 * kHour:
+        return "New Zealand";
+      default:
+        return "Local";
     }
   }
-
 
  private:
   static const int kTzNameSize = 128;
@@ -233,7 +241,6 @@ class WindowsTimezoneCache : public TimezoneCache {
   TIME_ZONE_INFORMATION tzinfo_;
   friend class Win32Time;
 };
-
 
 // ----------------------------------------------------------------------------
 // The Time class represents time on win32. A timestamp is represented as
@@ -299,18 +306,13 @@ class Win32Time {
   TimeStamp time_;
 };
 
-
 // Initialize timestamp to start of epoc.
-Win32Time::Win32Time() {
-  t() = 0;
-}
-
+Win32Time::Win32Time() { t() = 0; }
 
 // Initialize timestamp from a JavaScript timestamp.
 Win32Time::Win32Time(double jstime) {
   t() = static_cast<int64_t>(jstime) * kTimeScaler + kTimeEpoc;
 }
-
 
 // Initialize timestamp from date/time components.
 Win32Time::Win32Time(int year, int mon, int day, int hour, int min, int sec) {
@@ -325,12 +327,10 @@ Win32Time::Win32Time(int year, int mon, int day, int hour, int min, int sec) {
   SystemTimeToFileTime(&st, &ft());
 }
 
-
 // Convert timestamp to JavaScript timestamp.
 double Win32Time::ToJSTime() {
   return static_cast<double>((t() - kTimeEpoc) / kTimeScaler);
 }
-
 
 // Set timestamp to current time.
 void Win32Time::SetToCurrentTime() {
@@ -356,7 +356,7 @@ void Win32Time::SetToCurrentTime() {
   static DWORD init_ticks;
   static const int64_t kHundredNanosecondsPerSecond = 10000000;
   static const int64_t kMaxClockElapsedTime =
-      60*kHundredNanosecondsPerSecond;  // 1 minute
+      60 * kHundredNanosecondsPerSecond;  // 1 minute
 
   // If we are uninitialized, we need to resync the clock.
   bool needs_resync = !initialized;
@@ -386,7 +386,6 @@ void Win32Time::SetToCurrentTime() {
   DWORD elapsed = ticks_now - init_ticks;
   this->time_.t_ = init_time.t_ + (static_cast<int64_t>(elapsed) * 10000);
 }
-
 
 // Return the local timezone offset in milliseconds east of UTC. This
 // takes into account whether daylight saving is in effect at the time.
@@ -425,7 +424,6 @@ int64_t Win32Time::LocalOffset(WindowsTimezoneCache* cache) {
   }
 }
 
-
 // Return whether or not daylight savings time is in effect at this time.
 bool Win32Time::InDST(WindowsTimezoneCache* cache) {
   cache->InitializeIfNeeded();
@@ -450,12 +448,10 @@ bool Win32Time::InDST(WindowsTimezoneCache* cache) {
   return in_dst;
 }
 
-
 // Return the daylight savings time offset for this time.
 int64_t Win32Time::DaylightSavingsOffset(WindowsTimezoneCache* cache) {
   return InDST(cache) ? 60 * kMsPerMinute : 0;
 }
-
 
 // Returns a string identifying the current timezone for the
 // timestamp taking into account daylight saving.
@@ -465,15 +461,15 @@ char* Win32Time::LocalTimezone(WindowsTimezoneCache* cache) {
   return InDST(cache) ? cache->dst_tz_name_ : cache->std_tz_name_;
 }
 
-
 // Returns the accumulated user time for thread.
-int OS::GetUserTime(uint32_t* secs,  uint32_t* usecs) {
+int OS::GetUserTime(uint32_t* secs, uint32_t* usecs) {
   FILETIME dummy;
   uint64_t usertime;
 
   // Get the amount of time that the thread has executed in user mode.
   if (!GetThreadTimes(GetCurrentThread(), &dummy, &dummy, &dummy,
-                      reinterpret_cast<FILETIME*>(&usertime))) return -1;
+                      reinterpret_cast<FILETIME*>(&usertime)))
+    return -1;
 
   // Adjust the resolution to micro-seconds.
   usertime /= 10;
@@ -499,9 +495,7 @@ int OS::GetPeakMemoryUsageKb() {
 
 // Returns current time as the number of milliseconds since
 // 00:00:00 UTC, January 1, 1970.
-double OS::TimeCurrentMillis() {
-  return Time::Now().ToJsTime();
-}
+double OS::TimeCurrentMillis() { return Time::Now().ToJsTime(); }
 
 // Returns a string identifying the current timezone taking into
 // account daylight saving.
@@ -530,15 +524,11 @@ double WindowsTimezoneCache::DaylightSavingsOffset(double time) {
 
 TimezoneCache* OS::CreateTimezoneCache() { return new WindowsTimezoneCache(); }
 
-int OS::GetLastError() {
-  return ::GetLastError();
-}
-
+int OS::GetLastError() { return ::GetLastError(); }
 
 int OS::GetCurrentProcessId() {
   return static_cast<int>(::GetCurrentProcessId());
 }
-
 
 int OS::GetCurrentThreadId() {
   return static_cast<int>(::GetCurrentThreadId());
@@ -576,7 +566,6 @@ enum OutputMode {
 
 static OutputMode output_mode = UNKNOWN;  // Current output mode.
 
-
 // Determine if the process has a console for output.
 static bool HasConsole() {
   // Only check the first time. Eventual race conditions are not a problem,
@@ -594,7 +583,6 @@ static bool HasConsole() {
   }
   return output_mode == CONSOLE;
 }
-
 
 static void VPrintHelper(FILE* stream, const char* format, va_list args) {
   if ((stream == stdout || stream == stderr) && !HasConsole()) {
@@ -634,17 +622,11 @@ FILE* OS::FOpen(const char* path, const char* mode) {
   }
 }
 
-
-bool OS::Remove(const char* path) {
-  return (DeleteFileA(path) != 0);
-}
+bool OS::Remove(const char* path) { return (DeleteFileA(path) != 0); }
 
 char OS::DirectorySeparator() { return '\\'; }
 
-bool OS::isDirectorySeparator(const char ch) {
-  return ch == '/' || ch == '\\';
-}
-
+bool OS::isDirectorySeparator(const char ch) { return ch == '/' || ch == '\\'; }
 
 FILE* OS::OpenTemporaryFile() {
   // tmpfile_s tries to use the root dir, don't use it.
@@ -663,7 +645,6 @@ FILE* OS::OpenTemporaryFile() {
   return result;
 }
 
-
 // Open log file in binary mode to avoid /n -> /r/n conversion.
 const char* const OS::LogFileOpenMode = "wb+";
 
@@ -675,11 +656,9 @@ void OS::Print(const char* format, ...) {
   va_end(args);
 }
 
-
 void OS::VPrint(const char* format, va_list args) {
   VPrintHelper(stdout, format, args);
 }
-
 
 void OS::FPrint(FILE* out, const char* format, ...) {
   va_list args;
@@ -688,11 +667,9 @@ void OS::FPrint(FILE* out, const char* format, ...) {
   va_end(args);
 }
 
-
 void OS::VFPrint(FILE* out, const char* format, va_list args) {
   VPrintHelper(out, format, args);
 }
-
 
 // Print error message to console.
 void OS::PrintError(const char* format, ...) {
@@ -703,11 +680,9 @@ void OS::PrintError(const char* format, ...) {
   fflush(stderr);
 }
 
-
 void OS::VPrintError(const char* format, va_list args) {
   VPrintHelper(stderr, format, args);
 }
-
 
 int OS::SNPrintF(char* str, int length, const char* format, ...) {
   va_list args;
@@ -717,20 +692,17 @@ int OS::SNPrintF(char* str, int length, const char* format, ...) {
   return result;
 }
 
-
 int OS::VSNPrintF(char* str, int length, const char* format, va_list args) {
   int n = _vsnprintf_s(str, length, _TRUNCATE, format, args);
   // Make sure to zero-terminate the string if the output was
   // truncated or if there was an error.
   if (n < 0 || n >= length) {
-    if (length > 0)
-      str[length - 1] = '\0';
+    if (length > 0) str[length - 1] = '\0';
     return -1;
   } else {
     return n;
   }
 }
-
 
 void OS::StrNCpy(char* dest, int length, const char* src, size_t n) {
   // Use _TRUNCATE or strncpy_s crashes (by design) if buffer is too small.
@@ -741,7 +713,6 @@ void OS::StrNCpy(char* dest, int length, const char* src, size_t n) {
   USE(result);
   DCHECK(result == 0 || (n == _TRUNCATE && result == STRUNCATE));
 }
-
 
 #undef _TRUNCATE
 #undef STRUNCATE
@@ -1122,6 +1093,9 @@ bool OS::DecommitPages(void* address, size_t size) {
 }
 
 // static
+bool OS::SealPages(void* address, size_t size) { return false; }
+
+// static
 bool OS::CanReserveAddressSpace() {
   return VirtualAlloc2 != nullptr && MapViewOfFile3 != nullptr &&
          UnmapViewOfFile2 != nullptr;
@@ -1258,7 +1232,6 @@ void OS::Abort() {
   abort();
 }
 
-
 void OS::DebugBreak() {
 #if V8_CC_MSVC
   // To avoid Visual Studio runtime support the following code can be used
@@ -1269,7 +1242,6 @@ void OS::DebugBreak() {
   ::DebugBreak();
 #endif
 }
-
 
 class Win32MemoryMappedFile final : public OS::MemoryMappedFile {
  public:
@@ -1289,7 +1261,6 @@ class Win32MemoryMappedFile final : public OS::MemoryMappedFile {
   void* const memory_;
   size_t const size_;
 };
-
 
 // static
 OS::MemoryMappedFile* OS::MemoryMappedFile::open(const char* name,
@@ -1342,7 +1313,6 @@ OS::MemoryMappedFile* OS::MemoryMappedFile::create(const char* name,
   if (memory) memmove(memory, initial, size);
   return new Win32MemoryMappedFile(file, file_mapping, memory, size);
 }
-
 
 Win32MemoryMappedFile::~Win32MemoryMappedFile() {
   if (memory_) UnmapViewOfFile(memory_);
@@ -1445,22 +1415,22 @@ bool AddressSpaceReservation::DecommitPages(void* address, size_t size) {
 // dynamically might not be necessary any more - for some versions of Windows?).
 
 // Function pointers to functions dynamically loaded from dbghelp.dll.
-#define DBGHELP_FUNCTION_LIST(V)  \
-  V(SymInitialize)                \
-  V(SymGetOptions)                \
-  V(SymSetOptions)                \
-  V(SymGetSearchPath)             \
-  V(SymLoadModule64)              \
-  V(StackWalk64)                  \
-  V(SymGetSymFromAddr64)          \
-  V(SymGetLineFromAddr64)         \
-  V(SymFunctionTableAccess64)     \
+#define DBGHELP_FUNCTION_LIST(V) \
+  V(SymInitialize)               \
+  V(SymGetOptions)               \
+  V(SymSetOptions)               \
+  V(SymGetSearchPath)            \
+  V(SymLoadModule64)             \
+  V(StackWalk64)                 \
+  V(SymGetSymFromAddr64)         \
+  V(SymGetLineFromAddr64)        \
+  V(SymFunctionTableAccess64)    \
   V(SymGetModuleBase64)
 
 // Function pointers to functions dynamically loaded from dbghelp.dll.
-#define TLHELP32_FUNCTION_LIST(V)  \
-  V(CreateToolhelp32Snapshot)      \
-  V(Module32FirstW)                \
+#define TLHELP32_FUNCTION_LIST(V) \
+  V(CreateToolhelp32Snapshot)     \
+  V(Module32FirstW)               \
   V(Module32NextW)
 
 // Define the decoration to use for the type and variable name used for
@@ -1546,11 +1516,11 @@ static bool LoadDbgHelpAndTlHelp32() {
     return false;
   }
 
-#define LOAD_DLL_FUNC(name)                                                 \
-  DLL_FUNC_VAR(name) =                                                      \
+#define LOAD_DLL_FUNC(name) \
+  DLL_FUNC_VAR(name) =      \
       reinterpret_cast<DLL_FUNC_TYPE(name)>(GetProcAddress(module, #name));
 
-DBGHELP_FUNCTION_LIST(LOAD_DLL_FUNC)
+  DBGHELP_FUNCTION_LIST(LOAD_DLL_FUNC)
 
 #undef LOAD_DLL_FUNC
 
@@ -1561,23 +1531,23 @@ DBGHELP_FUNCTION_LIST(LOAD_DLL_FUNC)
     return false;
   }
 
-#define LOAD_DLL_FUNC(name)                                                 \
-  DLL_FUNC_VAR(name) =                                                      \
+#define LOAD_DLL_FUNC(name) \
+  DLL_FUNC_VAR(name) =      \
       reinterpret_cast<DLL_FUNC_TYPE(name)>(GetProcAddress(module, #name));
 
-TLHELP32_FUNCTION_LIST(LOAD_DLL_FUNC)
+  TLHELP32_FUNCTION_LIST(LOAD_DLL_FUNC)
 
 #undef LOAD_DLL_FUNC
 
   // Check that all functions where loaded.
-bool result =
+  bool result =
 #define DLL_FUNC_LOADED(name) (DLL_FUNC_VAR(name) != nullptr)&&
 
-    DBGHELP_FUNCTION_LIST(DLL_FUNC_LOADED)
-        TLHELP32_FUNCTION_LIST(DLL_FUNC_LOADED)
+      DBGHELP_FUNCTION_LIST(DLL_FUNC_LOADED)
+          TLHELP32_FUNCTION_LIST(DLL_FUNC_LOADED)
 
 #undef DLL_FUNC_LOADED
-            true;
+              true;
 
   dbghelp_loaded = result;
   return result;
@@ -1589,7 +1559,6 @@ bool result =
 #undef TLHELP32_FUNCTION_LIST
 #undef DLL_FUNC_VAR
 #undef DLL_FUNC_TYPE
-
 
 // Load the symbols for generating stack traces.
 static std::vector<OS::SharedLibraryAddress> LoadSymbols(
@@ -1621,9 +1590,9 @@ static std::vector<OS::SharedLibraryAddress> LoadSymbols(
     return result;
   }
 
-  HANDLE snapshot = _CreateToolhelp32Snapshot(
-      TH32CS_SNAPMODULE,       // dwFlags
-      GetCurrentProcessId());  // th32ProcessId
+  HANDLE snapshot =
+      _CreateToolhelp32Snapshot(TH32CS_SNAPMODULE,       // dwFlags
+                                GetCurrentProcessId());  // th32ProcessId
   if (snapshot == INVALID_HANDLE_VALUE) return result;
   MODULEENTRY32W module_entry;
   module_entry.dwSize = sizeof(module_entry);  // Set the size of the structure.
@@ -1641,8 +1610,7 @@ static std::vector<OS::SharedLibraryAddress> LoadSymbols(
         module_entry.modBaseSize);                            // SizeOfDll
     if (base == 0) {
       int err = GetLastError();
-      if (err != ERROR_MOD_NOT_FOUND &&
-          err != ERROR_INVALID_HANDLE) {
+      if (err != ERROR_MOD_NOT_FOUND && err != ERROR_INVALID_HANDLE) {
         result.clear();
         return result;
       }
@@ -1664,7 +1632,6 @@ static std::vector<OS::SharedLibraryAddress> LoadSymbols(
   return result;
 }
 
-
 std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
   // SharedLibraryEvents are logged when loading symbol information.
   // Only the shared libraries loaded at the time of the call to
@@ -1677,14 +1644,13 @@ std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
 
 void OS::SignalCodeMovingGC() {}
 
-#else  // __MINGW32__
+#else   // __MINGW32__
 std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
   return std::vector<OS::SharedLibraryAddress>();
 }
 
 void OS::SignalCodeMovingGC() {}
 #endif  // __MINGW32__
-
 
 int OS::ActivationFrameAlignment() {
 #ifdef _WIN64
@@ -1732,14 +1698,12 @@ static unsigned int __stdcall ThreadEntry(void* arg) {
   return 0;
 }
 
-
 class Thread::PlatformData {
  public:
   explicit PlatformData(HANDLE thread) : thread_(thread) {}
   HANDLE thread_;
   unsigned thread_id_;
 };
-
 
 // Initialize a Win32 thread object. The thread has an invalid thread
 // handle until it is started.
@@ -1750,19 +1714,16 @@ Thread::Thread(const Options& options)
   set_name(options.name());
 }
 
-
 void Thread::set_name(const char* name) {
   OS::StrNCpy(name_, sizeof(name_), name, strlen(name));
   name_[sizeof(name_) - 1] = '\0';
 }
-
 
 // Close our own handle for the thread.
 Thread::~Thread() {
   if (data_->thread_ != kNoThread) CloseHandle(data_->thread_);
   delete data_;
 }
-
 
 // Create a new thread. It is important to use _beginthreadex() instead of
 // the Win32 function CreateThread(), because the CreateThread() does not
@@ -1781,13 +1742,11 @@ void Thread::Join() {
   }
 }
 
-
 Thread::LocalStorageKey Thread::CreateThreadLocalKey() {
   DWORD result = TlsAlloc();
   DCHECK(result != TLS_OUT_OF_INDEXES);
   return static_cast<LocalStorageKey>(result);
 }
-
 
 void Thread::DeleteThreadLocalKey(LocalStorageKey key) {
   BOOL result = TlsFree(static_cast<DWORD>(key));
@@ -1795,11 +1754,9 @@ void Thread::DeleteThreadLocalKey(LocalStorageKey key) {
   DCHECK(result);
 }
 
-
 void* Thread::GetThreadLocal(LocalStorageKey key) {
   return TlsGetValue(static_cast<DWORD>(key));
 }
-
 
 void Thread::SetThreadLocal(LocalStorageKey key, void* value) {
   BOOL result = TlsSetValue(static_cast<DWORD>(key), value);
