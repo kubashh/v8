@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d11bfb37_26854068",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2024-08-16T06:46:01Z",
+      "side": 1,
+      "message": "Hi, pls changes the commit msg as:\n\n[riscv][codegen] ...\n\nPort commit 600c89acd1ae8d4bb0a7f2d3bc30779e8eb61c53\n\n...\n\nOther part LGTM",
+      "revId": "f450b9d8dd68279b630db572add842012e0f4eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
