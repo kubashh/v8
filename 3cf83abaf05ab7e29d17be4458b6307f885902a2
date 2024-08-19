@@ -16,6 +16,75 @@
       "message": "+Michael for src/heap",
       "revId": "3cf83abaf05ab7e29d17be4458b6307f885902a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "686cfa42_d45c0016",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-19T10:45:21Z",
+      "side": 1,
+      "message": "nit: I think it would be nice here to have the `JSDispatchTable` (actually a base class) acknowledge that it can never do compaction with slots recording by setting a bool that is asserted here.\n\nThe comment would then move into the dispatch table saying how it works and we don\u0027t need to keep it distributed over the code (write barrier, mark compact, etc)\n\nE.g.\n\n`static_assert(decltype(GetProcessWideJSDispatchTable())::kSupportsCompaction \u003d\u003d false)`.",
+      "range": {
+        "startLine": 134,
+        "startChar": 3,
+        "endLine": 136,
+        "endChar": 51
+      },
+      "revId": "3cf83abaf05ab7e29d17be4458b6307f885902a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76bf446_e1aff685",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5571,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-19T10:45:21Z",
+      "side": 1,
+      "message": "Do we relocate the compile lazy builtin?",
+      "range": {
+        "startLine": 5571,
+        "startChar": 31,
+        "endLine": 5571,
+        "endChar": 45
+      },
+      "revId": "3cf83abaf05ab7e29d17be4458b6307f885902a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27707f18_52800a4c",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-19T10:45:21Z",
+      "side": 1,
+      "message": "Can you add a one sentence summary what the method does?",
+      "range": {
+        "startLine": 430,
+        "startChar": 9,
+        "endLine": 430,
+        "endChar": 34
+      },
+      "revId": "3cf83abaf05ab7e29d17be4458b6307f885902a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
