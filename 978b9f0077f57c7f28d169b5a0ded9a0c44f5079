@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ecb8194_99b7d7d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-19T14:55:56Z",
+      "side": 1,
+      "message": "WDYT? It\u0027s a net increase in LoCs but probably more readable this way?",
+      "revId": "978b9f0077f57c7f28d169b5a0ded9a0c44f5079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
