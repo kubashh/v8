@@ -8612,7 +8612,7 @@ wasm::WasmCompilationResult CompileWasmMathIntrinsic(
   // Set up the graph start.
   builder.Start(static_cast<int>(sig->parameter_count() + 1 + 1));
 
-  // Generate either a unop or a binop.
+  // Generate either an unop or a binop.
   Node* node = nullptr;
   const char* debug_name = "WasmMathIntrinsic";
   auto opcode = GetMathIntrinsicOpcode(kind, &debug_name);
