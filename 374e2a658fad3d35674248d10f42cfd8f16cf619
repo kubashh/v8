@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e20c94_906a2f35",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-19T18:22:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "775c5915_685cdc2b",
+      "range": {
+        "startLine": 1442,
+        "startChar": 4,
+        "endLine": 1442,
+        "endChar": 58
+      },
+      "revId": "374e2a658fad3d35674248d10f42cfd8f16cf619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00cca341_6a6096f1",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-07-05T13:31:23Z",
       "side": 1,
       "message": "nit: Can you place the TODO on a new line please?",
+      "range": {
+        "startLine": 3670,
+        "startChar": 22,
+        "endLine": 3670,
+        "endChar": 46
+      },
+      "revId": "374e2a658fad3d35674248d10f42cfd8f16cf619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1a57b6_10155c21",
+        "filename": "src/regexp/regexp-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3670,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-19T18:22:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00cca341_6a6096f1",
       "range": {
         "startLine": 3670,
         "startChar": 22,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a89b51_0caa54d4",
+        "filename": "src/regexp/regexp-dotprinter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-19T18:22:26Z",
+      "side": 1,
+      "message": "Removed, not intended for commit.",
+      "parentUuid": "a8047e69_a9370c37",
+      "range": {
+        "startLine": 98,
+        "startChar": 9,
+        "endLine": 98,
+        "endChar": 14
+      },
+      "revId": "374e2a658fad3d35674248d10f42cfd8f16cf619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aca1c9ff_faa85642",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "862c4e6b_2f41c14f",
+        "filename": "src/regexp/regexp-nodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-19T18:22:26Z",
+      "side": 1,
+      "message": "It\u0027s because it has an extra field.",
+      "parentUuid": "aca1c9ff_faa85642",
+      "range": {
+        "startLine": 580,
+        "startChar": 6,
+        "endLine": 580,
+        "endChar": 31
+      },
+      "revId": "374e2a658fad3d35674248d10f42cfd8f16cf619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bff2016_fae8f59c",
@@ -123,6 +219,30 @@
       "writtenOn": "2024-07-05T13:31:23Z",
       "side": 1,
       "message": "This test should be moved to `test/mjsunit/regexp-lookahead.js`.",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 58
+      },
+      "revId": "374e2a658fad3d35674248d10f42cfd8f16cf619",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7414d1a4_514f6c98",
+        "filename": "test/mjsunit/es9/regexp-lookbehind.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-19T18:22:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3bff2016_fae8f59c",
       "range": {
         "startLine": 201,
         "startChar": 0,
