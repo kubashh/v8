@@ -420,7 +420,23 @@ class MaglevGraphBuilder {
     void set(Variable& var, ValueNode* value);
     ValueNode* get(const Variable& var) const;
 
+    template <typename FCond, typename FTrue, typename FFalse>
+    ReduceResult Branch(std::initializer_list<Variable*> vars, FCond cond,
+                        FTrue if_true, FFalse if_false);
+
     void MergeIntoLabel(Label* label, BasicBlock* predecessor);
+
+    class Result {
+     public:
+      Result() : variables_(nullptr) {}
+      explicit Result(MaglevSubGraphBuilder& builder);
+
+      bool IsAbort() const { return variables_ == nullptr; }
+      ValueNode* get(const Variable& var) const;
+
+     private:
+      ValueNode** variables_;
+    };
 
    private:
     class BorrowParentKnownNodeAspectsAndVOs;
