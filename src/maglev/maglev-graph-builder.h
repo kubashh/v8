@@ -422,6 +422,18 @@ class MaglevGraphBuilder {
 
     void MergeIntoLabel(Label* label, BasicBlock* predecessor);
 
+    class Result {
+     public:
+      Result() : variables_(nullptr) {}
+      explicit Result(MaglevSubGraphBuilder& builder);
+
+      bool IsAbort() const { return variables_ == nullptr; }
+      ValueNode* get(const Variable& var) const;
+
+     private:
+      ValueNode** variables_;
+    };
+
    private:
     class BorrowParentKnownNodeAspectsAndVOs;
     void TakeKnownNodeAspectsAndVOsFromParent();
@@ -2708,6 +2720,11 @@ class MaglevGraphBuilder {
 
   template <typename FCond, typename FTrue, typename FFalse>
   ReduceResult SelectReduction(FCond cond, FTrue if_true, FFalse if_false);
+
+  template <typename FCond, typename FTrue, typename FFalse>
+  MaglevSubGraphBuilder::Result SelectReduction(
+      std::initializer_list<MaglevSubGraphBuilder::Variable*> vars, FCond cond,
+      FTrue if_true, FFalse if_false);
 
   void MarkBranchDeadAndJumpIfNeeded(bool is_jump_taken);
 
