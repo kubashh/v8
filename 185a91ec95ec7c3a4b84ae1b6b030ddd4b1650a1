@@ -34,6 +34,24 @@
       "parentUuid": "79a0653e_47ee7303",
       "revId": "185a91ec95ec7c3a4b84ae1b6b030ddd4b1650a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88a9576a_14a3dccf",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-19T08:23:49Z",
+      "side": 1,
+      "message": "ah, thanks. the ifdefs here make it hard to see, that this is all in the `else` block.\n\ncould we use an early return in the then-block and get rid of the else-block?\n\nAlso, do you know if there is a reason the lines 537-547 at https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/objects-body-descriptors-inl.h;l\u003d537?q\u003dJSFunction::BodyDescriptor\u0026ss\u003dchromium\n\nare there and the rest of the code pointer handling is here? Can we move it to the same place?",
+      "parentUuid": "f03673b9_a687a639",
+      "revId": "185a91ec95ec7c3a4b84ae1b6b030ddd4b1650a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
