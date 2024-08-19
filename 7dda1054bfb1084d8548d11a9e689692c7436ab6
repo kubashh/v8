@@ -33,6 +33,23 @@
       "message": "Hi, Yuri, your AUTHORS file change needs another reviewer\u0027s \"LGTM\".",
       "revId": "7dda1054bfb1084d8548d11a9e689692c7436ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "919894d2_325bcda3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3529302
+      },
+      "writtenOn": "2024-08-19T13:11:24Z",
+      "side": 1,
+      "message": "Hi Ji Qiu, thanks for your review. Are any actions expected from my side at this point?",
+      "revId": "7dda1054bfb1084d8548d11a9e689692c7436ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
