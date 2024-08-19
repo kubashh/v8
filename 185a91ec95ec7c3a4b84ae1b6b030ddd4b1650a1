@@ -16,6 +16,24 @@
       "message": "Isn\u0027t this marking the code object, when you actually want to mark the dispatch table entry instead?\n\nIf I understand correctly we should\n1. always `IterateJSDispatchEntry`\n2. only mark the code object if `!ShouldFlushBaselineCode`",
       "revId": "185a91ec95ec7c3a4b84ae1b6b030ddd4b1650a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03673b9_a687a639",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-19T08:00:52Z",
+      "side": 1,
+      "message": "Yeah so we will mark the dispatch entry in `VisitJSDispatchTableEntry` above, which will be called from the `JSFunction::BodyDescriptor` which will be invoked below, through `Base::VisitJSFunction(map, js_function);`. So the table entry is always marked. In the case where `ShouldFlushBaselineCode(js_function)` (line 321), we don\u0027t mark the code object as alive and just register the function in some list (so that we can uncompile it if the Code object is dead after GC). In this branch, we should not flush baseline code, so we need to mark the Code object as alive, so that\u0027s what we\u0027re doing here.",
+      "parentUuid": "79a0653e_47ee7303",
+      "revId": "185a91ec95ec7c3a4b84ae1b6b030ddd4b1650a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
