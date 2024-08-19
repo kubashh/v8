@@ -3174,6 +3174,9 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       constexpr int kSlowpathCase = 1;
       base::SmallVector<TSBlock*, wasm::kMaxPolymorphism + kSlowpathCase>
           case_blocks;
+
+      InstanceCache::Snapshot instance_cache_snapshot =
+          instance_cache_.SaveState();
       for (size_t i = 0; i < feedback_cases.size() + kSlowpathCase; i++) {
         case_blocks.push_back(__ NewBlock());
       }
@@ -3181,6 +3184,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
 
       for (size_t i = 0; i < feedback_cases.size(); i++) {
         __ Bind(case_blocks[i]);
+        instance_cache_.RestoreFromSnapshot(instance_cache_snapshot);
         InliningTree* tree = feedback_cases[i];
         if (!tree || !tree->is_inlined()) {
           // Fall through to the next case.
@@ -3216,6 +3220,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       }
 
       TSBlock* no_inline_block = case_blocks.back();
+      instance_cache_.RestoreFromSnapshot(instance_cache_snapshot);
       __ Bind(no_inline_block);
     }
     auto [target, implicit_arg] = BuildFunctionReferenceTargetAndImplicitArg(
