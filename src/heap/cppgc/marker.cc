@@ -163,7 +163,10 @@ MarkerBase::MarkerBase(HeapBase& heap, cppgc::Platform* platform,
     : heap_(heap),
       config_(config),
       platform_(platform),
-      foreground_task_runner_(platform_->GetForegroundTaskRunner()),
+      foreground_task_runner_(platform_->GetForegroundTaskRunner(
+          config.incremental_marking_user_visible
+              ? TaskPriority::kUserVisible
+              : TaskPriority::kUserBlocking)),
       mutator_marking_state_(heap, marking_worklists_,
                              heap.compactor().compaction_worklists()),
       schedule_(config.bailout_of_marking_when_ahead_of_schedule

@@ -37,6 +37,7 @@ struct MarkingConfig {
   IsForcedGC is_forced_gc = IsForcedGC::kNotForced;
   v8::base::TimeDelta incremental_task_delay = v8::base::TimeDelta();
   bool bailout_of_marking_when_ahead_of_schedule = false;
+  bool incremental_marking_user_visible = false;
 };
 
 enum class SweepingStrategy {
