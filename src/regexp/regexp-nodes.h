@@ -16,6 +16,7 @@ class AlternativeGenerationList;
 class BoyerMooreLookahead;
 class GreedyLoopState;
 class NodeVisitor;
+class BeginPositiveSubmatchNode;
 class QuickCheckDetails;
 class RegExpCompiler;
 class Trace;
@@ -329,9 +330,9 @@ class ActionNode : public SeqRegExpNode {
   static ActionNode* StorePosition(int reg, bool is_capture,
                                    RegExpNode* on_success);
   static ActionNode* ClearCaptures(Interval range, RegExpNode* on_success);
-  static ActionNode* BeginPositiveSubmatch(int stack_pointer_reg,
-                                           int position_reg,
-                                           RegExpNode* on_success);
+  static BeginPositiveSubmatchNode* BeginPositiveSubmatch(
+      int stack_pointer_reg, int position_reg, RegExpNode* body,
+      ActionNode* success_node);
   static ActionNode* BeginNegativeSubmatch(int stack_pointer_reg,
                                            int position_reg,
                                            RegExpNode* on_success);
@@ -361,6 +362,10 @@ class ActionNode : public SeqRegExpNode {
     DCHECK_EQ(action_type(), MODIFY_FLAGS);
     return RegExpFlags{data_.u_modify_flags.flags};
   }
+
+ protected:
+  ActionNode(ActionType action_type, RegExpNode* on_success)
+      : SeqRegExpNode(on_success), action_type_(action_type) {}
 
  private:
   union {
@@ -394,8 +399,6 @@ class ActionNode : public SeqRegExpNode {
       int flags;
     } u_modify_flags;
   } data_;
-  ActionNode(ActionType action_type, RegExpNode* on_success)
-      : SeqRegExpNode(on_success), action_type_(action_type) {}
 
   ActionType action_type_;
   friend class DotPrinterImpl;
@@ -572,6 +575,25 @@ class NegativeSubmatchSuccess : public EndNode {
   int current_position_register_;
   int clear_capture_count_;
   int clear_capture_start_;
+};
+
+class BeginPositiveSubmatchNode : public ActionNode {
+ public:
+  BeginPositiveSubmatchNode(RegExpNode* body, ActionNode* success_node)
+      : ActionNode(BEGIN_POSITIVE_SUBMATCH, body),
+        success_node_(success_node) {}
+
+  ActionNode* success_node() { return success_node_; }
+
+  void FillInBMInfo(Isolate* isolate, int offset, int budget,
+                    BoyerMooreLookahead* bm, bool not_at_start) override;
+
+  void GetQuickCheckDetails(QuickCheckDetails* details,
+                            RegExpCompiler* compiler, int filled_in,
+                            bool not_at_start) override;
+
+ private:
+  ActionNode* success_node_;
 };
 
 class Guard : public ZoneObject {
