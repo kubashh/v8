@@ -70,6 +70,24 @@
       "parentUuid": "88a9576a_14a3dccf",
       "revId": "185a91ec95ec7c3a4b84ae1b6b030ddd4b1650a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de28d797_1796c7e3",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-19T09:44:32Z",
+      "side": 1,
+      "message": "got it. thanks.",
+      "parentUuid": "647e02e2_28ac0751",
+      "revId": "185a91ec95ec7c3a4b84ae1b6b030ddd4b1650a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
