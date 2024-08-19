@@ -33,6 +33,24 @@
       "message": "(Sorry for the late reply, was OOO on Friday.)\n\nLGTM since it\u0027s more explicit, but from what I understand, the second check variant (`#if DEBUG`) is true even with current debug builds. I locally checked that 1. `defines +\u003d [ \"DEBUG\" ]` in `BUILD.gn` adds `-DDEBUG` to the compiler invocation, and at least for Clang and GCC that by default defines `DEBUG` to 1 if the value is omitted (see https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-D-macro or https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html or https://godbolt.org/z/h6xqMK1qe)",
       "revId": "64c63abfcb77b081cc50eed96a7e0a80e7f72bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "437ce864_b71095f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-19T20:22:12Z",
+      "side": 1,
+      "message": "Huh! Fascinating, TIL.\n\nI\u0027m going to withdraw this patch, since the comment I added is therefore misleading.",
+      "parentUuid": "107ff982_2d508e84",
+      "revId": "64c63abfcb77b081cc50eed96a7e0a80e7f72bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
