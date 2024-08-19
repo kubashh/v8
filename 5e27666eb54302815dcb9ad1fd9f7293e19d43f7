@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6104eef6_18defa21",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-19T13:37:51Z",
+      "side": 1,
+      "message": "I think it would be useful, yeah.",
+      "parentUuid": "20963852_e45111df",
+      "range": {
+        "startLine": 560,
+        "startChar": 3,
+        "endLine": 560,
+        "endChar": 5
+      },
+      "revId": "5e27666eb54302815dcb9ad1fd9f7293e19d43f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "daa83f4d_6f4b6475",
         "filename": "src/base/platform/platform-win32.cc",
         "patchSetId": 7
