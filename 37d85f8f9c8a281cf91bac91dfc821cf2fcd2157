@@ -16,6 +16,29 @@
       "message": "PTAL!",
       "revId": "37d85f8f9c8a281cf91bac91dfc821cf2fcd2157",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b1fbdc3_a1eaaf5b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-19T09:56:31Z",
+      "side": 1,
+      "message": "how about making SelectReduction a more general `IfThenElse` on `MaglevSubGraphBuilder`, so that you don\u0027t have to initialise `subgraph` here and pass around a `setter` lambda? So that there\u0027s a bit less magic and the use is more like:\n\n```\nMaglevSubGraphBuilder subgraph(this, 2);\nMaglevSubGraphBuilder::Variable is_done(0);\nMaglevSubGraphBuilder::Variable ret_value(1);\nsubgraph.IfThenElse(\n  {\u0026is_done, \u0026ret_value},\n  [\u0026](auto\u0026 builder) {\n    return BuildBranchIfUint32Compare(builder, Operation::kLessThan,\n                                      uint32_index, uint32_length);\n  },\n  [\u0026]() {\n    ...\n    subgraph.set(ret_value, value);\n  },\n  [\u0026]() {\n    ...\n    subgraph.set(ret_value, other_value);\n  });\n\n... subgraph.get(ret_value), subgraph.get(is_done) ...\n```",
+      "range": {
+        "startLine": 842,
+        "startChar": 20,
+        "endLine": 842,
+        "endChar": 35
+      },
+      "revId": "37d85f8f9c8a281cf91bac91dfc821cf2fcd2157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
