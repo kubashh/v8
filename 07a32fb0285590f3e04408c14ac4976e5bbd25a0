@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebf4e4ec_6ec129b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-19T17:34:14Z",
+      "side": 1,
+      "message": "Drive-by comment on src/wasm/.\n\nNice to hear from you, Erik!",
+      "revId": "07a32fb0285590f3e04408c14ac4976e5bbd25a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9f92b2a_4d0b59ee",
+        "filename": "src/wasm/baseline/loong64/liftoff-assembler-loong64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-19T17:34:14Z",
+      "side": 1,
+      "message": "I think this comment was more accurate before. (Same for the mips64 version.)",
+      "range": {
+        "startLine": 3434,
+        "startChar": 14,
+        "endLine": 3434,
+        "endChar": 66
+      },
+      "revId": "07a32fb0285590f3e04408c14ac4976e5bbd25a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
