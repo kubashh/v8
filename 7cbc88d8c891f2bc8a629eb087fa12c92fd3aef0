@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "496c0a52_9ada1e34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-20T14:28:31Z",
+      "side": 1,
+      "message": "Merge to 12.9; Jakob, PTAL.",
+      "revId": "7cbc88d8c891f2bc8a629eb087fa12c92fd3aef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
