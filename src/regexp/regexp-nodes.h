@@ -330,8 +330,8 @@ class ActionNode : public SeqRegExpNode {
                                    RegExpNode* on_success);
   static ActionNode* ClearCaptures(Interval range, RegExpNode* on_success);
   static ActionNode* BeginPositiveSubmatch(int stack_pointer_reg,
-                                           int position_reg,
-                                           RegExpNode* on_success);
+                                           int position_reg, RegExpNode* body,
+                                           ActionNode* success_node);
   static ActionNode* BeginNegativeSubmatch(int stack_pointer_reg,
                                            int position_reg,
                                            RegExpNode* on_success);
@@ -352,15 +352,23 @@ class ActionNode : public SeqRegExpNode {
                             bool not_at_start) override;
   void FillInBMInfo(Isolate* isolate, int offset, int budget,
                     BoyerMooreLookahead* bm, bool not_at_start) override;
-  ActionType action_type() { return action_type_; }
+  ActionType action_type() const { return action_type_; }
   // TODO(erikcorry): We should allow some action nodes in greedy loops.
   int GreedyLoopTextLength() override {
     return kNodeIsTooComplexForGreedyLoops;
   }
-  RegExpFlags flags() {
+  RegExpFlags flags() const {
     DCHECK_EQ(action_type(), MODIFY_FLAGS);
     return RegExpFlags{data_.u_modify_flags.flags};
   }
+  ActionNode* success_node() const {
+    DCHECK_EQ(action_type(), BEGIN_POSITIVE_SUBMATCH);
+    return data_.u_submatch.success_node;
+  }
+
+ protected:
+  ActionNode(ActionType action_type, RegExpNode* on_success)
+      : SeqRegExpNode(on_success), action_type_(action_type) {}
 
  private:
   union {
@@ -380,6 +388,7 @@ class ActionNode : public SeqRegExpNode {
       int current_position_register;
       int clear_register_count;
       int clear_register_from;
+      ActionNode* success_node;  // Only used for positive submatch.
     } u_submatch;
     struct {
       int start_register;
@@ -394,8 +403,6 @@ class ActionNode : public SeqRegExpNode {
       int flags;
     } u_modify_flags;
   } data_;
-  ActionNode(ActionType action_type, RegExpNode* on_success)
-      : SeqRegExpNode(on_success), action_type_(action_type) {}
 
   ActionType action_type_;
   friend class DotPrinterImpl;
