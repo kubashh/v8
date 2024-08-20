@@ -68,6 +68,24 @@
       "parentUuid": "8d7e1e20_763e8919",
       "revId": "5a356e2c2ed764e83bc1f3205ec9e64fe5f4f5ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0416e332_8ae87170",
+        "filename": "test/mjsunit/regress/wasm/regress-360044696.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-20T10:31:38Z",
+      "side": 1,
+      "message": "Thanks for the additional detail, and of course: no real need to waste too much time on cleaning up the repro.",
+      "parentUuid": "a247ac41_5c17cc49",
+      "revId": "5a356e2c2ed764e83bc1f3205ec9e64fe5f4f5ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
