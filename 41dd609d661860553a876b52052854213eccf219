@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d85e35b1_ca86de63",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-20T12:37:06Z",
+      "side": 1,
+      "message": "I really dislike this down-cast of pointer types.\nIf we really need the cast, can you add virtual methods to `RegExpNode` to check/cast for a specific node-type in a safe way?",
+      "range": {
+        "startLine": 1199,
+        "startChar": 8,
+        "endLine": 1199,
+        "endChar": 56
+      },
+      "revId": "41dd609d661860553a876b52052854213eccf219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
