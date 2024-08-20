@@ -22,6 +22,30 @@
       },
       "revId": "41dd609d661860553a876b52052854213eccf219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea85dc2_ee31625c",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T14:13:35Z",
+      "side": 1,
+      "message": "It was really ugly (ant it should at least have been a static_cast).\n\nI changed it to use a virtual function to make a null pointer if our assumptions are violated.",
+      "parentUuid": "d85e35b1_ca86de63",
+      "range": {
+        "startLine": 1199,
+        "startChar": 8,
+        "endLine": 1199,
+        "endChar": 56
+      },
+      "revId": "41dd609d661860553a876b52052854213eccf219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
