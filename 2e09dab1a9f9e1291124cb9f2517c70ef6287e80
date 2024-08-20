@@ -16,6 +16,23 @@
       "message": "Still LGTM.",
       "revId": "2e09dab1a9f9e1291124cb9f2517c70ef6287e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b274f1a7_605ef777",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T14:06:21Z",
+      "side": 1,
+      "message": "Erik: Leszek has ENG_REVIEW_OWNERS superpowers, so with his +1 you can go ahead and land this.",
+      "revId": "2e09dab1a9f9e1291124cb9f2517c70ef6287e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
