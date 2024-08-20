@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3db1fc6_21d2ce54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "LGTM with comments, but I\u0027m not an OWNER for a bunch of these files.",
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f15a6f_954475f8",
+        "filename": "src/compiler/backend/mips64/instruction-selector-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "`sign-extend it`",
+      "range": {
+        "startLine": 2961,
+        "startChar": 43,
+        "endLine": 2961,
+        "endChar": 56
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81963894_490dc57a",
+        "filename": "src/compiler/backend/riscv/instruction-selector-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "`sign-extend it`",
+      "range": {
+        "startLine": 2112,
+        "startChar": 43,
+        "endLine": 2112,
+        "endChar": 56
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e64ef16f_a4671ef3",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "`multiplications`",
+      "range": {
+        "startLine": 3520,
+        "startChar": 22,
+        "endLine": 3520,
+        "endChar": 37
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e426b28_db0efb98",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8615,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "FWIW, this is at least debatable. I\u0027d probably pronounce the \"un\" in \"unop\" as in \"unary\", not as in \"undoing\", so \"a\" would be the correct indefinite article to use.",
+      "range": {
+        "startLine": 8615,
+        "startChar": 21,
+        "endLine": 8615,
+        "endChar": 28
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21e3ace1_9a03a975",
+        "filename": "src/objects/objects-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "This is outdated. We should probably update that separately though. Or perhaps just drop it.",
+      "range": {
+        "startLine": 22,
+        "startChar": 65,
+        "endLine": 27,
+        "endChar": 13
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fda4120_a9c23a6f",
+        "filename": "src/wasm/baseline/loong64/liftoff-assembler-loong64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3432,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "missing word: `it`",
+      "range": {
+        "startLine": 3432,
+        "startChar": 54,
+        "endLine": 3432,
+        "endChar": 55
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71dc51ac_9d2798e8",
+        "filename": "test/mjsunit/maglev/loop-phi-shrinking.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "only 80 chars per line please",
+      "range": {
+        "startLine": 46,
+        "startChar": 80,
+        "endLine": 46,
+        "endChar": 81
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd5f36d_2f0b60af",
+        "filename": "test/mjsunit/maglev/regress/regress-crbug-1428524.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "`inputs`",
+      "range": {
+        "startLine": 14,
+        "startChar": 38,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b1b2ea2_90d632e9",
+        "filename": "third_party/inspector_protocol/crdtp/frontend_channel.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-08-20T12:25:00Z",
+      "side": 1,
+      "message": "This change should probably be made in the upstream repo instead, see `README.v8` in this directory.",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 12
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
