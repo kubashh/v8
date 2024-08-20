@@ -44,7 +44,11 @@ class IncrementalMarkingJob::Task final : public CancelableTask {
 };
 
 IncrementalMarkingJob::IncrementalMarkingJob(Heap* heap)
-    : heap_(heap), foreground_task_runner_(heap->GetForegroundTaskRunner()) {
+    : heap_(heap),
+      user_blocking_task_runner_(
+          heap->GetForegroundTaskRunner(TaskPriority::kUserBlocking)),
+      user_visible_task_runner_(
+          heap->GetForegroundTaskRunner(TaskPriority::kUserVisible)) {
   CHECK(v8_flags.incremental_marking_task);
 }
 
@@ -55,26 +59,32 @@ void IncrementalMarkingJob::ScheduleTask(TaskType task_type) {
     return;
   }
 
+  IncrementalMarking* incremental_marking = heap_->incremental_marking();
+  v8::TaskRunner* task_runner =
+      v8_flags.incremental_marking_start_user_visible &&
+              incremental_marking->IsStopped()
+          ? user_visible_task_runner_.get()
+          : user_blocking_task_runner_.get();
   const bool non_nestable_tasks_enabled =
-      foreground_task_runner_->NonNestableTasksEnabled();
+      task_runner->NonNestableTasksEnabled();
   auto task = std::make_unique<Task>(heap_->isolate(), this,
                                      non_nestable_tasks_enabled
                                          ? StackState::kNoHeapPointers
                                          : StackState::kMayContainHeapPointers);
   if (non_nestable_tasks_enabled) {
     if (task_type == TaskType::kNormal) {
-      foreground_task_runner_->PostNonNestableTask(std::move(task));
+      task_runner->PostNonNestableTask(std::move(task));
     } else {
-      foreground_task_runner_->PostNonNestableDelayedTask(
+      task_runner->PostNonNestableDelayedTask(
           std::move(task), v8::base::TimeDelta::FromMilliseconds(
                                v8_flags.incremental_marking_task_delay_ms)
                                .InSecondsF());
     }
   } else {
     if (task_type == TaskType::kNormal) {
-      foreground_task_runner_->PostTask(std::move(task));
+      task_runner->PostTask(std::move(task));
     } else {
-      foreground_task_runner_->PostDelayedTask(
+      task_runner->PostDelayedTask(
           std::move(task), v8::base::TimeDelta::FromMilliseconds(
                                v8_flags.incremental_marking_task_delay_ms)
                                .InSecondsF());
