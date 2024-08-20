@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "405b1a9f_ca4c16a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-20T09:33:42Z",
+      "side": 1,
+      "message": "@dlehmann@chromium.org: PTAL. There is similar code in `call_ref` and `call_indirect`. As mentioned, I\u0027ll try to rewrite this using `Variable`s to get rid of this manual maintenance stuff but that isn\u0027t something we should abuse as a fix imo (and we certainly can\u0027t backmerge it).",
+      "revId": "5a356e2c2ed764e83bc1f3205ec9e64fe5f4f5ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
