@@ -176,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01187102_c0cc8524",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T17:42:37Z",
+      "side": 1,
+      "message": "Thanks, my BSD foo is is weak here. I figured by now the linker probably calls `mimmutable()` on the .data region and expects the reservations for globals to not change anymore. So this obviously doesn\u0027t work with our `mprotect()` sealing.",
+      "parentUuid": "26d714c2_f1e7a4e7",
+      "range": {
+        "startLine": 36,
+        "startChar": 57,
+        "endLine": 36,
+        "endChar": 64
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff2b3d73_2db33b47",
@@ -189,6 +213,30 @@
       "writtenOn": "2024-08-20T16:10:50Z",
       "side": 1,
       "message": "This needs a better name and the macro itself should be somewhere in `src/base/platform/*`",
+      "range": {
+        "startLine": 44,
+        "startChar": 20,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41b43050_4c8b94c0",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T17:42:37Z",
+      "side": 1,
+      "message": "This is still open. In essence, we want to factor out platform specifics as much as possible from the general runtime code.",
+      "parentUuid": "ff2b3d73_2db33b47",
       "range": {
         "startLine": 44,
         "startChar": 20,
