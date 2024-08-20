@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59787e8a_3a1708c3",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-08-20T08:15:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6104eef6_18defa21",
+      "range": {
+        "startLine": 560,
+        "startChar": 3,
+        "endLine": 560,
+        "endChar": 5
+      },
+      "revId": "5e27666eb54302815dcb9ad1fd9f7293e19d43f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "daa83f4d_6f4b6475",
@@ -126,6 +150,30 @@
       "side": 1,
       "message": "Usually not but mayb the formatter changed and this one didn\u0027t get touched since?\n\nUsually it only formats the diff you touch though.",
       "parentUuid": "daa83f4d_6f4b6475",
+      "range": {
+        "startLine": 44,
+        "startChar": 27,
+        "endLine": 44,
+        "endChar": 28
+      },
+      "revId": "5e27666eb54302815dcb9ad1fd9f7293e19d43f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3c1277_badfc24f",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-08-20T08:15:34Z",
+      "side": 1,
+      "message": "Ah, that\u0027s probably because of how I set up vscode. I undid the unrelated formatting changes.",
+      "parentUuid": "981cd2f7_8ffee030",
       "range": {
         "startLine": 44,
         "startChar": 27,
