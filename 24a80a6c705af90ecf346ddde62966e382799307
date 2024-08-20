@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "17d84275_c28e86b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-20T17:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a40a720_1b11f949",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "df3d2a90_5a4f3785",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d36a95c_061652ce",
+        "filename": "src/base/platform/memory.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-20T17:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "600fe8fb_3fb77bb9",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 17
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ae01297_614ac32d",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-08-20T16:10:50Z",
       "side": 1,
       "message": "Is this needed so that we can `mprotect()` the global?",
+      "range": {
+        "startLine": 36,
+        "startChar": 57,
+        "endLine": 36,
+        "endChar": 64
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d714c2_f1e7a4e7",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-20T17:13:01Z",
+      "side": 1,
+      "message": "[This method](https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/src/flags/flags.cc#809), which internally applies mprotect to `v8_flags`, is called during [V8 initialization](https://chromium.googlesource.com/v8/v8.git/+/refs/heads/main/src/init/v8.cc#154). This flow is also executed in the `mksnapshot` used at build time, so the build will fail if the application of `mprotect` to `v8_flags` fails.",
+      "parentUuid": "4ae01297_614ac32d",
       "range": {
         "startLine": 36,
         "startChar": 57,
