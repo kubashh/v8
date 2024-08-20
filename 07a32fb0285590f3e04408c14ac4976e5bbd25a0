@@ -39,6 +39,30 @@
       },
       "revId": "07a32fb0285590f3e04408c14ac4976e5bbd25a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "168fd77c_2ec632d6",
+        "filename": "src/wasm/baseline/loong64/liftoff-assembler-loong64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3434,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T09:28:14Z",
+      "side": 1,
+      "message": "Ooops.",
+      "parentUuid": "f9f92b2a_4d0b59ee",
+      "range": {
+        "startLine": 3434,
+        "startChar": 14,
+        "endLine": 3434,
+        "endChar": 66
+      },
+      "revId": "07a32fb0285590f3e04408c14ac4976e5bbd25a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
