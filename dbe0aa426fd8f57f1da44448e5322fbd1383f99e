@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df4348aa_56265b3e",
+        "filename": "src/compiler/backend/mips64/instruction-selector-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5f15a6f_954475f8",
+      "range": {
+        "startLine": 2961,
+        "startChar": 43,
+        "endLine": 2961,
+        "endChar": 56
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81963894_490dc57a",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1042a3b7_9ba3342c",
+        "filename": "src/compiler/backend/riscv/instruction-selector-riscv64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81963894_490dc57a",
+      "range": {
+        "startLine": 2112,
+        "startChar": 43,
+        "endLine": 2112,
+        "endChar": 56
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e64ef16f_a4671ef3",
@@ -77,6 +125,30 @@
       "writtenOn": "2024-08-20T12:25:00Z",
       "side": 1,
       "message": "`multiplications`",
+      "range": {
+        "startLine": 3520,
+        "startChar": 22,
+        "endLine": 3520,
+        "endChar": 37
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48527a48_5337b97b",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e64ef16f_a4671ef3",
       "range": {
         "startLine": 3520,
         "startChar": 22,
@@ -112,6 +184,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f6b7b037_0cc7d96f",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8615,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e426b28_db0efb98",
+      "range": {
+        "startLine": 8615,
+        "startChar": 21,
+        "endLine": 8615,
+        "endChar": 28
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "21e3ace1_9a03a975",
         "filename": "src/objects/objects-definitions.h",
         "patchSetId": 2
@@ -123,6 +219,30 @@
       "writtenOn": "2024-08-20T12:25:00Z",
       "side": 1,
       "message": "This is outdated. We should probably update that separately though. Or perhaps just drop it.",
+      "range": {
+        "startLine": 22,
+        "startChar": 65,
+        "endLine": 27,
+        "endChar": 13
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9becd2ce_f3c25ffa",
+        "filename": "src/objects/objects-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Removed the out-of-date section.",
+      "parentUuid": "21e3ace1_9a03a975",
       "range": {
         "startLine": 22,
         "startChar": 65,
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98379872_854fd53c",
+        "filename": "src/wasm/baseline/loong64/liftoff-assembler-loong64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3432,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fda4120_a9c23a6f",
+      "range": {
+        "startLine": 3432,
+        "startChar": 54,
+        "endLine": 3432,
+        "endChar": 55
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71dc51ac_9d2798e8",
@@ -169,6 +313,30 @@
       "writtenOn": "2024-08-20T12:25:00Z",
       "side": 1,
       "message": "only 80 chars per line please",
+      "range": {
+        "startLine": 46,
+        "startChar": 80,
+        "endLine": 46,
+        "endChar": 81
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb64e5f0_06bc4e36",
+        "filename": "test/mjsunit/maglev/loop-phi-shrinking.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71dc51ac_9d2798e8",
       "range": {
         "startLine": 46,
         "startChar": 80,
@@ -202,6 +370,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2206b12_78ad23c6",
+        "filename": "test/mjsunit/maglev/regress/regress-crbug-1428524.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cd5f36d_2f0b60af",
+      "range": {
+        "startLine": 14,
+        "startChar": 38,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b1b2ea2_90d632e9",
@@ -215,6 +407,30 @@
       "writtenOn": "2024-08-20T12:25:00Z",
       "side": 1,
       "message": "This change should probably be made in the upstream repo instead, see `README.v8` in this directory.",
+      "range": {
+        "startLine": 27,
+        "startChar": 5,
+        "endLine": 27,
+        "endChar": 12
+      },
+      "revId": "dbe0aa426fd8f57f1da44448e5322fbd1383f99e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "192d390d_9dc3d2a6",
+        "filename": "third_party/inspector_protocol/crdtp/frontend_channel.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-20T13:40:09Z",
+      "side": 1,
+      "message": "Undid change.",
+      "parentUuid": "8b1b2ea2_90d632e9",
       "range": {
         "startLine": 27,
         "startChar": 5,
