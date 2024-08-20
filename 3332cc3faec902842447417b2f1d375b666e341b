@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf6c5ba_31ead86a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-20T14:29:47Z",
+      "side": 1,
+      "message": "Thanks! LGTM with last nit.",
+      "revId": "3332cc3faec902842447417b2f1d375b666e341b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c34ba6e_b533a910",
+        "filename": "src/regexp/regexp-nodes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-20T14:29:47Z",
+      "side": 1,
+      "message": "nit: This should be Camel-case (`AsActionNode`).\nI would also prefer if we have this consistently for all node-types. You could use the `FOR_EACH_NODE_TYPE` macro to add the virtual methods for all types.\nI.e.\n```\n#define DECLARE_CAST(type) \\\n  virtual type##Node* As##type##Node() { return nullptr; }\nFOR_EACH_NODE_TYPE(DECLARE_CAST)\n#undef DECLARE_CAST\n```\nand override them in the respective node sub-types.",
+      "range": {
+        "startLine": 261,
+        "startChar": 22,
+        "endLine": 261,
+        "endChar": 36
+      },
+      "revId": "3332cc3faec902842447417b2f1d375b666e341b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
