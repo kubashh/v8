@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a40a720_1b11f949",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T16:10:50Z",
+      "side": 1,
+      "message": "nit: new line after title",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "df3d2a90_5a4f3785",
@@ -14,6 +37,92 @@
       "writtenOn": "2024-08-20T15:47:48Z",
       "side": 1,
       "message": "I know you are busy at present, but I would appreciate reviews.",
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d3f53e7_b9ff32a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T16:10:50Z",
+      "side": 1,
+      "message": "Thank you for the patch! See the comments below.",
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "600fe8fb_3fb77bb9",
+        "filename": "src/base/platform/memory.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T16:10:50Z",
+      "side": 1,
+      "message": "Why not put it in the list below as `!V8_OS_OPENBSD`?",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 17
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae01297_614ac32d",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T16:10:50Z",
+      "side": 1,
+      "message": "Is this needed so that we can `mprotect()` the global?",
+      "range": {
+        "startLine": 36,
+        "startChar": 57,
+        "endLine": 36,
+        "endChar": 64
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff2b3d73_2db33b47",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-20T16:10:50Z",
+      "side": 1,
+      "message": "This needs a better name and the macro itself should be somewhere in `src/base/platform/*`",
+      "range": {
+        "startLine": 44,
+        "startChar": 20,
+        "endLine": 44,
+        "endChar": 43
+      },
       "revId": "24a80a6c705af90ecf346ddde62966e382799307",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
