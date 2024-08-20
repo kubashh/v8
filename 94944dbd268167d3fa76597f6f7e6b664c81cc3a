@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56b77c4_da9d5ebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3575907
+      },
+      "writtenOn": "2024-08-20T01:29:08Z",
+      "side": 1,
+      "message": "acoon/security check/play protect",
+      "revId": "94944dbd268167d3fa76597f6f7e6b664c81cc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
