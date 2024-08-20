@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0e4741_6be5caad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-20T11:35:14Z",
+      "side": 1,
+      "message": "ptal. I wanted to add myself here. But then it seemed to me like this directory would be better served having common owners.",
+      "revId": "ec7fa0d3208d9ce1348e53141d7fd85fe228c00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
