@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd613e80_b05dbaae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-21T14:31:18Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "709eb4f450a3e0210d15b274527472648ffe271f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd092ca_3fc16e4d",
+        "filename": "AUTHORS",
+        "patchSetId": 6
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-21T14:31:18Z",
+      "side": 1,
+      "message": "Most of the names are in alphabetical order (starting from line 48).",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 13
+      },
+      "revId": "709eb4f450a3e0210d15b274527472648ffe271f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
