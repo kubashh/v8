@@ -97,6 +97,24 @@
       "message": "LGTM",
       "revId": "6b86c34110471787c8a015040fd230ff8381e997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "549e3cd3_14d7870e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-21T14:01:01Z",
+      "side": 1,
+      "message": "I have received an LGTM from Mr Matthias Liedtke, does this PR meet the submission requirements?",
+      "parentUuid": "215c4f63_633fda37",
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
