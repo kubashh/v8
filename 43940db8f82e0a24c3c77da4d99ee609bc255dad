@@ -16,6 +16,24 @@
       "message": "I just like to express my excitement that you are back to work on regexps in V8!\n\nI knew that desugaring unicode regexps at this layer is not particularly efficient. But it was straightforward to implement and reason about. And we had not a lot of motivation to improve upon that, which left a lot of room for improvement. Thanks for picking this up!",
       "revId": "43940db8f82e0a24c3c77da4d99ee609bc255dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eedba40a_32b697dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118894
+      },
+      "writtenOn": "2024-08-21T11:03:59Z",
+      "side": 1,
+      "message": "Thanks!  It\u0027s been fun doing V8 again.  I don\u0027t know how much time I\u0027ll have for regexp stuff going forward though.",
+      "parentUuid": "329b141d_86848e13",
+      "revId": "43940db8f82e0a24c3c77da4d99ee609bc255dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
