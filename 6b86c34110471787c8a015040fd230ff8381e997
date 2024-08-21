@@ -56,6 +56,23 @@
       "message": "You will need another review here. \n\nPing for others on this review. Any committer is enough.",
       "revId": "6b86c34110471787c8a015040fd230ff8381e997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47c26806_c684fdd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-21T13:24:01Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
