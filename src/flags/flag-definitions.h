@@ -1960,6 +1960,10 @@ DEFINE_BOOL(incremental_marking, true, "use incremental marking")
 DEFINE_BOOL(incremental_marking_bailout_when_ahead_of_schedule, true,
             "bails out of incremental marking when ahead of schedule")
 DEFINE_BOOL(incremental_marking_task, true, "use tasks for incremental marking")
+DEFINE_INT(incremental_marking_task_delay_ms, 0,
+           "incremental marking task delay. 0 means not using delayed tasks.")
+DEFINE_BOOL(incremental_marking_start_user_visible, false,
+            "Starts incremental marking with kUserVisible priority.")
 DEFINE_INT(incremental_marking_soft_trigger, 0,
            "threshold for starting incremental marking via a task in percent "
            "of available space: limit - size")
@@ -2773,14 +2777,6 @@ DEFINE_BOOL(freeze_flags_after_init, false,
 DEFINE_BOOL(freeze_flags_after_init, true,
             "Disallow changes to flag values after initializing V8")
 #endif  // defined(V8_OS_AIX) && defined(COMPONENT_BUILD)
-
-#if V8_ENABLE_CET_SHADOW_STACK
-#define V8_CET_SHADOW_STACK_BOOL true
-#else
-#define V8_CET_SHADOW_STACK_BOOL false
-#endif
-DEFINE_BOOL(cet_compatible, V8_CET_SHADOW_STACK_BOOL,
-            "Generate Intel CET compatible code")
 
 // mksnapshot.cc
 DEFINE_STRING(embedded_src, nullptr,

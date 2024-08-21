@@ -711,19 +711,20 @@ DEF_GETTER(JSObject, GetElementsKind, ElementsKind) {
   if (ElementsAreSafeToExamine(cage_base)) {
     Tagged<Map> map = fixed_array->map(cage_base);
     if (IsSmiOrObjectElementsKind(kind)) {
-      CHECK(map == GetReadOnlyRoots(cage_base).fixed_array_map() ||
-            map == GetReadOnlyRoots(cage_base).fixed_cow_array_map());
+      DCHECK(map == GetReadOnlyRoots(cage_base).fixed_array_map() ||
+             map == GetReadOnlyRoots(cage_base).fixed_cow_array_map());
     } else if (IsDoubleElementsKind(kind)) {
-      CHECK(IsFixedDoubleArray(fixed_array, cage_base) ||
-            fixed_array == GetReadOnlyRoots(cage_base).empty_fixed_array());
+      DCHECK(IsFixedDoubleArray(fixed_array, cage_base) ||
+             fixed_array == GetReadOnlyRoots(cage_base).empty_fixed_array());
     } else if (kind == DICTIONARY_ELEMENTS) {
-      CHECK(IsFixedArray(fixed_array, cage_base));
-      CHECK(IsNumberDictionary(fixed_array, cage_base));
+      DCHECK(IsFixedArray(fixed_array, cage_base));
+      DCHECK(IsNumberDictionary(fixed_array, cage_base));
     } else {
-      CHECK(kind > DICTIONARY_ELEMENTS || IsAnyNonextensibleElementsKind(kind));
+      DCHECK(kind > DICTIONARY_ELEMENTS ||
+             IsAnyNonextensibleElementsKind(kind));
     }
-    CHECK_IMPLIES(IsSloppyArgumentsElementsKind(kind),
-                  IsSloppyArgumentsElements(elements(cage_base)));
+    DCHECK(!IsSloppyArgumentsElementsKind(kind) ||
+           IsSloppyArgumentsElements(elements(cage_base)));
   }
 #endif
   return kind;

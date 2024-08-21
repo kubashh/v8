@@ -13,8 +13,10 @@ asyncTest(async function() {
   let values = [];
 
   async function TestUsingWithoutDisposeMethod() {
+    {
       await using x = {value: 1};
       values.push(43);
+    }
   };
   await assert.throwsAsync(
       TypeError, () => TestUsingWithoutDisposeMethod(), 'No dispose method');

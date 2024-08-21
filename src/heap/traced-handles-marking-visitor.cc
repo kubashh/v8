@@ -4,9 +4,6 @@
 
 #include "src/heap/traced-handles-marking-visitor.h"
 
-#include <algorithm>
-#include <iterator>
-
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-worklist-inl.h"
 #include "src/heap/marking.h"

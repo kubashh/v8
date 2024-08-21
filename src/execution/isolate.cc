@@ -107,9 +107,7 @@
 #include "src/profiler/heap-profiler.h"
 #include "src/profiler/tracing-cpu-profiler.h"
 #include "src/regexp/regexp-stack.h"
-#include "src/roots/roots.h"
 #include "src/roots/static-roots.h"
-#include "src/sandbox/js-dispatch-table-inl.h"
 #include "src/snapshot/embedded/embedded-data-inl.h"
 #include "src/snapshot/embedded/embedded-file-writer-interface.h"
 #include "src/snapshot/read-only-deserializer.h"
@@ -2174,25 +2172,6 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
     return exception;
   };
 
-#if V8_ENABLE_WEBASSEMBLY
-  auto HandleStackSwitch = [&](StackFrameIterator& iter) {
-    if (iter.wasm_stack() == nullptr) return;
-    auto switch_info = iter.wasm_stack()->stack_switch_info();
-    if (!switch_info.has_value()) return;
-    Tagged<Object> suspender_obj = root(RootIndex::kActiveSuspender);
-    if (!IsUndefined(suspender_obj)) {
-      // If the wasm-to-js wrapper was on a secondary stack and switched
-      // to the central stack, handle the implicit switch back.
-      if (switch_info->source_fp == iter.frame()->fp()) {
-        thread_local_top()->is_on_central_stack_flag_ = false;
-        stack_guard()->SetStackLimitForStackSwitching(
-            reinterpret_cast<uintptr_t>(iter.wasm_stack()->jslimit()));
-        iter.wasm_stack()->clear_stack_switch_info();
-      }
-    }
-  };
-#endif
-
   // Special handling of termination exceptions, uncatchable by JavaScript and
   // Wasm code, we unwind the handlers until the top ENTRY handler is found.
   bool catchable_by_js = is_catchable_by_javascript(exception);
@@ -2383,7 +2362,27 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
         UNREACHABLE();
       }
       case StackFrame::WASM_TO_JS: {
-        HandleStackSwitch(iter);
+        Tagged<Object> suspender_obj = root(RootIndex::kActiveSuspender);
+        if (!IsUndefined(suspender_obj)) {
+          Tagged<WasmSuspenderObject> suspender =
+              Cast<WasmSuspenderObject>(suspender_obj);
+          // If the wasm-to-js wrapper was on a secondary stack and switched
+          // to the central stack, handle the implicit switch back.
+          Address central_stack_sp = *reinterpret_cast<Address*>(
+              frame->fp() +
+              WasmImportWrapperFrameConstants::kCentralStackSPOffset);
+          bool switched_stacks = central_stack_sp != kNullAddress;
+          if (switched_stacks) {
+            DCHECK_EQ(1, suspender->has_js_frames());
+            suspender->set_has_js_frames(0);
+            thread_local_top()->is_on_central_stack_flag_ = false;
+            Address secondary_stack_limit = Memory<Address>(
+                frame->fp() +
+                WasmImportWrapperFrameConstants::kSecondaryStackLimitOffset);
+            stack_guard()->SetStackLimitForStackSwitching(
+                secondary_stack_limit);
+          }
+        }
         break;
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -2432,7 +2431,17 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
           if (code->builtin_id() == Builtin::kWasmToJsWrapperCSA) {
             // If the wasm-to-js wrapper was on a secondary stack and switched
             // to the central stack, handle the implicit switch back.
-            HandleStackSwitch(iter);
+            Address central_stack_sp = *reinterpret_cast<Address*>(
+                frame->fp() + WasmToJSWrapperConstants::kCentralStackSPOffset);
+            bool switched_stacks = central_stack_sp != kNullAddress;
+            if (switched_stacks) {
+              thread_local_top()->is_on_central_stack_flag_ = false;
+              Address secondary_stack_limit = Memory<Address>(
+                  frame->fp() +
+                  WasmToJSWrapperConstants::kSecondaryStackLimitOffset);
+              stack_guard()->SetStackLimitForStackSwitching(
+                  secondary_stack_limit);
+            }
           }
         }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -7372,40 +7381,25 @@ void DefaultWasmAsyncResolvePromiseCallback(
   CHECK(ret.IsJust() ? ret.FromJust() : isolate->IsExecutionTerminating());
 }
 
-// Mutex used to ensure that the dispatch table entries for builtins are only
-// initialized once.
-base::LazyMutex read_only_dispatch_entries_mutex_ = LAZY_MUTEX_INITIALIZER;
-
 void Isolate::InitializeBuiltinJSDispatchTable() {
 #ifdef V8_ENABLE_LEAPTIERING
-  // Ideally these entries would be created when the read only heap is
-  // initialized. However, since builtins are deserialized later, we need to
-  // patch it up here. Also, we need a mutex so the shared read only heaps space
-  // is not initialized multiple times. This must be blocking as no isolate
-  // should be allowed to proceed until the table is initialized.
-  base::MutexGuard guard(read_only_dispatch_entries_mutex_.Pointer());
-  auto jdt = GetProcessWideJSDispatchTable();
-  if (jdt->PreAllocatedEntryNeedsInitialization(
-          read_only_heap_->js_dispatch_table_space(),
-          builtin_dispatch_handle(JSBuiltinDispatchHandleRoot::Idx::kFirst))) {
-    JSDispatchTable::UnsealReadOnlySegmentScope unseal_scope(jdt);
-    for (JSBuiltinDispatchHandleRoot::Idx idx =
-             JSBuiltinDispatchHandleRoot::kFirst;
-         idx < JSBuiltinDispatchHandleRoot::kCount;
-         idx = static_cast<JSBuiltinDispatchHandleRoot::Idx>(
-             static_cast<int>(idx) + 1)) {
-      Builtin builtin = JSBuiltinDispatchHandleRoot::to_builtin(idx);
-      DCHECK(Builtins::IsIsolateIndependent(builtin));
-      Tagged<Code> code = builtins_.code(builtin);
-      DCHECK(code->entrypoint_tag() == CodeEntrypointTag::kJSEntrypointTag);
-      JSDispatchHandle handle = builtin_dispatch_handle(builtin);
-      // TODO(olivf, 40931165): It might be more robust to get the static
-      // parameter count of this builtin.
-      int parameter_count = code->parameter_count();
-      jdt->InitializePreAllocatedEntry(
-          read_only_heap_->js_dispatch_table_space(), handle, code,
-          parameter_count);
-    }
+  for (JSBuiltinDispatchHandleRoot::Idx idx =
+           JSBuiltinDispatchHandleRoot::kFirst;
+       idx < JSBuiltinDispatchHandleRoot::kEnd;
+       idx = static_cast<JSBuiltinDispatchHandleRoot::Idx>(
+           static_cast<int>(idx) + 1)) {
+    Builtin builtin = JSBuiltinDispatchHandleRoot::to_builtin(idx);
+    Tagged<Code> code = builtins_.code(builtin);
+    DCHECK(code->entrypoint_tag() == CodeEntrypointTag::kJSEntrypointTag);
+    // TODO(olivf, 40931165): It might be more robust to get the static
+    // parameter count of this builtin.
+    JSDispatchHandle handle =
+        GetProcessWideJSDispatchTable()->AllocateAndInitializeEntry(
+            read_only_heap()->js_dispatch_table_space(),
+            code->parameter_count());
+    DCHECK(!GetProcessWideJSDispatchTable()->HasCode(handle));
+    GetProcessWideJSDispatchTable()->SetCode(handle, code);
+    builtin_dispatch_table()[idx] = handle;
   }
 #endif
 }

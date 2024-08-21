@@ -1609,9 +1609,6 @@ class StackFrameIteratorBase {
   StackFrameIteratorBase& operator=(const StackFrameIteratorBase&) = delete;
 
   Isolate* isolate() const { return isolate_; }
-#if V8_ENABLE_WEBASSEMBLY
-  wasm::StackMemory* wasm_stack() const { return wasm_stack_; }
-#endif
 
   bool done() const { return frame_ == nullptr; }
 
@@ -1637,10 +1634,6 @@ class StackFrameIteratorBase {
   };
   StackFrame* frame_;
   StackHandler* handler_;
-#if V8_ENABLE_WEBASSEMBLY
-  // Current wasm stack being iterated.
-  wasm::StackMemory* wasm_stack_ = nullptr;
-#endif
 
   StackHandler* handler() const {
     DCHECK(!done());

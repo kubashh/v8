@@ -1086,9 +1086,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void call(Label* L);
 
   // Explicitly emit a near call / near jump. The displacement is relative to
-  // the next instructions (which starts at
-  // {pc_offset() + kIntraSegmentJmpInstrSize}).
-  static constexpr int kIntraSegmentJmpInstrSize = 5;
+  // the next instructions (which starts at {pc_offset() + kNearJmpInstrSize}).
+  static constexpr int kNearJmpInstrSize = 5;
   void near_call(intptr_t disp, RelocInfo::Mode rmode);
   void near_call(Builtin buitin, RelocInfo::Mode rmode);
   void near_jmp(intptr_t disp, RelocInfo::Mode rmode);
@@ -2466,7 +2465,6 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   }
 
   static bool IsNop(Address addr);
-  static bool IsJmpRel(Address addr);
 
   // Avoid overflows for displacements etc.
   static constexpr int kMaximalBufferSize = 512 * MB;

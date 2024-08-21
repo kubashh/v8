@@ -1093,17 +1093,16 @@ RegExpNode* RegExpAssertion::ToNode(RegExpCompiler* compiler,
                                      newline_ranges, false, zone);
       RegExpClassRanges* newline_atom =
           zone->New<RegExpClassRanges>(StandardCharacterSet::kLineTerminator);
-      ActionNode* submatch_success = ActionNode::PositiveSubmatchSuccess(
-          stack_pointer_register, position_register,
-          0,   // No captures inside.
-          -1,  // Ignored if no captures.
-          on_success);
       TextNode* newline_matcher =
-          zone->New<TextNode>(newline_atom, false, submatch_success);
+          zone->New<TextNode>(newline_atom, false,
+                              ActionNode::PositiveSubmatchSuccess(
+                                  stack_pointer_register, position_register,
+                                  0,   // No captures inside.
+                                  -1,  // Ignored if no captures.
+                                  on_success));
       // Create an end-of-input matcher.
       RegExpNode* end_of_line = ActionNode::BeginPositiveSubmatch(
-          stack_pointer_register, position_register, newline_matcher,
-          submatch_success);
+          stack_pointer_register, position_register, newline_matcher);
       // Add the two alternatives to the ChoiceNode.
       GuardedAlternative eol_alternative(end_of_line);
       result->AddAlternative(eol_alternative);
@@ -1195,15 +1194,14 @@ RegExpLookaround::Builder::Builder(bool is_positive, RegExpNode* on_success,
 
 RegExpNode* RegExpLookaround::Builder::ForMatch(RegExpNode* match) {
   if (is_positive_) {
-    ActionNode* on_match_success = on_match_success_->AsActionNode();
-    return ActionNode::BeginPositiveSubmatch(
-        stack_pointer_register_, position_register_, match, on_match_success);
+    return ActionNode::BeginPositiveSubmatch(stack_pointer_register_,
+                                             position_register_, match);
   } else {
     Zone* zone = on_success_->zone();
     // We use a ChoiceNode to represent the negative lookaround. The first
     // alternative is the negative match. On success, the end node backtracks.
     // On failure, the second alternative is tried and leads to success.
-    // NegativeLookaroundChoiceNode is a special ChoiceNode that ignores the
+    // NegativeLookaheadChoiceNode is a special ChoiceNode that ignores the
     // first exit when calculating quick checks.
     ChoiceNode* choice_node = zone->New<NegativeLookaroundChoiceNode>(
         GuardedAlternative(match), GuardedAlternative(on_success_), zone);

@@ -1105,12 +1105,6 @@ Label* CodeGenerator::AddJumpTable(Label** targets, size_t target_count) {
   return jump_tables_->label();
 }
 
-#ifndef V8_TARGET_ARCH_X64
-void CodeGenerator::AssemblePlaceHolderForLazyDeopt(Instruction* instr) {
-  UNREACHABLE();
-}
-#endif
-
 void CodeGenerator::RecordCallPosition(Instruction* instr) {
   const bool needs_frame_state =
       instr->HasCallDescriptorFlag(CallDescriptor::kNeedsFrameState);

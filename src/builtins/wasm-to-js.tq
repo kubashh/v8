@@ -61,8 +61,8 @@ transitioning macro WasmToJSWrapper(ref: WasmImportData): WasmToJSResult {
   *GetRefAt<intptr>(sigSlot, 0) = BitcastTaggedToWord(ref.sig);
   const alignment: intptr =
       StackAlignmentInBytes() / torque_internal::SizeOf<intptr>();
-  // 1 fixed slot, rounded up to stack alignment.
-  const numFixedSlots = alignment;
+  // 3 fixed slots, rounded up to stack alignment.
+  const numFixedSlots = ((2 + alignment) / alignment) * alignment;
 
   ModifyThreadInWasmFlag(0);
   // Trigger a wrapper tier-up when this function got called often enough.
@@ -313,7 +313,9 @@ transitioning macro WasmToJSWrapper(ref: WasmImportData): WasmToJSResult {
     result2: *GetRefAt<float64>(fpRegSlots, 0),
     result3: *GetRefAt<float64>(fpRegSlots, torque_internal::SizeOf<float64>())
   };
-  SwitchFromTheCentralStack(oldSP);
+  if (Convert<uintptr>(oldSP) != 0) {
+    SwitchFromTheCentralStack(oldSP);
+  }
   return wasmToJSResult;
 }
 }  // namespace wasm

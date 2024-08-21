@@ -407,7 +407,7 @@ void SemiSpace::VerifyPageMetadata() const {
       // The pointers-from-here-are-interesting flag isn't updated dynamically
       // on from-space pages, so it might be out of sync with the marking state.
       if (page->heap()->incremental_marking()->IsMarking()) {
-        CHECK(page->heap()->incremental_marking()->IsMajorMarking());
+        DCHECK(page->heap()->incremental_marking()->IsMajorMarking());
         CHECK(
             chunk->IsFlagSet(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING));
       } else {

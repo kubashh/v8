@@ -4,8 +4,6 @@
 
 #include "src/heap/allocation-observer.h"
 
-#include <algorithm>
-
 #include "src/heap/heap.h"
 #include "src/heap/spaces.h"
 

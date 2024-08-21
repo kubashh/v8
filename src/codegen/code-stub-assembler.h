@@ -4171,11 +4171,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
 #ifdef V8_ENABLE_LEAPTIERING
   // Load a builtin's handle into the JSDispatchTable.
-  TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(
-      JSBuiltinDispatchHandleRoot::Idx dispatch_root_idx);
-  inline TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(RootIndex idx) {
-    return LoadBuiltinDispatchHandle(JSBuiltinDispatchHandleRoot::to_idx(idx));
-  }
+  TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(Builtin builtin);
+  TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(RootIndex idx);
+  TNode<JSDispatchHandleT> LoadBuiltinDispatchHandle(TNode<Smi> builtin_id);
 
   // Load a Code object from the JSDispatchTable.
   TNode<Code> ResolveJSDispatchHandle(TNode<JSDispatchHandleT> dispatch_handle);

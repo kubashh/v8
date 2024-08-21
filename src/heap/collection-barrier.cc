@@ -4,8 +4,6 @@
 
 #include "src/heap/collection-barrier.h"
 
-#include <memory>
-
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/time.h"
 #include "src/common/globals.h"

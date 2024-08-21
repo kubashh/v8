@@ -2,17 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/api/api.h"
 #include "src/base/logging.h"
-#include "src/base/macros.h"
 #include "src/builtins/builtins-utils-inl.h"
 #include "src/handles/maybe-handles.h"
 #include "src/objects/js-disposable-stack-inl.h"
 #include "src/objects/js-disposable-stack.h"
-#include "src/objects/js-objects.h"
-#include "src/objects/js-promise-inl.h"
 #include "src/objects/js-promise.h"
-#include "src/objects/objects.h"
 #include "src/roots/roots.h"
 
 namespace v8 {
@@ -37,11 +32,6 @@ BUILTIN(AsyncDisposeFromSyncDispose) {
           JSDisposableStackBase::AsyncDisposeFromSyncDisposeContextSlots::
               kMethod))),
       isolate);
-
-  v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
-  try_catch.SetVerbose(false);
-  try_catch.SetCaptureMessage(false);
-
   MaybeHandle<Object> result = Execution::Call(
       isolate, sync_method, ReadOnlyRoots(isolate).undefined_value_handle(), 0,
       nullptr);
@@ -53,13 +43,8 @@ BUILTIN(AsyncDisposeFromSyncDispose) {
     //        undefined »).
     JSPromise::Resolve(promise, result_handle).ToHandleChecked();
   } else {
-    Tagged<Object> exception = isolate->exception();
-    if (!isolate->is_catchable_by_javascript(exception)) {
-      return {};
-    }
     //        d. IfAbruptRejectPromise(result, promiseCapability).
-    DCHECK(try_catch.HasCaught());
-    JSPromise::Reject(promise, handle(exception, isolate));
+    UNIMPLEMENTED();
   }
 
   //        f. Return promiseCapability.[[Promise]].

@@ -239,8 +239,7 @@ Assembler::Assembler(const AssemblerOptions& options,
                      std::unique_ptr<AssemblerBuffer> buffer)
     : AssemblerBase(options, std::move(buffer)),
       VU(this),
-      scratch_register_list_(DefaultTmpList()),
-      scratch_double_register_list_(DefaultFPTmpList()),
+      scratch_register_list_({t3, t5}),
       constpool_(this) {
   reloc_info_writer.Reposition(buffer_start_ + buffer_->size(), pc_);
 
@@ -943,7 +942,7 @@ inline int64_t signExtend(uint64_t V, int N) {
 #if V8_TARGET_ARCH_RISCV64
 void Assembler::RV_li(Register rd, int64_t imm) {
   UseScratchRegisterScope temps(this);
-  if (RecursiveLiCount(imm) > GeneralLiCount(imm, temps.CanAcquire())) {
+  if (RecursiveLiCount(imm) > GeneralLiCount(imm, temps.hasAvailable())) {
     GeneralLi(rd, imm);
   } else {
     RecursiveLi(rd, imm);
@@ -996,7 +995,7 @@ void Assembler::GeneralLi(Register rd, int64_t imm) {
       // No temp register is needed
     } else {
       BlockTrampolinePoolScope block_trampoline_pool(this);
-      temp_reg = temps.CanAcquire() ? temps.Acquire() : no_reg;
+      temp_reg = temps.hasAvailable() ? temps.Acquire() : no_reg;
     }
     if (temp_reg != no_reg) {
       // keep track of hardware behavior for lower part in sim_low
@@ -1711,6 +1710,10 @@ void Assembler::set_target_value_at(Address pc, uint32_t target,
 }
 #endif
 
+bool UseScratchRegisterScope::hasAvailable() const {
+  return !available_->is_empty();
+}
+
 bool Assembler::IsConstantPoolAt(Instruction* instr) {
   // The constant pool marker is made of two instructions. These instructions
   // will never be emitted by the JIT, so checking for the first one is enough:
@@ -2207,9 +2210,5 @@ int Assembler::GeneralLiCount(int64_t imm, bool is_get_temp_reg) {
   return count;
 }
 #endif
-
-RegList Assembler::DefaultTmpList() { return {t3, t5}; }
-DoubleRegList Assembler::DefaultFPTmpList() { return {kScratchDoubleReg}; }
-
 }  // namespace internal
 }  // namespace v8

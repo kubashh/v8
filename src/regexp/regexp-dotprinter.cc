@@ -110,7 +110,6 @@ void DotPrinterImpl::VisitChoice(ChoiceNode* that) {
     GuardedAlternative alt = that->alternatives()->at(i);
     alt.node()->Accept(this);
   }
-  PrintAttributes(that);
 }
 
 void DotPrinterImpl::VisitLoopChoice(LoopChoiceNode* that) {

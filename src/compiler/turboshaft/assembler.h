@@ -876,14 +876,11 @@ class ScopedVariable : Variable {
   using value_type = maybe_const_or_v_t<T>;
 
  public:
-  explicit ScopedVariable(Assembler& assembler)
-      : Variable(assembler.NewVariable(
-            static_cast<const RegisterRepresentation&>(V<T>::rep))),
-        assembler_(assembler) {}
-
   template <typename Reducer>
-  explicit ScopedVariable(Reducer* reducer) : ScopedVariable(reducer->Asm()) {}
-
+  explicit ScopedVariable(Reducer* reducer)
+      : Variable(reducer->Asm().NewVariable(
+            static_cast<const RegisterRepresentation&>(V<T>::rep))),
+        assembler_(reducer->Asm()) {}
   template <typename Reducer>
   ScopedVariable(Reducer* reducer, value_type initial_value)
       : ScopedVariable(reducer) {

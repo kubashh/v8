@@ -21,6 +21,11 @@ class Isolate;
 // tasks or delayed foreground tasks if marking progress allows.
 class IncrementalMarkingJob final {
  public:
+  enum class TaskType {
+    kNormal,
+    kPending,
+  };
+
   explicit IncrementalMarkingJob(Heap* heap);
 
   IncrementalMarkingJob(const IncrementalMarkingJob&) = delete;
@@ -28,7 +33,7 @@ class IncrementalMarkingJob final {
 
   // Schedules a task with a given `task_type`. Safe to be called from any
   // thread.
-  void ScheduleTask();
+  void ScheduleTask(TaskType task_type = TaskType::kNormal);
 
   // Returns a weighted average of time to task. For delayed tasks the time to
   // task is only recorded after the initial delay. In case a task is currently
@@ -41,11 +46,21 @@ class IncrementalMarkingJob final {
   class Task;
 
   Heap* const heap_;
-  const std::shared_ptr<v8::TaskRunner> foreground_task_runner_;
+  const std::shared_ptr<v8::TaskRunner> user_blocking_task_runner_;
+  const std::shared_ptr<v8::TaskRunner> user_visible_task_runner_;
   mutable base::Mutex mutex_;
   v8::base::TimeTicks scheduled_time_;
-  bool pending_task_ = false;
+  std::optional<TaskType> pending_task_;
 };
+
+constexpr const char* ToString(IncrementalMarkingJob::TaskType task_type) {
+  switch (task_type) {
+    case IncrementalMarkingJob::TaskType::kNormal:
+      return "normal";
+    case IncrementalMarkingJob::TaskType::kPending:
+      return "pending";
+  }
+}
 
 }  // namespace v8::internal
 

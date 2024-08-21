@@ -490,7 +490,7 @@ bool Heap::CanExpandOldGeneration(size_t size) const {
 }
 
 bool Heap::IsOldGenerationExpansionAllowed(
-    size_t size, const base::MutexGuard& expansion_mutex_witness) const {
+    size_t size, const base::MutexGuard& expansion_mutex_guard) const {
   return OldGenerationCapacity() + size <= max_old_generation_size();
 }
 
@@ -5926,8 +5926,10 @@ void Heap::InitializeHashSeed() {
           kInt64Size);
 }
 
-std::shared_ptr<v8::TaskRunner> Heap::GetForegroundTaskRunner() const {
-  return task_runner_;
+std::shared_ptr<v8::TaskRunner> Heap::GetForegroundTaskRunner(
+    TaskPriority priority) const {
+  return V8::GetCurrentPlatform()->GetForegroundTaskRunner(
+      reinterpret_cast<v8::Isolate*>(isolate()), priority);
 }
 
 // static
@@ -6941,13 +6943,7 @@ void Heap::KeepDuringJob(DirectHandle<HeapObject> target) {
     table =
         handle(Cast<OrderedHashSet>(weak_refs_keep_during_job()), isolate());
   }
-  MaybeHandle<OrderedHashSet> maybe_table =
-      OrderedHashSet::Add(isolate(), table, target);
-  if (!maybe_table.ToHandle(&table)) {
-    FATAL(
-        "Fatal JavaScript error: Too many distinct WeakRef objects "
-        "created or dereferenced during single event loop turn.");
-  }
+  table = OrderedHashSet::Add(isolate(), table, target).ToHandleChecked();
   set_weak_refs_keep_during_job(*table);
 }
 
@@ -7033,7 +7029,7 @@ size_t Heap::NumberOfDetachedContexts() {
   return detached_contexts()->length() / 2;
 }
 
-bool Heap::AllowedToBeMigrated(Tagged<Map> map, Tagged<HeapObject> object,
+bool Heap::AllowedToBeMigrated(Tagged<Map> map, Tagged<HeapObject> obj,
                                AllocationSpace dst) {
   // Object migration is governed by the following rules:
   //
@@ -7047,11 +7043,9 @@ bool Heap::AllowedToBeMigrated(Tagged<Map> map, Tagged<HeapObject> object,
   //
   // Since this function is used for debugging only, we do not place
   // asserts here, but check everything explicitly.
-  if (map == ReadOnlyRoots(this).one_pointer_filler_map()) {
-    return false;
-  }
+  if (map == ReadOnlyRoots(this).one_pointer_filler_map()) return false;
   InstanceType type = map->instance_type();
-  MutablePageMetadata* chunk = MutablePageMetadata::FromHeapObject(object);
+  MutablePageMetadata* chunk = MutablePageMetadata::FromHeapObject(obj);
   AllocationSpace src = chunk->owner_identity();
   switch (src) {
     case NEW_SPACE:
@@ -7110,22 +7104,21 @@ Tagged<GcSafeCode> Heap::GcSafeGetCodeFromInstructionStream(
   return UncheckedCast<GcSafeCode>(istream->raw_code(kAcquireLoad));
 }
 
-bool Heap::GcSafeInstructionStreamContains(
-    Tagged<InstructionStream> instruction_stream, Address addr) {
-  Tagged<Map> map = GcSafeMapOfHeapObject(instruction_stream);
+bool Heap::GcSafeInstructionStreamContains(Tagged<InstructionStream> istream,
+                                           Address addr) {
+  Tagged<Map> map = GcSafeMapOfHeapObject(istream);
   DCHECK_EQ(map, ReadOnlyRoots(this).instruction_stream_map());
 
   Builtin builtin_lookup_result =
       OffHeapInstructionStream::TryLookupCode(isolate(), addr);
   if (Builtins::IsBuiltinId(builtin_lookup_result)) {
     // Builtins don't have InstructionStream objects.
-    DCHECK(!Builtins::IsBuiltinId(
-        instruction_stream->code(kAcquireLoad)->builtin_id()));
+    DCHECK(!Builtins::IsBuiltinId(istream->code(kAcquireLoad)->builtin_id()));
     return false;
   }
 
-  Address start = instruction_stream.address();
-  Address end = start + instruction_stream->SizeFromMap(map);
+  Address start = istream.address();
+  Address end = start + istream->SizeFromMap(map);
   return start <= addr && addr < end;
 }
 
@@ -7384,10 +7377,10 @@ void Heap::WriteBarrierForRange(Tagged<HeapObject> object, TSlot start_slot,
 
 void Heap::GenerationalBarrierForCodeSlow(Tagged<InstructionStream> host,
                                           RelocInfo* rinfo,
-                                          Tagged<HeapObject> value) {
-  DCHECK(InYoungGeneration(value));
+                                          Tagged<HeapObject> object) {
+  DCHECK(InYoungGeneration(object));
   const MarkCompactCollector::RecordRelocSlotInfo info =
-      MarkCompactCollector::ProcessRelocInfo(host, rinfo, value);
+      MarkCompactCollector::ProcessRelocInfo(host, rinfo, object);
 
   base::MutexGuard write_scope(info.page_metadata->mutex());
   RememberedSet<OLD_TO_NEW>::InsertTyped(info.page_metadata, info.slot_type,
