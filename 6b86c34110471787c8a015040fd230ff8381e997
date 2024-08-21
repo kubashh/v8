@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea2e38b2_89e8dffc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-21T13:18:45Z",
+      "side": 1,
+      "message": "nit: If you want to play nice with the versioning tools you format this with linebreaks at 70 chars.",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "cb575e68_187aa580",
@@ -14,6 +37,23 @@
       "writtenOn": "2024-08-21T13:17:12Z",
       "side": 1,
       "message": "LGTM, thank you for your contribution!",
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "215c4f63_633fda37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-21T13:18:45Z",
+      "side": 1,
+      "message": "You will need another review here. \n\nPing for others on this review. Any committer is enough.",
       "revId": "6b86c34110471787c8a015040fd230ff8381e997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
