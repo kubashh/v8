@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "da9acb90_9e329073",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-21T13:36:59Z",
+      "side": 1,
+      "message": "Thank you for your advice! I have inserted a line break at \u0027by OpenBSD\u0027 and \u0027by mprotect\u0027 as suggested.",
+      "parentUuid": "ea2e38b2_89e8dffc",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cb575e68_187aa580",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
