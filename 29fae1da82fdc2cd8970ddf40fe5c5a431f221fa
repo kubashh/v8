@@ -16,6 +16,23 @@
       "message": "You\u0027ll need to wait for another approval by @mlippautz@chromium.org unfortunately as touching a new file resets all approvals... :/",
       "revId": "29fae1da82fdc2cd8970ddf40fe5c5a431f221fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7719c22_b62fbaef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-21T15:03:46Z",
+      "side": 1,
+      "message": "Thanks for hanging in!",
+      "revId": "29fae1da82fdc2cd8970ddf40fe5c5a431f221fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
