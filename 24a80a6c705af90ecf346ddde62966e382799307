@@ -245,6 +245,30 @@
       },
       "revId": "24a80a6c705af90ecf346ddde62966e382799307",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2820399a_bc11ed06",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-21T00:45:38Z",
+      "side": 1,
+      "message": "Well, I will define it in `platform.h` as `PERMISSION_MUTABLE_SECTION`.\nHow do you feel about this? Should I create a new header file for this?",
+      "parentUuid": "41b43050_4c8b94c0",
+      "range": {
+        "startLine": 44,
+        "startChar": 20,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "24a80a6c705af90ecf346ddde62966e382799307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
