@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa90e260_cb28c835",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-08-21T22:14:16Z",
+      "side": 1,
+      "message": "PTAL. Just noticed the version that landed didn\u0027t get the scope quite right.",
+      "revId": "c9f05e21ebab42cceed922a696eabd2447b2b1cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
