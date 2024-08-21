@@ -169,6 +169,24 @@
       "parentUuid": "42997713_891b3eca",
       "revId": "6b86c34110471787c8a015040fd230ff8381e997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78b0f1c_ce0d0793",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-21T14:21:18Z",
+      "side": 1,
+      "message": "I see that you have signed a CLA with Google.\n\nThe tool complains that you need to add yourself to the AUTHORS file in this repo as well.",
+      "parentUuid": "ae2b3651_798b45ed",
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
