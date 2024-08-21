@@ -3712,11 +3712,11 @@ TYPED_ARRAYS_BASE(VALUE_IS_TYPED_ARRAY)
 #undef VALUE_IS_TYPED_ARRAY
 
 bool Value::IsFloat16Array() const {
-  Utils::ApiCheck(i::v8_flags.js_float16array, "Value::IsFloat16Array",
-                  "Float16Array is not supported");
   auto obj = *Utils::OpenDirectHandle(this);
   return i::IsJSTypedArray(obj) &&
-         i::Cast<i::JSTypedArray>(obj)->type() == i::kExternalFloat16Array;
+         i::Cast<i::JSTypedArray>(obj)->type() == i::kExternalFloat16Array &&
+         Utils::ApiCheck(i::v8_flags.js_float16array, "Value::IsFloat16Array",
+                         "Float16Array is not supported");
 }
 
 bool Value::IsDataView() const {
@@ -10274,7 +10274,7 @@ int64_t Isolate::AdjustAmountOfExternalAllocatedMemory(
         change_in_bytes < kMaxReasonableBytes);
 
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
-  int64_t amount = i_isolate->heap()->update_external_memory(change_in_bytes);
+  int64_t amount = i_isolate->heap()->UpdateExternalMemory(change_in_bytes);
 
   if (change_in_bytes <= 0) return amount;
 

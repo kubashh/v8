@@ -1431,6 +1431,13 @@ bool ShouldClearOutputRegisterBeforeInstruction(CodeGenerator* g,
   return false;
 }
 
+void CodeGenerator::AssemblePlaceHolderForLazyDeopt(Instruction* instr) {
+  if (info()->shadow_stack_compliant_lazy_deopt() &&
+      instr->HasCallDescriptorFlag(CallDescriptor::kNeedsFrameState)) {
+    __ Nop(MacroAssembler::kIntraSegmentJmpInstrSize);
+  }
+}
+
 // Assembles an instruction after register allocation, producing machine code.
 CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     Instruction* instr) {
@@ -1463,6 +1470,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ call(reg);
       }
       RecordCallPosition(instr);
+      AssemblePlaceHolderForLazyDeopt(instr);
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -1471,6 +1479,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       Register builtin_index = i.InputRegister(0);
       __ CallBuiltinByIndex(builtin_index);
       RecordCallPosition(instr);
+      AssemblePlaceHolderForLazyDeopt(instr);
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -1488,6 +1497,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ call(i.InputRegister(0));
       }
       RecordCallPosition(instr);
+      AssemblePlaceHolderForLazyDeopt(instr);
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -1552,6 +1562,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ CallJSFunction(func);
       frame_access_state()->ClearSPDelta();
       RecordCallPosition(instr);
+      AssemblePlaceHolderForLazyDeopt(instr);
       break;
     }
     case kArchPrepareCallCFunction: {
@@ -7553,18 +7564,7 @@ void CodeGenerator::AssembleConstructFrame() {
         // accessors.
         __ pushq(kWasmInstanceRegister);
       }
-      if (call_descriptor->IsWasmImportWrapper()) {
-        // If the wrapper is running on a secondary stack, it will switch to the
-        // central stack and fill these slots with the central stack pointer and
-        // secondary stack limit. Otherwise the slots remain empty.
-        static_assert(WasmImportWrapperFrameConstants::kCentralStackSPOffset ==
-                      -24);
-        static_assert(
-            WasmImportWrapperFrameConstants::kSecondaryStackLimitOffset == -32);
-        __ pushq(Immediate(kNullAddress));
-        __ pushq(Immediate(kNullAddress));
-
-      } else if (call_descriptor->IsWasmCapiFunction()) {
+      if (call_descriptor->IsWasmCapiFunction()) {
         // Reserve space for saving the PC later.
         __ AllocateStackSpace(kSystemPointerSize);
       }
