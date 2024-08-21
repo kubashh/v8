@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d95185_1315ffc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-08-21T18:57:25Z",
+      "side": 1,
+      "message": "Hi Stephen,\n\nThis CL is failing a dcheck including on x64 with `v8_enable_sandbox \u003d false`:\n\nv8_unittests --random-seed\u003d622225070 --nohard-abort --verify-heap --testing-d8-test-runner --gtest_filter\u003dPoolTest.UnmapOnTeardown --gtest_random_seed\u003d622225070 --gtest_print_time\u003d0\n\n```\n#\n# Fatal error in ../../src/heap/code-range.cc, line 343\n# Debug check failed: !immutable_.\n```",
+      "revId": "199ec3571a7aeabe47d162e82282256c4fc63387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
