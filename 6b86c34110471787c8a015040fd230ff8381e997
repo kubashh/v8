@@ -187,6 +187,24 @@
       "parentUuid": "ae2b3651_798b45ed",
       "revId": "6b86c34110471787c8a015040fd230ff8381e997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "808780fa_629fa3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3579453
+      },
+      "writtenOn": "2024-08-21T14:27:07Z",
+      "side": 1,
+      "message": "Oh, sorry. I have just added my name and email to the AUTHORS file.",
+      "parentUuid": "d78b0f1c_ce0d0793",
+      "revId": "6b86c34110471787c8a015040fd230ff8381e997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
