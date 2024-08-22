@@ -410,6 +410,9 @@ class V8_EXPORT_PRIVATE WasmEngine {
       WasmOrphanedGlobalHandle** pointer);
   static void FreeAllOrphanedGlobalHandles(WasmOrphanedGlobalHandle* start);
 
+  static void EnsureWasmCanonicalRttsSize(Isolate* isolate, int length);
+  static void ClearWasmCanonicalRttsForTesting(Isolate* isolate);
+
  private:
   struct CurrentGCInfo;
   struct IsolateInfo;
