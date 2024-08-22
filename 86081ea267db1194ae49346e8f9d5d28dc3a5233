@@ -33,6 +33,23 @@
       "message": "ah, moving Matthias to reviewer for `pipeline.cc` OWNER-ship.",
       "revId": "86081ea267db1194ae49346e8f9d5d28dc3a5233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6158afe_331cb24e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T10:20:59Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "86081ea267db1194ae49346e8f9d5d28dc3a5233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
