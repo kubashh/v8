@@ -33,6 +33,23 @@
       "message": "+Matthias for compiler ownership.",
       "revId": "88e07ab0c865098f5d6f8118bd87f89d17a139da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45a86547_da5852d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T14:52:51Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "88e07ab0c865098f5d6f8118bd87f89d17a139da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
