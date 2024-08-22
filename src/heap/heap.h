@@ -236,22 +236,22 @@ class Heap final {
       return low_since_mark_compact_.load(std::memory_order_relaxed);
     }
 
-    void ResetAfterGC() {
-      set_low_since_mark_compact(total());
-      set_limit(total() + kExternalAllocationSoftLimit);
-    }
-
-    int64_t Update(int64_t delta) {
+    int64_t UpdateAmount(int64_t delta) {
       const int64_t amount =
           total_.fetch_add(delta, std::memory_order_relaxed) + delta;
-      if (amount < low_since_mark_compact()) {
-        set_low_since_mark_compact(amount);
-        set_limit(amount + kExternalAllocationSoftLimit);
-      }
       return amount;
     }
 
-    int64_t AllocatedSinceMarkCompact() const {
+    void UpdateLimit(int64_t amount) {
+      set_limit(amount + kExternalAllocationSoftLimit);
+    }
+
+    void UpdateLowSinceMarkCompact(int64_t amount) {
+      set_low_since_mark_compact(amount);
+      UpdateLimit(amount);
+    }
+
+    uint64_t AllocatedSinceMarkCompact() const {
       int64_t total_bytes = total();
       int64_t low_since_mark_compact_bytes = low_since_mark_compact();
 
@@ -629,11 +629,19 @@ class Heap final {
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);
 
-  int64_t external_memory_hard_limit() { return max_old_generation_size() / 2; }
+  int64_t external_memory_hard_limit() {
+    if (v8_flags.external_memory_relaxed_limits) {
+      return (external_memory_.low_since_mark_compact() +
+              max_global_memory_size_) /
+             2;
+    }
+    return external_memory_.low_since_mark_compact() +
+           max_old_generation_size() / 2;
+  }
 
-  V8_INLINE int64_t external_memory();
+  V8_INLINE int64_t external_memory() const;
   V8_EXPORT_PRIVATE int64_t external_memory_limit();
-  V8_INLINE int64_t update_external_memory(int64_t delta);
+  int64_t UpdateExternalMemory(int64_t delta);
 
   V8_EXPORT_PRIVATE size_t YoungArrayBufferBytes();
   V8_EXPORT_PRIVATE size_t OldArrayBufferBytes();
@@ -1419,6 +1427,9 @@ class Heap final {
   // bytes allocated and wasted.
   V8_EXPORT_PRIVATE size_t GlobalConsumedBytes() const;
 
+  V8_EXPORT_PRIVATE size_t OldGenerationConsumedBytesAtLastGC() const;
+  V8_EXPORT_PRIVATE size_t GlobalConsumedBytesAtLastGC() const;
+
   // We allow incremental marking to overshoot the V8 and global allocation
   // limit for performance reasons. If the overshoot is too large then we are
   // more eager to finalize incremental marking.
@@ -1884,8 +1895,10 @@ class Heap final {
   // ===========================================================================
 
   inline size_t OldGenerationSpaceAvailable() {
-    uint64_t bytes = OldGenerationConsumedBytes() +
-                     AllocatedExternalMemorySinceMarkCompact();
+    uint64_t bytes = OldGenerationConsumedBytes();
+    if (!v8_flags.external_memory_relaxed_limits) {
+      bytes += AllocatedExternalMemorySinceMarkCompact();
+    }
 
     if (old_generation_allocation_limit() <= bytes) return 0;
     return old_generation_allocation_limit() - static_cast<size_t>(bytes);
@@ -2336,7 +2349,7 @@ class Heap final {
   size_t old_generation_wasted_at_last_gc_{0};
 
   // The size of global memory after the last MarkCompact GC.
-  size_t global_consumed_memory_at_last_gc_ = 0;
+  size_t embedder_size_at_last_gc_ = 0;
 
   char trace_ring_buffer_[kTraceRingBufferSize];
 
