@@ -1259,6 +1259,26 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
   CHECK(code->parameter_count() == kDontAdaptArgumentsSentinel ||
         code->parameter_count() == parameter_count);
 
+  // Check that the code in the dispatch entry is consistent with the code on
+  // the JSFunction.
+  Tagged<Code> own_code = this->code(isolate);
+  Tagged<Code> maybe_optimized_code =
+      has_feedback_vector() ? feedback_vector()->optimized_code(isolate)
+                            : Tagged<Code>();
+  if (!maybe_optimized_code.is_null()) {
+    // In that case, the code in the dispatch entry must be equal to the
+    // (pending) optimized code on the FeedbackVector.
+    CHECK(code.SafeEquals(maybe_optimized_code));
+  } else if (own_code->marked_for_deoptimization()) {
+    // In that case, we don't really know what the code in the dispatch entry is
+    // currently. In the future, we can CHECK here that the code in the dispatch
+    // entry *is not* the code that is marked for deoptimization because we
+    // don't need lazy deopt with leaptiering.
+  } else {
+    // In that case, the two Code objects must be the same.
+    // CHECK(code.SafeEquals(own_code));
+  }
+
   // Currently, a JSFunction must have the same dispatch entry as its
   // FeedbackCell, unless the FeedbackCell has no entry.
   JSDispatchHandle feedback_cell_handle =
