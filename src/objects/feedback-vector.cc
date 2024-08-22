@@ -223,12 +223,14 @@ Handle<ClosureFeedbackCellArray> ClosureFeedbackCellArray::New(
   // allocation.
   DirectHandleVector<FeedbackCell> cells(isolate);
   cells.reserve(length);
+  JSDispatchTable* jdt = GetProcessWideJSDispatchTable();
   for (int i = 0; i < length; i++) {
     Handle<FeedbackCell> cell = isolate->factory()->NewNoClosuresCell();
 #ifdef V8_ENABLE_LEAPTIERING
     uint16_t parameter_count =
         shared->feedback_metadata()->GetCreateClosureParameterCount(i);
     cell->initialize_dispatch_handle(isolate, parameter_count);
+    jdt->SetCode(cell->dispatch_handle(), *BUILTIN_CODE(isolate, CompileLazy));
 #endif
     cells.push_back(cell);
   }
