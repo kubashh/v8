@@ -52,6 +52,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe1b7a4d_9c130f95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T15:36:49Z",
+      "side": 1,
+      "message": "Thanks for the review!",
+      "revId": "c99cd903f2de835a235aa9b37f955688328645dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d2d373c_e2845252",
@@ -89,6 +106,30 @@
       "side": 1,
       "message": "I assume we want to bottleneck it though, so that the mutable roots don\u0027t accidentally go out of sync with each other -- hard to do that when they have public setters.",
       "parentUuid": "4d2d373c_e2845252",
+      "range": {
+        "startLine": 2200,
+        "startChar": 11,
+        "endLine": 2200,
+        "endChar": 38
+      },
+      "revId": "c99cd903f2de835a235aa9b37f955688328645dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc33aaee_0ad7766f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T15:36:49Z",
+      "side": 1,
+      "message": "We already have such public setters apparently for other cases. I think it should be fairly easy to move it. I\u0027ll do that in a follow-up CL and then we can discuss there which option seems to be the better one. 😊",
+      "parentUuid": "7a17d9d5_a1d88623",
       "range": {
         "startLine": 2200,
         "startChar": 11,
