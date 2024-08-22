@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8242533_1b931250",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T16:06:43Z",
+      "side": 1,
+      "message": "@mlippautz@chromium.org: Was something like this what you had in mind?\n@clemensb@chromium.org, @leszeks@chromium.org: Adding you as you were involved in the previous CL, especially interested in @clemensb@chromium.org\u0027s thoughts on this for wasm.\n\nI\u0027m not very convinced that this CL is an improvement but maybe I also misunderstood what the \"public setters\" were about.",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eae35182_193544e1",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T16:06:43Z",
+      "side": 1,
+      "message": "This is where I feel this gets hard to grasp: `wasm::WasmEngine::EnsureWasmCanonicalRttsSize` will grow `js_to_wasm_wrappers()` that we access here. I\u0027d never guess that there would be any connection between these two statements. That wasn\u0027t obvious previously either, but it still had the `heap` as a common denominator.",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
