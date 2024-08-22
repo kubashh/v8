@@ -91,7 +91,7 @@ class V8_EXPORT_PRIVATE WasmGraphBuilderBase {
   template <typename T>
   using ConstOrV = compiler::turboshaft::ConstOrV<T>;
 
-  using ValidationTag = Decoder::FullValidationTag;
+  using ValidationTag = Decoder::NoValidationTag;
   using FullDecoder =
       WasmFullDecoder<ValidationTag, TurboshaftGraphBuildingInterface>;
 

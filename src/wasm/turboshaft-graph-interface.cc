@@ -361,7 +361,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
     kInlinedWithCatch,
     kInlinedTailCall
   };
-  using ValidationTag = Decoder::FullValidationTag;
+  using ValidationTag = Decoder::NoValidationTag;
   using FullDecoder =
       WasmFullDecoder<ValidationTag, TurboshaftGraphBuildingInterface>;
   static constexpr bool kUsesPoppedArgs = true;
@@ -8270,8 +8270,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                                            /*args*/ nullptr);
     }
 
-    WasmFullDecoder<Decoder::FullValidationTag,
-                    TurboshaftGraphBuildingInterface>
+    WasmFullDecoder<Decoder::NoValidationTag, TurboshaftGraphBuildingInterface>
         inlinee_decoder(decoder->zone_, decoder->module_, decoder->enabled_,
                         decoder->detected_, inlinee_body, decoder->zone_, env_,
                         asm_, inlinee_mode, instance_cache_, assumptions_,
@@ -8558,9 +8557,10 @@ V8_EXPORT_PRIVATE bool BuildTSGraph(
     const FunctionBody& func_body, const WireBytesStorage* wire_bytes,
     AssumptionsJournal* assumptions,
     ZoneVector<WasmInliningPosition>* inlining_positions, int func_index) {
+  DCHECK(env->module->function_was_validated(func_index));
   Zone zone(allocator, ZONE_NAME);
   WasmGraphBuilderBase::Assembler assembler(data, graph, graph, &zone);
-  WasmFullDecoder<Decoder::FullValidationTag, TurboshaftGraphBuildingInterface>
+  WasmFullDecoder<Decoder::NoValidationTag, TurboshaftGraphBuildingInterface>
       decoder(&zone, env->module, env->enabled_features, detected, func_body,
               &zone, env, assembler, assumptions, inlining_positions,
               func_index, func_body.is_shared, wire_bytes);
