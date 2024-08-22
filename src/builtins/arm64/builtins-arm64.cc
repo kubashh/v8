@@ -1498,6 +1498,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
 
   __ bind(&is_baseline);
   {
+#ifndef V8_ENABLE_LEAPTIERING
     // Load the feedback vector from the closure.
     __ LoadTaggedField(
         feedback_vector,
@@ -1526,6 +1527,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ JumpCodeObject(x2, kJSEntrypointTag);
 
     __ bind(&install_baseline_code);
+#endif  // V8_ENABLE_LEAPTIERING
     __ GenerateTailCallToReturnedCode(Runtime::kInstallBaselineCode);
   }
 #endif  // !V8_JITLESS

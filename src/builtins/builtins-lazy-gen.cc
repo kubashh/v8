@@ -142,6 +142,10 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
 
   BIND(&baseline);
   // Ensure we have a feedback vector.
+#ifdef V8_ENABLE_LEAPTIERING
+  code = CAST(CallRuntime(Runtime::kInstallBaselineCode,
+                          Parameter<Context>(Descriptor::kContext), function));
+#else
   code = Select<Code>(
       IsFeedbackVector(feedback_cell_value), [=]() { return sfi_code; },
       [=, this]() {
@@ -149,6 +153,7 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
                                 Parameter<Context>(Descriptor::kContext),
                                 function));
       });
+#endif  // V8_ENABLE_LEAPTIERING
   Goto(&tailcall_code);
 
   BIND(&tailcall_code);
