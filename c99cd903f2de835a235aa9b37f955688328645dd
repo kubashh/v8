@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aa96c4c_4e0482ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T14:30:13Z",
+      "side": 1,
+      "message": "@clemensb@chromium.org: PTAL, thanks a lot for the support on investigating this!\n@leszeks@chromium.org: Please component-review the change.",
+      "revId": "c99cd903f2de835a235aa9b37f955688328645dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "971bd89b_fce6f365",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-22T14:30:13Z",
+      "side": 1,
+      "message": "The fix becomes very obvious when looking at this function that grows the canonical types...",
+      "revId": "c99cd903f2de835a235aa9b37f955688328645dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
