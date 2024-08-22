@@ -131,8 +131,13 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
   // A usual case would be the InterpreterEntryTrampoline to start executing
   // existing bytecode.
   BIND(&maybe_use_sfi_code);
-  Label tailcall_code(this), baseline(this);
+
   TVARIABLE(Code, code);
+#ifdef V8_ENABLE_LEAPTIERING
+  code = CAST(CallRuntime(Runtime::kInstallBaselineCode,
+                          Parameter<Context>(Descriptor::kContext), function));
+#else
+  Label tailcall_code(this), baseline(this);
 
   // Check if we have baseline code.
   GotoIf(InstanceTypeEqual(sfi_data_type.value(), CODE_TYPE), &baseline);
@@ -152,6 +157,7 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
   Goto(&tailcall_code);
 
   BIND(&tailcall_code);
+#endif
   GenerateTailCallToJSCode(code.value(), function);
 
   BIND(&compile_function);

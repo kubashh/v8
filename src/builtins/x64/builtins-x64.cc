@@ -1243,6 +1243,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ LoadTaggedField(feedback_vector,
                        FieldOperand(feedback_cell, FeedbackCell::kValueOffset));
 
+#ifndef V8_ENABLE_LEAPTIERING
     Label install_baseline_code;
     // Check if feedback vector is valid. If not, call prepare for baseline to
     // allocate it.
@@ -1262,6 +1263,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ JumpCodeObject(rcx, kJSEntrypointTag);
 
     __ bind(&install_baseline_code);
+#endif  // V8_ENABLE_LEAPTIERING
     __ GenerateTailCallToReturnedCode(Runtime::kInstallBaselineCode);
   }
 #endif  // !V8_JITLESS
