@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fddafc89_11b3c8b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-08-22T23:14:59Z",
+      "side": 1,
+      "message": "1. I can\u0027t mentally map what\u0027s happening in that PR and what\u0027s happening in this CL. The PR creates these `useGrouping` properties. Is that an unobservable detail?\n\n2. Intl DurationFormat is already shipped. Can you help me understand the possible compat impact of this normative change?",
+      "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
