@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f73f297a_e9f5abb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-22T11:46:48Z",
+      "side": 1,
+      "message": "This should be the last big CL for this renaming. PTAL.",
+      "revId": "aa7446ef620b6e648f9f4e9442f9ac24447fcba7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
