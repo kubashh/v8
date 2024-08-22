@@ -18,6 +18,29 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d2d373c_e2845252",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-22T14:37:17Z",
+      "side": 1,
+      "message": "Drive-by: This is one of the things that looks like it\u0027s only on `Heap` because of the root setter?\n\nHow about a public setter for mutable roots so that this code can actually stay closer to where we want it?",
+      "range": {
+        "startLine": 2200,
+        "startChar": 11,
+        "endLine": 2200,
+        "endChar": 38
+      },
+      "revId": "c99cd903f2de835a235aa9b37f955688328645dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "971bd89b_fce6f365",
