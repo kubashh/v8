@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21b94148_9ab302cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-22T08:31:44Z",
+      "side": 1,
+      "message": "Not sure if it\u0027s still worth landing this, since there is no code size improvement in release builds (I still like the simplification though).",
+      "revId": "5e11cf5f3693ded883c462cea4bcae4a08a0e2e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
