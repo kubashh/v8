@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a17d9d5_a1d88623",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-22T15:33:15Z",
+      "side": 1,
+      "message": "I assume we want to bottleneck it though, so that the mutable roots don\u0027t accidentally go out of sync with each other -- hard to do that when they have public setters.",
+      "parentUuid": "4d2d373c_e2845252",
+      "range": {
+        "startLine": 2200,
+        "startChar": 11,
+        "endLine": 2200,
+        "endChar": 38
+      },
+      "revId": "c99cd903f2de835a235aa9b37f955688328645dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "971bd89b_fce6f365",
