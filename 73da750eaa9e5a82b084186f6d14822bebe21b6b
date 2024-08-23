@@ -18,6 +18,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecb2cdda_1de8693f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-23T08:28:44Z",
+      "side": 1,
+      "message": "Yeah this is what I meant. I do think it is an improvement and we have been trying to get runtime code out of heap where possible over the years.",
+      "parentUuid": "c8242533_1b931250",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4076b043_c73fae99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-23T08:28:44Z",
+      "side": 1,
+      "message": "IMHO this is better. Happy to hear other thoughts.",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eae35182_193544e1",
@@ -31,6 +66,24 @@
       "writtenOn": "2024-08-22T16:06:43Z",
       "side": 1,
       "message": "This is where I feel this gets hard to grasp: `wasm::WasmEngine::EnsureWasmCanonicalRttsSize` will grow `js_to_wasm_wrappers()` that we access here. I\u0027d never guess that there would be any connection between these two statements. That wasn\u0027t obvious previously either, but it still had the `heap` as a common denominator.",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bd486c0_70e06aed",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-08-23T08:28:44Z",
+      "side": 1,
+      "message": "I am not sure having `Heap` as the dumping ground makes this any better. If anything it suggests that there\u0027s something in common when there isnt.",
+      "parentUuid": "eae35182_193544e1",
       "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
