@@ -1236,6 +1236,12 @@ void Builtins::Generate_InterpreterEntryTrampoline(
 
   __ bind(&is_baseline);
   {
+#ifndef V8_ENABLE_LEAPTIERING
+    // TODO(olivf): Support this fastcase with leaptiering. This requires
+    // checking if the JSFunction and the FeedbackCell have the same dispatch
+    // entry and then unlocking the pkey protected dispatch table. See
+    // `JSFunction::UpdateCode`.
+
     // Load the feedback vector from the closure.
     TaggedRegister feedback_cell(feedback_vector);
     __ LoadTaggedField(feedback_cell,
@@ -1262,6 +1268,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ JumpCodeObject(rcx, kJSEntrypointTag);
 
     __ bind(&install_baseline_code);
+#endif  // V8_ENABLE_LEAPTIERING
     __ GenerateTailCallToReturnedCode(Runtime::kInstallBaselineCode);
   }
 #endif  // !V8_JITLESS
