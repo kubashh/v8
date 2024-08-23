@@ -16,6 +16,24 @@
       "message": "1. I can\u0027t mentally map what\u0027s happening in that PR and what\u0027s happening in this CL. The PR creates these `useGrouping` properties. Is that an unobservable detail?\n\n2. Intl DurationFormat is already shipped. Can you help me understand the possible compat impact of this normative change?",
       "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a8d4f0_18c46f0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2024-08-23T18:56:45Z",
+      "side": 1,
+      "message": "The spec was changed with several Editoral PR in the last several months, making it hard to map from the spec PR to this cl.\nBasically, if you look at the spec change, it set the useGrouping to false to create the number format when the style si numeric or 2-digit and that map to our code in that two places\n\nThe impact is a. while the style is digital, AND b. while the value of hours, minutes, or seconds is \u003e 999, the output will now be different. It used to have \",\" for example 123,456:789,012:56,890 for 123456 hours 789012 minutes and 56890 seconds but now it output \"123456:789012:56890\" instead. We do not think that will be a common use case. So it should have no significant usage on those cases.\n\nDurationFormat is ship for m129 (which the branch is just cut), once we land it, I plan to cherrypick this change into the m129 branch, with proper process.",
+      "parentUuid": "fddafc89_11b3c8b6",
+      "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
