@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deb6757c_b943a56e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-08-23T12:21:33Z",
+      "side": 1,
+      "message": "PTAL. I actually didn\u0027t see the the kraken ai-star flake in recent commits, but mandreel a lot. Just skipping both.",
+      "revId": "4476cbfc15a5aefa45a87de444003b870c19e186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
