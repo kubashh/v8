@@ -104,6 +104,24 @@
       "parentUuid": "eae35182_193544e1",
       "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d5e87e2_4f73e73b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-26T08:25:41Z",
+      "side": 1,
+      "message": "you could make it look more related by a) making this return the `js_to_wasm_wrappers` (maybe even `js_to_wasm_wrappers()-\u003eGet(wrapper_index)`), or b) having a WasmEngine helper to get the wrapper which is somehow named to include the relation to rtt length.",
+      "parentUuid": "5bd486c0_70e06aed",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
