@@ -22,6 +22,30 @@
       },
       "revId": "aaec0f2e879f9f7ca93c7a8b47a0fc15dd34ca46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b43796fd_fa81f27d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-26T14:54:45Z",
+      "side": 1,
+      "message": "I don\u0027t feel strongly on names. `STREAM_TRACE_IF` feels unfortunately long, especially since it\u0027s easier to use than the macro with the shorter name. Your suggestion resolves that, at the cost of two names that look almost identical (and are thus easily confusable) but don\u0027t work the same. I think your names are probably better on balance. Maybe there\u0027s an even better way somehow (`TRACE_IF` vs. `TRACE_FMT_IF`?).\n\nRe: hiding the macro underpinnings: No objection to making any wrappers be named similarly to the underlying invoked thingies.\n\nRe: obscuring flags: The main thing I\u0027d consider is that some files have a bunch of boilerplate they also want printed every time they trace, and it\u0027s convenient to put that in the file-scope macro to avoid repetition. If that\u0027s done, we\u0027re already hiding what\u0027s happening to some degree. Given that, I\u0027m not sure it\u0027s critical to surface the condition flag. If it is critical, then it would be nice to at least avoid \"v8_flags.\" at every callsite, but I can\u0027t think of a clear way to do that; just moving it into the file-scope helpers makes it look like we\u0027re checking some local variable name.\n\nThis particular CL shows a couple files that have involved, ugly changes; the vast majority of files are simple mechanical conversions. In those cases, I think hiding the condition variable works more nicely because there\u0027s only a single variable checked, and it\u0027s the same across the whole file (and, often, different from any other file).\n\nSo my suggestion would be, change the main macro names, surface that difference in the file-scope names, leave the particular variable elided locally. I could make those changes locally and post a larger set of diffs if you wanted a more representative sample to see what the effect was.",
+      "parentUuid": "ef754f6c_709b7521",
+      "range": {
+        "startLine": 198,
+        "startChar": 1,
+        "endLine": 198,
+        "endChar": 7
+      },
+      "revId": "aaec0f2e879f9f7ca93c7a8b47a0fc15dd34ca46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
