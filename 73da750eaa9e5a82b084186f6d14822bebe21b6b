@@ -73,6 +73,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dfc9079_5d04bf6e",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-26T09:48:36Z",
+      "side": 1,
+      "message": "As those two are always updated together, should we have a single setter which sets both?",
+      "range": {
+        "startLine": 883,
+        "startChar": 0,
+        "endLine": 884,
+        "endChar": 66
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c1a596_06f55c1a",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-26T09:48:36Z",
+      "side": 1,
+      "message": "Can this actually happen, or should we instead (in the beginning of the method) `CHECK_EQ(current_rtts-\u003elength() * 2, current_wrappers-\u003elength());`?",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64ebca8_833af18a",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-26T09:48:36Z",
+      "side": 1,
+      "message": "Two comments:\n1) This is not only about canonical rtts any more, so we should look for a better name.\n2) Can we find a \"less global\" place where to put it? I am worried that we pollute the WasmEngine with more and more unrelated little helpers which could instead be free-floating functions declared and defined where we need them. I am not sure about the right place in this case though. Maybe \"module-compiler.h\" since creating new canonical type IDs happens when compiling wrappers or modules with new types?",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 65
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eae35182_193544e1",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 1
@@ -120,6 +183,24 @@
       "side": 1,
       "message": "you could make it look more related by a) making this return the `js_to_wasm_wrappers` (maybe even `js_to_wasm_wrappers()-\u003eGet(wrapper_index)`), or b) having a WasmEngine helper to get the wrapper which is somehow named to include the relation to rtt length.",
       "parentUuid": "5bd486c0_70e06aed",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f0d45b_c6e7bb41",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-26T09:48:36Z",
+      "side": 1,
+      "message": "As mentioned above, I think this can be fixed by renaming `EnsureWasmCanonicalRttsSize` to something that describes better what this method does. Something like `PrepareForCanonicalTypeId` or something in that direction.",
+      "parentUuid": "7d5e87e2_4f73e73b",
       "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
