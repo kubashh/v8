@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef754f6c_709b7521",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-26T10:02:24Z",
+      "side": 1,
+      "message": "I like the `(STREAM_)TRACE_IF` macro, we could bikeshed the name (I\u0027m imagining, e.g. `TRACE_IF` and `TRACEF_IF`). I\u0027m not sure about these wrapping definitions though, for two reasons:\n\n  1) They hide whether they\u0027re using `TRACE_IF` or `STREAM_TRACE_IF`, which makes using `TRACE` macros \"non transferrable\" (sometimes you need the %d, sometimes not, and you can\u0027t tell from the callsite which it is).\n  \n  2) They (intentionally) obscure the flag that causes the printing -- this makes the code sleeker if you don\u0027t care about tracing, but makes it (a bit) harder to tell what flag is needed to enable some form of tracing. I\u0027m aware this is already done in some files, but not universally throughout and I\u0027m not sure we have consensus on which style should be preferred if we were to enforce a single one.\n  \nNot sure what your thoughts are on these points.",
+      "range": {
+        "startLine": 198,
+        "startChar": 1,
+        "endLine": 198,
+        "endChar": 7
+      },
+      "revId": "aaec0f2e879f9f7ca93c7a8b47a0fc15dd34ca46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
