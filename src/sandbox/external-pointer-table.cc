@@ -24,8 +24,72 @@ void ExternalPointerTable::SetUpFromReadOnlyArtifacts(
   }
 }
 
+<<<<<<< HEAD   (6becda Version 12.0.267.35)
 uint32_t ExternalPointerTable::SweepAndCompact(Space* space,
                                                Counters* counters) {
+=======
+// An iterator over a set of sets of segments that returns a total ordering of
+// segments in highest to lowest address order.  This lets us easily build a
+// sorted singly-linked freelist.
+//
+// When given a single set of segments, it's the same as iterating over
+// std::set<Segment> in reverse order.
+//
+// With multiple segment sets, we still produce a total order.  Sets are
+// annotated so that we can associate some data with their segments.  This is
+// useful when evacuating the young ExternalPointerTable::Space into the old
+// generation in a major collection, as both spaces could have been compacting,
+// with different starts to the evacuation area.
+template <typename Segment, typename Data>
+class SegmentsIterator {
+  using iterator = typename std::set<Segment>::reverse_iterator;
+  using const_iterator = typename std::set<Segment>::const_reverse_iterator;
+
+ public:
+  SegmentsIterator() = default;
+
+  void AddSegments(const std::set<Segment>& segments, Data data) {
+    streams_.emplace_back(segments.rbegin(), segments.rend(), data);
+  }
+
+  std::optional<std::pair<Segment, Data>> Next() {
+    int stream = -1;
+    int min_stream = -1;
+    std::optional<std::pair<Segment, Data>> result;
+    for (auto [iter, end, data] : streams_) {
+      stream++;
+      if (iter != end) {
+        Segment segment = *iter;
+        if (!result || result.value().first < segment) {
+          min_stream = stream;
+          result.emplace(segment, data);
+        }
+      }
+    }
+    if (result) {
+      streams_[min_stream].iter++;
+      return result;
+    }
+    return {};
+  }
+
+ private:
+  struct Stream {
+    iterator iter;
+    const_iterator end;
+    Data data;
+
+    Stream(iterator iter, const_iterator end, Data data)
+        : iter(iter), end(end), data(data) {}
+  };
+
+  std::vector<Stream> streams_;
+};
+
+uint32_t ExternalPointerTable::EvacuateAndSweepAndCompact(Space* space,
+                                                          Space* from_space,
+                                                          Counters* counters) {
+>>>>>>> CHANGE (1a2b08 heap,sandbox: Update EPT's evacuation entries in Scavenger.)
   DCHECK(space->BelongsTo(this));
   DCHECK(!space->is_internal_read_only_space());
 
@@ -67,8 +131,24 @@ uint32_t ExternalPointerTable::SweepAndCompact(Space* space,
 
     space->StopCompacting();
 
+<<<<<<< HEAD   (6becda Version 12.0.267.35)
     counters->external_pointer_table_compaction_outcome()->AddSample(
         static_cast<int>(outcome));
+=======
+    std::swap(from_space->segments_, from_space_segments);
+    DCHECK(from_space->segments_.empty());
+
+    CompactionResult from_space_compaction =
+        FinishCompaction(from_space, counter);
+    segments_iter.AddSegments(from_space_segments, from_space_compaction);
+
+    FreelistHead empty_freelist;
+    from_space->freelist_head_.store(empty_freelist, std::memory_order_relaxed);
+
+    for (Address field : from_space->invalidated_fields_)
+      space->invalidated_fields_.push_back(field);
+    from_space->ClearInvalidatedFields();
+>>>>>>> CHANGE (1a2b08 heap,sandbox: Update EPT's evacuation entries in Scavenger.)
   }
 
   // Sweep top to bottom and rebuild the freelist from newly dead and
@@ -106,7 +186,39 @@ uint32_t ExternalPointerTable::SweepAndCompact(Space* space,
     for (uint32_t i = segment.last_entry(); i >= segment.first_entry(); i--) {
       auto payload = at(i).GetRawPayload();
       if (payload.ContainsEvacuationEntry()) {
+<<<<<<< HEAD   (6becda Version 12.0.267.35)
         bool entry_was_resolved = false;
+=======
+        // Segments that will be evacuated cannot contain evacuation entries
+        // into which other entries would be evacuated.
+        DCHECK(!segment_will_be_evacuated);
+
+        // An evacuation entry contains the address of the external pointer
+        // field that owns the entry that is to be evacuated.
+        Address handle_location =
+            payload.ExtractEvacuationEntryHandleLocation();
+
+        // The evacuation entry may be invalidated by the Scavenger that has
+        // freed the object.
+        if (handle_location == kNullAddress) {
+          AddToFreelist(i);
+          continue;
+        }
+
+        // The external pointer field may have been invalidated in the meantime
+        // (for example if the host object has been in-place converted to a
+        // different type of object). In that case, the field no longer
+        // contains an external pointer handle and we therefore cannot evacuate
+        // the old entry. This is fine as the entry is guaranteed to be dead.
+        if (space->FieldWasInvalidated(handle_location)) {
+          // In this case, we must, however, free the evacuation entry.
+          // Otherwise, we would be left with effectively a stale evacuation
+          // entry that we'd try to process again during the next GC.
+          AddToFreelist(i);
+          continue;
+        }
+
+>>>>>>> CHANGE (1a2b08 heap,sandbox: Update EPT's evacuation entries in Scavenger.)
         // Resolve the evacuation entry: take the pointer to the handle from the
         // evacuation entry, copy the entry to its new location, and finally
         // update the handle to point to the new entry.
@@ -252,6 +364,40 @@ bool ExternalPointerTable::TryResolveEvacuationEntryDuringSweeping(
   at(old_index).UnmarkAndMigrateInto(new_entry);
   *handle_location = new_handle;
   return true;
+}
+
+void ExternalPointerTable::UpdateAllEvacuationEntries(
+    Space* space, std::function<Address(Address)> function) {
+  DCHECK(space->BelongsTo(this));
+  DCHECK(!space->is_internal_read_only_space());
+
+  if (!space->IsCompacting()) return;
+
+  // Lock the space. Technically this is not necessary since no other thread can
+  // allocate entries at this point, but some of the methods we call on the
+  // space assert that the lock is held.
+  base::MutexGuard guard(&space->mutex_);
+  // Same for the invalidated fields mutex.
+  base::MutexGuard invalidated_fields_guard(&space->invalidated_fields_mutex_);
+
+  const uint32_t start_of_evacuation_area =
+      space->start_of_evacuation_area_.load(std::memory_order_relaxed);
+
+  // Iterate until the start of evacuation area.
+  for (auto& segment : space->segments_) {
+    if (segment.first_entry() == start_of_evacuation_area) return;
+    for (uint32_t i = segment.first_entry(); i < segment.last_entry() + 1;
+         ++i) {
+      ExternalPointerTableEntry& entry = at(i);
+      ExternalPointerTableEntry::Payload payload = entry.GetRawPayload();
+      if (!payload.ContainsEvacuationEntry()) {
+        continue;
+      }
+      Address new_location =
+          function(payload.ExtractEvacuationEntryHandleLocation());
+      entry.MakeEvacuationEntry(new_location);
+    }
+  }
 }
 
 }  // namespace internal

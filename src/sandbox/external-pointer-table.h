@@ -433,6 +433,47 @@ class V8_EXPORT_PRIVATE ExternalPointerTable
   //
   // Returns the number of live entries after sweeping.
   uint32_t SweepAndCompact(Space* space, Counters* counters);
+<<<<<<< HEAD   (6becda Version 12.0.267.35)
+=======
+  uint32_t Sweep(Space* space, Counters* counters);
+
+  // Updates all evacuation entries with new handle locations. The function
+  // takes the old hanlde location and returns the new one.
+  void UpdateAllEvacuationEntries(Space*, std::function<Address(Address)>);
+
+  inline bool Contains(Space* space, ExternalPointerHandle handle) const;
+
+  // A resource outside of the V8 heap whose lifetime is tied to something
+  // inside the V8 heap. This class makes that relationship explicit.
+  //
+  // Knowing about such objects is important for the sandbox to guarantee
+  // memory safety. In particular, it is necessary to prevent issues where the
+  // external resource is destroyed before the entry in the
+  // ExternalPointerTable (EPT) that references it is freed. In that case, the
+  // EPT entry would then contain a dangling pointer which could be abused by
+  // an attacker to cause a use-after-free outside of the sandbox.
+  //
+  // Currently, this is solved by remembering the EPT entry in the external
+  // object and zapping/invalidating it when the resource is destroyed. An
+  // alternative approach that might be preferable in the future would be to
+  // destroy the external resource only when the EPT entry is freed. This would
+  // avoid the need to manually keep track of the entry, for example.
+  class ManagedResource : public Malloced {
+   public:
+    // This method must be called before destroying the external resource.
+    // When the sandbox is enabled, it will take care of zapping its EPT entry.
+    inline void ZapExternalPointerTableEntry();
+
+   private:
+    friend class ExternalPointerTable;
+    // Currently required for snapshot stress mode, see deserializer.cc.
+    template <typename IsolateT>
+    friend class Deserializer;
+
+    ExternalPointerTable* owning_table_ = nullptr;
+    ExternalPointerHandle ept_entry_ = kNullExternalPointerHandle;
+  };
+>>>>>>> CHANGE (1a2b08 heap,sandbox: Update EPT's evacuation entries in Scavenger.)
 
  private:
   static inline bool IsValidHandle(ExternalPointerHandle handle);
