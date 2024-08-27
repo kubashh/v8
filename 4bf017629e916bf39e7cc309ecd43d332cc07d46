@@ -33,6 +33,24 @@
       "message": "Looks good overall. I\u0027m just wondering if, since these fast-paths don\u0027t seem to be important for performance, we want to remove them everywhere?\nIt\u0027ll be tricky to implement writing to the JSDispatchTable from generated code, and it would be nice to entirely disallow that as it makes the sandbox easier to reason about (e.g. b/361743067). We can also consider that again at a later point though.",
       "revId": "4bf017629e916bf39e7cc309ecd43d332cc07d46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d591d33_fc41801d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-27T13:29:50Z",
+      "side": 1,
+      "message": "How about I will adjust the comment saying we expect this to go away, but keep it in for now?",
+      "parentUuid": "034322e5_accf1e69",
+      "revId": "4bf017629e916bf39e7cc309ecd43d332cc07d46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
