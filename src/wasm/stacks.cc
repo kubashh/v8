@@ -114,7 +114,7 @@ void StackMemory::Reset() {
   active_segment_ = first_segment_;
   size_ = active_segment_->size_;
 #if DEBUG
-  constexpr uint8_t kZapValue = 0xab;
+  constexpr uint8_t kZapValue = 0xac;
   FillWith(kZapValue);
 #endif
 }
