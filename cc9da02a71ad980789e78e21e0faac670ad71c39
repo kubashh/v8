@@ -33,6 +33,24 @@
       "message": "Can you please CC me on the bug so I have some context?",
       "revId": "cc9da02a71ad980789e78e21e0faac670ad71c39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3afa1fce_7347456f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2024-08-28T07:57:36Z",
+      "side": 1,
+      "message": "Sorry, I added you to CC of the bug just now.",
+      "parentUuid": "7cacba7b_7d990dbd",
+      "revId": "cc9da02a71ad980789e78e21e0faac670ad71c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
