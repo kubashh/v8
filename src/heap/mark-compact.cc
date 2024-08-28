@@ -3415,12 +3415,15 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
         if (!jdt->HasCode(handle)) return;
         Tagged<Code> code = jdt->GetCode(handle);
         if (!InReadOnlySpace(code) && !marking_state_->IsMarked(code)) {
-          // Baseline flushing: if the Code object is no longer alive, it must
+          // Baseline flushing: if the Code object is no longer alive but the
+          // function (and its dispatch entry) still is, it must
           // have been flushed and so we replace it with the CompileLazy
           // builtin. Once we use leaptiering on all platforms, we can probably
           // simplify the other code related to baseline flushing.
-          // TODO(olivf): Should we check that this is baseline code?
-          jdt->SetCode(handle, *BUILTIN_CODE(heap_->isolate(), CompileLazy));
+          if (jdt->IsMarked(handle)) {
+            DCHECK_EQ(code->kind(), CodeKind::BASELINE);
+            jdt->SetCode(handle, *BUILTIN_CODE(heap_->isolate(), CompileLazy));
+          }
         }
       });
 #endif  // V8_ENABLE_LEAPTIERING

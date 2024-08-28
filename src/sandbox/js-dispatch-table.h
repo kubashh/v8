@@ -235,6 +235,8 @@ class V8_EXPORT_PRIVATE JSDispatchTable
                           Space* ro_space);
 #endif  // DEBUG
 
+  inline bool IsMarked(JSDispatchHandle handle);
+
  private:
 #ifdef DEBUG
   static std::atomic<bool> initialized_;

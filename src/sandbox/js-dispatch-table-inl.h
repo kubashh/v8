@@ -205,6 +205,10 @@ void JSDispatchTable::IterateActiveEntriesIn(Space* space, Callback callback) {
   });
 }
 
+bool JSDispatchTable::IsMarked(JSDispatchHandle handle) {
+  return at(HandleToIndex(handle)).IsMarked();
+}
+
 }  // namespace internal
 }  // namespace v8
 
