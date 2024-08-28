@@ -4705,7 +4705,10 @@ Handle<JSFunction> Factory::JSFunctionBuilder::BuildRaw(
     // closures with optimized code installed.
     JSDispatchHandle handle = feedback_cell->dispatch_handle();
     JSDispatchTable* jdt = GetProcessWideJSDispatchTable();
-    if (!jdt->HasCode(handle)) {
+    // TODO(olivf): We should go through the cases where this is still needed
+    // and maybe find some alternative to initialize it correctly from the
+    // beginning.
+    if (!jdt->HasCode(handle) || jdt->GetCode(handle)->is_builtin()) {
       jdt->SetCode(handle, *code);
     }
     function->set_dispatch_handle(handle);
