@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4cd5f9d_79ac74d9",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-28T09:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d857997_8395b6f0",
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ca9f1c0_a0805d63",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c10d1921_1dd0ea00",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3722,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-28T09:31:41Z",
+      "side": 1,
+      "message": "ok, moved the check to GetCloneTargetMap",
+      "parentUuid": "7ca9f1c0_a0805d63",
+      "range": {
+        "startLine": 3722,
+        "startChar": 12,
+        "endLine": 3722,
+        "endChar": 77
+      },
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0706e30_3ff06bd6",
@@ -71,6 +113,24 @@
       "writtenOn": "2024-08-28T09:09:27Z",
       "side": 1,
       "message": "AFAICT we can legitimately try the fast case for a map from different native context, there are no context checks in the IC code.",
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d2618fb_4b4a305f",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-28T09:31:41Z",
+      "side": 1,
+      "message": "this is the object assign case. it does not call into this runtime function for foreign context source objects.",
+      "parentUuid": "f0706e30_3ff06bd6",
       "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
