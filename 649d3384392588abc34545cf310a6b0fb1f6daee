@@ -67,6 +67,23 @@
       "message": "hablich: Friendly ping",
       "revId": "649d3384392588abc34545cf310a6b0fb1f6daee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0438944_aff86db1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-28T14:31:18Z",
+      "side": 1,
+      "message": "Changing reviewer to leszeks@ per request of hablich@",
+      "revId": "649d3384392588abc34545cf310a6b0fb1f6daee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
