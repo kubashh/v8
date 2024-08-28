@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "498ad3c6_ead41f8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-08-28T16:05:34Z",
+      "side": 1,
+      "message": "lgtm. As discussed, would be interesting to know why compaction can make page order non-deterministic.",
+      "revId": "0ddf2f0e36598ddfe825c8296de1f3821976ec39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
