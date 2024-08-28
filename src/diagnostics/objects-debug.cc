@@ -1276,6 +1276,47 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
   if (feedback_cell_handle != kNullJSDispatchHandle) {
     CHECK(!jdt->GetCode(feedback_cell_handle)->is_context_specialized());
   }
+
+  // Check that the code in the dispatch entry is consistent with the code on
+  // the JSFunction.
+  Tagged<Code> own_code = this->code(isolate);
+  Tagged<Code> maybe_optimized_code =
+      has_feedback_vector() ? feedback_vector()->optimized_code(isolate)
+                            : Tagged<Code>();
+  if (!maybe_optimized_code.is_null()) {
+    // In that case, the code in the dispatch entry must be equal to the
+    // (pending) optimized code on the FeedbackVector with the exception of
+    // deoptimized code and context specialized code.
+    CHECK(code_from_table.SafeEquals(maybe_optimized_code) ||
+          (own_code->is_context_specialized() &&
+           code_from_table->is_context_specialized()) ||
+          // TODO(olivf): Once we update code in the deoptimizer tis exception
+          // should be removed.
+          code_from_table->marked_for_deoptimization());
+  } else if (own_code->marked_for_deoptimization()) {
+    // In that case, we don't really know what the code in the dispatch entry is
+    // currently. In the future, we can CHECK here that the code in the dispatch
+    // entry *is not* the code that is marked for deoptimization because we
+    // don't need lazy deopt with leaptiering.
+  } else {
+    // In that case, the two Code objects must be the same.
+    if (!(code_from_table.SafeEquals(own_code) ||
+          // TODO(olivf): Once we call through the table this exception should
+          // be removed.
+          code_from_table->kind() >= own_code->kind())) {
+      code_from_table->Print();
+      own_code->Print();
+    }
+    CHECK(code_from_table.SafeEquals(own_code) ||
+          // TODO(olivf): Once we call through the table these exception should
+          // be removed.
+          // 1. Function is lagging behind desired tiering state
+          code_from_table->kind() >= own_code->kind() ||
+          // 2. Function was tiered by compile lazy
+          (code_from_table.SafeEquals(*BUILTIN_CODE(isolate, CompileLazy)) &&
+           own_code->kind() >= CodeKind::BASELINE));
+  }
+
 #endif  // V8_ENABLE_LEAPTIERING
 
   Handle<JSFunction> function(*this, isolate);

@@ -3419,7 +3419,11 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
           // have been flushed and so we replace it with the CompileLazy
           // builtin. Once we use leaptiering on all platforms, we can probably
           // simplify the other code related to baseline flushing.
-          // TODO(olivf): Should we check that this is baseline code?
+#ifdef DEBUG
+          Tagged<Code> cur = jdt->GetCode(handle);
+          DCHECK(!non_atomic_marking_state_->IsMarked(cur) ||
+                 cur->kind() == CodeKind::BASELINE);
+#endif  // DEBUG
           jdt->SetCode(handle, *BUILTIN_CODE(heap_->isolate(), CompileLazy));
         }
       });
