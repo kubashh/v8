@@ -1025,6 +1025,7 @@ void TransitionArray::TransitionArrayVerify(Isolate* isolate) {
       Tagged<HeapObject> target;
       if (maybe_target.GetHeapObjectIfWeak(&target)) {
         CHECK(IsMap(target));
+        CHECK_EQ(target->map(), owner->map());
       } else {
         CHECK(maybe_target == SideStepTransition::Unreachable ||
               maybe_target == SideStepTransition::Empty ||
