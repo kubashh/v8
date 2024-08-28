@@ -18,6 +18,7 @@ class OptimizedCompilationInfo;
 namespace compiler {
 
 class SourcePositionTable;
+using JsWasmCallsSidetable = ZoneMap<NodeId, const JSWasmCallParameters*>;
 
 // The JSInliner provides the core graph inlining machinery. Note that this
 // class only deals with the mechanics of how to inline one graph into another,
@@ -28,6 +29,7 @@ class JSInliner final : public AdvancedReducer {
             JSGraph* jsgraph, JSHeapBroker* broker,
             SourcePositionTable* source_positions,
             NodeOriginTable* node_origins, const wasm::WasmModule* wasm_module,
+            JsWasmCallsSidetable* js_wasm_calls_sidetable,
             bool inline_wasm_fct_if_supported)
       : AdvancedReducer(editor),
         local_zone_(local_zone),
@@ -37,6 +39,7 @@ class JSInliner final : public AdvancedReducer {
         source_positions_(source_positions),
         node_origins_(node_origins),
         wasm_module_(wasm_module),
+        js_wasm_calls_sidetable_(js_wasm_calls_sidetable),
         inline_wasm_fct_if_supported_(inline_wasm_fct_if_supported) {
     // In case WebAssembly is disabled.
     USE(wasm_module_);
@@ -78,6 +81,7 @@ class JSInliner final : public AdvancedReducer {
   SourcePositionTable* const source_positions_;
   NodeOriginTable* const node_origins_;
   const wasm::WasmModule* wasm_module_;
+  JsWasmCallsSidetable* js_wasm_calls_sidetable_;
 
   // Inline not only the wasm wrapper but also the wasm function itself if
   // inlining into JavaScript is supported and the function is small enough.

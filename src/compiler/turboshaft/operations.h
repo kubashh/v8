@@ -3899,21 +3899,24 @@ struct TSCallDescriptor : public NON_EXPORTED_BASE(ZoneObject) {
   base::Vector<const RegisterRepresentation> out_reps;
   CanThrow can_throw;
   LazyDeoptOnThrow lazy_deopt_on_throw;
+  const JSWasmCallParameters* js_wasm_call_parameters;
 
   TSCallDescriptor(const CallDescriptor* descriptor,
                    base::Vector<const RegisterRepresentation> in_reps,
                    base::Vector<const RegisterRepresentation> out_reps,
-                   CanThrow can_throw, LazyDeoptOnThrow lazy_deopt_on_throw)
+                   CanThrow can_throw, LazyDeoptOnThrow lazy_deopt_on_throw,
+                   const JSWasmCallParameters* js_wasm_call_parameters)
       : descriptor(descriptor),
         in_reps(in_reps),
         out_reps(out_reps),
         can_throw(can_throw),
-        lazy_deopt_on_throw(lazy_deopt_on_throw) {}
+        lazy_deopt_on_throw(lazy_deopt_on_throw),
+        js_wasm_call_parameters(js_wasm_call_parameters) {}
 
-  static const TSCallDescriptor* Create(const CallDescriptor* descriptor,
-                                        CanThrow can_throw,
-                                        LazyDeoptOnThrow lazy_deopt_on_throw,
-                                        Zone* graph_zone) {
+  static const TSCallDescriptor* Create(
+      Zone* graph_zone, const CallDescriptor* descriptor, CanThrow can_throw,
+      LazyDeoptOnThrow lazy_deopt_on_throw,
+      const JSWasmCallParameters* js_wasm_call_parameters = nullptr) {
     DCHECK_IMPLIES(can_throw == CanThrow::kNo,
                    lazy_deopt_on_throw == LazyDeoptOnThrow::kNo);
     base::Vector<RegisterRepresentation> in_reps =
@@ -3931,7 +3934,8 @@ struct TSCallDescriptor : public NON_EXPORTED_BASE(ZoneObject) {
           descriptor->GetReturnType(i).representation());
     }
     return graph_zone->New<TSCallDescriptor>(descriptor, in_reps, out_reps,
-                                             can_throw, lazy_deopt_on_throw);
+                                             can_throw, lazy_deopt_on_throw,
+                                             js_wasm_call_parameters);
   }
 };
 
@@ -3954,6 +3958,8 @@ std::optional<Builtin> TryGetBuiltinId(const ConstantOp* target,
                                        JSHeapBroker* broker);
 
 struct CallOp : OperationT<CallOp> {
+  // TODO(dlehmann,353475584): Add feedback to `TSCallDescriptor` for JS-to-Wasm
+  // call inlining.
   const TSCallDescriptor* descriptor;
   OpEffects callee_effects;
 

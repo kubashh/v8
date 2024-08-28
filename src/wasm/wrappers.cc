@@ -53,8 +53,8 @@ const TSCallDescriptor* GetBuiltinCallDescriptor(Builtin name, Zone* zone) {
       CallDescriptor::kNoFlags,                       // flags
       compiler::Operator::kNoProperties,              // properties
       StubCallMode::kCallBuiltinPointer);             // stub call mode
-  return TSCallDescriptor::Create(call_desc, compiler::CanThrow::kNo,
-                                  compiler::LazyDeoptOnThrow::kNo, zone);
+  return TSCallDescriptor::Create(zone, call_desc, compiler::CanThrow::kNo,
+                                  compiler::LazyDeoptOnThrow::kNo);
 }
 }  // namespace
 
@@ -136,8 +136,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
                             : CallDescriptor::kNoFlags,
         Operator::kNoProperties, StubCallMode::kCallBuiltinPointer);
     const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-        call_descriptor, compiler::CanThrow::kNo,
-        compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+        __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+        compiler::LazyDeoptOnThrow::kNo);
     V<WordPtr> call_target = GetTargetForBuiltinCall(name);
     return __ Call(call_target, frame_state, base::VectorOf({args...}),
                    ts_call_descriptor);
@@ -150,8 +150,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
         __ graph_zone(), Descriptor(), 0, CallDescriptor::kNoFlags,
         Operator::kNoProperties, StubCallMode::kCallBuiltinPointer);
     const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-        call_descriptor, compiler::CanThrow::kNo,
-        compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+        __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+        compiler::LazyDeoptOnThrow::kNo);
     V<WordPtr> call_target = GetTargetForBuiltinCall(name);
     return __ Call(call_target, {args...}, ts_call_descriptor);
   }
@@ -339,9 +339,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
                                 base::SmallVector<OpIndex, 16> args,
                                 base::SmallVector<OpIndex, 1>& returns) {
     const TSCallDescriptor* descriptor = TSCallDescriptor::Create(
-        compiler::GetWasmCallDescriptor(__ graph_zone(), sig),
-        compiler::CanThrow::kYes, compiler::LazyDeoptOnThrow::kNo,
-        __ graph_zone());
+        __ graph_zone(), compiler::GetWasmCallDescriptor(__ graph_zone(), sig),
+        compiler::CanThrow::kYes, compiler::LazyDeoptOnThrow::kNo);
 
     args[0] = implicit_first_arg;
     OpIndex call = __ Call(callee, OpIndex::Invalid(), base::VectorOf(args),
@@ -574,8 +573,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
         auto call_descriptor = compiler::Linkage::GetJSCallDescriptor(
             __ graph_zone(), false, pushed_count + 1, CallDescriptor::kNoFlags);
         const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-            call_descriptor, compiler::CanThrow::kYes,
-            compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+            __ graph_zone(), call_descriptor, compiler::CanThrow::kYes,
+            compiler::LazyDeoptOnThrow::kNo);
 
         // Determine receiver at runtime.
         args[0] =
@@ -605,8 +604,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
             CallDescriptor::kNoFlags, Operator::kNoProperties,
             StubCallMode::kCallBuiltinPointer);
         const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-            call_descriptor, compiler::CanThrow::kYes,
-            compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+            __ graph_zone(), call_descriptor, compiler::CanThrow::kYes,
+            compiler::LazyDeoptOnThrow::kNo);
 
         // The native_context is sufficient here, because all kind of callables
         // which depend on the context provide their own context. The context
@@ -733,8 +732,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
           CallDescriptor::kNoFlags, Operator::kNoProperties,
           StubCallMode::kCallBuiltinPointer);
       const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-          call_descriptor, compiler::CanThrow::kYes,
-          compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+          __ graph_zone(), call_descriptor, compiler::CanThrow::kYes,
+          compiler::LazyDeoptOnThrow::kNo);
       OpIndex call_target = __ RelocatableWasmBuiltinCallTarget(
           Builtin::kWasmRethrowExplicitContext);
       V<Context> context =
@@ -913,8 +912,8 @@ class WasmWrapperTSGraphBuilder : public WasmGraphBuilderBase {
     CallDescriptor* call_descriptor =
         GetBigIntToI64CallDescriptor(frame_state.valid());
     const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-        call_descriptor, compiler::CanThrow::kNo,
-        compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+        __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+        compiler::LazyDeoptOnThrow::kNo);
     return frame_state.valid()
                ? __ Call(target, frame_state.value(),
                          base::VectorOf({input, context}), ts_call_descriptor)

@@ -801,8 +801,8 @@ class Int64LoweringReducer : public Next {
     }
 
     auto lowered_ts_descriptor =
-        TSCallDescriptor::Create(lowered_descriptor, descriptor->can_throw,
-                                 LazyDeoptOnThrow::kNo, __ graph_zone());
+        TSCallDescriptor::Create(__ graph_zone(), lowered_descriptor,
+                                 descriptor->can_throw, LazyDeoptOnThrow::kNo);
     OpIndex call =
         is_tail_call
             ? Next::ReduceTailCall(callee, base::VectorOf(lowered_args),

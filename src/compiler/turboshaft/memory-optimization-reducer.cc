@@ -15,13 +15,14 @@ namespace v8::internal::compiler::turboshaft {
 const TSCallDescriptor* CreateAllocateBuiltinDescriptor(Zone* zone,
                                                         Isolate* isolate) {
   return TSCallDescriptor::Create(
+      zone,
       Linkage::GetStubCallDescriptor(
           zone, AllocateDescriptor{},
           AllocateDescriptor{}.GetStackParameterCount(),
           CallDescriptor::kCanUseRoots, Operator::kNoThrow,
           isolate != nullptr ? StubCallMode::kCallCodeObject
                              : StubCallMode::kCallBuiltinPointer),
-      CanThrow::kNo, LazyDeoptOnThrow::kNo, zone);
+      CanThrow::kNo, LazyDeoptOnThrow::kNo);
 }
 
 void MemoryAnalyzer::Run() {

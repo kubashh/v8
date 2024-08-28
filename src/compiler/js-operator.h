@@ -234,11 +234,11 @@ class CallParameters final {
   // Checked to equal JSCallNode::kExtraInputCount below.
   static constexpr int kExtraCallInputCount = 3;
 
-  CallParameters(size_t arity, CallFrequency const& frequency,
-                 FeedbackSource const& feedback,
-                 ConvertReceiverMode convert_mode,
-                 SpeculationMode speculation_mode,
-                 CallFeedbackRelation feedback_relation)
+  CallParameters(
+      size_t arity, CallFrequency const& frequency,
+      // BOOKMARK(dlehmann): This is how feedback is attached to TF call nodes.
+      FeedbackSource const& feedback, ConvertReceiverMode convert_mode,
+      SpeculationMode speculation_mode, CallFeedbackRelation feedback_relation)
       : bit_field_(ArityField::encode(arity) |
                    CallFeedbackRelationField::encode(feedback_relation) |
                    SpeculationModeField::encode(speculation_mode) |

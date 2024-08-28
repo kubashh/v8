@@ -1342,9 +1342,9 @@ class GraphBuilder {
 
       SetMap(node, __ Call(V<CallTarget>::Cast(callee), frame_state,
                            base::VectorOf(arguments),
-                           TSCallDescriptor::Create(descriptor, CanThrow::kYes,
-                                                    lazy_deopt_on_throw,
-                                                    graph_zone())));
+                           TSCallDescriptor::Create(graph_zone(), descriptor,
+                                                    CanThrow::kYes,
+                                                    lazy_deopt_on_throw)));
     }
 
     return maglev::ProcessResult::kContinue;
@@ -1427,9 +1427,10 @@ class GraphBuilder {
 
     LazyDeoptOnThrow lazy_deopt_on_throw = ShouldLazyDeoptOnThrow(node);
 
-    return __ Call(stub_code, frame_state, base::VectorOf(arguments),
-                   TSCallDescriptor::Create(call_descriptor, CanThrow::kYes,
-                                            lazy_deopt_on_throw, graph_zone()));
+    return __ Call(
+        stub_code, frame_state, base::VectorOf(arguments),
+        TSCallDescriptor::Create(graph_zone(), call_descriptor, CanThrow::kYes,
+                                 lazy_deopt_on_throw));
   }
   maglev::ProcessResult Process(maglev::CallBuiltin* node,
                                 const maglev::ProcessingState& state) {
@@ -1520,8 +1521,8 @@ class GraphBuilder {
 
     V<Any> call_idx =
         __ Call(c_entry_stub, frame_state, base::VectorOf(arguments),
-                TSCallDescriptor::Create(call_descriptor, CanThrow::kYes,
-                                         lazy_deopt_on_throw, graph_zone()));
+                TSCallDescriptor::Create(graph_zone(), call_descriptor,
+                                         CanThrow::kYes, lazy_deopt_on_throw));
     SetMapMaybeMultiReturn(node, call_idx);
 
     return maglev::ProcessResult::kContinue;
