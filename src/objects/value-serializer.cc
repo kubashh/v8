@@ -2449,6 +2449,12 @@ Maybe<uint32_t> ValueDeserializer::ReadJSObjectProperties(
         return Just(static_cast<uint32_t>(properties.size()));
       }
 
+      // Determine the key to be used and the target map to transition to, if
+      // possible. Transitioning may abort if the key is not a string, or if no
+      // transition was found.
+      Handle<Object> key;
+      Handle<Map> target;
+      bool transition_was_found = false;
       const uint8_t* start_position = position_;
       uint32_t byte_length;
       if (!ReadTag().To(&tag) || !ReadVarint<uint32_t>().To(&byte_length)) {
@@ -2460,24 +2466,21 @@ Maybe<uint32_t> ValueDeserializer::ReadJSObjectProperties(
                static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
 #endif  // V8_VALUE_DESERIALIZER_HARD_FAIL
 
-      // Determine the key to be used and the target map to transition to, if
-      // possible. Transitioning may abort if the key is not a string, or if no
-      // transition was found.
-      Handle<Object> key;
-      Handle<Map> target;
-      std::pair<Handle<String>, Handle<Map>> expected_transition;
-      {
-        TransitionsAccessor transitions(isolate_, *map);
-        base::Vector<const uint8_t> key_chars(position_, byte_length);
-        auto expected_transition = transitions.ExpectedTransition(key_chars);
-        if (!expected_transition.first.is_null()) {
-          target = expected_transition.second;
+      if (byte_length <= static_cast<size_t>(end_ - position_)) {
+        std::pair<Handle<String>, Handle<Map>> expected_transition;
+        {
+          TransitionsAccessor transitions(isolate_, *map);
+          base::Vector<const uint8_t> key_chars(position_, byte_length);
+          auto expected_transition = transitions.ExpectedTransition(key_chars);
+          if (!expected_transition.first.is_null()) {
+            transition_was_found = true;
+            position_ += byte_length;
+            key = expected_transition.first;
+            target = expected_transition.second;
+          }
         }
       }
-      if (!expected_transition.first.is_null()) {
-        key = expected_transition.first;
-        position_ += byte_length;
-      } else {
+      if (!transition_was_found) {
         position_ = start_position;
         if (!ReadObject().ToHandle(&key) || !IsValidObjectKey(*key, isolate_)) {
           return Nothing<uint32_t>();
