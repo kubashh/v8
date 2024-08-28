@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11b5ab72_43807c3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-08-28T09:09:27Z",
+      "side": 1,
+      "message": "nice catch! some comments",
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d857997_8395b6f0",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3574,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-08-28T09:09:27Z",
+      "side": 1,
+      "message": "This kind of check should be somewhere in transition tree verification, all the target maps must belong to the same context as the source map.",
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ca9f1c0_a0805d63",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3722,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-08-28T09:09:27Z",
+      "side": 1,
+      "message": "Why only for non-null proto literal case? The issue applies to all the cases. Please consider moving the context check in one of the control predicates: GetCloneTargetMap and/or GetCloneModeForMap.",
+      "range": {
+        "startLine": 3722,
+        "startChar": 12,
+        "endLine": 3722,
+        "endChar": 77
+      },
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0706e30_3ff06bd6",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-08-28T09:09:27Z",
+      "side": 1,
+      "message": "AFAICT we can legitimately try the fast case for a map from different native context, there are no context checks in the IC code.",
+      "revId": "20db45b1e4d23e6d7d5ca69bac646b6cd5479201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
