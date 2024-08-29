@@ -96,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e91b981c_31d90d2a",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-29T09:36:07Z",
+      "side": 1,
+      "message": "I don\u0027t know, that sounds like we\u0027re going from \"let\u0027s move all the domain specific logic out of src/heap\" to \"let\u0027s move almost all the logic out of src/heap\".",
+      "parentUuid": "8dfc9079_5d04bf6e",
+      "range": {
+        "startLine": 883,
+        "startChar": 0,
+        "endLine": 884,
+        "endChar": 66
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9c1a596_06f55c1a",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 1
@@ -107,6 +131,24 @@
       "writtenOn": "2024-08-26T09:48:36Z",
       "side": 1,
       "message": "Can this actually happen, or should we instead (in the beginning of the method) `CHECK_EQ(current_rtts-\u003elength() * 2, current_wrappers-\u003elength());`?",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07528db8_e0f7aaff",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-29T09:36:07Z",
+      "side": 1,
+      "message": "The `CHECK` wouldn\u0027t work at the beginning, the `js_to_wasm_wrappers` start empty, so the invariant should be invalidated on the first call.\nIt probably(?) shouldn\u0027t happen after line 1989 but I\u0027m not very sure about that, this code is very unfamiliar to me and I\u0027m not sure if I want to risk that for this refactoring.",
+      "parentUuid": "e9c1a596_06f55c1a",
       "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -124,6 +166,30 @@
       "writtenOn": "2024-08-26T09:48:36Z",
       "side": 1,
       "message": "Two comments:\n1) This is not only about canonical rtts any more, so we should look for a better name.\n2) Can we find a \"less global\" place where to put it? I am worried that we pollute the WasmEngine with more and more unrelated little helpers which could instead be free-floating functions declared and defined where we need them. I am not sure about the right place in this case though. Maybe \"module-compiler.h\" since creating new canonical type IDs happens when compiling wrappers or modules with new types?",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 65
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "201e4ec8_7f818d14",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-29T09:36:07Z",
+      "side": 1,
+      "message": "1) Done by you.\n2) I share your concern about polluting the `WasmEngine` but I\u0027m also concerned of hiding this in the module-compiler. We use it e.g. when instantiating a JSToWasmWrapper in `WasmInternalFunction::GetOrCreateExternal` which I think can happen lazily e.g. when storing a funcref in a table? What about the `TypeCanonicalizer`? Looking at e.g. `wasm-fuzzer-common.cc`:\n```\n  GetTypeCanonicalizer()-\u003eEmptyStorageForTesting();\n  WasmEngine::ClearWasmCanonicalTypesForTesting(i_isolate);\n ```\nThe isolate and the `TypeCanonicalizer` have to be in sync, so I guess, it would make sense to put it there. WDYT?",
+      "parentUuid": "b64ebca8_833af18a",
       "range": {
         "startLine": 413,
         "startChar": 0,
@@ -201,6 +267,24 @@
       "side": 1,
       "message": "As mentioned above, I think this can be fixed by renaming `EnsureWasmCanonicalRttsSize` to something that describes better what this method does. Something like `PrepareForCanonicalTypeId` or something in that direction.",
       "parentUuid": "7d5e87e2_4f73e73b",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46e60ee_2d89f39b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-29T09:36:07Z",
+      "side": 1,
+      "message": "Done, thanks for the suggested name! 😊\nI\u0027ll also change the semantics though by doing the `+ 1` inside the implementation and changing the parameter from `length` to `id` then as it might otherwise be confusing and a future off-by-one error.",
+      "parentUuid": "52f0d45b_c6e7bb41",
       "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

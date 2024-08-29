@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd59281a_91275cd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-29T09:36:07Z",
+      "side": 1,
+      "message": "Sorry for the slow reaction, I\u0027ve been quite busy with bug investigations lately. 😞",
+      "revId": "990f6f65ea3a657c321df49d630bc02d708ada43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
