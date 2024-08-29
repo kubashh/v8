@@ -74,6 +74,30 @@
       ],
       "revId": "68d92055e51b87a4ea455d0622f5ffcc4f3ecdf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "917c5c19_e27449ed",
+        "filename": "src/snapshot/read-only-serializer-deserializer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-29T09:50:49Z",
+      "side": 1,
+      "message": "yeah, kinda strange that we only use 32bits to encode when we have 64 available, was not expecting that. anyway.",
+      "parentUuid": "a41834c8_444f6994",
+      "range": {
+        "startLine": 98,
+        "startChar": 13,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "revId": "68d92055e51b87a4ea455d0622f5ffcc4f3ecdf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
