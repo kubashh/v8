@@ -33,6 +33,47 @@
       "message": "ah, this is where the negative index was coming from? Nasty bug, thanks for finding it.",
       "revId": "68d92055e51b87a4ea455d0622f5ffcc4f3ecdf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41834c8_444f6994",
+        "filename": "src/snapshot/read-only-serializer-deserializer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-29T09:40:29Z",
+      "side": 1,
+      "message": "I guess this needs to be kSize",
+      "range": {
+        "startLine": 98,
+        "startChar": 13,
+        "endLine": 98,
+        "endChar": 21
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "3bb116c5_bec45e95",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/snapshot/read-only-serializer-deserializer.h",
+              "range": {
+                "startLine": 98,
+                "startChar": 0,
+                "endLine": 99,
+                "endChar": 0
+              },
+              "replacement": "      kSize * 8 - kOffsetBits;  // Determines max number of RO pages.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "68d92055e51b87a4ea455d0622f5ffcc4f3ecdf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
