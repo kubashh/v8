@@ -155,6 +155,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da7a8eec_ca9b3dbe",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-29T15:23:50Z",
+      "side": 1,
+      "message": "Don\u0027t both start empty, and then they always grow together (via this method)? Or is there another path that I am missing?",
+      "parentUuid": "07528db8_e0f7aaff",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b64ebca8_833af18a",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 1
@@ -190,6 +208,30 @@
       "side": 1,
       "message": "1) Done by you.\n2) I share your concern about polluting the `WasmEngine` but I\u0027m also concerned of hiding this in the module-compiler. We use it e.g. when instantiating a JSToWasmWrapper in `WasmInternalFunction::GetOrCreateExternal` which I think can happen lazily e.g. when storing a funcref in a table? What about the `TypeCanonicalizer`? Looking at e.g. `wasm-fuzzer-common.cc`:\n```\n  GetTypeCanonicalizer()-\u003eEmptyStorageForTesting();\n  WasmEngine::ClearWasmCanonicalTypesForTesting(i_isolate);\n ```\nThe isolate and the `TypeCanonicalizer` have to be in sync, so I guess, it would make sense to put it there. WDYT?",
       "parentUuid": "b64ebca8_833af18a",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 65
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92c5de7c_5270c5c5",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-29T15:23:50Z",
+      "side": 1,
+      "message": "Yes, type canonalizer would also work for me.",
+      "parentUuid": "201e4ec8_7f818d14",
       "range": {
         "startLine": 413,
         "startChar": 0,

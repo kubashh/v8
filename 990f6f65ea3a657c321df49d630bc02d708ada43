@@ -16,6 +16,23 @@
       "message": "Sorry for the slow reaction, I\u0027ve been quite busy with bug investigations lately. 😞",
       "revId": "990f6f65ea3a657c321df49d630bc02d708ada43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d196bb_0c1e57d5",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1984,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-29T15:23:50Z",
+      "side": 1,
+      "message": "Huh, why do we need this? We only allocate a few handles, and in the fast-path we could actually allocate no handle at all. Allocating the HandleScope adds significant overhead.",
+      "revId": "990f6f65ea3a657c321df49d630bc02d708ada43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
