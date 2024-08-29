@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "68d92055e51b87a4ea455d0622f5ffcc4f3ecdf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68fae3ff_9956d811",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-29T09:16:15Z",
+      "side": 1,
+      "message": "ah, this is where the negative index was coming from? Nasty bug, thanks for finding it.",
+      "revId": "68d92055e51b87a4ea455d0622f5ffcc4f3ecdf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
