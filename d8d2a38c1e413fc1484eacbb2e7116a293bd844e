@@ -98,6 +98,30 @@
       },
       "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c721fadf_e0bd7f8e",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-29T09:14:57Z",
+      "side": 1,
+      "message": "I missed that, and Leszek is right. This won\u0027t work for 2-byte chars.\nThe early check for length will fail: https://crsrc.org/c/v8/src/objects/string-inl.h;drc\u003d82dff63dbf9db05e9274e11d9128af7b9f51ceaa;l\u003d526",
+      "parentUuid": "e754daee_bd426443",
+      "range": {
+        "startLine": 2470,
+        "startChar": 11,
+        "endLine": 2471,
+        "endChar": 47
+      },
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
