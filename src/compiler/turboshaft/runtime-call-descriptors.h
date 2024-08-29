@@ -32,8 +32,8 @@ struct RuntimeCallDescriptor {
       CanThrow can_throw = (Derived::kProperties & Operator::kNoThrow)
                                ? CanThrow::kNo
                                : CanThrow::kYes;
-      return TSCallDescriptor::Create(descriptor, can_throw,
-                                      lazy_deopt_on_throw, zone);
+      return TSCallDescriptor::Create(zone, descriptor, can_throw,
+                                      lazy_deopt_on_throw);
     }
 
 #ifdef DEBUG

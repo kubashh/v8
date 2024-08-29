@@ -97,9 +97,9 @@ class StackCheckLoweringReducer : public Next {
               CallDescriptor::kNoFlags,             // flags
               Operator::kNoProperties,              // properties
               StubCallMode::kCallWasmRuntimeStub);  // stub call mode
-      const TSCallDescriptor* ts_call_descriptor =
-          TSCallDescriptor::Create(call_descriptor, compiler::CanThrow::kNo,
-                                   LazyDeoptOnThrow::kNo, __ graph_zone());
+      const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
+          __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+          LazyDeoptOnThrow::kNo);
       // Pass custom effects to the `Call` node to mark it as non-writing.
       __ Call(
           builtin, {}, ts_call_descriptor,

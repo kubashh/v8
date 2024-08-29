@@ -148,8 +148,8 @@ OpIndex WasmGraphBuilderBase::CallRuntime(
           __ graph_zone(), f, fun->nargs, Operator::kNoProperties,
           CallDescriptor::kNoFlags);
   const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-      call_descriptor, compiler::CanThrow::kYes,
-      compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+      __ graph_zone(), call_descriptor, compiler::CanThrow::kYes,
+      compiler::LazyDeoptOnThrow::kNo);
   return __ Call(centry_stub, OpIndex::Invalid(), base::VectorOf(centry_args),
                  ts_call_descriptor);
 }
@@ -181,8 +181,8 @@ V<BigInt> WasmGraphBuilderBase::BuildChangeInt64ToBigInt(
           Operator::kNoProperties,   // properties
           stub_mode);
   const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-      call_descriptor, compiler::CanThrow::kNo, compiler::LazyDeoptOnThrow::kNo,
-      __ graph_zone());
+      __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+      compiler::LazyDeoptOnThrow::kNo);
   if constexpr (Is64()) {
     return V<BigInt>::Cast(__ Call(target, {input}, ts_call_descriptor));
   }
@@ -343,8 +343,8 @@ OpIndex WasmGraphBuilderBase::CallC(const MachineSignature* sig,
   const CallDescriptor* call_descriptor =
       compiler::Linkage::GetSimplifiedCDescriptor(__ graph_zone(), sig);
   const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-      call_descriptor, compiler::CanThrow::kNo, compiler::LazyDeoptOnThrow::kNo,
-      __ graph_zone());
+      __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+      compiler::LazyDeoptOnThrow::kNo);
   return __ Call(function, OpIndex::Invalid(), base::VectorOf(args),
                  ts_call_descriptor);
 }
@@ -2137,8 +2137,8 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         compiler::Linkage::GetSimplifiedCDescriptor(__ graph_zone(),
                                                     builder.Get());
     const TSCallDescriptor* ts_call_descriptor = TSCallDescriptor::Create(
-        call_descriptor, compiler::CanThrow::kNo,
-        compiler::LazyDeoptOnThrow::kNo, __ graph_zone());
+        __ graph_zone(), call_descriptor, compiler::CanThrow::kNo,
+        compiler::LazyDeoptOnThrow::kNo);
     OpIndex target_address = __ ExternalConstant(ExternalReference::Create(
         env_->fast_api_targets[func_index].load(std::memory_order_relaxed),
         ExternalReference::FAST_C_CALL));
@@ -7296,9 +7296,8 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                      CheckForException check_for_exception =
                          CheckForException::kCatchInThisFrame) {
     const TSCallDescriptor* descriptor = TSCallDescriptor::Create(
-        compiler::GetWasmCallDescriptor(__ graph_zone(), sig),
-        compiler::CanThrow::kYes, compiler::LazyDeoptOnThrow::kNo,
-        __ graph_zone());
+        __ graph_zone(), compiler::GetWasmCallDescriptor(__ graph_zone(), sig),
+        compiler::CanThrow::kYes, compiler::LazyDeoptOnThrow::kNo);
 
     SmallZoneVector<OpIndex, 16> arg_indices(sig->parameter_count() + 1,
                                              decoder->zone());
@@ -7330,9 +7329,9 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
                                 const Value args[]) {
     if (mode_ == kRegular || mode_ == kInlinedTailCall) {
       const TSCallDescriptor* descriptor = TSCallDescriptor::Create(
+          __ graph_zone(),
           compiler::GetWasmCallDescriptor(__ graph_zone(), sig),
-          compiler::CanThrow::kYes, compiler::LazyDeoptOnThrow::kNo,
-          __ graph_zone());
+          compiler::CanThrow::kYes, compiler::LazyDeoptOnThrow::kNo);
 
       SmallZoneVector<OpIndex, 16> arg_indices(sig->parameter_count() + 1,
                                                decoder->zone_);

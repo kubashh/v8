@@ -2823,6 +2823,7 @@ Node* WasmGraphBuilder::BuildWasmCall(const wasm::FunctionSig* sig,
   CallDescriptor* call_descriptor = GetWasmCallDescriptor(
       mcgraph()->zone(), sig, kWasmFunction, frame_state != nullptr);
   const Operator* op = mcgraph()->common()->Call(call_descriptor);
+  // TODO(dlehmann,353475584): This is where we create the call node.
   Node* call =
       BuildCallNode(sig, args, position, implicit_first_arg, op, frame_state);
   // TODO(manoskouk): These assume the call has control and effect outputs.

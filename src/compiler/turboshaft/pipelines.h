@@ -32,6 +32,10 @@
 #include "src/compiler/turboshaft/type-assertions-phase.h"
 #include "src/compiler/turboshaft/typed-optimizations-phase.h"
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/compiler/turboshaft/wasm-in-js-inlining-phase.h"
+#endif  // V8_ENABLE_WEBASSEMBLY
+
 namespace v8::internal::compiler::turboshaft {
 
 inline constexpr char kTempZoneName[] = "temp-zone";
@@ -167,6 +171,19 @@ class Pipeline {
     if (v8_flags.turboshaft_frontend) {
       Run<turboshaft::SimplifiedLoweringPhase>();
     }
+
+#ifdef V8_ENABLE_WEBASSEMBLY
+    // TODO(dlehmann,353475584): Skip this phase if there were no JS->Wasm
+    // calls, similar to `data_->has_js_wasm_calls()` in TurboFan.
+    if (v8_flags.turboshaft_wasm_in_js_inlining) {
+      // TODO(dlehmann): Remove this. For now, run a DCE to cleanup this graph,
+      // so that it's easier to look at the before and after output in
+      // Turbolizer.
+      Run<turboshaft::OptimizePhase>();
+
+      Run<turboshaft::WasmInJSInliningPhase>();
+    }
+#endif  // !V8_ENABLE_WEBASSEMBLY
 
     Run<turboshaft::MachineLoweringPhase>();
 

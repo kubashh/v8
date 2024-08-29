@@ -2702,6 +2702,7 @@ Reduction JSCallReducer::ReduceArrayConstructor(Node* node) {
 
   // Turn the {node} into a {JSCreateArray} call.
   size_t const arity = p.arity_without_implicit_args();
+  // BOOKMARK(dlehmann): This is how feedback is used in TurboFan.
   node->RemoveInput(n.FeedbackVectorIndex());
   NodeProperties::ReplaceValueInput(node, target, 0);
   NodeProperties::ReplaceValueInput(node, target, 1);
@@ -3877,6 +3878,8 @@ Reduction JSCallReducer::ReduceCallWasmFunction(Node* node,
     actual_arity++;
   }
 
+  // BOOKMARK(dlehmann,353475584): Where do we change from kJSWasmCall to just
+  // Call?
   NodeProperties::ChangeOp(node, op);
   return Changed(node);
 }

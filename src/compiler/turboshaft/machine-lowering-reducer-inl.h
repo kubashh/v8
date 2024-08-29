@@ -1258,7 +1258,7 @@ class MachineLoweringReducer : public Next {
             auto desc = Linkage::GetSimplifiedCDescriptor(__ graph_zone(),
                                                           builder.Build());
             auto ts_desc = TSCallDescriptor::Create(
-                desc, CanThrow::kNo, LazyDeoptOnThrow::kNo, __ graph_zone());
+                __ graph_zone(), desc, CanThrow::kNo, LazyDeoptOnThrow::kNo);
             OpIndex callee = __ ExternalConstant(
                 ExternalReference::string_to_array_index_function());
             // NOTE: String::ToArrayIndex() currently returns int32_t.
@@ -2993,10 +2993,10 @@ class MachineLoweringReducer : public Next {
           __ ExternalConstant(ExternalReference::isolate_address());
       V<String> value_internalized = V<String>::Cast(__ Call(
           try_string_to_index_or_lookup_existing, {isolate_ptr, value},
-          TSCallDescriptor::Create(Linkage::GetSimplifiedCDescriptor(
+          TSCallDescriptor::Create(__ graph_zone(),
+                                   Linkage::GetSimplifiedCDescriptor(
                                        __ graph_zone(), builder.Build()),
-                                   CanThrow::kNo, LazyDeoptOnThrow::kNo,
-                                   __ graph_zone())));
+                                   CanThrow::kNo, LazyDeoptOnThrow::kNo)));
 
       // Now see if the results match.
       __ DeoptimizeIfNot(__ TaggedEqual(expected, value_internalized),
@@ -3576,7 +3576,7 @@ class MachineLoweringReducer : public Next {
         callable.descriptor().GetStackParameterCount(),
         CallDescriptor::kNoFlags, Operator::kFoldable | Operator::kNoThrow);
     auto ts_descriptor = TSCallDescriptor::Create(
-        descriptor, CanThrow::kNo, LazyDeoptOnThrow::kNo, __ graph_zone());
+        __ graph_zone(), descriptor, CanThrow::kNo, LazyDeoptOnThrow::kNo);
     return __ Call(__ HeapConstant(callable.code()), OpIndex::Invalid(),
                    base::VectorOf(args), ts_descriptor);
   }
