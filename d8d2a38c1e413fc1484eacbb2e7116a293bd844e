@@ -146,6 +146,30 @@
       },
       "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eba41c8_6ade1cc1",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-29T09:29:36Z",
+      "side": 1,
+      "message": "Worse -- since we\u0027re copying into uint8_t vector, the early check for length might _succeed_, but incorrectly, e.g. if there is a transition for \"aa\" (0x40, 0x40), and we get a two-byte string for value \"0x4040\".",
+      "parentUuid": "65c11e99_1395aba2",
+      "range": {
+        "startLine": 2470,
+        "startChar": 11,
+        "endLine": 2471,
+        "endChar": 47
+      },
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
