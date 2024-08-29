@@ -2904,7 +2904,9 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     // Liftoff operations. In that case, {pc_} did not necessarily advance until
     // {end_}. Thus do not wrap the next check in {VALIDATE}.
     if (this->pc_ != this->end_) {
-      this->DecodeError("Beyond end of code");
+      if constexpr (ValidationTag::validate) {
+        this->DecodeError("Beyond end of code");
+      }
     }
   }
 

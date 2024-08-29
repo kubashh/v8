@@ -20,6 +20,7 @@
 #include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/fast-api-calls.h"
 #include "src/compiler/js-heap-broker.h"
+#include "src/compiler/js-inlining.h"
 #include "src/compiler/machine-operator.h"
 #include "src/compiler/node-aux-data.h"
 #include "src/compiler/node-matchers.h"
@@ -60,10 +61,11 @@ struct GraphBuilder {
   AssemblerT assembler;
   SourcePositionTable* source_positions;
   NodeOriginTable* origins;
+  JsWasmCallsSidetable* js_wasm_calls_sidetable;
   TurboshaftPipelineKind pipeline_kind;
 
   GraphBuilder(PipelineData* data, Zone* phase_zone, Schedule& schedule,
-               Linkage* linkage)
+               Linkage* linkage, JsWasmCallsSidetable* js_wasm_calls_sidetable)
       : phase_zone(phase_zone),
         schedule(schedule),
         linkage(linkage),
@@ -73,6 +75,7 @@ struct GraphBuilder {
         assembler(data, data->graph(), data->graph(), phase_zone),
         source_positions(data->source_positions()),
         origins(data->node_origins()),
+        js_wasm_calls_sidetable(js_wasm_calls_sidetable),
         pipeline_kind(data->pipeline_kind()) {}
 
   struct BlockData {
@@ -330,6 +333,15 @@ std::optional<BailoutReason> GraphBuilder::Run() {
       OpIndex origin = __ output_graph().operation_origins()[index];
       origins->SetNodeOrigin(index.id(), origin.DecodeTurbofanNodeId());
     }
+  }
+
+  if (v8_flags.turboshaft_wasm_in_js_inlining) {
+    DCHECK_NOT_NULL(js_wasm_calls_sidetable);
+    // All processed sidetable entries have been successively removed, so it
+    // should be empty at the end.
+    DCHECK_WITH_MSG(js_wasm_calls_sidetable->empty(),
+                    "violated 1:1 mapping between Wasm Call nodes in graph and "
+                    "in sidetable");
   }
 
   return std::nullopt;
@@ -1302,6 +1314,30 @@ OpIndex GraphBuilder::Process(
 
     case IrOpcode::kCall: {
       auto call_descriptor = CallDescriptorOf(op);
+      const JSWasmCallParameters* jswcp = nullptr;
+#if V8_ENABLE_WEBASSEMBLY
+      if (call_descriptor->kind() == CallDescriptor::kCallWasmFunction) {
+        if (v8_flags.turboshaft_wasm_in_js_inlining) {
+          // A JS-to-Wasm call where the wrapper got inlined in TurboFan but the
+          // actual Wasm body inlining was either not possible or is going to
+          // happen later in Turboshaft. See https://crbug.com/353475584.
+          // Make sure there is a 1:1 relation between side table information
+          // and not-yet-body-inlined call nodes.
+          DCHECK_NOT_NULL(js_wasm_calls_sidetable);
+          auto it = js_wasm_calls_sidetable->find(node->id());
+          DCHECK_NE(it, js_wasm_calls_sidetable->end());
+          jswcp = it->second;
+          // Successively empty the sidetable, so we can check at the end that
+          // we processed all call nodes in question.
+          js_wasm_calls_sidetable->erase(it);
+        }
+      }
+#endif  // V8_ENABLE_WEBASSEMBLY
+      CanThrow can_throw =
+          op->HasProperty(Operator::kNoThrow) ? CanThrow::kNo : CanThrow::kYes;
+      const TSCallDescriptor* ts_descriptor = TSCallDescriptor::Create(
+          call_descriptor, can_throw, LazyDeoptOnThrow::kNo, graph_zone, jswcp);
+
       base::SmallVector<OpIndex, 16> arguments;
       // The input `0` is the callee, the following value inputs are the
       // arguments. `CallDescriptor::InputCount()` counts the callee and
@@ -1311,10 +1347,6 @@ OpIndex GraphBuilder::Process(
            ++i) {
         arguments.emplace_back(Map(node->InputAt(i)));
       }
-      CanThrow can_throw =
-          op->HasProperty(Operator::kNoThrow) ? CanThrow::kNo : CanThrow::kYes;
-      const TSCallDescriptor* ts_descriptor = TSCallDescriptor::Create(
-          call_descriptor, can_throw, LazyDeoptOnThrow::kNo, graph_zone);
 
       OpIndex frame_state_idx = OpIndex::Invalid();
       if (call_descriptor->NeedsFrameState()) {
@@ -2443,9 +2475,11 @@ OpIndex GraphBuilder::Process(
 
 }  // namespace
 
-std::optional<BailoutReason> BuildGraph(PipelineData* data, Schedule* schedule,
-                                        Zone* phase_zone, Linkage* linkage) {
-  GraphBuilder builder{data, phase_zone, *schedule, linkage};
+std::optional<BailoutReason> BuildGraph(
+    PipelineData* data, Schedule* schedule, Zone* phase_zone, Linkage* linkage,
+    JsWasmCallsSidetable* js_wasm_calls_sidetable) {
+  GraphBuilder builder{data, phase_zone, *schedule, linkage,
+                       js_wasm_calls_sidetable};
 #if DEBUG
   data->graph().SetCreatedFromTurbofan();
 #endif

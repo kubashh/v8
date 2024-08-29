@@ -1,0 +1,37 @@
+
+Test: empty
+Successfully inlined Wasm function #0
+
+Test: nop
+Successfully inlined Wasm function #1
+
+Test: i32Const
+Successfully inlined Wasm function #2
+
+Test: i32Add
+Successfully inlined Wasm function #3
+
+Test: localTee
+Successfully inlined Wasm function #4
+
+Test: globalSetGet
+Successfully inlined Wasm function #5
+
+Test: createArray
+Cannot inline Wasm function #6 (unsupported operation: array.new_default)
+
+Test: arrayLen
+Cannot inline Wasm function #7 (unsupported operation: ref.cast null)
+
+Test: multiValue
+Cannot consider {ADDRESS} {{ADDRESS} <FeedbackCell[many closures]>} for inlining (no feedback vector)
+
+Test: trapNoInline
+RuntimeError: unreachable
+Cannot consider {ADDRESS} {{ADDRESS} <FeedbackCell[many closures]>} for inlining (no feedback vector)
+Inlinee contains {NUMBER} calls without local exception handler; linking to surrounding exception handler.
+Cannot inline Wasm function #9 (unsupported operation: unreachable)
+RuntimeError: unreachable
+
+Test: brNoInline
+Cannot inline Wasm function #10 (unsupported operation: br)
