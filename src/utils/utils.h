@@ -10,9 +10,14 @@
 #include <string.h>
 
 #include <cmath>
+#include <concepts>
+#include <functional>
+#include <ostream>
 #include <string>
 #include <type_traits>
+#include <utility>
 
+#include "include/v8config.h"
 #include "src/base/bits.h"
 #include "src/base/compiler-specific.h"
 #include "src/base/logging.h"
@@ -20,6 +25,7 @@
 #include "src/base/safe_conversions.h"
 #include "src/base/vector.h"
 #include "src/common/globals.h"
+#include "src/utils/ostreams.h"
 
 #if defined(V8_USE_SIPHASH)
 #include "src/third_party/siphash/halfsiphash.h"
@@ -734,6 +740,54 @@ V8_EXPORT_PRIVATE std::string ReadFile(const char* filename, bool* exists,
                                        bool verbose = true);
 V8_EXPORT_PRIVATE std::string ReadFile(FILE* file, bool* exists,
                                        bool verbose = true);
+
+// ----------------------------------------------------------------------------
+// Debug tracing.
+
+// Conditional trace macros. Both of these print output to the console only if
+// `cond` is true (it is assumed to usually be false). They add a trailing
+// newline so callers don't need to (and can't forget, garbling output); if you
+// want to evaluate complex logic to compute the traced string, use an inline
+// lambda that returns a suitable argument for output, e.g.:
+// ```
+//   TRACE_STREAM_IF(cond, [&] {
+//     std::string output = "prefix: ";
+//     if (other_cond) {
+//       output += "(optional bit) ";
+//     }
+//     return output + "suffix";
+//   }());
+// ```
+//
+// These are macros instead of functions so that callers do not evaluate the
+// remaining arguments if the condition fails, which minimizes perf impact.
+//
+// A common usage tactic is to locally `#define`/`#undef` a file-specific
+// `TRACE_PRINTF()` or `TRACE_STREAM()` macro that includes a flag to check, as
+// well as any desired output prefix/suffix. This keeps actual callsites as
+// brief as possible.
+
+// Format string version, a la `printf(format_str "\n", ...)`.
+#define TRACE_PRINTF_IF(cond, format_str, ...)                        \
+  do {                                                                \
+    if (V8_UNLIKELY(cond)) {                                          \
+      ::v8::internal::PrintF((format_str)__VA_OPT__(, ) __VA_ARGS__); \
+      ::v8::internal::PrintF("\n");                                   \
+    }                                                                 \
+  } while (0)
+
+// Stream version, a la `std::cout << ... << '\n'`.
+#define TRACE_STREAM_IF(cond, ...)                               \
+  do {                                                           \
+    if (V8_UNLIKELY(cond)) {                                     \
+      [&](const auto&... args) {                                 \
+        (::v8::internal::StdoutStream() << ... << args) << '\n'; \
+      }(__VA_ARGS__);                                            \
+    }                                                            \
+  } while (0)
+
+// ----------------------------------------------------------------------------
+// Miscellaneous.
 
 bool DoubleToBoolean(double d);
 

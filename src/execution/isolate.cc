@@ -9,6 +9,7 @@
 #include <atomic>
 #include <cstdint>
 #include <fstream>
+#include <iomanip>
 #include <memory>
 #include <optional>
 #include <sstream>
@@ -174,17 +175,29 @@ extern "C" uint32_t v8_Default_embedded_blob_data_size_;
 namespace v8 {
 namespace internal {
 
+#define TRACE_STREAM_CONTEXTS(...) \
+  TRACE_STREAM_IF(v8_flags.trace_detached_contexts, __VA_ARGS__)
 #ifdef DEBUG
-#define TRACE_ISOLATE(tag)                                                  \
-  do {                                                                      \
-    if (v8_flags.trace_isolates) {                                          \
-      PrintF("Isolate %p (id %d)" #tag "\n", reinterpret_cast<void*>(this), \
-             id());                                                         \
-    }                                                                       \
-  } while (false)
+#define TRACE_STREAM_ISOLATES(...)                                          \
+  TRACE_STREAM_IF(v8_flags.trace_isolates, "Isolate ", this, " (id ", id(), \
+                  ") ", __VA_ARGS__)
 #else
-#define TRACE_ISOLATE(tag)
+#define TRACE_STREAM_ISOLATES(...)
 #endif
+#define TRACE_STREAM_RAIL(...) \
+  TRACE_STREAM_IF(v8_flags.trace_rail, ToString(), ' ', __VA_ARGS__)
+#define TRACE_STREAM_STATS(...) \
+  TRACE_STREAM_IF(v8_flags.trace_zone_stats, __VA_ARGS__)
+#define TRACE_STREAM_TURBO_STACK(...) \
+  TRACE_STREAM_IF(v8_flags.trace_turbo_stack_accesses, __VA_ARGS__)
+#ifdef V8_ENABLE_PRECISE_ZONE_STATS
+#define TRACE_STREAM_TYPE_STATS(...) \
+  TRACE_STREAM_IF(v8_flags.trace_zone_type_stats, __VA_ARGS__)
+#else
+#define TRACE_STREAM_TYPE_STATS(...)
+#endif
+#define TRACE_PRINTF_WASM_STACK(...) \
+  TRACE_PRINTF_IF(v8_flags.trace_wasm_stack_switching, __VA_ARGS__)
 
 const uint8_t* DefaultEmbeddedBlobCode() {
   return v8_Default_embedded_blob_code_;
@@ -2719,6 +2732,16 @@ Tagged<Object> Isolate::ThrowIllegalOperation() {
   return Throw(ReadOnlyRoots(heap()).illegal_access_string());
 }
 
+std::string Isolate::ToString(StringStyle style) const {
+  std::ostringstream os;
+  os << '[' << base::OS::GetCurrentProcessId() << ':' << this << ']';
+  if (style == StringStyle::kTimestamp) {
+    os << ' ' << std::fixed << std::setw(8) << std::setprecision(0)
+       << time_millis_since_init() << " ms";
+  }
+  return os.str();
+}
+
 void Isolate::PrintCurrentStackTrace(std::ostream& out) {
   DirectHandle<FixedArray> frames = CaptureSimpleStackTrace(
       this, FixedArray::kMaxLength, SKIP_NONE, factory()->undefined_value());
@@ -2737,9 +2760,9 @@ void Isolate::PrintCurrentStackTrace(std::ostream& out) {
 bool Isolate::ComputeLocation(MessageLocation* target) {
   DebuggableStackFrameIterator it(this);
   if (it.done()) return false;
-  // Compute the location from the function and the relocation info of the
-  // baseline code. For optimized code this will use the deoptimization
-  // information to get canonical location information.
+    // Compute the location from the function and the relocation info of the
+    // baseline code. For optimized code this will use the deoptimization
+    // information to get canonical location information.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope code_ref_scope;
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -3695,9 +3718,7 @@ void Isolate::SyncStackLimit() {
       Cast<WasmContinuationObject>(root(RootIndex::kActiveContinuation));
   wasm::StackMemory* stack =
       reinterpret_cast<wasm::StackMemory*>(continuation->stack());
-  if (v8_flags.trace_wasm_stack_switching) {
-    PrintF("Switch to stack #%d\n", stack->id());
-  }
+  TRACE_PRINTF_WASM_STACK("Switch to stack #%d", stack->id());
   uintptr_t limit = reinterpret_cast<uintptr_t>(stack->jmpbuf()->stack_limit);
   stack_guard()->SetStackLimitForStackSwitching(limit);
   UpdateCentralStackInfo();
@@ -3789,28 +3810,28 @@ class TracingAccountingAllocator : public AccountingAllocator {
   }
 
   void TraceZoneDestructionImpl(const Zone* zone) override {
+    bool updated = false;
+    const auto update = [&] {
+      if (std::exchange(updated, true)) return;
+      UpdateMemoryTrafficAndReportMemoryUsage(zone->segment_bytes_allocated());
+      active_zones_.erase(zone);
+      --nesting_depth_;
+    };
     base::MutexGuard lock(&mutex_);
-#ifdef V8_ENABLE_PRECISE_ZONE_STATS
-    if (v8_flags.trace_zone_type_stats) {
+    TRACE_STREAM_TYPE_STATS([&] {
       type_stats_.MergeWith(zone->type_stats());
-    }
-#endif
-    UpdateMemoryTrafficAndReportMemoryUsage(zone->segment_bytes_allocated());
-    active_zones_.erase(zone);
-    nesting_depth_--;
-
-#ifdef V8_ENABLE_PRECISE_ZONE_STATS
-    if (v8_flags.trace_zone_type_stats && active_zones_.empty()) {
-      type_stats_.Dump();
-    }
-#endif
+      update();
+      if (active_zones_.empty()) type_stats_.Dump();
+    });
+    update();  // Only runs when not tracing.
   }
 
  private:
   void UpdateMemoryTrafficAndReportMemoryUsage(size_t memory_traffic_delta) {
-    if (!v8_flags.trace_zone_stats &&
-        !(TracingFlags::zone_stats.load(std::memory_order_relaxed) &
-          v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+    const bool enabled_by_tracing =
+        TracingFlags::zone_stats.load(std::memory_order_relaxed) &
+        v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING;
+    if (!v8_flags.trace_zone_stats && !enabled_by_tracing) {
       // Don't print anything if the zone tracing was enabled only because of
       // v8_flags.trace_zone_type_stats.
       return;
@@ -3824,19 +3845,10 @@ class TracingAccountingAllocator : public AccountingAllocator {
     Dump(buffer_, true);
 
     {
-      std::string trace_str = buffer_.str();
-
-      if (v8_flags.trace_zone_stats) {
-        PrintF(
-            "{"
-            "\"type\": \"v8-zone-trace\", "
-            "\"stats\": %s"
-            "}\n",
-            trace_str.c_str());
-      }
-      if (V8_UNLIKELY(
-              TracingFlags::zone_stats.load(std::memory_order_relaxed) &
-              v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+      const std::string& trace_str = buffer_.str();
+      TRACE_STREAM_STATS("{\"type\": \"v8-zone-trace\", \"stats\": ", trace_str,
+                         '}');
+      if (V8_UNLIKELY(enabled_by_tracing)) {
         TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("v8.zone_stats"),
                              "V8.Zone_Stats", TRACE_EVENT_SCOPE_THREAD, "stats",
                              TRACE_STR_COPY(trace_str.c_str()));
@@ -3851,9 +3863,8 @@ class TracingAccountingAllocator : public AccountingAllocator {
     // Note: Neither isolate nor zones are locked, so be careful with accesses
     // as the allocator is potentially used on a concurrent thread.
     double time = isolate_->time_millis_since_init();
-    out << "{"
-        << "\"isolate\": \"" << reinterpret_cast<void*>(isolate_) << "\", "
-        << "\"time\": " << time << ", ";
+    out << "{" << "\"isolate\": \"" << reinterpret_cast<void*>(isolate_)
+        << "\", " << "\"time\": " << time << ", ";
     size_t total_segment_bytes_allocated = 0;
     size_t total_zone_allocation_size = 0;
     size_t total_zone_freed_size = 0;
@@ -3871,8 +3882,7 @@ class TracingAccountingAllocator : public AccountingAllocator {
         } else {
           out << ", ";
         }
-        out << "{"
-            << "\"name\": \"" << zone->name() << "\", "
+        out << "{" << "\"name\": \"" << zone->name() << "\", "
             << "\"allocated\": " << zone_segment_bytes_allocated << ", "
             << "\"used\": " << zone_allocation_size << ", "
             << "\"freed\": " << freed_size << "}";
@@ -4013,7 +4023,7 @@ Isolate::Isolate(IsolateGroup* isolate_group)
       next_module_async_evaluation_ordinal_(
           SourceTextModule::kFirstAsyncEvaluationOrdinal),
       cancelable_task_manager_(new CancelableTaskManager()) {
-  TRACE_ISOLATE(constructor);
+  TRACE_STREAM_ISOLATES("constructor");
   CheckIsolateLayout();
 
   // ThreadManager is initialized early to support locking an isolate
@@ -4207,7 +4217,7 @@ void Isolate::UpdateLogObjectRelocation() {
 }
 
 void Isolate::Deinit() {
-  TRACE_ISOLATE(deinit);
+  TRACE_STREAM_ISOLATES("deinit");
 
 #if defined(V8_USE_PERFETTO)
   PerfettoLogger::UnregisterIsolate(this);
@@ -4468,7 +4478,7 @@ void Isolate::SetIsolateThreadLocals(Isolate* isolate,
 }
 
 Isolate::~Isolate() {
-  TRACE_ISOLATE(destructor);
+  TRACE_STREAM_ISOLATES("destructor");
   DCHECK_NULL(current_deoptimizer_);
 
   // The entry stack must be empty when we get here.
@@ -5240,7 +5250,7 @@ void Isolate::VerifyStaticRoots() {
 bool Isolate::Init(SnapshotData* startup_snapshot_data,
                    SnapshotData* read_only_snapshot_data,
                    SnapshotData* shared_heap_snapshot_data, bool can_rehash) {
-  TRACE_ISOLATE(init);
+  TRACE_STREAM_ISOLATES("init");
 
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   CHECK_EQ(V8HeapCompressionScheme::base(), cage_base());
@@ -5764,31 +5774,29 @@ std::unique_ptr<PersistentHandles> Isolate::NewPersistentHandles() {
 }
 
 void Isolate::DumpAndResetStats() {
-  if (v8_flags.trace_turbo_stack_accesses) {
-    StdoutStream os;
-    uint64_t total_loads = 0;
-    uint64_t total_stores = 0;
-    os << "=== Stack access counters === " << std::endl;
-    if (!stack_access_count_map) {
-      os << "No stack accesses in optimized/wasm functions found.";
-    } else {
-      DCHECK_NOT_NULL(stack_access_count_map);
+  TRACE_STREAM_TURBO_STACK([&] {
+    std::ostringstream os;
+    os << "=== Stack access counters ===\n";
+    if (stack_access_count_map) {
       os << "Number of optimized/wasm stack-access functions: "
-         << stack_access_count_map->size() << std::endl;
-      for (auto it = stack_access_count_map->cbegin();
-           it != stack_access_count_map->cend(); it++) {
-        std::string function_name((*it).first);
-        std::pair<uint64_t, uint64_t> per_func_count = (*it).second;
-        os << "Name: " << function_name << ", Loads: " << per_func_count.first
-           << ", Stores: " << per_func_count.second << std::endl;
-        total_loads += per_func_count.first;
-        total_stores += per_func_count.second;
+         << stack_access_count_map->size();
+      uint64_t total_loads = 0;
+      uint64_t total_stores = 0;
+      for (const auto& [function_name, accesses] : *stack_access_count_map) {
+        auto [loads, stores] = accesses;
+        os << "\nName: " << function_name << ", Loads: " << loads
+           << ", Stores: " << stores;
+        total_loads += loads;
+        total_stores += stores;
       }
-      os << "Total Loads: " << total_loads << ", Total Stores: " << total_stores
-         << std::endl;
+      os << "\nTotal Loads: " << total_loads
+         << ", Total Stores: " << total_stores;
       stack_access_count_map = nullptr;
+    } else {
+      os << "No stack accesses in optimized/wasm functions found.";
     }
-  }
+    return os.str();
+  }());
   if (turbo_statistics_ != nullptr) {
     DCHECK(v8_flags.turbo_stats || v8_flags.turbo_stats_nvp);
     StdoutStream os;
@@ -6219,10 +6227,9 @@ void Isolate::WasmInitJSPIFeature() {
     wasm::StackMemory* stack(wasm::StackMemory::GetCurrentStackView(this));
     this->wasm_stacks().emplace_back(stack);
     stack->set_index(0);
-    if (v8_flags.trace_wasm_stack_switching) {
-      PrintF("Set up native stack object (limit: %p, base: %p)\n",
-             stack->jslimit(), reinterpret_cast<void*>(stack->base()));
-    }
+    TRACE_PRINTF_WASM_STACK("Set up native stack object (limit: %p, base: %p)",
+                            stack->jslimit(),
+                            reinterpret_cast<void*>(stack->base()));
     HandleScope scope(this);
     DirectHandle<WasmContinuationObject> continuation =
         WasmContinuationObject::New(this, stack, wasm::JumpBuffer::Active,
@@ -6244,10 +6251,10 @@ void Isolate::UpdatePromiseHookProtector() {
 
 void Isolate::PromiseHookStateUpdated() {
   promise_hook_flags_ =
-    (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
-    PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
-    PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
-    PromiseHookFields::IsDebugActive::encode(debug()->is_active());
+      (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
+      PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
+      PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
+      PromiseHookFields::IsDebugActive::encode(debug()->is_active());
 
   if (promise_hook_flags_ != 0) {
     UpdatePromiseHookProtector();
@@ -6850,19 +6857,21 @@ void Isolate::CheckDetachedContextsAfterGC() {
     ++new_length;
   }
 
-  if (v8_flags.trace_detached_contexts) {
-    PrintF("%d detached contexts are collected out of %d\n",
-           length - new_length, length);
+  TRACE_STREAM_CONTEXTS([&] {
+    std::ostringstream os;
+    os << length - new_length << " detached contexts are collected out of "
+       << length;
     for (int i = 0; i < new_length; i += 2) {
       Tagged<MaybeObject> context = detached_contexts->Get(i);
       int mark_sweeps = detached_contexts->Get(i + 1).ToSmi().value();
       DCHECK(context.IsWeakOrCleared());
       if (mark_sweeps > 3) {
-        PrintF("detached context %p\n survived %d GCs (leak?)\n",
-               reinterpret_cast<void*>(context.ptr()), mark_sweeps);
+        os << "\ndetached context " << context.ptr() << "\n survived "
+           << mark_sweeps << " GCs (leak?)";
       }
     }
-  }
+    return os.str();
+  }());
 }
 
 void Isolate::DetachGlobal(Handle<Context> env) {
@@ -6896,9 +6905,7 @@ void Isolate::SetRAILMode(RAILMode rail_mode) {
   if (old_rail_mode == PERFORMANCE_LOAD && rail_mode != PERFORMANCE_LOAD) {
     heap()->NotifyLoadingEnded();
   }
-  if (v8_flags.trace_rail) {
-    PrintIsolate(this, "RAIL mode: %s\n", RAILModeName(rail_mode));
-  }
+  TRACE_STREAM_RAIL("RAIL mode: ", RAILModeName(rail_mode));
 }
 
 void Isolate::SetPriority(v8::Isolate::Priority priority) {
@@ -6906,15 +6913,6 @@ void Isolate::SetPriority(v8::Isolate::Priority priority) {
   if (priority_ == v8::Isolate::Priority::kBestEffort) {
     heap()->ActivateMemoryReducerIfNeeded();
   }
-}
-
-void Isolate::PrintWithTimestamp(const char* format, ...) {
-  base::OS::Print("[%d:%p] %8.0f ms: ", base::OS::GetCurrentProcessId(),
-                  static_cast<void*>(this), time_millis_since_init());
-  va_list arguments;
-  va_start(arguments, format);
-  base::OS::VPrint(format, arguments);
-  va_end(arguments);
 }
 
 void Isolate::SetIdle(bool is_idle) {
@@ -7274,8 +7272,6 @@ void Isolate::initialize_wasm_execution_timer() {
 }
 #endif  // V8_ENABLE_DRUMBRAKE
 
-#undef TRACE_ISOLATE
-
 // static
 Address Isolate::load_from_stack_count_address(const char* function_name) {
   DCHECK_NOT_NULL(function_name);
@@ -7402,6 +7398,14 @@ void Isolate::InitializeBuiltinJSDispatchTable() {
   }
 #endif
 }
+
+#undef TRACE_PRINTF_WASM_STACK
+#undef TRACE_STREAM_TYPE_STATS
+#undef TRACE_STREAM_TURBO_STACK
+#undef TRACE_STREAM_STATS
+#undef TRACE_STREAM_RAIL
+#undef TRACE_STREAM_ISOLATES
+#undef TRACE_STREAM_CONTEXTS
 
 }  // namespace internal
 }  // namespace v8

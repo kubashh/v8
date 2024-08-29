@@ -14,7 +14,9 @@
 
 #include <inttypes.h>
 
+#include <iomanip>
 #include <optional>
+#include <sstream>
 
 #include "src/base/bounds.h"
 #include "src/base/small-vector.h"
@@ -36,12 +38,8 @@ namespace v8::internal::wasm {
 struct WasmGlobal;
 struct WasmTag;
 
-#define TRACE(...)                                        \
-  do {                                                    \
-    if (v8_flags.trace_wasm_decoder) PrintF(__VA_ARGS__); \
-  } while (false)
-
-#define TRACE_INST_FORMAT "  @%-8d #%-30s|"
+#define TRACE_STREAM(...) \
+  TRACE_STREAM_IF(v8_flags.trace_wasm_decoder, __VA_ARGS__)
 
 // Return the evaluation of {condition} if {ValidationTag::validate} is true,
 // DCHECK that it is true and always return true otherwise.
@@ -1515,7 +1513,7 @@ class WasmDecoder : public Decoder {
       DecodeError(pc, "invalid local decls count");
       return 0;
     }
-    TRACE("local decls count: %u\n", entries);
+    TRACE_STREAM("local decls count: ", entries);
 
     // Do an early validity check, to avoid allocating too much memory below.
     // Every entry needs at least two bytes (count plus type); if that many are
@@ -2709,17 +2707,20 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     if (this->failed()) return TraceFailed();
 
     DCHECK(stack_.empty());
-    TRACE("wasm-decode ok\n\n");
+    TRACE_STREAM("wasm-decode ok\n");
   }
 
   void TraceFailed() {
-    if (this->error_.offset()) {
-      TRACE("wasm-error module+%-6d func+%d: %s\n\n", this->error_.offset(),
-            this->GetBufferRelativeOffset(this->error_.offset()),
-            this->error_.message().c_str());
-    } else {
-      TRACE("wasm-error: %s\n\n", this->error_.message().c_str());
-    }
+    TRACE_STREAM([&] {
+      std::ostringstream os;
+      os << "wasm-error";
+      if (this->error_.offset()) {
+        os << " module+" << std::left << std::setw(6) << this->error_.offset()
+           << " func+" << this->GetBufferRelativeOffset(this->error_.offset());
+      }
+      os << ": " << this->error_.message() << '\n';
+      return os.str();
+    }());
   }
 
   const char* SafeOpcodeNameAt(const uint8_t* pc) {
@@ -2815,9 +2816,9 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
   void DecodeFunctionBody() {
-    TRACE("wasm-decode %p...%p (module+%u, %d bytes)\n", this->start(),
-          this->end(), this->pc_offset(),
-          static_cast<int>(this->end() - this->start()));
+    TRACE_STREAM("wasm-decode ", this->start(), "...", this->end(), " (module+",
+                 this->pc_offset(), ", ", this->end() - this->start(),
+                 " bytes)");
 
     // Set up initial function block.
     {
@@ -2879,8 +2880,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                this->current_inst_trace_->first >= this->pc_offset());
         if (V8_UNLIKELY(this->current_inst_trace_->first ==
                         this->pc_offset())) {
-          TRACE("Emit trace at 0x%x with ID[0x%x]\n", this->pc_offset(),
-                this->current_inst_trace_->second);
+          TRACE_STREAM("Emit trace at 0x", this->pc_offset(), " with ID[0x",
+                       this->current_inst_trace_->second, ']');
           CALL_INTERFACE_IF_OK_AND_REACHABLE(TraceInstruction,
                                              this->current_inst_trace_->second);
           this->current_inst_trace_++;
@@ -2986,92 +2987,75 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   class TraceLine {
    public:
     explicit TraceLine(WasmFullDecoder* decoder) : decoder_(decoder) {
+      os_ << std::left;
       WasmOpcode opcode = static_cast<WasmOpcode>(*decoder->pc());
       if (!WasmOpcodes::IsPrefixOpcode(opcode)) AppendOpcode(opcode);
     }
 
+    ~TraceLine() {
+      TRACE_STREAM([&] {
+        os_ << ' ';
+        for (Control& c : decoder_->control_) {
+          switch (c.kind) {
+            case kControlIf:
+              os_ << 'I';
+              break;
+            case kControlBlock:
+              os_ << 'B';
+              break;
+            case kControlLoop:
+              os_ << 'L';
+              break;
+            case kControlTry:
+            case kControlTryTable:
+              os_ << 'T';
+              break;
+            case kControlIfElse:
+              os_ << 'E';
+              break;
+            case kControlTryCatch:
+              os_ << 'C';
+              break;
+            case kControlTryCatchAll:
+              os_ << 'A';
+              break;
+          }
+          if (c.start_merge.arity) os_ << c.start_merge.arity << '-';
+          os_ << c.end_merge.arity;
+          if (!c.reachable()) os_ << (c.unreachable() ? '*' : '#');
+        }
+        os_ << " | ";
+        for (uint32_t i = 0; i < decoder_->stack_.size(); ++i) {
+          os_ << ' ' << decoder_->stack_[i].type.short_name();
+        }
+        return os_.str();
+      }());
+    }
+
     void AppendOpcode(WasmOpcode opcode) {
       DCHECK(!WasmOpcodes::IsPrefixOpcode(opcode));
-      Append(TRACE_INST_FORMAT, decoder_->startrel(decoder_->pc_),
-             WasmOpcodes::OpcodeName(opcode));
+      AppendInst(decoder_->startrel(decoder_->pc_),
+                 WasmOpcodes::OpcodeName(opcode));
     }
 
-    ~TraceLine() {
-      if (!v8_flags.trace_wasm_decoder) return;
-      AppendStackState();
-      PrintF("%.*s\n", len_, buffer_);
-    }
-
-    // Appends a formatted string.
-    PRINTF_FORMAT(2, 3)
-    void Append(const char* format, ...) {
-      if (!v8_flags.trace_wasm_decoder) return;
-      va_list va_args;
-      va_start(va_args, format);
-      size_t remaining_len = kMaxLen - len_;
-      base::Vector<char> remaining_msg_space(buffer_ + len_, remaining_len);
-      int len = base::VSNPrintF(remaining_msg_space, format, va_args);
-      va_end(va_args);
-      len_ += len < 0 ? remaining_len : len;
+    void AppendInst(int offset, const char* opcode) {
+      os_ << "  @" << std::setw(8) << offset << " #" << std::setw(30) << opcode
+          << '|';
     }
 
    private:
-    void AppendStackState() {
-      DCHECK(v8_flags.trace_wasm_decoder);
-      Append(" ");
-      for (Control& c : decoder_->control_) {
-        switch (c.kind) {
-          case kControlIf:
-            Append("I");
-            break;
-          case kControlBlock:
-            Append("B");
-            break;
-          case kControlLoop:
-            Append("L");
-            break;
-          case kControlTry:
-            Append("T");
-            break;
-          case kControlTryTable:
-            Append("T");
-            break;
-          case kControlIfElse:
-            Append("E");
-            break;
-          case kControlTryCatch:
-            Append("C");
-            break;
-          case kControlTryCatchAll:
-            Append("A");
-            break;
-        }
-        if (c.start_merge.arity) Append("%u-", c.start_merge.arity);
-        Append("%u", c.end_merge.arity);
-        if (!c.reachable()) Append("%c", c.unreachable() ? '*' : '#');
-      }
-      Append(" | ");
-      for (uint32_t i = 0; i < decoder_->stack_.size(); ++i) {
-        Value& val = decoder_->stack_[i];
-        Append(" %c", val.type.short_name());
-      }
-    }
-
-    static constexpr int kMaxLen = 512;
-
-    char buffer_[kMaxLen];
-    int len_ = 0;
+    std::ostringstream os_;
     WasmFullDecoder* const decoder_;
   };
 #else
   class TraceLine {
    public:
-    explicit TraceLine(WasmFullDecoder*) {}
+    explicit TraceLine(WasmFullDecoder*) = default;
+    ~TraceLine() = default;
 
     void AppendOpcode(WasmOpcode) {}
 
-    PRINTF_FORMAT(2, 3)
-    void Append(const char* format, ...) {}
+    void AppendInst(int offset, const char* opcode) {}
   };
 #endif
 
@@ -3576,8 +3560,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         return 0;
       }
       // The result of the block is the return value.
-      trace_msg->Append("\n" TRACE_INST_FORMAT, startrel(this->pc_),
-                        "(implicit) return");
+      trace_msg->AppendInst(startrel(this->pc_), "(implicit) return");
       control_.pop();
       return 1;
     }
@@ -6506,7 +6489,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   void onFirstError() override {
     this->end_ = this->pc_;  // Terminate decoding loop.
     this->current_code_reachable_and_ok_ = false;
-    TRACE(" !%s\n", this->error_.message().c_str());
+    TRACE_STREAM(" !", this->error_.message());
     // Cannot use CALL_INTERFACE_* macros because we emitted an error.
     interface().OnFirstError(this);
   }
@@ -6575,8 +6558,7 @@ class EmptyInterface {
 
 #undef CALL_INTERFACE_IF_OK_AND_REACHABLE
 #undef CALL_INTERFACE_IF_OK_AND_PARENT_REACHABLE
-#undef TRACE
-#undef TRACE_INST_FORMAT
+#undef TRACE_STREAM
 #undef VALIDATE
 #undef CHECK_PROTOTYPE_OPCODE
 

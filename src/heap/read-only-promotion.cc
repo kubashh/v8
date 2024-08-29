@@ -4,6 +4,7 @@
 
 #include "src/heap/read-only-promotion.h"
 
+#include <sstream>
 #include <unordered_set>
 
 #include "src/common/assert-scope.h"
@@ -15,6 +16,14 @@
 
 namespace v8 {
 namespace internal {
+
+#define TRACE_STREAM(cond, ...) \
+  TRACE_STREAM_IF(cond, "ro-promotion: ", __VA_ARGS__)
+#define TRACE_STREAM_NORMAL(...) \
+  TRACE_STREAM(v8_flags.trace_read_only_promotion, __VA_ARGS__)
+#define TRACE_STREAM_VERBOSE(...) \
+  TRACE_STREAM(v8_flags.trace_read_only_promotion_verbose, __VA_ARGS__)
+
 namespace {
 
 // Convenience aliases:
@@ -61,9 +70,17 @@ class Committee final {
       if (!EvaluateSubgraph(o, &accepted_subgraph, &visited)) continue;
       if (accepted_subgraph.empty()) continue;
 
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion)) {
-        LogAcceptedPromotionSet(accepted_subgraph);
-      }
+      TRACE_STREAM_NORMAL(
+          "accepted set {",
+          [&] {
+            std::ostringstream output;
+            for (Tagged<HeapObject> o : accepted_subgraph) {
+              if (output.tellp()) output << ", ";
+              output << reinterpret_cast<void*>(o.ptr());
+            }
+            return output.str();
+          }(),
+          '}');
       promo_accepted_.insert(accepted_subgraph.begin(),
                              accepted_subgraph.end());
     }
@@ -91,9 +108,10 @@ class Committee final {
     if (Contains(*visited, o)) return true;
     visited->insert(o);
     if (!IsPromoCandidate(isolate_, o)) {
-      const auto& [it, inserted] = promo_rejected_.insert(o);
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion) && inserted) {
-        LogRejectedPromotionForFailedPredicate(o);
+      if (promo_rejected_.insert(o).second) {
+        TRACE_STREAM_NORMAL("rejected due to failed predicate ",
+                            reinterpret_cast<void*>(o.ptr()), " (",
+                            o->map()->instance_type(), ')');
       }
       return false;
     }
@@ -101,10 +119,24 @@ class Committee final {
     CandidateVisitor v(this, accepted_subgraph, visited);
     o->Iterate(isolate_, &v);
     if (!v.all_slots_are_promo_candidates()) {
-      const auto& [it, inserted] = promo_rejected_.insert(o);
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion) && inserted) {
-        LogRejectedPromotionForInvalidSubgraph(o,
-                                               v.first_rejected_slot_offset());
+      if (promo_rejected_.insert(o).second) {
+        TRACE_STREAM_NORMAL([&] {
+          std::ostringstream os;
+          os << "rejected due to rejected subgraph "
+             << reinterpret_cast<void*>(o.ptr()) << " ("
+             << o->map()->instance_type() << ") at slot offset "
+             << v.first_rejected_slot_offset() << ' ';
+          Tagged<HeapObject> heap_object;
+          if (o->RawMaybeWeakField(v.first_rejected_slot_offset())
+                  .load(isolate_)
+                  .GetHeapObject(&heap_object)) {
+            os << reinterpret_cast<void*>(heap_object.ptr()) << " ("
+               << heap_object->map()->instance_type() << ')';
+          } else {
+            os << "<cleared weak object>";
+          }
+          return os.str();
+        }());
       }
       return false;
     }
@@ -227,40 +259,6 @@ class Committee final {
     HeapObjectSet* const visited_;
     int first_rejected_slot_offset_ = -1;
   };
-
-  static void LogAcceptedPromotionSet(const HeapObjectSet& os) {
-    std::cout << "ro-promotion: accepted set {";
-    for (Tagged<HeapObject> o : os) {
-      std::cout << reinterpret_cast<void*>(o.ptr()) << ", ";
-    }
-    std::cout << "}\n";
-  }
-
-  static void LogRejectedPromotionForFailedPredicate(Tagged<HeapObject> o) {
-    std::cout << "ro-promotion: rejected due to failed predicate "
-              << reinterpret_cast<void*>(o.ptr()) << " ("
-              << o->map()->instance_type() << ")"
-              << "\n";
-  }
-
-  void LogRejectedPromotionForInvalidSubgraph(Tagged<HeapObject> o,
-                                              int first_rejected_slot_offset) {
-    std::cout << "ro-promotion: rejected due to rejected subgraph "
-              << reinterpret_cast<void*>(o.ptr()) << " ("
-              << o->map()->instance_type() << ")"
-              << " at slot offset " << first_rejected_slot_offset << " ";
-
-    MaybeObjectSlot slot = o->RawMaybeWeakField(first_rejected_slot_offset);
-    Tagged<MaybeObject> maybe_object = slot.load(isolate_);
-    Tagged<HeapObject> heap_object;
-    if (maybe_object.GetHeapObject(&heap_object)) {
-      std::cout << reinterpret_cast<void*>(heap_object.ptr()) << " ("
-                << heap_object->map()->instance_type() << ")"
-                << "\n";
-    } else {
-      std::cout << "<cleared weak object>\n";
-    }
-  }
 
   Isolate* const isolate_;
   HeapObjectSet promo_accepted_;
@@ -406,9 +404,11 @@ class ReadOnlyPromotionImpl final : public AllStatic {
       Address slot_value = slot.load(isolate_);
       slot.init(isolate_, host, slot_value);
 
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion_verbose)) {
-        LogUpdatedExternalPointerTableEntry(host, slot, slot_value);
-      }
+      TRACE_STREAM_VERBOSE("updated external pointer slot {host ",
+                           reinterpret_cast<void*>(host.address()), " slot ",
+                           reinterpret_cast<void*>(slot.address()),
+                           " slot_value ", reinterpret_cast<void*>(slot_value),
+                           '}');
 #endif  // V8_ENABLE_SANDBOX
     }
     void VisitIndirectPointer(Tagged<HeapObject> host, IndirectPointerSlot slot,
@@ -468,9 +468,11 @@ class ReadOnlyPromotionImpl final : public AllStatic {
       if (it == moves_->end()) return;
       Tagged<HeapObject> new_slot_value = it->second;
       slot.store(new_slot_value);
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion_verbose)) {
-        LogUpdatedPointer(root, slot, old_slot_value, new_slot_value);
-      }
+      TRACE_STREAM_VERBOSE(
+          "updated pointer {root ", static_cast<int>(root), " slot ",
+          reinterpret_cast<void*>(slot.address()), " from ",
+          reinterpret_cast<void*>(old_slot_value.ptr()), " to ",
+          reinterpret_cast<void*>(new_slot_value.ptr()), '}');
     }
     void ProcessSlot(Tagged<HeapObject> host, MaybeObjectSlot slot) {
       Tagged<HeapObject> old_slot_value;
@@ -479,9 +481,11 @@ class ReadOnlyPromotionImpl final : public AllStatic {
       if (it == moves_->end()) return;
       Tagged<HeapObject> new_slot_value = it->second;
       slot.store(new_slot_value);
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion_verbose)) {
-        LogUpdatedPointer(host, slot, old_slot_value, new_slot_value);
-      }
+      TRACE_STREAM_VERBOSE(
+          "updated pointer {host ", reinterpret_cast<void*>(host.address()),
+          " slot ", reinterpret_cast<void*>(slot.address()), " from ",
+          reinterpret_cast<void*>(old_slot_value.ptr()), " to ",
+          reinterpret_cast<void*>(new_slot_value.ptr()), '}');
     }
 
 #ifdef V8_ENABLE_SANDBOX
@@ -498,9 +502,11 @@ class ReadOnlyPromotionImpl final : public AllStatic {
       IndirectPointerHandle new_handle = it->second;
       slot.Relaxed_StoreHandle(new_handle);
 
-      if (V8_UNLIKELY(v8_flags.trace_read_only_promotion_verbose)) {
-        LogUpdatedCodePointerTableEntry(host, slot, old_handle, new_handle);
-      }
+      TRACE_STREAM_VERBOSE("updated code pointer table entry {host ",
+                           reinterpret_cast<void*>(host.address()), " slot ",
+                           reinterpret_cast<void*>(slot.address()), " from ",
+                           AsHex(old_handle, 8, true), " to ",
+                           AsHex(new_handle, 8, true), '}');
     }
 
     void PromoteCodePointerEntryFor(Tagged<Code> code) {
@@ -531,43 +537,6 @@ class ReadOnlyPromotionImpl final : public AllStatic {
       }
     }
 #endif  // V8_ENABLE_SANDBOX
-
-    void LogUpdatedPointer(Root root, FullObjectSlot slot,
-                           Tagged<HeapObject> old_slot_value,
-                           Tagged<HeapObject> new_slot_value) {
-      std::cout << "ro-promotion: updated pointer {root "
-                << static_cast<int>(root) << " slot "
-                << reinterpret_cast<void*>(slot.address()) << " from "
-                << reinterpret_cast<void*>(old_slot_value.ptr()) << " to "
-                << reinterpret_cast<void*>(new_slot_value.ptr()) << "}\n";
-    }
-    void LogUpdatedPointer(Tagged<HeapObject> host, MaybeObjectSlot slot,
-                           Tagged<HeapObject> old_slot_value,
-                           Tagged<HeapObject> new_slot_value) {
-      std::cout << "ro-promotion: updated pointer {host "
-                << reinterpret_cast<void*>(host.address()) << " slot "
-                << reinterpret_cast<void*>(slot.address()) << " from "
-                << reinterpret_cast<void*>(old_slot_value.ptr()) << " to "
-                << reinterpret_cast<void*>(new_slot_value.ptr()) << "}\n";
-    }
-    void LogUpdatedExternalPointerTableEntry(Tagged<HeapObject> host,
-                                             ExternalPointerSlot slot,
-                                             Address slot_value) {
-      std::cout << "ro-promotion: updated external pointer slot {host "
-                << reinterpret_cast<void*>(host.address()) << " slot "
-                << reinterpret_cast<void*>(slot.address()) << " slot_value "
-                << reinterpret_cast<void*>(slot_value) << "}\n";
-    }
-    void LogUpdatedCodePointerTableEntry(Tagged<HeapObject> host,
-                                         IndirectPointerSlot slot,
-                                         IndirectPointerHandle old_handle,
-                                         IndirectPointerHandle new_handle) {
-      std::cout << "ro-promotion: updated code pointer table entry {host "
-                << reinterpret_cast<void*>(host.address()) << " slot "
-                << reinterpret_cast<void*>(slot.address()) << " from "
-                << AsHex(old_handle, 8, true) << " to "
-                << AsHex(new_handle, 8, true) << "}\n";
-    }
 
 #ifdef DEBUG
     void RecordProcessedSlotIfDebug(Address slot_address) {
@@ -633,6 +602,10 @@ void ReadOnlyPromotion::Promote(Isolate* isolate,
   ReadOnlyPromotionImpl::DeleteDeadObjects(isolate, safepoint_scope, moves);
   ReadOnlyPromotionImpl::Verify(isolate, safepoint_scope);
 }
+
+#undef TRACE_STREAM_VERBOSE
+#undef TRACE_STREAM_NORMAL
+#undef TRACE_STREAM
 
 }  // namespace internal
 }  // namespace v8
