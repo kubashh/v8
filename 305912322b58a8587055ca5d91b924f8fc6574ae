@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b8bbe9_00461971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-29T18:41:32Z",
+      "side": 1,
+      "message": "This latest version renames the core macros, names the wrapper macros to expose which core mechanism they use, rolls the helper method into the stream macro (figured out how), and eliminates a stray `CostlyTrace()` instance I missed.\n\nWDYT? Too verbose of names? TBH I think having \"_STREAM_\" in all the wrapper macros isn\u0027t great.\n\nI\u0027d like to get to a point where there\u0027s some kernel we agree is good so I can at least start landing that bit.",
+      "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
