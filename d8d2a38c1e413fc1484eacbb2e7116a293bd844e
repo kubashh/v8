@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09f4729f_eea8d7f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2024-08-29T08:59:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17577c04_87d6d563",
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20bbbc39_92eae32d",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-08-29T08:33:28Z",
       "side": 1,
       "message": "how is this correct for non-one-byte strings?",
+      "range": {
+        "startLine": 2470,
+        "startChar": 11,
+        "endLine": 2471,
+        "endChar": 47
+      },
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e754daee_bd426443",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2024-08-29T08:59:49Z",
+      "side": 1,
+      "message": "Good question!\nThe key_chars will be used to compare content with key in transitions (````if (!Cast\u003cString\u003e(transition_name)-\u003eIsEqualTo(key_chars)) return false;````https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/transitions-inl.h;drc\u003ddbad3d1199deaab0d12393a2d1301ab8586a81ae;l\u003d412), I think the actual comparison operation ````String::IsEqualToImpl()```` doesn\u0027t care whether key_chars is one-byte string or not, the related code (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/string-inl.h;drc\u003d4997e6ca5db8a03dd97a2006eec4fb0a37590e3b;l\u003d545):\n````\n      case kSeqOneByteStringTag:\n        return CompareCharsEqual(\n            Cast\u003cSeqOneByteString\u003e(string)-\u003eGetChars(no_gc, access_guard) +\n                slice_offset,\n            data, len);\n````\nCast ````key_chars```` to type of ````transition_name```` then compare.",
+      "parentUuid": "20bbbc39_92eae32d",
       "range": {
         "startLine": 2470,
         "startChar": 11,
