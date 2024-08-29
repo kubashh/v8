@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22d628e5_2de8bcf0",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-29T15:53:03Z",
+      "side": 1,
+      "message": "remove: DCE interaction etc.",
+      "revId": "87bf5e1d4dedb74ef05f8db67e1f7465309c677d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac0a3336_0c854e7e",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-29T15:53:03Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "87bf5e1d4dedb74ef05f8db67e1f7465309c677d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbb21dcc_f4a8986c",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3903,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-29T15:53:03Z",
+      "side": 1,
+      "message": "add TODO: if TSCallDescriptor becomes shared, add this to the TS CallOp, needs lots of code churn in all reducers",
+      "revId": "87bf5e1d4dedb74ef05f8db67e1f7465309c677d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25e9f552_38c7de94",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-phase.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-29T15:53:03Z",
+      "side": 1,
+      "message": "add TODO: GC TypeOptimizationReducer",
+      "revId": "87bf5e1d4dedb74ef05f8db67e1f7465309c677d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1085e0_d866423f",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-29T15:53:03Z",
+      "side": 1,
+      "message": "Make it a `CHECK`",
+      "revId": "87bf5e1d4dedb74ef05f8db67e1f7465309c677d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ea659b_ab795e94",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2907,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-08-29T15:53:03Z",
+      "side": 1,
+      "message": "I double checked, and this is required. See added comment for clarity.",
+      "revId": "87bf5e1d4dedb74ef05f8db67e1f7465309c677d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
