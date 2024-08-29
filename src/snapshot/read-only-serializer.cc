@@ -98,6 +98,9 @@ struct ReadOnlySegmentForSerialization {
         tagged_slots(segment_size / kTaggedSize) {
     // .. because tagged_slots records a bit for each slot:
     DCHECK(IsAligned(segment_size, kTaggedSize));
+    // Ensure incoming pointers to this page are representable.
+    CHECK_LT(isolate->read_only_heap()->read_only_space()->IndexOf(page),
+             1 << ro::EncodedTagged::kPageIndexBits);
 
     MemCopy(contents.get(), reinterpret_cast<void*>(segment_start),
             segment_size);
