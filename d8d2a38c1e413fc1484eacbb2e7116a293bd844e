@@ -122,6 +122,30 @@
       },
       "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c11e99_1395aba2",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-29T09:27:37Z",
+      "side": 1,
+      "message": "nor for a utf8 encoding of latin1 characters, I think.",
+      "parentUuid": "c721fadf_e0bd7f8e",
+      "range": {
+        "startLine": 2470,
+        "startChar": 11,
+        "endLine": 2471,
+        "endChar": 47
+      },
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
