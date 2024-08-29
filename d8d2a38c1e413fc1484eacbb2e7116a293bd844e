@@ -16,6 +16,23 @@
       "message": "Hi Leszek, could you please review this patch?",
       "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17577c04_87d6d563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-08-29T08:14:33Z",
+      "side": 1,
+      "message": "Just one nit I forgot: Please update the commit message to describe the new change (instead of the initial one).",
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
