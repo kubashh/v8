@@ -1979,6 +1979,40 @@ void WasmEngine::GlobalTearDown() {
   global_wasm_state = nullptr;
 }
 
+// static
+void WasmEngine::PrepareForCanonicalTypeId(Isolate* isolate, int id) {
+  HandleScope scope(isolate);
+  Heap* heap = isolate->heap();
+  // Canonical types are zero-indexed.
+  const int length = id + 1;
+
+  Handle<WeakArrayList> current_rtts =
+      handle(heap->wasm_canonical_rtts(), isolate);
+  if (length <= current_rtts->length()) return;
+  DirectHandle<WeakArrayList> new_rtts = WeakArrayList::EnsureSpace(
+      isolate, current_rtts, length, AllocationType::kOld);
+  new_rtts->set_length(length);
+  heap->SetWasmCanonicalRtts(*new_rtts);
+
+  // Wrappers are indexed by canonical rtt length, and an additional boolean
+  // storing whether the corresponding function is imported or not.
+  int required_wrapper_length = 2 * length;
+  Handle<WeakArrayList> current_wrappers =
+      handle(heap->js_to_wasm_wrappers(), isolate);
+  if (required_wrapper_length <= current_wrappers->length()) return;
+  DirectHandle<WeakArrayList> new_wrappers = WeakArrayList::EnsureSpace(
+      isolate, current_wrappers, required_wrapper_length, AllocationType::kOld);
+  new_wrappers->set_length(required_wrapper_length);
+  heap->SetJSToWasmWrappers(*new_wrappers);
+}
+
+// static
+void WasmEngine::ClearWasmCanonicalTypesForTesting(Isolate* isolate) {
+  ReadOnlyRoots roots(isolate);
+  isolate->heap()->SetWasmCanonicalRtts(roots.empty_weak_array_list());
+  isolate->heap()->SetJSToWasmWrappers(roots.empty_weak_array_list());
+}
+
 WasmEngine* GetWasmEngine() {
   DCHECK_NOT_NULL(global_wasm_state);
   return &global_wasm_state->engine;

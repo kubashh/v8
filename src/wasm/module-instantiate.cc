@@ -1313,8 +1313,8 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   if (!module_->isorecursive_canonical_type_ids.empty()) {
     // Make sure all canonical indices have been set.
     DCHECK_NE(module_->MaxCanonicalTypeIndex(), kNoSuperType);
-    isolate_->heap()->EnsureWasmCanonicalRttsSize(
-        module_->MaxCanonicalTypeIndex() + 1);
+    WasmEngine::PrepareForCanonicalTypeId(isolate_,
+                                          module_->MaxCanonicalTypeIndex());
   }
   Handle<FixedArray> non_shared_maps = isolate_->factory()->NewFixedArray(
       static_cast<int>(module_->types.size()));
