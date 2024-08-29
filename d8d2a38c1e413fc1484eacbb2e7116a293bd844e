@@ -33,6 +33,29 @@
       "message": "Just one nit I forgot: Please update the commit message to describe the new change (instead of the initial one).",
       "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20bbbc39_92eae32d",
+        "filename": "src/objects/value-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-29T08:33:28Z",
+      "side": 1,
+      "message": "how is this correct for non-one-byte strings?",
+      "range": {
+        "startLine": 2470,
+        "startChar": 11,
+        "endLine": 2471,
+        "endChar": 47
+      },
+      "revId": "d8d2a38c1e413fc1484eacbb2e7116a293bd844e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
