@@ -18,6 +18,10 @@
 #include "src/objects/oddball.h"
 #include "src/runtime/runtime.h"
 
+#ifdef DEBUG
+#include "src/wasm/canonical-types.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -840,23 +844,19 @@ const ForInParameters& ForInParametersOf(const Operator* op);
 #if V8_ENABLE_WEBASSEMBLY
 class JSWasmCallParameters {
  public:
-  explicit JSWasmCallParameters(const wasm::WasmModule* module,
-                                const wasm::FunctionSig* signature,
+  explicit JSWasmCallParameters(const wasm::FunctionSig* signature,
                                 int function_index,
                                 SharedFunctionInfoRef shared_fct_info,
                                 wasm::NativeModule* native_module,
                                 FeedbackSource const& feedback)
-      : module_(module),
-        signature_(signature),
+      : signature_(signature),
         function_index_(function_index),
         shared_fct_info_(shared_fct_info),
         native_module_(native_module),
         feedback_(feedback) {
-    DCHECK_NOT_NULL(module);
-    DCHECK_NOT_NULL(signature);
+    DCHECK(wasm::GetTypeCanonicalizer()->Contains(signature));
   }
 
-  const wasm::WasmModule* module() const { return module_; }
   const wasm::FunctionSig* signature() const { return signature_; }
   int function_index() const { return function_index_; }
   SharedFunctionInfoRef shared_fct_info() const { return shared_fct_info_; }
@@ -866,7 +866,6 @@ class JSWasmCallParameters {
   int arity_without_implicit_args() const;
 
  private:
-  const wasm::WasmModule* const module_;
   const wasm::FunctionSig* const signature_;
   int function_index_;
   SharedFunctionInfoRef shared_fct_info_;
@@ -1005,8 +1004,7 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
       Operator::Properties properties = Operator::kNoProperties);
 
 #if V8_ENABLE_WEBASSEMBLY
-  const Operator* CallWasm(const wasm::WasmModule* wasm_module,
-                           const wasm::FunctionSig* wasm_signature,
+  const Operator* CallWasm(const wasm::FunctionSig* wasm_signature,
                            int wasm_function_index,
                            SharedFunctionInfoRef shared_fct_info,
                            wasm::NativeModule* native_module,

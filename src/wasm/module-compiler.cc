@@ -2038,6 +2038,8 @@ int AddExportWrapperUnits(Isolate* isolate, NativeModule* native_module,
     if (exp.kind != kExternalFunction) continue;
     auto& function = module->functions[exp.index];
     uint32_t canonical_sig_id = module->canonical_sig_id(function.sig_index);
+    const FunctionSig* sig =
+        wasm::GetTypeCanonicalizer()->LookupFunctionSignature(canonical_sig_id);
     if (static_cast<int>(canonical_sig_id) <
         isolate->heap()->js_to_wasm_wrappers()->length()) {
       Tagged<MaybeObject> existing_wrapper =
@@ -2052,9 +2054,9 @@ int AddExportWrapperUnits(Isolate* isolate, NativeModule* native_module,
       }
     }
     if (!keys.insert(canonical_sig_id).second) continue;  // Already triggered.
-    builder->AddJSToWasmWrapperUnit(JSToWasmWrapperCompilationUnit{
-        isolate, function.sig, canonical_sig_id, module,
-        native_module->enabled_features()});
+    builder->AddJSToWasmWrapperUnit(
+        JSToWasmWrapperCompilationUnit{isolate, sig, canonical_sig_id, module,
+                                       native_module->enabled_features()});
   }
 
   return static_cast<int>(keys.size());
@@ -4579,6 +4581,8 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module) {
         CanUseGenericJsToWasmWrapper(module, function.sig);
     if (use_generic_wrapper) continue;  // Nothing to compile.
     uint32_t canonical_sig_id = module->canonical_sig_id(function.sig_index);
+    const FunctionSig* sig =
+        wasm::GetTypeCanonicalizer()->LookupFunctionSignature(canonical_sig_id);
     int wrapper_index = canonical_sig_id;
     Tagged<MaybeObject> existing_wrapper =
         isolate->heap()->js_to_wasm_wrappers()->Get(wrapper_index);
@@ -4591,7 +4595,7 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module) {
     const auto [it, inserted] = set.insert(canonical_sig_id);
     if (!inserted) continue;  // Compilation already triggered.
     auto unit = std::make_unique<JSToWasmWrapperCompilationUnit>(
-        isolate, function.sig, canonical_sig_id, module, enabled_features);
+        isolate, sig, canonical_sig_id, module, enabled_features);
     compilation_units.emplace_back(canonical_sig_id, std::move(unit));
   }
 
