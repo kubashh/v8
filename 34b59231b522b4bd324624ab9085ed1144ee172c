@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3bd261f_d6677d9c",
+        "filename": "src/wasm/canonical-types.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T11:50:46Z",
+      "side": 1,
+      "message": "Done. 😊",
+      "parentUuid": "8083a38d_51dfa3f7",
+      "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "056b3828_cbdbb9be",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-30T08:58:26Z",
       "side": 1,
       "message": "msvc complains here because also methods are marked as `V8_EXPORT_PRIVATE`. I think it\u0027s generally preferrable to only export what\u0027s needed, so better individual methods than the whole class.",
+      "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7201c4b6_bed03d64",
+        "filename": "src/wasm/canonical-types.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T11:50:46Z",
+      "side": 1,
+      "message": "Yeah, I wanted to go the easy route and not having to worry about it but that didn\u0027t turn out to work here. 😊 Done.",
+      "parentUuid": "056b3828_cbdbb9be",
       "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

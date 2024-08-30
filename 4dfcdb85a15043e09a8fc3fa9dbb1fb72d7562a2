@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09f5f8e0_b74d376f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T11:50:46Z",
+      "side": 1,
+      "message": "@mlippautz@chromium.org @leszeks@chromium.org: I\u0027ll need an owners-approval for `src/heap` here, thanks!",
+      "revId": "4dfcdb85a15043e09a8fc3fa9dbb1fb72d7562a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
