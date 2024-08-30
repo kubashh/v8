@@ -27,7 +27,7 @@ namespace v8::internal::wasm {
 // - identical types, if those do not belong to the rec. group,
 // - types in the same relative position in the group, if those belong to the
 //   rec. group.
-class TypeCanonicalizer {
+class V8_EXPORT_PRIVATE TypeCanonicalizer {
  public:
   static constexpr uint32_t kPredefinedArrayI8Index = 0;
   static constexpr uint32_t kPredefinedArrayI16Index = 1;
@@ -86,6 +86,13 @@ class TypeCanonicalizer {
   size_t EstimateCurrentMemoryConsumption() const;
 
   size_t GetCurrentNumberOfTypes() const;
+
+  // Prepares wasm for the provided canonical type index. This reserves enough
+  // space in the canonical rtts and the JSToWasm wrappers on the isolate roots.
+  static void PrepareForCanonicalTypeId(Isolate* isolate, int id);
+  // Reset the canonical rtts and JSToWasm wrappers on the isolate roots for
+  // testing purposes (in production cases canonical type ids are never freed).
+  static void ClearWasmCanonicalTypesForTesting(Isolate* isolate);
 
  private:
   struct CanonicalType {
