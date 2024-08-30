@@ -3411,7 +3411,7 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
 
 #ifdef V8_ENABLE_LEAPTIERING
   JSDispatchTable* const jdt = GetProcessWideJSDispatchTable();
-  jdt->IterateActiveEntriesIn(
+  jdt->IterateMarkedEntriesIn(
       heap_->js_dispatch_table_space(), [&](JSDispatchHandle handle) {
         if (!jdt->HasCode(handle)) return;
         Tagged<Code> code = jdt->GetCode(handle);
@@ -3421,6 +3421,7 @@ void MarkCompactCollector::ClearFlushedJsFunctions() {
           // builtin. Once we use leaptiering on all platforms, we can probably
           // simplify the other code related to baseline flushing.
           // TODO(olivf): Should we check that this is baseline code?
+          DCHECK_EQ(code->kind(), CodeKind::BASELINE);
           jdt->SetCode(handle, *BUILTIN_CODE(heap_->isolate(), CompileLazy));
         }
       });
