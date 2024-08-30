@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9806ab11_dc8693ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-30T08:57:11Z",
+      "side": 1,
+      "message": "Thanks, LGTM, let\u0027s get this landed and then we can still improve things later.",
+      "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8083a38d_51dfa3f7",
+        "filename": "src/wasm/canonical-types.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-30T08:57:11Z",
+      "side": 1,
+      "message": "Now this is certainly dead code ;)\n(but can still be addressed later, when removing the HandleScope; happy to help out there after this CL landed)",
+      "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
