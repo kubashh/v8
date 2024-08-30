@@ -13,6 +13,7 @@
 #include <string>
 #include <type_traits>
 
+#include "include/v8config.h"
 #include "src/base/bits.h"
 #include "src/base/compiler-specific.h"
 #include "src/base/logging.h"
@@ -20,6 +21,7 @@
 #include "src/base/safe_conversions.h"
 #include "src/base/vector.h"
 #include "src/common/globals.h"
+#include "src/utils/ostreams.h"
 
 #if defined(V8_USE_SIPHASH)
 #include "src/third_party/siphash/halfsiphash.h"
@@ -734,6 +736,42 @@ V8_EXPORT_PRIVATE std::string ReadFile(const char* filename, bool* exists,
                                        bool verbose = true);
 V8_EXPORT_PRIVATE std::string ReadFile(FILE* file, bool* exists,
                                        bool verbose = true);
+
+// ----------------------------------------------------------------------------
+// Debug tracing.
+
+// Conditional trace macro. Prints output to the console only if `cond` is true
+// (it is assumed to usually be false). Adds a trailing newline so callers don't
+// need to (and can't forget, garbling output); if you want to evaluate complex
+// logic to compute the traced string, use an inline lambda that returns a
+// suitable argument for output, e.g.:
+// ```
+//   TRACE_IF(cond, [&] {
+//     std::string output = "prefix: ";
+//     if (other_cond) {
+//       output += "(optional bit) ";
+//     }
+//     return output + "suffix";
+//   }());
+// ```
+//
+// This is a macro instead of a function so that callers do not evaluate the
+// remaining arguments if the condition fails, which minimizes perf impact.
+//
+// A common usage tactic is to locally `#define`/`#undef` a file-specific
+// `TRACE()` macro that includes a flag to check, as well as any desired output
+// prefix/suffix. This keeps actual callsites as brief as possible.
+#define TRACE_IF(cond, ...)                                      \
+  do {                                                           \
+    if (V8_UNLIKELY(cond)) {                                     \
+      [&](const auto&... args) {                                 \
+        (::v8::internal::StdoutStream() << ... << args) << '\n'; \
+      }(__VA_ARGS__);                                            \
+    }                                                            \
+  } while (false)
+
+// ----------------------------------------------------------------------------
+// Miscellaneous.
 
 bool DoubleToBoolean(double d);
 
