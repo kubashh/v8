@@ -87,6 +87,13 @@ class TypeCanonicalizer {
 
   size_t GetCurrentNumberOfTypes() const;
 
+  // Prepares wasm for the provided canonical type index. This reserves enough
+  // space in the canonical rtts and the JSToWasm wrappers on the isolate roots.
+  static void PrepareForCanonicalTypeId(Isolate* isolate, int id);
+  // Reset the canonical rtts and JSToWasm wrappers on the isolate roots for
+  // testing purposes (in production cases canonical type ids are never freed).
+  static void ClearWasmCanonicalTypesForTesting(Isolate* isolate);
+
  private:
   struct CanonicalType {
     TypeDefinition type_def;
