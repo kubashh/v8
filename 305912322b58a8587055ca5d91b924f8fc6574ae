@@ -52,6 +52,24 @@
       "parentUuid": "0d39efc8_89f311ee",
       "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c29d1d92_79e62f73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-08-30T15:55:39Z",
+      "side": 1,
+      "message": "So the feedback from various colleagues is that this doesn\u0027t look like a net improvement, and is more just replacing one opinionated style with another. I think that without some more complete motivation and style proposal doc, signed off by a few people and bikeshedded by the rest, it\u0027s not worth pursuing this further.",
+      "parentUuid": "e04ff8d8_a8939dbe",
+      "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
