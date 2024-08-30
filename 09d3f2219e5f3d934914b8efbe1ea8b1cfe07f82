@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec845890_9a74b0ee",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-08-30T09:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ed5938e_f7bb1254",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 48
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f817330_3fcab864",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-08-30T08:11:05Z",
       "side": 1,
       "message": "Nit: I think you can remove this, the entire block is already behind !V8_ENABLE_LEAPTIERING",
+      "range": {
+        "startLine": 4829,
+        "startChar": 0,
+        "endLine": 4830,
+        "endChar": 60
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e19f9725_39e111ad",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4830,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-08-30T09:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f817330_3fcab864",
       "range": {
         "startLine": 4829,
         "startChar": 0,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c6f5ec_16dfabbf",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4927,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-08-30T09:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ffba94b_906aced2",
+      "range": {
+        "startLine": 4927,
+        "startChar": 0,
+        "endLine": 4927,
+        "endChar": 48
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea78cfee_9d8f05f2",
@@ -117,6 +189,30 @@
       "writtenOn": "2024-08-30T08:11:05Z",
       "side": 1,
       "message": "Same as above",
+      "range": {
+        "startLine": 6453,
+        "startChar": 0,
+        "endLine": 6454,
+        "endChar": 60
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e603433_f6fadaae",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6454,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-08-30T09:05:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea78cfee_9d8f05f2",
       "range": {
         "startLine": 6453,
         "startChar": 0,
