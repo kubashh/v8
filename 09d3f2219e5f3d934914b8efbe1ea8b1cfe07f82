@@ -16,6 +16,115 @@
       "message": "PTAL, thanks!",
       "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d04ad24f_6c2cf869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T08:11:05Z",
+      "side": 1,
+      "message": "Looks good with some suggestions",
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ed5938e_f7bb1254",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T08:11:05Z",
+      "side": 1,
+      "message": "Nit: you could also add a `DCHECK_EQ(JSDispatchEntry::kEntrypointOffset, 0)` here and drop the `if` entirely. We expect the entrypoint to stay at offset 0.",
+      "range": {
+        "startLine": 389,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 48
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f817330_3fcab864",
+        "filename": "src/codegen/loong64/macro-assembler-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4830,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T08:11:05Z",
+      "side": 1,
+      "message": "Nit: I think you can remove this, the entire block is already behind !V8_ENABLE_LEAPTIERING",
+      "range": {
+        "startLine": 4829,
+        "startChar": 0,
+        "endLine": 4830,
+        "endChar": 60
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ffba94b_906aced2",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4927,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T08:11:05Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 4927,
+        "startChar": 0,
+        "endLine": 4927,
+        "endChar": 48
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea78cfee_9d8f05f2",
+        "filename": "src/codegen/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6454,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T08:11:05Z",
+      "side": 1,
+      "message": "Same as above",
+      "range": {
+        "startLine": 6453,
+        "startChar": 0,
+        "endLine": 6454,
+        "endChar": 60
+      },
+      "revId": "09d3f2219e5f3d934914b8efbe1ea8b1cfe07f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
