@@ -5,6 +5,8 @@
 #ifndef V8_COMPILER_NODE_H_
 #define V8_COMPILER_NODE_H_
 
+#include <iosfwd>
+
 #include "src/common/globals.h"
 #include "src/compiler/graph-zone-traits.h"
 #include "src/compiler/opcodes.h"
@@ -316,6 +318,17 @@ ZoneNodePtr* Node::OutOfLineInputs::inputs() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Node& n);
+
+// Helper for debug tracing. Prints the node's ID and op as "#id:op".
+class NodeSummary {
+ public:
+  explicit NodeSummary(const Node* node) : node_(node) {}
+
+  friend std::ostream& operator<<(std::ostream& os, const NodeSummary& n);
+
+ private:
+  const Node* node_;
+};
 
 // Base class for node wrappers.
 class NodeWrapper {
