@@ -4,6 +4,8 @@
 
 #include "src/compiler/node.h"
 
+#include <ostream>
+
 namespace v8 {
 namespace internal {
 namespace compiler {
@@ -375,7 +377,7 @@ void Node::Print(std::ostream& os, int depth) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Node& n) {
-  os << n.id() << ": " << *n.op();
+  os << NodeSummary(&n);
   if (n.InputCount() > 0) {
     os << "(";
     for (int i = 0; i < n.InputCount(); ++i) {
@@ -389,6 +391,10 @@ std::ostream& operator<<(std::ostream& os, const Node& n) {
     os << ")";
   }
   return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const NodeSummary& n) {
+  return os << '#' << n.node_->id() << ':' << *n.node_->op();
 }
 
 Node::Node(NodeId id, const Operator* op, int inline_count, int inline_capacity)
