@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2fc854a_ce2ab033",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T13:17:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93116287_4b5eb1c0",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aac3db24_1d5df314",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a6408ce_9e5ef1c8",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3432,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T13:17:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aac3db24_1d5df314",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "127ba526_326971f8",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-08-30T13:10:52Z",
       "side": 1,
       "message": "do we need this? if another thread writes over us, they better also trigger a write barrier, not?",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12a6ae60_e7a749d6",
+        "filename": "src/sandbox/js-dispatch-table-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-08-30T13:17:43Z",
+      "side": 1,
+      "message": "Ah good point. How about I test that also in a follow-up CL? But I think you\u0027re correct",
+      "parentUuid": "127ba526_326971f8",
       "revId": "185988282d127a553aadde01ab1e12363c30baf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
