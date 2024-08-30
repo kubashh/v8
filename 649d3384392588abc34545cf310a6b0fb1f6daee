@@ -101,6 +101,41 @@
       "message": "Seems reasonable, adding a Wasm person as your second committer.",
       "revId": "649d3384392588abc34545cf310a6b0fb1f6daee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e0ceeff_4fe2fbe5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-30T10:11:47Z",
+      "side": 1,
+      "message": "Wasm person here :) \nLGTM, with one comment (optional).",
+      "parentUuid": "405333fb_64f62745",
+      "revId": "649d3384392588abc34545cf310a6b0fb1f6daee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "776d1ce7_d60b038f",
+        "filename": "src/runtime/runtime-utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-30T10:11:47Z",
+      "side": 1,
+      "message": "Since all runtime functions have an isolate and we never want to reset the flag to `true` if there is an exception, I think we should always pass an isolate here.\nHappy to do that in a follow-up, if you think that\u0027s outside the scope of this CL.",
+      "revId": "649d3384392588abc34545cf310a6b0fb1f6daee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
