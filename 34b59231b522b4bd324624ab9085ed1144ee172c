@@ -33,6 +33,23 @@
       "message": "Now this is certainly dead code ;)\n(but can still be addressed later, when removing the HandleScope; happy to help out there after this CL landed)",
       "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "056b3828_cbdbb9be",
+        "filename": "src/wasm/canonical-types.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-08-30T08:58:26Z",
+      "side": 1,
+      "message": "msvc complains here because also methods are marked as `V8_EXPORT_PRIVATE`. I think it\u0027s generally preferrable to only export what\u0027s needed, so better individual methods than the whole class.",
+      "revId": "34b59231b522b4bd324624ab9085ed1144ee172c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
