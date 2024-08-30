@@ -12,6 +12,7 @@
 #include <memory>
 #include <optional>
 #include <queue>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -958,6 +959,13 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   void SetAbortOnUncaughtExceptionCallback(
       v8::Isolate::AbortOnUncaughtExceptionCallback callback);
 
+  enum class StringStyle {
+    kNoTimestamp,
+    kTimestamp,
+  };
+
+  [[nodiscard]] std::string ToString(
+      StringStyle style = StringStyle::kNoTimestamp) const;
   enum PrintStackMode { kPrintStackConcise, kPrintStackVerbose };
   void PrintCurrentStackTrace(std::ostream& out);
   void PrintStack(StringStream* accumulator,

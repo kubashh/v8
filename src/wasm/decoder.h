@@ -11,7 +11,11 @@
 
 #include <cinttypes>
 #include <cstdarg>
+#include <iomanip>
+#include <ios>
 #include <memory>
+#include <sstream>
+#include <string>
 
 #include "src/base/compiler-specific.h"
 #include "src/base/memory.h"
@@ -26,13 +30,13 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-#define TRACE(...)                                        \
-  do {                                                    \
-    if (v8_flags.trace_wasm_decoder) PrintF(__VA_ARGS__); \
-  } while (false)
-#define TRACE_IF(cond, ...)                                         \
-  do {                                                              \
-    if (v8_flags.trace_wasm_decoder && (cond)) PrintF(__VA_ARGS__); \
+#define TRACE(...) TRACE_IF(v8_flags.trace_wasm_decoder, __VA_ARGS__)
+#define TRACE_NAMED(...)                                        \
+  do {                                                          \
+    if constexpr (trace) {                                      \
+      TRACE("  +", pc_offset(), "  ", std::left, std::setw(20), \
+            implicit_cast<const char*>(name), __VA_ARGS__);     \
+    }                                                           \
   } while (false)
 
 // A {DecodeResult} only stores the failure / success status, but no data.
@@ -96,7 +100,7 @@ class Decoder {
   } kFullValidation = {};
 
   struct NoName {
-    constexpr NoName(const char*) {}
+    constexpr explicit NoName(const char*) {}
     operator const char*() const { UNREACHABLE(); }
   };
   // Pass a {NoName} if we know statically that we do not use it anyway (we are
@@ -293,9 +297,9 @@ class Decoder {
   }
 
   // Consume {size} bytes and send them to the bit bucket, advancing {pc_}.
+  template <TraceFlag trace = kTrace>
   void consume_bytes(uint32_t size, const char* name = "skip") {
-    // Only trace if the name is not null.
-    TRACE_IF(name, "  +%u  %-20s: %u bytes\n", pc_offset(), name, size);
+    TRACE_NAMED(size, " bytes");
     if (checkAvailable(size)) {
       pc_ += size;
     } else {
@@ -360,23 +364,11 @@ class Decoder {
   // Behavior triggered on first error, overridden in subclasses.
   virtual void onFirstError() {}
 
-  // Debugging helper to print a bytes range as hex bytes.
-  void traceByteRange(const uint8_t* start, const uint8_t* end) {
-    DCHECK_LE(start, end);
-    for (const uint8_t* p = start; p < end; ++p) TRACE("%02x ", *p);
-  }
-
-  // Debugging helper to print bytes up to the end.
-  void traceOffEnd() {
-    traceByteRange(pc_, end_);
-    TRACE("<end>\n");
-  }
-
   // Converts the given value to a {Result}, copying the error if necessary.
   template <typename T, typename R = std::decay_t<T>>
   Result<R> toResult(T&& val) {
     if (failed()) {
-      TRACE("Result error: %s\n", error_.message().c_str());
+      TRACE("Result error: ", error_.message());
       return Result<R>{error_};
     }
     return Result<R>{std::forward<T>(val)};
@@ -469,17 +461,43 @@ class Decoder {
     return base::ReadLittleEndianValue<IntType>(reinterpret_cast<Address>(pc));
   }
 
+  static void AppendByteAsHex(uint8_t b, std::ostream& os) {
+    os << std::hex << std::setfill('0') << std::setw(2) << int{b};
+  }
+
+  // Debugging helper to print a byte range as hex bytes.
+  static std::string ByteRangeAsString(const uint8_t* start,
+                                       const uint8_t* end) {
+    DCHECK_LE(start, end);
+    std::ostringstream os;
+    for (const uint8_t* p = start; p < end; ++p) {
+      AppendByteAsHex(*p, os);
+      os << ' ';
+    }
+    return os.str();
+  }
+
+  template <TraceFlag trace, typename IntType>
+  void AppendValue(IntType value, std::ostream& os) {
+    if constexpr (trace) {
+      os << " = " << std::dec;
+      if constexpr (std::is_signed_v<IntType>) {
+        os << static_cast<int64_t>(value);
+      } else {
+        os << static_cast<uint64_t>(value);
+      }
+    }
+  }
+
   template <typename IntType, TraceFlag trace>
   IntType consume_little_endian(const char* name) {
-    TRACE_IF(trace, "  +%u  %-20s: ", pc_offset(), name);
     if (!checkAvailable(sizeof(IntType))) {
-      traceOffEnd();
+      TRACE_NAMED(ByteRangeAsString(pc_, end_), "<end>");
       pc_ = end_;
       return IntType{0};
     }
     IntType val = read_little_endian<IntType, NoValidationTag>(pc_, name);
-    traceByteRange(pc_, pc_ + sizeof(IntType));
-    TRACE_IF(trace, "= %d\n", val);
+    TRACE_NAMED(ByteRangeAsString(pc_, pc_ + sizeof(IntType)), "= ", val);
     pc_ += sizeof(IntType);
     return val;
   }
@@ -492,44 +510,43 @@ class Decoder {
       const uint8_t* pc, Name<ValidationTag> name = "varint") {
     static_assert(size_in_bits <= 8 * sizeof(IntType),
                   "leb does not fit in type");
-    TRACE_IF(trace, "  +%u  %-20s: ", pc_offset(),
-             implicit_cast<const char*>(name));
+    std::ostringstream os;
     // Fast path for single-byte integers.
     if (V8_LIKELY((!ValidationTag::validate || pc < end_) && !(*pc & 0x80))) {
-      TRACE_IF(trace, "%02x ", *pc);
       IntType result = *pc;
-      if (std::is_signed<IntType>::value) {
+      if constexpr (trace) AppendByteAsHex(result, os);
+      if constexpr (std::is_signed_v<IntType>) {
         // Perform sign extension.
         constexpr int sign_ext_shift = int{8 * sizeof(IntType)} - 7;
         result = (result << sign_ext_shift) >> sign_ext_shift;
-        TRACE_IF(trace, "= %" PRIi64 "\n", static_cast<int64_t>(result));
-      } else {
-        TRACE_IF(trace, "= %" PRIu64 "\n", static_cast<uint64_t>(result));
       }
+      AppendValue<trace>(result, os);
+      TRACE_NAMED(os.str());
       return {result, 1};
     }
     auto [result, length] =
-        read_leb_slowpath<IntType, ValidationTag, trace, size_in_bits>(pc,
-                                                                       name);
+        read_leb_slowpath<IntType, ValidationTag, trace, size_in_bits>(pc, name,
+                                                                       os);
     V8_ASSUME(length >= 0 && length <= (size_in_bits + 6) / 7);
     V8_ASSUME(ValidationTag::validate || length >= 1);
+    TRACE_NAMED(os.str());
     return {result, length};
   }
 
   template <typename IntType, typename ValidationTag, TraceFlag trace,
             size_t size_in_bits = 8 * sizeof(IntType)>
   V8_NOINLINE V8_PRESERVE_MOST std::pair<IntType, uint32_t> read_leb_slowpath(
-      const uint8_t* pc, Name<ValidationTag> name) {
+      const uint8_t* pc, Name<ValidationTag> name, std::ostream& os) {
     // Create an unrolled LEB decoding function per integer type.
     return read_leb_tail<IntType, ValidationTag, trace, size_in_bits, 0>(
-        pc, name, 0);
+        pc, name, 0, os);
   }
 
   template <typename IntType, typename ValidationTag, TraceFlag trace,
             size_t size_in_bits, int byte_index>
   V8_INLINE std::pair<IntType, uint32_t> read_leb_tail(
-      const uint8_t* pc, Name<ValidationTag> name,
-      IntType intermediate_result) {
+      const uint8_t* pc, Name<ValidationTag> name, IntType intermediate_result,
+      std::ostream& os) {
     constexpr bool is_signed = std::is_signed<IntType>::value;
     constexpr int kMaxLength = (size_in_bits + 6) / 7;
     static_assert(byte_index < kMaxLength, "invalid template instantiation");
@@ -540,7 +557,7 @@ class Decoder {
     if (V8_LIKELY(!at_end)) {
       DCHECK_LT(pc, end_);
       b = *pc;
-      TRACE_IF(trace, "%02x ", b);
+      if constexpr (trace) AppendByteAsHex(b, os);
       using Unsigned = typename std::make_unsigned<IntType>::type;
       intermediate_result |=
           (static_cast<Unsigned>(static_cast<IntType>(b) & 0x7f) << shift);
@@ -551,10 +568,11 @@ class Decoder {
       // following call is unreachable if is_last_byte is false.
       constexpr int next_byte_index = byte_index + (is_last_byte ? 0 : 1);
       return read_leb_tail<IntType, ValidationTag, trace, size_in_bits,
-                           next_byte_index>(pc + 1, name, intermediate_result);
+                           next_byte_index>(pc + 1, name, intermediate_result,
+                                            os);
     }
     if (ValidationTag::validate && V8_UNLIKELY(at_end || (b & 0x80))) {
-      TRACE_IF(trace, at_end ? "<end> " : "<length overflow> ");
+      if constexpr (trace) os << (at_end ? " <end>" : " <length overflow>");
       errorf(pc, "%s while decoding %s",
              at_end ? "reached end" : "length overflow", name);
       return {0, 0};
@@ -585,17 +603,15 @@ class Decoder {
     // Perform sign extension.
     intermediate_result =
         (intermediate_result << sign_ext_shift) >> sign_ext_shift;
-    if (trace && is_signed) {
-      TRACE("= %" PRIi64 "\n", static_cast<int64_t>(intermediate_result));
-    } else if (trace) {
-      TRACE("= %" PRIu64 "\n", static_cast<uint64_t>(intermediate_result));
-    }
+    AppendValue<trace>(intermediate_result, os);
     const uint32_t length = byte_index + 1;
     return {intermediate_result, length};
   }
 };
 
+#undef TRACE_NAMED
 #undef TRACE
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8
