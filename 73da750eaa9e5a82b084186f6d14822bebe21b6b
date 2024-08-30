@@ -171,6 +171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b07c065a_fb9a087c",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T08:18:44Z",
+      "side": 1,
+      "message": "I think I misread your `CHECK`, it makes sense in all cases. 😊\nDone.",
+      "parentUuid": "da7a8eec_ca9b3dbe",
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b64ebca8_833af18a",
@@ -232,6 +250,30 @@
       "side": 1,
       "message": "Yes, type canonalizer would also work for me.",
       "parentUuid": "201e4ec8_7f818d14",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 414,
+        "endChar": 65
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05affebb_fc9d2970",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T08:18:44Z",
+      "side": 1,
+      "message": "Great, done.",
+      "parentUuid": "92c5de7c_5270c5c5",
       "range": {
         "startLine": 413,
         "startChar": 0,

@@ -33,6 +33,24 @@
       "message": "Huh, why do we need this? We only allocate a few handles, and in the fast-path we could actually allocate no handle at all. Allocating the HandleScope adds significant overhead.",
       "revId": "990f6f65ea3a657c321df49d630bc02d708ada43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e58096d_a161df9e",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1984,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T08:18:44Z",
+      "side": 1,
+      "message": "Agree, I added a `TODO` on my name.\nI\u0027d like to get this landed without any further issues, I\u0027ll be out next week and still have some reviews to be done and an open issue. 😊",
+      "parentUuid": "34d196bb_0c1e57d5",
+      "revId": "990f6f65ea3a657c321df49d630bc02d708ada43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
