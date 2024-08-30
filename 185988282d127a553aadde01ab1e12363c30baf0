@@ -104,6 +104,24 @@
       "parentUuid": "127ba526_326971f8",
       "revId": "185988282d127a553aadde01ab1e12363c30baf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee417aa1_a20646cc",
+        "filename": "src/sandbox/js-dispatch-table-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-30T13:20:20Z",
+      "side": 1,
+      "message": "sure, if you prefer.",
+      "parentUuid": "12a6ae60_e7a749d6",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
