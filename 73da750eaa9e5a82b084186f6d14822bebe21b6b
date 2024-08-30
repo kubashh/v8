@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e0ea67f6_cbff869b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-08-30T13:03:23Z",
+      "side": 1,
+      "message": "Happy to do that if I don\u0027t forget after my vacation. 😊",
+      "parentUuid": "5c0b1832_36f0dcc1",
+      "range": {
+        "startLine": 883,
+        "startChar": 0,
+        "endLine": 884,
+        "endChar": 66
+      },
+      "revId": "73da750eaa9e5a82b084186f6d14822bebe21b6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9c1a596_06f55c1a",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 1
