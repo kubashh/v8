@@ -88,6 +88,24 @@
       "parentUuid": "c29d1d92_79e62f73",
       "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fa23e17_1a706400",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-30T20:27:21Z",
+      "side": 1,
+      "message": "I haven\u0027t written a full doc (can do if needed with more examples, alternatives considered, etc.), but this snapshot is more compelling IMO.\n\n* Ditched support for both streaming and printf styles. Streaming only. This resolves the family of concerns that arose from having both.\n* Explicitly disclaim any intent to force everyone to unify on a single style. Where it makes sense to do so (which turns out to be most places), I do intend to make use of this, but code that makes more sense another way can stay that way. This makes this less about being opinionated about The Right Style, and more about just trying to make things clearer and better case-by-case. This also makes ditching printf support palatable, because code that works better with printf can just keep using that.\n* Changed the set of files in this CL to better demonstrate typical effects, and changed my approach to avoid caller-site inline lambdas, which are ugly.\n* Changed the CL description to note the specific effects.\n\nI hope this version looks more like a net improvement. LMK.",
+      "parentUuid": "7f0f2be1_0a991bfe",
+      "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
