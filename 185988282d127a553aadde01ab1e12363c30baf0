@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93116287_4b5eb1c0",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-30T13:10:52Z",
+      "side": 1,
+      "message": "actually might be a good idea to split this into a separate cl.",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aac3db24_1d5df314",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3432,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-30T13:10:52Z",
+      "side": 1,
+      "message": "same as above.",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "127ba526_326971f8",
+        "filename": "src/sandbox/js-dispatch-table-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-08-30T13:10:52Z",
+      "side": 1,
+      "message": "do we need this? if another thread writes over us, they better also trigger a write barrier, not?",
+      "revId": "185988282d127a553aadde01ab1e12363c30baf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
