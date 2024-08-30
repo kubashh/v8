@@ -4,6 +4,9 @@
 
 #include "src/compiler/escape-analysis.h"
 
+#include <sstream>
+#include <string>
+
 #include "src/codegen/tick-counter.h"
 #include "src/compiler/frame-states.h"
 #include "src/compiler/node-matchers.h"
@@ -13,18 +16,26 @@
 #include "src/handles/handles-inl.h"
 #include "src/objects/map-inl.h"
 
+namespace v8 {
+namespace internal {
+namespace compiler {
+
 #ifdef DEBUG
-#define TRACE(...)                                        \
-  do {                                                    \
-    if (v8_flags.trace_turbo_escape) PrintF(__VA_ARGS__); \
-  } while (false)
+#define TRACE(...) TRACE_IF(v8_flags.trace_turbo_escape, __VA_ARGS__)
 #else
 #define TRACE(...)
 #endif
 
-namespace v8 {
-namespace internal {
-namespace compiler {
+namespace {
+
+[[maybe_unused]] std::string MaybeNodeSummary(Node* node) {
+  if (!node) return "nullptr";
+  std::ostringstream os;
+  os << NodeSummary(node);
+  return os.str();
+}
+
+}  // namespace
 
 template <class T>
 class Sidetable {
@@ -210,9 +221,8 @@ class EscapeAnalysisTracker : public ZoneObject {
     void SetEscaped(Node* node) {
       if (VirtualObject* object = tracker_->virtual_objects_.Get(node)) {
         if (object->HasEscaped()) return;
-        TRACE("Setting %s#%d to escaped because of use by %s#%d\n",
-              node->op()->mnemonic(), node->id(),
-              current_node()->op()->mnemonic(), current_node()->id());
+        TRACE("Setting ", NodeSummary(node), "to escaped because of use by ",
+              NodeSummary(current_node()));
         object->SetEscaped();
         object->RevisitDependants(reducer_);
       }
@@ -237,12 +247,7 @@ class EscapeAnalysisTracker : public ZoneObject {
       replacement_ = replacement;
       vobject_ =
           replacement ? tracker_->virtual_objects_.Get(replacement) : nullptr;
-      if (replacement) {
-        TRACE("Set %s#%d as replacement.\n", replacement->op()->mnemonic(),
-              replacement->id());
-      } else {
-        TRACE("Set nullptr as replacement.\n");
-      }
+      TRACE("Set ", MaybeNodeSummary(replacement), " as replacement.");
     }
 
     void MarkForDeletion() { SetReplacement(tracker_->jsgraph_->Dead()); }
@@ -386,8 +391,7 @@ void EffectGraphReducer::ReduceFrom(Node* node) {
 
 void EffectGraphReducer::Revisit(Node* node) {
   if (state_.Get(node) == State::kVisited) {
-    TRACE("  Queueing for revisit: %s#%d\n", node->op()->mnemonic(),
-          node->id());
+    TRACE("  Queueing for revisit: ", NodeSummary(node));
     state_.Set(node, State::kRevisit);
     revisit_.push(node);
   }
@@ -442,7 +446,7 @@ VariableTracker::State VariableTracker::MergeInputs(Node* effect_phi) {
   DCHECK_EQ(IrOpcode::kEffectPhi, effect_phi->opcode());
   int arity = effect_phi->op()->EffectInputCount();
   Node* control = NodeProperties::GetControlInput(effect_phi, 0);
-  TRACE("control: %s#%d\n", control->op()->mnemonic(), control->id());
+  TRACE("control: ", NodeSummary(control));
   bool is_loop = control->opcode() == IrOpcode::kLoop;
   buffer_.reserve(arity + 1);
 
@@ -452,32 +456,23 @@ VariableTracker::State VariableTracker::MergeInputs(Node* effect_phi) {
     tick_counter_->TickAndMaybeEnterSafepoint();
     if (Node* value = var_value.second) {
       Variable var = var_value.first;
-      TRACE("var %i:\n", var.id_);
+      TRACE("var ", var.id_, ':');
       buffer_.clear();
       buffer_.push_back(value);
       bool identical_inputs = true;
       int num_defined_inputs = 1;
-      TRACE("  input 0: %s#%d\n", value->op()->mnemonic(), value->id());
+      TRACE("  input 0: ", NodeSummary(value));
       for (int i = 1; i < arity; ++i) {
         Node* next_value =
             table_.Get(NodeProperties::GetEffectInput(effect_phi, i)).Get(var);
         if (next_value != value) identical_inputs = false;
-        if (next_value != nullptr) {
-          num_defined_inputs++;
-          TRACE("  input %i: %s#%d\n", i, next_value->op()->mnemonic(),
-                next_value->id());
-        } else {
-          TRACE("  input %i: nullptr\n", i);
-        }
+        if (next_value) ++num_defined_inputs;
+        TRACE("  input ", i, ": ", MaybeNodeSummary(next_value));
         buffer_.push_back(next_value);
       }
 
       Node* old_value = table_.Get(effect_phi).Get(var);
-      if (old_value) {
-        TRACE("  old: %s#%d\n", old_value->op()->mnemonic(), old_value->id());
-      } else {
-        TRACE("  old: nullptr\n");
-      }
+      TRACE("  old: ", MaybeNodeSummary(old_value));
       // Reuse a previously created phi node if possible.
       if (old_value && old_value->opcode() == IrOpcode::kPhi &&
           NodeProperties::GetControlInput(old_value, 0) == control) {
@@ -510,7 +505,7 @@ VariableTracker::State VariableTracker::MergeInputs(Node* effect_phi) {
           if (identical_inputs) {
             result.Set(var, value);
           } else {
-            TRACE("Creating new phi\n");
+            TRACE("Creating new phi");
             buffer_.push_back(control);
             Node* phi = graph_->graph()->NewNode(
                 graph_->common()->Phi(MachineRepresentation::kTagged, arity),
@@ -524,14 +519,7 @@ VariableTracker::State VariableTracker::MergeInputs(Node* effect_phi) {
           }
         }
       }
-#ifdef DEBUG
-      if (Node* result_node = result.Get(var)) {
-        TRACE("  result: %s#%d\n", result_node->op()->mnemonic(),
-              result_node->id());
-      } else {
-        TRACE("  result: nullptr\n");
-      }
-#endif
+      TRACE("  result: ", MaybeNodeSummary(result.Get(var)));
     }
   }
   return result;
@@ -890,11 +878,9 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
 }  // namespace
 
 void EscapeAnalysis::Reduce(Node* node, Reduction* reduction) {
-  const Operator* op = node->op();
-  TRACE("Reducing %s#%d\n", op->mnemonic(), node->id());
-
+  TRACE("Reducing ", NodeSummary(node));
   EscapeAnalysisTracker::Scope current(this, tracker_, node, reduction);
-  ReduceNode(op, &current, jsgraph());
+  ReduceNode(node->op(), &current, jsgraph());
 }
 
 EscapeAnalysis::EscapeAnalysis(JSGraph* jsgraph, TickCounter* tick_counter,
@@ -929,7 +915,7 @@ VirtualObject::VirtualObject(VariableTracker* var_states, VirtualObject::Id id,
                              int size)
     : Dependable(var_states->zone()), id_(id), fields_(var_states->zone()) {
   DCHECK(IsAligned(size, kTaggedSize));
-  TRACE("Creating VirtualObject id:%d size:%d\n", id, size);
+  TRACE("Creating VirtualObject id:", id, " size:", size);
   int num_fields = size / kTaggedSize;
   fields_.reserve(num_fields);
   for (int i = 0; i < num_fields; ++i) {

@@ -30,6 +30,7 @@ namespace wasm {
   do {                                                    \
     if (v8_flags.trace_wasm_decoder) PrintF(__VA_ARGS__); \
   } while (false)
+#undef TRACE_IF
 #define TRACE_IF(cond, ...)                                         \
   do {                                                              \
     if (v8_flags.trace_wasm_decoder && (cond)) PrintF(__VA_ARGS__); \
@@ -595,7 +596,9 @@ class Decoder {
   }
 };
 
+#undef TRACE_IF
 #undef TRACE
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8

@@ -175,16 +175,15 @@ namespace v8 {
 namespace internal {
 
 #ifdef DEBUG
-#define TRACE_ISOLATE(tag)                                                  \
-  do {                                                                      \
-    if (v8_flags.trace_isolates) {                                          \
-      PrintF("Isolate %p (id %d)" #tag "\n", reinterpret_cast<void*>(this), \
-             id());                                                         \
-    }                                                                       \
-  } while (false)
+#define TRACE_ISOLATE(...)                                           \
+  TRACE_IF(v8_flags.trace_isolates, "Isolate ", this, " (id ", id(), \
+           ")" __VA_OPT__(" ", ) __VA_ARGS__)
 #else
-#define TRACE_ISOLATE(tag)
+#define TRACE_ISOLATE(...)
 #endif
+#define TRACE_RAIL(...) \
+  TRACE_IF(v8_flags.trace_rail, ToString(), ' ', __VA_ARGS__)
+#define TRACE_STATS(...) TRACE_IF(v8_flags.trace_zone_stats, __VA_ARGS__)
 
 const uint8_t* DefaultEmbeddedBlobCode() {
   return v8_Default_embedded_blob_code_;
@@ -2737,6 +2736,16 @@ Tagged<Object> Isolate::ThrowIllegalOperation() {
   return Throw(ReadOnlyRoots(heap()).illegal_access_string());
 }
 
+std::string Isolate::ToString(StringStyle style) const {
+  std::ostringstream os;
+  os << '[' << base::OS::GetCurrentProcessId() << ':' << this << ']';
+  if (style == StringStyle::kTimestamp) {
+    os << ' ' << std::fixed << std::setw(8) << std::setprecision(0)
+       << time_millis_since_init() << " ms";
+  }
+  return os.str();
+}
+
 void Isolate::PrintCurrentStackTrace(std::ostream& out) {
   DirectHandle<FixedArray> frames = CaptureSimpleStackTrace(
       this, FixedArray::kMaxLength, SKIP_NONE, factory()->undefined_value());
@@ -3844,14 +3853,7 @@ class TracingAccountingAllocator : public AccountingAllocator {
     {
       std::string trace_str = buffer_.str();
 
-      if (v8_flags.trace_zone_stats) {
-        PrintF(
-            "{"
-            "\"type\": \"v8-zone-trace\", "
-            "\"stats\": %s"
-            "}\n",
-            trace_str.c_str());
-      }
+      TRACE_STATS(R"({"type": "v8-zone-trace", "stats": )", trace_str, '}');
       if (V8_UNLIKELY(
               TracingFlags::zone_stats.load(std::memory_order_relaxed) &
               v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
@@ -4031,7 +4033,7 @@ Isolate::Isolate(IsolateGroup* isolate_group)
       next_module_async_evaluation_ordinal_(
           SourceTextModule::kFirstAsyncEvaluationOrdinal),
       cancelable_task_manager_(new CancelableTaskManager()) {
-  TRACE_ISOLATE(constructor);
+  TRACE_ISOLATE("constructor");
   CheckIsolateLayout();
 
   // ThreadManager is initialized early to support locking an isolate
@@ -4225,7 +4227,7 @@ void Isolate::UpdateLogObjectRelocation() {
 }
 
 void Isolate::Deinit() {
-  TRACE_ISOLATE(deinit);
+  TRACE_ISOLATE("deinit");
 
 #if defined(V8_USE_PERFETTO)
   PerfettoLogger::UnregisterIsolate(this);
@@ -4486,7 +4488,7 @@ void Isolate::SetIsolateThreadLocals(Isolate* isolate,
 }
 
 Isolate::~Isolate() {
-  TRACE_ISOLATE(destructor);
+  TRACE_ISOLATE("destructor");
   DCHECK_NULL(current_deoptimizer_);
 
   // The entry stack must be empty when we get here.
@@ -5259,7 +5261,7 @@ void Isolate::VerifyStaticRoots() {
 bool Isolate::Init(SnapshotData* startup_snapshot_data,
                    SnapshotData* read_only_snapshot_data,
                    SnapshotData* shared_heap_snapshot_data, bool can_rehash) {
-  TRACE_ISOLATE(init);
+  TRACE_ISOLATE("init");
 
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   CHECK_EQ(V8HeapCompressionScheme::base(), cage_base());
@@ -6915,9 +6917,7 @@ void Isolate::SetRAILMode(RAILMode rail_mode) {
   if (old_rail_mode == PERFORMANCE_LOAD && rail_mode != PERFORMANCE_LOAD) {
     heap()->NotifyLoadingEnded();
   }
-  if (v8_flags.trace_rail) {
-    PrintIsolate(this, "RAIL mode: %s\n", RAILModeName(rail_mode));
-  }
+  TRACE_RAIL("RAIL mode: ", RAILModeName(rail_mode));
 }
 
 void Isolate::SetPriority(v8::Isolate::Priority priority) {
@@ -6928,8 +6928,7 @@ void Isolate::SetPriority(v8::Isolate::Priority priority) {
 }
 
 void Isolate::PrintWithTimestamp(const char* format, ...) {
-  base::OS::Print("[%d:%p] %8.0f ms: ", base::OS::GetCurrentProcessId(),
-                  static_cast<void*>(this), time_millis_since_init());
+  base::OS::Print("%s: ", ToString(StringStyle::kTimestamp).c_str());
   va_list arguments;
   va_start(arguments, format);
   base::OS::VPrint(format, arguments);
@@ -7293,8 +7292,6 @@ void Isolate::initialize_wasm_execution_timer() {
 }
 #endif  // V8_ENABLE_DRUMBRAKE
 
-#undef TRACE_ISOLATE
-
 // static
 Address Isolate::load_from_stack_count_address(const char* function_name) {
   DCHECK_NOT_NULL(function_name);
@@ -7421,6 +7418,8 @@ void Isolate::InitializeBuiltinJSDispatchTable() {
   }
 #endif
 }
+
+#undef TRACE_ISOLATE
 
 }  // namespace internal
 }  // namespace v8
