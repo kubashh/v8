@@ -34,6 +34,24 @@
       "parentUuid": "04b8bbe9_00461971",
       "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e04ff8d8_a8939dbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-08-30T13:38:03Z",
+      "side": 1,
+      "message": "In my local refactoring, I ended up using the stream form 95% of the time, so another way forward would be to only add the stream versions, and if you want the printf version, do it yourself. Or make that one have a noisy name. Or even convert all call sites to stream form; I got partway there but people who want precise spacing and precision then have to use manipulators, which is ugly.",
+      "parentUuid": "0d39efc8_89f311ee",
+      "revId": "305912322b58a8587055ca5d91b924f8fc6574ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
