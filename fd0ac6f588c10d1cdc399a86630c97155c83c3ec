@@ -60,6 +60,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81a1960f_149cd242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Sorry for the late response. Recently I did some performance tests and profiling of this optimization (https://chromium-review.googlesource.com/c/v8/v8/+/5797856). Before continue reviewing this CL, I would like to share the results with you and discuss about how to proceed the optimization.\n\nHere are the conclusions of my experiment:\n\n1. Currently the optimization to the best can bring +0.4% improvement to Speedometer2, but no significant improvement to Speedometer3 (https://pinpoint-dot-chromeperf.appspot.com/job/1015d617c10000).\n\n2. In Speedometer2/3, about half of the `Megamorphic` keyed stores can be optimized to `MegaTransition` keyed stores.\n\n3. Among all the `MegaTransition` keyed stores in Speedometer2/3, 70% of them are with enumerated key (key is enumerated from `for-in` statement). And all the deoptimizations of `MegaTransition` are coming from non-enumerated keys. So to reduce the chance of deoptimization, we can generate calls to generic `KeyedStoreIC` for non-enumerated keyed stores.\n\n4. This optimization benefits the performance from two aspects: avoiding descriptor array lookup and the avoiding the `TryToName` heuristic. Both of them contribute half of the benefit.\n\nDo you think the improvement still worth the complexity? In alternative we can use some simple solution like always looking up transition array before descriptor array and avoiding `TryToName` when possible.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "adc824e4_11a9cbb9",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 11
@@ -105,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b60f177_7ec227d1",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2327,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69b988fb_25868ea3",
+      "range": {
+        "startLine": 2327,
+        "startChar": 44,
+        "endLine": 2327,
+        "endChar": 51
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc715416_813b6053",
@@ -118,6 +159,30 @@
       "writtenOn": "2024-06-21T09:32:38Z",
       "side": 1,
       "message": "nit: order above `no_feedback` for consistency",
+      "range": {
+        "startLine": 4094,
+        "startChar": 4,
+        "endLine": 4094,
+        "endChar": 8
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71e1a51_9627a240",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 4094,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc715416_813b6053",
       "range": {
         "startLine": 4094,
         "startChar": 4,
@@ -145,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "392b45d2_82072d14",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "befc5e07_2cb0cc67",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cf01d32_59a409d3",
@@ -158,6 +241,30 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "`TryStoreTransition` would be a better name here. And please add a comment in the header about what it does and what it does not.",
+      "range": {
+        "startLine": 2727,
+        "startChar": 34,
+        "endLine": 2727,
+        "endChar": 49
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04a800c6_79377875",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2727,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cf01d32_59a409d3",
       "range": {
         "startLine": 2727,
         "startChar": 34,
@@ -185,6 +292,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b41846f_e967253b",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b6c7376_2294bcb1",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8799831_f4ff7fe7",
@@ -198,6 +323,24 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "I think we also need to handle private names and JSProxies as in `StoreIC::Store`.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e743834_cf880eab",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "e8799831_f4ff7fe7",
       "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -221,6 +364,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0237495f_39cddc90",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "I\u0027m curious in which situation it will go to this path and if the short cut is still valid:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5244014/11/src/ic/ic.cc#1699",
+      "parentUuid": "20fb24ae_0e1c0a03",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3ac9f161_15ef5825",
         "filename": "src/ic/ic.cc",
         "patchSetId": 11
@@ -232,6 +393,30 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "Note, in general `it.transition_` might be a `PropertyCell` here but if we add a fast-map check above then it shouldn\u0027t be the case.\n\nBTW, in a follow up CL we could have supported regular dictionary objects too.",
+      "range": {
+        "startLine": 2752,
+        "startChar": 15,
+        "endLine": 2752,
+        "endChar": 34
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00fc0749_aec0c5c6",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2752,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ac9f161_15ef5825",
       "range": {
         "startLine": 2752,
         "startChar": 15,
@@ -265,6 +450,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "071fc06f_0121e7c5",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2753,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "935618f4_3552197b",
+      "range": {
+        "startLine": 2753,
+        "startChar": 17,
+        "endLine": 2753,
+        "endChar": 36
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e892353a_87604f15",
@@ -278,6 +487,24 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "Given the amount of checks we have to do to get to the fast path, please put this middle part into a helper function from which we can just `return false` in case the fast path can\u0027t be taken.",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d9c6f9_477fdf1d",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "I only put part of the check in the helper function, because we need to distinguish `exception` and `not StoreTransition but no exception` when the fast path can\u0027t be taken.",
+      "parentUuid": "e892353a_87604f15",
       "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -301,6 +528,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70b8c084_6772673a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2769,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Yes, we always have a tailing deopt check after calling the builtin in the JIT\u0027d code.",
+      "parentUuid": "c68be5c1_88b3237a",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5db388d_98cea97b",
         "filename": "src/ic/ic.cc",
         "patchSetId": 11
@@ -312,6 +557,42 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "This is not what V8 expects - to have a pending exception and not returning the exception sentinel. Please handle exception case properly: `RETURN_RESULT_OR_FAILURE`.\nAssuming that throwing an exception is a rare case there\u0027s no harm in letting it throw and not deopting.\n\nIn case deopting is strictly necessary we\u0027d need to find the caller function and deoptimize it manually (see `Runtime_DeoptimizeNow`).",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3a5f67a_98bbfe95",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5db388d_98cea97b",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2578a85_d7e61ea1",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5db388d_98cea97b",
       "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -333,6 +614,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7364a274_083a3059",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "I used `RETURN_RESULT_OR_FAILURE(ic.StoreTransition)` here, which already have a `DCHECK(!isolate-\u003ehas_exception());`",
+      "parentUuid": "8cc89ff1_6471c5b0",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8888902c_b3633eca",
@@ -346,6 +645,30 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "Typo: known.",
+      "range": {
+        "startLine": 57,
+        "startChar": 19,
+        "endLine": 57,
+        "endChar": 23
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86a0d31d_c0a358c1",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8888902c_b3633eca",
       "range": {
         "startLine": 57,
         "startChar": 19,
@@ -379,6 +702,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64f3e601_843a2687",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "846cdd2d_181d752a",
+      "range": {
+        "startLine": 59,
+        "startChar": 27,
+        "endLine": 59,
+        "endChar": 32
+      },
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5637a873_941cf51f",
@@ -392,6 +739,24 @@
       "writtenOn": "2024-07-02T18:22:49Z",
       "side": 1,
       "message": "`CSA_DCHECK(.., IsUniqueName(..));`",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "326bca00_f25a6122",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-02T09:56:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5637a873_941cf51f",
       "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
