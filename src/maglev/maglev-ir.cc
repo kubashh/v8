@@ -3577,6 +3577,18 @@ void CheckNotHole::GenerateCode(MaglevAssembler* masm,
   __ EmitEagerDeoptIf(kEqual, DeoptimizeReason::kHole, this);
 }
 
+void CheckNotMegaTransitionFailed::SetValueLocationConstraints() {
+  UseRegister(object_input());
+  DefineSameAsFirst(this);
+}
+void CheckNotMegaTransitionFailed::GenerateCode(MaglevAssembler* masm,
+                                                const ProcessingState& state) {
+  DCHECK_EQ(ToRegister(object_input()), ToRegister(result()));
+  Register reg = ToRegister(object_input());
+  __ CompareRoot(reg, RootIndex::kmega_transition_failed_symbol);
+  __ EmitEagerDeoptIf(kEqual, DeoptimizeReason::kNotATransitioningStore, this);
+}
+
 void ConvertHoleToUndefined::SetValueLocationConstraints() {
   UseRegister(object_input());
   DefineSameAsFirst(this);

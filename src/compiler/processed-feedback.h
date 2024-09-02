@@ -166,15 +166,23 @@ class ElementAccessFeedback : public ProcessedFeedback {
 
 class NamedAccessFeedback : public ProcessedFeedback {
  public:
-  NamedAccessFeedback(NameRef name, ZoneVector<MapRef> const& maps,
-                      FeedbackSlotKind slot_kind);
+  enum AccessMode { kNotStoreTransition, kStoreTransition };
 
-  NameRef name() const { return name_; }
+  NamedAccessFeedback(OptionalNameRef name, ZoneVector<MapRef> const& maps,
+                      FeedbackSlotKind slot_kind,
+                      AccessMode mode = kNotStoreTransition);
+
+  NameRef name() const {
+    DCHECK(name_.has_value());
+    return *name_;
+  }
   ZoneVector<MapRef> const& maps() const { return maps_; }
+  bool IsStoreTransition() const { return mode_ == kStoreTransition; }
 
  private:
-  NameRef const name_;
+  OptionalNameRef const name_;
   ZoneVector<MapRef> const maps_;
+  AccessMode mode_;
 };
 
 class MegaDOMPropertyAccessFeedback : public ProcessedFeedback {

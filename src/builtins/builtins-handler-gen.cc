@@ -58,6 +58,23 @@ void Builtins::Generate_KeyedStoreIC_Megamorphic(
   KeyedStoreMegamorphicGenerator::Generate(state);
 }
 
+void Builtins::Generate_KeyedStoreIC_Transition(
+    compiler::CodeAssemblerState* state) {
+  KeyedStoreTransitionGenerator::Generate_KeyedStoreIC_Transition(state);
+}
+
+void Builtins::Generate_KeyedStoreIC_Transition_WithBailout(
+    compiler::CodeAssemblerState* state) {
+  KeyedStoreTransitionGenerator::Generate_KeyedStoreIC_Transition_WithBailout(
+      state);
+}
+
+void Builtins::Generate_EnumeratedKeyedStoreIC_Transition_WithBailout(
+    compiler::CodeAssemblerState* state) {
+  KeyedStoreTransitionGenerator::
+      Generate_EnumeratedKeyedStoreIC_Transition_WithBailout(state);
+}
+
 void Builtins::Generate_DefineKeyedOwnIC_Megamorphic(
     compiler::CodeAssemblerState* state) {
   DefineKeyedOwnGenericGenerator::Generate(state);

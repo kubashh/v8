@@ -237,6 +237,11 @@ bool LookupIterator::is_dictionary_holder() const {
   return !holder_->HasFastProperties(isolate_);
 }
 
+bool LookupIterator::is_transition_map() const {
+  if (state_ != TRANSITION) return false;
+  return IsMap(*transition_, isolate_);
+}
+
 Handle<Map> LookupIterator::transition_map() const {
   DCHECK_EQ(TRANSITION, state_);
   return Handle<Map>::cast(transition_);

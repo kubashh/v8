@@ -174,6 +174,7 @@ class V8_EXPORT_PRIVATE LookupIterator final {
   template <class T>
   inline Handle<T> GetStoreTarget() const;
   inline bool is_dictionary_holder() const;
+  inline bool is_transition_map() const;
   inline Handle<Map> transition_map() const;
   inline Handle<PropertyCell> transition_cell() const;
   template <class T>

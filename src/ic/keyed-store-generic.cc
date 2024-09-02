@@ -46,6 +46,18 @@ enum class StoreMode {
 // exists, while 'update' semantics will throw if the field does not exist.
 enum class PrivateNameSemantics { kUpdate, kDefine };
 
+// When ic state is MegaTransition, kGeneric tries to do the
+// transitioning store. If it found that it is not a transitioning store, it
+// will call runtime to do a generic store and update the ic state to
+// Megamorphic. kWithBailout is similar to kGeneric, but it will bailout if
+// the store is not a transitioning store by returning symbol
+// 'mega_transition_failed_symbol'.
+enum class StoreTransitionMode { kGeneric, kWithBailout };
+
+// When the key is known to be a UniqueName (e.g. from enum cache), the type
+// would be kUniqueName, otherwise it would be kKey.
+enum class KeyType { kKey, kUniqueName };
+
 class KeyedStoreGenericAssembler : public AccessorAssembler {
  public:
   explicit KeyedStoreGenericAssembler(compiler::CodeAssemblerState* state,
@@ -54,7 +66,7 @@ class KeyedStoreGenericAssembler : public AccessorAssembler {
 
   void KeyedStoreGeneric();
   void KeyedStoreMegamorphic();
-
+  void KeyedStoreTransition(StoreTransitionMode store_mode, KeyType key_type);
   void StoreIC_NoFeedback();
 
   // Generates code for [[Set]] or [[CreateDataProperty]] operation,
@@ -201,6 +213,28 @@ void KeyedStoreMegamorphicGenerator::Generate(
     compiler::CodeAssemblerState* state) {
   KeyedStoreGenericAssembler assembler(state, StoreMode::kSet);
   assembler.KeyedStoreMegamorphic();
+}
+
+void KeyedStoreTransitionGenerator::Generate_KeyedStoreIC_Transition(
+    compiler::CodeAssemblerState* state) {
+  KeyedStoreGenericAssembler assembler(state, StoreMode::kSet);
+  assembler.KeyedStoreTransition(StoreTransitionMode::kGeneric, KeyType::kKey);
+}
+
+void KeyedStoreTransitionGenerator::
+    Generate_KeyedStoreIC_Transition_WithBailout(
+        compiler::CodeAssemblerState* state) {
+  KeyedStoreGenericAssembler assembler(state, StoreMode::kSet);
+  assembler.KeyedStoreTransition(StoreTransitionMode::kWithBailout,
+                                 KeyType::kKey);
+}
+
+void KeyedStoreTransitionGenerator::
+    Generate_EnumeratedKeyedStoreIC_Transition_WithBailout(
+        compiler::CodeAssemblerState* state) {
+  KeyedStoreGenericAssembler assembler(state, StoreMode::kSet);
+  assembler.KeyedStoreTransition(StoreTransitionMode::kWithBailout,
+                                 KeyType::kUniqueName);
 }
 
 // static
@@ -1246,6 +1280,85 @@ void KeyedStoreGenericAssembler::KeyedStoreMegamorphic() {
 
   KeyedStoreGeneric(context, receiver, name, value, Nothing<LanguageMode>(),
                     kUseStubCache, slot, maybe_vector);
+}
+
+void KeyedStoreGenericAssembler::KeyedStoreTransition(
+    StoreTransitionMode store_mode, KeyType key_type) {
+  DCHECK(IsSet());  // Only [[Set]] handlers are stored in the stub cache.
+  using Descriptor = StoreWithVectorDescriptor;
+
+  auto receiver_maybe_smi = Parameter<Object>(Descriptor::kReceiver);
+  auto name_maybe_smi = Parameter<Object>(Descriptor::kName);
+  auto value = Parameter<Object>(Descriptor::kValue);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  auto slot = Parameter<TaggedIndex>(Descriptor::kSlot);
+  auto maybe_vector = Parameter<HeapObject>(Descriptor::kVector);
+
+  Label if_miss(this, Label::kDeferred);
+  GotoIf(TaggedIsSmi(receiver_maybe_smi), &if_miss);
+  TNode<HeapObject> receiver = CAST(receiver_maybe_smi);
+  TNode<Map> receiver_map = LoadMap(receiver);
+  ExitPoint direct_exit(this);
+
+  TNode<Name> name;
+  if (key_type == KeyType::kKey) {
+    TVARIABLE(IntPtrT, var_index);
+    TVARIABLE(Name, var_unique);
+    Label if_index(this, &var_index, Label::kDeferred), if_unique_name(this),
+        not_internalized(this);
+
+    TryToName(name_maybe_smi, &if_index, &var_index, &if_unique_name,
+              &var_unique, &if_miss, &not_internalized);
+
+    BIND(&if_index);
+    {
+      Comment("integer index");
+      // Should be Megamorphic.
+      Goto(&if_miss);
+    }
+
+    BIND(&not_internalized);
+    {
+      Comment("not_internalized");
+      if (v8_flags.internalize_on_the_fly) {
+        TryInternalizeString(CAST(name_maybe_smi), &if_index, &var_index,
+                             &if_unique_name, &var_unique, &if_miss, &if_miss);
+      } else {
+        Goto(&if_miss);
+      }
+    }
+
+    BIND(&if_unique_name);
+    name = var_unique.value();
+  } else {
+    name = CAST(name_maybe_smi);
+    CSA_DCHECK(this, IsUniqueName(name));
+  }
+  {
+    Comment("lookup transition");
+    CheckForAssociatedProtector(name, &if_miss);
+
+    TNode<Map> transition_map =
+        FindCandidateStoreICTransitionMapHandler(receiver_map, name, &if_miss);
+
+    // Validate the transition handler candidate and apply the transition.
+    StoreTransitionMapFlags flags = kStoreTransitionMapFlagsMask;
+    StoreICParameters p(context, receiver, name, value, base::nullopt, slot,
+                        maybe_vector, StoreICMode::kDefault);
+    HandleStoreICTransitionMapHandlerCase(&p, transition_map, &if_miss, flags);
+    Comment("done transition");
+    direct_exit.Return(value);
+  }
+
+  BIND(&if_miss);
+  {
+    Comment("KeyedStoreTransition_miss");
+    TailCallRuntime(store_mode == StoreTransitionMode::kGeneric
+                        ? Runtime::kKeyedStoreIC_Miss
+                        : Runtime::kKeyedStoreTransitionIC_Miss,
+                    context, value, slot, maybe_vector, receiver,
+                    name_maybe_smi);
+  }
 }
 
 void KeyedStoreGenericAssembler::StoreProperty(TNode<Context> context,
