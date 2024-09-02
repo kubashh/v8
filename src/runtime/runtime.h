@@ -739,6 +739,7 @@ namespace internal {
   F(ElementsTransitionAndStoreIC_Miss, 6, 1) \
   F(KeyedLoadIC_Miss, 4, 1)                  \
   F(KeyedStoreIC_Miss, 5, 1)                 \
+  F(KeyedStoreTransitionIC_Miss, 5, 1)       \
   F(DefineKeyedOwnIC_Miss, 5, 1)             \
   F(StoreInArrayLiteralIC_Miss, 5, 1)        \
   F(DefineNamedOwnIC_Slow, 3, 1)             \

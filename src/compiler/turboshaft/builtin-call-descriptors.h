@@ -302,6 +302,65 @@ struct BuiltinCallDescriptor {
     static constexpr OpEffects kEffects = base_effects.CanReadMemory();
   };
 
+  struct EnumeratedKeyedStoreIC_Transition
+      : public Descriptor<EnumeratedKeyedStoreIC_Transition> {
+    static constexpr auto kFunction =
+        Builtin::kEnumeratedKeyedStoreIC_Transition_WithBailout;
+    using arguments_t =
+        std::tuple<V<Object>, V<Object>, V<Object>, V<TaggedIndex>, V<Object>>;
+    using results_t = std::tuple<V<Object>>;
+
+    static constexpr bool kNeedsFrameState = true;
+    static constexpr bool kNeedsContext = true;
+    static constexpr Operator::Properties kProperties = Operator::kNoProperties;
+
+    static constexpr OpEffects kEffects = base_effects.CanCallAnything();
+  };
+
+  struct KeyedStoreIC_Transition : public Descriptor<KeyedStoreIC_Transition> {
+    static constexpr auto kFunction =
+        Builtin::kKeyedStoreIC_Transition_WithBailout;
+    using arguments_t =
+        std::tuple<V<Object>, V<Object>, V<Object>, V<TaggedIndex>, V<Object>>;
+    using results_t = std::tuple<V<Object>>;
+
+    static constexpr bool kNeedsFrameState = true;
+    static constexpr bool kNeedsContext = true;
+    static constexpr Operator::Properties kProperties = Operator::kNoProperties;
+
+    static constexpr OpEffects kEffects = base_effects.CanCallAnything();
+  };
+
+  struct EnumeratedKeyedStoreICTrampoline_Transition
+      : public Descriptor<EnumeratedKeyedStoreICTrampoline_Transition> {
+    static constexpr auto kFunction =
+        Builtin::kEnumeratedKeyedStoreICTrampoline_Transition;
+    using arguments_t =
+        std::tuple<V<Object>, V<Object>, V<Object>, V<TaggedIndex>>;
+    using results_t = std::tuple<V<Object>>;
+
+    static constexpr bool kNeedsFrameState = true;
+    static constexpr bool kNeedsContext = true;
+    static constexpr Operator::Properties kProperties = Operator::kNoProperties;
+
+    static constexpr OpEffects kEffects = base_effects.CanCallAnything();
+  };
+
+  struct KeyedStoreICTrampoline_Transition
+      : public Descriptor<KeyedStoreICTrampoline_Transition> {
+    static constexpr auto kFunction =
+        Builtin::kKeyedStoreICTrampoline_Transition;
+    using arguments_t =
+        std::tuple<V<Object>, V<Object>, V<Object>, V<TaggedIndex>>;
+    using results_t = std::tuple<V<Object>>;
+
+    static constexpr bool kNeedsFrameState = true;
+    static constexpr bool kNeedsContext = true;
+    static constexpr Operator::Properties kProperties = Operator::kNoProperties;
+
+    static constexpr OpEffects kEffects = base_effects.CanCallAnything();
+  };
+
   struct StringAdd_CheckNone : public Descriptor<StringAdd_CheckNone> {
     static constexpr auto kFunction = Builtin::kStringAdd_CheckNone;
     using arguments_t = std::tuple<V<String>, V<String>>;

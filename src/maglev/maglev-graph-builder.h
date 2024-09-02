@@ -2076,6 +2076,10 @@ class MaglevGraphBuilder {
     return TryBuildLoadNamedProperty(receiver, receiver, name, feedback_source);
   }
 
+  ReduceResult TryBuildKeyedStoreTransition(
+      ValueNode* receiver, ValueNode* lookup_start_object, ValueNode* name,
+      compiler::FeedbackSource const& feedback_source);
+
   ReduceResult BuildLoadTypedArrayLength(ValueNode* object,
                                          ElementsKind elements_kind);
   ValueNode* BuildLoadTypedArrayElement(ValueNode* object, ValueNode* index,

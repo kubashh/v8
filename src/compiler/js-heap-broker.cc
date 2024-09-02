@@ -432,10 +432,14 @@ MegaDOMPropertyAccessFeedback::MegaDOMPropertyAccessFeedback(
   DCHECK(IsLoadICKind(slot_kind));
 }
 
-NamedAccessFeedback::NamedAccessFeedback(NameRef name,
+NamedAccessFeedback::NamedAccessFeedback(OptionalNameRef name,
                                          ZoneVector<MapRef> const& maps,
-                                         FeedbackSlotKind slot_kind)
-    : ProcessedFeedback(kNamedAccess, slot_kind), name_(name), maps_(maps) {
+                                         FeedbackSlotKind slot_kind,
+                                         AccessMode mode)
+    : ProcessedFeedback(kNamedAccess, slot_kind),
+      name_(name),
+      maps_(maps),
+      mode_(mode) {
   DCHECK(IsLoadICKind(slot_kind) || IsSetNamedICKind(slot_kind) ||
          IsDefineNamedOwnICKind(slot_kind) || IsKeyedLoadICKind(slot_kind) ||
          IsKeyedHasICKind(slot_kind) || IsKeyedStoreICKind(slot_kind) ||
@@ -534,7 +538,8 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
 
   // If no maps were found for a non-megamorphic access, then our maps died
   // and we should soft-deopt.
-  if (maps.empty() && nexus.ic_state() != InlineCacheState::MEGAMORPHIC) {
+  if (maps.empty() && nexus.ic_state() != InlineCacheState::MEGAMORPHIC &&
+      nexus.ic_state() != InlineCacheState::MEGATRANSITION) {
     return NewInsufficientFeedback(kind);
   }
 
@@ -542,10 +547,14 @@ ProcessedFeedback const& JSHeapBroker::ReadFeedbackForPropertyAccess(
     // We rely on this invariant in JSGenericLowering.
     DCHECK_IMPLIES(maps.empty(),
                    nexus.ic_state() == InlineCacheState::MEGAMORPHIC);
-    return *zone()->New<NamedAccessFeedback>(*name, maps, kind);
+    return *zone()->New<NamedAccessFeedback>(name, maps, kind);
   } else if (nexus.GetKeyType() == IcCheckType::kElement && !maps.empty()) {
     return ProcessFeedbackMapsForElementAccess(
         maps, KeyedAccessMode::FromNexus(nexus), kind);
+  } else if (nexus.ic_state() == InlineCacheState::MEGATRANSITION) {
+    DCHECK(maps.empty());
+    return *zone()->New<NamedAccessFeedback>(
+        name, maps, kind, NamedAccessFeedback::AccessMode::kStoreTransition);
   } else {
     // No actionable feedback.
     DCHECK(maps.empty());

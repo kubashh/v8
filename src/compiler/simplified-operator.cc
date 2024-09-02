@@ -151,6 +151,25 @@ std::ostream& operator<<(std::ostream& os, ObjectAccess const& access) {
   return os;
 }
 
+bool operator==(StoreTransitionParameters const& lhs,
+                StoreTransitionParameters const& rhs) {
+  return lhs.slot_ == rhs.slot_ &&
+         lhs.is_internalized_string_key_ == rhs.is_internalized_string_key_ &&
+         lhs.is_trampoline_ == rhs.is_trampoline_;
+}
+
+size_t hash_value(StoreTransitionParameters const& params) {
+  return base::hash_combine(params.slot_, params.is_internalized_string_key_,
+                            params.is_trampoline_);
+}
+
+std::ostream& operator<<(std::ostream& os,
+                         StoreTransitionParameters const& params) {
+  os << params.slot_ << ", " << params.is_internalized_string_key_ << ", "
+     << params.is_trampoline_;
+  return os;
+}
+
 #if V8_ENABLE_WEBASSEMBLY
 
 V8_EXPORT_PRIVATE bool operator==(WasmFieldInfo const& lhs,
@@ -209,6 +228,13 @@ const ObjectAccess& ObjectAccessOf(const Operator* op) {
          op->opcode() == IrOpcode::kStoreToObject ||
          op->opcode() == IrOpcode::kInitializeImmutableInObject);
   return OpParameter<ObjectAccess>(op);
+}
+
+const StoreTransitionParameters& StoreTransitionParametersOf(
+    const Operator* op) {
+  DCHECK_NOT_NULL(op);
+  DCHECK(op->opcode() == IrOpcode::kStoreTransitionOrDeopt);
+  return OpParameter<StoreTransitionParameters>(op);
 }
 
 ExternalArrayType ExternalArrayTypeOf(const Operator* op) {
@@ -2186,6 +2212,14 @@ const Operator* SimplifiedOperatorBuilder::SpeculativeNumberEqual(
   }
 ACCESS_OP_LIST(ACCESS)
 #undef ACCESS
+
+const Operator* SimplifiedOperatorBuilder::StoreTransitionOrDeopt(
+    const StoreTransitionParameters& params) {
+  // whether Operator::kNoRead?
+  return zone()->New<Operator1<StoreTransitionParameters>>(
+      IrOpcode::kStoreTransitionOrDeopt, Operator::kNoProperties,
+      "StoreTransitionOrDeopt", 4, 1, 1, 0, 1, 0, params);
+}
 
 const Operator* SimplifiedOperatorBuilder::StoreField(
     const FieldAccess& access, bool maybe_initializing_or_transitioning) {

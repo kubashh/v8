@@ -1516,6 +1516,8 @@ enum class InlineCacheState {
   POLYMORPHIC,
   // Many DOM receiver types have been seen for the same accessor.
   MEGADOM,
+  // Many receiver types have been seen for transitioning stores.
+  MEGATRANSITION,
   // Many receiver types have been seen.
   MEGAMORPHIC,
   // A generic handler is installed and no extra typefeedback is recorded.
@@ -1543,6 +1545,8 @@ inline const char* InlineCacheState2String(InlineCacheState state) {
       return "MEGAMORPHIC";
     case InlineCacheState::MEGADOM:
       return "MEGADOM";
+    case InlineCacheState::MEGATRANSITION:
+      return "MEGATRANSITION";
     case InlineCacheState::GENERIC:
       return "GENERIC";
   }

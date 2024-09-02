@@ -1507,6 +1507,39 @@ OpIndex GraphBuilder::Process(
                access.indirect_pointer_tag);
       return OpIndex::Invalid();
     }
+    case IrOpcode::kStoreTransitionOrDeopt: {
+      Node* object = node->InputAt(0);
+      Node* key = node->InputAt(1);
+      Node* value = node->InputAt(2);
+      Node* feedback_vector = node->InputAt(3);
+      Node* context = node->InputAt(4);
+      Node* frame_state = node->InputAt(5);
+
+      StoreTransitionParameters const& params = StoreTransitionParametersOf(op);
+      int slot = params.slot();
+
+      bool is_internalized_string_key = params.is_internalized_string_key();
+      V<Object> result =
+          params.is_trampoline()
+              ? __ CallBuiltin_KeyedStoreTransitionTrampoline(
+                    isolate, Map(object), Map(key), Map(value), slot,
+                    Map(context), Map(frame_state), is_internalized_string_key)
+              : __ CallBuiltin_KeyedStoreTransition(
+                    isolate, Map(object), Map(key), Map(value), slot,
+                    Map(feedback_vector), Map(context), Map(frame_state),
+                    is_internalized_string_key);
+
+      __ DeoptimizeIf(
+          __ TaggedEqual(
+              result,
+              __ HeapConstant(ReadOnlyRoots(isolate)
+                                  .mega_transition_failed_symbol_handle())),
+          dominating_frame_state, DeoptimizeReason::kNotATransitioningStore,
+          FeedbackSource{});
+
+      return OpIndex::Invalid();
+    }
+
     case IrOpcode::kLoadFromObject:
     case IrOpcode::kLoadImmutableFromObject: {
       Node* object = node->InputAt(0);

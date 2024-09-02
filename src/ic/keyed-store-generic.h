@@ -16,6 +16,16 @@ class KeyedStoreMegamorphicGenerator {
   static void Generate(compiler::CodeAssemblerState* state);
 };
 
+class KeyedStoreTransitionGenerator {
+ public:
+  static void Generate_KeyedStoreIC_Transition(
+      compiler::CodeAssemblerState* state);
+  static void Generate_KeyedStoreIC_Transition_WithBailout(
+      compiler::CodeAssemblerState* state);
+  static void Generate_EnumeratedKeyedStoreIC_Transition_WithBailout(
+      compiler::CodeAssemblerState* state);
+};
+
 class KeyedStoreGenericGenerator {
  public:
   static void Generate(compiler::CodeAssemblerState* state);

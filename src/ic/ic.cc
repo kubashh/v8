@@ -11,6 +11,7 @@
 #include "src/builtins/accessors.h"
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
+#include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/arguments-inl.h"
 #include "src/execution/execution.h"
 #include "src/execution/frames-inl.h"
@@ -57,6 +58,7 @@ constexpr InlineCacheState RECOMPUTE_HANDLER =
 constexpr InlineCacheState POLYMORPHIC = InlineCacheState::POLYMORPHIC;
 constexpr InlineCacheState MEGAMORPHIC = InlineCacheState::MEGAMORPHIC;
 constexpr InlineCacheState MEGADOM = InlineCacheState::MEGADOM;
+constexpr InlineCacheState MEGATRANSITION = InlineCacheState::MEGATRANSITION;
 constexpr InlineCacheState GENERIC = InlineCacheState::GENERIC;
 
 char IC::TransitionMarkFromState(IC::State state) {
@@ -75,6 +77,8 @@ char IC::TransitionMarkFromState(IC::State state) {
       return 'N';
     case MEGADOM:
       return 'D';
+    case MEGATRANSITION:
+      return 'T';
     case GENERIC:
       return 'G';
   }
@@ -395,6 +399,15 @@ void IC::ConfigureVectorState(
   OnFeedbackChanged("Polymorphic");
 }
 
+void IC::ConfigureVectorState(IC::State new_state) {
+  DCHECK_EQ(MEGATRANSITION, new_state);
+  nexus()->ConfigureMegaTransition();
+  bool changed = nexus()->ConfigureMegaTransition();
+  if (changed) {
+    OnFeedbackChanged("MegaTransition");
+  }
+}
+
 MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
                                  bool update_feedback,
                                  Handle<Object> receiver) {
@@ -629,6 +642,21 @@ bool IC::UpdateMegaDOMIC(const MaybeObjectHandle& handler, Handle<Name> name) {
   return true;
 }
 
+bool IC::UpdateMegaTransitionIC(LookupIterator* lookup) {
+  if (!v8_flags.mega_transition_ic) return false;
+
+  DCHECK(IsKeyedStoreIC());
+
+  if (!lookup->is_transition_map()) return false;
+
+  if (lookup->transition_map()->is_dictionary_map()) return false;
+
+  ConfigureVectorState(MEGATRANSITION);
+  vector_set_ = true;
+
+  return true;
+}
+
 bool IC::UpdatePolymorphicIC(Handle<Name> name,
                              const MaybeObjectHandle& handler) {
   DCHECK(IsHandler(*handler));
@@ -751,7 +779,8 @@ void IC::SetCache(Handle<Name> name, Handle<Object> handler) {
   SetCache(name, MaybeObjectHandle(handler));
 }
 
-void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
+void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler,
+                  LookupIterator* lookup) {
   DCHECK(IsHandler(*handler));
   // Currently only load and store ICs support non-code handlers.
   DCHECK(IsAnyLoad() || IsAnyStore() || IsAnyHas());
@@ -774,6 +803,11 @@ void IC::SetCache(Handle<Name> name, const MaybeObjectHandle& handler) {
       if (!is_keyed() || state() == RECOMPUTE_HANDLER) {
         CopyICToMegamorphicCache(name);
       }
+      [[fallthrough]];
+    case MEGATRANSITION:
+      if (IsKeyedStoreIC() && lookup != nullptr &&
+          UpdateMegaTransitionIC(lookup))
+        break;
       [[fallthrough]];
     case MEGADOM:
       ConfigureVectorState(MEGAMORPHIC, name);
@@ -1970,7 +2004,7 @@ void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
   // Can't use {lookup->name()} because the LookupIterator might be in
   // "elements" mode for keys that are strings representing integers above
   // JSArray::kMaxIndex.
-  SetCache(lookup->GetName(), handler);
+  SetCache(lookup->GetName(), handler, lookup);
   TraceIC("StoreIC", lookup->GetName());
 }
 
@@ -2692,6 +2726,51 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
   return result;
 }
 
+bool KeyedStoreIC::TryGetPropertyNameForStoreTransition(
+    Handle<Object> object, Handle<Object> key, Handle<Name>* name_out) {
+  // MegaTransition IC handling of JSProxy is not supported.
+  if (IsJSProxy(*object)) return false;
+
+  if (IsNullOrUndefined(*object, isolate())) return false;
+
+  if (!IsJSReceiver(*object)) return false;
+  if (Handle<JSObject>::cast(object)->map()->is_dictionary_map()) return false;
+
+  intptr_t maybe_index;
+  KeyType key_type = TryConvertKey(key, isolate(), &maybe_index, name_out);
+  // MegaTransition IC handling of private name is not supported.
+  return key_type == kName && !(*name_out)->IsPrivate();
+}
+
+MaybeHandle<Object> KeyedStoreIC::TryStoreTransition(Handle<Object> object,
+                                                     Handle<Object> key,
+                                                     Handle<Object> value) {
+  MigrateDeprecated(isolate(), object);
+  // MegaTransition IC handling of JSProxy is not supported.
+  Handle<Name> maybe_name;
+  if (TryGetPropertyNameForStoreTransition(object, key, &maybe_name)) {
+    LookupIterator it(isolate(), object, maybe_name, LookupIterator::DEFAULT);
+    if (StoreIC::LookupForWrite(&it, value, StoreOrigin::kMaybeKeyed) &&
+        it.state() == LookupIterator::TRANSITION &&
+        !it.transition_map()->is_dictionary_map()) {
+      MAYBE_RETURN_ON_EXCEPTION_VALUE(
+          isolate(),
+          Object::TransitionAndWriteDataProperty(
+              &it, value, PropertyAttributes::NONE, Nothing<ShouldThrow>(),
+              StoreOrigin::kMaybeKeyed),
+          MaybeHandle<Object>());
+      return value;
+    }
+  }
+
+  // Not a transitioning store, need to bailout.
+  if (ConfigureVectorState(MEGAMORPHIC, key)) {
+    set_slow_stub_reason("not a transitioning store");
+    TraceIC("StoreIC", key);
+  }
+  return ReadOnlyRoots(isolate()).mega_transition_failed_symbol_handle();
+}
+
 namespace {
 Maybe<bool> StoreOwnElement(Isolate* isolate, Handle<JSArray> array,
                             Handle<Object> index, Handle<Object> value) {
@@ -3116,6 +3195,25 @@ RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Miss) {
     RETURN_RESULT_OR_FAILURE(
         isolate, ic.Store(Handle<JSArray>::cast(receiver), key, value));
   }
+}
+
+RUNTIME_FUNCTION(Runtime_KeyedStoreTransitionIC_Miss) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(5, args.length());
+  // Runtime functions don't follow the IC's calling convention.
+  Handle<Object> value = args.at(0);
+  int slot = args.tagged_index_value_at(1);
+  Handle<HeapObject> maybe_vector = args.at<HeapObject>(2);
+  Handle<Object> receiver = args.at(3);
+  Handle<Object> key = args.at(4);
+
+  Handle<FeedbackVector> vector = Handle<FeedbackVector>::cast(maybe_vector);
+  FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot);
+  FeedbackSlotKind kind = vector->GetKind(vector_slot);
+
+  KeyedStoreIC ic(isolate, vector, vector_slot, kind);
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           ic.TryStoreTransition(receiver, key, value));
 }
 
 RUNTIME_FUNCTION(Runtime_DefineKeyedOwnIC_Miss) {

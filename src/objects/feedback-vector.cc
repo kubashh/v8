@@ -45,7 +45,8 @@ static bool IsPropertyNameFeedback(Tagged<MaybeObject> feedback) {
   ReadOnlyRoots roots = symbol->GetReadOnlyRoots();
   return symbol != roots.uninitialized_symbol() &&
          symbol != roots.mega_dom_symbol() &&
-         symbol != roots.megamorphic_symbol();
+         symbol != roots.megamorphic_symbol() &&
+         symbol != roots.mega_transition_symbol();
 }
 
 std::ostream& operator<<(std::ostream& os, FeedbackSlotKind kind) {
@@ -709,6 +710,20 @@ bool FeedbackNexus::ConfigureMegamorphic(IcCheckType property_type) {
   return update_required;
 }
 
+bool FeedbackNexus::ConfigureMegaTransition() {
+  DisallowGarbageCollection no_gc;
+  Isolate* isolate = GetIsolate();
+  Tagged<MaybeObject> sentinel = MegaTransitionSentinel();
+
+  auto feedback = GetFeedbackPair();
+  if (feedback.first != sentinel) {
+    DCHECK_NE(feedback.first, MegamorphicSentinel());
+    SetFeedback(sentinel, SKIP_WRITE_BARRIER, ClearedValue(isolate));
+    return true;
+  }
+  return false;
+}
+
 Tagged<Map> FeedbackNexus::GetFirstMap() const {
   FeedbackIterator it(this);
   if (!it.done()) {
@@ -760,6 +775,10 @@ InlineCacheState FeedbackNexus::ic_state() const {
       if (feedback == MegaDOMSentinel()) {
         DCHECK(IsLoadICKind(kind()));
         return InlineCacheState::MEGADOM;
+      }
+      if (feedback == MegaTransitionSentinel()) {
+        DCHECK(IsKeyedStoreICKind(kind()));
+        return InlineCacheState::MEGATRANSITION;
       }
       if (feedback.IsWeakOrCleared()) {
         // Don't check if the map is cleared.

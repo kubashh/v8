@@ -514,6 +514,7 @@
   V(StoreMessage)                       \
   V(StoreSignedSmallElement)            \
   V(StoreToObject)                      \
+  V(StoreTransitionOrDeopt)             \
   V(StoreTypedElement)                  \
   V(StringCharCodeAt)                   \
   V(StringCodePointAt)                  \

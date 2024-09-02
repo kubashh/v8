@@ -35,6 +35,11 @@ bool IC::IsHandler(Tagged<MaybeObject> object) {
           (IsDataHandler(heap_object) || IsCode(heap_object)));
 }
 
+bool IC::IsStoreTransitionHandler(Tagged<MaybeObject> object) {
+  Tagged<HeapObject> heap_object;
+  return object.GetHeapObjectIfWeak(&heap_object) && IsMap(heap_object);
+}
+
 bool IC::vector_needs_update() {
   if (state() == InlineCacheState::NO_FEEDBACK) return false;
   return (!vector_set_ && (state() != InlineCacheState::MEGAMORPHIC ||

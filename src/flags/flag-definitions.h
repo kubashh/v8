@@ -2324,6 +2324,8 @@ DEFINE_BOOL(super_ic, true, "use an IC for super property loads")
 
 DEFINE_BOOL(mega_dom_ic, false, "use MegaDOM IC state for API objects")
 
+DEFINE_BOOL(mega_transition_ic, true, "use MegaTransition IC state")
+
 // objects.cc
 DEFINE_BOOL(trace_prototype_users, false,
             "Trace updates to prototype user tracking")
