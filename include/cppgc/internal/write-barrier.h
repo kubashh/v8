@@ -115,7 +115,7 @@ class V8_EXPORT WriteBarrier final {
   // The FlagUpdater class allows cppgc internal to update
   // |write_barrier_enabled_|.
   class FlagUpdater;
-  static bool IsEnabled() { return write_barrier_enabled_.MightBeEntered(); }
+  static bool IsEnabled() { return GetWriteBarrierFlag().MightBeEntered(); }
 
  private:
   WriteBarrier() = delete;
@@ -150,7 +150,14 @@ class V8_EXPORT WriteBarrier final {
       HeapHandle* heap_handle);
 #endif  // CPPGC_YOUNG_GENERATION
 
-  static AtomicEntryFlag write_barrier_enabled_;
+  static AtomicEntryFlag& GetWriteBarrierFlag() {
+    return write_barrier_flag_storage_.flag;
+  }
+
+  static union alignas(api_constants::kCachelineSize) AtomicEntryFlagStorage {
+    AtomicEntryFlag flag;
+    char cache_line[api_constants::kCachelineSize];
+  } write_barrier_flag_storage_;
 };
 
 template <WriteBarrier::Type type>

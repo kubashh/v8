@@ -14,8 +14,8 @@ namespace internal {
 
 class WriteBarrier::FlagUpdater final {
  public:
-  static void Enter() { write_barrier_enabled_.Enter(); }
-  static void Exit() { write_barrier_enabled_.Exit(); }
+  static void Enter() { GetWriteBarrierFlag().Enter(); }
+  static void Exit() { GetWriteBarrierFlag().Exit(); }
 
  private:
   FlagUpdater() = delete;

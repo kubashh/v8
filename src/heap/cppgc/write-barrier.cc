@@ -21,9 +21,9 @@
 namespace cppgc {
 namespace internal {
 
-// static
-AtomicEntryFlag WriteBarrier::write_barrier_enabled_;
-
+//   static
+WriteBarrier::AtomicEntryFlagStorage WriteBarrier::write_barrier_flag_storage_ =
+    {.flag = {}};
 namespace {
 
 template <MarkerBase::WriteBarrierType type>
