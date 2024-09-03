@@ -101,14 +101,14 @@ JSDispatchHandle JSDispatchTable::AllocateAndInitializeEntry(
   uint32_t index = AllocateEntry(space);
   JSDispatchEntry& entry = at(index);
   CFIMetadataWriteScope write_scope("JSDispatchTable initialize");
-  entry.MakeJSDispatchEntry(kNullAddress, kNullAddress, parameter_count,
+  entry.MakeJSDispatchEntry(new_code.address(), new_entrypoint, parameter_count,
                             space->allocate_black());
-  entry.SetCodeAndEntrypointPointer(new_code.ptr(), new_entrypoint);
   return IndexToHandle(index);
 }
 
 void JSDispatchEntry::SetCodeAndEntrypointPointer(Address new_object,
                                                   Address new_entrypoint) {
+  CHECK(!IsFreelistEntry());
   Address current_payload = encoded_word_.load(std::memory_order_relaxed);
   Address marking_bit = current_payload & kMarkingBit;
   Address parameter_count = current_payload & kParameterCountMask;
