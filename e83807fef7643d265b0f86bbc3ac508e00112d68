@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0264b81e_862d1f55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-03T16:36:58Z",
+      "side": 1,
+      "message": "Hello, this is my first contribution to v8/Chromium. I would appreciate it if you could take a look at the patches. Thank you!",
+      "revId": "e83807fef7643d265b0f86bbc3ac508e00112d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
