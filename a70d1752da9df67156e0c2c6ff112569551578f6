@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "60ac2fe7_172ac16a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-04T14:34:47Z",
+      "side": 1,
+      "message": "Unrelated to the specific change. I only saw this flying by: What is up with \"jumbo\" here? \n\nJumbo builds have officially been deprecated afaik and there\u0027s no discussion/bug/document that would suggest otherwise. Did I miss anything and there was an announcement that this is being reversed?\n\nI was personally sympathetic to jumbo effort and as it helped especially non-Googlers but I also think we should respect the call from eng leads (even if some of them have left by now). We should almost certainly not spend time fixing unsupported modes without tracking bugs and bots as they could (and history tells us would) constantly break.",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8c021fc9_6b3aaa4f",
