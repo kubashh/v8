@@ -16,6 +16,23 @@
       "message": "Leszek, PTAL.",
       "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b78ea1df_f647a18c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-04T17:56:07Z",
+      "side": 1,
+      "message": "Ideally, for when `fallthrough_needed_` is false, we can emit some kind of `unreachable` bytecode in debug builds, but I don\u0027t think we have one. Think it\u0027s worth it in this case?",
+      "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
