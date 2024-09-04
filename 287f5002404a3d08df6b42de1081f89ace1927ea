@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74f08486_0c4f024c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-04T17:38:32Z",
+      "side": 1,
+      "message": "+Nikos",
+      "revId": "287f5002404a3d08df6b42de1081f89ace1927ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f79e04_11c987fd",
+        "filename": "test/cctest/wasm/test-run-wasm-wrappers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-04T17:38:32Z",
+      "side": 1,
+      "message": "The way we generally handle this is by using a GC without stack (there\u0027s scopes to disable stack scanning). This way we can avoid the define and maintain the check.\n\nWith stack scanning in general anything goes so most tests that check that objects go away should run without stack.",
+      "range": {
+        "startLine": 450,
+        "startChar": 5,
+        "endLine": 450,
+        "endChar": 42
+      },
+      "revId": "287f5002404a3d08df6b42de1081f89ace1927ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
