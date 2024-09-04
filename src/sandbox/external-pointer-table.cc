@@ -254,6 +254,40 @@ bool ExternalPointerTable::TryResolveEvacuationEntryDuringSweeping(
   return true;
 }
 
+void ExternalPointerTable::UpdateAllEvacuationEntries(
+    Space* space, std::function<Address(Address)> function) {
+  DCHECK(space->BelongsTo(this));
+  DCHECK(!space->is_internal_read_only_space());
+
+  if (!space->IsCompacting()) return;
+
+  // Lock the space. Technically this is not necessary since no other thread can
+  // allocate entries at this point, but some of the methods we call on the
+  // space assert that the lock is held.
+  base::MutexGuard guard(&space->mutex_);
+  // Same for the invalidated fields mutex.
+  base::MutexGuard invalidated_fields_guard(&space->invalidated_fields_mutex_);
+
+  const uint32_t start_of_evacuation_area =
+      space->start_of_evacuation_area_.load(std::memory_order_relaxed);
+
+  // Iterate until the start of evacuation area.
+  for (auto& segment : space->segments_) {
+    if (segment.first_entry() == start_of_evacuation_area) return;
+    for (uint32_t i = segment.first_entry(); i < segment.last_entry() + 1;
+         ++i) {
+      ExternalPointerTableEntry& entry = at(i);
+      ExternalPointerTableEntry::Payload payload = entry.GetRawPayload();
+      if (!payload.ContainsEvacuationEntry()) {
+        continue;
+      }
+      Address new_location =
+          function(payload.ExtractEvacuationEntryHandleLocation());
+      entry.MakeEvacuationEntry(new_location);
+    }
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
 
