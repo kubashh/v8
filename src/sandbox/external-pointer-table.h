@@ -434,6 +434,10 @@ class V8_EXPORT_PRIVATE ExternalPointerTable
   // Returns the number of live entries after sweeping.
   uint32_t SweepAndCompact(Space* space, Counters* counters);
 
+  // Updates all evacuation entries with new handle locations. The function
+  // takes the old hanlde location and returns the new one.
+  void UpdateAllEvacuationEntries(Space*, std::function<Address(Address)>);
+
  private:
   static inline bool IsValidHandle(ExternalPointerHandle handle);
   static inline uint32_t HandleToIndex(ExternalPointerHandle handle);
