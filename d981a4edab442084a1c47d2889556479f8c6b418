@@ -69,6 +69,24 @@
       "parentUuid": "b6a8d4f0_18c46f0d",
       "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef1fc593_35c092ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2024-09-04T17:49:52Z",
+      "side": 1,
+      "message": "Dear Shu-yu: You are right. I agree with you for this CL we should wait for Ben to bring this up to the next TG1 before landing.",
+      "parentUuid": "a86f3a9b_f34f009f",
+      "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
