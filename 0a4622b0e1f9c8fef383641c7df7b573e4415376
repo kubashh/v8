@@ -16,6 +16,23 @@
       "message": "Leszek is OOO this week. Adding Igor instead.",
       "revId": "0a4622b0e1f9c8fef383641c7df7b573e4415376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "539ed82c_1fdbfeef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-04T09:24:45Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0a4622b0e1f9c8fef383641c7df7b573e4415376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
