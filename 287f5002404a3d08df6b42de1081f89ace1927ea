@@ -39,6 +39,30 @@
       },
       "revId": "287f5002404a3d08df6b42de1081f89ace1927ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e7bfc9_4a2050f8",
+        "filename": "test/cctest/wasm/test-run-wasm-wrappers.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-04T17:42:38Z",
+      "side": 1,
+      "message": "Aha! I see `DisableConservativeStackScanningScopeForTesting` and that indeed seems to fix it. I\u0027ll upload a follow-up fix.",
+      "parentUuid": "34f79e04_11c987fd",
+      "range": {
+        "startLine": 450,
+        "startChar": 5,
+        "endLine": 450,
+        "endChar": 42
+      },
+      "revId": "287f5002404a3d08df6b42de1081f89ace1927ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
