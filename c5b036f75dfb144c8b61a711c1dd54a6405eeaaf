@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed9c8e09_7747768b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-04T17:30:32Z",
+      "side": 1,
+      "message": "Rezvan, PTAL to re-open the tree.\n\nMichael, please let me know if there is a good way to re-enable the check for CSS.",
+      "revId": "c5b036f75dfb144c8b61a711c1dd54a6405eeaaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
