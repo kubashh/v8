@@ -63,6 +63,23 @@
       "message": "leszeks: Friendly ping",
       "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54080c67_0a8fa8ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-09-05T16:47:52Z",
+      "side": 1,
+      "message": "leszeks: Ping",
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
