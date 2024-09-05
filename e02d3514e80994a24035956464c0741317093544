@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b5fa6e_9c2f0727",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16a0ba50_684453e9",
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43fff89f_8d925697",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "if",
+      "range": {
+        "startLine": 506,
+        "startChar": 66,
+        "endLine": 506,
+        "endChar": 70
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6468900_74c51794",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43fff89f_8d925697",
       "range": {
         "startLine": 506,
         "startChar": 66,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bd752f8_b248ada2",
+        "filename": "src/compiler/js-inlining.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Ah, I forgot to make this change after our sync meeting. Done.",
+      "parentUuid": "362cc4b1_a4f8023c",
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2707b93_d3c2d23b",
@@ -88,6 +148,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "Sure? Even the wasm-into-wasm inlining doesn\u0027t support this (i.e. cross-module-inlining), see e.g. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/wasm-lowering-reducer.h;l\u003d977. This will not be a trivial change.\n(You can obviously keep the `TODO` but you might want to lower your expectations on it. 😊)",
+      "range": {
+        "startLine": 569,
+        "startChar": 31,
+        "endLine": 569,
+        "endChar": 78
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0cfb952_847ac4af",
+        "filename": "src/compiler/pipeline-data-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Ack, this is not going to happen for the TS Wasm-in-JS inlining MVP, so I toned down the comment.\n\nIn terms of importance/prioritization, I do think the restriction to inline only from a single module in Wasm-in-JS inlining is more of a weird performance cliff than not inlining across different Wasm modules. I.e., that the first Wasm module \"wins\" in Wasm-in-JS inlining feels \"more arbitrary\" or \"more surprising\". (This is just my gut feeling for what I think \"a typical Web developer\" expects, WDYT?)",
+      "parentUuid": "a2707b93_d3c2d23b",
       "range": {
         "startLine": 569,
         "startChar": 31,
@@ -121,6 +205,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72953267_0423f41f",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Good point, that\u0027s a good reason to do it late in Turboshaft in any case (i.e., here.)",
+      "parentUuid": "f08d208b_903eb848",
+      "range": {
+        "startLine": 1048,
+        "startChar": 28,
+        "endLine": 1048,
+        "endChar": 34
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f2cf2eb_8a4c15e5",
@@ -134,6 +242,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "`wasm_call_parameters`? Yes, there is an 80 char line limit but it isn\u0027t that terrible. 😄",
+      "range": {
+        "startLine": 1307,
+        "startChar": 34,
+        "endLine": 1307,
+        "endChar": 39
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb47e7cb_20948d3a",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1307,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "fair 😄",
+      "parentUuid": "7f2cf2eb_8a4c15e5",
       "range": {
         "startLine": 1307,
         "startChar": 34,
@@ -167,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8de8b4_99e5f928",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f807b04_048e3531",
+      "range": {
+        "startLine": 1309,
+        "startChar": 0,
+        "endLine": 1310,
+        "endChar": 54
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8389177_2a818ec0",
@@ -180,6 +336,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "not",
+      "range": {
+        "startLine": 1314,
+        "startChar": 37,
+        "endLine": 1314,
+        "endChar": 39
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b249a0e0_507aa1db",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8389177_2a818ec0",
       "range": {
         "startLine": 1314,
         "startChar": 37,
@@ -213,6 +393,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d46623e_b655d136",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Ack \u0026 done",
+      "parentUuid": "237dae2e_042b1e8a",
+      "range": {
+        "startLine": 1318,
+        "startChar": 10,
+        "endLine": 1318,
+        "endChar": 19
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aebc316_430a7fb5",
@@ -236,6 +440,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf61669c_00e8cd10",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3904,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2aebc316_430a7fb5",
+      "range": {
+        "startLine": 3904,
+        "startChar": 36,
+        "endLine": 3904,
+        "endChar": 69
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c31b4b5e_04e154ca",
@@ -249,6 +477,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "`Then`? In which of the two cases? 😊\nMaybe \"For sharing call descriptors, the JSWasmCallParameters need to be moved to the CallOp which causes a lot of code churn (needs touching all `REDUCE(Call)`).\n\nWell, actually, there aren\u0027t many of them (2), so it wouldn\u0027t be all that bad. Still needs touching the operation etc. but that isn\u0027t a lot of work.",
+      "range": {
+        "startLine": 3907,
+        "startChar": 5,
+        "endLine": 3907,
+        "endChar": 9
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1512cd_46b50f0c",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c31b4b5e_04e154ca",
       "range": {
         "startLine": 3907,
         "startChar": 5,
@@ -284,6 +536,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "749efe55_e5902566",
+        "filename": "src/compiler/turboshaft/pipelines.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "I have thought again about my comment `Skip this phase if there were no JS-\u003eWasm calls` a couple lines above and replaced it instead with the plan you laid out:\n1. Keep a separate phase before the `MachineLoweringPhase` until the MVP is feature-complete and cleaned-up (but before Finching or shipping it).\n2. Then integrate my reducer into the `MachineLoweringPhase` probably before `DataViewLoweringReducer` (since we have `DataViewLoweringReducer` in the `WasmGraphBuilderBase` as well, that seems like the right place).\n3. Not worry about the performance of always running the reducer: If we have inlineable Wasm functions, running a separate phase is more expensive, and if we don\u0027t inline it\u0027s just an additional load+conditional branch per CallOp during Turbofan compilation, which is not worth the hassle. (Except if we add a lot more reducers that apply to JS operations as well, but I don\u0027t think that will be the case.)",
+      "parentUuid": "1cbed0b0_abab46e6",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 40
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5dee7965_9f5908fc",
         "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
         "patchSetId": 8
@@ -295,6 +571,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "I don\u0027t think this is semantically correct. We do not want to set the flag in the inlined case (the flag is meant to be only set on wasm frames).",
+      "range": {
+        "startLine": 55,
+        "startChar": 53,
+        "endLine": 55,
+        "endChar": 68
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6452f956_3c7eab9d",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dee7965_9f5908fc",
       "range": {
         "startLine": 55,
         "startChar": 53,
@@ -328,6 +628,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e15fbe6_e401918e",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8192a10c_a8e4e782",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 15
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fd04fa2_c5718bb5",
@@ -341,6 +665,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "I think it\u0027s easier to read if you put this in the beginning:\n```\nif (!descriptor-\u003ejs_wasm_call_parameters) {\n  return Next::ReduceCall(callee, frame_state, arguments, descriptor,\n                          effects);\n}\n```",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 37
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98ce23aa_040ca60c",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Good idea! Done.",
+      "parentUuid": "5fd04fa2_c5718bb5",
       "range": {
         "startLine": 80,
         "startChar": 4,
@@ -374,6 +722,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d112eada_aae37c83",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Sure, kept both in the same `compiler::turboshaft` namespace and added a bunch of `wasm::` prefixes (and few `using wasm::...` declarations for frequently repeated things or where there\u0027s no danger of confusing it with JS things).",
+      "parentUuid": "cd79d0ca_81faa1ae",
+      "range": {
+        "startLine": 93,
+        "startChar": 10,
+        "endLine": 93,
+        "endChar": 28
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c8712b2_32d26b7a",
@@ -387,6 +759,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "Can we please just bail out in that case? Shared-everything is a super-complicated proposal and the whole `trusted_instance_data` handling for it will be challenging. It is unclear who\u0027ll be responsible for then providing the necessary testing for mixing wasm-into-js-inlining with shared-everything, so there is a big risk that this will create issues in the future.\n\nThere is also no need to support this right now, shared-everything isn\u0027t going to be shipped within the next 12 months (I guess).",
+      "range": {
+        "startLine": 122,
+        "startChar": 28,
+        "endLine": 122,
+        "endChar": 47
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc536560_a9da5591",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Yes, sure. Removed the field, bail out in `TryInlineWasmCall` now.",
+      "parentUuid": "6c8712b2_32d26b7a",
       "range": {
         "startLine": 122,
         "startChar": 28,
@@ -420,6 +816,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf74439b_439ba6e3",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07f51079_7b8bd171",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 69
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6bc5e77_ef90732f",
@@ -433,6 +853,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "How many test cases do you have for this? #passiveAggressiveQuestion 😊\nMaybe you\u0027d want to add a `Bailout` here if we have non-parameter-locals and add this feature later.",
+      "range": {
+        "startLine": 144,
+        "startChar": 7,
+        "endLine": 144,
+        "endChar": 43
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ad5b057_3f764ef5",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Haha, well, there was one test with a non-parameter local (`localTee` below), but I see your point :)\nI will leave it in, since the code required for non-parameter locals is really quite minimal, but added another test with more than one local and some swaps between locals.",
+      "parentUuid": "b6bc5e77_ef90732f",
       "range": {
         "startLine": 144,
         "startChar": 7,
@@ -468,6 +912,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "005665b7_98150b86",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Thanks for the pointer, will leave this open and address in a follow-up CL/part of the implementation.",
+      "parentUuid": "e88cab15_24aa1672",
+      "range": {
+        "startLine": 169,
+        "startChar": 35,
+        "endLine": 169,
+        "endChar": 46
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "36d75e62_9801a5e8",
         "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
         "patchSetId": 8
@@ -479,6 +947,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "I\u0027m pretty sure that most if not all of the `I64` instructions you added are broken. When not on 64 bits, you\u0027ll need to run the `turboshaft::Int64LoweringReducer`.\n\nAs you\u0027re on an experimental flag, this doesn\u0027t have to happen on this change but that\u0027s a bit of the risk of adding dozens of instructions and testing like 5 of them.",
+      "range": {
+        "startLine": 239,
+        "startChar": 15,
+        "endLine": 239,
+        "endChar": 45
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f98c72d2_f9f204ab",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Oh, you are right, and constant folding may eliminate the i64 operations in many simple test cases so it\u0027s not immediately obvious. Just adding the `Int64LoweringReducer` is also not possible to support them, since it makes some assumptions about `Parameter` and `Return` ops and assumes a (non-existent in the Wasm-in-JS inlining case) `wasm_sig`.\n\nAll in all, I have to agree that this is a bit too risky and would require a whole bunch of more changes to land right now. So I will remove i64 unary/binary ops from this CL, and only gradually extend later.\n\nI also extended the test with all unary and binary ops that are currently supported by the inliner (which required a bit of a rewrite/testing framework, otherwise it would have been a lot of repetition).",
+      "parentUuid": "36d75e62_9801a5e8",
       "range": {
         "startLine": 239,
         "startChar": 15,
@@ -512,6 +1004,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5902093_ab35d828",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "My reasoning for the `UNREACHABLE` was that we should trip over it when adding a new (in this case: unary) op and forget to handle it here (in the spirit of \"make assumptions explicit\", \"constrain the valid execution paths maximally\", and \"make all handled enum cases explicit\") but I agree that this shouldn\u0027t risk stability. So instead, I am going with a three pronged approach:\n- ops that we support\n- ops that we don\u0027t support, but not a bug: `Bailout()`\n- default (ops that we \"forgot to handle\"), a bug, but should not affect stability: `DHCECK(false); Bailout()`",
+      "parentUuid": "7f25ed09_74eb02fd",
+      "range": {
+        "startLine": 324,
+        "startChar": 8,
+        "endLine": 324,
+        "endChar": 22
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "351841ee_1eeeb016",
@@ -525,6 +1041,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "Same as above.",
+      "range": {
+        "startLine": 529,
+        "startChar": 8,
+        "endLine": 529,
+        "endChar": 19
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8555c036_49764cbb",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "351841ee_1eeeb016",
       "range": {
         "startLine": 529,
         "startChar": 8,
@@ -558,6 +1098,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "751752a4_c012488c",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Changed to loading `__ HeapConstant(isolate-\u003efactory()-\u003eundefined_value())`.\n\nRegarding testing the result of the inlining: all test cases `assertEqual(unoptimizedResult, inlinedResult)`, so basically a differential oracle. I think that\u0027s good enough, but feel free to reopen if I misunderstood something.",
+      "parentUuid": "66f27a4c_29830b4f",
+      "range": {
+        "startLine": 625,
+        "startChar": 6,
+        "endLine": 626,
+        "endChar": 65
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c282da96_74b1f5e3",
@@ -571,6 +1135,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "Nit: I\u0027m not a fan of such comments. They tend to get outdated and then cause more confusion than without having the comment.",
+      "range": {
+        "startLine": 1110,
+        "startChar": 20,
+        "endLine": 1110,
+        "endChar": 51
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6260ead0_7dcea137",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done (removed).",
+      "parentUuid": "c282da96_74b1f5e3",
       "range": {
         "startLine": 1110,
         "startChar": 20,
@@ -604,6 +1192,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdddddef_e6ecd80a",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88bdfda1_85654ba0",
+      "range": {
+        "startLine": 1120,
+        "startChar": 2,
+        "endLine": 1120,
+        "endChar": 39
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d5f1747_781669eb",
@@ -617,6 +1229,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "As said above, I\u0027d like to get rid of any sharedness here.",
+      "range": {
+        "startLine": 1147,
+        "startChar": 56,
+        "endLine": 1147,
+        "endChar": 73
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f8ae37_20fc6ec6",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d5f1747_781669eb",
       "range": {
         "startLine": 1147,
         "startChar": 56,
@@ -650,6 +1286,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "27eed15b_a87aa49f",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Done (removed).",
+      "parentUuid": "7c3c3fba_ef2d609f",
+      "range": {
+        "startLine": 1395,
+        "startChar": 67,
+        "endLine": 1395,
+        "endChar": 79
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8968975_cb1cc9a8",
@@ -663,6 +1323,24 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "So, what was the reason for this change again?",
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc584648_1bcd6abb",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2908,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "`DecoderError()` in its body has `V8_ASSUME(ValidationTag::validate)` to help the compiler optimize (and since it\u0027s an unchecked assumption, V8_ASSUME additionally DCHECKs that it holds). Here, we call `DecodeError` in a context where `validate` could be false. I am not entirely sure why we didn\u0027t trip over this beforehand, but this is the correct thing to do and it comes up with bailouts in the `WasmInJsInliningInterface` now.",
+      "parentUuid": "b8968975_cb1cc9a8",
       "revId": "e02d3514e80994a24035956464c0741317093544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -690,6 +1368,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a9ebae_cc56df31",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Correct, rephrased the comment: If we want to support it, we first need to support this in the JS-to-Wasm wrapper inlining. I would rather first port the wrapper inlining to Turboshaft and then implement it, so it\u0027s quite far out (doesn\u0027t make much sense to spend time on features in the TurboFan wrapper inlining).",
+      "parentUuid": "ea715ed5_c117ee19",
+      "range": {
+        "startLine": 76,
+        "startChar": 33,
+        "endLine": 76,
+        "endChar": 49
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0022391f_51274dad",
@@ -707,6 +1409,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64cb299a_bcef8ad1",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0022391f_51274dad",
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4879922c_810cdfc4",
@@ -720,6 +1440,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "It might be better to return it or not use the error at all. I\u0027ve learnt in the past that printing errors creates confusion because someone looks at the output and thinks \"Oh, `RuntimeError: unreachable`, seems like the test has failed!\"",
+      "range": {
+        "startLine": 143,
+        "startChar": 6,
+        "endLine": 143,
+        "endChar": 20
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "035ca204_41031b5d",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Good point, ack and done.",
+      "parentUuid": "4879922c_810cdfc4",
       "range": {
         "startLine": 143,
         "startChar": 6,
@@ -753,6 +1497,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e31bf38_3a546d77",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.out",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Ack and done: Use the same format as the TurboFan implementation (see also comment below).",
+      "parentUuid": "613b95c2_b540bf98",
+      "range": {
+        "startLine": 3,
+        "startChar": 35,
+        "endLine": 3,
+        "endChar": 37
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f6649c2_9c415f97",
@@ -766,6 +1534,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "Nit: The `successfully` seems redundant.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 12
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8ea34b0_f42dd463",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.out",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Ack and done: Use the same format as the TurboFan implementation (see also comment below).",
+      "parentUuid": "4f6649c2_9c415f97",
       "range": {
         "startLine": 6,
         "startChar": 0,
@@ -799,6 +1591,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6475d785_842c29c1",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.out",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "Ack and done: Use the same format as the TurboFan implementation (see also comment below).",
+      "parentUuid": "decfe50b_c0d5aa6f",
+      "range": {
+        "startLine": 9,
+        "startChar": 35,
+        "endLine": 9,
+        "endChar": 37
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cfa70f7_b40b43a5",
@@ -812,6 +1628,30 @@
       "writtenOn": "2024-08-30T10:24:39Z",
       "side": 1,
       "message": "Nit: But we \"considered\" it for inlining, otherwise we wouldn\u0027t have printed this line? 😊\nShould we just treat this as \"Cannot inline [...] (no feedback vector)\"?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 15
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58905a62_8aacf0c2",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.out",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-05T17:48:09Z",
+      "side": 1,
+      "message": "This is actually output from the existing JS-to-Wasm wrapper inlining in Turbofan. I assume it is written this way to be consistent with JavaScript inlining and the positive case where inlining works out:\n```\nConsidering wasm function [24] anyConvertExternConvertAny of module 0x56523c722ac8 for inlining\n- inlining\n```\n\nI don\u0027t terribly like the format either, but it\u0027s really just bikeshedding and for consistency with the existing tracing output, I use the same format now here. The wrapper inlining is still in Turbofan, which is yet another reason to use this format.",
+      "parentUuid": "7cfa70f7_b40b43a5",
       "range": {
         "startLine": 27,
         "startChar": 0,
