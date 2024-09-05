@@ -425,8 +425,8 @@ JSInliner::WasmInlineResult JSInliner::TryWasmInlining(
   const int fct_index = wasm_call_params.function_index();
   TRACE("Considering wasm function ["
         << fct_index << "] "
-        << WasmFunctionNameForTrace(native_module, fct_index) << " of module "
-        << wasm_call_params.module() << " for inlining");
+        << WasmFunctionNameForTrace(native_module, fct_index)
+        << " for inlining");
 
   if (native_module->module() != wasm_module_) {
     // Inlining of multiple wasm modules into the same JS function is not
@@ -502,10 +502,10 @@ Reduction JSInliner::ReduceJSWasmCall(Node* node) {
     subgraph_min_node_id = graph()->NodeCount();
 
     bool set_in_wasm_flag = !inline_result.can_inline_body;
-    BuildInlinedJSToWasmWrapper(
-        graph()->zone(), jsgraph(), sig, wasm_call_params.module(), isolate(),
-        source_positions_, wasm::WasmEnabledFeatures::FromFlags(),
-        continuation_frame_state, set_in_wasm_flag);
+    BuildInlinedJSToWasmWrapper(graph()->zone(), jsgraph(), sig, isolate(),
+                                source_positions_,
+                                wasm::WasmEnabledFeatures::FromFlags(),
+                                continuation_frame_state, set_in_wasm_flag);
 
     // Extract the inlinee start/end nodes.
     wrapper_start_node = graph()->start();
