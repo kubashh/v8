@@ -328,7 +328,6 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitJSFunction(
 #ifdef V8_ENABLE_LEAPTIERING
   JSDispatchHandle handle = js_function->Relaxed_ReadField<JSDispatchHandle>(
       JSFunction::kDispatchHandleOffset);
-  if (GetProcessWideJSDispatchTable()->HasCode(handle)) {
     Tagged<HeapObject> obj = GetProcessWideJSDispatchTable()->GetCode(handle);
     // TODO(saelo): maybe factor out common code with VisitIndirectPointer
     // into a helper routine?
@@ -337,7 +336,6 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitJSFunction(
     if (target_worklist) {
       MarkObject(js_function, obj, target_worklist.value());
     }
-  }
 #else
 #ifdef V8_ENABLE_SANDBOX
   VisitIndirectPointer(js_function,

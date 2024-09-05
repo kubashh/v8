@@ -809,14 +809,16 @@ void FeedbackCell::FeedbackCellVerify(Isolate* isolate) {
   CHECK(IsUndefined(v) || IsClosureFeedbackCellArray(v) || IsFeedbackVector(v));
 
 #ifdef V8_ENABLE_LEAPTIERING
-  JSDispatchTable* jdt = GetProcessWideJSDispatchTable();
   JSDispatchHandle handle = dispatch_handle();
-  if (!jdt->HasCode(handle)) return;
-  Tagged<Code> code = jdt->GetCode(handle);
-  CodeKind kind = code->kind();
-  CHECK(kind == CodeKind::FOR_TESTING || kind == CodeKind::BUILTIN ||
-        kind == CodeKind::INTERPRETED_FUNCTION || kind == CodeKind::BASELINE ||
-        kind == CodeKind::MAGLEV || kind == CodeKind::TURBOFAN);
+  if (handle != kNullJSDispatchHandle) {
+    JSDispatchTable* jdt = GetProcessWideJSDispatchTable();
+    Tagged<Code> code = jdt->GetCode(handle);
+    CodeKind kind = code->kind();
+    CHECK(kind == CodeKind::FOR_TESTING || kind == CodeKind::BUILTIN ||
+          kind == CodeKind::INTERPRETED_FUNCTION ||
+          kind == CodeKind::BASELINE || kind == CodeKind::MAGLEV ||
+          kind == CodeKind::TURBOFAN);
+  }
 #endif
 }
 
@@ -1266,7 +1268,6 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
   uint16_t parameter_count = jdt->GetParameterCount(handle);
   CHECK_EQ(parameter_count,
            shared(isolate)->internal_formal_parameter_count_with_receiver());
-  CHECK(jdt->HasCode(handle));
   Tagged<Code> code_from_table = jdt->GetCode(handle);
   CHECK(code_from_table->parameter_count() == kDontAdaptArgumentsSentinel ||
         code_from_table->parameter_count() == parameter_count);

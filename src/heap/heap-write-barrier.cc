@@ -145,10 +145,8 @@ void WriteBarrier::MarkingSlow(Tagged<HeapObject> host,
   // table entries are updated after compacting GC.
   static_assert(!JSDispatchTable::kSupportsCompaction);
 
-  if (GetProcessWideJSDispatchTable()->HasCode(handle)) {
     Tagged<Code> value = GetProcessWideJSDispatchTable()->GetCode(handle);
     marking_barrier->MarkValue(host, value);
-  }
 #else
   UNREACHABLE();
 #endif
