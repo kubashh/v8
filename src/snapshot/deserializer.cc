@@ -64,7 +64,11 @@ class SlotAccessorForHeapObject {
   int Write(Tagged<MaybeObject> value, int slot_offset = 0) {
     MaybeObjectSlot current_slot = slot() + slot_offset;
     current_slot.Relaxed_Store(value);
-    CombinedWriteBarrier(*object_, current_slot, value, UPDATE_WRITE_BARRIER);
+    WriteBarrierMode mode = UPDATE_WRITE_BARRIER;
+    if (FastInReadOnlySpaceOrSmallSmi(static_cast<Tagged_t>(value.ptr()))) {
+      mode = SKIP_WRITE_BARRIER;
+    }
+    CombinedWriteBarrier(*object_, current_slot, value, mode);
     return 1;
   }
   int Write(Tagged<HeapObject> value, HeapObjectReferenceType ref_type,
