@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34c1c9f5_44a0a893",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5065,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-06T18:12:54Z",
+      "side": 0,
+      "message": "I broke this in https://chromium-review.googlesource.com/c/v8/v8/+/4659512\n\nWhen the heap is set up via parameters we are supposed to be configured. After all, we know  initial heap and old gen limit.\n\nCan you instead refactor to fix the bug? Otherwise, I will do that next week.",
+      "range": {
+        "startLine": 5065,
+        "startChar": 6,
+        "endLine": 5065,
+        "endChar": 52
+      },
+      "revId": "81718098d4deb6d8cfce8cc226670101ed5487ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
