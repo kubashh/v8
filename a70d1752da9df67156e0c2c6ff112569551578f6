@@ -98,6 +98,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5aca5886_c05ce303",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-09-06T19:49:39Z",
+      "side": 1,
+      "message": "I am working on a doc at https://docs.google.com/document/d/1T06UcebQmZZs6qpe5cV4bZnemRaRD8u1fItVVoeUavE/edit?usp\u003dsharing.\n\nIt is woefully incomplete -- I need to link examples of all the problems seen, and I need to actually flesh out the remaining portions below that beyond just bullets -- but it\u0027s representative.",
+      "parentUuid": "e8a34794_e332cb20",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8c021fc9_6b3aaa4f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
