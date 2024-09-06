@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "defca458_976b07dc",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-06T09:38:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60df3e4c_45a9090d",
+      "range": {
+        "startLine": 813,
+        "startChar": 16,
+        "endLine": 813,
+        "endChar": 37
+      },
+      "revId": "ac7a235bcbd5b01cd467549d941f75b3f31311a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e71adf9b_7d485e34",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-09-06T08:16:10Z",
       "side": 1,
       "message": "nit: formatting",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 10
+      },
+      "revId": "ac7a235bcbd5b01cd467549d941f75b3f31311a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad862c6_7a451443",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-06T09:38:05Z",
+      "side": 1,
+      "message": "Ah, weird that `git cl format` didn\u0027t do that. I\u0027ve also shifted some more code around now to make it more readable (hopefully)",
+      "parentUuid": "e71adf9b_7d485e34",
       "range": {
         "startLine": 148,
         "startChar": 4,
