@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "121a9360_7d29874b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-06T07:03:40Z",
+      "side": 1,
+      "message": "\u003e Heh, you\u0027re the second person to ask about this. Maybe I should use a different tag so people don\u0027t get concerned.\n\u003e \n\nYes, I think that would make sense.\n\n\u003e Chrome ATLs set an OKR to improve build speed, so I spent a while looking into whether resurrecting jumbo would be an effective way of doing that and what it would take to do so. That work hasn\u0027t reached a conclusion (I have some data, but there\u0027s uncertainty about whether we want to prioritize wall-clock or CPU-seconds improvements), but along the way I found several hundred CLs\u0027 worth of cleanups I thought might be worth landing regardless. I\u0027m in the process of landing them, and I\u0027m tagging them all with [jumbo] just so I can find them again with a search query, because I think I want to characterize them as part of writing up what this work entailed.\n\u003e \n\nEven for cleanups we should have ideas that are tracked. You are replacing an existing style with a new style; both being rather subjective if there\u0027s no actual other reason this is done. Leszek already asked around what others think and so on. This binds time and people.\n\nWe do encourage code cleanups and refactorings but they should have a dedicated reason (e.g. printf vs streaming; uniform usage of flags for tracing) but they should come with a short description and are ideally scoped in a way that they have an end.",
+      "parentUuid": "5022340c_5fff4373",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8c021fc9_6b3aaa4f",
