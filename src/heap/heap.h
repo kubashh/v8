@@ -2106,7 +2106,6 @@ class Heap final {
 
   size_t initial_max_old_generation_size_ = 0;
   size_t initial_max_old_generation_size_threshold_ = 0;
-  size_t initial_old_generation_size_ = 0;
 
   // Before the first full GC the old generation allocation limit is considered
   // to be *not* configured (unless initial limits were provided by the
