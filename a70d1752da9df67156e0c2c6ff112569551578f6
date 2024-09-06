@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e8a34794_e332cb20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-09-06T15:48:37Z",
+      "side": 1,
+      "message": "\u003e\u003e Maybe I should use a different tag so people don\u0027t get concerned.\n\u003e\n\u003e Yes, I think that would make sense.\n\nI filed crbug.com/364987728 that I can assign all the miscellaneous one-offs to. For now I plan to keep the tag since there are a number of CLs that have landed that use only that, but if people are still confused or concerned I\u0027ll remove it and just use the bug.\n\n\u003e You are replacing an existing style with a new style; both being rather subjective if there\u0027s no actual other reason this is done.\n\nOK. I didn\u0027t perceive any coherent/consistent existing style when touching the current code, so picking anything at all seemed better. But it definitely seems like this work warrants a bug + doc, since it\u0027s not intended to just be a style switch due to taste.\n\n\u003e Leszek already asked around what others think and so on. This binds time and people.\n\nYes, I\u0027m sorry for the time cost. I did not expect anyone else to get looped in yet -- I was trying to reach out to Leszek early and hammer out a mutually-agreeable shape before formalizing things more. There\u0027s a chicken-and-egg problem in how detailed of a proposal to create and when to loop in people. I think I missed the mark on walking that line here and I apologize for consuming y\u0027all\u0027s time excessively.\n\nI\u0027ll go write a more formal doc.",
+      "parentUuid": "121a9360_7d29874b",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8c021fc9_6b3aaa4f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
@@ -102,6 +126,23 @@
       "writtenOn": "2024-09-05T16:47:52Z",
       "side": 1,
       "message": "leszeks: Ping",
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "821137b5_2796f9df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-09-06T15:48:37Z",
+      "side": 1,
+      "message": "Marked WIP pending formal proposal writeup.",
       "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
