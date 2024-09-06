@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aade0f0_4ab3a104",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-06T09:14:46Z",
+      "side": 1,
+      "message": "LGTM, thanks!\nNote: I didn\u0027t get a notification/email about the review request for this CL, just for the other one. I wonder why.",
+      "revId": "27499674cdb1de636a314d23d36f8172da740ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
