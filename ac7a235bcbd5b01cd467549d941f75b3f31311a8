@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b432b12_76c7992d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-06T08:16:10Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "ac7a235bcbd5b01cd467549d941f75b3f31311a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60df3e4c_45a9090d",
+        "filename": "src/diagnostics/objects-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-06T08:16:10Z",
+      "side": 1,
+      "message": "nit: Slightly nicer with early return?",
+      "range": {
+        "startLine": 813,
+        "startChar": 16,
+        "endLine": 813,
+        "endChar": 37
+      },
+      "revId": "ac7a235bcbd5b01cd467549d941f75b3f31311a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e71adf9b_7d485e34",
+        "filename": "src/heap/heap-write-barrier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-06T08:16:10Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 148,
+        "endChar": 10
+      },
+      "revId": "ac7a235bcbd5b01cd467549d941f75b3f31311a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
