@@ -16,6 +16,24 @@
       "message": "LGTM, thanks!\nNote: I didn\u0027t get a notification/email about the review request for this CL, just for the other one. I wonder why.",
       "revId": "27499674cdb1de636a314d23d36f8172da740ca4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e8434d_a6c4ddd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-06T09:29:11Z",
+      "side": 1,
+      "message": "Hm, I forgot to add you initially, so I added you on PS2. I would have expected that that also sends out a mail. I\u0027ll try to remember to send an explicit \u0027PTAL\u0027 next time.",
+      "parentUuid": "5aade0f0_4ab3a104",
+      "revId": "27499674cdb1de636a314d23d36f8172da740ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
