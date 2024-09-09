@@ -182,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5ef9176_222c2a61",
+        "filename": "src/compiler/pipeline-data-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "More arbitrary, yes.\nHowever, the multi-module-use-cases are rare so far. It does work with multiple instantiations afaik as both instantiations would have the same `wasm::WasmModule` object, so that\u0027s already ahead of the wasm-into-wasm inlining.\nI\u0027d rather see us implement cross-module / cross-instantiation inlining for the wasm-inlining than for the Wasm-into-JS inlining as this is much more of a corner case (and much less something that developers would expect the engine to optimize for).",
+      "parentUuid": "c0cfb952_847ac4af",
+      "range": {
+        "startLine": 569,
+        "startChar": 31,
+        "endLine": 569,
+        "endChar": 78
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f08d208b_903eb848",
@@ -560,6 +584,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8c40706_93bc2e42",
+        "filename": "src/compiler/turboshaft/pipelines.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Ah, actually I remember one difference here:\nFor Turbofan, if we inline wasm functions, we run a bunch of extra optimizations (the `WasmGCOptimizationPhase`) and some of that stuff is actually relevant (e.g. eliminating redundant casts and the `extern.internalize(extern.externalize(...))` that would be a typical pattern if you chain two wasm calls (one externalizes the return and the other internalizes the argument.)\n\nSo you might want to do the same later on. (OTOH, we can still run it in the regular phase and then conditionally run the wasm optimizations later on, they anyways need their own phase in Turboshaft.)",
+      "parentUuid": "749efe55_e5902566",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 40
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5dee7965_9f5908fc",
         "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
         "patchSetId": 8
@@ -887,6 +935,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93b9609b_c161bd72",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "5ad5b057_3f764ef5",
+      "range": {
+        "startLine": 144,
+        "startChar": 7,
+        "endLine": 144,
+        "endChar": 43
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e88cab15_24aa1672",
@@ -983,6 +1055,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d82e409_f414c73a",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "\u003e and constant folding may eliminate the i64 operations in many simple test cases so it\u0027s not immediately obvious.\n\nYes, but even `Word64Constant` should fail without the lowering. 😊",
+      "parentUuid": "f98c72d2_f9f204ab",
+      "range": {
+        "startLine": 239,
+        "startChar": 15,
+        "endLine": 239,
+        "endChar": 45
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7f25ed09_74eb02fd",
         "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
         "patchSetId": 8
@@ -1018,6 +1114,30 @@
       "side": 1,
       "message": "My reasoning for the `UNREACHABLE` was that we should trip over it when adding a new (in this case: unary) op and forget to handle it here (in the spirit of \"make assumptions explicit\", \"constrain the valid execution paths maximally\", and \"make all handled enum cases explicit\") but I agree that this shouldn\u0027t risk stability. So instead, I am going with a three pronged approach:\n- ops that we support\n- ops that we don\u0027t support, but not a bug: `Bailout()`\n- default (ops that we \"forgot to handle\"), a bug, but should not affect stability: `DHCECK(false); Bailout()`",
       "parentUuid": "7f25ed09_74eb02fd",
+      "range": {
+        "startLine": 324,
+        "startChar": 8,
+        "endLine": 324,
+        "endChar": 22
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c35ec51_2fbd354e",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Sounds good!",
+      "parentUuid": "f5902093_ab35d828",
       "range": {
         "startLine": 324,
         "startChar": 8,
@@ -1112,6 +1232,30 @@
       "side": 1,
       "message": "Changed to loading `__ HeapConstant(isolate-\u003efactory()-\u003eundefined_value())`.\n\nRegarding testing the result of the inlining: all test cases `assertEqual(unoptimizedResult, inlinedResult)`, so basically a differential oracle. I think that\u0027s good enough, but feel free to reopen if I misunderstood something.",
       "parentUuid": "66f27a4c_29830b4f",
+      "range": {
+        "startLine": 625,
+        "startChar": 6,
+        "endLine": 626,
+        "endChar": 65
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0ca80f7_9fc7dc1f",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Fair, I missed the `assertEquals`. (I\u0027ll blame it on the CL size! 😜)",
+      "parentUuid": "751752a4_c012488c",
       "range": {
         "startLine": 625,
         "startChar": 6,
@@ -1341,6 +1485,24 @@
       "side": 1,
       "message": "`DecoderError()` in its body has `V8_ASSUME(ValidationTag::validate)` to help the compiler optimize (and since it\u0027s an unchecked assumption, V8_ASSUME additionally DCHECKs that it holds). Here, we call `DecodeError` in a context where `validate` could be false. I am not entirely sure why we didn\u0027t trip over this beforehand, but this is the correct thing to do and it comes up with bailouts in the `WasmInJsInliningInterface` now.",
       "parentUuid": "b8968975_cb1cc9a8",
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c085b774_a208ed7e",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2908,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Ah, I think I got it, with bailouts, we don\u0027t reach the end but we still don\u0027t want to trigger a `DecodeError` here, right?",
+      "parentUuid": "bc584648_1bcd6abb",
       "revId": "e02d3514e80994a24035956464c0741317093544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1652,6 +1814,30 @@
       "side": 1,
       "message": "This is actually output from the existing JS-to-Wasm wrapper inlining in Turbofan. I assume it is written this way to be consistent with JavaScript inlining and the positive case where inlining works out:\n```\nConsidering wasm function [24] anyConvertExternConvertAny of module 0x56523c722ac8 for inlining\n- inlining\n```\n\nI don\u0027t terribly like the format either, but it\u0027s really just bikeshedding and for consistency with the existing tracing output, I use the same format now here. The wrapper inlining is still in Turbofan, which is yet another reason to use this format.",
       "parentUuid": "7cfa70f7_b40b43a5",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 15
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fceb3a8_29e33df5",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.out",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Consistency makes sense, I don\u0027t like the format too much either, but I guess, I also wanted to make it consistent with the JS inlining. 😊",
+      "parentUuid": "58905a62_8aacf0c2",
       "range": {
         "startLine": 27,
         "startChar": 0,

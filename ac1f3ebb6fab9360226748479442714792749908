@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c68a95_cda8afbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "LGTM once tests pass. 😊",
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68252d0_673a2a37",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Thanks. Also note that we can\u0027t inline asm.js because it would require different handling in frames.cc as it would need to create a \"JS-looking\" stack frame for a wasm function. (There is a test case somewhere I think.)",
+      "range": {
+        "startLine": 312,
+        "startChar": 6,
+        "endLine": 312,
+        "endChar": 16
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e557381_23221ca8",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Nit: `support`",
+      "range": {
+        "startLine": 457,
+        "startChar": 28,
+        "endLine": 457,
+        "endChar": 36
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3934152_9cc5ca52",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "I\u0027d hope that\n1) People don\u0027t use a generic wrapper mechanism with `...` (as that would also prevent inlining as everything goes through the same call).\n2) compilers generate the arguments explicitly since wasm signatures are static, so it should be very easy to generate the argument list.)\n\nSo, if these assumptions hold true, we shouldn\u0027t need this. (But still a good idea to keep the todo for now.)",
+      "range": {
+        "startLine": 32,
+        "startChar": 7,
+        "endLine": 33,
+        "endChar": 48
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0079b837_12d9f963",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Note that this can be optimized away (as mentioned in another comment).\nAn idea using `kSi_r_i`:\n```\nkExprLocalGet, 0,\nkExprRefI31,\nkExprExternConvertAny\n```\n\nand `kSig_i_r` for the other way:\n```\nkExprLocalGet, 0,\nkExprAnyConvertExtern,\nkExprI31GetS,\n```\n(I didn\u0027t check if you have the ref.i31 stuff in your CL, so this could also be a nice test case for a follow-up CL.)\n\nAnd yes, there could still be some optimizations here, but I don\u0027t think we optimize anything there (other than very generic optimizations).",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 35
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64b25e97_151d8c45",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "This isn\u0027t needed for feature parity, it\u0027s only needed to test the `array.len` below, so your TODO is slightly misleading. 😊",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 24
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47de471c_672a0374",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Should this be `kWasmEqRef` or do I misunderstand the comment?",
+      "range": {
+        "startLine": 212,
+        "startChar": 39,
+        "endLine": 212,
+        "endChar": 53
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6dde5fd_0bb5f3dd",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "Oh, I never considered this. Independently, it\u0027s probably easiest to add the lowering to support the operations and ignore the fact that wrappers won\u0027t work well on 32 bits as we don\u0027t care too much about missed optimizations on 32 bit platforms.",
+      "range": {
+        "startLine": 216,
+        "startChar": 18,
+        "endLine": 216,
+        "endChar": 69
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451932ff_62720ce4",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "This would also require inlining into a try-block which in Turbofan would\u0027ve been a pain (not sure about Turboshaft in that aspect).",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 248,
+        "endChar": 3
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "294304ad_cd11dd11",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "You can slightly reduce the amount of eval and magic by doing\n\n\n```suggestion\n  const jsFunction \u003d eval(jsFunctionSrc);\n```",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 40
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b15914ce_4e03ff67",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-09T09:22:51Z",
+      "side": 1,
+      "message": "I think these asserts can produce all kinds of issues in various build modes (e.g. the one that randomly deopts functions).\nYou should probably try to use the helpers like `assertOptimized(jsFunction)` that hides most of that complexity.",
+      "range": {
+        "startLine": 273,
+        "startChar": 2,
+        "endLine": 273,
+        "endChar": 155
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
