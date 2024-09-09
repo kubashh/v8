@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a882e190_df037182",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "\u003e or please sign the CLA with this account too\n\nAdded \u0027me@shqld.dev\u0027 to my google account and sign the CLA again, so I think this is resolved.",
+      "parentUuid": "0917fd43_3187f3c0",
+      "range": {
+        "startLine": 2,
+        "startChar": 26,
+        "endLine": 2,
+        "endChar": 38
+      },
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bad6e5c7_9c02d81b",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-09-09T09:10:55Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 4,
+        "startChar": 26,
+        "endLine": 4,
+        "endChar": 38
+      },
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1640f9dc_c80645bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bad6e5c7_9c02d81b",
       "range": {
         "startLine": 4,
         "startChar": 26,
@@ -81,6 +129,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "720e7374_c4c39d20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Thank you for your review! I\u0027ve made the changes, could you take another look?",
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dba008e9_6cbd6096",
@@ -94,6 +159,30 @@
       "writtenOn": "2024-09-09T09:10:55Z",
       "side": 1,
       "message": "1) it seems that we tried to keep this list ordered alphabetically up to some point... please add your name where it should be alphabetically.\n2) please use your `shomiyamoto.dev@gmail.com` account which signed the CLA or please sign the CLA with this account too.",
+      "range": {
+        "startLine": 327,
+        "startChar": 14,
+        "endLine": 327,
+        "endChar": 26
+      },
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3fdcc1e_ad7209de",
+        "filename": "AUTHORS",
+        "patchSetId": 2
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dba008e9_6cbd6096",
       "range": {
         "startLine": 327,
         "startChar": 14,
@@ -121,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd103a8_d08f27c0",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1eefd428_a527f88a",
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34365005_f3575c36",
@@ -134,6 +241,30 @@
       "writtenOn": "2024-09-09T09:10:55Z",
       "side": 1,
       "message": "Please change this to `DCHECK_LE(current_index_, part_length_);` to include both values into the error message if the DCHECK fails.",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 42
+      },
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c553762f_2a7487e3",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "34365005_f3575c36",
       "range": {
         "startLine": 212,
         "startChar": 4,
@@ -167,6 +298,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8637362_f60f2a0b",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d3fcf547_99116445",
+      "range": {
+        "startLine": 219,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 10
+      },
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83c2824c_edbb9931",
@@ -180,6 +335,30 @@
       "writtenOn": "2024-09-09T09:10:55Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 294,
+        "startChar": 6,
+        "endLine": 294,
+        "endChar": 12
+      },
+      "revId": "fab7ef817de65270414758a6a4c3c520d9d0d08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f5e3b0_a103f26c",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-09T14:31:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "83c2824c_edbb9931",
       "range": {
         "startLine": 294,
         "startChar": 6,
