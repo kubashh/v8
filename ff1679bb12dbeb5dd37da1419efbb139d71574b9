@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc454c44_cf16c937",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-09T14:58:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3442d2c9_e208ad3b",
+      "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "804a63ef_84f0a4f6",
@@ -83,6 +101,30 @@
       "writtenOn": "2024-09-09T09:20:25Z",
       "side": 1,
       "message": "alternatively, in the case where there is no fallthrough needed, we could make the jump table smaller by one and make one of the deferred commands a fallthrough. Maybe this could be a nice followup? Low priority though.",
+      "range": {
+        "startLine": 306,
+        "startChar": 10,
+        "endLine": 306,
+        "endChar": 29
+      },
+      "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "095fca9f_9bae5c34",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-09T14:58:23Z",
+      "side": 1,
+      "message": "Agreed. Added to the random ideas doc.",
+      "parentUuid": "804a63ef_84f0a4f6",
       "range": {
         "startLine": 306,
         "startChar": 10,
