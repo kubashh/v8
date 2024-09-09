@@ -1559,7 +1559,18 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ Assert(equal, AbortReason::kWrongFunctionContext);
       }
       static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+#ifdef V8_ENABLE_LEAPTIERING
+      size_t parameter_count_index;
+      if (instr->HasCallDescriptorFlag(CallDescriptor::kHasExceptionHandler)) {
+        parameter_count_index = instr->InputCount() - 2;
+      } else {
+        parameter_count_index = instr->InputCount() - 1;
+      }
+      uint32_t num_parameters = i.InputUint32(parameter_count_index);
+      __ CallJSFunction(func, num_parameters);
+#else
       __ CallJSFunction(func);
+#endif  // V8_ENABLE_LEAPTIERING
       frame_access_state()->ClearSPDelta();
       RecordCallPosition(instr);
       AssemblePlaceHolderForLazyDeopt(instr);

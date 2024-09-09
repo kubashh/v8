@@ -3185,6 +3185,9 @@ void MacroAssembler::CallCodeObject(Register code_object,
 
 void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
                                     JumpMode jump_mode) {
+  // TODO(saelo): can we avoid using this for JavaScript functions
+  // (kJSEntrypointTag) and instead use a variant that ensures that the caller
+  // and callee agree on the signature (i.e. parameter count)?
   LoadCodeInstructionStart(code_object, code_object, tag);
   switch (jump_mode) {
     case JumpMode::kJump:
@@ -3197,15 +3200,33 @@ void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
   }
 }
 
-void MacroAssembler::CallJSFunction(Register function_object) {
-  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
 #ifdef V8_ENABLE_LEAPTIERING
-  // TODO(40931165): mark this as UNREACHABLE. Callers should use a version that
-  // ensures parameter count and code entrypoint match.
+void MacroAssembler::CallJSFunction(Register function_object,
+                                    uint16_t actual_argument_count) {
+  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+  movl(r15, FieldOperand(function_object, JSFunction::kDispatchHandleOffset));
+  LoadParameterCountFromJSDispatchTable(rcx, r15);
+  Label ok;
+  cmpl(rcx, Immediate(actual_argument_count));
+  j(less_equal, &ok);
+  int3();
+  bind(&ok);
+  LoadCodeEntrypointFromJSDispatchTable(rcx, r15);
+  call(rcx);
+}
+
+void MacroAssembler::JumpJSFunction(Register function_object,
+                                    JumpMode jump_mode) {
+  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
   movl(rcx, FieldOperand(function_object, JSFunction::kDispatchHandleOffset));
   LoadCodeEntrypointFromJSDispatchTable(rcx, rcx);
-  call(rcx);
-#elif V8_ENABLE_SANDBOX
+  DCHECK_EQ(jump_mode, JumpMode::kJump);
+  jmp(rcx);
+}
+#else
+void MacroAssembler::CallJSFunction(Register function_object) {
+  static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+#ifdef V8_ENABLE_SANDBOX
   // When the sandbox is enabled, we can directly fetch the entrypoint pointer
   // from the code pointer table instead of going through the Code object. In
   // this way, we avoid one memory load on this code path.
@@ -3222,14 +3243,7 @@ void MacroAssembler::CallJSFunction(Register function_object) {
 void MacroAssembler::JumpJSFunction(Register function_object,
                                     JumpMode jump_mode) {
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
-#ifdef V8_ENABLE_LEAPTIERING
-  // TODO(40931165): mark this as UNREACHABLE. Callers should use a version that
-  // ensures parameter count and code entrypoint match.
-  movl(rcx, FieldOperand(function_object, JSFunction::kDispatchHandleOffset));
-  LoadCodeEntrypointFromJSDispatchTable(rcx, rcx);
-  DCHECK_EQ(jump_mode, JumpMode::kJump);
-  jmp(rcx);
-#elif V8_ENABLE_SANDBOX
+#ifdef V8_ENABLE_SANDBOX
   // When the sandbox is enabled, we can directly fetch the entrypoint pointer
   // from the code pointer table instead of going through the Code object. In
   // this way, we avoid one memory load on this code path.
@@ -3243,6 +3257,7 @@ void MacroAssembler::JumpJSFunction(Register function_object,
   JumpCodeObject(rcx, kJSEntrypointTag, jump_mode);
 #endif
 }
+#endif  // V8_ENABLE_LEAPTIERING
 
 void MacroAssembler::PextrdPreSse41(Register dst, XMMRegister src,
                                     uint8_t imm8) {
