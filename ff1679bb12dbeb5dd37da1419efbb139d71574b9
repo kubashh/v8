@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e0c51f5_f4646698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-09T09:20:25Z",
+      "side": 1,
+      "message": "lgtm as is, but I think we could improve this in the future to optimize the no-fallthrough case further.",
+      "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b78ea1df_f647a18c",
@@ -31,6 +48,47 @@
       "writtenOn": "2024-09-04T17:56:07Z",
       "side": 1,
       "message": "Ideally, for when `fallthrough_needed_` is false, we can emit some kind of `unreachable` bytecode in debug builds, but I don\u0027t think we have one. Think it\u0027s worth it in this case?",
+      "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3442d2c9_e208ad3b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-09T09:20:25Z",
+      "side": 1,
+      "message": "I\u0027ve thought about this for some of the switch cases too -- there is an abort bytecode we could emit already, making this debug-only does mean having different bytecodes for debug and release though, which is the bigger problem.",
+      "parentUuid": "b78ea1df_f647a18c",
+      "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "804a63ef_84f0a4f6",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-09T09:20:25Z",
+      "side": 1,
+      "message": "alternatively, in the case where there is no fallthrough needed, we could make the jump table smaller by one and make one of the deferred commands a fallthrough. Maybe this could be a nice followup? Low priority though.",
+      "range": {
+        "startLine": 306,
+        "startChar": 10,
+        "endLine": 306,
+        "endChar": 29
+      },
       "revId": "ff1679bb12dbeb5dd37da1419efbb139d71574b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
