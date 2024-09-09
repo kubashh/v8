@@ -2517,6 +2517,9 @@ void MacroAssembler::CallCodeObject(Register code_object,
 
 void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
                                     JumpMode jump_mode) {
+  // TODO(saelo): can we avoid using this for JavaScript functions
+  // (kJSEntrypointTag) and instead use a variant that ensures that the caller
+  // and callee agree on the signature (i.e. parameter count)?
   ASM_CODE_COMMENT(this);
   DCHECK_EQ(JumpMode::kJump, jump_mode);
   LoadCodeInstructionStart(code_object, code_object, tag);
@@ -2529,16 +2532,40 @@ void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
   Jump(x17);
 }
 
-void MacroAssembler::CallJSFunction(Register function_object) {
-  Register code = kJavaScriptCallCodeStartRegister;
 #ifdef V8_ENABLE_LEAPTIERING
-  // TODO(40931165): mark this as UNREACHABLE. Callers should use a version that
-  // ensures parameter count and code entrypoint match.
+void MacroAssembler::CallJSFunction(Register function_object,
+                                    uint16_t actual_argument_count) {
+  Register code = kJavaScriptCallCodeStartRegister;
+  Ldr(x20.W(),
+      FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
+  LoadParameterCountFromJSDispatchTable(code, x20);
+  Label ok;
+  Cmp(code, Immediate(actual_argument_count));
+  B(le, &ok);
+  Brk(0);
+  Bind(&ok);
+  LoadCodeEntrypointFromJSDispatchTable(code, x20);
+  Call(code);
+}
+
+void MacroAssembler::JumpJSFunction(Register function_object,
+                                    JumpMode jump_mode) {
+  Register code = kJavaScriptCallCodeStartRegister;
   Ldr(code.W(),
       FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
   LoadCodeEntrypointFromJSDispatchTable(code, code);
-  Call(code);
-#elif V8_ENABLE_SANDBOX
+  DCHECK_EQ(jump_mode, JumpMode::kJump);
+  // We jump through x17 here because for Branch Identification (BTI) we use
+  // "Call" (`bti c`) rather than "Jump" (`bti j`) landing pads for tail-called
+  // code. See TailCallBuiltin for more information.
+  DCHECK_NE(code, x17);
+  Mov(x17, code);
+  Jump(x17);
+}
+#else
+void MacroAssembler::CallJSFunction(Register function_object) {
+  Register code = kJavaScriptCallCodeStartRegister;
+#ifdef V8_ENABLE_SANDBOX
   // When the sandbox is enabled, we can directly fetch the entrypoint pointer
   // from the code pointer table instead of going through the Code object. In
   // this way, we avoid one memory load on this code path.
@@ -2556,20 +2583,7 @@ void MacroAssembler::CallJSFunction(Register function_object) {
 void MacroAssembler::JumpJSFunction(Register function_object,
                                     JumpMode jump_mode) {
   Register code = kJavaScriptCallCodeStartRegister;
-#ifdef V8_ENABLE_LEAPTIERING
-  // TODO(40931165): mark this as UNREACHABLE. Callers should use a version that
-  // ensures parameter count and code entrypoint match.
-  Ldr(code.W(),
-      FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
-  LoadCodeEntrypointFromJSDispatchTable(code, code);
-  DCHECK_EQ(jump_mode, JumpMode::kJump);
-  // We jump through x17 here because for Branch Identification (BTI) we use
-  // "Call" (`bti c`) rather than "Jump" (`bti j`) landing pads for tail-called
-  // code. See TailCallBuiltin for more information.
-  DCHECK_NE(code, x17);
-  Mov(x17, code);
-  Jump(x17);
-#elif V8_ENABLE_SANDBOX
+#ifdef V8_ENABLE_SANDBOX
   // When the sandbox is enabled, we can directly fetch the entrypoint pointer
   // from the code pointer table instead of going through the Code object. In
   // this way, we avoid one memory load on this code path.
@@ -2589,6 +2603,7 @@ void MacroAssembler::JumpJSFunction(Register function_object,
   JumpCodeObject(code, kJSEntrypointTag, jump_mode);
 #endif
 }
+#endif  // V8_ENABLE_LEAPTIERING
 
 void MacroAssembler::StoreReturnAddressAndCall(Register target) {
   ASM_CODE_COMMENT(this);
