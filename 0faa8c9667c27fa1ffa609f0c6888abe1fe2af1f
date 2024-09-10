@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4843ae5_8c99cc02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-09-10T06:38:07Z",
+      "side": 1,
+      "message": "Here\u0027s my change - For some reason my rebasing attempts on top of your chain failed, so all your changes are unfortunately squashed in as well. Perhaps wait until you\u0027re landed to review.",
+      "revId": "0faa8c9667c27fa1ffa609f0c6888abe1fe2af1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
