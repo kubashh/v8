@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2024548_4e50f40c",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-10T08:10:03Z",
+      "side": 1,
+      "message": "would it make sense to instead have this in CombinedWriteBarrier itself?",
+      "range": {
+        "startLine": 75,
+        "startChar": 38,
+        "endLine": 75,
+        "endChar": 67
+      },
+      "revId": "e9558b04603dda06f519811ad6bce327cea8d96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
