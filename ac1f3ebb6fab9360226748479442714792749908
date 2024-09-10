@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57b0dc75_8eb8294b",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "I added an early bailout to ensure the Wasm module we inline is not coming from `asm.js`, to document this explicitly.",
+      "parentUuid": "c68252d0_673a2a37",
+      "range": {
+        "startLine": 312,
+        "startChar": 6,
+        "endLine": 312,
+        "endChar": 16
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e557381_23221ca8",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-09-09T09:22:51Z",
       "side": 1,
       "message": "Nit: `support`",
+      "range": {
+        "startLine": 457,
+        "startChar": 28,
+        "endLine": 457,
+        "endChar": 36
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02e199e7_a59854f8",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e557381_23221ca8",
       "range": {
         "startLine": 457,
         "startChar": 28,
@@ -112,6 +160,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "07478e5b_9117e1b0",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Thanks for the test case. Since I don\u0027t have `ref.i31` support yet, I\u0027ll keep this open and add it in a later CL.",
+      "parentUuid": "0079b837_12d9f963",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 35
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64b25e97_151d8c45",
         "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
         "patchSetId": 9
@@ -123,6 +195,30 @@
       "writtenOn": "2024-09-09T09:22:51Z",
       "side": 1,
       "message": "This isn\u0027t needed for feature parity, it\u0027s only needed to test the `array.len` below, so your TODO is slightly misleading. 😊",
+      "range": {
+        "startLine": 194,
+        "startChar": 13,
+        "endLine": 194,
+        "endChar": 24
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eb7418d_444f945b",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Oh, good point. Fixed.",
+      "parentUuid": "64b25e97_151d8c45",
       "range": {
         "startLine": 194,
         "startChar": 13,
@@ -146,6 +242,30 @@
       "writtenOn": "2024-09-09T09:22:51Z",
       "side": 1,
       "message": "Should this be `kWasmEqRef` or do I misunderstand the comment?",
+      "range": {
+        "startLine": 212,
+        "startChar": 39,
+        "endLine": 212,
+        "endChar": 53
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d84609c_36b7d2a9",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Right, I missed that I can already test this without having to support operations that create an `eqref` in Wasm, since one can pass JS numbers as `kWasmEqRef`. So fixed and added a `RefEq` testcase now.",
+      "parentUuid": "47de471c_672a0374",
       "range": {
         "startLine": 212,
         "startChar": 39,
@@ -225,6 +345,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94bb320b_e467e41b",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Unfortunately, that\u0027s not possible, since in `eval(\u0027function foo() { ... }\u0027)` the JS is parsed as a function declaration (not a named function expression) and hence has return value `undefined`. It\u0027s only a named function expression when this syntax is used in a context that doesn\u0027t allow statements (e.g., the right-hand side of an assignment). So I think I have to keep this particular eval magic :/",
+      "parentUuid": "294304ad_cd11dd11",
+      "range": {
+        "startLine": 263,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 40
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b15914ce_4e03ff67",
@@ -238,6 +382,30 @@
       "writtenOn": "2024-09-09T09:22:51Z",
       "side": 1,
       "message": "I think these asserts can produce all kinds of issues in various build modes (e.g. the one that randomly deopts functions).\nYou should probably try to use the helpers like `assertOptimized(jsFunction)` that hides most of that complexity.",
+      "range": {
+        "startLine": 273,
+        "startChar": 2,
+        "endLine": 273,
+        "endChar": 155
+      },
+      "revId": "ac1f3ebb6fab9360226748479442714792749908",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe738b5e_16b4067d",
+        "filename": "test/message/wasm-in-js-inlining-turboshaft.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Thanks, used this and `assertUnoptimized` now.",
+      "parentUuid": "b15914ce_4e03ff67",
       "range": {
         "startLine": 273,
         "startChar": 2,

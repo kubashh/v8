@@ -208,6 +208,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "06d38451_648f1d18",
+        "filename": "src/compiler/pipeline-data-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "That makes sense: more arbitrary, but less used in practice, hence add features rather to Wasm-inlining. (Marking as resolved, further discussion on team priorities offline.)",
+      "parentUuid": "f5ef9176_222c2a61",
+      "range": {
+        "startLine": 569,
+        "startChar": 31,
+        "endLine": 569,
+        "endChar": 78
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f08d208b_903eb848",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 8
@@ -596,6 +620,30 @@
       "side": 1,
       "message": "Ah, actually I remember one difference here:\nFor Turbofan, if we inline wasm functions, we run a bunch of extra optimizations (the `WasmGCOptimizationPhase`) and some of that stuff is actually relevant (e.g. eliminating redundant casts and the `extern.internalize(extern.externalize(...))` that would be a typical pattern if you chain two wasm calls (one externalizes the return and the other internalizes the argument.)\n\nSo you might want to do the same later on. (OTOH, we can still run it in the regular phase and then conditionally run the wasm optimizations later on, they anyways need their own phase in Turboshaft.)",
       "parentUuid": "749efe55_e5902566",
+      "range": {
+        "startLine": 183,
+        "startChar": 20,
+        "endLine": 183,
+        "endChar": 40
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "201835eb_ec44936f",
+        "filename": "src/compiler/turboshaft/pipelines.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Yes, good point. I already had a `TODO` in `wasm-in-js-inlining-phase.cc` to add Wasm GC optimizations, but I hadn\u0027t accounted for them needing their own phase due to the analysis on the input graph.\n\nIIUC the analysis code walks over all operations in all blocks (i.e., it wouldn\u0027t only add overhead for Wasm GC operations), so we cannot just add it to the beginning of a following phase unconditionally.",
+      "parentUuid": "f8c40706_93bc2e42",
       "range": {
         "startLine": 183,
         "startChar": 20,
@@ -1077,6 +1125,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c97534_de8d6895",
+        "filename": "src/compiler/turboshaft/wasm-in-js-inlining-reducer-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Right, I also removed support for `i64.const`. (But it\u0027s not easy to test a lone `i64.const` instruction: the wrapper inlining doesn\u0027t support `i64` in the signature on 32-bit architectures, i.e., you first need to convert it to an `i32` somehow, and that may be constant folded again.)",
+      "parentUuid": "0d82e409_f414c73a",
+      "range": {
+        "startLine": 239,
+        "startChar": 15,
+        "endLine": 239,
+        "endChar": 45
+      },
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f25ed09_74eb02fd",
@@ -1503,6 +1575,24 @@
       "side": 1,
       "message": "Ah, I think I got it, with bailouts, we don\u0027t reach the end but we still don\u0027t want to trigger a `DecodeError` here, right?",
       "parentUuid": "bc584648_1bcd6abb",
+      "revId": "e02d3514e80994a24035956464c0741317093544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "647f4dd0_e3180684",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2908,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-09-10T13:47:40Z",
+      "side": 1,
+      "message": "Yes, exactly, good explanation. I updated the comment to explicitly mention bailouts.",
+      "parentUuid": "c085b774_a208ed7e",
       "revId": "e02d3514e80994a24035956464c0741317093544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
