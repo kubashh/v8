@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "639d67a1_ee1bb7de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-10T10:04:03Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL. The `BrOnNull` would be using the `value_on_branch` to add a `TypeGuard` for the fallthrough case which just doesn\u0027t make much sense.\nI\u0027ve therefore decided to just \"manually\" implement the desired behavior which seems much safer and easier to understand than reusing another function that doesn\u0027t quite fit the use case.",
+      "revId": "1f6c6ba0942fcdbb0dfef6c474fe041124745e2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
