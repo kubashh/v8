@@ -16,6 +16,23 @@
       "message": "nicohartmann: Friendly ping",
       "revId": "0cc9f634d7f48abe8814bb70917866cd6419edb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b81c02e_2a831feb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-09-10T16:28:24Z",
+      "side": 1,
+      "message": "mliedtke: Second CR+1 since I need two votes as a non-comitter",
+      "revId": "0cc9f634d7f48abe8814bb70917866cd6419edb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
