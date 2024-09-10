@@ -63,6 +63,30 @@
       },
       "revId": "e9558b04603dda06f519811ad6bce327cea8d96a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13e5fda5_84bb7c6a",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-10T08:53:50Z",
+      "side": 1,
+      "message": "This is exactly what I tried to do in here (https://chromium-review.googlesource.com/c/v8/v8/+/5845630) which was reverted. This only works if you can guarantee that `value` is not a trusted object or an InstructionStream, which should work in your case here. (`DCHECK()` this please).\n\nThe problem in `CombinedWriteBarrier()` is that we lost all the information about `Tagged\u003cObject\u003e value` which may also be a `TrustedObject` or in theory (not in practice) `InstructionStream`. Both types have their own cages which in theory allow allocation on the first page which would break the check.\n\nI am investigating now what it would take to prohibit allocation on the first page in the trusted cage and in the code range if it coincides with static roots.",
+      "parentUuid": "d39d5497_3b9c9385",
+      "range": {
+        "startLine": 75,
+        "startChar": 38,
+        "endLine": 75,
+        "endChar": 67
+      },
+      "revId": "e9558b04603dda06f519811ad6bce327cea8d96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
