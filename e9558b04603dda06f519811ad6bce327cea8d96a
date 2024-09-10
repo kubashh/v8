@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bbff2df_7df2f700",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-10T08:45:51Z",
+      "side": 1,
+      "message": "Michi, PTAL short discussion in the comment",
+      "revId": "e9558b04603dda06f519811ad6bce327cea8d96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2024548_4e50f40c",
