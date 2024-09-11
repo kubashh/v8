@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a4ada76_02f3ad6a",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-11T12:17:09Z",
+      "side": 1,
+      "message": "can we instead add a predicate like \"IsMainCage\" or similar? followup would be fine.",
+      "range": {
+        "startLine": 80,
+        "startChar": 14,
+        "endLine": 80,
+        "endChar": 33
+      },
+      "revId": "a7ecc1b350e1502ef252de06f40d0622ea797725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
