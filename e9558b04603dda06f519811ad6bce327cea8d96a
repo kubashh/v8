@@ -111,6 +111,30 @@
       },
       "revId": "e9558b04603dda06f519811ad6bce327cea8d96a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3e14101_43cd0bac",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-09-11T06:12:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1fbc3b1a_2f33727b",
+      "range": {
+        "startLine": 75,
+        "startChar": 38,
+        "endLine": 75,
+        "endChar": 67
+      },
+      "revId": "e9558b04603dda06f519811ad6bce327cea8d96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

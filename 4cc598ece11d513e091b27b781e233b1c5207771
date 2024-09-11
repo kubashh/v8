@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b697abe_0bde9c05",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-09-11T06:12:50Z",
+      "side": 1,
+      "message": "Here are the checks you requested, although actually I\u0027m not sure they would work as expected. Since istreams and trusted objs are in different cages, I don\u0027t see how we can access them without providing the correct cage base. Do you agree? I\u0027ll remove the checks again if so.",
+      "revId": "4cc598ece11d513e091b27b781e233b1c5207771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
