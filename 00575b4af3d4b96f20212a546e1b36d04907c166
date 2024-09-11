@@ -16,6 +16,23 @@
       "message": "As you mentioned, the V8_INFINITY check is not required anymore. I have removed it in this CL. PTAL. Thanks",
       "revId": "00575b4af3d4b96f20212a546e1b36d04907c166",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09db9b77_9d2dc8d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-11T19:23:08Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "00575b4af3d4b96f20212a546e1b36d04907c166",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
