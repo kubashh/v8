@@ -860,7 +860,18 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ cmp(cp, temp);
         __ Assert(eq, AbortReason::kWrongFunctionContext);
       }
+#ifdef V8_ENABLE_LEAPTIERING
+      size_t argument_count_index;
+      if (instr->HasCallDescriptorFlag(CallDescriptor::kHasExceptionHandler)) {
+        argument_count_index = instr->InputCount() - 2;
+      } else {
+        argument_count_index = instr->InputCount() - 1;
+      }
+      uint32_t num_arguments = i.InputUint32(argument_count_index);
+      __ CallJSFunction(func, num_arguments);
+#else
       __ CallJSFunction(func);
+#endif  // V8_ENABLE_LEAPTIERING
       RecordCallPosition(instr);
       frame_access_state()->ClearSPDelta();
       break;
