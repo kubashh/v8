@@ -122,6 +122,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1d5fd03b_75a10723",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2024-09-11T20:17:05Z",
+      "side": 1,
+      "message": "The doc is now review-worthy and reflects leszeks@\u0027s feedback along the way. I don\u0027t know what the most appropriate next step is: share more widely, file a bug somewhere, add some \"approved by ____\" stamp, just start writing CLs that reference this (probably not). LMK the appropriate process.",
+      "parentUuid": "5aca5886_c05ce303",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 6
+      },
+      "revId": "a70d1752da9df67156e0c2c6ff112569551578f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8c021fc9_6b3aaa4f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
