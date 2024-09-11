@@ -16,6 +16,24 @@
       "message": "Hi Matthias,\n\nThe newly added test is crashing with a segfault on both ppc and s390, i\u0027m assuming it is due to wasm deoptimizer not being supported yet. Should we just skip the test for now?",
       "revId": "397ad3e3b336b3cc22d42e8e4489d44e61b88828",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb7874b_4a11a736",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-11T18:39:04Z",
+      "side": 1,
+      "message": "Yes, that\u0027s the right strategy, I added the two new deoptimizer regression tests here now: https://chromium-review.googlesource.com/c/v8/v8/+/5854180",
+      "parentUuid": "54f187e1_55c7fab0",
+      "revId": "397ad3e3b336b3cc22d42e8e4489d44e61b88828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
