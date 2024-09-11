@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551fb3c4_6cecd421",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-11T10:49:51Z",
+      "side": 1,
+      "message": "@thibaudm@chromium.org: PTAL. Note that this is now even more aggressive as it disables deopt support for the rest of the function not just for the catch block, so that I don\u0027t have to worry about nested inlining, nested catch blocks etc.\n\nI still don\u0027t think that this will matter performance-wise in any ways.",
+      "revId": "8a37dc1d7328c9c509c0c69abf1651e9f6c420d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
