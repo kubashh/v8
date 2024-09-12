@@ -206,6 +206,30 @@
       },
       "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a9ca448_a841222b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "(outdated)",
+      "parentUuid": "6291626d_cae067ad",
+      "range": {
+        "startLine": 591,
+        "startChar": 17,
+        "endLine": 591,
+        "endChar": 47
+      },
+      "revId": "85a05b4d7737354b914aaecece1df36e1184b830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

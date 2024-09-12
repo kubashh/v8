@@ -16,6 +16,224 @@
       "message": "PTAnL?",
       "revId": "efede5692b823677548ebf281f3199878fb466b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1b5a875_cc97bb50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 71
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "Thanks a lot! Most comments are just style and nits. \n\nThe only unclear thing here is the hard limit which doesn\u0027t really have a good reason to exist in first place. What we would actually want (but doesn\u0027t seem realistic right now) as a managed `malloc()` call for Blink (and the renderer in general) that performs synchrnous GC before failing with OOM.",
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8437b77_54b9e5b4",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10276,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "Since you are here: `static constexpr`",
+      "range": {
+        "startLine": 10276,
+        "startChar": 2,
+        "endLine": 10276,
+        "endChar": 7
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca7e1cd_d34b4006",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10279,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "Can you remove this line here so that it\u0027s a nice contained block for the `CHECK()`.",
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997590b3_cbf02169",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10288,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "I wonder if we should rename this to `external_memory_limit_or_interrupt`.",
+      "range": {
+        "startLine": 10288,
+        "startChar": 34,
+        "endLine": 10288,
+        "endChar": 55
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b3039a5_ee53c4fb",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10289,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "Maybe `HandleExternalMemoryInterrupt()`?\n\nI want to avoid the term \"limit\" here going forward as in the configuration we will ship soon this is not a \"limit\" but merely an interrupt.",
+      "range": {
+        "startLine": 10289,
+        "startChar": 4,
+        "endLine": 10289,
+        "endChar": 40
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d0d0e0d_b7e28bac",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "`external_memory_accounted_in_global_limit` (and adjusted description)",
+      "range": {
+        "startLine": 2102,
+        "startChar": 12,
+        "endLine": 2102,
+        "endChar": 42
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2a6f502_9964b252",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 2641,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "Why not `UpdateExternalMemoryAtLastGC()`? It\u0027s not really a \"low\" value a lot of external memory is freed asynchronously after the atomic pause.",
+      "range": {
+        "startLine": 2641,
+        "startChar": 19,
+        "endLine": 2641,
+        "endChar": 44
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb99ffdb_4fd47372",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "Isn\u0027t that a little large for an interrupt? That\u0027s essentially 64M before we would even check whether we want to GC. Interrupt limits are usually much smaller.\n\nSee [1] for Oilpan (128KB). We can make it larger than that but 64M seems  a little excessive.\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc-js/cpp-heap.cc;l\u003d1015;drc\u003d8b00b43b06712a6c61f59f2e9f9230459d2a9025?q\u003dcpp-heap.cc\u0026ss\u003dchromium",
+      "range": {
+        "startLine": 246,
+        "startChar": 25,
+        "endLine": 246,
+        "endChar": 53
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b63cd7f_fd8c2dca",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "I cannot wrap my head around this one. Basically `max_global_memory_size_ / 2` will be ~2G (or ~4G). Realistically, we are never going to hit the hard limit here as we would alos have some `external_memory_.low_since_mark_compact()`.\n\nNot saying the previous limit was great either. \n\nI wonder if we can just avoid the max limit completely in this configuration. We have a global limit for the regular GC trigger and what we actually would want is a synchronous OOM last-resort GC. The hard limit here will not help us preventing any OOM case.",
+      "range": {
+        "startLine": 642,
+        "startChar": 14,
+        "endLine": 642,
+        "endChar": 30
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e489894_0a976c84",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T19:45:14Z",
+      "side": 1,
+      "message": "```\n// TODO(xxx): When not accounting external memory properly in the global limit, just add allocated external bytes towards the regular old gen bytes. This is historic behavior.\n```\n\nLets add this or something similar so others also are aware of what\u0027s going on.",
+      "range": {
+        "startLine": 1908,
+        "startChar": 11,
+        "endLine": 1908,
+        "endChar": 12
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
