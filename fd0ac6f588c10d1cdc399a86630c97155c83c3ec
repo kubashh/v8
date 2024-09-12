@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "002d8d33_53554896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-12T09:04:11Z",
+      "side": 1,
+      "message": "Thanks for the analysis Hao, it gives us a lot to think about. It\u0027s interesting that deopts from `MegaTransition` are coming from non-enumerated keys -- though when we think about it, it makes sense, we\u0027d mostly expect keyed name stores to happen in for-in object cloning and in dictionary-like access, where the latter will start as transitioning stores but eventually settle on non-transitioning stores (and deopt).\n\nHow would you feel about making this distinction more explicit with a separate `SetEnumeratedKeyedProperty`, similar to the existing `GetEnumeratedKeyedProperty`, and then only having that one use `MegaTransition`? Perhaps then, in later work, we would also make `SetKeyedProperty` for non-enumerated keys try to go to dictionary mode earlier.",
+      "parentUuid": "81a1960f_149cd242",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "adc824e4_11a9cbb9",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 11
