@@ -39,6 +39,30 @@
       },
       "revId": "a0a300e322736fa31703415174895aa871bb125c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "772a2490_0470e70a",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-12T11:18:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "db31898e_eef754ff",
+      "range": {
+        "startLine": 113,
+        "startChar": 14,
+        "endLine": 113,
+        "endChar": 24
+      },
+      "revId": "a0a300e322736fa31703415174895aa871bb125c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
