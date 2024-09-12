@@ -525,10 +525,22 @@ class V8_EXPORT_PRIVATE MacroAssembler
   void JumpCodeObject(Register code_object, CodeEntrypointTag tag,
                       JumpMode jump_mode = JumpMode::kJump);
 
+#ifdef V8_ENABLE_LEAPTIERING
+  // Convenience functions to call/jmp to the code of a JSFunction object.
+  // TODO(42204201): These don't work properly with leaptiering as we need to
+  // validate the parameter count at runtime. Instead, we should replace them
+  // with CallJSDispatchEntry that generates a call to a given (compile-time
+  // constant) JSDispatchHandle.
+  void CallJSFunction(Register function_object,
+                      uint16_t expected_parameter_count);
+  void JumpJSFunction(Register function_object,
+                      JumpMode jump_mode = JumpMode::kJump);
+#else
   // Convenience functions to call/jmp to the code of a JSFunction object.
   void CallJSFunction(Register function_object);
   void JumpJSFunction(Register function_object,
                       JumpMode jump_mode = JumpMode::kJump);
+#endif  // V8_ENABLE_LEAPTIERING
   void Jump(Address destination, RelocInfo::Mode rmode);
   void Jump(Address destination, RelocInfo::Mode rmode, Condition cc);
   void Jump(const ExternalReference& reference);
@@ -822,12 +834,12 @@ class V8_EXPORT_PRIVATE MacroAssembler
 #endif  // V8_ENABLE_SANDBOX
 
 #ifdef V8_ENABLE_LEAPTIERING
-  // Load the entrypoint pointer of a JSDispatchTable entry.
-  void LoadCodeEntrypointFromJSDispatchTable(Register destination,
-                                             Register dispatch_handle);
-  // Load the parameter count of a JSDispatchTable entry.
+  void LoadEntrypointFromJSDispatchTable(Register destination,
+                                         Register dispatch_handle);
   void LoadParameterCountFromJSDispatchTable(Register destination,
                                              Register dispatch_handle);
+  void LoadEntrypointAndParameterCountFromJSDispatchTable(
+      Register entrypoint, Register parameter_count, Register dispatch_handle);
 #endif  // V8_ENABLE_LEAPTIERING
 
   void LoadProtectedPointerField(Register destination, Operand field_operand);
