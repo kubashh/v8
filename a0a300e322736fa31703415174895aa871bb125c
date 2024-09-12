@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6325de0_a004973b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-09-12T11:13:10Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "a0a300e322736fa31703415174895aa871bb125c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db31898e_eef754ff",
+        "filename": "src/heap/cppgc/stats-collector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-09-12T11:13:10Z",
+      "side": 1,
+      "message": "`AtomicWord` is an alias of `Atomic64` on 64 bit systems, and an alias of `Atomic32` on 32 bit systems (in which case `Atomic64` doesn\u0027t exist).\nI considered replacing this with `std::atomic\u003cint64_t\u003e` but I prefer to keep using the internal type for now.",
+      "range": {
+        "startLine": 113,
+        "startChar": 14,
+        "endLine": 113,
+        "endChar": 24
+      },
+      "revId": "a0a300e322736fa31703415174895aa871bb125c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
