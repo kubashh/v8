@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72fb587b_3cb78d81",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10276,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8437b77_54b9e5b4",
+      "range": {
+        "startLine": 10276,
+        "startChar": 2,
+        "endLine": 10276,
+        "endChar": 7
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bca7e1cd_d34b4006",
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13d52430_010e58e3",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10279,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bca7e1cd_d34b4006",
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "997590b3_cbf02169",
@@ -88,6 +130,30 @@
       "writtenOn": "2024-09-12T19:45:14Z",
       "side": 1,
       "message": "I wonder if we should rename this to `external_memory_limit_or_interrupt`.",
+      "range": {
+        "startLine": 10288,
+        "startChar": 34,
+        "endLine": 10288,
+        "endChar": 55
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ffc8376_8d340645",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10288,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Or external_memory_limit_for_interrupt?\nSimilar to https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc-js/cpp-heap.h;drc\u003d8b00b43b06712a6c61f59f2e9f9230459d2a9025;l\u003d265",
+      "parentUuid": "997590b3_cbf02169",
       "range": {
         "startLine": 10288,
         "startChar": 34,
@@ -121,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cc90e64_2d6eddfb",
+        "filename": "src/api/api.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 10289,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b3039a5_ee53c4fb",
+      "range": {
+        "startLine": 10289,
+        "startChar": 4,
+        "endLine": 10289,
+        "endChar": 40
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d0d0e0d_b7e28bac",
@@ -134,6 +224,30 @@
       "writtenOn": "2024-09-12T19:45:14Z",
       "side": 1,
       "message": "`external_memory_accounted_in_global_limit` (and adjusted description)",
+      "range": {
+        "startLine": 2102,
+        "startChar": 12,
+        "endLine": 2102,
+        "endChar": 42
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a8c7737_d2149aa6",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d0d0e0d_b7e28bac",
       "range": {
         "startLine": 2102,
         "startChar": 12,
@@ -169,6 +283,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de8cf91a_05f06701",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 2641,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "UpdateLowSinceMarkCompact is also called in UpdateExternalMemory when reaching a new low, so it is the lowest value reached since last GC.",
+      "parentUuid": "e2a6f502_9964b252",
+      "range": {
+        "startLine": 2641,
+        "startChar": 19,
+        "endLine": 2641,
+        "endChar": 44
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb99ffdb_4fd47372",
         "filename": "src/heap/heap.h",
         "patchSetId": 71
@@ -180,6 +318,30 @@
       "writtenOn": "2024-09-12T19:45:14Z",
       "side": 1,
       "message": "Isn\u0027t that a little large for an interrupt? That\u0027s essentially 64M before we would even check whether we want to GC. Interrupt limits are usually much smaller.\n\nSee [1] for Oilpan (128KB). We can make it larger than that but 64M seems  a little excessive.\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/cppgc-js/cpp-heap.cc;l\u003d1015;drc\u003d8b00b43b06712a6c61f59f2e9f9230459d2a9025?q\u003dcpp-heap.cc\u0026ss\u003dchromium",
+      "range": {
+        "startLine": 246,
+        "startChar": 25,
+        "endLine": 246,
+        "endChar": 53
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba78d137_72a0827f",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Done, I split the \"soft limit\" (64M) and \"limit for interrupt\" (128KB).",
+      "parentUuid": "cb99ffdb_4fd47372",
       "range": {
         "startLine": 246,
         "startChar": 25,
@@ -213,6 +375,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7f3270e_4132fbb9",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Yeah that makes sense, I\u0027m happy removing this check altogether.",
+      "parentUuid": "9b63cd7f_fd8c2dca",
+      "range": {
+        "startLine": 642,
+        "startChar": 14,
+        "endLine": 642,
+        "endChar": 30
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e489894_0a976c84",
@@ -226,6 +412,30 @@
       "writtenOn": "2024-09-12T19:45:14Z",
       "side": 1,
       "message": "```\n// TODO(xxx): When not accounting external memory properly in the global limit, just add allocated external bytes towards the regular old gen bytes. This is historic behavior.\n```\n\nLets add this or something similar so others also are aware of what\u0027s going on.",
+      "range": {
+        "startLine": 1908,
+        "startChar": 11,
+        "endLine": 1908,
+        "endChar": 12
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b094813_8fed9e12",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T20:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e489894_0a976c84",
       "range": {
         "startLine": 1908,
         "startChar": 11,
