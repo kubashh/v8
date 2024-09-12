@@ -46,6 +46,7 @@ void WasmCodePointerTable::SetEntrypointWithWriteScope(
 }
 
 uint32_t WasmCodePointerTable::AllocateAndInitializeEntry(Address entrypoint) {
+  DCHECK(entrypoint != kNullAddress);
   uint32_t index = AllocateUninitializedEntry();
   WriteScope write_scope("WasmCodePointerTable write");
   at(index).MakeCodePointerEntry(entrypoint);
@@ -71,6 +72,10 @@ uint32_t WasmCodePointerTable::AllocateUninitializedEntry() {
     // Fast path, try to take an entry from the freelist.
     uint32_t allocated_entry;
     if (TryAllocateFromFreelist(&allocated_entry)) {
+#ifdef DEBUG
+      WriteScope write_scope("WasmCodePointerTable write");
+      at(allocated_entry).MakeCodePointerEntry(0x1234);
+#endif
       return allocated_entry;
     }
 
@@ -102,6 +107,10 @@ uint32_t WasmCodePointerTable::AllocateUninitializedEntry() {
     // Merge the new freelist entries into our freelist.
     LinkFreelist(freelist, segment.last_entry());
 
+#ifdef DEBUG
+    WriteScope write_scope("WasmCodePointerTable write");
+    at(allocated_entry).MakeCodePointerEntry(0x1234);
+#endif
     return allocated_entry;
   }
 }

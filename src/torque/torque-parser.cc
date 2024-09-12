@@ -74,6 +74,8 @@ class BuildFlags : public base::ContextualClass<BuildFlags> {
 #endif
 #ifdef V8_ENABLE_WEBASSEMBLY
     build_flags_["V8_ENABLE_WEBASSEMBLY"] = true;
+    build_flags_["V8_ENABLE_WASM_CODE_POINTER_TABLE"] =
+        V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL;
 #else
     build_flags_["V8_ENABLE_WEBASSEMBLY"] = false;
 #endif

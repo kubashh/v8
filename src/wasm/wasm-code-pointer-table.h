@@ -98,6 +98,9 @@ class V8_EXPORT_PRIVATE WasmCodePointerTable
   void SweepSegments(size_t threshold = 2 * kEntriesPerSegment);
 
  private:
+  // Allow the ExternalReference to access the table base.
+  friend class ::v8::internal::ExternalReference;
+
   // This marker is used to temporarily unlink the freelist to get exclusive
   // access.
   static constexpr FreelistHead kRetryMarker = FreelistHead(0xffffffff, 0);

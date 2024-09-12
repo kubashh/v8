@@ -542,7 +542,7 @@ bool WasmCode::ShouldAllocateCodePointerHandle(int index, Kind kind) {
 
 // static
 WasmCodePointerTable::Handle WasmCode::MaybeAllocateCodePointerHandle(
-    NativeModule* native_module, int index, Kind kind) {
+    NativeModule* native_module, int index, Kind kind, Address address) {
   if (index != kAnonymousFuncIndex) {
     DCHECK(!ShouldAllocateCodePointerHandle(index, kind));
     return native_module->GetCodePointerHandle(index);
@@ -552,7 +552,8 @@ WasmCodePointerTable::Handle WasmCode::MaybeAllocateCodePointerHandle(
     case kWasmToCapiWrapper:
     case kWasmToJsWrapper:
       DCHECK(ShouldAllocateCodePointerHandle(index, kind));
-      return GetProcessWideWasmCodePointerTable()->AllocateUninitializedEntry();
+      return GetProcessWideWasmCodePointerTable()->AllocateAndInitializeEntry(
+          address);
     case kJumpTable:
       DCHECK(!ShouldAllocateCodePointerHandle(index, kind));
       return WasmCodePointerTable::kInvalidHandle;
@@ -2011,6 +2012,16 @@ WasmCodePointerTable::Handle NativeModule::GetCodePointerHandle(
     return WasmCodePointerTable::kInvalidHandle;
   }
   return code_pointer_handles_[declared_function_index(module_.get(), index)];
+}
+
+bool NativeModule::OwnsCodePointerHandle(
+    WasmCodePointerTable::Handle handle) const {
+  for (size_t i = 0; i < code_pointer_handles_size_; i++) {
+    if (code_pointer_handles_[i] == handle) {
+      return true;
+    }
+  }
+  return false;
 }
 
 NativeModule::~NativeModule() {
