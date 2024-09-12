@@ -127,6 +127,9 @@ namespace internal {
   T(IncompatibleMethodReceiver, "Method % called on incompatible receiver %")  \
   T(InstanceofNonobjectProto,                                                  \
     "Function has non-object prototype '%' in instanceof check")               \
+  T(InvalidDecoratorAddInitializer,                                            \
+    "Cannot add initializers after decorators "                                \
+    "have been executed")                                                      \
   T(InvalidArgument, "invalid_argument")                                       \
   T(InvalidArgumentForTemporal, "Invalid argument for Temporal %")             \
   T(InvalidInOperatorUse, "Cannot use 'in' operator to search for '%' in %")   \

@@ -170,7 +170,10 @@
 
 #define NOT_IMPORTANT_INTERNALIZED_STRING_LIST_GENERATOR(V, _)                \
   INTERNALIZED_STRING_LIST_GENERATOR_INTL(V, _)                               \
+  V(_, access_string, "access")                                               \
+  V(_, accessor_string, "accessor")                                           \
   V(_, add_string, "add")                                                     \
+  V(_, addInitializer_string, "addInitializer")                               \
   V(_, AggregateError_string, "AggregateError")                               \
   V(_, always_string, "always")                                               \
   V(_, anonymous_string, "anonymous")                                         \
@@ -207,6 +210,7 @@
   V(_, caller_string, "caller")                                               \
   V(_, cause_string, "cause")                                                 \
   V(_, character_string, "character")                                         \
+  V(_, class_string, "class")                                                 \
   V(_, code_string, "code")                                                   \
   V(_, column_string, "column")                                               \
   V(_, computed_string, "<computed>")                                         \
@@ -263,6 +267,7 @@
   V(_, exception_string, "exception")                                         \
   V(_, exec_string, "exec")                                                   \
   V(_, false_string, "false")                                                 \
+  V(_, field_string, "field")                                                 \
   V(_, fields_string, "fields")                                               \
   V(_, FinalizationRegistry_string, "FinalizationRegistry")                   \
   V(_, flags_string, "flags")                                                 \
@@ -282,6 +287,7 @@
   V(_, getOwnPropertyDescriptor_string, "getOwnPropertyDescriptor")           \
   V(_, getPossibleInstantsFor_string, "getPossibleInstantsFor")               \
   V(_, getPrototypeOf_string, "getPrototypeOf")                               \
+  V(_, getter_string, "getter")                                               \
   V(_, global_string, "global")                                               \
   V(_, globalThis_string, "globalThis")                                       \
   V(_, groups_string, "groups")                                               \
@@ -320,6 +326,7 @@
   V(_, jsMemoryEstimate_string, "jsMemoryEstimate")                           \
   V(_, jsMemoryRange_string, "jsMemoryRange")                                 \
   V(_, keys_string, "keys")                                                   \
+  V(_, kind_string, "kind")                                                   \
   V(_, largestUnit_string, "largestUnit")                                     \
   V(_, lastIndex_string, "lastIndex")                                         \
   V(_, let_string, "let")                                                     \
@@ -334,6 +341,7 @@
   V(_, mergeFields_string, "mergeFields")                                     \
   V(_, message_string, "message")                                             \
   V(_, meta_string, "meta")                                                   \
+  V(_, method_string, "method")                                               \
   V(_, minus_Infinity_string, "-Infinity")                                    \
   V(_, microsecond_string, "microsecond")                                     \
   V(_, microseconds_string, "microseconds")                                   \
@@ -380,6 +388,7 @@
   V(_, plainTime_string, "plainTime")                                         \
   V(_, position_string, "position")                                           \
   V(_, preventExtensions_string, "preventExtensions")                         \
+  V(_, private_string, "private")                                             \
   V(_, private_constructor_string, "#constructor")                            \
   V(_, Promise_string, "Promise")                                             \
   V(_, promise_string, "promise")                                             \
@@ -416,6 +425,7 @@
   V(_, set_string, "set")                                                     \
   V(_, SetIterator_string, "Set Iterator")                                    \
   V(_, setPrototypeOf_string, "setPrototypeOf")                               \
+  V(_, setter_string, "setter")                                               \
   V(_, ShadowRealm_string, "ShadowRealm")                                     \
   V(_, SharedArray_string, "SharedArray")                                     \
   V(_, SharedArrayBuffer_string, "SharedArrayBuffer")                         \
@@ -427,6 +437,7 @@
   V(_, sourceText_string, "sourceText")                                       \
   V(_, stack_string, "stack")                                                 \
   V(_, stackTraceLimit_string, "stackTraceLimit")                             \
+  V(_, static_string, "static")                                               \
   V(_, static_initializer_string, "<static_initializer>")                     \
   V(_, sticky_string, "sticky")                                               \
   V(_, String_string, "String")                                               \

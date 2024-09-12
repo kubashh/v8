@@ -13,6 +13,7 @@
 #include "src/ast/ast-source-ranges.h"
 #include "src/base/bits.h"
 #include "src/builtins/accessors.h"
+#include "src/builtins/builtins-decorators.h"
 #include "src/builtins/constants-table-builder.h"
 #include "src/codegen/compilation-cache.h"
 #include "src/codegen/compiler.h"
@@ -3519,6 +3520,108 @@ Handle<JSAsyncFromSyncIterator> Factory::NewJSAsyncFromSyncIterator(
   raw->set_sync_iterator(*sync_iterator, SKIP_WRITE_BARRIER);
   raw->set_next(*next, SKIP_WRITE_BARRIER);
   return iterator;
+}
+
+Handle<JSDecoratorAccessObject> Factory::NewJSDecoratorAccessObject(
+    DirectHandle<Name> name) {
+  Factory* factory = isolate()->factory();
+  DirectHandle<Map> map(
+      isolate()->native_context()->js_decorator_access_object_map(), isolate());
+  Handle<JSDecoratorAccessObject> access_object = Cast<JSDecoratorAccessObject>(
+      NewJSObjectFromMap(map, AllocationType::kYoung));
+  Handle<Context> decorator_access_context = factory->NewBuiltinContext(
+      isolate()->native_context(),
+      DecoratorsBuiltins::kDecoratorAccessContextLength);
+  decorator_access_context->set(DecoratorsBuiltins::kNameContextSlot, *name);
+  Handle<SharedFunctionInfo> get_info(
+      isolate()->heap()->decorator_access_get_sfi(), isolate());
+  Handle<JSFunction> get =
+      Factory::JSFunctionBuilder{isolate(), get_info, decorator_access_context}
+          .set_map(isolate()->strict_function_without_prototype_map())
+          .set_allocation_type(AllocationType::kYoung)
+          .Build();
+  Handle<SharedFunctionInfo> set_info(
+      isolate()->heap()->decorator_access_set_sfi(), isolate());
+  Handle<JSFunction> set =
+      Factory::JSFunctionBuilder{isolate(), set_info, decorator_access_context}
+          .set_map(isolate()->strict_function_without_prototype_map())
+          .set_allocation_type(AllocationType::kYoung)
+          .Build();
+  Handle<SharedFunctionInfo> has_info(
+      isolate()->heap()->decorator_access_has_sfi(), isolate());
+  Handle<JSFunction> has =
+      Factory::JSFunctionBuilder{isolate(), has_info, decorator_access_context}
+          .set_map(isolate()->strict_function_without_prototype_map())
+          .set_allocation_type(AllocationType::kYoung)
+          .Build();
+  DisallowGarbageCollection no_gc;
+  Tagged<JSDecoratorAccessObject> raw = *access_object;
+  raw->set_get(*get, SKIP_WRITE_BARRIER);
+  raw->set_set(*set, SKIP_WRITE_BARRIER);
+  raw->set_has(*has, SKIP_WRITE_BARRIER);
+  return access_object;
+}
+
+Handle<JSFunction> Factory::NewDecoratorAddInitializerFunction(
+    Isolate* isolate, DirectHandle<ArrayList> extra_class_initializers) {
+  Factory* factory = isolate->factory();
+  Handle<Context> add_initializer_context = factory->NewBuiltinContext(
+      isolate->native_context(),
+      DecoratorsBuiltins::AddInitializerContextSlots::
+          kAddInitializerContextLength);
+  add_initializer_context->set(DecoratorsBuiltins::AddInitializerContextSlots::
+                                   kExtraInitializersContextSlot,
+                               *extra_class_initializers);
+  Handle<SharedFunctionInfo> add_initializer_info(
+      isolate->heap()->add_initializer_sfi(), isolate);
+  Handle<JSFunction> add_initializer_function =
+      Factory::JSFunctionBuilder{isolate, add_initializer_info,
+                                 add_initializer_context}
+          .set_map(isolate->strict_function_without_prototype_map())
+          .set_allocation_type(AllocationType::kYoung)
+          .Build();
+  return add_initializer_function;
+}
+
+Handle<JSClassDecoratorContextObject> Factory::NewJSClassDecoratorContextObject(
+    DirectHandle<String> name,
+    DirectHandle<JSFunction> add_initializer_function) {
+  DirectHandle<Map> map(
+      isolate()->native_context()->js_class_decorator_context_object_map(),
+      isolate());
+  Handle<JSClassDecoratorContextObject> context_object =
+      Cast<JSClassDecoratorContextObject>(
+          NewJSObjectFromMap(map, AllocationType::kYoung));
+  DisallowGarbageCollection no_gc;
+  Tagged<JSClassDecoratorContextObject> raw = *context_object;
+  raw->set_kind(*class_string(), SKIP_WRITE_BARRIER);
+  raw->set_name(*name, SKIP_WRITE_BARRIER);
+  raw->set_addInitializer(*add_initializer_function, SKIP_WRITE_BARRIER);
+  return context_object;
+}
+
+Handle<JSClassElementDecoratorContextObject>
+Factory::NewJSClassElementDecoratorContextObject(
+    DirectHandle<String> kind,
+    DirectHandle<JSDecoratorAccessObject> decorator_access_object,
+    Handle<Boolean> is_static, Handle<Boolean> is_private,
+    DirectHandle<String> name, Handle<JSFunction> add_initializer_function) {
+  DirectHandle<Map> map(isolate()
+                            ->native_context()
+                            ->js_class_element_decorator_context_object_map(),
+                        isolate());
+  Handle<JSClassElementDecoratorContextObject> context_object =
+      Cast<JSClassElementDecoratorContextObject>(
+          NewJSObjectFromMap(map, AllocationType::kYoung));
+  DisallowGarbageCollection no_gc;
+  Tagged<JSClassElementDecoratorContextObject> raw = *context_object;
+  raw->set_kind(*kind);
+  raw->set_access(*decorator_access_object);
+  raw->set_is_static(*is_static);
+  raw->set_is_private(*is_private);
+  raw->set_name(*name);
+  raw->set_add_initializer(*add_initializer_function);
+  return context_object;
 }
 
 Handle<JSMap> Factory::NewJSMap() {
