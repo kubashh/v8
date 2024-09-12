@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d07a903_30dcc03c",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-12T08:33:22Z",
+      "side": 1,
+      "message": "On Arm64 we use a conditional select but here we\u0027d probably need an additional `xor rXX, rXX` first to get a zero register. I\u0027m not sure if either approach is really better, so let me know if you have any preferences.",
+      "range": {
+        "startLine": 3230,
+        "startChar": 0,
+        "endLine": 3231,
+        "endChar": 9
+      },
+      "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
