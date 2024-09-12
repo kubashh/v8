@@ -10281,7 +10281,7 @@ int64_t Isolate::AdjustAmountOfExternalAllocatedMemory(
         change_in_bytes < kMaxReasonableBytes);
 
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
-  int64_t amount = i_isolate->heap()->update_external_memory(change_in_bytes);
+  int64_t amount = i_isolate->heap()->UpdateExternalMemory(change_in_bytes);
 
   if (change_in_bytes <= 0) return amount;
 
