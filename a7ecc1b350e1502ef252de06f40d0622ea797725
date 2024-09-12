@@ -22,6 +22,30 @@
       },
       "revId": "a7ecc1b350e1502ef252de06f40d0622ea797725",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa686ce8_ef987cb2",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-09-12T06:37:30Z",
+      "side": 1,
+      "message": "See https://crrev.com/c/5853966",
+      "parentUuid": "9a4ada76_02f3ad6a",
+      "range": {
+        "startLine": 80,
+        "startChar": 14,
+        "endLine": 80,
+        "endChar": 33
+      },
+      "revId": "a7ecc1b350e1502ef252de06f40d0622ea797725",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
