@@ -673,11 +673,9 @@ void MacroAssembler::LoadCodeEntrypointViaCodePointer(Register destination,
 #ifdef V8_ENABLE_LEAPTIERING
 void MacroAssembler::LoadEntrypointFromJSDispatchTable(
     Register destination, Register dispatch_handle) {
-  DCHECK(!AreAliased(destination, kScratchRegister));
+  DCHECK(!AreAliased(destination, dispatch_handle, kScratchRegister));
   LoadAddress(kScratchRegister, ExternalReference::js_dispatch_table_address());
-  if (destination != dispatch_handle) {
-    movq(destination, dispatch_handle);
-  }
+  movq(destination, dispatch_handle);
   shrl(destination, Immediate(kJSDispatchHandleShift));
   shll(destination, Immediate(kJSDispatchTableEntrySizeLog2));
   movq(destination, Operand(kScratchRegister, destination, times_1,
@@ -686,11 +684,9 @@ void MacroAssembler::LoadEntrypointFromJSDispatchTable(
 
 void MacroAssembler::LoadParameterCountFromJSDispatchTable(
     Register destination, Register dispatch_handle) {
-  DCHECK(!AreAliased(destination, kScratchRegister));
+  DCHECK(!AreAliased(destination, dispatch_handle, kScratchRegister));
   LoadAddress(kScratchRegister, ExternalReference::js_dispatch_table_address());
-  if (destination != dispatch_handle) {
-    movq(destination, dispatch_handle);
-  }
+  movq(destination, dispatch_handle);
   shrl(destination, Immediate(kJSDispatchHandleShift));
   shll(destination, Immediate(kJSDispatchTableEntrySizeLog2));
   movq(destination, Operand(kScratchRegister, destination, times_1,
@@ -700,12 +696,11 @@ void MacroAssembler::LoadParameterCountFromJSDispatchTable(
 
 void MacroAssembler::LoadEntrypointAndParameterCountFromJSDispatchTable(
     Register entrypoint, Register parameter_count, Register dispatch_handle) {
-  DCHECK(!AreAliased(entrypoint, parameter_count, kScratchRegister));
+  DCHECK(!AreAliased(entrypoint, parameter_count, dispatch_handle,
+                     kScratchRegister));
   LoadAddress(kScratchRegister, ExternalReference::js_dispatch_table_address());
   Register offset = parameter_count;
-  if (offset != dispatch_handle) {
-    movq(offset, dispatch_handle);
-  }
+  movq(offset, dispatch_handle);
   shrl(offset, Immediate(kJSDispatchHandleShift));
   shll(offset, Immediate(kJSDispatchTableEntrySizeLog2));
   movq(entrypoint, Operand(kScratchRegister, offset, times_1,
@@ -3222,6 +3217,7 @@ void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
 void MacroAssembler::CallJSFunction(Register function_object,
                                     uint16_t actual_argument_count) {
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+  static_assert(kJavaScriptCallDispatchHandleRegister == r15, "ABI mismatch");
   movl(r15, FieldOperand(function_object, JSFunction::kDispatchHandleOffset));
   LoadEntrypointAndParameterCountFromJSDispatchTable(rcx, rbx, r15);
   Label ok;
@@ -3236,8 +3232,9 @@ void MacroAssembler::CallJSFunction(Register function_object,
 void MacroAssembler::JumpJSFunction(Register function_object,
                                     JumpMode jump_mode) {
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
-  movl(rcx, FieldOperand(function_object, JSFunction::kDispatchHandleOffset));
-  LoadEntrypointFromJSDispatchTable(rcx, rcx);
+  static_assert(kJavaScriptCallDispatchHandleRegister == r15, "ABI mismatch");
+  movl(r15, FieldOperand(function_object, JSFunction::kDispatchHandleOffset));
+  LoadEntrypointFromJSDispatchTable(rcx, r15);
   DCHECK_EQ(jump_mode, JumpMode::kJump);
   jmp(rcx);
 }
@@ -3929,7 +3926,7 @@ void MacroAssembler::InvokeFunctionCode(
   DCHECK_EQ(function, rdi);
   DCHECK_IMPLIES(new_target.is_valid(), new_target == rdx);
 
-  Register dispatch_handle = r15;
+  Register dispatch_handle = kJavaScriptCallDispatchHandleRegister;
   movl(dispatch_handle,
        FieldOperand(function, JSFunction::kDispatchHandleOffset));
 
