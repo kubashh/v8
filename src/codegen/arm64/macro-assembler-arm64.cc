@@ -2517,6 +2517,9 @@ void MacroAssembler::CallCodeObject(Register code_object,
 
 void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
                                     JumpMode jump_mode) {
+  // TODO(saelo): can we avoid using this for JavaScript functions
+  // (kJSEntrypointTag) and instead use a variant that ensures that the caller
+  // and callee agree on the signature (i.e. parameter count)?
   ASM_CODE_COMMENT(this);
   DCHECK_EQ(JumpMode::kJump, jump_mode);
   LoadCodeInstructionStart(code_object, code_object, tag);
@@ -2529,14 +2532,42 @@ void MacroAssembler::JumpCodeObject(Register code_object, CodeEntrypointTag tag,
   Jump(x17);
 }
 
-void MacroAssembler::CallJSFunction(Register function_object) {
-  Register code = kJavaScriptCallCodeStartRegister;
 #ifdef V8_ENABLE_LEAPTIERING
+void MacroAssembler::CallJSFunction(Register function_object,
+                                    uint16_t actual_argument_count) {
+  Register dispatch_handle = x20;
+  Register code = kJavaScriptCallCodeStartRegister;
+  Register parameter_count = x19;
+
+  Ldr(dispatch_handle.W(),
+      FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
+  LoadEntrypointAndParameterCountFromJSDispatchTable(code, parameter_count,
+                                                     dispatch_handle);
+  Cmp(parameter_count, Immediate(actual_argument_count));
+  // If the parameter count doesn't match, we force a safe crash by setting the
+  // code entrypoint to zero, causing a nullptr dereference during the call.
+  Csel(code, code, xzr, le);
+  Call(code);
+}
+
+void MacroAssembler::JumpJSFunction(Register function_object,
+                                    JumpMode jump_mode) {
+  Register code = kJavaScriptCallCodeStartRegister;
   Ldr(code.W(),
       FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
-  LoadCodeEntrypointFromJSDispatchTable(code, code);
-  Call(code);
-#elif V8_ENABLE_SANDBOX
+  LoadEntrypointFromJSDispatchTable(code, code);
+  DCHECK_EQ(jump_mode, JumpMode::kJump);
+  // We jump through x17 here because for Branch Identification (BTI) we use
+  // "Call" (`bti c`) rather than "Jump" (`bti j`) landing pads for tail-called
+  // code. See TailCallBuiltin for more information.
+  DCHECK_NE(code, x17);
+  Mov(x17, code);
+  Jump(x17);
+}
+#else
+void MacroAssembler::CallJSFunction(Register function_object) {
+  Register code = kJavaScriptCallCodeStartRegister;
+#ifdef V8_ENABLE_SANDBOX
   // When the sandbox is enabled, we can directly fetch the entrypoint pointer
   // from the code pointer table instead of going through the Code object. In
   // this way, we avoid one memory load on this code path.
@@ -2554,18 +2585,7 @@ void MacroAssembler::CallJSFunction(Register function_object) {
 void MacroAssembler::JumpJSFunction(Register function_object,
                                     JumpMode jump_mode) {
   Register code = kJavaScriptCallCodeStartRegister;
-#ifdef V8_ENABLE_LEAPTIERING
-  Ldr(code.W(),
-      FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
-  LoadCodeEntrypointFromJSDispatchTable(code, code);
-  DCHECK_EQ(jump_mode, JumpMode::kJump);
-  // We jump through x17 here because for Branch Identification (BTI) we use
-  // "Call" (`bti c`) rather than "Jump" (`bti j`) landing pads for tail-called
-  // code. See TailCallBuiltin for more information.
-  DCHECK_NE(code, x17);
-  Mov(x17, code);
-  Jump(x17);
-#elif V8_ENABLE_SANDBOX
+#ifdef V8_ENABLE_SANDBOX
   // When the sandbox is enabled, we can directly fetch the entrypoint pointer
   // from the code pointer table instead of going through the Code object. In
   // this way, we avoid one memory load on this code path.
@@ -2585,6 +2605,7 @@ void MacroAssembler::JumpJSFunction(Register function_object,
   JumpCodeObject(code, kJSEntrypointTag, jump_mode);
 #endif
 }
+#endif  // V8_ENABLE_LEAPTIERING
 
 void MacroAssembler::StoreReturnAddressAndCall(Register target) {
   ASM_CODE_COMMENT(this);
@@ -2892,8 +2913,8 @@ void MacroAssembler::InvokeFunctionCode(
   // We call indirectly through the code field in the function to
   // allow recompilation to take effect without changing any of the
   // call sites.
-  LoadCodeEntrypointFromJSDispatchTable(kJavaScriptCallCodeStartRegister,
-                                        dispatch_handle);
+  LoadEntrypointFromJSDispatchTable(kJavaScriptCallCodeStartRegister,
+                                    dispatch_handle);
   switch (type) {
     case InvokeType::kCall:
       Call(kJavaScriptCallCodeStartRegister);
@@ -3957,7 +3978,7 @@ void MacroAssembler::LoadCodeEntrypointViaCodePointer(Register destination,
 #endif  // V8_ENABLE_SANDBOX
 
 #ifdef V8_ENABLE_LEAPTIERING
-void MacroAssembler::LoadCodeEntrypointFromJSDispatchTable(
+void MacroAssembler::LoadEntrypointFromJSDispatchTable(
     Register destination, Register dispatch_handle) {
   ASM_CODE_COMMENT(this);
   UseScratchRegisterScope temps(this);
@@ -3982,6 +4003,24 @@ void MacroAssembler::LoadParameterCountFromJSDispatchTable(
   Add(destination, destination, Immediate(JSDispatchEntry::kCodeObjectOffset));
   Ldr(destination, MemOperand(scratch, destination));
   And(destination, destination,
+      Immediate(JSDispatchEntry::kParameterCountMask));
+}
+
+void MacroAssembler::LoadEntrypointAndParameterCountFromJSDispatchTable(
+    Register entrypoint, Register parameter_count, Register dispatch_handle) {
+  ASM_CODE_COMMENT(this);
+  UseScratchRegisterScope temps(this);
+  Register scratch = temps.AcquireX();
+  Mov(scratch, ExternalReference::js_dispatch_table_address());
+  // TODO(saelo): can the offset computation be done more efficiently?
+  Register offset = parameter_count;
+  Mov(offset, Operand(dispatch_handle, LSR, kJSDispatchHandleShift));
+  Mov(offset, Operand(offset, LSL, kJSDispatchTableEntrySizeLog2));
+  DCHECK_EQ(JSDispatchEntry::kEntrypointOffset, 0);
+  Ldr(entrypoint, MemOperand(scratch, offset));
+  Add(offset, offset, Immediate(JSDispatchEntry::kCodeObjectOffset));
+  Ldr(parameter_count, MemOperand(scratch, offset));
+  And(parameter_count, parameter_count,
       Immediate(JSDispatchEntry::kParameterCountMask));
 }
 #endif
