@@ -399,6 +399,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f33918ce_4a3d451b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 71
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-12T22:20:42Z",
+      "side": 1,
+      "message": "Ah well //mjsunit/regress/regress-319722-TypedArrays shows this is necessary to force GC; global limits aren\u0027t enough because they grow over 4G.\nhttps://ci.chromium.org/ui/p/v8/builders/try/v8_linux_rel/b8736967658402178673/overview\nSo maybe we could keep the hard limit at least as-is.",
+      "parentUuid": "b7f3270e_4132fbb9",
+      "range": {
+        "startLine": 642,
+        "startChar": 14,
+        "endLine": 642,
+        "endChar": 30
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e489894_0a976c84",
