@@ -16,6 +16,92 @@
       "message": "lgtm from my side. Please wait for Samuel",
       "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2af8b5b2_2ee93533",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-13T13:39:59Z",
+      "side": 1,
+      "message": "Looks good with a nit and two suggestions.",
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b15e93c2_8691e553",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-13T13:39:59Z",
+      "side": 1,
+      "message": "Nit: I guess this could just be `isolate()`?",
+      "range": {
+        "startLine": 412,
+        "startChar": 4,
+        "endLine": 412,
+        "endChar": 21
+      },
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "973839b1_c2ea0b5b",
+        "filename": "src/sandbox/indirect-pointer-tag.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-13T13:39:59Z",
+      "side": 1,
+      "message": "I think it could be nice if we mark both the tag and the class as being \"shared trusted\" (or \"shareable trusted\"). So for example, we currently have `ExposedTrustedObject`, and maybe we could also have a `ExposedSharedTrustedObject` parent class. Then we can validate that we only have shared trusted objects in the shared trusted space and in the shared trusted pointer table, etc.\nDefinitely nice to have and not for this CL anyway, but maybe you could leave a `TODO` here to investigate whether we can also create a dedicated SharedTrustedObject type hierarchy alongside the tags.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 52
+      },
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11325b01_3f83e2ec",
+        "filename": "src/sandbox/indirect-pointer-tag.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-13T13:39:59Z",
+      "side": 1,
+      "message": "This is a bit awkward now.. I wonder if we can just simplify this to something like\n```\nreturn IsSharedTrustedPointerType(tag) || IsPerIsolateTrustedPointerType(tag);\n```\nWhere each of them just does a range check?",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 15
+      },
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
