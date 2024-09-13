@@ -16,6 +16,29 @@
       "message": "@syg@chromium.org PTAL when you have a chance, this is a simple CL but a lot of wiring.",
       "revId": "cf4f1c558550674dbd49c11503bbe30a0e568134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a021a0_fff7e953",
+        "filename": "src/objects/js-objects-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-09-13T17:06:38Z",
+      "side": 1,
+      "message": "I\u0027d like to follow your suggestion and add a dcheck to verify that the map has not change, that would look something like:\n\n```\nACCESSORS_CHECKED(JSClassElementDecoratorContextObject, kind, Tagged\u003cObject\u003e,\n          kKindOffset, IsJSClassDecoratorContextObjectMap(map())\n```\n\nBut there isn\u0027t an automatically generated IsJSClassDecoratorContextObjectMap and I\u0027m not sure what is the right way to code it since the map is cached in the native context.\n\nAlternatively, I could write getters/setters that receive the native context as an argument and perform the dcheck. That\u0027s fine but I\u0027d like us to agree that it is the best solution before adding that code.",
+      "range": {
+        "startLine": 1017,
+        "startChar": 0,
+        "endLine": 1017,
+        "endChar": 75
+      },
+      "revId": "cf4f1c558550674dbd49c11503bbe30a0e568134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
