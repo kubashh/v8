@@ -56,6 +56,30 @@
       },
       "revId": "32ee6dcd5009f9b433bcfc26867b854769c35246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a13982f_da447518",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 74
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-13T13:44:59Z",
+      "side": 1,
+      "message": "N/A in latest patchset",
+      "parentUuid": "0f9178ad_b37fd7eb",
+      "range": {
+        "startLine": 648,
+        "startChar": 10,
+        "endLine": 648,
+        "endChar": 36
+      },
+      "revId": "32ee6dcd5009f9b433bcfc26867b854769c35246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
