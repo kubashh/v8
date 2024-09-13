@@ -368,6 +368,10 @@ class RootVisitor;
     AsyncDisposableStackOnRejectedSharedFun)                                   \
   V(SharedFunctionInfo, async_dispose_from_sync_dispose_shared_fun,            \
     AsyncDisposeFromSyncDisposeSharedFun)                                      \
+  V(SharedFunctionInfo, add_initializer_sfi, AddInitializerSFI)                \
+  V(SharedFunctionInfo, decorator_access_get_sfi, DecoratorAccessGetSFI)       \
+  V(SharedFunctionInfo, decorator_access_set_sfi, DecoratorAccessSetSFI)       \
+  V(SharedFunctionInfo, decorator_access_has_sfi, DecoratorAccessHasSFI)       \
   BUILTINS_WITH_SFI_ROOTS_LIST(V)                                              \
   TRUSTED_ROOT_LIST(V)
 
