@@ -557,6 +557,7 @@ TNode<Float64T> CodeStubAssembler::Float64RoundToEven(TNode<Float64T> x) {
   // Use UniqueInt32Constant instead of BoolConstant here in order to ensure
   // that the graph structure does not depend on the value of the predicate
   // (BoolConstant uses cached nodes).
+  Comment("Float64RoundToEven");
   Branch(UniqueInt32Constant(IsFloat64RoundTiesEvenSupported()),
          &round_op_supported, &round_op_fallback);
 

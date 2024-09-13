@@ -322,6 +322,10 @@ TF_BUILTIN(StoreFastElementIC_InBounds, HandlerBuiltinsAssembler) {
   Generate_StoreFastElementIC(KeyedAccessStoreMode::kInBounds);
 }
 
+TF_BUILTIN(ISX_StoreFastElementIC_InBounds, HandlerBuiltinsAssembler) {
+  Generate_StoreFastElementIC(KeyedAccessStoreMode::kInBounds);
+}
+
 TF_BUILTIN(StoreFastElementIC_NoTransitionGrowAndHandleCOW,
            HandlerBuiltinsAssembler) {
   Generate_StoreFastElementIC(KeyedAccessStoreMode::kGrowAndHandleCOW);

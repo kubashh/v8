@@ -144,6 +144,16 @@ class V8_EXPORT_PRIVATE CpuFeatures : public AllStatic {
     return dcache_line_size_;
   }
 
+  static inline unsigned supported_features() {
+    DCHECK(initialized_);
+    return supported_;
+  }
+
+  static inline void set_supported_features(unsigned features) {
+    DCHECK(initialized_);
+    supported_ = features;
+  }
+
   static void PrintTarget();
   static void PrintFeatures();
 

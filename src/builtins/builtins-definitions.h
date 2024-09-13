@@ -19,6 +19,14 @@ namespace internal {
 #define IF_TSA(TSA_MACRO, CSA_MACRO) CSA_MACRO
 #endif
 
+// #ifdef V8_BUILTINS_INSTRUCTION_SET_EXTENSION && V8_TARGET_ARCH_X64
+// #else
+// #endif
+
+#define IF_ISX(MACRO, NAME, DESCRIPTOR) \
+  MACRO(NAME, DESCRIPTOR)               \
+  MACRO(ISX_##NAME, DESCRIPTOR)
+
 // CPP: Builtin in C++. Entered via BUILTIN_EXIT frame.
 //      Args: name
 // TFJ: Builtin in Turbofan, with JS linkage (callable as Javascript function).
@@ -321,7 +329,7 @@ namespace internal {
   TFH(KeyedStoreIC_SloppyArguments_NoTransitionIgnoreTypedArrayOOB,            \
       StoreWithVector)                                                         \
   TFH(KeyedStoreIC_SloppyArguments_NoTransitionHandleCOW, StoreWithVector)     \
-  TFH(StoreFastElementIC_InBounds, StoreWithVector)                            \
+  IF_ISX(TFH, StoreFastElementIC_InBounds, StoreWithVector)                    \
   TFH(StoreFastElementIC_NoTransitionGrowAndHandleCOW, StoreWithVector)        \
   TFH(StoreFastElementIC_NoTransitionIgnoreTypedArrayOOB, StoreWithVector)     \
   TFH(StoreFastElementIC_NoTransitionHandleCOW, StoreWithVector)               \

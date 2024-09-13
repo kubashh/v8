@@ -7,6 +7,7 @@
 #include "src/builtins/builtins-inl.h"
 #include "src/builtins/profile-data-reader.h"
 #include "src/codegen/assembler-inl.h"
+#include "src/codegen/cpu-features.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
@@ -40,6 +41,53 @@ BUILTIN_LIST_C(FORWARD_DECLARE)
 #undef FORWARD_DECLARE
 
 namespace {
+
+enum class InstructionSetExtensionMode {
+  // Do not use extended instruction sets.
+  kNoExtension,
+  // Use extended instruction sets.
+  kExtension
+};
+
+// #if V8_BUILTINS_INSTRUCTION_SET_EXTENSION && V8_TARGET_ARCH_X64
+
+class InstructionSetExtensionScope {
+ public:
+  InstructionSetExtensionScope(Builtin builtin) {
+    if (IsInstructionSetExtensionBuiltin(builtin)) {
+      old_features_ = CpuFeatures::supported_features();
+      CpuFeatures::SetSupported(SSE4_1);
+      initialized_ = true;
+    }
+  }
+
+  ~InstructionSetExtensionScope() {
+    if (initialized_) {
+      CpuFeatures::set_supported_features(old_features_);
+    }
+  }
+
+ private:
+  bool IsInstructionSetExtensionBuiltin(Builtin builtin) {
+    if (builtin == Builtin::kISX_StoreFastElementIC_InBounds) {
+      return true;
+    }
+    return false;
+  }
+  bool initialized_ = false;
+  unsigned old_features_ = 0;
+};
+// #else
+// bool NeedInstructionSetExtension(Builtin builtin) {
+//   return false;
+// }
+
+// class InstructionSetExtensionScope {
+//   public:
+//     InstructionSetExtensionScope() {}
+//     ~InstructionSetExtensionScope() {}
+// };
+// #endif
 
 const int kBufferSize = 128 * KB;
 
@@ -286,6 +334,7 @@ V8_NOINLINE Tagged<Code> BuildWithCodeStubAssemblerCS(
   // an actual use.
   USE(&BuildWithTurboshaftAssemblerCS);
   HandleScope scope(isolate);
+  InstructionSetExtensionScope isx_scope(builtin);
   Zone zone(isolate->allocator(), ZONE_NAME, kCompressGraphZone);
   // The interface descriptor with given key must be initialized at this point
   // and this construction just queries the details from the descriptors table.
