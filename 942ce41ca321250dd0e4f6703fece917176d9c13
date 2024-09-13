@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc25029b_e4198074",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-13T13:05:01Z",
+      "side": 1,
+      "message": "lgtm from my side. Please wait for Samuel",
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
