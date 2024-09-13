@@ -173,6 +173,8 @@ macro ExtractFixedDoubleArray(
           ConstantIterator(kDoubleHole)));
 }
 
+extern macro ArrayListAdd(ArrayList, Object): ArrayList;
+
 namespace runtime {
 extern runtime FatalProcessOutOfMemoryInvalidArrayLength(NoContext): never;
 }

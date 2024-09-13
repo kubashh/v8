@@ -1139,6 +1139,73 @@ class JSIteratorResult : public JSObject {
   OBJECT_CONSTRUCTORS(JSIteratorResult, JSObject);
 };
 
+class JSClassDecoratorContextObject : public JSObject {
+ public:
+  DECL_ACCESSORS(kind, Tagged<Object>)
+  DECL_ACCESSORS(name, Tagged<Object>)
+  DECL_ACCESSORS(addInitializer, Tagged<Object>)
+
+  // Layout description.
+#define JS_CLASS_DECORATOR_CONTEXT_OBJECT_FIELDS(V) \
+  V(kKindOffset, kTaggedSize)                       \
+  V(kNameOffset, kTaggedSize)                       \
+  V(kAddInitializerOffset, kTaggedSize)             \
+  /* Total size. */                                 \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,
+                                JS_CLASS_DECORATOR_CONTEXT_OBJECT_FIELDS)
+#undef JS_CLASS_DECORATOR_CONTEXT_OBJECT_FIELDS
+
+  OBJECT_CONSTRUCTORS(JSClassDecoratorContextObject, JSObject);
+};
+class JSClassElementDecoratorContextObject : public JSObject {
+ public:
+  DECL_ACCESSORS(kind, Tagged<Object>)
+  DECL_ACCESSORS(access, Tagged<Object>)
+  DECL_ACCESSORS(is_static, Tagged<Object>)
+  DECL_ACCESSORS(is_private, Tagged<Object>)
+  DECL_ACCESSORS(name, Tagged<Object>)
+  DECL_ACCESSORS(add_initializer, Tagged<Object>)
+
+  // Layout description.
+#define JS_CLASS_ELEMENT_DECORATOR_CONTEXT_OBJECT_FIELDS(V) \
+  V(kKindOffset, kTaggedSize)                               \
+  V(kAccessOffset, kTaggedSize)                             \
+  V(kIsStaticOffset, kTaggedSize)                           \
+  V(kIsPrivateOffset, kTaggedSize)                          \
+  V(kNameOffset, kTaggedSize)                               \
+  V(kAddInitializerOffset, kTaggedSize)                     \
+  /* Total size. */                                         \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(
+      JSObject::kHeaderSize, JS_CLASS_ELEMENT_DECORATOR_CONTEXT_OBJECT_FIELDS)
+#undef JS_CLASS_ELEMENT_DECORATOR_CONTEXT_OBJECT_FIELDS
+
+  OBJECT_CONSTRUCTORS(JSClassElementDecoratorContextObject, JSObject);
+};
+
+class JSDecoratorAccessObject : public JSObject {
+ public:
+  DECL_ACCESSORS(get, Tagged<Object>)
+  DECL_ACCESSORS(set, Tagged<Object>)
+  DECL_ACCESSORS(has, Tagged<Object>)
+
+  // Layout description.
+#define JS_DECORATOR_ACCESS_OBJECT_FIELDS(V) \
+  V(kGetOffset, kTaggedSize)                 \
+  V(kSetOffset, kTaggedSize)                 \
+  V(kHasOffset, kTaggedSize)                 \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,
+                                JS_DECORATOR_ACCESS_OBJECT_FIELDS)
+#undef JS_DECORATOR_ACCESS_OBJECT_FIELDS
+
+  OBJECT_CONSTRUCTORS(JSDecoratorAccessObject, JSObject);
+};
+
 // JSGlobalProxy's prototype must be a JSGlobalObject or null,
 // and the prototype is hidden. JSGlobalProxy always delegates
 // property accesses to its prototype if the prototype is not null.

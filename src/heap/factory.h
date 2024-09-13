@@ -830,6 +830,23 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<JSAsyncFromSyncIterator> NewJSAsyncFromSyncIterator(
       DirectHandle<JSReceiver> sync_iterator, DirectHandle<Object> next);
 
+  Handle<JSDecoratorAccessObject> NewJSDecoratorAccessObject(
+      DirectHandle<Name> name);
+
+  Handle<JSFunction> NewDecoratorAddInitializerFunction(
+      Isolate* isolate, DirectHandle<ArrayList> extra_class_initializers);
+
+  Handle<JSClassDecoratorContextObject> NewJSClassDecoratorContextObject(
+      DirectHandle<String> name,
+      DirectHandle<JSFunction> add_initializer_function);
+
+  Handle<JSClassElementDecoratorContextObject>
+  NewJSClassElementDecoratorContextObject(
+      DirectHandle<String> kind,
+      DirectHandle<JSDecoratorAccessObject> decorator_access_object,
+      Handle<Boolean> is_static, Handle<Boolean> is_private,
+      DirectHandle<String> name, Handle<JSFunction> add_initializer_function);
+
   Handle<JSMap> NewJSMap();
   Handle<JSSet> NewJSSet();
 

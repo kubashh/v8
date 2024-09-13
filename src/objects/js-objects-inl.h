@@ -50,6 +50,12 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(JSDate)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSGlobalObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSGlobalProxy)
 JSIteratorResult::JSIteratorResult(Address ptr) : JSObject(ptr) {}
+JSClassDecoratorContextObject::JSClassDecoratorContextObject(Address ptr)
+    : JSObject(ptr) {}
+JSClassElementDecoratorContextObject::JSClassElementDecoratorContextObject(
+    Address ptr)
+    : JSObject(ptr) {}
+JSDecoratorAccessObject::JSDecoratorAccessObject(Address ptr) : JSObject(ptr) {}
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSMessageObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSPrimitiveWrapper)
 TQ_OBJECT_CONSTRUCTORS_IMPL(JSStringIterator)
@@ -1007,6 +1013,28 @@ inline int JSGlobalProxy::SizeWithEmbedderFields(int embedder_field_count) {
 
 ACCESSORS(JSIteratorResult, value, Tagged<Object>, kValueOffset)
 ACCESSORS(JSIteratorResult, done, Tagged<Object>, kDoneOffset)
+
+ACCESSORS(JSClassDecoratorContextObject, kind, Tagged<Object>, kKindOffset)
+ACCESSORS(JSClassDecoratorContextObject, name, Tagged<Object>, kNameOffset)
+ACCESSORS(JSClassDecoratorContextObject, addInitializer, Tagged<Object>,
+          kAddInitializerOffset)
+
+ACCESSORS(JSClassElementDecoratorContextObject, kind, Tagged<Object>,
+          kKindOffset)
+ACCESSORS(JSClassElementDecoratorContextObject, access, Tagged<Object>,
+          kAccessOffset)
+ACCESSORS(JSClassElementDecoratorContextObject, is_static, Tagged<Object>,
+          kIsStaticOffset)
+ACCESSORS(JSClassElementDecoratorContextObject, is_private, Tagged<Object>,
+          kIsPrivateOffset)
+ACCESSORS(JSClassElementDecoratorContextObject, name, Tagged<Object>,
+          kNameOffset)
+ACCESSORS(JSClassElementDecoratorContextObject, add_initializer, Tagged<Object>,
+          kAddInitializerOffset)
+
+ACCESSORS(JSDecoratorAccessObject, get, Tagged<Object>, kGetOffset)
+ACCESSORS(JSDecoratorAccessObject, set, Tagged<Object>, kSetOffset)
+ACCESSORS(JSDecoratorAccessObject, has, Tagged<Object>, kHasOffset)
 
 // If the fast-case backing storage takes up much more memory than a dictionary
 // backing storage would, the object should have slow elements.
