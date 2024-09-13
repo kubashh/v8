@@ -95,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb1abfef_561c18a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2024-09-13T05:16:28Z",
+      "side": 1,
+      "message": "Hi Leszek, thanks for your suggestion! I think this make sense. I will update this CL to support `SetEnumeratedKeyedProperty` and use `MegaTransition` for it.",
+      "parentUuid": "002d8d33_53554896",
+      "revId": "fd0ac6f588c10d1cdc399a86630c97155c83c3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "adc824e4_11a9cbb9",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 11
