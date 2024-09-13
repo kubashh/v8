@@ -305,6 +305,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34ffd27e_ed88a1d7",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 71
+      },
+      "lineNbr": 2641,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-13T06:33:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "de8cf91a_05f06701",
+      "range": {
+        "startLine": 2641,
+        "startChar": 19,
+        "endLine": 2641,
+        "endChar": 44
+      },
+      "revId": "efede5692b823677548ebf281f3199878fb466b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb99ffdb_4fd47372",
