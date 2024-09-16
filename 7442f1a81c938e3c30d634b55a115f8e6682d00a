@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8622e47_380949c9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6129,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-16T15:36:55Z",
+      "side": 1,
+      "message": "I think it would be good to add a predicate which checks whether the function is marked for turbofan optimization, or is actively being compiled  to turbofan (using IsInProgress and IsRequestTurbofan), otherwise this is very sensitive to thread scheduling.",
+      "range": {
+        "startLine": 6129,
+        "startChar": 24,
+        "endLine": 6129,
+        "endChar": 44
+      },
+      "revId": "7442f1a81c938e3c30d634b55a115f8e6682d00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
