@@ -110,6 +110,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ca58a9c_f648932a",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-16T11:05:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7d0c0a02_10c833cf",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 49
+      },
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8e4951f_f375cc65",
@@ -133,6 +157,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77623f0_ab65eecf",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-16T11:05:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c8e4951f_f375cc65",
+      "range": {
+        "startLine": 1584,
+        "startChar": 7,
+        "endLine": 1584,
+        "endChar": 9
+      },
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeead905_075c8bb7",
@@ -146,6 +194,30 @@
       "writtenOn": "2024-09-16T09:43:11Z",
       "side": 1,
       "message": "also here",
+      "range": {
+        "startLine": 1590,
+        "startChar": 3,
+        "endLine": 1590,
+        "endChar": 4
+      },
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c055458e_a1c0cc33",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-16T11:05:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "eeead905_075c8bb7",
       "range": {
         "startLine": 1590,
         "startChar": 3,
