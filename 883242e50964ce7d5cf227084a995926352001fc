@@ -50,6 +50,24 @@
       "message": "np! btw, my +1 survived ))",
       "revId": "883242e50964ce7d5cf227084a995926352001fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97c5faca_a1c9d727",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-16T11:29:22Z",
+      "side": 1,
+      "message": "Thank you! I\u0027m feeling like every time I touch Gerrit, unexpected thing happens 😅",
+      "parentUuid": "0f6653d8_f542255c",
+      "revId": "883242e50964ce7d5cf227084a995926352001fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
