@@ -85,6 +85,24 @@
       "message": "\u003e Tryjob v8/try/v8_mac_arm64_rel has failed\n\n\u003e ERROR: start fetch: rpc error: code \u003d NotFound desc \u003d stream path not found\n\nLooks like CI for arm64 just failed to start...",
       "revId": "883242e50964ce7d5cf227084a995926352001fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b06c378c_e8c3de52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-16T13:15:37Z",
+      "side": 1,
+      "message": "yeah looks like we have an infra problem there -- let\u0027s retry later.",
+      "parentUuid": "5d2a6f94_7f3f5486",
+      "revId": "883242e50964ce7d5cf227084a995926352001fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
