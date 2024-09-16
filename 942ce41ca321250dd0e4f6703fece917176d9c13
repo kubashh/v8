@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebfa4082_a08862eb",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-09-16T22:33:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b15e93c2_8691e553",
+      "range": {
+        "startLine": 412,
+        "startChar": 4,
+        "endLine": 412,
+        "endChar": 21
+      },
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "973839b1_c2ea0b5b",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "437c004a_620aedef",
+        "filename": "src/sandbox/indirect-pointer-tag.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-09-16T22:33:30Z",
+      "side": 1,
+      "message": "Done\n\nI added a TODO.\nI think it would be great if we could enforce specifically shared types. My understanding from the decision to choose the tag based on the sharedness of the host was that we expect the same types to have both shared and non-shared instances.\n\nImo it will be best if someone could put together a design doc for this and clarify what the assumptions/expectations are. Having an example to work against (and test against), would be even better.",
+      "parentUuid": "973839b1_c2ea0b5b",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 52
+      },
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11325b01_3f83e2ec",
@@ -94,6 +142,30 @@
       "writtenOn": "2024-09-13T13:39:59Z",
       "side": 1,
       "message": "This is a bit awkward now.. I wonder if we can just simplify this to something like\n```\nreturn IsSharedTrustedPointerType(tag) || IsPerIsolateTrustedPointerType(tag);\n```\nWhere each of them just does a range check?",
+      "range": {
+        "startLine": 141,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 15
+      },
+      "revId": "942ce41ca321250dd0e4f6703fece917176d9c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace0ab02_30fa30fd",
+        "filename": "src/sandbox/indirect-pointer-tag.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-09-16T22:33:30Z",
+      "side": 1,
+      "message": "Done.\n\nI assumed we wanted this one to check the individual values rather than a range check, in case there are gaps in the range. I suppose that assumption was false.",
+      "parentUuid": "11325b01_3f83e2ec",
       "range": {
         "startLine": 141,
         "startChar": 0,
