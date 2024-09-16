@@ -33,6 +33,24 @@
       "message": "Thanks Sho -- do you have any numbers on the performance improvement?",
       "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "091c2d2a_fffac698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1370115
+      },
+      "writtenOn": "2024-09-16T09:09:43Z",
+      "side": 1,
+      "message": "\u003e Thanks Sho -- do you have any numbers on the performance improvement?\n\nSorry, I forgot to include the numbers.\n\nRoughly 4~6 faster than JSON.stringify on main for long strings where escaping is not needed.\n\n---\n\n`\u0027a\u0027.repeat(100_000)` # a...a\n\n\\[main]\n0.25499999999999995\n[pr]\n0.040429999999999994 (6x faster than main)\n[js]\n0.002080000000000002\n\n---\n\n`\u0027a\u0027.repeat(100_000_000)` # a...a\n\n\\[main]\n223.06750999999997\n[pr]\n53.236250000000034 (4x faster than main)\n[js]\n1.8166999999999953\n\n---\n\n`\u0027a\u0027.repeat(100_000) + \u0027\"\u0027` # a...a\"\n\n\\[main]\n0.2433\n[pr]\n0.03958999999999999 (6x faster than main)\n[js]\n0.005830000000000002\n\n---\n\n`\u0027a\"\u0027.repeat(100_000)` # a\"...a\"\n\n\\[main]\n0.6454300000000004\n[pr]\n0.6466200000000015\n[js]\n5.196250000000003\n\n---\n\n`\u0027a𩸽\u0027.repeat(100_000)` # a𩸽...a𩸽\n\n\\[main]\n0.7491500000000001\n[pr]\n0.7345499999999998\n[js]\n0.010030000000000231\n\n---\n\n*main: 1f5183f7ad6cca21029fd60653d075730c644432\n*pr: this pr\n*js: a function naively implemented in JS",
+      "parentUuid": "f25ed00b_796161b9",
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
