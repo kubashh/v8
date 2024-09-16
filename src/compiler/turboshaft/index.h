@@ -532,7 +532,12 @@ using NumberOrUndefined = UnionOf<Number, Undefined>;
 
 using NonBigIntPrimitive = UnionOf<Symbol, PlainPrimitive>;
 using Primitive = UnionOf<BigInt, NonBigIntPrimitive>;
-using CallTarget = UntaggedUnion<WordPtr, Code, JSFunction>;
+#ifdef V8_ENABLE_WASM_CODE_POINTER_TABLE
+using WasmCodePtr = Word32;
+#else
+using WasmCodePtr = WordPtr;
+#endif
+using CallTarget = UntaggedUnion<WordPtr, Code, JSFunction, WasmCodePtr>;
 using AnyOrNone = UntaggedUnion<Any, None>;
 
 #ifdef HAS_CPP_CONCEPTS

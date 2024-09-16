@@ -83,6 +83,25 @@ class V8_EXPORT_PRIVATE DisjointAllocationPool final {
   std::set<base::AddressRegion, base::AddressRegion::StartAddressLess> regions_;
 };
 
+#if V8_ENABLE_WASM_CODE_POINTER_TABLE
+// TODO(sroettger): remove these once it's enabled by default
+using WasmCodePointer = WasmCodePointerTable::Handle;
+constexpr WasmCodePointer kInvalidWasmCodePointer =
+    WasmCodePointerTable::kInvalidHandle;
+#else
+using WasmCodePointer = Address;
+constexpr WasmCodePointer kInvalidWasmCodePointer = kNullAddress;
+#endif
+
+template <Builtin builtin>
+WasmCodePointer GetBuiltinCodePointer(Isolate* isolate) {
+#if V8_ENABLE_WASM_CODE_POINTER_TABLE
+  return Builtins::WasmBuiltinHandleOf<builtin>(isolate);
+#else
+  return Builtins::EntryOf(builtin, isolate);
+#endif
+}
+
 class V8_EXPORT_PRIVATE WasmCode final {
  public:
   enum Kind {
@@ -169,6 +188,13 @@ class V8_EXPORT_PRIVATE WasmCode final {
   }
   Address instruction_start() const {
     return reinterpret_cast<Address>(instructions_);
+  }
+  WasmCodePointer code_pointer() const {
+#ifdef V8_ENABLE_WASM_CODE_POINTER_TABLE
+    return code_pointer_handle_;
+#else
+    return instruction_start();
+#endif
   }
   size_t instructions_size() const {
     return static_cast<size_t>(instructions_size_);
@@ -337,7 +363,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
 
   static bool ShouldAllocateCodePointerHandle(int index, Kind kind);
   static WasmCodePointerTable::Handle MaybeAllocateCodePointerHandle(
-      NativeModule* native_module, int index, Kind kind);
+      NativeModule* native_module, int index, Kind kind, Address entry);
 
   WasmCode(NativeModule* native_module, int index,
            base::Vector<uint8_t> instructions, int stack_slots, int ool_spills,
@@ -353,8 +379,9 @@ class V8_EXPORT_PRIVATE WasmCode final {
            bool frame_has_feedback_slot = false)
       : native_module_(native_module),
         instructions_(instructions.begin()),
-        code_pointer_handle_(
-            MaybeAllocateCodePointerHandle(native_module, index, kind)),
+        code_pointer_handle_(MaybeAllocateCodePointerHandle(
+            native_module, index, kind,
+            reinterpret_cast<Address>(instructions.begin()))),
         meta_data_(ConcatenateBytes({protected_instructions_data, reloc_info,
                                      source_position_table, inlining_positions,
                                      deopt_data})),
@@ -652,7 +679,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // to a function index.
   uint32_t GetFunctionIndexFromJumpTableSlot(Address slot_address) const;
 
-  uint32_t GetFunctionIndexFromIndirectCallTarget(Address target) const;
+  uint32_t GetFunctionIndexFromIndirectCallTarget(WasmCodePointer target) const;
 
   // For cctests, where we build both WasmModule and the runtime objects
   // on the fly, and bypass the instance builder pipeline.
@@ -871,7 +898,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   }
 
   WasmCodePointerTable::Handle GetCodePointerHandle(int index) const;
-  Address GetIndirectCallTarget(int index) const;
+  WasmCodePointer GetIndirectCallTarget(int index) const;
 
  private:
   friend class WasmCode;

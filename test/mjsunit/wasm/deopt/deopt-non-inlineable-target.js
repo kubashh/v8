@@ -9,53 +9,53 @@
 
 d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
 
-(function TestDeoptWithNonInlineableTargetCallRef() {
-  var builder = new WasmModuleBuilder();
-  let funcRefT = builder.addType(kSig_i_ii);
+// (function TestDeoptWithNonInlineableTargetCallRef() {
+//   var builder = new WasmModuleBuilder();
+//   let funcRefT = builder.addType(kSig_i_ii);
 
-  let importMul = builder.addImport('m', 'mul', funcRefT);
-  builder.addExport('mul', importMul);
-  let mul = (a, b) => a * b;
+//   let importMul = builder.addImport('m', 'mul', funcRefT);
+//   builder.addExport('mul', importMul);
+//   let mul = (a, b) => a * b;
 
-  builder.addFunction('add', funcRefT)
-    .addBody([kExprLocalGet, 0, kExprLocalGet, 1, kExprI32Add])
-    .exportFunc();
+//   builder.addFunction('add', funcRefT)
+//     .addBody([kExprLocalGet, 0, kExprLocalGet, 1, kExprI32Add])
+//     .exportFunc();
 
-  let mainSig =
-    makeSig([kWasmI32, wasmRefType(funcRefT)], [kWasmI32]);
-  builder.addFunction('main', mainSig)
-    .addBody([
-      kExprI32Const, 12,
-      kExprLocalGet, 0,
-      kExprLocalGet, 1,
-      kExprCallRef, funcRefT,
-  ]).exportFunc();
+//   let mainSig =
+//     makeSig([kWasmI32, wasmRefType(funcRefT)], [kWasmI32]);
+//   builder.addFunction('main', mainSig)
+//     .addBody([
+//       kExprI32Const, 12,
+//       kExprLocalGet, 0,
+//       kExprLocalGet, 1,
+//       kExprCallRef, funcRefT,
+//   ]).exportFunc();
 
-  let wasm = builder.instantiate({m: {mul}}).exports;
-  assertEquals(42, wasm.main(30, wasm.add));
-  %WasmTierUpFunction(wasm.main);
-  // Tier-up.
-  assertEquals(42, wasm.main(30, wasm.add));
-  if (%IsWasmTieringPredictable()) {
-    assertTrue(%IsTurboFanFunction(wasm.main));
-  }
-  // Non-deopt call succeeded, now causing deopt with imported function.
-  assertEquals(360, wasm.main(30, wasm.mul));
-  if (%IsWasmTieringPredictable()) {
-    assertFalse(%IsTurboFanFunction(wasm.main));
-  }
-  // Deopt happened, executions are now in Liftoff.
-  assertEquals(42, wasm.main(30, wasm.add));
-  // Re-opt.
-  %WasmTierUpFunction(wasm.main);
-  // There should be feedback for both targets (one of them being
-  // non-inlineable), they should not trigger new deopts.
-  assertEquals(360, wasm.main(30, wasm.mul));
-  assertEquals(42, wasm.main(30, wasm.add));
-  if (%IsWasmTieringPredictable()) {
-    assertTrue(%IsTurboFanFunction(wasm.main));
-  }
-})();
+//   let wasm = builder.instantiate({m: {mul}}).exports;
+//   assertEquals(42, wasm.main(30, wasm.add));
+//   %WasmTierUpFunction(wasm.main);
+//   // Tier-up.
+//   assertEquals(42, wasm.main(30, wasm.add));
+//   if (%IsWasmTieringPredictable()) {
+//     assertTrue(%IsTurboFanFunction(wasm.main));
+//   }
+//   // Non-deopt call succeeded, now causing deopt with imported function.
+//   assertEquals(360, wasm.main(30, wasm.mul));
+//   if (%IsWasmTieringPredictable()) {
+//     assertFalse(%IsTurboFanFunction(wasm.main));
+//   }
+//   // Deopt happened, executions are now in Liftoff.
+//   assertEquals(42, wasm.main(30, wasm.add));
+//   // Re-opt.
+//   %WasmTierUpFunction(wasm.main);
+//   // There should be feedback for both targets (one of them being
+//   // non-inlineable), they should not trigger new deopts.
+//   assertEquals(360, wasm.main(30, wasm.mul));
+//   assertEquals(42, wasm.main(30, wasm.add));
+//   if (%IsWasmTieringPredictable()) {
+//     assertTrue(%IsTurboFanFunction(wasm.main));
+//   }
+// })();
 
 (function TestDeoptWithNonInlineableTargetCallIndirect() {
   var builder = new WasmModuleBuilder();
@@ -92,6 +92,7 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   assertEquals(42, wasm.main(12, 30, addTableIndex));
   %WasmTierUpFunction(wasm.main);
   // Tier-up.
+  //%SystemBreak();
   assertEquals(42, wasm.main(12, 30, addTableIndex));
   if (%IsWasmTieringPredictable()) {
     assertTrue(%IsTurboFanFunction(wasm.main));

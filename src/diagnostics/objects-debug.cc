@@ -2440,7 +2440,7 @@ void WasmDispatchTable::WasmDispatchTableVerify(Isolate* isolate) {
           arg == Smi::zero());
     if (!v8_flags.wasm_jitless) {
       // call_target always null with the interpreter.
-      CHECK_EQ(arg == Smi::zero(), target(i) == kNullAddress);
+      CHECK_EQ(arg == Smi::zero(), target(i) == wasm::kInvalidWasmCodePointer);
     }
   }
 }
