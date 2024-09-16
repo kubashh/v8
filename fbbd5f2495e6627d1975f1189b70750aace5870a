@@ -51,6 +51,92 @@
       "parentUuid": "f25ed00b_796161b9",
       "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bcfc5d7_1f218b26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-16T09:43:11Z",
+      "side": 1,
+      "message": "Very nice first contribution, thanks! Just some nits, you\u0027ll need a second +1 before you can submit though.",
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d0c0a02_10c833cf",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-16T09:43:11Z",
+      "side": 1,
+      "message": "I think you could skip this check if you earlier ensure `CurrentPartCanFit(count + 1)` instead (could do the same for `AppendString` too)",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 49
+      },
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e4951f_f375cc65",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-16T09:43:11Z",
+      "side": 1,
+      "message": "I assume this wrapping change is unintentional, please revert (it helps us keep git blame history cleaner)",
+      "range": {
+        "startLine": 1584,
+        "startChar": 7,
+        "endLine": 1584,
+        "endChar": 9
+      },
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeead905_075c8bb7",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-09-16T09:43:11Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 1590,
+        "startChar": 3,
+        "endLine": 1590,
+        "endChar": 4
+      },
+      "revId": "fbbd5f2495e6627d1975f1189b70750aace5870a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
