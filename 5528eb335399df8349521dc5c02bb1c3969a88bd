@@ -22,6 +22,30 @@
       },
       "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be6559f_1d90977a",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-16T11:32:07Z",
+      "side": 1,
+      "message": "Orthogonal idea to try as a follow-up: jumping to a dedicated builtin doing abort or trap might be nicer because:\n1) fallthrough is a \"faster\" path\n2) should it ever fail it\u0027d be easy to distinguish the crash signature from other crashes.\nNot sure which variant is better performance wise. Codesize-wise `int3` variant is better.",
+      "parentUuid": "0d07a903_30dcc03c",
+      "range": {
+        "startLine": 3230,
+        "startChar": 0,
+        "endLine": 3231,
+        "endChar": 9
+      },
+      "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

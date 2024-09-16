@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d309a8c_6f9dd301",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-16T11:32:07Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea750083_aacfd4d1",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4013,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-16T11:32:07Z",
+      "side": 1,
+      "message": "The callers allocate registers manually but do not make `UseScratchRegisterScope` aware of taken registers, so theoretically there could be a register clash here.\nPlease add a `[D]CHECK(!AreAliased(..));` to avoid surprises or add an explicit `scratch` register argument.",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81535771_4dcbac0e",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-16T11:32:07Z",
+      "side": 1,
+      "message": "How about introducing a helper function?",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e390b28_21c37f76",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2616,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-16T11:32:07Z",
+      "side": 1,
+      "message": "Aren\u0027t you adding this argument for non-leaptiering configurations too?",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
