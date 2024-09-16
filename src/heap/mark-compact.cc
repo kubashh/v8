@@ -822,19 +822,21 @@ void MarkCompactCollector::Finish() {
   }
 
   if (heap_->new_space()) {
-    if (v8_flags.minor_ms) {
-      switch (resize_new_space_) {
-        case ResizeNewSpaceMode::kShrink:
-          heap_->ReduceNewSpaceSize();
-          break;
-        case ResizeNewSpaceMode::kGrow:
-          heap_->ExpandNewSpaceSize();
-          break;
-        case ResizeNewSpaceMode::kNone:
-          break;
-      }
-      resize_new_space_ = ResizeNewSpaceMode::kNone;
+    if (!v8_flags.minor_ms) {
+      DCHECK_EQ(Heap::ResizeNewSpaceMode::kNone, resize_new_space_);
+      resize_new_space_ = heap_->ShouldResizeNewSpace();
     }
+    switch (resize_new_space_) {
+      case ResizeNewSpaceMode::kShrink:
+        heap_->ReduceNewSpaceSize();
+        break;
+      case ResizeNewSpaceMode::kGrow:
+        heap_->ExpandNewSpaceSize();
+        break;
+      case ResizeNewSpaceMode::kNone:
+        break;
+    }
+    resize_new_space_ = ResizeNewSpaceMode::kNone;
     TRACE_GC(heap_->tracer(), GCTracer::Scope::MC_EVACUATE);
     TRACE_GC(heap_->tracer(), GCTracer::Scope::MC_EVACUATE_REBALANCE);
     if (!heap_->new_space()->EnsureCurrentCapacity()) {
