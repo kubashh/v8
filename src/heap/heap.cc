@@ -5072,36 +5072,33 @@ void Heap::ConfigureHeap(const v8::ResourceConstraints& constraints,
   }
 
   // Initialize initial_old_space_size_.
-  {
-    initial_old_generation_size_ = kMaxInitialOldGenerationSize;
+  std::optional<size_t> initial_old_generation_size =
+      [&]() -> std::optional<size_t> {
     if (constraints.initial_old_generation_size_in_bytes() > 0) {
-      initial_old_generation_size_ =
-          constraints.initial_old_generation_size_in_bytes();
-      set_old_generation_allocation_limit_configured(true);
+      return constraints.initial_old_generation_size_in_bytes();
     }
     if (v8_flags.initial_heap_size > 0) {
       size_t initial_heap_size =
           static_cast<size_t>(v8_flags.initial_heap_size) * MB;
       size_t young_generation_size =
           YoungGenerationSizeFromSemiSpaceSize(initial_semispace_size_);
-      initial_old_generation_size_ =
-          initial_heap_size > young_generation_size
-              ? initial_heap_size - young_generation_size
-              : 0;
-      set_old_generation_allocation_limit_configured(true);
+      return initial_heap_size > young_generation_size
+                 ? initial_heap_size - young_generation_size
+                 : 0;
     }
     if (v8_flags.initial_old_space_size > 0) {
-      initial_old_generation_size_ =
-          static_cast<size_t>(v8_flags.initial_old_space_size) * MB;
-      set_old_generation_allocation_limit_configured(true);
+      return static_cast<size_t>(v8_flags.initial_old_space_size) * MB;
     }
-    initial_old_generation_size_ =
-        std::min(initial_old_generation_size_, max_old_generation_size() / 2);
-    initial_old_generation_size_ =
-        RoundDown<PageMetadata::kPageSize>(initial_old_generation_size_);
-  }
-
-  if (old_generation_allocation_limit_configured()) {
+    return std::nullopt;
+  }();
+  initial_old_generation_size_ = initial_old_generation_size.has_value()
+                                     ? *initial_old_generation_size
+                                     : kMaxInitialOldGenerationSize;
+  initial_old_generation_size_ =
+      std::min(initial_old_generation_size_, max_old_generation_size() / 2);
+  initial_old_generation_size_ =
+      RoundDown<PageMetadata::kPageSize>(initial_old_generation_size_);
+  if (initial_old_generation_size.has_value()) {
     // If the embedder pre-configures the initial old generation size,
     // then allow V8 to skip full GCs below that threshold.
     min_old_generation_size_ = initial_old_generation_size_;
