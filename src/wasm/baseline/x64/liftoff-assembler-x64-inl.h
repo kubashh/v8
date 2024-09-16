@@ -450,6 +450,16 @@ void LiftoffAssembler::LoadFullPointer(Register dst, Register src_addr,
   movq(dst, src_op);
 }
 
+void LiftoffAssembler::LoadCodePointer(Register dst, Register src_addr,
+                                       int32_t offset_imm) {
+  if constexpr (V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL) {
+    return Load(LiftoffRegister(dst), src_addr, no_reg, offset_imm,
+                LoadType::kI64Load32U);
+  } else {
+    return LoadFullPointer(dst, src_addr, offset_imm);
+  }
+}
+
 #ifdef V8_ENABLE_SANDBOX
 void LiftoffAssembler::LoadCodeEntrypointViaCodePointer(Register dst,
                                                         Register src_addr,
@@ -4814,7 +4824,7 @@ void LiftoffAssembler::CallIndirect(const ValueKindSig* sig,
     popq(kScratchRegister);
     target = kScratchRegister;
   }
-  call(target);
+  CallWasmCodePointer(target);
 }
 
 void LiftoffAssembler::TailCallIndirect(Register target) {
@@ -4822,7 +4832,7 @@ void LiftoffAssembler::TailCallIndirect(Register target) {
     popq(kScratchRegister);
     target = kScratchRegister;
   }
-  jmp(target);
+  CallWasmCodePointer(target, true);
 }
 
 void LiftoffAssembler::CallBuiltin(Builtin builtin) {
