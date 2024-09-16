@@ -652,6 +652,8 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // to a function index.
   uint32_t GetFunctionIndexFromJumpTableSlot(Address slot_address) const;
 
+  uint32_t GetFunctionIndexFromIndirectCallTarget(Address target) const;
+
   // For cctests, where we build both WasmModule and the runtime objects
   // on the fly, and bypass the instance builder pipeline.
   void ReserveCodeTableForTesting(uint32_t max_functions);
@@ -869,6 +871,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   }
 
   WasmCodePointerTable::Handle GetCodePointerHandle(int index) const;
+  Address GetIndirectCallTarget(int index) const;
 
  private:
   friend class WasmCode;
