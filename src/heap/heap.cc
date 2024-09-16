@@ -1056,18 +1056,6 @@ void Heap::GarbageCollectionPrologueInSafepoint() {
   TRACE_GC(tracer(), GCTracer::Scope::HEAP_PROLOGUE_SAFEPOINT);
   gc_count_++;
   new_space_allocation_counter_ = NewSpaceAllocationCounter();
-
-  DCHECK_EQ(ResizeNewSpaceMode::kNone, resize_new_space_mode_);
-  if (new_space_) {
-    if (!v8_flags.minor_ms) {
-      resize_new_space_mode_ = ShouldResizeNewSpace();
-      // Pretenuring heuristics require that new space grows before pretenuring
-      // feedback is processed.
-      if (resize_new_space_mode_ == ResizeNewSpaceMode::kGrow) {
-        ExpandNewSpaceSize();
-      }
-    }
-  }
 }
 
 size_t Heap::NewSpaceAllocationCounter() const {
@@ -1202,16 +1190,6 @@ void Heap::GarbageCollectionEpilogueInSafepoint(GarbageCollector collector) {
   if (v8_flags.print_handles) PrintHandles();
   if (v8_flags.check_handle_count) CheckHandleCount();
 #endif
-
-  if (new_space() && !v8_flags.minor_ms) {
-    {
-      TRACE_GC(tracer(), GCTracer::Scope::HEAP_EPILOGUE_REDUCE_NEW_SPACE);
-      if (resize_new_space_mode_ == ResizeNewSpaceMode::kShrink) {
-        ReduceNewSpaceSize();
-      }
-      resize_new_space_mode_ = ResizeNewSpaceMode::kNone;
-    }
-  }
 
   // Young generation GCs only run with  memory reducing flags during
   // interleaved GCs.
@@ -2318,8 +2296,6 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
   // capacity is set in the epilogue.
   PauseAllocationObserversScope pause_observers(this);
 
-  size_t new_space_capacity_before_gc = NewSpaceTargetCapacity();
-
   if (collector == GarbageCollector::MARK_COMPACTOR) {
     MarkCompact();
   } else if (collector == GarbageCollector::MINOR_MARK_SWEEPER) {
@@ -2329,7 +2305,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
     Scavenge();
   }
 
-  pretenuring_handler_.ProcessPretenuringFeedback(new_space_capacity_before_gc);
+  pretenuring_handler_.ProcessPretenuringFeedback(NewSpaceTargetCapacity());
 
   UpdateSurvivalStatistics(static_cast<int>(start_young_generation_size));
   ShrinkOldGenerationAllocationLimitIfNotConfigured();
