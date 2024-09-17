@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad91f60f_64814989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-17T13:46:20Z",
+      "side": 1,
+      "message": "ptal, pinpoint suggests that at this point there\u0027s no need to expand before the Scavenger GC anymore for the sake of pretenuring heuristics. If a regression pops up we should adjust the pretenuring handler instead of growing before the GC though.",
+      "revId": "7332a48bea949940c68586f040cb5c7c7094dc0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "347661a7_38dcc766",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-17T13:46:20Z",
+      "side": 1,
+      "message": "I will simplify and centralize these blocks in a follow up. I wanted to keep the change as minimal as possible with just moving around the Scavenger timing.",
+      "range": {
+        "startLine": 577,
+        "startChar": 10,
+        "endLine": 577,
+        "endChar": 21
+      },
+      "revId": "7332a48bea949940c68586f040cb5c7c7094dc0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
