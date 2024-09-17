@@ -56,6 +56,30 @@
       },
       "revId": "1cd8f7f413def0dad743db002da68008b5ff2ce2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa7dcbb_24ddd911",
+        "filename": "test/mjsunit/regress/wasm/regress-366635354.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-17T09:58:55Z",
+      "side": 1,
+      "message": "Done. I added this regression test when I was trying to fix the inlined case instead of disabling inlining for it. It was important that the source location is correct and we don\u0027t get additional frames for the builtin that we call to handle the conversion error, so that\u0027s why I\u0027m doing this too complicated thing.\nI guess, I could build a nicer helper function for this at some point in time and put it into mjsunit.js.",
+      "parentUuid": "6c4e5624_5ae2ec8f",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 22
+      },
+      "revId": "1cd8f7f413def0dad743db002da68008b5ff2ce2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
