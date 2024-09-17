@@ -338,6 +338,10 @@ ExternalReference ExternalReference::js_dispatch_table_address() {
 
 #endif  // V8_ENABLE_SANDBOX
 
+ExternalReference ExternalReference::wasm_code_pointer_table() {
+  return ExternalReference(wasm::GetProcessWideWasmCodePointerTable()->base());
+}
+
 ExternalReference ExternalReference::interpreter_dispatch_table_address(
     Isolate* isolate) {
   return ExternalReference(isolate->interpreter()->dispatch_table_address());
