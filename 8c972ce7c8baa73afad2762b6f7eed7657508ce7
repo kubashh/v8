@@ -33,6 +33,24 @@
       "message": "I think it would be better to remove `--wasm-to-js-generic-wrapper` completely and just use `wasm-generic-wrapper` instead.",
       "revId": "8c972ce7c8baa73afad2762b6f7eed7657508ce7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a859ccd_879d04ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-17T13:46:57Z",
+      "side": 1,
+      "message": "Why would it be better? What was the use case of adding two flags? It still allows finer control of the wrappers, so for investigation of a bug it might be helpful to only switch one to compiled but not the other.",
+      "parentUuid": "2ee75bf2_f2c3695b",
+      "revId": "8c972ce7c8baa73afad2762b6f7eed7657508ce7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
