@@ -801,34 +801,36 @@ WasmScript* WasmScript::Cast(Script* script) {
   return static_cast<WasmScript*>(script);
 }
 
-WasmScript::DebugSymbolsType WasmScript::GetDebugSymbolType() const {
-  auto script = Utils::OpenDirectHandle(this);
-  DCHECK_EQ(i::Script::Type::kWasm, script->type());
-  switch (script->wasm_native_module()->module()->debug_symbols.type) {
-    case i::wasm::WasmDebugSymbols::Type::None:
-      return WasmScript::DebugSymbolsType::None;
+WasmScript::DebugSymbols::Type GetDebugSymbolType(
+    i::wasm::WasmDebugSymbols::Type type) {
+  switch (type) {
     case i::wasm::WasmDebugSymbols::Type::EmbeddedDWARF:
-      return WasmScript::DebugSymbolsType::EmbeddedDWARF;
+      return WasmScript::DebugSymbols::Type::EmbeddedDWARF;
     case i::wasm::WasmDebugSymbols::Type::ExternalDWARF:
-      return WasmScript::DebugSymbolsType::ExternalDWARF;
+      return WasmScript::DebugSymbols::Type::ExternalDWARF;
     case i::wasm::WasmDebugSymbols::Type::SourceMap:
-      return WasmScript::DebugSymbolsType::SourceMap;
+      return WasmScript::DebugSymbols::Type::SourceMap;
+    case i::wasm::WasmDebugSymbols::Type::None:
+      return WasmScript::DebugSymbols::Type::None;
   }
 }
 
-MemorySpan<const char> WasmScript::ExternalSymbolsURL() const {
+void WasmScript::GetDebugSymbols(
+    std::vector<WasmScript::DebugSymbols>* debug_symbols) const {
   auto script = Utils::OpenDirectHandle(this);
   DCHECK_EQ(i::Script::Type::kWasm, script->type());
 
-  const i::wasm::WasmDebugSymbols& symbols =
-      script->wasm_native_module()->module()->debug_symbols;
-  if (symbols.external_url.is_empty()) return {};
-
-  internal::wasm::ModuleWireBytes wire_bytes(
-      script->wasm_native_module()->wire_bytes());
-  i::wasm::WasmName external_url =
-      wire_bytes.GetNameOrNull(symbols.external_url);
-  return {external_url.data(), external_url.size()};
+  auto symbols = script->wasm_native_module()->module()->debug_symbols;
+  for (size_t i = 0; i < symbols.size(); ++i) {
+    const i::wasm::WasmDebugSymbols& symbol = symbols[i];
+    DebugSymbols::Type type = GetDebugSymbolType(symbol.type);
+    internal::wasm::ModuleWireBytes wire_bytes(
+        script->wasm_native_module()->wire_bytes());
+    i::wasm::WasmName external_url =
+        wire_bytes.GetNameOrNull(symbol.external_url);
+    MemorySpan<const char> span = {external_url.data(), external_url.size()};
+    debug_symbols->emplace_back(type, span);
+  }
 }
 
 int WasmScript::NumFunctions() const {
