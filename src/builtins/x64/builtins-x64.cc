@@ -1826,36 +1826,36 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
   __ incl(
       FieldOperand(feedback_vector, FeedbackVector::kInvocationCountOffset));
 
-    // Save the return address, so that we can push it to the end of the newly
-    // set-up frame once we're done setting it up.
-    __ PopReturnAddressTo(return_address);
-    FrameScope frame_scope(masm, StackFrame::MANUAL);
-    {
-      ASM_CODE_COMMENT_STRING(masm, "Frame Setup");
-      __ EnterFrame(StackFrame::BASELINE);
+  // Save the return address, so that we can push it to the end of the newly
+  // set-up frame once we're done setting it up.
+  __ PopReturnAddressTo(return_address);
+  FrameScope frame_scope(masm, StackFrame::MANUAL);
+  {
+    ASM_CODE_COMMENT_STRING(masm, "Frame Setup");
+    __ EnterFrame(StackFrame::BASELINE);
 
-      __ Push(descriptor.GetRegisterParameter(
-          BaselineOutOfLinePrologueDescriptor::kCalleeContext));  // Callee's
-                                                                  // context.
-      Register callee_js_function = descriptor.GetRegisterParameter(
-          BaselineOutOfLinePrologueDescriptor::kClosure);
-      DCHECK_EQ(callee_js_function, kJavaScriptCallTargetRegister);
-      DCHECK_EQ(callee_js_function, kJSFunctionRegister);
-      ResetJSFunctionAge(masm, callee_js_function);
-      __ Push(callee_js_function);  // Callee's JS function.
-      __ Push(descriptor.GetRegisterParameter(
-          BaselineOutOfLinePrologueDescriptor::
-              kJavaScriptCallArgCount));  // Actual argument
-                                          // count.
+    __ Push(descriptor.GetRegisterParameter(
+        BaselineOutOfLinePrologueDescriptor::kCalleeContext));  // Callee's
+                                                                // context.
+    Register callee_js_function = descriptor.GetRegisterParameter(
+        BaselineOutOfLinePrologueDescriptor::kClosure);
+    DCHECK_EQ(callee_js_function, kJavaScriptCallTargetRegister);
+    DCHECK_EQ(callee_js_function, kJSFunctionRegister);
+    ResetJSFunctionAge(masm, callee_js_function);
+    __ Push(callee_js_function);  // Callee's JS function.
+    __ Push(descriptor.GetRegisterParameter(
+        BaselineOutOfLinePrologueDescriptor::
+            kJavaScriptCallArgCount));  // Actual argument
+                                        // count.
 
-      // We'll use the bytecode for both code age/OSR resetting, and pushing
-      // onto the frame, so load it into a register.
-      Register bytecode_array = descriptor.GetRegisterParameter(
-          BaselineOutOfLinePrologueDescriptor::kInterpreterBytecodeArray);
-      __ Push(bytecode_array);
-      __ Push(feedback_cell);
-      __ Push(feedback_vector);
-    }
+    // We'll use the bytecode for both code age/OSR resetting, and pushing
+    // onto the frame, so load it into a register.
+    Register bytecode_array = descriptor.GetRegisterParameter(
+        BaselineOutOfLinePrologueDescriptor::kInterpreterBytecodeArray);
+    __ Push(bytecode_array);
+    __ Push(feedback_cell);
+    __ Push(feedback_vector);
+  }
 
   Register new_target = descriptor.GetRegisterParameter(
       BaselineOutOfLinePrologueDescriptor::kJavaScriptCallNewTarget);
@@ -2209,8 +2209,8 @@ void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
     __ movq(rbx, rdi);
     __ cmpq(rax, Immediate(JSParameterCount(1)));
     __ j(below, &done, Label::kNear);
-    __ movq(rdi, args[1]);                     // target
-    __ movq(rdx, rdi);                         // new.target defaults to target
+    __ movq(rdi, args[1]);  // target
+    __ movq(rdx, rdi);      // new.target defaults to target
     __ j(equal, &done, Label::kNear);
     __ movq(rbx, args[2]);  // argumentsList
     __ cmpq(rax, Immediate(JSParameterCount(3)));
@@ -3540,9 +3540,20 @@ void JSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ movq(params_end,
           MemOperand(wrapper_buffer,
                      JSToWasmWrapperFrameConstants::kWrapperBufferParamEnd));
-  __ movq(call_target,
-          MemOperand(wrapper_buffer,
-                     JSToWasmWrapperFrameConstants::kWrapperBufferCallTarget));
+
+  static_assert(sizeof(wasm::WasmCodePointer) == 4 ||
+                sizeof(wasm::WasmCodePointer) == 8);
+  if constexpr (sizeof(wasm::WasmCodePointer) == 4) {
+    __ movl(
+        call_target,
+        MemOperand(wrapper_buffer,
+                   JSToWasmWrapperFrameConstants::kWrapperBufferCallTarget));
+  } else {
+    __ movq(
+        call_target,
+        MemOperand(wrapper_buffer,
+                   JSToWasmWrapperFrameConstants::kWrapperBufferCallTarget));
+  }
 
   Register last_stack_param = rcx;
 
@@ -3593,7 +3604,7 @@ void JSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
             0);
   }
 
-  __ call(call_target);
+  __ CallWasmCodePointer(call_target);
 
   __ movq(
       thread_in_wasm_flag_addr,
@@ -4089,7 +4100,8 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
   // rax. Larger return sizes must be written to an address passed as a hidden
   // first argument.
   static constexpr int kMaxRegisterResultSize = 1;
-  const int kReservedStackSlots = kSwitchToTheCentralStackSlots +
+  const int kReservedStackSlots =
+      kSwitchToTheCentralStackSlots +
       (result_size <= kMaxRegisterResultSize ? 0 : result_size);
 #else
   // Simple results are returned in rax, and a struct of two pointers are
