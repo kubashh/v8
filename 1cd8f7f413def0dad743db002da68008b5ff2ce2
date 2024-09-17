@@ -16,6 +16,46 @@
       "message": "@jkummerow@chromium.org: PTAL.\n@dlehmann@chromium.org: FYI.",
       "revId": "1cd8f7f413def0dad743db002da68008b5ff2ce2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "736082da_c51ddfa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-17T08:42:19Z",
+      "side": 1,
+      "message": "LGTM with a nit. Thanks for fixing this!",
+      "revId": "1cd8f7f413def0dad743db002da68008b5ff2ce2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c4e5624_5ae2ec8f",
+        "filename": "test/mjsunit/regress/wasm/regress-366635354.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-17T08:42:19Z",
+      "side": 1,
+      "message": "`assertUnreachable();` to document intent.\n\nYou could also drop all of `testCallStack` and replace each of its two call sites with:\n```\nassertThrows(wasm_caller, TypeError,\n             \"type incompatibility when transforming from/to JS\");\n```\nif you want.",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 22
+      },
+      "revId": "1cd8f7f413def0dad743db002da68008b5ff2ce2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
