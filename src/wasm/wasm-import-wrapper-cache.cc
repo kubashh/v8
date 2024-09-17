@@ -142,7 +142,7 @@ void WasmImportWrapperCache::LogForIsolate(Isolate* isolate) {
 
 void WasmImportWrapperCache::Free(std::vector<WasmCode*>& wrappers) {
   base::MutexGuard lock(&mutex_);
-  if (entry_map_.empty() || wrappers.empty()) return;
+  if (codes_.empty() || wrappers.empty()) return;
   // {WasmCodeAllocator::FreeCode()} wants code objects to be sorted.
   std::sort(wrappers.begin(), wrappers.end(), [](WasmCode* a, WasmCode* b) {
     return a->instruction_start() < b->instruction_start();

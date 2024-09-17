@@ -70,7 +70,13 @@ class WasmImportWrapperCache {
   };
 
   WasmImportWrapperCache() = default;
-  ~WasmImportWrapperCache() = default;
+  ~WasmImportWrapperCache() {
+    // On process shutdown, don't bother with accurate GC, just free all
+    // known wrappers.
+    for (auto [instruction_start, code] : codes_) {
+      delete code;
+    }
+  }
 
   void LazyInitialize(Isolate* triggering_isolate);
 

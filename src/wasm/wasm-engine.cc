@@ -545,18 +545,6 @@ WasmEngine::~WasmEngine() {
 
   operations_barrier_->CancelAndWait();
 
-  // All code should have been deleted already, but wrappers managed by the
-  // WasmImportWrapperCache are placed in {potentially_dead_code_} when they
-  // are no longer referenced, and we don't want to wait for the next
-  // Wasm Code GC cycle to remove them from that set.
-  for (WasmCode* code : potentially_dead_code_) {
-    code->DcheckRefCountIsOne();
-    // The actual instructions will get thrown out when the global
-    // WasmImportWrapperCache's {code_allocator_} frees its memory region.
-    // Here we just pacify LSan.
-    delete code;
-  }
-
   // All AsyncCompileJobs have been canceled.
   DCHECK(async_compile_jobs_.empty());
   // All Isolates have been deregistered.
