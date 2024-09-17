@@ -1494,7 +1494,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           __ Call(wasm_code, constant.rmode());
         }
       } else {
-        __ call(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0));
       }
       RecordCallPosition(instr);
       AssemblePlaceHolderForLazyDeopt(instr);
@@ -1512,7 +1512,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           __ jmp(kScratchRegister);
         }
       } else {
-        __ jmp(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0), true);
       }
       unwinding_info_writer_.MarkBlockWillExit();
       frame_access_state()->ClearSPDelta();
