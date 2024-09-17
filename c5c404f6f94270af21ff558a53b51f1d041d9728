@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e79366c_641b8ff6",
+        "filename": "test/cctest/test-js-to-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 872,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-17T08:24:12Z",
+      "side": 0,
+      "message": "Well, I tested `bigint` but I guess, it would\u0027ve been great to test the null check here as well. (To be fair, I thought my mjsunit test was covering that, but it didn\u0027t do that properly.)\n\nAnyways, this test case is now obsolete as it tests and asserts that we inline the wrapper which we don\u0027t do any more.",
+      "range": {
+        "startLine": 872,
+        "startChar": 63,
+        "endLine": 872,
+        "endChar": 72
+      },
+      "revId": "c5c404f6f94270af21ff558a53b51f1d041d9728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
