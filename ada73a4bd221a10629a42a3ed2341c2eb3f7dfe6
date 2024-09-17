@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8088b8f5_f1e2f339",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-17T07:18:25Z",
+      "side": 1,
+      "message": "Looks okay but the bots are not on your side :)",
+      "revId": "ada73a4bd221a10629a42a3ed2341c2eb3f7dfe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
