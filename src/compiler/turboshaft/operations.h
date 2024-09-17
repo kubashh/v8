@@ -1127,7 +1127,7 @@ struct OperationT : Operation {
     OperationStorageSlot* ptr =
         AllocateOpStorage(graph, StorageSlotCount(input_count));
     Derived* result = new (ptr) Derived(args...);
-#ifdef DEBUG
+#if 0
     result->Validate(*graph);
     ZoneVector<MaybeRegisterRepresentation> storage(get_zone(graph));
     base::Vector<const MaybeRegisterRepresentation> expected =
@@ -2606,8 +2606,13 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
       case Kind::kTrustedHeapObject:
       case Kind::kRelocatableWasmCall:
       case Kind::kRelocatableWasmStubCall:
-      case Kind::kRelocatableWasmIndirectCallTarget:
         return RegisterRepresentation::WordPtr();
+      case Kind::kRelocatableWasmIndirectCallTarget:
+        if constexpr (V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL) {
+          return RegisterRepresentation::Word32();
+        } else {
+          return RegisterRepresentation::WordPtr();
+        }
       case Kind::kSmi:
       case Kind::kHeapObject:
       case Kind::kNumber:
@@ -3992,6 +3997,10 @@ struct CallOp : OperationT<CallOp> {
         descriptor->descriptor->IsJSFunctionCall() ||
         descriptor->descriptor->IsBuiltinPointerCall()) {
       storage[i++] = MaybeRegisterRepresentation::Tagged();
+    } else if (descriptor->descriptor->IsWasmFunctionCall() ||
+               descriptor->descriptor->IsWasmImportWrapper() ||
+               descriptor->descriptor->IsWasmCapiFunction()) {
+      storage[i++] = MaybeRegisterRepresentation::WasmCodePointer();
     } else {
       storage[i++] = MaybeRegisterRepresentation::WordPtr();
     }
@@ -4197,7 +4206,13 @@ struct TailCallOp : OperationT<TailCallOp> {
       ZoneVector<MaybeRegisterRepresentation>& storage) const {
     storage.resize(input_count);
     size_t i = 0;
-    storage[i++] = MaybeRegisterRepresentation::Tagged();  // True for wasm?
+    if (descriptor->descriptor->IsWasmFunctionCall() ||
+        descriptor->descriptor->IsWasmImportWrapper() ||
+        descriptor->descriptor->IsWasmCapiFunction()) {
+      storage[i++] = MaybeRegisterRepresentation::WasmCodePointer();
+    } else {
+      storage[i++] = MaybeRegisterRepresentation::Tagged();  // True for wasm?
+    }
     for (auto rep : descriptor->in_reps) {
       storage[i++] = rep;
     }

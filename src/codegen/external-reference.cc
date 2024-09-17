@@ -331,6 +331,10 @@ ExternalReference ExternalReference::memory_chunk_metadata_table_address() {
   return ExternalReference(MemoryChunk::MetadataTableAddress());
 }
 
+ExternalReference ExternalReference::wasm_code_pointer_table() {
+  return ExternalReference(wasm::GetProcessWideWasmCodePointerTable()->base());
+}
+
 ExternalReference ExternalReference::js_dispatch_table_address() {
   // TODO(saelo): maybe rename to js_dispatch_table_base_address?
   return ExternalReference(GetProcessWideJSDispatchTable()->base_address());
