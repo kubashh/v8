@@ -16,6 +16,23 @@
       "message": "@ahaas@chromium.org: PTAL, thanks!",
       "revId": "8c972ce7c8baa73afad2762b6f7eed7657508ce7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee75bf2_f2c3695b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-09-17T13:43:34Z",
+      "side": 1,
+      "message": "I think it would be better to remove `--wasm-to-js-generic-wrapper` completely and just use `wasm-generic-wrapper` instead.",
+      "revId": "8c972ce7c8baa73afad2762b6f7eed7657508ce7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
