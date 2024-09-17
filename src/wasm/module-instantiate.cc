@@ -1900,7 +1900,7 @@ bool InstanceBuilder::ProcessImportedFunction(
       // The import reference is the trusted instance data itself.
       Tagged<WasmTrustedInstanceData> instance_data =
           function_data->instance_data();
-      Address imported_target =
+      WasmCodePointer imported_target =
           instance_data->GetCallTarget(function_data->function_index());
       imported_entry.SetWasmToWasm(instance_data, imported_target
 #if V8_ENABLE_DRUMBRAKE
@@ -2051,7 +2051,7 @@ bool InstanceBuilder::ProcessImportedFunction(
         DCHECK(kind >= ImportCallKind::kFirstMathIntrinsic &&
                kind <= ImportCallKind::kLastMathIntrinsic);
         imported_entry.SetWasmToWasm(*trusted_instance_data,
-                                     wasm_code->instruction_start()
+                                     wasm_code->code_pointer()
 #if V8_ENABLE_DRUMBRAKE
                                          ,
                                      -1

@@ -712,7 +712,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           __ call(wasm_code, constant.rmode());
         }
       } else {
-        __ call(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0));
       }
       RecordCallPosition(instr);
       frame_access_state()->ClearSPDelta();
@@ -724,7 +724,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         Address wasm_code = static_cast<Address>(constant.ToInt32());
         __ jmp(wasm_code, constant.rmode());
       } else {
-        __ jmp(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0), true);
       }
       frame_access_state()->ClearSPDelta();
       frame_access_state()->SetFrameAccessToDefault();

@@ -3741,7 +3741,7 @@ void JSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
     __ Move(MemOperand(ebp, StackSwitchFrameConstants::kGCScanSlotCountOffset),
             Immediate(0));
   }
-  __ call(call_target);
+  __ CallWasmCodePointer(call_target);
 
   __ mov(
       thread_in_wasm_flag_addr,

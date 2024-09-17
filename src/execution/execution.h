@@ -71,9 +71,10 @@ class Execution final : public AllStatic {
   // provided {wrapper_code}, which must match the function's signature.
   // Upon return, either isolate->has_exception() is true, or
   // the function's return values are in {packed_args}.
+  // TODO: require a cpt handle
   V8_EXPORT_PRIVATE static void CallWasm(Isolate* isolate,
                                          DirectHandle<Code> wrapper_code,
-                                         Address wasm_call_target,
+                                         WasmCodePointer wasm_call_target,
                                          DirectHandle<Object> object_ref,
                                          Address packed_args);
 #endif  // V8_ENABLE_WEBASSEMBLY
