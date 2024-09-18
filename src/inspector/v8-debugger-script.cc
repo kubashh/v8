@@ -81,21 +81,11 @@ class ActualScript : public V8DebuggerScript {
     return v8::Nothing<v8::MemorySpan<const uint8_t>>();
   }
 
-  v8::Maybe<v8::debug::WasmScript::DebugSymbolsType> getDebugSymbolsType()
-      const override {
+  void getDebugSymbols(std::vector<v8::debug::WasmScript::DebugSymbols>*
+                           debugSymbols) const override {
     auto script = this->script();
-    if (!script->IsWasm())
-      return v8::Nothing<v8::debug::WasmScript::DebugSymbolsType>();
-    return v8::Just(v8::debug::WasmScript::Cast(*script)->GetDebugSymbolType());
-  }
-
-  v8::Maybe<String16> getExternalDebugSymbolsURL() const override {
-    auto script = this->script();
-    if (!script->IsWasm()) return v8::Nothing<String16>();
-    v8::MemorySpan<const char> external_url =
-        v8::debug::WasmScript::Cast(*script)->ExternalSymbolsURL();
-    if (external_url.size() == 0) return v8::Nothing<String16>();
-    return v8::Just(String16(external_url.data(), external_url.size()));
+    if (!script->IsWasm()) return;
+    v8::debug::WasmScript::Cast(*script)->GetDebugSymbols(debugSymbols);
   }
 
   void Disassemble(v8::debug::DisassemblyCollector* collector,
