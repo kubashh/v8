@@ -4458,7 +4458,7 @@ void ParserBase<Impl>::ParseVariableDeclarations(
 
     int decl_pos = peek_position();
 
-    IdentifierT name;
+    IdentifierT name = impl()->NullIdentifier();
     ExpressionT pattern;
     // Check for an identifier first, so that we can elide the pattern in cases
     // where there is no initializer (and so no proxy needs to be created).
@@ -4483,7 +4483,6 @@ void ParserBase<Impl>::ParseVariableDeclarations(
       }
     } else if (parsing_result->descriptor.mode != VariableMode::kUsing &&
                parsing_result->descriptor.mode != VariableMode::kAwaitUsing) {
-      name = impl()->NullIdentifier();
       pattern = ParseBindingPattern();
       DCHECK(!impl()->IsIdentifier(pattern));
     }
@@ -4492,6 +4491,19 @@ void ParserBase<Impl>::ParseVariableDeclarations(
 
     ExpressionT value = impl()->NullExpression();
     int value_beg_pos = kNoSourcePosition;
+
+    if ((parsing_result->descriptor.mode == VariableMode::kUsing ||
+         parsing_result->descriptor.mode == VariableMode::kAwaitUsing) &&
+        impl()->IsNull(name)) {
+      impl()->ReportMessageAt(
+          Scanner::Location(decl_pos, end_position()),
+          MessageTemplate::kDeclarationMissingInitializer,
+          parsing_result->descriptor.mode == VariableMode::kUsing
+              ? "using"
+              : "await using");
+      return;
+    }
+
     if (Check(Token::kAssign)) {
       DCHECK(!impl()->IsNull(pattern));
       {
