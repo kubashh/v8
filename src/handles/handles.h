@@ -252,6 +252,7 @@ class V8_NODISCARD HandleScope {
   static Address current_next_address(Isolate* isolate);
   static Address current_limit_address(Isolate* isolate);
   static Address current_level_address(Isolate* isolate);
+  static Address current_is_sealed_address(Isolate* isolate);
 
   // Closes the HandleScope (invalidating all handles
   // created in the scope of the HandleScope) and returns
@@ -271,6 +272,7 @@ class V8_NODISCARD HandleScope {
   Isolate* isolate_;
   Address* prev_next_;
   Address* prev_limit_;
+  bool prev_is_sealed_;
 
 #ifdef V8_ENABLE_CHECKS
   int scope_level_ = 0;
@@ -278,7 +280,7 @@ class V8_NODISCARD HandleScope {
 
   // Close the handle scope resetting limits to a previous state.
   static V8_INLINE void CloseScope(Isolate* isolate, Address* prev_next,
-                                   Address* prev_limit);
+                                   Address* prev_limit, bool prev_is_sealed);
 
   // Extend the handle scope making room for more handles.
   V8_EXPORT_PRIVATE V8_NOINLINE static Address* Extend(Isolate* isolate);
@@ -315,8 +317,8 @@ class V8_NODISCARD SealHandleScope final {
 
  private:
   Isolate* isolate_;
-  Address* prev_limit_;
-  int prev_sealed_level_;
+  int level_;
+  int prev_is_sealed_;
 #endif
 };
 
@@ -327,11 +329,12 @@ struct HandleScopeData final {
   Address* next;
   Address* limit;
   int level;
-  int sealed_level;
+  bool is_sealed;
 
   void Initialize() {
     next = limit = nullptr;
-    sealed_level = level = 0;
+    level = 0;
+    is_sealed = false;
   }
 };
 

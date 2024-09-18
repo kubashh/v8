@@ -772,6 +772,11 @@ ExternalReference ExternalReference::handle_scope_next_address(
   return ExternalReference(HandleScope::current_next_address(isolate));
 }
 
+ExternalReference ExternalReference::handle_scope_is_sealed_address(
+    Isolate* isolate) {
+  return ExternalReference(HandleScope::current_is_sealed_address(isolate));
+}
+
 ExternalReference ExternalReference::handle_scope_limit_address(
     Isolate* isolate) {
   return ExternalReference(HandleScope::current_limit_address(isolate));

@@ -134,6 +134,7 @@ class V8_EXPORT V8_NODISCARD HandleScope {
   internal::Isolate* i_isolate_;
   internal::Address* prev_next_;
   internal::Address* prev_limit_;
+  bool prev_is_sealed_;
 #ifdef V8_ENABLE_CHECKS
   int scope_level_ = 0;
 #endif
@@ -748,8 +749,8 @@ class V8_EXPORT V8_NODISCARD SealHandleScope {
 
  private:
   internal::Isolate* const i_isolate_;
-  internal::Address* prev_limit_;
-  int prev_sealed_level_;
+  int level_;
+  int prev_is_sealed_;
 };
 
 }  // namespace v8

@@ -894,6 +894,8 @@ void HandleScope::Initialize(Isolate* v8_isolate) {
   prev_next_ = current->next;
   prev_limit_ = current->limit;
   current->level++;
+  prev_is_sealed_ = current->is_sealed;
+  current->is_sealed = false;
 #ifdef V8_ENABLE_CHECKS
   scope_level_ = current->level;
 #endif
@@ -903,7 +905,8 @@ HandleScope::~HandleScope() {
 #ifdef V8_ENABLE_CHECKS
   CHECK_EQ(scope_level_, i_isolate_->handle_scope_data()->level);
 #endif
-  i::HandleScope::CloseScope(i_isolate_, prev_next_, prev_limit_);
+  i::HandleScope::CloseScope(i_isolate_, prev_next_, prev_limit_,
+                             prev_is_sealed_);
 }
 
 void* HandleScope::operator new(size_t) { base::OS::Abort(); }
@@ -947,18 +950,18 @@ i::Address* EscapableHandleScopeBase::EscapeSlot(i::Address* escape_value) {
 SealHandleScope::SealHandleScope(Isolate* v8_isolate)
     : i_isolate_(reinterpret_cast<i::Isolate*>(v8_isolate)) {
   i::HandleScopeData* current = i_isolate_->handle_scope_data();
-  prev_limit_ = current->limit;
-  current->limit = current->next;
-  prev_sealed_level_ = current->sealed_level;
-  current->sealed_level = current->level;
+  prev_is_sealed_ = current->is_sealed;
+  current->is_sealed = true;
+  current->level++;
+  level_ = current->level;
 }
 
 SealHandleScope::~SealHandleScope() {
   i::HandleScopeData* current = i_isolate_->handle_scope_data();
-  DCHECK_EQ(current->next, current->limit);
-  current->limit = prev_limit_;
-  DCHECK_EQ(current->level, current->sealed_level);
-  current->sealed_level = prev_sealed_level_;
+  DCHECK_EQ(current->level, current->level);
+  current->level--;
+  DCHECK(current->is_sealed);
+  current->is_sealed = prev_is_sealed_;
 }
 
 bool Data::IsModule() const {

@@ -52,9 +52,10 @@ enum class IsolateFieldId : uint8_t;
   V(old_space_allocation_top_address, "Heap::OldSpaceAllocationTopAddress")    \
   V(old_space_allocation_limit_address,                                        \
     "Heap::OldSpaceAllocationLimitAddress")                                    \
+  V(handle_scope_is_sealed_address, "HandleScope::is_sealed")                  \
   V(handle_scope_level_address, "HandleScope::level")                          \
-  V(handle_scope_next_address, "HandleScope::next")                            \
   V(handle_scope_limit_address, "HandleScope::limit")                          \
+  V(handle_scope_next_address, "HandleScope::next")                            \
   V(exception_address, "Isolate::exception")                                   \
   V(address_of_pending_message, "address_of_pending_message")                  \
   V(promise_hook_flags_address, "Isolate::promise_hook_flags_address()")       \

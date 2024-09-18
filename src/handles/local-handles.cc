@@ -26,6 +26,8 @@ void LocalHandleScope::OpenMainThreadScope(LocalHeap* local_heap) {
   prev_next_ = data->next;
   prev_limit_ = data->limit;
   data->level++;
+  prev_is_sealed_ = data->is_sealed;
+  data->is_sealed = false;
 #ifdef V8_ENABLE_CHECKS
   scope_level_ = data->level;
 #endif
@@ -33,9 +35,10 @@ void LocalHandleScope::OpenMainThreadScope(LocalHeap* local_heap) {
 
 void LocalHandleScope::CloseMainThreadScope(LocalHeap* local_heap,
                                             Address* prev_next,
-                                            Address* prev_limit) {
+                                            Address* prev_limit,
+                                            bool prev_is_sealed) {
   Isolate* isolate = local_heap->heap()->isolate();
-  HandleScope::CloseScope(isolate, prev_next, prev_limit);
+  HandleScope::CloseScope(isolate, prev_next, prev_limit, prev_is_sealed);
 }
 
 #ifdef V8_ENABLE_CHECKS

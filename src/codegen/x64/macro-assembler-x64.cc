@@ -4600,6 +4600,8 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
       ER::handle_scope_limit_address(isolate), no_reg);
   MemOperand level_mem_op = __ ExternalReferenceAsOperand(
       ER::handle_scope_level_address(isolate), no_reg);
+  MemOperand is_sealed_mem_op = __ ExternalReferenceAsOperand(
+      ER::handle_scope_is_sealed_address(isolate), no_reg);
 
   Register return_value = rax;
   Register scratch = kCArgRegs[3];
@@ -4608,6 +4610,7 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
   // We will need to restore the HandleScope after the call to the API function,
   // by allocating it in callee-saved registers it'll be preserved by C code.
   Register prev_next_address_reg = r12;
+  // Register prev_is_sealed_reg = r13;
   Register prev_limit_reg = r15;
 
   // C arguments (kCArgRegs[0/1]) are expected to be initialized outside, so
@@ -4631,6 +4634,9 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
     __ movq(prev_next_address_reg, next_mem_op);
     __ movq(prev_limit_reg, limit_mem_op);
     __ addl(level_mem_op, Immediate(1));
+    __ movb(scratch, is_sealed_mem_op);
+    __ Push(scratch);
+    __ movb(is_sealed_mem_op, Immediate(0));
   }
 
   Label profiler_or_side_effects_check_enabled, done_api_call;
@@ -4662,6 +4668,8 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
     __ subl(level_mem_op, Immediate(1));
     __ Assert(above_equal, AbortReason::kInvalidHandleScopeLevel);
     __ movq(next_mem_op, prev_next_address_reg);
+    __ Pop(scratch);
+    __ movb(is_sealed_mem_op, scratch);
     __ cmpq(prev_limit_reg, limit_mem_op);
     __ j(not_equal, &delete_allocated_handles);
   }

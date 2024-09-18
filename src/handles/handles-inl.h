@@ -163,6 +163,8 @@ HandleScope::HandleScope(Isolate* isolate) {
   isolate_ = isolate;
   prev_next_ = data->next;
   prev_limit_ = data->limit;
+  prev_is_sealed_ = data->is_sealed;
+  data->is_sealed = false;
   data->level++;
 #ifdef V8_ENABLE_CHECKS
   scope_level_ = data->level;
@@ -184,7 +186,7 @@ HandleScope::~HandleScope() {
 #ifdef V8_ENABLE_CHECKS
   CHECK_EQ(scope_level_, isolate_->handle_scope_data()->level);
 #endif
-  CloseScope(isolate_, prev_next_, prev_limit_);
+  CloseScope(isolate_, prev_next_, prev_limit_, prev_is_sealed_);
 }
 
 HandleScope& HandleScope::operator=(HandleScope&& other) V8_NOEXCEPT {
@@ -195,7 +197,7 @@ HandleScope& HandleScope::operator=(HandleScope&& other) V8_NOEXCEPT {
 #ifdef V8_ENABLE_CHECKS
     CHECK_EQ(scope_level_, isolate_->handle_scope_data()->level);
 #endif
-    CloseScope(isolate_, prev_next_, prev_limit_);
+    CloseScope(isolate_, prev_next_, prev_limit_, prev_is_sealed_);
   }
   prev_next_ = other.prev_next_;
   prev_limit_ = other.prev_limit_;
@@ -207,7 +209,7 @@ HandleScope& HandleScope::operator=(HandleScope&& other) V8_NOEXCEPT {
 }
 
 void HandleScope::CloseScope(Isolate* isolate, Address* prev_next,
-                             Address* prev_limit) {
+                             Address* prev_limit, bool prev_is_sealed) {
 #ifdef DEBUG
   int before = v8_flags.check_handle_count ? NumberOfHandles(isolate) : 0;
 #endif
@@ -216,6 +218,7 @@ void HandleScope::CloseScope(Isolate* isolate, Address* prev_next,
 
   std::swap(current->next, prev_next);
   current->level--;
+  current->is_sealed = prev_is_sealed;
   Address* limit = prev_next;
   if (V8_UNLIKELY(current->limit != prev_limit)) {
     current->limit = prev_limit;
@@ -244,9 +247,9 @@ Handle<T> HandleScope::CloseAndEscape(Handle<T> handle_value) {
   CHECK_EQ(scope_level_, isolate_->handle_scope_data()->level);
 #endif
   // Throw away all handles in the current scope.
-  CloseScope(isolate_, prev_next_, prev_limit_);
+  CloseScope(isolate_, prev_next_, prev_limit_, prev_is_sealed_);
   // Allocate one handle in the parent scope.
-  DCHECK(current->level > current->sealed_level);
+  DCHECK(!current->is_sealed);
   Handle<T> result(value, isolate_);
   // Reinitialize the current scope (so that it's ready
   // to be used or closed again).
@@ -262,6 +265,7 @@ Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
   DCHECK_WITH_MSG(isolate->thread_id() == ThreadId::Current(),
                   "main-thread handle can only be created on the main thread.");
   HandleScopeData* data = isolate->handle_scope_data();
+  DCHECK(!data->is_sealed);
   Address* result = data->next;
   if (V8_UNLIKELY(result == data->limit)) {
     result = Extend(isolate);
@@ -281,22 +285,20 @@ inline SealHandleScope::SealHandleScope(Isolate* isolate) : isolate_(isolate) {
   // Make sure the current thread is allowed to create handles to begin with.
   DCHECK(AllowHandleAllocation::IsAllowed());
   HandleScopeData* current = isolate_->handle_scope_data();
-  // Shrink the current handle scope to make it impossible to do
-  // handle allocations without an explicit handle scope.
-  prev_limit_ = current->limit;
-  current->limit = current->next;
-  prev_sealed_level_ = current->sealed_level;
-  current->sealed_level = current->level;
+  prev_is_sealed_ = current->is_sealed;
+  current->level++;
+  level_ = current->level;
+  current->is_sealed = true;
 }
 
 inline SealHandleScope::~SealHandleScope() {
   // Restore state in current handle scope to re-enable handle
   // allocations.
   HandleScopeData* current = isolate_->handle_scope_data();
-  DCHECK_EQ(current->next, current->limit);
-  current->limit = prev_limit_;
-  DCHECK_EQ(current->level, current->sealed_level);
-  current->sealed_level = prev_sealed_level_;
+  DCHECK_EQ(current->level, level_);
+  current->level--;
+  DCHECK(current->is_sealed);
+  current->is_sealed = prev_is_sealed_;
 }
 #endif  // DEBUG
 

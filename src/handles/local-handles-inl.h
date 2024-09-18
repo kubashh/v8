@@ -53,7 +53,7 @@ LocalHandleScope::~LocalHandleScope() {
 #ifdef V8_ENABLE_CHECKS
     VerifyMainThreadScope();
 #endif
-    CloseMainThreadScope(local_heap_, prev_next_, prev_limit_);
+    CloseMainThreadScope(local_heap_, prev_next_, prev_limit_, prev_is_sealed_);
   } else {
     CloseScope(local_heap_, prev_next_, prev_limit_);
   }
@@ -69,13 +69,13 @@ Handle<T> LocalHandleScope::CloseAndEscape(Handle<T> handle_value) {
     VerifyMainThreadScope();
 #endif
     current = local_heap_->heap()->isolate()->handle_scope_data();
-    CloseMainThreadScope(local_heap_, prev_next_, prev_limit_);
+    CloseMainThreadScope(local_heap_, prev_next_, prev_limit_, prev_is_sealed_);
   } else {
     current = &local_heap_->handles()->scope_;
     CloseScope(local_heap_, prev_next_, prev_limit_);
   }
   // Allocate one handle in the parent scope.
-  DCHECK(current->level > current->sealed_level);
+  DCHECK(!current->is_sealed);
   Handle<T> result(value, local_heap_);
   // Reinitialize the current scope (so that it's ready
   // to be used or closed again).

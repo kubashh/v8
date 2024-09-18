@@ -158,12 +158,11 @@ Address* HandleScope::Extend(Isolate* isolate) {
   HandleScopeData* current = isolate->handle_scope_data();
 
   Address* result = current->next;
+  DCHECK_EQ(result, current->limit);
 
-  DCHECK(result == current->limit);
   // Make sure there's at least one scope on the stack and that the
   // top of the scope stack isn't a barrier.
-  if (!Utils::ApiCheck(current->level != current->sealed_level,
-                       "v8::HandleScope::CreateHandle()",
+  if (!Utils::ApiCheck(!current->is_sealed, "v8::HandleScope::CreateHandle()",
                        "Cannot create a handle without a HandleScope")) {
     return nullptr;
   }
@@ -208,6 +207,10 @@ void HandleScope::ZapRange(Address* start, Address* end) {
 
 Address HandleScope::current_level_address(Isolate* isolate) {
   return reinterpret_cast<Address>(&isolate->handle_scope_data()->level);
+}
+
+Address HandleScope::current_is_sealed_address(Isolate* isolate) {
+  return reinterpret_cast<Address>(&isolate->handle_scope_data()->is_sealed);
 }
 
 Address HandleScope::current_next_address(Isolate* isolate) {

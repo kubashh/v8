@@ -64,7 +64,8 @@ class V8_NODISCARD LocalHandleScope {
                                 Address* prev_limit);
   V8_EXPORT_PRIVATE static void CloseMainThreadScope(LocalHeap* local_heap,
                                                      Address* prev_next,
-                                                     Address* prev_limit);
+                                                     Address* prev_limit,
+                                                     bool prev_is_sealed);
 
   V8_EXPORT_PRIVATE void OpenMainThreadScope(LocalHeap* local_heap);
 
@@ -74,6 +75,7 @@ class V8_NODISCARD LocalHandleScope {
   LocalHeap* local_heap_;
   Address* prev_limit_;
   Address* prev_next_;
+  bool prev_is_sealed_;
 
 #ifdef V8_ENABLE_CHECKS
   int scope_level_ = 0;
