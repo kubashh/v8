@@ -2763,9 +2763,9 @@ void Isolate::PrintCurrentStackTrace(std::ostream& out) {
 bool Isolate::ComputeLocation(MessageLocation* target) {
   DebuggableStackFrameIterator it(this);
   if (it.done()) return false;
-  // Compute the location from the function and the relocation info of the
-  // baseline code. For optimized code this will use the deoptimization
-  // information to get canonical location information.
+    // Compute the location from the function and the relocation info of the
+    // baseline code. For optimized code this will use the deoptimization
+    // information to get canonical location information.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope code_ref_scope;
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -3896,9 +3896,8 @@ class TracingAccountingAllocator : public AccountingAllocator {
     // Note: Neither isolate nor zones are locked, so be careful with accesses
     // as the allocator is potentially used on a concurrent thread.
     double time = isolate_->time_millis_since_init();
-    out << "{"
-        << "\"isolate\": \"" << reinterpret_cast<void*>(isolate_) << "\", "
-        << "\"time\": " << time << ", ";
+    out << "{" << "\"isolate\": \"" << reinterpret_cast<void*>(isolate_)
+        << "\", " << "\"time\": " << time << ", ";
     size_t total_segment_bytes_allocated = 0;
     size_t total_zone_allocation_size = 0;
     size_t total_zone_freed_size = 0;
@@ -3916,8 +3915,7 @@ class TracingAccountingAllocator : public AccountingAllocator {
         } else {
           out << ", ";
         }
-        out << "{"
-            << "\"name\": \"" << zone->name() << "\", "
+        out << "{" << "\"name\": \"" << zone->name() << "\", "
             << "\"allocated\": " << zone_segment_bytes_allocated << ", "
             << "\"used\": " << zone_allocation_size << ", "
             << "\"freed\": " << freed_size << "}";
@@ -4100,15 +4098,11 @@ Isolate::Isolate(IsolateGroup* isolate_group)
         embedded_data.InstructionStartOf(Builtin::kWasmTrapHandlerLandingPad);
     i::trap_handler::SetLandingPad(landing_pad);
   }
-  wasm::WasmCodePointerTable* wasm_code_pointer_table =
-      wasm::GetProcessWideWasmCodePointerTable();
+
   for (size_t i = 0; i < Builtins::kNumWasmIndirectlyCallableBuiltins; i++) {
-    // TODO(sroettger): investigate if we can use a global set of handles for
-    // these builtins.
-    wasm_builtin_code_handles_[i] =
-        wasm_code_pointer_table->AllocateAndInitializeEntry(Builtins::EntryOf(
-            Builtins::kWasmIndirectlyCallableBuiltins[i], this));
+    wasm_builtin_code_handles_[i] = wasm::WasmCodePointerTable::kInvalidHandle;
   }
+
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   MicrotaskQueue::SetUpDefaultMicrotaskQueue(this);
@@ -5742,6 +5736,16 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     V8::FatalProcessOutOfMemory(this, "decommitting WasmNull payload");
   }
 #endif  // V8_STATIC_ROOTS_BOOL
+
+  wasm::WasmCodePointerTable* wasm_code_pointer_table =
+      wasm::GetProcessWideWasmCodePointerTable();
+  for (size_t i = 0; i < Builtins::kNumWasmIndirectlyCallableBuiltins; i++) {
+    // TODO(sroettger): investigate if we can use a global set of handles for
+    // these builtins.
+    wasm_builtin_code_handles_[i] =
+        wasm_code_pointer_table->AllocateAndInitializeEntry(Builtins::EntryOf(
+            Builtins::kWasmIndirectlyCallableBuiltins[i], this));
+  }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   // Isolate initialization allocates long living objects that should be
@@ -6330,10 +6334,10 @@ void Isolate::UpdatePromiseHookProtector() {
 
 void Isolate::PromiseHookStateUpdated() {
   promise_hook_flags_ =
-    (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
-    PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
-    PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
-    PromiseHookFields::IsDebugActive::encode(debug()->is_active());
+      (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
+      PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
+      PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
+      PromiseHookFields::IsDebugActive::encode(debug()->is_active());
 
   if (promise_hook_flags_ != 0) {
     UpdatePromiseHookProtector();

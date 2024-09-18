@@ -62,6 +62,16 @@ class MaybeRegisterRepresentation {
     }
   }
 
+  static constexpr MaybeRegisterRepresentation WasmCodePointer() {
+    if constexpr (V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL) {
+      // TODO(sroettger): This should return either Word32 or WordPtr for
+      // immediates. Could this use `GetInputLocation(0)->IsRegister()` ?
+      return None();
+    } else {
+      return WordPtr();
+    }
+  }
+
   static constexpr MaybeRegisterRepresentation Float32() {
     return MaybeRegisterRepresentation(Enum::kFloat32);
   }
@@ -591,6 +601,13 @@ class MemoryRepresentation {
   }
   static constexpr MemoryRepresentation IndirectPointer() {
     return MemoryRepresentation(Enum::kIndirectPointer);
+  }
+  static constexpr MemoryRepresentation WasmCodePointer() {
+    if constexpr (V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL) {
+      return Uint32();
+    } else {
+      return UintPtr();
+    }
   }
   static constexpr MemoryRepresentation SandboxedPointer() {
     return MemoryRepresentation(Enum::kSandboxedPointer);
