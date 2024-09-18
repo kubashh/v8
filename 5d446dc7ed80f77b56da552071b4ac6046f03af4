@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "688da768_66a45442",
+        "filename": "src/builtins/builtins-object-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-18T16:01:28Z",
+      "side": 1,
+      "message": "This is the check that was missing.",
+      "range": {
+        "startLine": 448,
+        "startChar": 6,
+        "endLine": 448,
+        "endChar": 73
+      },
+      "revId": "5d446dc7ed80f77b56da552071b4ac6046f03af4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

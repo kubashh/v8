@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "102fb865_5e892e77",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3965,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-18T16:01:28Z",
+      "side": 0,
+      "message": "This could cause an endless recursion since a map might have a side_step transition pointing to itself.",
+      "revId": "645bf821b8a73a3376908f4278110b4f8d4dc22d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59dc5c9_e12678c3",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3556,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-18T16:01:28Z",
+      "side": 0,
+      "message": "I moved this \"cut-off\" check up and made it explicit that `{}` actually creates `Smi(0)` which is `SideStepTransition::Empty`.",
+      "revId": "645bf821b8a73a3376908f4278110b4f8d4dc22d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
