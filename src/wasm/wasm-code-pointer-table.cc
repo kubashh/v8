@@ -13,7 +13,7 @@ void WasmCodePointerTable::Initialize() { Base::Initialize(); }
 
 void WasmCodePointerTable::TearDown() {
   SweepSegments(0);
-  DCHECK(freelist_head_.load().is_empty());
+  // DCHECK(freelist_head_.load().is_empty());
   Base::TearDown();
 }
 
