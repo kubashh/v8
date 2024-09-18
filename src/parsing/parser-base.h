@@ -4486,12 +4486,22 @@ void ParserBase<Impl>::ParseVariableDeclarations(
       name = impl()->NullIdentifier();
       pattern = ParseBindingPattern();
       DCHECK(!impl()->IsIdentifier(pattern));
+    } else {
+      // `using` and `await using` declarations should have an identifier.
+      impl()->ReportMessageAt(
+          Scanner::Location(decl_pos, end_position()),
+          MessageTemplate::kDeclarationMissingInitializer,
+          parsing_result->descriptor.mode == VariableMode::kUsing
+              ? "using"
+              : "await using");
+      return;
     }
 
     Scanner::Location variable_loc = scanner()->location();
 
     ExpressionT value = impl()->NullExpression();
     int value_beg_pos = kNoSourcePosition;
+
     if (Check(Token::kAssign)) {
       DCHECK(!impl()->IsNull(pattern));
       {
