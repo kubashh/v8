@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaed83f3_64617cec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-09-18T22:22:39Z",
+      "side": 1,
+      "message": "This cl adds a check for having identifier with `using` and `await using` syntax. PTAL! Thanks",
+      "revId": "3162574dbed9deca5838488cf54e942654c39e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
