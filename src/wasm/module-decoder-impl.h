@@ -468,10 +468,8 @@ class ModuleDecoderImpl : public Decoder {
         DecodeSourceMappingURLSection();
         break;
       case kDebugInfoSectionCode:
-        // If there is an explicit source map, prefer it over DWARF info.
-        if (module_->debug_symbols.type == WasmDebugSymbols::Type::None) {
-          module_->debug_symbols = {WasmDebugSymbols::Type::EmbeddedDWARF, {}};
-        }
+        module_->debug_symbols[WasmDebugSymbols::Type::EmbeddedDWARF].type =
+            WasmDebugSymbols::Type::EmbeddedDWARF;
         consume_bytes(static_cast<uint32_t>(end_ - start_), ".debug_info");
         break;
       case kExternalDebugInfoSectionCode:
@@ -1325,9 +1323,11 @@ class ModuleDecoderImpl : public Decoder {
     Decoder inner(start_, pc_, end_, buffer_offset_);
     WireBytesRef url =
         wasm::consume_utf8_string(&inner, "module name", tracer_);
-    if (inner.ok() &&
-        module_->debug_symbols.type != WasmDebugSymbols::Type::SourceMap) {
-      module_->debug_symbols = {WasmDebugSymbols::Type::SourceMap, url};
+    WasmDebugSymbols& sourcemap_symbol =
+        module_->debug_symbols[WasmDebugSymbols::Type::SourceMap];
+    if (inner.ok() && sourcemap_symbol.type != WasmDebugSymbols::SourceMap) {
+      sourcemap_symbol.type = WasmDebugSymbols::Type::SourceMap;
+      sourcemap_symbol.external_url = url;
     }
     set_seen_unordered_section(kSourceMappingURLSectionCode);
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
@@ -1337,10 +1337,11 @@ class ModuleDecoderImpl : public Decoder {
     Decoder inner(start_, pc_, end_, buffer_offset_);
     WireBytesRef url =
         wasm::consume_utf8_string(&inner, "external symbol file", tracer_);
-    // If there is an explicit source map, prefer it over DWARF info.
-    if (inner.ok() &&
-        module_->debug_symbols.type != WasmDebugSymbols::Type::SourceMap) {
-      module_->debug_symbols = {WasmDebugSymbols::Type::ExternalDWARF, url};
+    if (inner.ok()) {
+      WasmDebugSymbols& dwarf_symbol =
+          module_->debug_symbols[WasmDebugSymbols::Type::ExternalDWARF];
+      dwarf_symbol.type = WasmDebugSymbols::Type::ExternalDWARF;
+      dwarf_symbol.external_url = url;
       set_seen_unordered_section(kExternalDebugInfoSectionCode);
     }
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
