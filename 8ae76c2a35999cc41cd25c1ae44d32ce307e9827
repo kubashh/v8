@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ad48b1_37c4cf89",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 4461,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-09-18T23:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "669082ad_8eba6ede",
+      "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f60f5181_1976f570",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-09-18T23:00:06Z",
       "side": 1,
       "message": "This body looks like it can be put into an `} else {` branch at L4488 above.",
+      "range": {
+        "startLine": 4499,
+        "startChar": 0,
+        "endLine": 4505,
+        "endChar": 13
+      },
+      "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b366155c_136b44d8",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 4505,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-09-18T23:32:36Z",
+      "side": 1,
+      "message": "That\u0027s right. \nI also realized that `await using` with no identifier is not hitting this path. It will be checked in `ParseAssignmentExpressionCoverGrammarContinuation` so I removed the condition on printing message here.",
+      "parentUuid": "f60f5181_1976f570",
       "range": {
         "startLine": 4499,
         "startChar": 0,
