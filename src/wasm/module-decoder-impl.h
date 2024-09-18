@@ -468,11 +468,7 @@ class ModuleDecoderImpl : public Decoder {
         DecodeSourceMappingURLSection();
         break;
       case kDebugInfoSectionCode:
-        // If there is an explicit source map, prefer it over DWARF info.
-        if (module_->debug_symbols.type == WasmDebugSymbols::Type::None) {
-          module_->debug_symbols = {WasmDebugSymbols::Type::EmbeddedDWARF, {}};
-        }
-        consume_bytes(static_cast<uint32_t>(end_ - start_), ".debug_info");
+        DecodeEmbeddedDebugInfoSection();
         break;
       case kExternalDebugInfoSectionCode:
         DecodeExternalDebugInfoSection();
@@ -1325,22 +1321,33 @@ class ModuleDecoderImpl : public Decoder {
     Decoder inner(start_, pc_, end_, buffer_offset_);
     WireBytesRef url =
         wasm::consume_utf8_string(&inner, "module name", tracer_);
-    if (inner.ok() &&
-        module_->debug_symbols.type != WasmDebugSymbols::Type::SourceMap) {
-      module_->debug_symbols = {WasmDebugSymbols::Type::SourceMap, url};
+    WasmDebugSymbols& symbol =
+        module_->debug_symbols[WasmDebugSymbols::Type::SourceMap];
+    if (inner.ok() && symbol.type != WasmDebugSymbols::SourceMap) {
+      module_->debug_symbols[WasmDebugSymbols::Type::SourceMap] = {
+          WasmDebugSymbols::Type::SourceMap, url};
     }
     set_seen_unordered_section(kSourceMappingURLSectionCode);
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
+  }
+
+  void DecodeEmbeddedDebugInfoSection() {
+    WasmDebugSymbols& symbol =
+        module_->debug_symbols[WasmDebugSymbols::Type::EmbeddedDWARF];
+    if (symbol.type == WasmDebugSymbols::Type::None) {
+      module_->debug_symbols[WasmDebugSymbols::Type::EmbeddedDWARF] = {
+          WasmDebugSymbols::Type::EmbeddedDWARF, {}};
+    }
+    consume_bytes(static_cast<uint32_t>(end_ - start_), ".debug_info");
   }
 
   void DecodeExternalDebugInfoSection() {
     Decoder inner(start_, pc_, end_, buffer_offset_);
     WireBytesRef url =
         wasm::consume_utf8_string(&inner, "external symbol file", tracer_);
-    // If there is an explicit source map, prefer it over DWARF info.
-    if (inner.ok() &&
-        module_->debug_symbols.type != WasmDebugSymbols::Type::SourceMap) {
-      module_->debug_symbols = {WasmDebugSymbols::Type::ExternalDWARF, url};
+    if (inner.ok()) {
+      module_->debug_symbols[WasmDebugSymbols::Type::ExternalDWARF] = {
+          WasmDebugSymbols::Type::ExternalDWARF, url};
       set_seen_unordered_section(kExternalDebugInfoSectionCode);
     }
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
