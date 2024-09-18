@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a9d2bf9_358808f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2024-09-18T10:58:18Z",
+      "side": 1,
+      "message": "Hi Philip, hi Clemens!\n\nThis CL changes the v8 code to inform the Devtools front-end on all available debug symbol types for a WebAssembly module (source maps, embedded DWARF, external DWARF). Previously, we would only keep track of one (and prioritize source maps).\n\nWith this change, we can decide on the front-end side which symbols to use, if multiple are available.\n\n@clemensb@chromium.org: Here is a design doc, which I previously sent to Emanuel: go/chrome-devtools:warnings-on-multiple-debug-symbols-design\n\nPTAL!",
+      "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a200188_9c556258",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2024-09-18T10:58:18Z",
+      "side": 1,
+      "message": "Hi Philip, hi Clemens!\n\nThis CL changes the v8 back-end to keep track of all existing symbol file types (embedded DWARF, external DWARF, and source maps), instead of only one. Previously, if we had several symbol file types available, we\u0027d always default to only report source map information. With this change, we can report all existing symbol files, and let the debugger front-end decide which one to use when debugging.\n\n@clemensb@chromium.org: Emanuel has reviewed the design doc previously, here is more information: go/chrome-devtools:warnings-on-multiple-debug-symbols-design.\n\nPTAL!",
+      "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
