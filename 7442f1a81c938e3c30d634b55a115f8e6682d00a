@@ -22,6 +22,30 @@
       },
       "revId": "7442f1a81c938e3c30d634b55a115f8e6682d00a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9d816f_4487197d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6129,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2024-09-18T06:49:34Z",
+      "side": 1,
+      "message": "I added whether the function is marked for turbofan optimization (using IsRequestTurbofan) and is actively being compiled to turbofan (using IsInProgress) to condition of maglev_inline_turbofanned_candidate_weight.\nPlease be noted IsInProgress can not distinguish is in progress of turbofan optimization or maglev optimization.",
+      "parentUuid": "f8622e47_380949c9",
+      "range": {
+        "startLine": 6129,
+        "startChar": 24,
+        "endLine": 6129,
+        "endChar": 44
+      },
+      "revId": "7442f1a81c938e3c30d634b55a115f8e6682d00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
