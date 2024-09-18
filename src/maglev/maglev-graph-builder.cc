@@ -7205,7 +7205,19 @@ ReduceResult MaglevGraphBuilder::BuildInlined(ValueNode* context,
 #define TRACE_CANNOT_INLINE(...) \
   TRACE_INLINING("  cannot inline " << shared << ": " << __VA_ARGS__)
 
+bool TieringOrTieredUpToTurbofan(
+    LocalIsolate* local_isolate,
+    compiler::OptionalJSFunctionRef maybe_function) {
+  if (!maybe_function.has_value()) return false;
+  Handle<JSFunction> function = maybe_function.value().object();
+  DCHECK(function->has_feedback_vector());
+  TieringState state = function->feedback_vector()->tiering_state();
+  return function->ActiveTierIsTurbofan(local_isolate) ||
+         IsRequestTurbofan(state);
+}
+
 bool MaglevGraphBuilder::ShouldInlineCall(
+    compiler::OptionalJSFunctionRef callee,
     compiler::SharedFunctionInfoRef shared,
     compiler::OptionalFeedbackVectorRef feedback_vector, float call_frequency) {
   if (graph()->total_inlined_bytecode_size() >
@@ -7246,7 +7258,11 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     TRACE_CANNOT_INLINE("use unsupported NewTargetOrGenerator register");
     return false;
   }
-  if (call_frequency < v8_flags.min_maglev_inlining_frequency) {
+  int weight = 1;
+  if (TieringOrTieredUpToTurbofan(local_isolate_, callee)) {
+    weight = v8_flags.maglev_inline_turbofanned_candidate_weight;
+  }
+  if (call_frequency < v8_flags.min_maglev_inlining_frequency * weight) {
     TRACE_CANNOT_INLINE("call frequency ("
                         << call_frequency << ") < minimum threshold ("
                         << v8_flags.min_maglev_inlining_frequency << ")");
@@ -7286,14 +7302,18 @@ ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
     const compiler::FeedbackSource& feedback_source) {
   DCHECK_EQ(args.mode(), CallArguments::kDefault);
   float feedback_frequency = 0.0f;
+  compiler::OptionalJSFunctionRef callee;
   if (feedback_source.IsValid()) {
-    compiler::ProcessedFeedback const& feedback =
-        broker()->GetFeedbackForCall(feedback_source);
+    const compiler::CallFeedback& feedback =
+        broker()->GetFeedbackForCall(feedback_source).AsCall();
     feedback_frequency =
-        feedback.IsInsufficient() ? 0.0f : feedback.AsCall().frequency();
+        feedback.IsInsufficient() ? 0.0f : feedback.frequency();
+    if (feedback.target().has_value() && feedback.target()->IsJSFunction()) {
+      callee = feedback.target()->AsJSFunction();
+    }
   }
   float call_frequency = feedback_frequency * call_frequency_;
-  if (!ShouldInlineCall(shared, feedback_vector, call_frequency)) {
+  if (!ShouldInlineCall(callee, shared, feedback_vector, call_frequency)) {
     return ReduceResult::Fail();
   }
 
