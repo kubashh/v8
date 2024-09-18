@@ -1547,7 +1547,7 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
     case CallDescriptor::kCallWasmFunction:
     case CallDescriptor::kCallWasmImportWrapper:
       buffer->instruction_args.push_back(
-          (call_address_immediate && this->IsRelocatableWasmConstant(callee))
+          (call_address_immediate && (this->IsRelocatableWasmConstant(callee)))
               ? g.UseImmediate(callee)
           : call_use_fixed_target_reg
               ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)

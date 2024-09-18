@@ -712,7 +712,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           __ call(wasm_code, constant.rmode());
         }
       } else {
-        __ call(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0));
       }
       RecordCallPosition(instr);
       frame_access_state()->ClearSPDelta();
@@ -724,7 +724,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         Address wasm_code = static_cast<Address>(constant.ToInt32());
         __ jmp(wasm_code, constant.rmode());
       } else {
-        __ jmp(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0), true);
       }
       frame_access_state()->ClearSPDelta();
       frame_access_state()->SetFrameAccessToDefault();
@@ -834,6 +834,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                                      set_isolate_data_slots, &return_location);
       } else {
         Register func = i.InputRegister(0);
+#if V8_ENABLE_WEBASSEMBLY
+        if (linkage()->GetIncomingDescriptor()->IsWasmCapiFunction()) {
+          __ ResolveWasmCodePointer(func);
+        }
+#endif
         pc_offset = __ CallCFunction(func, num_parameters,
                                      set_isolate_data_slots, &return_location);
       }

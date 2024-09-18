@@ -1494,7 +1494,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           __ Call(wasm_code, constant.rmode());
         }
       } else {
-        __ call(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0));
       }
       RecordCallPosition(instr);
       AssemblePlaceHolderForLazyDeopt(instr);
@@ -1512,7 +1512,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           __ jmp(kScratchRegister);
         }
       } else {
-        __ jmp(i.InputRegister(0));
+        __ CallWasmCodePointer(i.InputRegister(0), true);
       }
       unwinding_info_writer_.MarkBlockWillExit();
       frame_access_state()->ClearSPDelta();
@@ -1624,6 +1624,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                                      set_isolate_data_slots, &return_location);
       } else {
         Register func = i.InputRegister(0);
+#if V8_ENABLE_WEBASSEMBLY
+        if (linkage()->GetIncomingDescriptor()->IsWasmCapiFunction()) {
+          __ ResolveWasmCodePointer(func);
+        }
+#endif
         pc_offset =
             __ CallCFunction(func, num_gp_parameters + num_fp_parameters,
                              set_isolate_data_slots, &return_location);
