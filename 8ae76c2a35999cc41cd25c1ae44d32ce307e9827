@@ -81,6 +81,30 @@
       },
       "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29b53f4a_8d55b7b6",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 4505,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-18T23:50:51Z",
+      "side": 1,
+      "message": "I don\u0027t think I understand this, why doesn\u0027t `await using` hit this path?",
+      "parentUuid": "b366155c_136b44d8",
+      "range": {
+        "startLine": 4499,
+        "startChar": 0,
+        "endLine": 4505,
+        "endChar": 13
+      },
+      "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
