@@ -33,6 +33,74 @@
       "message": "Hi Philip, hi Clemens!\n\nThis CL changes the v8 back-end to keep track of all existing symbol file types (embedded DWARF, external DWARF, and source maps), instead of only one. Previously, if we had several symbol file types available, we\u0027d always default to only report source map information. With this change, we can report all existing symbol files, and let the debugger front-end decide which one to use when debugging.\n\n@clemensb@chromium.org: Emanuel has reviewed the design doc previously, here is more information: go/chrome-devtools:warnings-on-multiple-debug-symbols-design.\n\nPTAL!",
       "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27b02997_418299b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2024-09-18T12:05:47Z",
+      "side": 1,
+      "message": "Some nits, otherwise inspector LGTM!",
+      "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af3cc388_dba9a6a3",
+        "filename": "src/debug/debug-interface.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2024-09-18T12:05:47Z",
+      "side": 1,
+      "message": "I think non-const ref is allowed now.\n\nGiven how the method is used, you could also return the vector here?.",
+      "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497ff9fe_bbd64ec4",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1876,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2024-09-18T12:05:47Z",
+      "side": 1,
+      "message": "Style should be debug_symbols (also below)",
+      "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf22aec6_1e2f7d57",
+        "filename": "src/inspector/v8-debugger-script.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1372423
+      },
+      "writtenOn": "2024-09-18T12:05:47Z",
+      "side": 1,
+      "message": "debug_symbols",
+      "revId": "4e3593de2594068f9c67c4a60cbdb8331489a50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
