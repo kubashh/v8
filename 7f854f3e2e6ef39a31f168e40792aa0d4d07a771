@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2269fcca_ad7e00fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-18T11:55:08Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "7f854f3e2e6ef39a31f168e40792aa0d4d07a771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f528b9d_4a2b5d27",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-09-18T11:53:04Z",
       "side": 1,
       "message": "See line 1316: `constant_pool_deadline_` is supposed to stay in sync with `first_const_pool_32_use_`; when resetting one we must reset the other too.",
+      "range": {
+        "startLine": 319,
+        "startChar": 4,
+        "endLine": 319,
+        "endChar": 27
+      },
+      "revId": "7f854f3e2e6ef39a31f168e40792aa0d4d07a771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5afabc4_0414d266",
+        "filename": "src/codegen/arm/assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-18T11:55:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0f528b9d_4a2b5d27",
       "range": {
         "startLine": 319,
         "startChar": 4,
