@@ -4272,7 +4272,7 @@ void LiftoffAssembler::CallIndirect(const ValueKindSig* sig,
   // For Arm64, we have more cache registers than wasm parameters. That means
   // that target will always be in a register.
   DCHECK(target.is_valid());
-  Call(target);
+  CallWasmCodePointer(target);
 }
 
 void LiftoffAssembler::TailCallIndirect(Register target) {
@@ -4283,7 +4283,7 @@ void LiftoffAssembler::TailCallIndirect(Register target) {
   UseScratchRegisterScope temps(this);
   temps.Exclude(x17);
   Mov(x17, target);
-  Jump(x17);
+  CallWasmCodePointer(x17, true);
 }
 
 void LiftoffAssembler::CallBuiltin(Builtin builtin) {

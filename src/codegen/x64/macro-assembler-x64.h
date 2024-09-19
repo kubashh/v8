@@ -529,6 +529,10 @@ class V8_EXPORT_PRIVATE MacroAssembler
   void CallJSFunction(Register function_object);
   void JumpJSFunction(Register function_object,
                       JumpMode jump_mode = JumpMode::kJump);
+  void ResolveWasmCodePointer(Register target);
+  void CallWasmCodePointer(Register target, bool tail_call = false);
+  void LoadWasmCodePointer(Register dst, Operand src);
+
   void Jump(Address destination, RelocInfo::Mode rmode);
   void Jump(Address destination, RelocInfo::Mode rmode, Condition cc);
   void Jump(const ExternalReference& reference);

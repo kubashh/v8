@@ -62,6 +62,16 @@ class MaybeRegisterRepresentation {
     }
   }
 
+  static constexpr MaybeRegisterRepresentation WasmCodePointer() {
+    if constexpr (V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL) {
+      // TODO(sroettger): This should return either Word32 for indirect calls or
+      // WordPtr for direct calls.
+      return None();
+    } else {
+      return WordPtr();
+    }
+  }
+
   static constexpr MaybeRegisterRepresentation Float32() {
     return MaybeRegisterRepresentation(Enum::kFloat32);
   }
@@ -323,6 +333,12 @@ class RegisterRepresentation : public MaybeRegisterRepresentation {
                                     : RegisterRepresentation::WordPtr();
     }
     return *this;
+  }
+
+  static constexpr RegisterRepresentation WasmCodePointer() {
+    return V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL
+               ? RegisterRepresentation::Word32()
+               : RegisterRepresentation::WordPtr();
   }
 };
 
@@ -591,6 +607,13 @@ class MemoryRepresentation {
   }
   static constexpr MemoryRepresentation IndirectPointer() {
     return MemoryRepresentation(Enum::kIndirectPointer);
+  }
+  static constexpr MemoryRepresentation WasmCodePointer() {
+    if constexpr (V8_ENABLE_WASM_CODE_POINTER_TABLE_BOOL) {
+      return Uint32();
+    } else {
+      return UintPtr();
+    }
   }
   static constexpr MemoryRepresentation SandboxedPointer() {
     return MemoryRepresentation(Enum::kSandboxedPointer);

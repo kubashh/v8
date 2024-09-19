@@ -4100,14 +4100,9 @@ Isolate::Isolate(IsolateGroup* isolate_group)
         embedded_data.InstructionStartOf(Builtin::kWasmTrapHandlerLandingPad);
     i::trap_handler::SetLandingPad(landing_pad);
   }
-  wasm::WasmCodePointerTable* wasm_code_pointer_table =
-      wasm::GetProcessWideWasmCodePointerTable();
+
   for (size_t i = 0; i < Builtins::kNumWasmIndirectlyCallableBuiltins; i++) {
-    // TODO(sroettger): investigate if we can use a global set of handles for
-    // these builtins.
-    wasm_builtin_code_handles_[i] =
-        wasm_code_pointer_table->AllocateAndInitializeEntry(Builtins::EntryOf(
-            Builtins::kWasmIndirectlyCallableBuiltins[i], this));
+    wasm_builtin_code_handles_[i] = wasm::WasmCodePointerTable::kInvalidHandle;
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
@@ -5742,6 +5737,16 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     V8::FatalProcessOutOfMemory(this, "decommitting WasmNull payload");
   }
 #endif  // V8_STATIC_ROOTS_BOOL
+
+  wasm::WasmCodePointerTable* wasm_code_pointer_table =
+      wasm::GetProcessWideWasmCodePointerTable();
+  for (size_t i = 0; i < Builtins::kNumWasmIndirectlyCallableBuiltins; i++) {
+    // TODO(sroettger): investigate if we can use a global set of handles for
+    // these builtins.
+    wasm_builtin_code_handles_[i] =
+        wasm_code_pointer_table->AllocateAndInitializeEntry(Builtins::EntryOf(
+            Builtins::kWasmIndirectlyCallableBuiltins[i], this));
+  }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   // Isolate initialization allocates long living objects that should be

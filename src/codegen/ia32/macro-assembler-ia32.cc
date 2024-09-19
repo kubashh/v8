@@ -2134,6 +2134,28 @@ void MacroAssembler::JumpJSFunction(Register function_object,
   JumpCodeObject(ecx, jump_mode);
 }
 
+void MacroAssembler::ResolveWasmCodePointer(Register target) {
+#ifdef V8_ENABLE_WASM_CODE_POINTER_TABLE
+  Register scratch = target == eax ? ebx : eax;
+  // TODO(sroettger): the load from table[target] is possible with a single
+  // instruction.
+  push(scratch);
+  Move(scratch, Immediate(ExternalReference::wasm_code_pointer_table()));
+  static_assert(sizeof(wasm::WasmCodePointerTableEntry) == 4);
+  mov(target, Operand(scratch, target, ScaleFactor::times_4, 0));
+  pop(scratch);
+#endif
+}
+
+void MacroAssembler::CallWasmCodePointer(Register target, bool tail_call) {
+  ResolveWasmCodePointer(target);
+  if (tail_call) {
+    jmp(target);
+  } else {
+    call(target);
+  }
+}
+
 void MacroAssembler::Jump(const ExternalReference& reference) {
   DCHECK(root_array_available());
   jmp(Operand(kRootRegister, RootRegisterOffsetForExternalReferenceTableEntry(

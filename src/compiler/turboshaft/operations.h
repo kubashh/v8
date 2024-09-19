@@ -2606,8 +2606,9 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
       case Kind::kTrustedHeapObject:
       case Kind::kRelocatableWasmCall:
       case Kind::kRelocatableWasmStubCall:
-      case Kind::kRelocatableWasmIndirectCallTarget:
         return RegisterRepresentation::WordPtr();
+      case Kind::kRelocatableWasmIndirectCallTarget:
+        return RegisterRepresentation::WasmCodePointer();
       case Kind::kSmi:
       case Kind::kHeapObject:
       case Kind::kNumber:
@@ -3992,6 +3993,12 @@ struct CallOp : OperationT<CallOp> {
         descriptor->descriptor->IsJSFunctionCall() ||
         descriptor->descriptor->IsBuiltinPointerCall()) {
       storage[i++] = MaybeRegisterRepresentation::Tagged();
+#ifdef V8_ENABLE_WEBASSEMBLY
+    } else if (descriptor->descriptor->IsWasmFunctionCall() ||
+               descriptor->descriptor->IsWasmImportWrapper() ||
+               descriptor->descriptor->IsWasmCapiFunction()) {
+      storage[i++] = MaybeRegisterRepresentation::WasmCodePointer();
+#endif
     } else {
       storage[i++] = MaybeRegisterRepresentation::WordPtr();
     }
@@ -4197,7 +4204,17 @@ struct TailCallOp : OperationT<TailCallOp> {
       ZoneVector<MaybeRegisterRepresentation>& storage) const {
     storage.resize(input_count);
     size_t i = 0;
-    storage[i++] = MaybeRegisterRepresentation::Tagged();  // True for wasm?
+#ifdef V8_ENABLE_WEBASSEMBLY
+    if (descriptor->descriptor->IsWasmFunctionCall() ||
+        descriptor->descriptor->IsWasmImportWrapper() ||
+        descriptor->descriptor->IsWasmCapiFunction()) {
+      storage[i++] = MaybeRegisterRepresentation::WasmCodePointer();
+    } else {
+      storage[i++] = MaybeRegisterRepresentation::Tagged();
+    }
+#else
+    storage[i++] = MaybeRegisterRepresentation::Tagged();
+#endif
     for (auto rep : descriptor->in_reps) {
       storage[i++] = rep;
     }
