@@ -16,6 +16,57 @@
       "message": "Thanks a lot for the review, Philip! I\u0027ve updated the code according to your comments.",
       "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0835f58_c3de6110",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-19T10:54:18Z",
+      "side": 1,
+      "message": "Thanks, LGTM with two nits.",
+      "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a1270ef_c842c0c5",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-19T10:54:18Z",
+      "side": 1,
+      "message": "Can we introduce a constant instead of `3`? Maybe in `WasmDebugSymbols` a `static constexpr kNumTypes \u003d 3;`?",
+      "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92910006_1736a254",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-19T10:54:18Z",
+      "side": 1,
+      "message": "Looks like this is never triggered; we get an empty array if there are no symbols. Should we remove this?",
+      "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
