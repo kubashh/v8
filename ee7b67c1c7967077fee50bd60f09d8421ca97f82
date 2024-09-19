@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f3de45_9af6e067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2024-09-19T20:16:40Z",
+      "side": 1,
+      "message": "Thanks a lot for the review, Clemens and Philip! 😊 I\u0027ve addressed all comments. I\u0027ll wait until Monday to land this CL to be able to take care of the changes required in the front-end when the protocol rolls (I\u0027ll be OOO tomorrow).",
+      "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a1270ef_c842c0c5",
@@ -52,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c245633_b1f9d900",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2024-09-19T20:16:40Z",
+      "side": 1,
+      "message": "Of course, done!",
+      "parentUuid": "6a1270ef_c842c0c5",
+      "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92910006_1736a254",
@@ -65,6 +100,24 @@
       "writtenOn": "2024-09-19T10:54:18Z",
       "side": 1,
       "message": "Looks like this is never triggered; we get an empty array if there are no symbols. Should we remove this?",
+      "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "446a2121_e664c071",
+        "filename": "test/inspector/debugger/wasm-scripts.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1396836
+      },
+      "writtenOn": "2024-09-19T20:16:40Z",
+      "side": 1,
+      "message": "That\u0027s true, removed!",
+      "parentUuid": "92910006_1736a254",
       "revId": "ee7b67c1c7967077fee50bd60f09d8421ca97f82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
