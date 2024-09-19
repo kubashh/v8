@@ -39,6 +39,30 @@
       },
       "revId": "7332a48bea949940c68586f040cb5c7c7094dc0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68805aec_7917ea0a",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-09-19T12:23:40Z",
+      "side": 1,
+      "message": "Acknowledged. Perhaps `Heap::ResizeNewSpaceIfNeeded()` would work.",
+      "parentUuid": "347661a7_38dcc766",
+      "range": {
+        "startLine": 577,
+        "startChar": 10,
+        "endLine": 577,
+        "endChar": 21
+      },
+      "revId": "7332a48bea949940c68586f040cb5c7c7094dc0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
