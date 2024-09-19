@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "98a77e50_c791d671",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-09-19T13:35:26Z",
+      "side": 1,
+      "message": "Ah, didn\u0027t know that, but makes sense.",
+      "parentUuid": "58d1ab90_d2cb6dad",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "aa7578a8ae09ab2b9276417d4cf0cfd365684fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "83bf7a9e_7d459927",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2024-09-19T12:44:01Z",
       "side": 1,
       "message": "Nit: `and returns the corresponding tuple input instead.` is probably easier to read.",
+      "range": {
+        "startLine": 5313,
+        "startChar": 55,
+        "endLine": 5314,
+        "endChar": 31
+      },
+      "revId": "aa7578a8ae09ab2b9276417d4cf0cfd365684fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9c91ef_2ec33544",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5314,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-09-19T13:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15157354_48aac46b",
       "range": {
         "startLine": 5313,
         "startChar": 55,

@@ -22,6 +22,30 @@
       },
       "revId": "277ee3f5e083c6576d36407ee117df961911b9a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3a2c340_b357c790",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-09-19T13:35:26Z",
+      "side": 0,
+      "message": "Yes, now that `Assembler` now inherits from both `AssemblerOpInterface` and the stack, so they cannot both have different implementations for equally named functions.",
+      "parentUuid": "63aff63d_de393624",
+      "range": {
+        "startLine": 44,
+        "startChar": 54,
+        "endLine": 44,
+        "endChar": 58
+      },
+      "revId": "277ee3f5e083c6576d36407ee117df961911b9a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
