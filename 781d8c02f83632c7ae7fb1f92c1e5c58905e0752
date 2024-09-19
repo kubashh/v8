@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5564c167_afb9d3df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-19T08:42:06Z",
+      "side": 1,
+      "message": "PTAL, this is a follow-up to https://chromium-review.googlesource.com/c/v8/v8/+/5873559 which added the test case and now it fails on the waterfall here https://ci.chromium.org/p/v8/g/ports/console",
+      "revId": "781d8c02f83632c7ae7fb1f92c1e5c58905e0752",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
