@@ -105,6 +105,30 @@
       },
       "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f915aa1_18624274",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 4505,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-09-19T21:06:35Z",
+      "side": 1,
+      "message": "For `await using` we added another lookahead token to the scanner to check the identifier (as part of `CoverAwaitExpressionAndAwaitUsingDeclarationHead`). The `Token::IsAnyIdentifier(PeekAheadAhead())` in [1] is failing when the code is `await using \u003d 42` and the parser goes to a different path. (`ParseStatement` instead of `ParsevariableStatement`). That means even in the current available version of v8 `await using \u003d 42` gives a syntax error and this is an intended behavior. Does that makes sense to you now? \n\n\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/parsing/parser-base.h;l\u003d5692;bpv\u003d1;bpt\u003d1?q\u003dCoverAwaitExpressionAndAwaitUsingDeclarationHead\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "parentUuid": "29b53f4a_8d55b7b6",
+      "range": {
+        "startLine": 4499,
+        "startChar": 0,
+        "endLine": 4505,
+        "endChar": 13
+      },
+      "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
