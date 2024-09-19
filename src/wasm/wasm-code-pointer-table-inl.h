@@ -37,11 +37,11 @@ Address WasmCodePointerTable::GetEntrypoint(uint32_t index) const {
 
 void WasmCodePointerTable::SetEntrypoint(uint32_t index, Address value) {
   WriteScope write_scope("WasmCodePointerTable write");
-  SetEntrypointWithWriteScope(index, value, write_scope);
+  SetEntrypointWithWriteScope(index, value);
 }
 
-void WasmCodePointerTable::SetEntrypointWithWriteScope(
-    uint32_t index, Address value, WriteScope& write_scope) {
+void WasmCodePointerTable::SetEntrypointWithWriteScope(uint32_t index,
+                                                       Address value) {
   at(index).MakeCodePointerEntry(value);
 }
 

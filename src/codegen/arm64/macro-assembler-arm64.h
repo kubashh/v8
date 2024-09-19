@@ -1089,6 +1089,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void CallJSFunction(Register function_object);
   void JumpJSFunction(Register function_object,
                       JumpMode jump_mode = JumpMode::kJump);
+  void ResolveWasmCodePointer(Register target);
+  void CallWasmCodePointer(Register target, bool tail_call = false);
+  void LoadWasmCodePointer(Register dst, MemOperand src);
 
   // Generates an instruction sequence s.t. the return address points to the
   // instruction following the call.
