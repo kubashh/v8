@@ -3540,9 +3540,11 @@ void JSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ movq(params_end,
           MemOperand(wrapper_buffer,
                      JSToWasmWrapperFrameConstants::kWrapperBufferParamEnd));
-  __ movq(call_target,
-          MemOperand(wrapper_buffer,
-                     JSToWasmWrapperFrameConstants::kWrapperBufferCallTarget));
+
+  __ LoadWasmCodePointer(
+      call_target,
+      MemOperand(wrapper_buffer,
+                 JSToWasmWrapperFrameConstants::kWrapperBufferCallTarget));
 
   Register last_stack_param = rcx;
 
@@ -3593,7 +3595,7 @@ void JSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
             0);
   }
 
-  __ call(call_target);
+  __ CallWasmCodePointer(call_target);
 
   __ movq(
       thread_in_wasm_flag_addr,

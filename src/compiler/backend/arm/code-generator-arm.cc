@@ -678,26 +678,38 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
 #if V8_ENABLE_WEBASSEMBLY
-    case kArchCallWasmFunction: {
+    case kArchCallWasmFunction:
+    case kArchCallWasmFunctionIndirect: {
       if (instr->InputAt(0)->IsImmediate()) {
+        DCHECK_EQ(arch_opcode, kArchCallWasmFunction);
         Constant constant = i.ToConstant(instr->InputAt(0));
         Address wasm_code = static_cast<Address>(constant.ToInt32());
         __ Call(wasm_code, constant.rmode());
       } else {
-        __ Call(i.InputRegister(0));
+        if (arch_opcode == kArchCallWasmFunctionIndirect) {
+          __ CallWasmCodePointer(i.InputRegister(0));
+        } else {
+          __ Call(i.InputRegister(0));
+        }
       }
       RecordCallPosition(instr);
       DCHECK_EQ(LeaveCC, i.OutputSBit());
       frame_access_state()->ClearSPDelta();
       break;
     }
-    case kArchTailCallWasm: {
+    case kArchTailCallWasm:
+    case kArchTailCallWasmIndirect: {
       if (instr->InputAt(0)->IsImmediate()) {
+        DCHECK_EQ(arch_opcode, kArchTailCallWasm);
         Constant constant = i.ToConstant(instr->InputAt(0));
         Address wasm_code = static_cast<Address>(constant.ToInt32());
         __ Jump(wasm_code, constant.rmode());
       } else {
-        __ Jump(i.InputRegister(0));
+        if (arch_opcode == kArchTailCallWasmIndirect) {
+          __ CallWasmCodePointer(i.InputRegister(0), true);
+        } else {
+          __ Jump(i.InputRegister(0));
+        }
       }
       DCHECK_EQ(LeaveCC, i.OutputSBit());
       unwinding_info_writer_.MarkBlockWillExit();
@@ -813,6 +825,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                                      set_isolate_data_slots, &return_location);
       } else {
         Register func = i.InputRegister(0);
+#if V8_ENABLE_WEBASSEMBLY
+        if (linkage()->GetIncomingDescriptor()->IsWasmCapiFunction()) {
+          __ ResolveWasmCodePointer(func);
+        }
+#endif
         pc_offset = __ CallCFunction(func, num_parameters,
                                      set_isolate_data_slots, &return_location);
       }

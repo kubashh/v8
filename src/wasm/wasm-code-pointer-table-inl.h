@@ -41,7 +41,7 @@ void WasmCodePointerTable::SetEntrypoint(uint32_t index, Address value) {
 }
 
 void WasmCodePointerTable::SetEntrypointWithWriteScope(
-    uint32_t index, Address value, WriteScope& write_scope) {
+    uint32_t index, Address value, const WriteScope& write_scope) {
   at(index).MakeCodePointerEntry(value);
 }
 

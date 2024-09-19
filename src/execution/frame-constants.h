@@ -329,6 +329,7 @@ class JSToWasmWrapperFrameConstants : public TypedFrameConstants {
   static constexpr size_t kWrapperBufferSigRepresentationArray = 8;
   static constexpr size_t kWrapperBufferStackReturnBufferSize = 16;
   static constexpr size_t kWrapperBufferCallTarget = 24;
+  // TODO(sroettger): fix size
   static constexpr size_t kWrapperBufferParamStart = 32;
   static constexpr size_t kWrapperBufferParamEnd = 40;
 
