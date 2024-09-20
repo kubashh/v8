@@ -40,6 +40,14 @@ namespace v8::internal::compiler::turboshaft {
 //    check) or refining (setting the from type to a more specific type) type
 //    operations.
 
+// TODO(mliedtke): This is pretty ugly, is there a better way to do this?
+class ValueTypeDefaultsTop : public wasm::ValueType {
+ public:
+  ValueTypeDefaultsTop() : wasm::ValueType(wasm::kWasmTop) {}
+  /*implicit*/ ValueTypeDefaultsTop(wasm::ValueType other)  // NOLINT
+      : wasm::ValueType(other) {}
+};
+
 class WasmGCTypeAnalyzer {
  public:
   WasmGCTypeAnalyzer(PipelineData* data, Graph& graph, Zone* zone)
@@ -54,7 +62,7 @@ class WasmGCTypeAnalyzer {
   }
 
  private:
-  using TypeSnapshotTable = SparseOpIndexSnapshotTable<wasm::ValueType>;
+  using TypeSnapshotTable = SparseOpIndexSnapshotTable<ValueTypeDefaultsTop>;
   using Snapshot = TypeSnapshotTable::Snapshot;
   using MaybeSnapshot = TypeSnapshotTable::MaybeSnapshot;
 
@@ -139,7 +147,7 @@ class WasmGCTypedOptimizationReducer : public Next {
     if (ShouldSkipOptimizationStep()) goto no_change;
 
     wasm::ValueType type = analyzer_.GetInputType(op_idx);
-    if (type != wasm::ValueType() && !type.is_uninhabited()) {
+    if (type != wasm::kWasmTop && !type.is_uninhabited()) {
       DCHECK(wasm::IsSameTypeHierarchy(type.heap_type(),
                                        cast_op.config.to.heap_type(), module_));
       bool to_nullable = cast_op.config.to.is_nullable();
@@ -193,7 +201,7 @@ class WasmGCTypedOptimizationReducer : public Next {
     if (ShouldSkipOptimizationStep()) goto no_change;
 
     wasm::ValueType type = analyzer_.GetInputType(op_idx);
-    if (type != wasm::ValueType() && !type.is_uninhabited()) {
+    if (type != wasm::kWasmTop && !type.is_uninhabited()) {
       DCHECK(wasm::IsSameTypeHierarchy(
           type.heap_type(), type_check.config.to.heap_type(), module_));
       bool to_nullable = type_check.config.to.is_nullable();
@@ -258,7 +266,7 @@ class WasmGCTypedOptimizationReducer : public Next {
     if (type.is_non_nullable()) {
       return __ Word32Constant(0);
     }
-    if (type != wasm::ValueType() && type != wasm::kWasmBottom &&
+    if (type != wasm::kWasmTop && type != wasm::kWasmBottom &&
         wasm::ToNullSentinel({type, module_}) == type) {
       return __ Word32Constant(1);
     }
