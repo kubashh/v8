@@ -205,18 +205,17 @@ class Scavenger {
 
   ScavengerCollector* const collector_;
   Heap* const heap_;
-  EmptyChunksList::Local empty_chunks_local_;
-  PromotionList::Local promotion_list_local_;
-  CopiedList::Local copied_list_local_;
-  EphemeronRememberedSet::TableList::Local ephemeron_table_list_local_;
-  PretenuringHandler* const pretenuring_handler_;
+  EmptyChunksList::Local local_empty_chunks_;
+  PromotionList::Local local_promotion_list_;
+  CopiedList::Local local_copied_list_;
+  EphemeronRememberedSet::TableList::Local local_ephemeron_table_list_;
   PretenuringHandler::PretenuringFeedbackMap local_pretenuring_feedback_;
+  EphemeronRememberedSet::TableMap local_ephemeron_remembered_set_;
+  SurvivingNewLargeObjectsMap local_surviving_new_large_objects_;
   size_t copied_size_{0};
   size_t promoted_size_{0};
   EvacuationAllocator allocator_;
-  SurvivingNewLargeObjectsMap surviving_new_large_objects_;
 
-  EphemeronRememberedSet::TableMap ephemeron_remembered_set_;
   const bool is_logging_;
   const bool is_incremental_marking_;
   const bool is_compacting_;
@@ -233,7 +232,8 @@ class Scavenger {
 // filtering out non-HeapObjects and objects which do not reside in new space.
 class RootScavengeVisitor final : public RootVisitor {
  public:
-  explicit RootScavengeVisitor(Scavenger* scavenger);
+  explicit RootScavengeVisitor(Scavenger& scavenger);
+  ~RootScavengeVisitor() final;
 
   void VisitRootPointer(Root root, const char* description,
                         FullObjectSlot p) final;
@@ -243,7 +243,7 @@ class RootScavengeVisitor final : public RootVisitor {
  private:
   void ScavengePointer(FullObjectSlot p);
 
-  Scavenger* const scavenger_;
+  Scavenger& scavenger_;
 };
 
 class ScavengerCollector {
