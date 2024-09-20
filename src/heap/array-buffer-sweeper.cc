@@ -74,6 +74,7 @@ size_t ArrayBufferList::BytesSlow() const {
 bool ArrayBufferList::IsEmpty() const {
   DCHECK_IMPLIES(head_, tail_);
   DCHECK_IMPLIES(!head_, bytes_ == 0);
+  PrintF("IsEmpty %zu \n", bytes_);
   return head_ == nullptr;
 }
 
@@ -94,6 +95,10 @@ class ArrayBufferSweeper::SweepingState final {
   }
 
   void MergeTo(ArrayBufferSweeper* sweeper) {
+    PrintF("MergeTo young %zu %zu %zu %zu\n", new_young_.bytes_, young_bytes_,
+           sweeper->young_bytes_adjustment_, sweeper->young_.bytes_);
+    PrintF("MergeTo old %zu %zu %zu %zu\n", new_old_.bytes_, old_bytes_,
+           sweeper->old_bytes_adjustment_, sweeper->old_.bytes_);
     new_young_.bytes_ = young_bytes_;
     new_old_.bytes_ = old_bytes_;
     sweeper->young_.Append(new_young_);
@@ -328,6 +333,8 @@ void ArrayBufferSweeper::Append(Tagged<JSArrayBuffer> object,
 
   FinishIfDone();
 
+  PrintF("Append %zu \n", bytes);
+
   // `Heap::InYoungGeneration` during full GC with sticky markbits is generally
   // inaccurate. However, a full GC will sweep both lists and promote all to
   // old, so it doesn't matter which list initially holds the extension.
@@ -348,6 +355,8 @@ void ArrayBufferSweeper::Resize(ArrayBufferExtension* extension,
 
   ArrayBufferExtension::AccountingValue previous_value =
       extension->UpdateAccountingLength(delta);
+
+  PrintF("Resize %zu %li\n", previous_value.accounting_length(), delta);
 
   switch (previous_value.age()) {
     case ArrayBufferExtension::Age::kYoung:
@@ -381,6 +390,8 @@ void ArrayBufferSweeper::Detach(ArrayBufferExtension* extension) {
 
   ArrayBufferExtension::AccountingValue previous_value =
       extension->ClearAccountingLength();
+
+  PrintF("Detach %zu \n", previous_value.accounting_length());
 
   // We cannot free the extension eagerly here, since extensions are tracked in
   // a singly linked list. The next GC will remove it automatically.
