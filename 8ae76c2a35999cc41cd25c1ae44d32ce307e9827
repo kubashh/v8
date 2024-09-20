@@ -129,6 +129,30 @@
       },
       "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aae6c947_ca8fdeef",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 4505,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-20T00:11:33Z",
+      "side": 1,
+      "message": "Ah ha, got it, thanks!",
+      "parentUuid": "2f915aa1_18624274",
+      "range": {
+        "startLine": 4499,
+        "startChar": 0,
+        "endLine": 4505,
+        "endChar": 13
+      },
+      "revId": "8ae76c2a35999cc41cd25c1ae44d32ce307e9827",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
