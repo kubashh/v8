@@ -192,8 +192,21 @@ class ArrayBufferExtension final
 #else
     : public Malloced {
 #endif  // V8_COMPRESS_POINTERS
+  static constexpr uint64_t kAgeMask = 1;
+  static constexpr uint64_t kAccountingLengthBitOffset = 1;
+
  public:
   enum class Age : uint8_t { kYoung, kOld };
+
+  struct AccountingValue {
+    size_t accounting_length() const {
+      return static_cast<size_t>(value >> kAccountingLengthBitOffset);
+    }
+    // Returns true if canceled.
+    Age age() const { return static_cast<Age>(value & kAgeMask); }
+
+    uint64_t value;
+  };
 
   ArrayBufferExtension() : backing_store_(std::shared_ptr<BackingStore>()) {}
   explicit ArrayBufferExtension(std::shared_ptr<BackingStore> backing_store)
@@ -214,15 +227,22 @@ class ArrayBufferExtension final
   BackingStore* backing_store_raw() { return backing_store_.get(); }
 
   size_t accounting_length() const {
-    return accounting_length_.load(std::memory_order_relaxed);
+    return AccountingValue{accounting_value_.load(std::memory_order_relaxed)}
+        .accounting_length();
+  }
+  void set_accounting_value(size_t accounting_length, Age age) {
+    accounting_value_.store((accounting_length << kAccountingLengthBitOffset) |
+                                static_cast<uint8_t>(age),
+                            std::memory_order_relaxed);
   }
 
-  void set_accounting_length(size_t accounting_length) {
-    accounting_length_.store(accounting_length, std::memory_order_relaxed);
+  AccountingValue UpdateAccountingLength(int64_t delta) {
+    return {accounting_value_.fetch_add(delta << kAccountingLengthBitOffset,
+                                        std::memory_order_relaxed)};
   }
 
-  size_t ClearAccountingLength() {
-    return accounting_length_.exchange(0, std::memory_order_relaxed);
+  AccountingValue ClearAccountingLength() {
+    return {accounting_value_.fetch_and(kAgeMask, std::memory_order_relaxed)};
   }
 
   std::shared_ptr<BackingStore> RemoveBackingStore() {
@@ -238,18 +258,25 @@ class ArrayBufferExtension final
   ArrayBufferExtension* next() const { return next_; }
   void set_next(ArrayBufferExtension* extension) { next_ = extension; }
 
-  Age age() const { return age_; }
-  void set_age(Age age) { age_ = age; }
+  Age age() const {
+    return AccountingValue{accounting_value_.load(std::memory_order_relaxed)}
+        .age();
+  }
+  AccountingValue SetOld() {
+    return {accounting_value_.fetch_or(kAgeMask, std::memory_order_relaxed)};
+  }
+  AccountingValue SetYoung() {
+    return {accounting_value_.fetch_and(~kAgeMask, std::memory_order_relaxed)};
+  }
 
  private:
   enum class GcState : uint8_t { Dead = 0, Copied, Promoted };
 
-  Age age_ = Age::kOld;
   std::atomic<bool> marked_{false};
   std::atomic<GcState> young_gc_state_{GcState::Dead};
   std::shared_ptr<BackingStore> backing_store_;
   ArrayBufferExtension* next_ = nullptr;
-  std::atomic<size_t> accounting_length_{0};
+  std::atomic<uint64_t> accounting_value_{kAgeMask};
 
   GcState young_gc_state() const {
     return young_gc_state_.load(std::memory_order_relaxed);
