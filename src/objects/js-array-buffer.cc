@@ -4,6 +4,7 @@
 
 #include "src/objects/js-array-buffer.h"
 
+#include "js-array-buffer.h"
 #include "src/execution/protectors-inl.h"
 #include "src/logging/counters.h"
 #include "src/objects/js-array-buffer-inl.h"
@@ -112,7 +113,7 @@ void JSArrayBuffer::Attach(std::shared_ptr<BackingStore> backing_store) {
   if (backing_store->is_wasm_memory()) set_is_detachable(false);
   ArrayBufferExtension* extension = EnsureExtension();
   size_t bytes = backing_store->PerIsolateAccountingLength();
-  extension->set_accounting_length(bytes);
+  extension->set_accounting_value(bytes, ArrayBufferExtension::Age::kYoung);
   extension->set_backing_store(std::move(backing_store));
   isolate->heap()->AppendArrayBufferExtension(*this, extension);
 }
