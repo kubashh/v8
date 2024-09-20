@@ -278,6 +278,7 @@ RegisterRepresentation WasmGraphBuilderBase::RepresentationFor(ValueType type) {
       return RegisterRepresentation::Simd128();
     case kVoid:
     case kRtt:
+    case kTop:
     case kBottom:
       UNREACHABLE();
   }
@@ -1175,6 +1176,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       case kF16:
       case kRtt:
       case kVoid:
+      case kTop:
       case kBottom:
         UNREACHABLE();
     }
@@ -3653,6 +3655,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         case kI16:
         case kF16:
         case kVoid:
+        case kTop:
         case kBottom:
           UNREACHABLE();
       }
@@ -4566,6 +4569,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
           array_copy_max_loop_length = 15;
           break;
         case wasm::kVoid:
+        case kTop:
         case wasm::kBottom:
           UNREACHABLE();
       }
@@ -5830,6 +5834,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
       case kVoid:
       case kRtt:
       case kRef:
+      case kTop:
       case kBottom:
         UNREACHABLE();
     }
@@ -7797,6 +7802,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         case kI16:
         case kF16:
         case kVoid:
+        case kTop:
         case kBottom:
           UNREACHABLE();
       }
@@ -8042,6 +8048,7 @@ class TurboshaftGraphBuildingInterface : public WasmGraphBuilderBase {
         UNIMPLEMENTED();
       case wasm::kRtt:
       case wasm::kVoid:
+      case kTop:
       case wasm::kBottom:
         UNREACHABLE();
     }

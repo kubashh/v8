@@ -49,6 +49,7 @@ namespace wasm {
   V(Rtt, kTaggedSizeLog2, Rtt, TaggedPointer, 't', "rtt")          \
   V(Ref, kTaggedSizeLog2, Ref, AnyTagged, 'r', "ref")              \
   V(RefNull, kTaggedSizeLog2, RefNull, AnyTagged, 'n', "ref null") \
+  V(Top, -1, Void, None, '\\', "<top>")                            \
   V(Bottom, -1, Void, None, '*', "<bot>")
 
 constexpr int kMaxValueTypeSize = 16;  // bytes
@@ -98,6 +99,7 @@ class HeapType {
     kNoFuncShared,
     kNoExternShared,
     kNoExnShared,
+    kTop,
     // This value is used to represent failures in the parsing of heap types and
     // does not correspond to a wasm heap type. It has to be last in this list.
     kBottom
@@ -255,6 +257,8 @@ class HeapType {
         return std::string("shared exn");
       case kBottom:
         return std::string("<bot>");
+      case kTop:
+        return std::string("<top>");
       default:
         DCHECK(is_index());
         return std::to_string(representation_);
@@ -446,7 +450,11 @@ constexpr bool is_numeric(ValueKind kind) {
   }
 }
 
-constexpr bool is_valid(ValueKind kind) { return kind <= kBottom; }
+constexpr bool is_valid(ValueKind kind) {
+  // Note that this function is used as additional validation for preventing V8
+  // heap sandbox escapes.
+  return kind <= kTop;
+}
 
 constexpr bool is_reference(ValueKind kind) {
   return kind == kRef || kind == kRefNull || kind == kRtt;
@@ -555,7 +563,7 @@ class ValueType {
   /******************************* Constructors *******************************/
   constexpr ValueType() : bit_field_(KindField::encode(kVoid)) {}
   static constexpr ValueType Primitive(ValueKind kind) {
-    DCHECK(kind == kBottom || kind <= kF16);
+    DCHECK(kind == kTop || kind == kBottom || kind <= kF16);
     return ValueType(KindField::encode(kind));
   }
   static constexpr ValueType Ref(uint32_t heap_type) {
@@ -630,6 +638,7 @@ class ValueType {
   constexpr bool is_defaultable() const { return wasm::is_defaultable(kind()); }
 
   constexpr bool is_bottom() const { return kind() == kBottom; }
+  constexpr bool is_top() const { return kind() == kTop; }
 
   constexpr bool is_string_view() const {
     return is_object_reference() && heap_type().is_string_view();
@@ -755,6 +764,7 @@ class ValueType {
   // kFuncrefCode and not kRefNullCode).
   constexpr ValueTypeCode value_type_code() const {
     DCHECK_NE(kBottom, kind());
+    DCHECK_NE(kTop, kind());
     switch (kind()) {
       case kRefNull:
         switch (heap_representation()) {
@@ -807,6 +817,7 @@ class ValueType {
       // compiler-internal type only.
       case kRtt:
       case kVoid:
+      case kTop:
       case kBottom:
         // Unreachable code
         return kVoidCode;
@@ -936,6 +947,8 @@ constexpr ValueType kWasmI8 = ValueType::Primitive(kI8);
 constexpr ValueType kWasmI16 = ValueType::Primitive(kI16);
 constexpr ValueType kWasmF16 = ValueType::Primitive(kF16);
 constexpr ValueType kWasmVoid = ValueType::Primitive(kVoid);
+// The abstract top type (super type of all other types).
+constexpr ValueType kWasmTop = ValueType::Primitive(kTop);
 constexpr ValueType kWasmBottom = ValueType::Primitive(kBottom);
 // Established reference-type and wasm-gc proposal shorthands.
 constexpr ValueType kWasmFuncRef = ValueType::RefNull(HeapType::kFunc);
