@@ -73,7 +73,11 @@ size_t ArrayBufferList::BytesSlow() const {
 
 bool ArrayBufferList::IsEmpty() const {
   DCHECK_IMPLIES(head_, tail_);
-  DCHECK_IMPLIES(!head_, bytes_ == 0);
+  if (!head_) {
+    DCHECK_EQ(bytes_, 0);
+  }
+  // DCHECK_IMPLIES(!head_, bytes_ == 0);
+  PrintF("IsEmpty %zu \n", bytes_);
   return head_ == nullptr;
 }
 
@@ -99,6 +103,9 @@ class ArrayBufferSweeper::SweepingState final {
               0);
     DCHECK_GE(
         old_bytes_ + sweeper->old_bytes_adjustment_ + sweeper->old_.bytes_, 0);
+    PrintF("MergeTo young %zu %zu\n", new_young_.bytes_,
+           sweeper->young_.bytes_);
+    PrintF("MergeTo old %zu %zu\n", new_old_.bytes_, sweeper->old_.bytes_);
     new_young_.bytes_ = young_bytes_;
     new_old_.bytes_ = old_bytes_;
     sweeper->young_.Append(new_young_);
@@ -106,6 +113,8 @@ class ArrayBufferSweeper::SweepingState final {
     sweeper->young_.bytes_ +=
         std::exchange(sweeper->young_bytes_adjustment_, 0);
     sweeper->old_.bytes_ += std::exchange(sweeper->old_bytes_adjustment_, 0);
+    sweeper->young_.BytesSlow();
+    sweeper->old_.BytesSlow();
     sweeper->DecrementExternalMemoryCounters(freed_bytes_);
   }
 
@@ -141,6 +150,7 @@ class ArrayBufferSweeper::SweepingState::SweepingJob final : public JobTask {
         treat_all_young_as_promoted_(treat_all_young_as_promoted),
         trace_id_(trace_id),
         local_sweeper_(heap_->sweeper()) {
+    PrintF("Prepare %zu %zu\n", young_.bytes_, old_.bytes_);
     state_.young_bytes_ = young_.bytes_;
     state_.old_bytes_ = old_.bytes_;
   }
@@ -289,6 +299,10 @@ void ArrayBufferSweeper::Prepare(
   DCHECK(!sweeping_in_progress());
   DCHECK_IMPLIES(type == SweepingType::kFull,
                  treat_all_young_as_promoted == TreatAllYoungAsPromoted::kYes);
+  PrintF("Prepare young %zu \n", young_.bytes_);
+  PrintF("Prepare old %zu \n", old_.bytes_);
+  young_.BytesSlow();
+  old_.BytesSlow();
   switch (type) {
     case SweepingType::kYoung: {
       state_ = std::make_unique<SweepingState>(
@@ -333,6 +347,8 @@ void ArrayBufferSweeper::Append(Tagged<JSArrayBuffer> object,
 
   FinishIfDone();
 
+  PrintF("Append %p %zu \n", extension, bytes);
+
   // `Heap::InYoungGeneration` during full GC with sticky markbits is generally
   // inaccurate. However, a full GC will sweep both lists and promote all to
   // old, so it doesn't matter which list initially holds the extension.
@@ -353,6 +369,8 @@ void ArrayBufferSweeper::Resize(ArrayBufferExtension* extension,
 
   ArrayBufferExtension::AccountingValue previous_value =
       extension->UpdateAccountingLength(delta);
+
+  PrintF("Resize %p %zu\n", extension, previous_value.accounting_length());
 
   switch (previous_value.age()) {
     case ArrayBufferExtension::Age::kYoung:
@@ -386,6 +404,8 @@ void ArrayBufferSweeper::Detach(ArrayBufferExtension* extension) {
 
   ArrayBufferExtension::AccountingValue previous_value =
       extension->ClearAccountingLength();
+
+  PrintF("Detach %p %zu \n", extension, previous_value.accounting_length());
 
   // We cannot free the extension eagerly here, since extensions are tracked in
   // a singly linked list. The next GC will remove it automatically.
