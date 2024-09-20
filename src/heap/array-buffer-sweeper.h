@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "include/v8config.h"
+#include "src/api/api.h"
 #include "src/base/logging.h"
 #include "src/base/platform/mutex.h"
 #include "src/heap/sweeper.h"
@@ -64,6 +66,8 @@ class ArrayBufferSweeper final {
   // Track the given ArrayBufferExtension for the given JSArrayBuffer.
   void Append(Tagged<JSArrayBuffer> object, ArrayBufferExtension* extension);
 
+  void Resize(ArrayBufferExtension* extension, int64_t delta);
+
   // Detaches an ArrayBufferExtension.
   void Detach(ArrayBufferExtension* extension);
 
@@ -104,6 +108,9 @@ class ArrayBufferSweeper final {
   std::unique_ptr<SweepingState> state_;
   ArrayBufferList young_{ArrayBufferList::Age::kYoung};
   ArrayBufferList old_{ArrayBufferList::Age::kOld};
+  int64_t young_bytes_adjustment_{0};
+  int64_t old_bytes_adjustment_{0};
+  V8_NO_UNIQUE_ADDRESS ExternalMemoryAccounterBase external_memory_accounter_;
 };
 
 }  // namespace internal
