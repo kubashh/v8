@@ -1690,7 +1690,8 @@ uint32_t ImportStartOffset(base::Vector<const uint8_t> wire_bytes,
 // them on the {module}'s {well_known_imports} list.
 WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
                                        base::Vector<const uint8_t> wire_bytes,
-                                       const CompileTimeImports& imports) {
+                                       const CompileTimeImports& imports,
+                                       WasmDetectedFeatures* detected) {
   DCHECK_EQ(module->origin, kWasmOrigin);
   if (imports.empty()) return {};
 
@@ -1772,6 +1773,7 @@ WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
       RETURN_ERROR("js-string", #import_name);           \
     }                                                    \
     status = WellKnownImport::kEnumName;                 \
+    detected->add_imported_strings();                    \
   } else  // NOLINT(readability/braces)
 
       CHECK_SIG(cast, kSig_e_r, kStringCast)
@@ -1812,6 +1814,7 @@ WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
           RETURN_ERROR("text-encoder", "measureStringAsUTF8");
         }
         status = WellKnownImport::kStringMeasureUtf8;
+        detected->add_imported_strings_utf8();
       } else if (name ==
                  base::StaticOneByteVector("encodeStringIntoUTF8Array")) {
         if (sig->parameter_count() != 3 || sig->return_count() != 1 ||
@@ -1822,6 +1825,7 @@ WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
           RETURN_ERROR("text-encoder", "encodeStringIntoUTF8Array");
         }
         status = WellKnownImport::kStringIntoUtf8Array;
+        detected->add_imported_strings_utf8();
       } else if (name == base::StaticOneByteVector("encodeStringToUTF8Array")) {
         if (sig->parameter_count() != 1 || sig->return_count() != 1 ||
             sig->GetParam(0) != kExternRef ||
@@ -1829,6 +1833,7 @@ WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
           RETURN_ERROR("text-encoder", "encodeStringToUTF8Array");
         }
         status = WellKnownImport::kStringToUtf8Array;
+        detected->add_imported_strings_utf8();
       }
     } else if (collection == base::StaticOneByteVector("text-decoder") &&
                imports.contains(CompileTimeImport::kTextDecoder)) {
@@ -1841,6 +1846,7 @@ WasmError ValidateAndSetBuiltinImports(const WasmModule* module,
           RETURN_ERROR("text-decoder", "decodeStringFromUTF8Array");
         }
         status = WellKnownImport::kStringFromUtf8Array;
+        detected->add_imported_strings_utf8();
       }
     }
 #undef RETURN_ERROR
@@ -2654,9 +2660,9 @@ void AsyncCompileJob::Failed() {
     // The only possible reason why {result} might be okay is if the failure
     // was due to compile-time imports checking.
     CHECK(!job->compile_imports_.empty());
-    WasmError error = ValidateAndSetBuiltinImports(result.value().get(),
-                                                   wire_bytes_.module_bytes(),
-                                                   job->compile_imports_);
+    WasmError error = ValidateAndSetBuiltinImports(
+        result.value().get(), wire_bytes_.module_bytes(), job->compile_imports_,
+        &unused_detected_features);
     CHECK(error.has_error());
     thrower.CompileError("%s", error.message().c_str());
   }
@@ -2873,8 +2879,8 @@ class AsyncCompileJob::DecodeModule : public AsyncCompileJob::CompileStep {
       if (result.ok()) {
         const WasmModule* module = result.value().get();
         if (WasmError error = ValidateAndSetBuiltinImports(
-                module, job->wire_bytes_.module_bytes(),
-                job->compile_imports_)) {
+                module, job->wire_bytes_.module_bytes(), job->compile_imports_,
+                &job->detected_features_)) {
           result = ModuleResult{std::move(error)};
         }
       }
@@ -3215,10 +3221,13 @@ void AsyncStreamingProcessor::OnFinishedStream(
   job_->bytes_copy_ = std::move(bytes);
 
   if (!after_error) {
+    WasmDetectedFeatures detected_imports_features;
     if (WasmError error = ValidateAndSetBuiltinImports(
             module_result.value().get(), job_->wire_bytes_.module_bytes(),
-            job_->compile_imports_)) {
+            job_->compile_imports_, &detected_imports_features)) {
       after_error = true;
+    } else {
+      job_->detected_features_ |= detected_imports_features;
     }
   }
 

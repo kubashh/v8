@@ -61,7 +61,7 @@ std::shared_ptr<NativeModule> CompileToNativeModule(
 
 V8_EXPORT_PRIVATE WasmError ValidateAndSetBuiltinImports(
     const WasmModule* module, base::Vector<const uint8_t> wire_bytes,
-    const CompileTimeImports& imports);
+    const CompileTimeImports& imports, WasmDetectedFeatures* detected);
 
 // Compiles the wrapper for this (kind, sig) pair and sets the corresponding
 // cache entry. Assumes the key already exists in the cache but has not been

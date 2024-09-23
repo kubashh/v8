@@ -89,11 +89,11 @@ Handle<WasmModuleObject> CompileReferenceModule(
       DecodeWasmModule(enabled_features, wire_bytes, kNoVerifyFunctions,
                        ModuleOrigin::kWasmOrigin);
   CHECK(module_res.ok());
-  std::shared_ptr<WasmModule> module = module_res.value();
+  const std::shared_ptr<WasmModule>& module = module_res.value();
   CHECK_NOT_NULL(module);
   CompileTimeImports compile_imports = CompileTimeImportsForFuzzing();
-  WasmError imports_error =
-      ValidateAndSetBuiltinImports(module.get(), wire_bytes, compile_imports);
+  WasmError imports_error = ValidateAndSetBuiltinImports(
+      module.get(), wire_bytes, compile_imports, &detected_features);
   CHECK(!imports_error.has_error());  // The module was compiled before.
   native_module = GetWasmEngine()->NewNativeModule(
       isolate, enabled_features, CompileTimeImportsForFuzzing(), module, 0);
