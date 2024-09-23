@@ -16,6 +16,29 @@
       "message": "PTAnL?",
       "revId": "9cb63f0b995bd7537d034120ddb2874ed8c84f09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4ba7da3_c8f96a94",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5078,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-23T16:47:00Z",
+      "side": 1,
+      "message": "Why can\u0027t we set `allocation_limit_configured` in this case? I think passing the limits actually should move us into configured state right away.",
+      "range": {
+        "startLine": 5078,
+        "startChar": 4,
+        "endLine": 5078,
+        "endChar": 30
+      },
+      "revId": "9cb63f0b995bd7537d034120ddb2874ed8c84f09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

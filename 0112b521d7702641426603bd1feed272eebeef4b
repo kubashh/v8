@@ -45,6 +45,30 @@
       },
       "revId": "0112b521d7702641426603bd1feed272eebeef4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c48e5e_9ed15922",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-23T16:47:00Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "defb30f5_e192bab6",
+      "range": {
+        "startLine": 1340,
+        "startChar": 4,
+        "endLine": 1341,
+        "endChar": 42
+      },
+      "revId": "0112b521d7702641426603bd1feed272eebeef4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
