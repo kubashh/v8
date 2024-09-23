@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb322c02_058e2f75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T16:08:28Z",
+      "side": 1,
+      "message": "Sending this out early; I will check tomorrow if all bots are green. Feel free to take a look already, or ignore it, in particular if bots are still failing.",
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f16b9e8b_42de6a85",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4163,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T16:08:28Z",
+      "side": 1,
+      "message": "Note: This DCHECK is a pretty good test that we indeed passed through the detected features correctly (at least it caught a few missing pieces).\nI would still like to add an explicit test, I\u0027ll look into this next. And I still need to fix the TODO below. But I guess the CL in it\u0027s current form will be a huge step forward already.",
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
