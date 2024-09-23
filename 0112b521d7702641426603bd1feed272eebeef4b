@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b400a132_ca6c1928",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2103,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-23T16:07:16Z",
+      "side": 0,
+      "message": "To undo before landing",
+      "range": {
+        "startLine": 2103,
+        "startChar": 47,
+        "endLine": 2103,
+        "endChar": 52
+      },
+      "revId": "0112b521d7702641426603bd1feed272eebeef4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "defb30f5_e192bab6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-23T16:07:16Z",
+      "side": 0,
+      "message": "When looking at the code, this seems to do nothing, they are reset shortly after.\nHowever, EnsureSweepingCompleted can be called in-between, where we use the (now-zero) old_generation_size_at_last_gc_.",
+      "range": {
+        "startLine": 1340,
+        "startChar": 4,
+        "endLine": 1341,
+        "endChar": 42
+      },
+      "revId": "0112b521d7702641426603bd1feed272eebeef4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
