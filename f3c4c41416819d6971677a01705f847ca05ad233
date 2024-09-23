@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7a82cf4d_de9eee3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-23T15:29:42Z",
+      "side": 1,
+      "message": "Neat, thank you! Just one typo and 2 questions.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e4582109_b479c4ae",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
@@ -48,6 +65,29 @@
       "writtenOn": "2024-09-23T10:19:47Z",
       "side": 1,
       "message": "FYI: The `WasmMemoryObject` now needs a body descriptor because it contains an untagged field which needs to be skipped by the GC.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01b7ab5f_d4487a3e",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-23T15:29:42Z",
+      "side": 1,
+      "message": "question: how did you figure out the constants here?",
+      "range": {
+        "startLine": 1193,
+        "startChar": 0,
+        "endLine": 1194,
+        "endChar": 49
+      },
       "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -99,6 +139,70 @@
       "writtenOn": "2024-09-23T10:19:47Z",
       "side": 1,
       "message": "FYI: I pulled this out into a separate function.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bcde42e_3b4c825d",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-23T15:29:42Z",
+      "side": 1,
+      "message": "question: what are these locals?",
+      "range": {
+        "startLine": 1341,
+        "startChar": 12,
+        "endLine": 1341,
+        "endChar": 19
+      },
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4068f154_9e8ceaba",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-23T15:29:42Z",
+      "side": 1,
+      "message": "typo: Memory",
+      "range": {
+        "startLine": 1498,
+        "startChar": 53,
+        "endLine": 1498,
+        "endChar": 58
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "eaa2ea51_6e2c09fb",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/wasm/wasm-js.cc",
+              "range": {
+                "startLine": 1498,
+                "startChar": 0,
+                "endLine": 1499,
+                "endChar": 0
+              },
+              "replacement": "// new WebAssembly.Memory(descriptor) -\u003e WebAssembly.Memory\n"
+            }
+          ]
+        }
+      ],
       "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
