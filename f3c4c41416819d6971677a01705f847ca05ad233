@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4582109_b479c4ae",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5418,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T10:19:47Z",
+      "side": 1,
+      "message": "FYI: Here we now compute a new \"minimal\" index type instead of using the conjunction of the two booleans.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7a43c20_71705f94",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1188,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T10:19:47Z",
+      "side": 1,
+      "message": "FYI: The `WasmMemoryObject` now needs a body descriptor because it contains an untagged field which needs to be skipped by the GC.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a965fce2_596706e0",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T10:19:47Z",
+      "side": 1,
+      "message": "This adds support for constructing a `uint8_t` enum from a constant. We need to case the `Uint32Constant` to `Uint8T`.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07f71352_99123f40",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T10:19:47Z",
+      "side": 1,
+      "message": "FYI: We generate slightly different error messages now.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcd082f3_930d8ab7",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T10:19:47Z",
+      "side": 1,
+      "message": "FYI: I pulled this out into a separate function.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb5cff1_6399007e",
+        "filename": "src/wasm/wasm-objects.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T10:19:47Z",
+      "side": 1,
+      "message": "FYI: It would be nicer to write something like `padding_for_index_type: uint8[kTaggedSize - kUint8Size];`, but torque does not support this currently. Not even with a true constant size. I\u0027ll look into fixing this, but will only do it if it\u0027s easy enough.",
+      "revId": "f3c4c41416819d6971677a01705f847ca05ad233",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
