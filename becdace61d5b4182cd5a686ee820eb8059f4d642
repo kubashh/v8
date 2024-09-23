@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66779d18_1edcfd17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-23T17:31:46Z",
+      "side": 1,
+      "message": "Looks good! I have a few nits, and a hopefully-helpful contribution of my own 😊",
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e2b213_3e13bd12",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3379,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-23T17:31:46Z",
+      "side": 1,
+      "message": "nit: `validating`",
+      "range": {
+        "startLine": 3379,
+        "startChar": 5,
+        "endLine": 3379,
+        "endChar": 15
+      },
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d8d73a6_c72c358a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4162,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-23T17:31:46Z",
+      "side": 1,
+      "message": "It occurs to me that that\u0027s a historical artifact from the time when we didn\u0027t have compile-time imports yet and just detected appropriate inputs on instantiation. With the final state of the JS String Builtins proposal, we can change that logic, and perform feature detection at validation time, like so: https://chromium-review.googlesource.com/c/v8/v8/+/5882105\nFeel free to just merge that patch into this CL; if I didn\u0027t screw it up that should work without conflicts, and should then compile 😊",
+      "range": {
+        "startLine": 4161,
+        "startChar": 2,
+        "endLine": 4162,
+        "endChar": 29
+      },
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f16b9e8b_42de6a85",
@@ -31,6 +94,52 @@
       "writtenOn": "2024-09-23T16:08:28Z",
       "side": 1,
       "message": "Note: This DCHECK is a pretty good test that we indeed passed through the detected features correctly (at least it caught a few missing pieces).\nI would still like to add an explicit test, I\u0027ll look into this next. And I still need to fix the TODO below. But I guess the CL in it\u0027s current form will be a huge step forward already.",
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fba33ad6_185a4b48",
+        "filename": "src/wasm/module-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-23T17:31:46Z",
+      "side": 1,
+      "message": "nit: incomplete comment",
+      "range": {
+        "startLine": 100,
+        "startChar": 25,
+        "endLine": 100,
+        "endChar": 29
+      },
+      "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "763cf7ea_2678c891",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-09-23T17:31:46Z",
+      "side": 1,
+      "message": "nit: outdated comment",
+      "range": {
+        "startLine": 1701,
+        "startChar": 6,
+        "endLine": 1701,
+        "endChar": 53
+      },
       "revId": "becdace61d5b4182cd5a686ee820eb8059f4d642",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
