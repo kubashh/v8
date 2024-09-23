@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fbd0d3a_25fa5022",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-23T16:04:41Z",
+      "side": 1,
+      "message": "Confirmed offline that there are no more questions, so landing this.",
+      "revId": "5a49c2215e3c36e0086f94fba458e75cbe2acd58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
