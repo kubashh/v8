@@ -271,7 +271,7 @@ void WasmGCTypeAnalyzer::ProcessAllocateStruct(
 
 void WasmGCTypeAnalyzer::ProcessPhi(const PhiOp& phi) {
   // The result type of a phi is the union of all its input types.
-  // If any of the inputs is the default value ValueType(), there isn't any type
+  // If any of the inputs is the default value kWasmTop, there isn't any type
   // knowledge inferrable.
   DCHECK_GT(phi.input_count, 0);
   if (is_first_loop_header_evaluation_) {
@@ -281,24 +281,14 @@ void WasmGCTypeAnalyzer::ProcessPhi(const PhiOp& phi) {
     RefineTypeKnowledge(graph_.Index(phi), GetResolvedType((phi.input(0))));
     return;
   }
-  wasm::ValueType union_type =
-      types_table_.GetPredecessorValue(ResolveAliases(phi.input(0)), 0);
-  if (union_type == wasm::ValueType()) return;
-  for (int i = 1; i < phi.input_count; ++i) {
+  wasm::ValueType union_type = wasm::kWasmBottom;
+  for (int i = 0; i < phi.input_count; ++i) {
     wasm::ValueType input_type =
         types_table_.GetPredecessorValue(ResolveAliases(phi.input(i)), i);
-    if (input_type == wasm::ValueType()) return;
-    // <bottom> types have to be skipped as an unreachable predecessor doesn't
-    // change our type knowledge.
-    // TODO(mliedtke): Ideally, we'd skip unreachable predecessors here
-    // completely, as we might loosen the known type due to an unreachable
-    // predecessor.
-    if (input_type.is_uninhabited()) continue;
-    if (union_type.is_uninhabited()) {
-      union_type = input_type;
-    } else {
-      union_type = wasm::Union(union_type, input_type, module_, module_).type;
-    }
+    if (input_type == wasm::kWasmTop) return;
+    // TODO(mliedtke): Ideally, we'd skip unreachable predecessors here, as we
+    // might loosen the known type due to an unreachable predecessor.
+    union_type = wasm::Union(union_type, input_type, module_, module_).type;
   }
   RefineTypeKnowledge(graph_.Index(phi), union_type);
 }
@@ -389,25 +379,10 @@ bool WasmGCTypeAnalyzer::CreateMergeSnapshot(
   types_table_.StartNewSnapshot(
       predecessors, [this, &types_are_equivalent, reachable](
                         TypeSnapshotTable::Key,
-                        base::Vector<const wasm::ValueType> predecessors) {
+                        base::Vector<const ValueTypeDefaultsTop> predecessors) {
         DCHECK_GT(predecessors.size(), 1);
         size_t i = 0;
-        // Initialize the type based on the first reachable predecessor.
-        wasm::ValueType first = wasm::kWasmBottom;
-        for (; i < reachable.size(); ++i) {
-          // Uninhabitated types can only occur in unreachable code e.g. as a
-          // result of an always failing cast. Still reachability tracking might
-          // in some cases miss that a block becomes unreachable, so we still
-          // check for uninhabited in the if below.
-          DCHECK_IMPLIES(reachable[i], !predecessors[i].is_uninhabited());
-          if (reachable[i] && !predecessors[i].is_uninhabited()) {
-            first = predecessors[i];
-            ++i;
-            break;
-          }
-        }
-
-        wasm::ValueType res = first;
+        wasm::ValueType res = wasm::kWasmBottom;
         for (; i < reachable.size(); ++i) {
           if (!reachable[i]) continue;  // Skip unreachable predecessors.
           wasm::ValueType type = predecessors[i];
@@ -417,14 +392,10 @@ bool WasmGCTypeAnalyzer::CreateMergeSnapshot(
           // check for uninhabited in the if below.
           DCHECK(!type.is_uninhabited());
           if (type.is_uninhabited()) continue;
-          types_are_equivalent &= first == type;
-          if (res == wasm::ValueType() || type == wasm::ValueType()) {
-            res = wasm::ValueType();
-          } else {
-            res = wasm::Union(res, type, module_, module_).type;
-          }
+          types_are_equivalent &= res == wasm::kWasmBottom || res == type;
+          res = wasm::Union(res, type, module_, module_).type;
         }
-        return res;
+        return ValueTypeDefaultsTop(res);
       });
   return !types_are_equivalent;
 }
@@ -435,9 +406,7 @@ wasm::ValueType WasmGCTypeAnalyzer::RefineTypeKnowledge(
   object = ResolveAliases(object);
   wasm::ValueType previous_value = types_table_.Get(object);
   wasm::ValueType intersection_type =
-      previous_value == wasm::ValueType()
-          ? new_type
-          : wasm::Intersection(previous_value, new_type, module_, module_).type;
+      wasm::Intersection(previous_value, new_type, module_, module_).type;
   if (intersection_type.is_uninhabited()) {
     block_is_unreachable_.Add(current_block_->index().id());
   }

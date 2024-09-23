@@ -453,7 +453,7 @@ constexpr bool is_numeric(ValueKind kind) {
 constexpr bool is_valid(ValueKind kind) {
   // Note that this function is used as additional validation for preventing V8
   // heap sandbox escapes.
-  return kind <= kTop;
+  return kind <= kBottom;
 }
 
 constexpr bool is_reference(ValueKind kind) {
