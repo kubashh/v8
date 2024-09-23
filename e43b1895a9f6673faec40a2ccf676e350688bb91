@@ -16,6 +16,23 @@
       "message": "PTAL. More preparation for upcoming changes.",
       "revId": "e43b1895a9f6673faec40a2ccf676e350688bb91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08921b8e_3e7d9896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-09-23T21:05:57Z",
+      "side": 1,
+      "message": "lgtm \u0026 thanks",
+      "revId": "e43b1895a9f6673faec40a2ccf676e350688bb91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
