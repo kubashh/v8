@@ -54,10 +54,10 @@ struct WasmModule;
 V8_EXPORT_PRIVATE
 std::shared_ptr<NativeModule> CompileToNativeModule(
     Isolate* isolate, WasmEnabledFeatures enabled_features,
-    CompileTimeImports compile_imports, ErrorThrower* thrower,
-    std::shared_ptr<const WasmModule> module, ModuleWireBytes wire_bytes,
-    int compilation_id, v8::metrics::Recorder::ContextId context_id,
-    ProfileInformation* pgo_info);
+    WasmDetectedFeatures detected_features, CompileTimeImports compile_imports,
+    ErrorThrower* thrower, std::shared_ptr<const WasmModule> module,
+    ModuleWireBytes wire_bytes, int compilation_id,
+    v8::metrics::Recorder::ContextId context_id, ProfileInformation* pgo_info);
 
 V8_EXPORT_PRIVATE WasmError ValidateAndSetBuiltinImports(
     const WasmModule* module, base::Vector<const uint8_t> wire_bytes,
@@ -95,6 +95,11 @@ V8_EXPORT_PRIVATE void TierUpNowForTesting(Isolate*,
 // Same, but all functions.
 V8_EXPORT_PRIVATE void TierUpAllForTesting(Isolate*,
                                            Tagged<WasmTrustedInstanceData>);
+
+// Publish a set of detected features in a given isolate. If this is the initial
+// compilation, also the "V8.
+void PublishDetectedFeatures(WasmDetectedFeatures, Isolate*,
+                             bool is_initial_compilation);
 
 // Encapsulates all the state and steps of an asynchronous compilation.
 // An asynchronous compile job consists of a number of tasks that are executed
@@ -213,6 +218,7 @@ class AsyncCompileJob {
   Isolate* const isolate_;
   const char* const api_method_name_;
   const WasmEnabledFeatures enabled_features_;
+  WasmDetectedFeatures detected_features_;
   CompileTimeImports compile_imports_;
   const DynamicTiering dynamic_tiering_;
   base::TimeTicks start_time_;
