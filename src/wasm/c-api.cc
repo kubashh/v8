@@ -1441,6 +1441,41 @@ namespace {
 
 class SignatureHelper : public i::AllStatic {
  public:
+  static const i::wasm::FunctionSig* Canonicalize(FuncType* type) {
+    std::vector<i::wasm::ValueType> types;
+    types.reserve(type->results().size() + type->params().size());
+
+    // TODO(jkummerow): Consider making vec<> range-based for-iterable.
+    for (size_t i = 0; i < type->results().size(); i++) {
+      types.push_back(WasmValKindToV8(type->results()[i]->kind()));
+    }
+    for (size_t i = 0; i < type->params().size(); i++) {
+      types.push_back(WasmValKindToV8(type->params()[i]->kind()));
+    }
+
+    i::wasm::FunctionSig non_canonical_sig{type->results().size(),
+                                           type->params().size(), types.data()};
+    uint32_t canonical_id =
+        i::wasm::GetTypeCanonicalizer()->AddRecursiveGroup(&non_canonical_sig);
+    return i::wasm::GetTypeCanonicalizer()->LookupFunctionSignature(
+        canonical_id);
+  }
+
+  static own<FuncType> FromV8Sig(const i::wasm::FunctionSig* sig) {
+    int result_arity = static_cast<int>(sig->return_count());
+    int param_arity = static_cast<int>(sig->parameter_count());
+    ownvec<ValType> results = ownvec<ValType>::make_uninitialized(result_arity);
+    ownvec<ValType> params = ownvec<ValType>::make_uninitialized(param_arity);
+
+    for (int i = 0; i < result_arity; ++i) {
+      results[i] = ValType::make(V8ValueTypeToWasm(sig->GetReturn(i)));
+    }
+    for (int i = 0; i < param_arity; ++i) {
+      params[i] = ValType::make(V8ValueTypeToWasm(sig->GetParam(i)));
+    }
+    return FuncType::make(std::move(params), std::move(results));
+  }
+
   static i::Handle<i::PodArray<i::wasm::ValueType>> Serialize(
       i::Isolate* isolate, FuncType* type) {
     i::Handle<i::PodArray<i::wasm::ValueType>> sig =
@@ -1459,27 +1494,9 @@ class SignatureHelper : public i::AllStatic {
     return sig;
   }
 
-  static own<FuncType> Deserialize(
-      i::Tagged<i::PodArray<i::wasm::ValueType>> sig) {
-    int result_arity = i::wasm::SerializedSignatureHelper::ReturnCount(sig);
-    int param_arity = i::wasm::SerializedSignatureHelper::ParamCount(sig);
-    ownvec<ValType> results = ownvec<ValType>::make_uninitialized(result_arity);
-    ownvec<ValType> params = ownvec<ValType>::make_uninitialized(param_arity);
-
-    for (int i = 0; i < result_arity; ++i) {
-      results[i] = ValType::make(V8ValueTypeToWasm(
-          i::wasm::SerializedSignatureHelper::GetReturn(sig, i)));
-    }
-    for (int i = 0; i < param_arity; ++i) {
-      params[i] = ValType::make(V8ValueTypeToWasm(
-          i::wasm::SerializedSignatureHelper::GetParam(sig, i)));
-    }
-    return FuncType::make(std::move(params), std::move(results));
-  }
-
-  static i::Tagged<i::PodArray<i::wasm::ValueType>> GetSig(
+  static const i::wasm::FunctionSig* GetSig(
       i::DirectHandle<i::JSFunction> function) {
-    return i::Cast<i::WasmCapiFunction>(*function)->GetSerializedSignature();
+    return i::Cast<i::WasmCapiFunction>(*function)->sig();
   }
 
 #if V8_ENABLE_SANDBOX
@@ -1517,7 +1534,7 @@ auto make_func(Store* store_abs, std::shared_ptr<FuncData> data) -> own<Func> {
 #endif  // V8_ENABLE_SANDBOX
   i::Handle<i::WasmCapiFunction> function = i::WasmCapiFunction::New(
       isolate, reinterpret_cast<i::Address>(&FuncData::v8_callback),
-      embedder_data, SignatureHelper::Serialize(isolate, data->type.get()),
+      embedder_data, SignatureHelper::Canonicalize(data->type.get()),
       signature_hash);
   i::Cast<i::WasmImportData>(
       function->shared()->wasm_capi_function_data()->internal()->implicit_arg())
@@ -1549,7 +1566,7 @@ auto Func::type() const -> own<FuncType> {
   PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
   i::DirectHandle<i::JSFunction> func = impl(this)->v8_object();
   if (i::WasmCapiFunction::IsWasmCapiFunction(*func)) {
-    return SignatureHelper::Deserialize(SignatureHelper::GetSig(func));
+    return SignatureHelper::FromV8Sig(SignatureHelper::GetSig(func));
   }
   DCHECK(i::WasmExportedFunction::IsWasmExportedFunction(*func));
   auto function = i::Cast<i::WasmExportedFunction>(func);
@@ -1562,8 +1579,7 @@ auto Func::param_arity() const -> size_t {
   PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
   i::DirectHandle<i::JSFunction> func = impl(this)->v8_object();
   if (i::WasmCapiFunction::IsWasmCapiFunction(*func)) {
-    return i::wasm::SerializedSignatureHelper::ParamCount(
-        SignatureHelper::GetSig(func));
+    return SignatureHelper::GetSig(func)->parameter_count();
   }
   DCHECK(i::WasmExportedFunction::IsWasmExportedFunction(*func));
   auto function = i::Cast<i::WasmExportedFunction>(func);
@@ -1577,8 +1593,7 @@ auto Func::result_arity() const -> size_t {
   PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
   i::DirectHandle<i::JSFunction> func = impl(this)->v8_object();
   if (i::WasmCapiFunction::IsWasmCapiFunction(*func)) {
-    return i::wasm::SerializedSignatureHelper::ReturnCount(
-        SignatureHelper::GetSig(func));
+    return SignatureHelper::GetSig(func)->return_count();
   }
   DCHECK(i::WasmExportedFunction::IsWasmExportedFunction(*func));
   auto function = i::Cast<i::WasmExportedFunction>(func);
@@ -1603,7 +1618,7 @@ i::Handle<i::Object> WasmRefToV8(i::Isolate* isolate, const Ref* ref) {
 void PrepareFunctionData(
     i::Isolate* isolate,
     i::DirectHandle<i::WasmExportedFunctionData> function_data,
-    const i::wasm::FunctionSig* sig, const i::wasm::WasmModule* module) {
+    const i::wasm::FunctionSig* sig) {
   // If the data is already populated, return immediately.
   // TODO(saelo): We need to use full pointer comparison here while not all Code
   // objects have migrated into trusted space.
@@ -1614,7 +1629,7 @@ void PrepareFunctionData(
   }
   // Compile wrapper code.
   i::DirectHandle<i::Code> wrapper_code =
-      i::compiler::CompileCWasmEntry(isolate, sig, module);
+      i::compiler::CompileCWasmEntry(isolate, sig);
   function_data->set_c_wrapper_code(*wrapper_code);
   // Compute packed args size.
   function_data->set_packed_args_size(
@@ -1757,8 +1772,11 @@ auto Func::call(const Val args[], Val results[]) const -> own<Trap> {
   int function_index = function_data->function_index();
   const i::wasm::WasmModule* module = instance_data->module();
   // Caching {sig} would give a ~10% reduction in overhead.
-  const i::wasm::FunctionSig* sig = module->functions[function_index].sig;
-  PrepareFunctionData(isolate, function_data, sig, module);
+  const i::wasm::FunctionSig* sig =
+      i::wasm::GetTypeCanonicalizer()->LookupFunctionSignature(
+          module->canonical_sig_id(
+              module->functions[function_index].sig_index));
+  PrepareFunctionData(isolate, function_data, sig);
   i::DirectHandle<i::Code> wrapper_code(function_data->c_wrapper_code(isolate),
                                         isolate);
   i::WasmCodePointer call_target = function_data->internal()->call_target();
