@@ -177,15 +177,14 @@ MaybeHandle<Object> JSDisposableStackBase::DisposeResources(
   return isolate->factory()->true_value();
 }
 
-Handle<JSReceiver> JSDisposableStackBase::ResolveAPromiseWithValueAndReturnIt(
+MaybeHandle<JSReceiver>
+JSDisposableStackBase::ResolveAPromiseWithValueAndReturnIt(
     Isolate* isolate, Handle<Object> value) {
   Handle<JSFunction> promise_function = isolate->promise_function();
   Handle<Object> argv[] = {value};
-  Handle<Object> resolve_result =
+  return Cast<JSReceiver>(
       Execution::CallBuiltin(isolate, isolate->promise_resolve(),
-                             promise_function, arraysize(argv), argv)
-          .ToHandleChecked();
-  return Cast<JSReceiver>(resolve_result);
+                             promise_function, arraysize(argv), argv));
 }
 
 Maybe<bool> JSAsyncDisposableStack::NextDisposeAsyncIteration(
@@ -240,17 +239,16 @@ Maybe<bool> JSAsyncDisposableStack::NextDisposeAsyncIteration(
               .Build();
 
       Handle<Object> argv[] = {on_fulfilled, on_rejected};
-
-      Execution::CallBuiltin(isolate, isolate->perform_promise_then(),
-                             Cast<JSPromise>(result_handle), arraysize(argv),
-                             argv)
-          .ToHandleChecked();
+      MaybeHandle<Object> then_result = Execution::CallBuiltin(
+          isolate, isolate->perform_promise_then(),
+          Cast<JSPromise>(result_handle), arraysize(argv), argv);
+      USE(then_result);
     } else {
       // 8. Perform ! Call(promiseCapability.[[Resolve]], undefined, « result
       // »).
-      JSPromise::Resolve(outer_promise,
-                         ReadOnlyRoots(isolate).undefined_value_handle())
-          .ToHandleChecked();
+      MaybeHandle<Object> promise_result = JSPromise::Resolve(
+          outer_promise, ReadOnlyRoots(isolate).undefined_value_handle());
+      USE(promise_result);
     }
   } else {
     // 7. IfAbruptRejectPromise(result, promiseCapability).
