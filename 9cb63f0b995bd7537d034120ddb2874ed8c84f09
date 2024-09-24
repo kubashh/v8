@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c754c407_1dadf6bf",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2559,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-24T20:42:17Z",
+      "side": 1,
+      "message": "Agreed.\nI find that it\u0027s a little easier to read as:\n\n```\nif (IsYoungGenerationCollector(collector) \u0026\u0026 \n     !(allocation_limit_configured() \u0026\u0026 \t \n       HasLowYoungGenerationAllocationRate())) {\n  return;\n}\n```",
+      "parentUuid": "8f32fbb3_ad811811",
+      "range": {
+        "startLine": 2559,
+        "startChar": 4,
+        "endLine": 2559,
+        "endChar": 5
+      },
+      "revId": "9cb63f0b995bd7537d034120ddb2874ed8c84f09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4ba7da3_c8f96a94",
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "\u003e 2 reasons I think:\n\u003e - there are code paths that allow recomputing limits not immediately after full GC (e.g. if HasLowYoungGenerationAllocationRate()); we need to make sure this happen only if first full GC happened so we have estimate for GC speed. allocation_limit_configured is essentially that.\n\u003e (If we set allocation_limit_configured to true here, then we\u0027d need another variable to check that we have GC/allocation speed estimate, and allocation_limit_configured is no longer useful)\n\nWouldn\u0027t this still work? The path for recomputing that you mentioned is for young GCs when we are configured (if we set the flag here). `HasLowYoungGenerationAllocationRate()` should work because we execute this after the young gen GC, so we should already have some estimates.\n\n\u003e - NotifyContextDisposed resets limit. I think we want to reuse the initial limits overwrites in that case, but we do have GC speed estimate, so it\u0027s different from reseting to the initial state.\n\nAck., that makes sense. The check would probably more implicit (check some limits against defaults)",
       "parentUuid": "9b51a7df_bd4fdabf",
+      "range": {
+        "startLine": 5078,
+        "startChar": 4,
+        "endLine": 5078,
+        "endChar": 30
+      },
+      "revId": "9cb63f0b995bd7537d034120ddb2874ed8c84f09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11df2583_e0d86030",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5078,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2024-09-24T20:42:17Z",
+      "side": 1,
+      "message": "\u003e HasLowYoungGenerationAllocationRate() should work because we execute this after the young gen GC, so we should already have some estimates.\n\nWe\u0027re missing old_generation_size_at_last_gc_ and similar, and CombinedMarkCompactSpeedInBytesPerMillisecond() at this point still.\n\n\u003e The check would probably more implicit (check some limits against defaults)\n\nI figured when calling `ResetOldGenerationAndGlobalAllocationLimit()` from `NotifyContextDisposed()`, the intended behavior is:\n1- if initial limits were not overwritten, we go back in the initial state when ShrinkOldGenerationAllocationLimitIfNotConfigured() takes effect, until the next GC.\n2- Otherwise if there are limit overwrites, we use that limit without updating, until the next GC. \n(that\u0027s not currently the case, we\u0027ll always do 1)\nI don\u0027t see how to differentiate both cases without the second `bool initial_limit_overwritten_`\n\nIn latest patchset, I flipped the bool into `using_initial_limit` that\u0027s set right after configuring the necessary things to start computing the (non-initial) limits.",
+      "parentUuid": "f80334f1_b31e50ff",
       "range": {
         "startLine": 5078,
         "startChar": 4,
