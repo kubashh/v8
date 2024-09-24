@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5b508ec5_33400c94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-24T14:41:33Z",
+      "side": 1,
+      "message": "I don\u0027t think so. After the DCHECK we would still have to increasing the use counters for those late-detected features. That has to happen for each isolate that uses the module, so via the WasmEngine. That\u0027s nontrivial, so I\u0027ll leave that for later.",
+      "parentUuid": "b954264f_bfbeeba5",
+      "range": {
+        "startLine": 14,
+        "startChar": 53,
+        "endLine": 15,
+        "endChar": 59
+      },
+      "revId": "e2e6fe4bb2b2fd513be618772af664d210413a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "19df1534_67152d35",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a603d1a_e62e566c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1884,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-24T14:41:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdb57b36_3d6e66dc",
+      "range": {
+        "startLine": 1884,
+        "startChar": 8,
+        "endLine": 1884,
+        "endChar": 14
+      },
+      "revId": "e2e6fe4bb2b2fd513be618772af664d210413a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f57b1a1e_afac4b71",
@@ -111,6 +159,30 @@
       "writtenOn": "2024-09-24T13:43:38Z",
       "side": 1,
       "message": "I think the `and for stringref` part is outdated now; but you\u0027ll revisit this anyway for lazy compilation.",
+      "range": {
+        "startLine": 4179,
+        "startChar": 16,
+        "endLine": 4179,
+        "endChar": 33
+      },
+      "revId": "e2e6fe4bb2b2fd513be618772af664d210413a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f8f38d_85407149",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4179,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-24T14:41:33Z",
+      "side": 1,
+      "message": "Yes. Removing it breaks tests, let\u0027s look into this in a follow-up.",
+      "parentUuid": "f57b1a1e_afac4b71",
       "range": {
         "startLine": 4179,
         "startChar": 16,
