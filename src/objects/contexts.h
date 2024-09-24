@@ -204,8 +204,13 @@ enum ContextLookupFlags {
     js_array_template_literal_object_map)                                      \
   V(JS_DISPOSABLE_STACK_FUNCTION_INDEX, JSFunction,                            \
     js_disposable_stack_function)                                              \
+  V(JS_DECORATOR_ACCESS_OBJECT_MAP_INDEX, Map, js_decorator_access_object_map) \
   V(JS_ASYNC_DISPOSABLE_STACK_FUNCTION_INDEX, JSFunction,                      \
     js_async_disposable_stack_function)                                        \
+  V(JS_CLASS_DECORATOR_CONTEXT_OBJECT_MAP_INDEX, Map,                          \
+    js_class_decorator_context_object_map)                                     \
+  V(JS_CLASS_ELEMENT_DECORATOR_CONTEXT_OBJECT_MAP_INDEX, Map,                  \
+    js_class_element_decorator_context_object_map)                             \
   V(JS_DISPOSABLE_STACK_MAP_INDEX, Map, js_disposable_stack_map)               \
   V(JS_MAP_FUN_INDEX, JSFunction, js_map_fun)                                  \
   V(JS_MAP_MAP_INDEX, Map, js_map_map)                                         \

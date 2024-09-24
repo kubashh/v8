@@ -1,0 +1,66 @@
+// Copyright 2024 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-decorators.h'
+#include 'src/common/message-template.h'
+
+namespace decorators {
+
+extern enum AddInitializerContextSlots extends intptr
+    constexpr 'DecoratorsBuiltins::AddInitializerContextSlots' {
+  kExtraInitializersContextSlot: Slot<Context, ArrayList>,
+  kAddInitializerContextLength
+}
+
+extern enum DecoratorAccessContextSlots extends intptr
+    constexpr 'DecoratorsBuiltins::DecoratorAccessContextSlots' {
+  kNameContextSlot: Slot<Context, JSAny>,
+  kDecoratorAccessContextLength
+}
+
+transitioning javascript builtin AddInitializer(
+    js-implicit context: Context, receiver: JSAny)(initializer: JSAny): JSAny {
+  // We use the function's context to implement the decorationState.[[Finished]]
+  // record. The function starts with a custom function context which is
+  // replaced when the native context after decoration.
+  // If decorationState.[[Finished]] is true, throw a TypeError exception
+  if (Is<NativeContext>(context)) {
+    ThrowTypeError(MessageTemplate::kInvalidDecoratorAddInitializer);
+  }
+  if (!Is<Callable>(initializer)) {
+    ThrowCalledNonCallable(initializer);
+  }
+  const extraInitializers = *ContextSlot(
+      context, AddInitializerContextSlots::kExtraInitializersContextSlot);
+  *ContextSlot(
+      context, AddInitializerContextSlots::kExtraInitializersContextSlot) =
+      ArrayListAdd(extraInitializers, initializer);
+  return Undefined;
+}
+
+transitioning javascript builtin DecoratorAccessGet(
+    js-implicit context: Context, receiver: JSAny)(obj: JSAny): JSAny {
+  const name = *ContextSlot(
+      context, DecoratorAccessContextSlots::kNameContextSlot);
+  dcheck(Is<String>(name) || Is<Symbol>(name));
+  return GetProperty(obj, name);
+}
+
+transitioning javascript builtin DecoratorAccessSet(
+    js-implicit context: Context, receiver: JSAny)(obj: JSAny,
+    value: JSAny): JSAny {
+  const name = *ContextSlot(
+      context, DecoratorAccessContextSlots::kNameContextSlot);
+  dcheck(Is<String>(name) || Is<Symbol>(name));
+  return SetProperty(obj, name, value);
+}
+
+transitioning javascript builtin DecoratorAccessHas(
+    js-implicit context: Context, receiver: JSAny)(obj: JSAny): JSAny {
+  const name = *ContextSlot(
+      context, DecoratorAccessContextSlots::kNameContextSlot);
+  dcheck(Is<String>(name) || Is<Symbol>(name));
+  return HasProperty(obj, name);
+}
+}  // namespace decorators

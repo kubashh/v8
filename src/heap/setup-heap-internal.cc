@@ -1607,6 +1607,19 @@ void Heap::CreateInitialMutableObjects() {
     set_async_dispose_from_sync_dispose_shared_fun(*info);
   }
 
+  // Decorators
+  {
+    DirectHandle<SharedFunctionInfo> info =
+        CreateSharedFunctionInfo(isolate_, Builtin::kAddInitializer, 1);
+    set_add_initializer_sfi(*info);
+    info = CreateSharedFunctionInfo(isolate_, Builtin::kDecoratorAccessGet, 1);
+    set_decorator_access_get_sfi(*info);
+    info = CreateSharedFunctionInfo(isolate_, Builtin::kDecoratorAccessSet, 2);
+    set_decorator_access_set_sfi(*info);
+    info = CreateSharedFunctionInfo(isolate_, Builtin::kDecoratorAccessHas, 1);
+    set_decorator_access_has_sfi(*info);
+  }
+
   // Trusted roots:
   // TODO(saelo): these would ideally be read-only and shared, but we currently
   // don't have a trusted RO space.

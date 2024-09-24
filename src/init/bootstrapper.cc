@@ -5462,7 +5462,6 @@ EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_import_assertions)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_import_attributes)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(js_regexp_modifiers)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(js_regexp_duplicate_named_groups)
-EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(js_decorators)
 
 #ifdef V8_INTL_SUPPORT
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_intl_best_fit_matcher)
@@ -5913,6 +5912,30 @@ void Genesis::InitializeGlobal_js_float16array() {
 
   InstallWithIntrinsicDefaultProto(isolate_, fun,
                                    Context::FLOAT16_ARRAY_FUN_INDEX);
+}
+
+void Genesis::InitializeGlobal_js_decorators() {
+  if (!v8_flags.js_decorators) return;
+
+  std::array<Handle<Name>, 3> fields{factory()->kind_string(),
+                                     factory()->name_string(),
+                                     factory()->addInitializer_string()};
+  DirectHandle<Map> map = CreateLiteralObjectMapFromCache(isolate(), fields);
+  native_context()->set_js_class_decorator_context_object_map(*map);
+
+  std::array<Handle<Name>, 6> class_elements_fields = {
+      factory()->kind_string(),   factory()->access_string(),
+      factory()->static_string(), factory()->private_string(),
+      factory()->name_string(),   factory()->addInitializer_string()};
+  map = CreateLiteralObjectMapFromCache(isolate(), class_elements_fields);
+  native_context()->set_js_class_element_decorator_context_object_map(*map);
+
+  std::array<Handle<Name>, 3> decorator_access_object_fields = {
+      factory()->get_string(), factory()->set_string(),
+      factory()->has_string()};
+  map = CreateLiteralObjectMapFromCache(isolate(),
+                                        decorator_access_object_fields);
+  native_context()->set_js_decorator_access_object_map(*map);
 }
 
 void Genesis::InitializeGlobal_js_source_phase_imports() {

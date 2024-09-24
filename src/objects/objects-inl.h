@@ -289,6 +289,14 @@ template <>
 struct CastTraits<FreshlyAllocatedBigInt> : public CastTraits<BigInt> {};
 template <>
 struct CastTraits<JSIteratorResult> : public CastTraits<JSObject> {};
+template <>
+struct CastTraits<JSClassDecoratorContextObject> : public CastTraits<JSObject> {
+};
+template <>
+struct CastTraits<JSClassElementDecoratorContextObject>
+    : public CastTraits<JSObject> {};
+template <>
+struct CastTraits<JSDecoratorAccessObject> : public CastTraits<JSObject> {};
 
 template <>
 struct CastTraits<DeoptimizationFrameTranslation>

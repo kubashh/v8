@@ -65,6 +65,12 @@ class WithJSSharedMemoryFeatureFlagsMixin : public TMixin {
   WithJSSharedMemoryFeatureFlagsMixin() { i::v8_flags.harmony_struct = true; }
 };
 
+template <typename TMixin>
+class WithJSDecoratorsFeatureFlagsMixin : public TMixin {
+ public:
+  WithJSDecoratorsFeatureFlagsMixin() { i::v8_flags.js_decorators = true; }
+};
+
 using CounterMap = std::map<std::string, int>;
 
 enum CountersMode { kNoCounters, kEnableCounters };
@@ -502,6 +508,15 @@ using TestJSSharedMemoryWithNativeContext =  //
             WithIsolateScopeMixin<           //
                 WithIsolateMixin<            //
                     TestJSSharedMemoryWithPlatform>>>>;
+
+using TestJSDecoratorsWithNativeContext =                   //
+    WithInternalIsolateMixin<                               //
+        WithContextMixin<                                   //
+            WithIsolateScopeMixin<                          //
+                WithIsolateMixin<                           //
+                    WithDefaultPlatformMixin<               //
+                        WithJSDecoratorsFeatureFlagsMixin<  //
+                            ::testing::Test>>>>>>;
 
 class V8_NODISCARD SaveFlags {
  public:
