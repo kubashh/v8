@@ -16,6 +16,75 @@
       "message": "Hey Sam! I\u0027m on leave for 2 more weeks. @mliedtke@chromium.org can you review? :)",
       "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a83bd65a_32daef7a",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-24T17:48:04Z",
+      "side": 1,
+      "message": "Do you have numbers for the generated code size?\nI\u0027d be fine with landing this, however, I\u0027m not sure how much does it actually do?\n\nIs this correct?\n```\n|           |  unroll count  |\n| loop size | before | after |\n|\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d|\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d|\u003d\u003d\u003d\u003d\u003d\u003d\u003d|\n| 0-60      |      4 |     4 |\n| 61-80     |      4 |     3 |\n| 81+       |      0 |     0 |\n```\n\nI guess we can always tweak the numbers later anyways (e.g. we could evaluate if unrolling very small loops more often than 4 times could lead to performance improvements).",
+      "range": {
+        "startLine": 202,
+        "startChar": 6,
+        "endLine": 204,
+        "endChar": 75
+      },
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed521b9_b48cfd00",
+        "filename": "test/unittests/compiler/turboshaft/loop-unrolling-analyzer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-24T17:48:04Z",
+      "side": 1,
+      "message": "For consistency this should be `__ WasmStackCheck(WasmStackCheckOp::Kind::kLoop, 0);`",
+      "range": {
+        "startLine": 460,
+        "startChar": 9,
+        "endLine": 460,
+        "endChar": 25
+      },
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8de2c8_6ea8a1f6",
+        "filename": "test/unittests/compiler/turboshaft/loop-unrolling-analyzer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-24T17:48:04Z",
+      "side": 1,
+      "message": "Looking at the CI bots this should use `uint32_t` instead.",
+      "range": {
+        "startLine": 463,
+        "startChar": 11,
+        "endLine": 463,
+        "endChar": 14
+      },
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
