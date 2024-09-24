@@ -16,6 +16,24 @@
       "message": "This case was dropped, oops",
       "revId": "cbbe873976236f73c43f67af9047dc2e0b97c68f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80775ecf_33da16ec",
+        "filename": "src/objects/simd.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-24T10:09:27Z",
+      "side": 0,
+      "message": "Oops, indeed. Thanks!",
+      "parentUuid": "f2cd60a9_8ff3c528",
+      "revId": "cbbe873976236f73c43f67af9047dc2e0b97c68f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
