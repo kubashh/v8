@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6263906_fb6a189f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-09-24T16:17:49Z",
+      "side": 1,
+      "message": "Hey Sam! I\u0027m on leave for 2 more weeks. @mliedtke@chromium.org can you review? :)",
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
