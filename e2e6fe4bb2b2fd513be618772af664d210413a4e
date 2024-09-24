@@ -58,6 +58,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "612d55b2_051723c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-24T13:45:39Z",
+      "side": 1,
+      "message": "LGTM for `src/compiler`",
+      "revId": "e2e6fe4bb2b2fd513be618772af664d210413a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cdb57b36_3d6e66dc",
