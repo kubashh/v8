@@ -28,6 +28,7 @@
 #include "src/heap/marking-visitor.h"
 #include "src/heap/marking.h"
 #include "src/heap/memory-chunk-metadata.h"
+#include "src/heap/memory-chunk.h"
 #include "src/heap/memory-measurement-inl.h"
 #include "src/heap/memory-measurement.h"
 #include "src/heap/minor-mark-sweep-inl.h"
@@ -317,7 +318,7 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
           break;
         }
         DCHECK(!HeapLayout::InReadOnlySpace(object));
-        DCHECK_EQ(GetIsolateFromWritableObject(object), isolate);
+        DCHECK_EQ(MemoryChunk::FromHeapObject(object)->GetHeap(), heap_);
         objects_processed++;
 
         Address new_space_top = kNullAddress;

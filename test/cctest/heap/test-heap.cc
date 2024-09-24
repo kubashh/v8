@@ -1320,6 +1320,7 @@ UNINITIALIZED_TEST(Regress10843) {
       &callback_was_invoked);
 
   {
+    v8::Isolate::Scope isolate_scope(isolate);
     PtrComprCageAccessScope ptr_compr_cage_access_scope(i_isolate);
     HandleScope scope(i_isolate);
     std::vector<Handle<FixedArray>> arrays;
@@ -6738,6 +6739,7 @@ UNINITIALIZED_TEST(OutOfMemory) {
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
   v8::Isolate* isolate = v8::Isolate::New(create_params);
+  v8::Isolate::Scope isolate_scope(isolate);
   Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
   oom_isolate = i_isolate;
   isolate->SetOOMErrorHandler(OOMCallback);
@@ -6999,13 +7001,14 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
   v8_flags.max_old_space_size = kOldGenerationLimit / MB;
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
-  Isolate* isolate =
-      reinterpret_cast<Isolate*>(v8::Isolate::New(create_params));
-  Heap* heap = isolate->heap();
-  Factory* factory = isolate->factory();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  Isolate* i_isolate = reinterpret_cast<Isolate*>(isolate);
+  Heap* heap = i_isolate->heap();
+  Factory* factory = i_isolate->factory();
 
   {
-    PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
+    v8::Isolate::Scope isolate_scope(isolate);
+    PtrComprCageAccessScope ptr_compr_cage_access_scope(i_isolate);
 
     // In this test, we need to invoke GC without stack, otherwise some objects
     // may not be reclaimed because of conservative stack scanning and the heap
@@ -7019,7 +7022,7 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
     heap->AutomaticallyRestoreInitialHeapLimit(0.5);
     const int kFixedArrayLength = 1000000;
     {
-      HandleScope handle_scope(isolate);
+      HandleScope handle_scope(i_isolate);
       while (!state.oom_triggered) {
         factory->NewFixedArray(kFixedArrayLength);
       }
@@ -7027,7 +7030,7 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
     heap->MemoryPressureNotification(MemoryPressureLevel::kCritical, true);
     state.oom_triggered = false;
     {
-      HandleScope handle_scope(isolate);
+      HandleScope handle_scope(i_isolate);
       while (!state.oom_triggered) {
         factory->NewFixedArray(kFixedArrayLength);
       }
@@ -7035,7 +7038,7 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
     CHECK_EQ(state.current_heap_limit, state.initial_heap_limit);
   }
 
-  reinterpret_cast<v8::Isolate*>(isolate)->Dispose();
+  isolate->Dispose();
 }
 
 void HeapTester::UncommitUnusedMemory(Heap* heap) {
