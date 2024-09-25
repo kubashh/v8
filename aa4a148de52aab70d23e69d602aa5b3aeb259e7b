@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a6bddc_ea371226",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-25T09:43:42Z",
+      "side": 1,
+      "message": "LGTM, though I\u0027d be interested if we can see a reduction of binary size (not a requirement for landing this though).",
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a83bd65a_32daef7a",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "Your reading is correct. I did try various thresholds to taper the count, 220 worked okay in that it was neutral performance wise. Unrolling tiny loops more is definitely an option too, but I didn\u0027t want to change more than one variable at a time.\n\nIs there a simple way of getting code size?",
       "parentUuid": "a83bd65a_32daef7a",
+      "range": {
+        "startLine": 202,
+        "startChar": 6,
+        "endLine": 204,
+        "endChar": 75
+      },
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1f4ac50_1b1b75b6",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-25T09:43:42Z",
+      "side": 1,
+      "message": "\u003e Is there a simple way of getting code size?\n\nI think the simplest way might be to run with `--trace-wasm-compilation-times`, write the output into a file and then use `process-wasm-compilation-times.py` from the tools directory to get an aggregate. (I don\u0027t think I\u0027ve used that script though, if it doesn\u0027t work, let me know, then I can share a version of mine that does some other stuff as well like showing largest / slowest functions which in this case isn\u0027t relevant though.)",
+      "parentUuid": "cb894132_39973f80",
       "range": {
         "startLine": 202,
         "startChar": 6,
