@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e5ec5d_0f88b282",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:12:08Z",
+      "side": 1,
+      "message": "Generally looks good. Please get a Wasm reviewer though :)",
+      "revId": "c2b5b001a1e48b48ed90d9c5e213cbd887502a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c00de5e3_2eb44b22",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:12:08Z",
+      "side": 1,
+      "message": "Should we use a heap-internal utility for this somewhere? (For now at least?)",
+      "range": {
+        "startLine": 321,
+        "startChar": 31,
+        "endLine": 321,
+        "endChar": 45
+      },
+      "revId": "c2b5b001a1e48b48ed90d9c5e213cbd887502a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98c157ab_e4803773",
+        "filename": "src/heap/heap-layout.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:12:08Z",
+      "side": 1,
+      "message": "`IsOwnedByAnyHeap()`? lmk if you think your name is better.",
+      "range": {
+        "startLine": 54,
+        "startChar": 24,
+        "endLine": 54,
+        "endChar": 31
+      },
+      "revId": "c2b5b001a1e48b48ed90d9c5e213cbd887502a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2d64d56_0287182d",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:12:08Z",
+      "side": 1,
+      "message": "Can you add a Wasm owner for the c api?",
+      "range": {
+        "startLine": 436,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 9
+      },
+      "revId": "c2b5b001a1e48b48ed90d9c5e213cbd887502a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

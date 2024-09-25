@@ -16,6 +16,24 @@
       "message": "I changed this as well because I want to add a DCHECK to GetIsolateFromWritableObject such that it is never invoked on shared space objects.",
       "revId": "5764d1a25a365768ee9fd75cfd33b31c678c5556",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a743e27_0ee38054",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:12:08Z",
+      "side": 1,
+      "message": "See other comment.",
+      "parentUuid": "9000729e_b51fa1a3",
+      "revId": "5764d1a25a365768ee9fd75cfd33b31c678c5556",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

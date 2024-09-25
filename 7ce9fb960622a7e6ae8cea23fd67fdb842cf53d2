@@ -16,6 +16,24 @@
       "message": "I cannot use InReadOnlySpace here because this fails during deserialization.",
       "revId": "7ce9fb960622a7e6ae8cea23fd67fdb842cf53d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab16b992_f2776368",
+        "filename": "src/objects/object-macros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:12:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "eacecfce_1f511501",
+      "revId": "7ce9fb960622a7e6ae8cea23fd67fdb842cf53d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
