@@ -153,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec883731_0e2930ff",
+        "filename": "test/unittests/compiler/turboshaft/loop-unrolling-analyzer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2024-09-25T11:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ed521b9_b48cfd00",
+      "range": {
+        "startLine": 460,
+        "startChar": 9,
+        "endLine": 460,
+        "endChar": 25
+      },
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa8de2c8_6ea8a1f6",
@@ -166,6 +190,30 @@
       "writtenOn": "2024-09-24T17:48:04Z",
       "side": 1,
       "message": "Looking at the CI bots this should use `uint32_t` instead.",
+      "range": {
+        "startLine": 463,
+        "startChar": 11,
+        "endLine": 463,
+        "endChar": 14
+      },
+      "revId": "aa4a148de52aab70d23e69d602aa5b3aeb259e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3beac9d_1bcad2ac",
+        "filename": "test/unittests/compiler/turboshaft/loop-unrolling-analyzer-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2024-09-25T11:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa8de2c8_6ea8a1f6",
       "range": {
         "startLine": 463,
         "startChar": 11,
