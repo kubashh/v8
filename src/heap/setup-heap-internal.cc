@@ -1321,11 +1321,11 @@ void Heap::CreateInitialMutableObjects() {
   set_basic_block_profiling_data(roots.unchecked_empty_array_list());
 
   // Allocate regexp caches.
-  set_string_split_cache(*factory->NewFixedArray(
+  set_string_split_cache(*factory->NewWeakFixedArray(
       RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
-  set_regexp_multiple_cache(*factory->NewFixedArray(
+  set_regexp_multiple_cache(*factory->NewWeakFixedArray(
       RegExpResultsCache::kRegExpResultsCacheSize, AllocationType::kOld));
-  set_regexp_match_global_atom_cache(*factory->NewFixedArray(
+  set_regexp_match_global_atom_cache(*factory->NewWeakFixedArray(
       RegExpResultsCache_MatchGlobalAtom::kSize, AllocationType::kOld));
 
   // Allocate FeedbackCell for builtins.
