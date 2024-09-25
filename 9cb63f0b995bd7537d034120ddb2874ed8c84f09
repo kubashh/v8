@@ -175,6 +175,30 @@
       },
       "revId": "9cb63f0b995bd7537d034120ddb2874ed8c84f09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f96a18ec_5af6c323",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 5078,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:58:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "11df2583_e0d86030",
+      "range": {
+        "startLine": 5078,
+        "startChar": 4,
+        "endLine": 5078,
+        "endChar": 30
+      },
+      "revId": "9cb63f0b995bd7537d034120ddb2874ed8c84f09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

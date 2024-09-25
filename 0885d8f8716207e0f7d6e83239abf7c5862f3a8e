@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0639f8d_03bdea04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:58:58Z",
+      "side": 1,
+      "message": "lgtm % flag flip. Thanks for digging",
+      "revId": "0885d8f8716207e0f7d6e83239abf7c5862f3a8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190aba2e_2c8be437",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 2566,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-09-25T12:58:58Z",
+      "side": 1,
+      "message": "Thanks, that\u0027s much clearer!",
+      "range": {
+        "startLine": 2560,
+        "startChar": 1,
+        "endLine": 2566,
+        "endChar": 3
+      },
+      "revId": "0885d8f8716207e0f7d6e83239abf7c5862f3a8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
