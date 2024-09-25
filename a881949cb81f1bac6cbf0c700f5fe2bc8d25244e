@@ -16,6 +16,47 @@
       "message": "I\u0027m rather confused about the test failures, as I\u0027m struggling to reproduce the arm one. The bots args are:\ndcheck_always_on \u003d true\nis_component_build \u003d false\nis_debug \u003d false\nsymbol_level \u003d 1\ntarget_cpu \u003d \"x86\"\nuse_remoteexec \u003d true\nv8_enable_google_benchmark \u003d true\nv8_gcmole \u003d true\nv8_target_cpu \u003d \"arm\"\n\nAnd my local ones are:\ndcheck_always_on \u003d true\nis_component_build \u003d false\nis_debug \u003d false\nsymbol_level \u003d 1\ntarget_cpu \u003d \"x86\"\nv8_gcmole \u003d true\nv8_target_cpu \u003d \"arm\"\n\nCan `use_remoteexec \u003d true` and/or `v8_enable_google_benchmark \u003d true` really be affecting the result?",
       "revId": "a881949cb81f1bac6cbf0c700f5fe2bc8d25244e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25419ea7_0e236c2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-25T15:25:21Z",
+      "side": 1,
+      "message": "I can reproduce the issue on `ia32` (didn\u0027t try arm) and for the last test configuration the `op_count` is 79 which isn\u0027t too large for unrolling.\n\nI assume this has changed when you changed the `JSStackCheck` to `WasmStackCheck` as the `JSStackCheck` takes a `FrameState` (which is somewhat \"huge\" typically and the `op_count` just uses the \"size in slots\" of the block containing the instructions and doesn\u0027t count the exact number of instructions).\n\nI\u0027ve added a comment with the suggested edit.",
+      "parentUuid": "50587104_0838368c",
+      "revId": "a881949cb81f1bac6cbf0c700f5fe2bc8d25244e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5f1478e_b50f4603",
+        "filename": "test/unittests/compiler/turboshaft/loop-unrolling-analyzer-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-09-25T15:25:21Z",
+      "side": 1,
+      "message": "```suggestion\n    {0, Cmp::kInt32LessThan, Binop::kWord32Add, 360, 36, 3,\n     \"for (int32_t i \u003d 0;  i \u003c 360;  i +\u003d 36)\"},\n    {0, Cmp::kInt32LessThan, Binop::kWord32Add, 360, 40, 0,\n     \"for (int32_t i \u003d 0;  i \u003c 360;  i +\u003d 40)\"},\n```",
+      "range": {
+        "startLine": 445,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 48
+      },
+      "revId": "a881949cb81f1bac6cbf0c700f5fe2bc8d25244e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
