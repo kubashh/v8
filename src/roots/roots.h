@@ -346,10 +346,11 @@ class RootVisitor;
     StringWrapperToPrimitiveProtector)                                         \
   V(PropertyCell, number_string_not_regexp_like_protector,                     \
     NumberStringNotRegexpLikeProtector)                                        \
-  /* Caches */                                                                 \
-  V(FixedArray, string_split_cache, StringSplitCache)                          \
-  V(FixedArray, regexp_multiple_cache, RegExpMultipleCache)                    \
-  V(FixedArray, regexp_match_global_atom_cache, RegExpMatchGlobalAtomCache)    \
+  /* RegExp result caches */                                                   \
+  V(WeakFixedArray, string_split_cache, StringSplitCache)                      \
+  V(WeakFixedArray, regexp_multiple_cache, RegExpMultipleCache)                \
+  V(WeakFixedArray, regexp_match_global_atom_cache,                            \
+    RegExpMatchGlobalAtomCache)                                                \
   /* Indirection lists for isolate-independent builtins */                     \
   V(FixedArray, builtins_constants_table, BuiltinsConstantsTable)              \
   /* Internal SharedFunctionInfos */                                           \
