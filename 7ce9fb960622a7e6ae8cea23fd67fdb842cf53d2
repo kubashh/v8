@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eacecfce_1f511501",
+        "filename": "src/objects/object-macros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-09-25T11:54:55Z",
+      "side": 1,
+      "message": "I cannot use InReadOnlySpace here because this fails during deserialization.",
+      "revId": "7ce9fb960622a7e6ae8cea23fd67fdb842cf53d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
