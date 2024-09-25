@@ -700,18 +700,19 @@ JSWasmCallParameters const& JSWasmCallParametersOf(const Operator* op) {
 }
 
 std::ostream& operator<<(std::ostream& os, JSWasmCallParameters const& p) {
-  return os << p.module() << ", " << p.signature() << ", " << p.feedback();
+  return os << p.native_module() << ", " << p.signature() << ", "
+            << p.feedback();
 }
 
 size_t hash_value(JSWasmCallParameters const& p) {
-  return base::hash_combine(p.module(), p.signature(),
+  return base::hash_combine(p.native_module(), p.signature(),
                             FeedbackSource::Hash()(p.feedback()));
 }
 
 bool operator==(JSWasmCallParameters const& lhs,
                 JSWasmCallParameters const& rhs) {
-  return lhs.module() == rhs.module() && lhs.signature() == rhs.signature() &&
-         lhs.feedback() == rhs.feedback();
+  return lhs.native_module() == rhs.native_module() &&
+         lhs.signature() == rhs.signature() && lhs.feedback() == rhs.feedback();
 }
 
 int JSWasmCallParameters::arity_without_implicit_args() const {
@@ -945,13 +946,11 @@ const Operator* JSOperatorBuilder::CallRuntime(
 
 #if V8_ENABLE_WEBASSEMBLY
 const Operator* JSOperatorBuilder::CallWasm(
-    const wasm::WasmModule* wasm_module,
     const wasm::FunctionSig* wasm_signature, int wasm_function_index,
     SharedFunctionInfoRef shared_fct_info, wasm::NativeModule* native_module,
     FeedbackSource const& feedback) {
-  JSWasmCallParameters parameters(wasm_module, wasm_signature,
-                                  wasm_function_index, shared_fct_info,
-                                  native_module, feedback);
+  JSWasmCallParameters parameters(wasm_signature, wasm_function_index,
+                                  shared_fct_info, native_module, feedback);
   return zone()->New<Operator1<JSWasmCallParameters>>(
       IrOpcode::kJSWasmCall, Operator::kNoProperties,  // opcode
       "JSWasmCall",                                    // name
