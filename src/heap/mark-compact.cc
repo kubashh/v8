@@ -2258,7 +2258,7 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
     CHECK(!IsFreeSpaceOrFiller(object, cage_base));
     DCHECK(IsHeapObject(object));
     DCHECK(!HeapLayout::InReadOnlySpace(object));
-    DCHECK_EQ(GetIsolateFromWritableObject(object), isolate);
+    DCHECK_EQ(MemoryChunk::FromHeapObject(object)->GetHeap(), heap_);
     DCHECK(heap_->Contains(object));
     DCHECK(!(marking_state_->IsUnmarked(object)));
     if (mode == MarkCompactCollector::MarkingWorklistProcessingMode::
