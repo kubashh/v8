@@ -435,6 +435,7 @@ void CheckAndHandleInterrupts(i::Isolate* isolate) {
 
 StoreImpl::~StoreImpl() {
   {
+    v8::Isolate::Scope isolate_scope(isolate_);
 #ifdef DEBUG
     i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate_);
     PtrComprCageAccessScope ptr_compr_cage_access_scope(i_isolate);
@@ -924,6 +925,7 @@ class RefImpl {
     RefImpl* self = new (std::nothrow) RefImpl();
     if (!self) return nullptr;
     i::Isolate* isolate = store->i_isolate();
+    self->isolate_ = isolate;
     v8::Isolate::Scope isolate_scope(store->isolate());
     self->val_ = isolate->global_handles()->Create(*obj);
     return make_own(seal<Ref>(self));
@@ -931,11 +933,14 @@ class RefImpl {
 
   ~RefImpl() { i::GlobalHandles::Destroy(location()); }
 
-  own<Ref> copy() const { return make(store(), v8_object()); }
+  own<Ref> copy() const {
+    v8::Isolate::Scope isolate_scope(store()->isolate());
+    return make(store(), v8_object());
+  }
 
   StoreImpl* store() const { return StoreImpl::get(isolate()); }
 
-  i::Isolate* isolate() const { return val_->GetIsolate(); }
+  i::Isolate* isolate() const { return isolate_; }
 
   i::Handle<JSType> v8_object() const {
 #ifdef DEBUG
@@ -944,9 +949,13 @@ class RefImpl {
     return i::Cast<JSType>(val_);
   }
 
-  void* get_host_info() const { return store()->GetHostInfo(v8_object()); }
+  void* get_host_info() const {
+    v8::Isolate::Scope isolate_scope(store()->isolate());
+    return store()->GetHostInfo(v8_object());
+  }
 
   void set_host_info(void* info, void (*finalizer)(void*)) {
+    v8::Isolate::Scope isolate_scope(store()->isolate());
     store()->SetHostInfo(v8_object(), info, finalizer);
   }
 
@@ -958,6 +967,7 @@ class RefImpl {
   }
 
   i::Handle<i::JSReceiver> val_;
+  i::Isolate* isolate_;
 };
 
 template <>
@@ -972,7 +982,9 @@ void Ref::operator delete(void* p) {}
 auto Ref::copy() const -> own<Ref> { return impl(this)->copy(); }
 
 auto Ref::same(const Ref* that) const -> bool {
-  i::HandleScope handle_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  i::HandleScope handle_scope(isolate);
   return i::Object::SameValue(*impl(this)->v8_object(),
                               *impl(that)->v8_object());
 }
@@ -1095,6 +1107,7 @@ own<Frame> CreateFrameFromInternal(i::DirectHandle<i::FixedArray> frames,
 own<Frame> Trap::origin() const {
   i::Isolate* isolate = impl(this)->isolate();
   PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
   i::HandleScope handle_scope(isolate);
 
   i::DirectHandle<i::FixedArray> frames =
@@ -1108,6 +1121,7 @@ own<Frame> Trap::origin() const {
 ownvec<Frame> Trap::trace() const {
   i::Isolate* isolate = impl(this)->isolate();
   PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
   i::HandleScope handle_scope(isolate);
 
   i::DirectHandle<i::FixedArray> frames =
@@ -1159,6 +1173,7 @@ auto Module::validate(Store* store_abs, const vec<byte_t>& binary) -> bool {
   i::wasm::ModuleWireBytes bytes(
       {reinterpret_cast<const uint8_t*>(binary.get()), binary.size()});
   i::Isolate* isolate = impl(store_abs)->i_isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
   PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   i::HandleScope scope(isolate);
   i::wasm::WasmEnabledFeatures features =
@@ -1229,7 +1244,9 @@ ownvec<ExportType> ExportsImpl(
 }
 
 auto Module::exports() const -> ownvec<ExportType> {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   return ExportsImpl(impl(this)->v8_object());
 }
 
@@ -1237,7 +1254,9 @@ auto Module::exports() const -> ownvec<ExportType> {
 // If no TurboFan code existed before calling this function, then the call to
 // {serialize} may take a long time.
 auto Module::serialize() const -> vec<byte_t> {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
   i::wasm::NativeModule* native_module =
       impl(this)->v8_object()->native_module();
   native_module->compilation_state()->TierUpAllFunctions();
@@ -1339,7 +1358,10 @@ Extern::~Extern() = default;
 auto Extern::copy() const -> own<Extern> { return impl(this)->copy(); }
 
 auto Extern::kind() const -> ExternKind {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+
   i::DirectHandle<i::JSReceiver> obj = impl(this)->v8_object();
   if (i::WasmExternalFunction::IsWasmExternalFunction(*obj)) {
     return wasm::EXTERN_FUNC;
@@ -1546,7 +1568,9 @@ auto Func::make(Store* store, const FuncType* type, callback_with_env callback,
 }
 
 auto Func::type() const -> own<FuncType> {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   i::DirectHandle<i::JSFunction> func = impl(this)->v8_object();
   if (i::WasmCapiFunction::IsWasmCapiFunction(*func)) {
     return SignatureHelper::Deserialize(SignatureHelper::GetSig(func));
@@ -1559,7 +1583,9 @@ auto Func::type() const -> own<FuncType> {
 }
 
 auto Func::param_arity() const -> size_t {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   i::DirectHandle<i::JSFunction> func = impl(this)->v8_object();
   if (i::WasmCapiFunction::IsWasmCapiFunction(*func)) {
     return i::wasm::SerializedSignatureHelper::ParamCount(
@@ -1574,7 +1600,9 @@ auto Func::param_arity() const -> size_t {
 }
 
 auto Func::result_arity() const -> size_t {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   i::DirectHandle<i::JSFunction> func = impl(this)->v8_object();
   if (i::WasmCapiFunction::IsWasmCapiFunction(*func)) {
     return i::wasm::SerializedSignatureHelper::ReturnCount(
@@ -1948,7 +1976,9 @@ auto Global::type() const -> own<GlobalType> {
 }
 
 auto Global::get() const -> Val {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   i::DirectHandle<i::WasmGlobalObject> v8_global = impl(this)->v8_object();
   switch (v8_global->type().kind()) {
     case i::wasm::kI32:
@@ -2105,9 +2135,10 @@ auto Table::type() const -> own<TableType> {
 
 // TODO(14034): Handle types other than funcref and externref if needed.
 auto Table::get(size_t index) const -> own<Ref> {
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
   i::DirectHandle<i::WasmTableObject> table = impl(this)->v8_object();
   if (index >= static_cast<size_t>(table->current_length())) return own<Ref>();
-  i::Isolate* isolate = impl(this)->isolate();
   PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   i::HandleScope handle_scope(isolate);
   i::Handle<i::Object> result =
@@ -2124,10 +2155,10 @@ auto Table::get(size_t index) const -> own<Ref> {
 }
 
 auto Table::set(size_t index, const Ref* ref) -> bool {
-  i::DirectHandle<i::WasmTableObject> table = impl(this)->v8_object();
-  if (index >= static_cast<size_t>(table->current_length())) return false;
   i::Isolate* isolate = impl(this)->isolate();
   v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  i::DirectHandle<i::WasmTableObject> table = impl(this)->v8_object();
+  if (index >= static_cast<size_t>(table->current_length())) return false;
   i::HandleScope handle_scope(isolate);
   i::Handle<i::Object> obj = WasmRefToV8(isolate, ref);
   const char* error_message;
@@ -2142,14 +2173,16 @@ auto Table::set(size_t index, const Ref* ref) -> bool {
 
 // TODO(jkummerow): Having Table::size_t shadowing "std" size_t is ugly.
 auto Table::size() const -> size_t {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   return impl(this)->v8_object()->current_length();
 }
 
 auto Table::grow(size_t delta, const Ref* ref) -> bool {
-  i::DirectHandle<i::WasmTableObject> table = impl(this)->v8_object();
   i::Isolate* isolate = impl(this)->isolate();
   v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  i::DirectHandle<i::WasmTableObject> table = impl(this)->v8_object();
   i::HandleScope scope(isolate);
   i::Handle<i::Object> obj = WasmRefToV8(isolate, ref);
   const char* error_message;
@@ -2212,28 +2245,34 @@ auto Memory::type() const -> own<MemoryType> {
 }
 
 auto Memory::data() const -> byte_t* {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   return reinterpret_cast<byte_t*>(
       impl(this)->v8_object()->array_buffer()->backing_store());
 }
 
 auto Memory::data_size() const -> size_t {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   return impl(this)->v8_object()->array_buffer()->byte_length();
 }
 
 auto Memory::size() const -> pages_t {
-  PtrComprCageAccessScope ptr_compr_cage_access_scope(impl(this)->isolate());
+  i::Isolate* isolate = impl(this)->isolate();
+  v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
+  PtrComprCageAccessScope ptr_compr_cage_access_scope(isolate);
   return static_cast<pages_t>(
       impl(this)->v8_object()->array_buffer()->byte_length() /
       i::wasm::kWasmPageSize);
 }
 
 auto Memory::grow(pages_t delta) -> bool {
-  i::Handle<i::WasmMemoryObject> memory = impl(this)->v8_object();
   i::Isolate* isolate = impl(this)->isolate();
   v8::Isolate::Scope isolate_scope(reinterpret_cast<v8::Isolate*>(isolate));
   i::HandleScope handle_scope(isolate);
+  i::Handle<i::WasmMemoryObject> memory = impl(this)->v8_object();
   int32_t old = i::WasmMemoryObject::Grow(isolate, memory, delta);
   return old != -1;
 }
