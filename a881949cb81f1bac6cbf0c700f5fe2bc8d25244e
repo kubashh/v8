@@ -57,6 +57,30 @@
       },
       "revId": "a881949cb81f1bac6cbf0c700f5fe2bc8d25244e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45f9f90a_a99d91a3",
+        "filename": "test/unittests/compiler/turboshaft/loop-unrolling-analyzer-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2024-09-25T15:30:47Z",
+      "side": 1,
+      "message": "face palm... I had already changed the test, so no wonder why it wasn\u0027t reproducing the failure. I clearly cannot multi-task!",
+      "parentUuid": "c5f1478e_b50f4603",
+      "range": {
+        "startLine": 445,
+        "startChar": 0,
+        "endLine": 446,
+        "endChar": 48
+      },
+      "revId": "a881949cb81f1bac6cbf0c700f5fe2bc8d25244e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
