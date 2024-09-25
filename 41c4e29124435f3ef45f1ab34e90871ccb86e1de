@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcd00be8_77f3e14c",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-09-25T23:09:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6280371_94ee9872",
+      "revId": "41c4e29124435f3ef45f1ab34e90871ccb86e1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d41010cc_1b2d6e0d",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-09-25T22:15:05Z",
       "side": 1,
       "message": "Ditto here, you\u0027re swallowing the error instead of propagating it.",
+      "revId": "41c4e29124435f3ef45f1ab34e90871ccb86e1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b1fc6c7_6656a656",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-09-25T23:09:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d41010cc_1b2d6e0d",
       "revId": "41c4e29124435f3ef45f1ab34e90871ccb86e1de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
