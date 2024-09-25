@@ -1204,12 +1204,37 @@ int32_t* RegExpGlobalCache::LastSuccessfulMatch() {
   return &register_array_[index];
 }
 
+namespace {
+
+template <typename T>
+bool GetIfWeak(Tagged<WeakFixedArray> array, int index, Tagged<T>* out) {
+  Tagged<HeapObject> heap_object;
+  if (!array->get(index).GetHeapObjectIfWeak(&heap_object)) return false;
+  *out = Cast<T>(heap_object);
+  return true;
+}
+
+Tagged<Object> GetIfWeakOrZero(Tagged<WeakFixedArray> array, int index) {
+  Tagged<HeapObject> heap_object;
+  if (!array->get(index).GetHeapObjectIfWeak(&heap_object)) return Smi::zero();
+  return heap_object;
+}
+
+int GetInt(Tagged<WeakFixedArray> array, int index) {
+  Tagged<MaybeObject> maybe_obj = array->get(index);
+  DCHECK(maybe_obj.IsSmi());
+  return maybe_obj.ToSmi().value();
+}
+
+}  // namespace
+
+// static
 Tagged<Object> RegExpResultsCache::Lookup(Heap* heap, Tagged<String> key_string,
                                           Tagged<Object> key_pattern,
                                           Tagged<FixedArray>* last_match_cache,
                                           ResultsCacheType type) {
   if (V8_UNLIKELY(!v8_flags.regexp_results_cache)) return Smi::zero();
-  Tagged<FixedArray> cache;
+  Tagged<WeakFixedArray> cache;
   if (!IsInternalizedString(key_string)) return Smi::zero();
   if (type == STRING_SPLIT_SUBSTRINGS) {
     DCHECK(IsString(key_pattern));
@@ -1224,20 +1249,30 @@ Tagged<Object> RegExpResultsCache::Lookup(Heap* heap, Tagged<String> key_string,
   uint32_t hash = key_string->hash();
   uint32_t index = ((hash & (kRegExpResultsCacheSize - 1)) &
                     ~(kArrayEntriesPerCacheEntry - 1));
-  if (cache->get(index + kStringOffset) != key_string ||
-      cache->get(index + kPatternOffset) != key_pattern) {
+  if (GetIfWeakOrZero(cache, index + kStringOffset) != key_string ||
+      GetIfWeakOrZero(cache, index + kPatternOffset) != key_pattern) {
     index =
         ((index + kArrayEntriesPerCacheEntry) & (kRegExpResultsCacheSize - 1));
-    if (cache->get(index + kStringOffset) != key_string ||
-        cache->get(index + kPatternOffset) != key_pattern) {
+    if (GetIfWeakOrZero(cache, index + kStringOffset) != key_string ||
+        GetIfWeakOrZero(cache, index + kPatternOffset) != key_pattern) {
       return Smi::zero();
     }
   }
 
-  *last_match_cache = Cast<FixedArray>(cache->get(index + kLastMatchOffset));
-  return cache->get(index + kArrayOffset);
+  Tagged<FixedArray> last_match_obj;
+  if (!GetIfWeak(cache, index + kLastMatchOffset, &last_match_obj)) {
+    return Smi::zero();
+  }
+  Tagged<Object> array_obj;
+  if (!GetIfWeak(cache, index + kArrayOffset, &array_obj)) {
+    return Smi::zero();
+  }
+
+  *last_match_cache = last_match_obj;
+  return array_obj;
 }
 
+// static
 void RegExpResultsCache::Enter(Isolate* isolate,
                                DirectHandle<String> key_string,
                                DirectHandle<Object> key_pattern,
@@ -1246,7 +1281,7 @@ void RegExpResultsCache::Enter(Isolate* isolate,
                                ResultsCacheType type) {
   if (V8_UNLIKELY(!v8_flags.regexp_results_cache)) return;
   Factory* factory = isolate->factory();
-  DirectHandle<FixedArray> cache;
+  DirectHandle<WeakFixedArray> cache;
   if (!IsInternalizedString(*key_string)) return;
   if (type == STRING_SPLIT_SUBSTRINGS) {
     DCHECK(IsString(*key_pattern));
@@ -1261,28 +1296,28 @@ void RegExpResultsCache::Enter(Isolate* isolate,
   uint32_t hash = key_string->hash();
   uint32_t index = ((hash & (kRegExpResultsCacheSize - 1)) &
                     ~(kArrayEntriesPerCacheEntry - 1));
-  if (cache->get(index + kStringOffset) == Smi::zero()) {
-    cache->set(index + kStringOffset, *key_string);
-    cache->set(index + kPatternOffset, *key_pattern);
-    cache->set(index + kArrayOffset, *value_array);
-    cache->set(index + kLastMatchOffset, *last_match_cache);
+  if (cache->get(index + kStringOffset).IsSmi()) {
+    cache->set(index + kStringOffset, MakeWeak(*key_string));
+    cache->set(index + kPatternOffset, MakeWeak(*key_pattern));
+    cache->set(index + kArrayOffset, MakeWeak(*value_array));
+    cache->set(index + kLastMatchOffset, MakeWeak(*last_match_cache));
   } else {
     uint32_t index2 =
         ((index + kArrayEntriesPerCacheEntry) & (kRegExpResultsCacheSize - 1));
-    if (cache->get(index2 + kStringOffset) == Smi::zero()) {
-      cache->set(index2 + kStringOffset, *key_string);
-      cache->set(index2 + kPatternOffset, *key_pattern);
-      cache->set(index2 + kArrayOffset, *value_array);
-      cache->set(index2 + kLastMatchOffset, *last_match_cache);
+    if (cache->get(index2 + kStringOffset).IsSmi()) {
+      cache->set(index2 + kStringOffset, MakeWeak(*key_string));
+      cache->set(index2 + kPatternOffset, MakeWeak(*key_pattern));
+      cache->set(index2 + kArrayOffset, MakeWeak(*value_array));
+      cache->set(index2 + kLastMatchOffset, MakeWeak(*last_match_cache));
     } else {
       cache->set(index2 + kStringOffset, Smi::zero());
       cache->set(index2 + kPatternOffset, Smi::zero());
       cache->set(index2 + kArrayOffset, Smi::zero());
       cache->set(index2 + kLastMatchOffset, Smi::zero());
-      cache->set(index + kStringOffset, *key_string);
-      cache->set(index + kPatternOffset, *key_pattern);
-      cache->set(index + kArrayOffset, *value_array);
-      cache->set(index + kLastMatchOffset, *last_match_cache);
+      cache->set(index + kStringOffset, MakeWeak(*key_string));
+      cache->set(index + kPatternOffset, MakeWeak(*key_pattern));
+      cache->set(index + kArrayOffset, MakeWeak(*value_array));
+      cache->set(index + kLastMatchOffset, MakeWeak(*last_match_cache));
     }
   }
   // If the array is a reasonably short list of substrings, convert it into a
@@ -1299,12 +1334,6 @@ void RegExpResultsCache::Enter(Isolate* isolate,
       ReadOnlyRoots(isolate).fixed_cow_array_map());
 }
 
-void RegExpResultsCache::Clear(Tagged<FixedArray> cache) {
-  for (int i = 0; i < kRegExpResultsCacheSize; i++) {
-    cache->set(i, Smi::zero());
-  }
-}
-
 // static
 void RegExpResultsCache_MatchGlobalAtom::TryInsert(Isolate* isolate,
                                                    Tagged<String> subject,
@@ -1315,10 +1344,11 @@ void RegExpResultsCache_MatchGlobalAtom::TryInsert(Isolate* isolate,
   DCHECK(Smi::IsValid(number_of_matches));
   DCHECK(Smi::IsValid(last_match_index));
   if (!IsSlicedString(subject)) return;
-  Tagged<FixedArray> cache = isolate->heap()->regexp_match_global_atom_cache();
+  Tagged<WeakFixedArray> cache =
+      isolate->heap()->regexp_match_global_atom_cache();
   DCHECK_EQ(cache->length(), kSize);
-  cache->set(kSubjectIndex, subject);
-  cache->set(kPatternIndex, pattern);
+  cache->set(kSubjectIndex, MakeWeak(subject));
+  cache->set(kPatternIndex, MakeWeak(pattern));
   cache->set(kNumberOfMatchesIndex, Smi::FromInt(number_of_matches));
   cache->set(kLastMatchIndexIndex, Smi::FromInt(last_match_index));
 }
@@ -1330,29 +1360,28 @@ bool RegExpResultsCache_MatchGlobalAtom::TryGet(Isolate* isolate,
                                                 int* number_of_matches_out,
                                                 int* last_match_index_out) {
   DisallowGarbageCollection no_gc;
-  Tagged<FixedArray> cache = isolate->heap()->regexp_match_global_atom_cache();
+  Tagged<WeakFixedArray> cache =
+      isolate->heap()->regexp_match_global_atom_cache();
   DCHECK_EQ(cache->length(), kSize);
 
   if (!IsSlicedString(subject)) return false;
-  if (pattern != Cast<String>(cache->get(kPatternIndex))) return false;
+
+  Tagged<String> cached_pattern;
+  if (!GetIfWeak(cache, kPatternIndex, &cached_pattern)) return false;
+  if (pattern != cached_pattern) return false;
 
   // Here we are looking for a subject slice that 1. starts at the same point
   // and 2. is of equal length or longer than the cached subject slice.
   Tagged<SlicedString> sliced_subject = Cast<SlicedString>(subject);
-  Tagged<SlicedString> cached_subject =
-      Cast<SlicedString>(cache->get(kSubjectIndex));
+  Tagged<SlicedString> cached_subject;
+  if (!GetIfWeak(cache, kSubjectIndex, &cached_subject)) return false;
   if (cached_subject->parent() != sliced_subject->parent()) return false;
   if (cached_subject->offset() != sliced_subject->offset()) return false;
   if (cached_subject->length() > sliced_subject->length()) return false;
 
-  *number_of_matches_out = Smi::ToInt(cache->get(kNumberOfMatchesIndex));
-  *last_match_index_out = Smi::ToInt(cache->get(kLastMatchIndexIndex));
+  *number_of_matches_out = GetInt(cache, kNumberOfMatchesIndex);
+  *last_match_index_out = GetInt(cache, kLastMatchIndexIndex);
   return true;
-}
-
-void RegExpResultsCache_MatchGlobalAtom::Clear(Heap* heap) {
-  MemsetTagged(heap->regexp_match_global_atom_cache()->RawFieldOfFirstElement(),
-               Smi::zero(), kSize);
 }
 
 std::ostream& operator<<(std::ostream& os, RegExpFlags flags) {
