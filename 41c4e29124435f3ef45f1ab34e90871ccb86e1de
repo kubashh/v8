@@ -16,6 +16,40 @@
       "message": "This is the CL that fixes unsuccessful builtin calls. PTAL! Thanks!",
       "revId": "41c4e29124435f3ef45f1ab34e90871ccb86e1de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6280371_94ee9872",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-25T22:15:05Z",
+      "side": 1,
+      "message": "You\u0027re swallowing the error here instead of propagating. Please use `RETURN_ON_EXCEPTION_VALUE`.",
+      "revId": "41c4e29124435f3ef45f1ab34e90871ccb86e1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d41010cc_1b2d6e0d",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-25T22:15:05Z",
+      "side": 1,
+      "message": "Ditto here, you\u0027re swallowing the error instead of propagating it.",
+      "revId": "41c4e29124435f3ef45f1ab34e90871ccb86e1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
