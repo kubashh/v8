@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a8040b3_98d76a1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-25T10:16:03Z",
+      "side": 1,
+      "message": "Please remove these lines from the comment, see https://v8.dev/docs/merge-patch#option-1%3A-using-gerrit---recommended .",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 44
+      },
+      "revId": "c2f80d425320df30316694f0df8bec800ce9f5c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61b4cb4a_6054b8c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-09-25T10:16:03Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "c2f80d425320df30316694f0df8bec800ce9f5c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
