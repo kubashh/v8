@@ -115,6 +115,7 @@
 #include "src/snapshot/embedded/embedded-data.h"
 #include "src/snapshot/serializer-deserializer.h"
 #include "src/snapshot/snapshot.h"
+#include "src/strings/string-builder.h"
 #include "src/strings/string-stream.h"
 #include "src/strings/unicode-inl.h"
 #include "src/tasks/cancelable-task.h"
@@ -178,6 +179,11 @@ void Heap::SetStringSplitCache(Tagged<HeapObject> object) {
 void Heap::SetRegExpMatchGlobalAtomCache(Tagged<HeapObject> object) {
   DCHECK(IsUndefined(object) || IsFixedArray(object));
   set_regexp_match_global_atom_cache(object);
+}
+
+void Heap::SetStringBuilderConcatCache(Tagged<HeapObject> object) {
+  DCHECK(IsUndefined(object) || IsFixedArray(object));
+  set_string_builder_concat_cache(object);
 }
 
 class ScheduleMinorGCTaskObserver final : public AllocationObserver {
@@ -2734,6 +2740,7 @@ void Heap::MarkCompactPrologue() {
   TRACE_GC(tracer(), GCTracer::Scope::MC_PROLOGUE);
   isolate_->descriptor_lookup_cache()->Clear();
   RegExpResultsCache::ClearAll(this);
+  StringBuilderConcatCache::Clear(this);
   RegExpResultsCache_MatchGlobalAtom::Clear(this);
   FlushNumberStringCache();
 }
