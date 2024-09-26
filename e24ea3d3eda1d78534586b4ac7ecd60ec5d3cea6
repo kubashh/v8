@@ -16,6 +16,24 @@
       "message": "I have tweaked the tests as recommended.",
       "revId": "e24ea3d3eda1d78534586b4ac7ecd60ec5d3cea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac7d4cc_7f1337ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-09-26T18:07:56Z",
+      "side": 1,
+      "message": "Thanks, still LGTM.",
+      "parentUuid": "04dc5741_43d9fc0f",
+      "revId": "e24ea3d3eda1d78534586b4ac7ecd60ec5d3cea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
