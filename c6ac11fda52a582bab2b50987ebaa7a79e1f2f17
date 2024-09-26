@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b8269ff_927d8b27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-09-26T12:15:52Z",
+      "side": 1,
+      "message": "Issue was fixed in https://crrev.com/c/5872848\nRe-enabling the flag _should_ be fine.\nPTAL!",
+      "revId": "c6ac11fda52a582bab2b50987ebaa7a79e1f2f17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
