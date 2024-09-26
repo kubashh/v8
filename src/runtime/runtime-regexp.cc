@@ -1219,13 +1219,11 @@ Handle<JSObject> ConstructNamedCaptureGroupsObject(
   return groups;
 }
 
-// Only called from Runtime_RegExpExecMultiple so it doesn't need to maintain
-// separate last match info.  See comment on that function.
-template <bool has_capture>
-static Tagged<Object> SearchRegExpMultiple(
-    Isolate* isolate, Handle<String> subject, DirectHandle<JSRegExp> regexp,
-    DirectHandle<RegExpData> regexp_data,
-    Handle<RegExpMatchInfo> last_match_array) {
+Tagged<Object> SearchRegExpMultiple(Isolate* isolate, Handle<String> subject,
+                                    DirectHandle<JSRegExp> regexp,
+                                    DirectHandle<RegExpData> regexp_data,
+                                    Handle<RegExpMatchInfo> last_match_array,
+                                    bool has_capture) {
   DCHECK(RegExpUtils::IsUnmodifiedRegExp(isolate, regexp));
   DCHECK_NE(has_capture, regexp_data->capture_count() == 0);
   DCHECK_IMPLIES(has_capture, Is<IrRegExpData>(*regexp_data));
@@ -1245,6 +1243,7 @@ static Tagged<Object> SearchRegExpMultiple(
     }
   }
 
+  ReadOnlyRoots roots{isolate};
   int capture_count = regexp_data->capture_count();
   int subject_length = subject->length();
 
@@ -1276,8 +1275,16 @@ static Tagged<Object> SearchRegExpMultiple(
 
   RegExpGlobalCache global_cache(handle(*regexp_data, isolate), subject,
                                  isolate);
-  if (global_cache.HasException()) return ReadOnlyRoots(isolate).exception();
+  if (global_cache.HasException()) return roots.exception();
 
+  // Encoding. For each match:
+  //
+  // - substrings *between* matches:
+  //   - either: one smi that encode offset and length
+  //   -     or: two smis (negated length followed by offset).
+  // - for each match:
+  //   - if no captures: just the matching substring
+  //   -      otherwise: the args for the replacer fn as a JSArray.
   FixedArrayBuilder builder = FixedArrayBuilder::Lazy(isolate);
 
   // Position to search from.
@@ -1285,7 +1292,10 @@ static Tagged<Object> SearchRegExpMultiple(
   int match_end = 0;
   bool first = true;
 
-  // Two smis before and after the match, for very long strings.
+  // Each match uses at most this many slots:
+  // - two smis (to encode subject slices) before the match.
+  // - one string or array for the match itself.
+  // - and for the last match, two more smis for the trailing subject slice.
   static const int kMaxBuilderEntriesPerRegExpMatch = 5;
 
   while (true) {
@@ -1339,7 +1349,7 @@ static Tagged<Object> SearchRegExpMultiple(
             elements->set(cursor++, *substring);
           } else {
             DCHECK_GT(0, current_match[i * 2 + 1]);
-            elements->set(cursor++, ReadOnlyRoots(isolate).undefined_value());
+            elements->set(cursor++, roots.undefined_value());
           }
         }
 
@@ -1361,7 +1371,7 @@ static Tagged<Object> SearchRegExpMultiple(
     }
   }
 
-  if (global_cache.HasException()) return ReadOnlyRoots(isolate).exception();
+  if (global_cache.HasException()) return roots.exception();
 
   if (match_start >= 0) {
     // Finished matching, with at least one match.
@@ -1397,7 +1407,7 @@ static Tagged<Object> SearchRegExpMultiple(
     }
     return *builder.array();
   } else {
-    return ReadOnlyRoots(isolate).null_value();  // No matches at all.
+    return roots.null_value();  // No matches at all.
   }
 }
 
@@ -1517,7 +1527,6 @@ V8_WARN_UNUSED_RESULT MaybeHandle<String> RegExpReplace(
 
 }  // namespace
 
-// This is only called for StringReplaceGlobalRegExpWithFunction.
 RUNTIME_FUNCTION(Runtime_RegExpExecMultiple) {
   HandleScope handles(isolate);
   DCHECK_EQ(3, args.length());
@@ -1531,16 +1540,14 @@ RUNTIME_FUNCTION(Runtime_RegExpExecMultiple) {
       direct_handle(regexp->data(isolate), isolate);
 
   subject = String::Flatten(isolate, subject);
-  CHECK(regexp->flags() & JSRegExp::kGlobal);
+  DCHECK(regexp->flags() & JSRegExp::kGlobal);
 
-  Tagged<Object> result;
-  if (regexp_data->capture_count() == 0) {
-    result = SearchRegExpMultiple<false>(isolate, subject, regexp, regexp_data,
-                                         last_match_info);
-  } else {
-    result = SearchRegExpMultiple<true>(isolate, subject, regexp, regexp_data,
-                                        last_match_info);
-  }
+  // TODO(jgruber): Currently this is very specific to RegExp.p.replace with
+  // a callable replacer (the result is encoded s.t. it's convenient to call
+  // the replacer function).
+  Tagged<Object> result =
+      SearchRegExpMultiple(isolate, subject, regexp, regexp_data,
+                           last_match_info, regexp_data->capture_count() > 0);
   DCHECK(RegExpUtils::IsUnmodifiedRegExp(isolate, regexp));
   return result;
 }

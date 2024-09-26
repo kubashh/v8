@@ -613,6 +613,7 @@ class Heap final {
   void SetRegExpMultipleCache(Tagged<HeapObject> object);
   void SetStringSplitCache(Tagged<HeapObject> object);
   void SetRegExpMatchGlobalAtomCache(Tagged<HeapObject> object);
+  void SetStringBuilderConcatCache(Tagged<HeapObject> object);
 
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);

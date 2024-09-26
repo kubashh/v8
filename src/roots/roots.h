@@ -399,6 +399,7 @@ class RootVisitor;
   V(HeapObject, string_split_cache, StringSplitCache)                       \
   V(HeapObject, regexp_multiple_cache, RegExpMultipleCache)                 \
   V(HeapObject, regexp_match_global_atom_cache, RegExpMatchGlobalAtomCache) \
+  V(HeapObject, string_builder_concat_cache, StringBuilderConcatCache)      \
   IF_WASM(V, HeapObject, active_continuation, ActiveContinuation)           \
   IF_WASM(V, HeapObject, active_suspender, ActiveSuspender)                 \
   IF_WASM(V, WeakFixedArray, js_to_wasm_wrappers, JSToWasmWrappers)         \
