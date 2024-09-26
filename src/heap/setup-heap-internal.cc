@@ -54,6 +54,7 @@
 #include "src/objects/turboshaft-types.h"
 #include "src/regexp/regexp.h"
 #include "src/roots/roots.h"
+#include "src/strings/string-builder.h"
 #include "src/utils/allocation.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -1324,6 +1325,7 @@ void Heap::CreateInitialMutableObjects() {
   set_string_split_cache(roots.undefined_value());
   set_regexp_multiple_cache(roots.undefined_value());
   set_regexp_match_global_atom_cache(roots.undefined_value());
+  set_string_builder_concat_cache(roots.undefined_value());
 
   // Allocate FeedbackCell for builtins.
   DirectHandle<FeedbackCell> many_closures_cell =

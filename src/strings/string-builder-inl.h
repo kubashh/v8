@@ -29,9 +29,9 @@ void StringBuilderConcatHelper(Tagged<String> special, sinkchar* sink,
 
 // Returns the result length of the concatenation.
 // On illegal argument, -1 is returned.
-int StringBuilderConcatLength(int special_length,
+int StringBuilderConcatLength(Tagged<String> special, int special_length,
                               Tagged<FixedArray> fixed_array, int array_length,
-                              bool* one_byte);
+                              bool* one_byte, uint32_t* hash_out);
 
 // static
 inline void ReplacementStringBuilder::AddSubjectSlice(
