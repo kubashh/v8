@@ -55,11 +55,17 @@ template void StringBuilderConcatHelper<base::uc16>(
     Tagged<String> special, base::uc16* sink, Tagged<FixedArray> fixed_array,
     int array_length);
 
-int StringBuilderConcatLength(int special_length,
-                              Tagged<FixedArray> fixed_array, int array_length,
-                              bool* one_byte) {
+namespace {
+
+template <bool kCreateHash>
+int StringBuilderConcatLengthImpl(Tagged<String> special, int special_length,
+                                  Tagged<FixedArray> fixed_array,
+                                  int array_length, bool* one_byte,
+                                  uint32_t* hash_out) {
   DisallowGarbageCollection no_gc;
   int position = 0;
+  base::Hasher hasher;
+  if constexpr (kCreateHash) hasher.AddHash(special->EnsureHash());
   for (int i = 0; i < array_length; i++) {
     int increment = 0;
     Tagged<Object> elt = fixed_array->get(i);
@@ -86,10 +92,12 @@ int StringBuilderConcatLength(int special_length,
       DCHECK_GE(pos, 0);
       DCHECK_GE(len, 0);
       if (pos > special_length || len > special_length - pos) return -1;
+      if constexpr (kCreateHash) hasher.Combine(pos, len);
       increment = len;
     } else if (IsString(elt)) {
       Tagged<String> element = Cast<String>(elt);
       int element_length = element->length();
+      if constexpr (kCreateHash) hasher.AddHash(element->EnsureHash());
       increment = element_length;
       if (*one_byte && !element->IsOneByteRepresentation()) {
         *one_byte = false;
@@ -102,7 +110,23 @@ int StringBuilderConcatLength(int special_length,
     }
     position += increment;
   }
+  if constexpr (kCreateHash) {
+    *hash_out = static_cast<uint32_t>(hasher.hash());
+  }
   return position;
+}
+
+}  // namespace
+
+int StringBuilderConcatLength(Tagged<String> special, int special_length,
+                              Tagged<FixedArray> fixed_array, int array_length,
+                              bool* one_byte, uint32_t* hash_out) {
+  if (special_length < StringBuilderConcatCache::kMinLengthToCache) {
+    return StringBuilderConcatLengthImpl<false>(
+        special, special_length, fixed_array, array_length, one_byte, nullptr);
+  }
+  return StringBuilderConcatLengthImpl<true>(
+      special, special_length, fixed_array, array_length, one_byte, hash_out);
 }
 
 FixedArrayBuilder::FixedArrayBuilder(Isolate* isolate, int initial_capacity)
@@ -355,6 +379,119 @@ void IncrementalStringBuilder::AppendString(DirectHandle<String> string) {
   part_length_ = kInitialPartLength;  // Allocate conservatively.
   Extend();  // Attach current part and allocate new part.
   Accumulate(string);
+}
+
+// static
+void StringBuilderConcatCache::TryInsert(Isolate* isolate,
+                                         Handle<String> subject_string,
+                                         Handle<FixedArray> array,
+                                         uint32_t hash,
+                                         Handle<String> concatenated_string) {
+  if (subject_string->length() < kMinLengthToCache) return;
+
+  Tagged<FixedArray> cache;
+  auto maybe_cache = isolate->heap()->string_builder_concat_cache();
+  if (maybe_cache == ReadOnlyRoots{isolate}.undefined_value()) {
+    cache = *isolate->factory()->NewFixedArray(kSize, AllocationType::kOld);
+    isolate->heap()->SetStringBuilderConcatCache(cache);
+  } else {
+    cache = Cast<FixedArray>(maybe_cache);
+  }
+  DCHECK_EQ(cache->length(), kSize);
+
+  // The hash must be truncated to fit inside a smi.
+  uint32_t truncated_hash = hash & ~(1u << 31);
+  uint32_t ix0 = (truncated_hash & (kSize - 1)) & ~(kEntrySize - 1);
+  if (cache->get(ix0 + kArrayIndex).IsSmi()) {
+    cache->set(ix0 + kArrayIndex, *array);
+    cache->set(ix0 + kHashIndex, Smi::From31BitPattern(truncated_hash));
+    cache->set(ix0 + kConcatenatedStringIndex, *concatenated_string);
+    cache->set(ix0 + kSubjectStringIndex, *subject_string);
+  } else {
+    uint32_t ix1 = (ix0 + kEntrySize) & (kSize - 1);
+    if (cache->get(ix1 + kArrayIndex).IsSmi()) {
+      cache->set(ix1 + kArrayIndex, *array);
+      cache->set(ix1 + kHashIndex, Smi::From31BitPattern(truncated_hash));
+      cache->set(ix1 + kConcatenatedStringIndex, *concatenated_string);
+      cache->set(ix1 + kSubjectStringIndex, *subject_string);
+    } else {
+      cache->set(ix1 + kArrayIndex, Smi::zero());
+      cache->set(ix1 + kHashIndex, Smi::zero());
+      cache->set(ix1 + kConcatenatedStringIndex, Smi::zero());
+      cache->set(ix1 + kSubjectStringIndex, Smi::zero());
+      cache->set(ix0 + kArrayIndex, *array);
+      cache->set(ix0 + kHashIndex, Smi::From31BitPattern(truncated_hash));
+      cache->set(ix0 + kConcatenatedStringIndex, *concatenated_string);
+      cache->set(ix0 + kSubjectStringIndex, *subject_string);
+    }
+  }
+}
+
+// static
+bool StringBuilderConcatCache::TryGet(Isolate* isolate,
+                                      Tagged<String> subject_string,
+                                      Tagged<FixedArray> array, uint32_t hash,
+                                      Tagged<String>* concatenated_string) {
+  DisallowGarbageCollection no_gc;
+  if (subject_string->length() < kMinLengthToCache) return false;
+
+  auto maybe_cache = isolate->heap()->string_builder_concat_cache();
+  if (maybe_cache == ReadOnlyRoots{isolate}.undefined_value()) return false;
+  Tagged<FixedArray> cache = Cast<FixedArray>(maybe_cache);
+  DCHECK_EQ(cache->length(), kSize);
+
+  // The hash must be truncated to fit inside a smi.
+  uint32_t truncated_hash = hash & ~(1u << 31);
+  uint32_t ix = (truncated_hash & (kSize - 1)) & ~(kEntrySize - 1);
+  if (cache->get(ix + kHashIndex) != Smi::From31BitPattern(truncated_hash)) {
+    ix = (ix + kEntrySize) & (kSize - 1);
+    if (cache->get(ix + kHashIndex) != Smi::From31BitPattern(truncated_hash)) {
+      return false;
+    }
+  }
+
+  // Verify equality.
+  Tagged<String> cached_subject_string =
+      Cast<String>(cache->get(ix + kSubjectStringIndex));
+  if (!cached_subject_string->Equals(subject_string)) return false;
+  Tagged<FixedArray> cached_array =
+      Cast<FixedArray>(cache->get(ix + kArrayIndex));
+  if (!DeepEquals(cached_array, array)) return false;
+
+  *concatenated_string =
+      Cast<String>(cache->get(ix + kConcatenatedStringIndex));
+  return true;
+}
+
+// static
+bool StringBuilderConcatCache::DeepEquals(Tagged<FixedArray> lhs,
+                                          Tagged<FixedArray> rhs) {
+  const int length = lhs->length();
+  // TODO(jgruber): This should hold due to construction, but theoretically
+  // it's possible for the physical lengths to differ as long as the non-holey
+  // sections are the same length.
+  if (length != rhs->length()) return false;
+  for (int i = 0; i < length; i++) {
+    Tagged<Object> l = lhs->get(i);
+    Tagged<Object> r = rhs->get(i);
+    if (IsSmi(l)) {
+      if (l != r) return false;
+    } else if (IsString(l)) {
+      if (!IsString(r)) return false;
+      if (!Cast<String>(l)->Equals(Cast<String>(r))) return false;
+    } else if (IsTheHole(l)) {
+      return IsTheHole(r);
+    } else {
+      UNREACHABLE();
+    }
+  }
+  return true;
+}
+
+// static
+void StringBuilderConcatCache::Clear(Heap* heap) {
+  auto undefined = ReadOnlyRoots{heap}.undefined_value();
+  heap->SetStringBuilderConcatCache(undefined);
 }
 
 }  // namespace internal

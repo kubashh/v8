@@ -205,6 +205,32 @@ class IncrementalStringBuilder {
   DirectHandle<String> current_part_;
 };
 
+class StringBuilderConcatCache final : public AllStatic {
+ public:
+  static void TryInsert(Isolate* isolate, Handle<String> subject_string,
+                        Handle<FixedArray> array, uint32_t hash,
+                        Handle<String> concatenated_string);
+  static bool TryGet(Isolate* isolate, Tagged<String> subject_string,
+                     Tagged<FixedArray> array, uint32_t hash,
+                     Tagged<String>* concatenated_string);
+  static void Clear(Heap* heap);
+
+ private:
+  static constexpr int kArrayIndex = 0;
+  static constexpr int kHashIndex = 1;
+  static constexpr int kConcatenatedStringIndex = 2;
+  static constexpr int kSubjectStringIndex = 3;
+  static constexpr int kEntrySize = 4;
+
+  static bool DeepEquals(Tagged<FixedArray> lhs, Tagged<FixedArray> rhs);
+
+ public:
+  static constexpr int kNumberOfEntries = 32;
+  static constexpr int kSize = kNumberOfEntries * kEntrySize;
+  // Matches the behavior of the REGEXP_MULTIPLE_INDICES cache.
+  static constexpr int kMinLengthToCache = 0x1000;
+};
+
 }  // namespace internal
 }  // namespace v8
 

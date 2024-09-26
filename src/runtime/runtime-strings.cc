@@ -228,11 +228,13 @@ RUNTIME_FUNCTION(Runtime_StringCodePointAt) {
 RUNTIME_FUNCTION(Runtime_StringBuilderConcat) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());
-  DirectHandle<FixedArray> array = args.at<FixedArray>(0);
+  Handle<FixedArray> array = args.at<FixedArray>(0);
 
+  // Note this is not necessarily equal to array->length(). But slots past
+  // array_length are TheHole.
   int array_length = args.smi_value_at(1);
 
-  DirectHandle<String> special = args.at<String>(2);
+  Handle<String> special = args.at<String>(2);
 
   // This assumption is used by the slice encoding in one or two smis.
   DCHECK_GE(Smi::kMaxValue, String::kMaxLength);
@@ -241,6 +243,9 @@ RUNTIME_FUNCTION(Runtime_StringBuilderConcat) {
 
   int length;
   bool one_byte = special->IsOneByteRepresentation();
+
+  // A hash of the subject string and encoded array.
+  uint32_t hash = 0u;
 
   {
     DisallowGarbageCollection no_gc;
@@ -252,8 +257,8 @@ RUNTIME_FUNCTION(Runtime_StringBuilderConcat) {
       Tagged<Object> first = fixed_array->get(0);
       if (IsString(first)) return first;
     }
-    length = StringBuilderConcatLength(special_length, fixed_array,
-                                       array_length, &one_byte);
+    length = StringBuilderConcatLength(*special, special_length, fixed_array,
+                                       array_length, &one_byte, &hash);
   }
 
   if (length == -1) {
@@ -263,6 +268,15 @@ RUNTIME_FUNCTION(Runtime_StringBuilderConcat) {
     return ReadOnlyRoots(isolate).empty_string();
   }
 
+  {
+    Tagged<String> result;
+    if (StringBuilderConcatCache::TryGet(isolate, *special, *array, hash,
+                                         &result)) {
+      return result;
+    }
+  }
+
+  Handle<String> result_handle;
   if (one_byte) {
     Handle<SeqOneByteString> answer;
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
@@ -270,7 +284,7 @@ RUNTIME_FUNCTION(Runtime_StringBuilderConcat) {
     DisallowGarbageCollection no_gc;
     StringBuilderConcatHelper(*special, answer->GetChars(no_gc), *array,
                               array_length);
-    return *answer;
+    result_handle = answer;
   } else {
     Handle<SeqTwoByteString> answer;
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
@@ -278,8 +292,13 @@ RUNTIME_FUNCTION(Runtime_StringBuilderConcat) {
     DisallowGarbageCollection no_gc;
     StringBuilderConcatHelper(*special, answer->GetChars(no_gc), *array,
                               array_length);
-    return *answer;
+    result_handle = answer;
   }
+
+  StringBuilderConcatCache::TryInsert(isolate, special, array, hash,
+                                      result_handle);
+
+  return *result_handle;
 }
 
 // Converts a String to JSArray.

@@ -52,7 +52,6 @@ transitioning macro RegExpReplaceCallableNoExplicitCaptures(
             Call(context, replaceFn, Undefined, elString, matchStart, string);
         const replacement: String = ToString_Inline(replacementObj);
         matchesElements.objects[i] = replacement;
-        matchStart += elString.length_smi;
       }
       case (TheHole): deferred {
         // No more elements.
