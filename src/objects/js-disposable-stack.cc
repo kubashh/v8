@@ -22,6 +22,7 @@
 #include "src/objects/objects.h"
 #include "src/objects/oddball.h"
 #include "src/objects/tagged.h"
+#include "src/roots/roots.h"
 #include "v8-promise.h"
 
 namespace v8 {
@@ -260,12 +261,16 @@ Maybe<bool> JSAsyncDisposableStack::NextDisposeAsyncIteration(
     }
   } else {
     // 7. IfAbruptRejectPromise(result, promiseCapability).
-    Handle<Object> exception(isolate->exception(), isolate);
-    if (!isolate->is_catchable_by_javascript(*exception)) {
-      return Nothing<bool>();
+    Handle<Object> reason;
+    if (try_catch.HasCaught()) {
+      reason = handle(isolate->exception(), isolate);
+      if (!isolate->is_catchable_by_javascript(*reason)) {
+        return Nothing<bool>();
+      }
+    } else {
+      reason = ReadOnlyRoots(isolate).undefined_value_handle();
     }
-    DCHECK(try_catch.HasCaught());
-    JSPromise::Reject(outer_promise, exception);
+    JSPromise::Reject(outer_promise, reason);
   }
 
   return Just(true);
