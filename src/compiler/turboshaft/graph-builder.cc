@@ -1994,13 +1994,7 @@ OpIndex GraphBuilder::Process(
               TSCallDescriptor::Create(params.descriptor(), CanThrow::kYes,
                                        LazyDeoptOnThrow::kNo, __ graph_zone()));
 
-          if (is_final_control) {
-            // The `__ Call()` before has already created exceptional
-            // control flow and bound a new block for the success case. So we
-            // can just `Goto` the block that Turbofan designated as the
-            // `IfSuccess` successor.
-            __ Goto(Map(block->SuccessorAt(0)));
-          }
+          __ Unreachable();
           return result;
         }
       }
@@ -2017,18 +2011,14 @@ OpIndex GraphBuilder::Process(
       const FastApiCallParameters* parameters = FastApiCallParameters::Create(
           c_functions, resolution_result, __ graph_zone());
 
-      Label<Object> done(this);
-
       V<Tuple<Word32, Any>> fast_call_result =
           __ FastApiCall(dominating_frame_state, data_argument, context,
                          base::VectorOf(arguments), parameters);
 
       V<Word32> result_state = __ template Projection<0>(fast_call_result);
 
-      IF (LIKELY(__ Word32Equal(result_state, FastApiCallOp::kSuccessValue))) {
-        GOTO(done, V<Object>::Cast(__ template Projection<1>(
-                       fast_call_result, RegisterRepresentation::Tagged())));
-      } ELSE {
+      IF (UNLIKELY(
+              __ Word32Equal(result_state, FastApiCallOp::kFailureValue))) {
         // We need to generate a fallback (both fast and slow call) in case:
         // 1) the generated code might fail, in case e.g. a Smi was passed where
         // a JSObject was expected and an error must be thrown or
@@ -2036,14 +2026,14 @@ OpIndex GraphBuilder::Process(
         // arg. None of the above usually holds true for Wasm functions with
         // primitive types only, so we avoid generating an extra branch here.
 
-        V<Object> slow_call_result = V<Object>::Cast(__ Call(
+        V<Object>::Cast(__ Call(
             slow_call_callee, dominating_frame_state,
             base::VectorOf(slow_call_arguments),
             TSCallDescriptor::Create(params.descriptor(), CanThrow::kYes,
                                      LazyDeoptOnThrow::kNo, __ graph_zone())));
-        GOTO(done, slow_call_result);
+
+        __ Unreachable();
       }
-      BIND(done, result);
       if (is_final_control) {
         // The `__ FastApiCall()` before has already created exceptional control
         // flow and bound a new block for the success case. So we can just
@@ -2051,7 +2041,7 @@ OpIndex GraphBuilder::Process(
         // successor.
         __ Goto(Map(block->SuccessorAt(0)));
       }
-      return result;
+      return __ UndefinedConstant();
     }
 
     case IrOpcode::kRuntimeAbort:
