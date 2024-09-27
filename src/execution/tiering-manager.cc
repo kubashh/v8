@@ -212,6 +212,7 @@ int InterruptBudgetFor(std::optional<CodeKind> code_kind,
                  bytecode_length;
         case CachedTieringDecision::kPending:
         case CachedTieringDecision::kEarlySparkplug:
+        case CachedTieringDecision::kTurbofanSkipMaglev:
         case CachedTieringDecision::kNormal:
           return v8_flags.invocation_count_for_maglev * bytecode_length;
       }
@@ -390,8 +391,10 @@ OptimizationDecision TieringManager::ShouldOptimize(
       shared->PassesFilter(v8_flags.maglev_filter) &&
       !shared->maglev_compilation_failed()) {
     if (v8_flags.profile_guided_optimization &&
-        shared->cached_tiering_decision() ==
-            CachedTieringDecision::kEarlyTurbofan) {
+        (shared->cached_tiering_decision() ==
+             CachedTieringDecision::kEarlyTurbofan ||
+         shared->cached_tiering_decision() ==
+             CachedTieringDecision::kTurbofanSkipMaglev)) {
       return OptimizationDecision::TurbofanHotAndStable();
     }
     return OptimizationDecision::Maglev();
@@ -431,6 +434,7 @@ bool ShouldResetInterruptBudgetByICChange(
     case CachedTieringDecision::kPending:
     case CachedTieringDecision::kEarlySparkplug:
     case CachedTieringDecision::kDelayMaglev:
+    case CachedTieringDecision::kTurbofanSkipMaglev:
     case CachedTieringDecision::kNormal:
       return true;
   }

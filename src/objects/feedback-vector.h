@@ -319,6 +319,9 @@ class FeedbackVector
   inline bool interrupt_budget_reset_by_ic_change() const;
   inline void set_interrupt_budget_reset_by_ic_change(bool value);
 
+  inline bool guide_optimization() const;
+  inline void set_guide_optimization(bool value);
+
   // Check if this function was ever deoptimized. This flag can be used as a
   // blanked bailout for optimizations which are not guaranteed to be deopt-loop
   // free (such as hoisting checks out of loops).

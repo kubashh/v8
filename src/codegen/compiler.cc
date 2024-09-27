@@ -614,10 +614,24 @@ void TurbofanCompilationJob::RecordCompilationStats(ConcurrencyMode mode,
   counters->turbofan_optimize_total_foreground()->AddSample(
       static_cast<int>(time_foreground.InMicroseconds()));
 
-  if (v8_flags.profile_guided_optimization &&
-      shared->cached_tiering_decision() ==
-          CachedTieringDecision::kEarlyMaglev) {
-    shared->set_cached_tiering_decision(CachedTieringDecision::kEarlyTurbofan);
+  if (v8_flags.profile_guided_optimization) {
+    if (shared->cached_tiering_decision() ==
+        CachedTieringDecision::kEarlyMaglev) {
+      shared->set_cached_tiering_decision(
+          CachedTieringDecision::kEarlyTurbofan);
+    } else if (shared->cached_tiering_decision() !=
+                   CachedTieringDecision::kEarlyTurbofan &&
+               !compilation_info()
+                    ->closure()
+                    ->feedback_vector()
+                    ->guide_optimization() &&
+               !compilation_info()
+                    ->closure()
+                    ->feedback_vector()
+                    ->was_once_deoptimized()) {
+      shared->set_cached_tiering_decision(
+          CachedTieringDecision::kTurbofanSkipMaglev);
+    }
   }
 }
 

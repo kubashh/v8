@@ -620,18 +620,23 @@ void JSFunction::CreateAndAttachFeedbackVector(
 
   DCHECK_EQ(v8_flags.log_function_events,
             feedback_vector->log_next_execution());
-
-  if (v8_flags.profile_guided_optimization &&
-      v8_flags.profile_guided_optimization_for_empty_feedback_vector &&
-      function->feedback_vector()->length() == 0) {
-    if (function->shared()->cached_tiering_decision() ==
-        CachedTieringDecision::kEarlyMaglev) {
-      function->MarkForOptimization(isolate, CodeKind::MAGLEV,
-                                    ConcurrencyMode::kConcurrent);
-    } else if (function->shared()->cached_tiering_decision() ==
-               CachedTieringDecision::kEarlyTurbofan) {
-      function->MarkForOptimization(isolate, CodeKind::TURBOFAN,
-                                    ConcurrencyMode::kConcurrent);
+  if (v8_flags.profile_guided_optimization) {
+    CachedTieringDecision cached_tiering_decision =
+        function->shared()->cached_tiering_decision();
+    if (cached_tiering_decision > CachedTieringDecision::kEarlySparkplug) {
+      function->feedback_vector()->set_guide_optimization(true);
+    }
+    if (v8_flags.profile_guided_optimization_for_empty_feedback_vector &&
+        function->feedback_vector()->length() == 0) {
+      if (function->shared()->cached_tiering_decision() ==
+          CachedTieringDecision::kEarlyMaglev) {
+        function->MarkForOptimization(isolate, CodeKind::MAGLEV,
+                                      ConcurrencyMode::kConcurrent);
+      } else if (function->shared()->cached_tiering_decision() ==
+                 CachedTieringDecision::kEarlyTurbofan) {
+        function->MarkForOptimization(isolate, CodeKind::TURBOFAN,
+                                      ConcurrencyMode::kConcurrent);
+      }
     }
   }
 }

@@ -253,6 +253,14 @@ void FeedbackVector::set_interrupt_budget_reset_by_ic_change(bool value) {
   set_flags(InterruptBudgetResetByIcChangeBit::update(flags(), value));
 }
 
+bool FeedbackVector::guide_optimization() const {
+  return GuideOptimizationBit::decode(flags());
+}
+
+void FeedbackVector::set_guide_optimization(bool value) {
+  set_flags(GuideOptimizationBit::update(flags(), value));
+}
+
 bool FeedbackVector::was_once_deoptimized() const {
   return invocation_count_before_stable(kRelaxedLoad) ==
          kInvocationCountBeforeStableDeoptSentinel;
