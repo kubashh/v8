@@ -986,11 +986,23 @@ bool V8DebuggerAgentImpl::isFunctionBlackboxed(const String16& scriptId,
     // Unknown scripts are blackboxed.
     return true;
   }
-  if (m_blackboxPattern) {
+  if (m_blackboxPattern || m_skipAnonymousScripts) {
     const String16& scriptSourceURL = it->second->sourceURL();
-    if (!scriptSourceURL.isEmpty() &&
-        m_blackboxPattern->match(scriptSourceURL) != -1)
+    if (scriptSourceURL.isEmpty()) {
+      if (m_skipAnonymousScripts) {
+        return true;
+      }
+    } else if (m_blackboxPattern->match(scriptSourceURL) != -1) {
       return true;
+    }
+  }
+  if (!m_blackboxedExecutionContexts.empty()) {
+    int contextId = it->second->executionContextId();
+    InspectedContext* inspected = m_inspector->getContext(contextId);
+    if (inspected && m_blackboxedExecutionContexts.count(
+                         inspected->uniqueId().toString()) > 0) {
+      return true;
+    }
   }
   auto itBlackboxedPositions = m_blackboxedPositions.find(scriptId);
   if (itBlackboxedPositions == m_blackboxedPositions.end()) return false;
@@ -1665,7 +1677,10 @@ Response V8DebuggerAgentImpl::setAsyncCallStackDepth(int depth) {
 }
 
 Response V8DebuggerAgentImpl::setBlackboxPatterns(
-    std::unique_ptr<protocol::Array<String16>> patterns) {
+    std::unique_ptr<protocol::Array<String16>> patterns,
+    Maybe<bool> skipAnonymous) {
+  m_skipAnonymousScripts = skipAnonymous.value_or(false);
+
   if (patterns->empty()) {
     m_blackboxPattern = nullptr;
     resetBlackboxedStateCache();
@@ -1686,6 +1701,15 @@ Response V8DebuggerAgentImpl::setBlackboxPatterns(
   if (!response.IsSuccess()) return response;
   resetBlackboxedStateCache();
   m_state->setString(DebuggerAgentState::blackboxPattern, pattern);
+  return Response::Success();
+}
+
+Response V8DebuggerAgentImpl::setBlackboxExecutionContexts(
+    std::unique_ptr<protocol::Array<String16>> uniqueIds) {
+  m_blackboxedExecutionContexts.clear();
+  for (const String16& uniqueId : *uniqueIds) {
+    m_blackboxedExecutionContexts.insert(uniqueId);
+  }
   return Response::Success();
 }
 
@@ -2271,6 +2295,7 @@ void V8DebuggerAgentImpl::reset() {
   m_cachedScripts.clear();
   m_cachedScriptSize = 0;
   m_debugger->allAsyncTasksCanceled();
+  m_blackboxedExecutionContexts.clear();
 }
 
 void V8DebuggerAgentImpl::ScriptCollected(const V8DebuggerScript* script) {
