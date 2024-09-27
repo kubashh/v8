@@ -50,6 +50,24 @@
       "message": "Actually I think this can just be `isolate`.",
       "revId": "c3619bb5cb5a095f77b91f7e2c1fecf04c249794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a69233_7f6da1cd",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-09-27T18:50:38Z",
+      "side": 1,
+      "message": "Thanks, that seems to work as well.",
+      "parentUuid": "267a223a_b60ecb23",
+      "revId": "c3619bb5cb5a095f77b91f7e2c1fecf04c249794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
