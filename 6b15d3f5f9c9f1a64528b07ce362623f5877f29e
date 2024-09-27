@@ -16,6 +16,24 @@
       "message": "vsavu@: The bug was approved. PTAL.",
       "revId": "6b15d3f5f9c9f1a64528b07ce362623f5877f29e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f293f02c_dafef474",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368736
+      },
+      "writtenOn": "2024-09-27T07:15:16Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "0c8398fd_9ed1b77f",
+      "revId": "6b15d3f5f9c9f1a64528b07ce362623f5877f29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
