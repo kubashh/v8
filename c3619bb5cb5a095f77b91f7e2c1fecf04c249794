@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "c3619bb5cb5a095f77b91f7e2c1fecf04c249794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a65883_d166a581",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-27T15:24:50Z",
+      "side": 1,
+      "message": "lgtm % comment, thanks!",
+      "revId": "c3619bb5cb5a095f77b91f7e2c1fecf04c249794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "267a223a_b60ecb23",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-09-27T15:24:50Z",
+      "side": 1,
+      "message": "Actually I think this can just be `isolate`.",
+      "revId": "c3619bb5cb5a095f77b91f7e2c1fecf04c249794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
