@@ -337,6 +337,7 @@ TEST(GetObjectProperties) {
   props = d::GetObjectProperties((*o).ptr(), &ReadMemory, heap_addresses);
   CHECK(Contains(props->brief, "\"" + std::string(80, 'a') + "...\""));
 
+#ifdef V8_ENABLE_SANDBOX
   // GetObjectProperties can read cacheable external strings.
   heap_addresses.metadata_pointer_table =
       TestDebugHelper::MetadataTableAddress();
@@ -350,6 +351,7 @@ TEST(GetObjectProperties) {
             d::PropertyKind::kArrayOfKnownSize, string_resource->length());
   CHECK_EQ(props->properties[5]->address,
            reinterpret_cast<uintptr_t>(string_resource->data()));
+#endif
 
   // GetObjectProperties cannot read uncacheable external strings.
   auto external_string =

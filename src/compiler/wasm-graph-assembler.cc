@@ -188,7 +188,7 @@ Node* WasmGraphAssembler::InitializeImmutableInObject(ObjectAccess access,
 
 Node* WasmGraphAssembler::BuildDecodeSandboxedExternalPointer(
     Node* handle, ExternalPointerTag tag, Node* isolate_root) {
-#if V8_ENABLE_SANDBOX
+#ifdef V8_COMPRESS_POINTERS
   Node* index = Word32Shr(handle, Int32Constant(kExternalPointerIndexShift));
   Node* offset = ChangeUint32ToUint64(
       Word32Shl(index, Int32Constant(kExternalPointerTableEntrySizeLog2)));
@@ -208,7 +208,7 @@ Node* WasmGraphAssembler::BuildDecodeSandboxedExternalPointer(
   return WordAnd(decoded_ptr, IntPtrConstant(~tag));
 #else
   UNREACHABLE();
-#endif  // V8_ENABLE_SANDBOX
+#endif  // V8_COMPRESS_POINTERS
 }
 
 Node* WasmGraphAssembler::BuildDecodeTrustedPointer(Node* handle,
@@ -236,7 +236,7 @@ Node* WasmGraphAssembler::BuildDecodeTrustedPointer(Node* handle,
 Node* WasmGraphAssembler::BuildLoadExternalPointerFromObject(
     Node* object, int field_offset, ExternalPointerTag tag,
     Node* isolate_root) {
-#ifdef V8_ENABLE_SANDBOX
+#ifdef V8_COMPRESS_POINTERS
   DCHECK_NE(tag, kExternalPointerNullTag);
   Node* handle = LoadFromObject(MachineType::Uint32(), object,
                                 wasm::ObjectAccess::ToTagged(field_offset));
@@ -244,7 +244,7 @@ Node* WasmGraphAssembler::BuildLoadExternalPointerFromObject(
 #else
   return LoadFromObject(MachineType::Pointer(), object,
                         wasm::ObjectAccess::ToTagged(field_offset));
-#endif  // V8_ENABLE_SANDBOX
+#endif  // V8_COMPRESS_POINTERS
 }
 
 Node* WasmGraphAssembler::IsSmi(Node* object) {
