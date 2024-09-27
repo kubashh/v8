@@ -368,7 +368,7 @@ class ReadStringVisitor : public TqObjectVisitor {
     if (IsExternalStringCached(object)) {
       ExternalPointer_t resource_data =
           GetOrFinish(object->GetResourceDataValue(accessor_));
-#ifdef V8_ENABLE_SANDBOX
+#ifdef V8_COMPRESS_POINTERS
       Address memory_chunk =
           MemoryChunk::FromAddress(object->GetMapAddress())->address();
       uint32_t metadata_index = GetOrFinish(ReadValue<uint32_t>(
@@ -391,7 +391,7 @@ class ReadStringVisitor : public TqObjectVisitor {
       Address data_address = tagged_data & ~kExternalStringResourceDataTag;
 #else
       uintptr_t data_address = static_cast<uintptr_t>(resource_data);
-#endif  // V8_ENABLE_SANDBOX
+#endif  // V8_COMPRESS_POINTERS
       if (done_) return;
       ReadStringCharacters<TChar>(object, data_address);
     } else {

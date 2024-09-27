@@ -954,7 +954,7 @@ void MarkCompactCollector::SweepArrayBufferExtensions() {
 // they should keep alive its embedded pointers (which would otherwise be
 // dropped).
 // - Prefix of the string table.
-// - If V8_ENABLE_SANDBOX, client Isolates' waiter queue node
+// - If V8_COMPRESS_POINTERS, client Isolates' waiter queue node
 // ExternalPointer_t in shared Isolates.
 class MarkCompactCollector::CustomRootBodyMarkingVisitor final
     : public ObjectVisitorWithCageBases {
@@ -1137,7 +1137,7 @@ class InternalizedStringTableCleaner final : public RootVisitor {
   int pointers_removed_ = 0;
 };
 
-#ifdef V8_ENABLE_SANDBOX
+#ifdef V8_COMPRESS_POINTERS
 class MarkExternalPointerFromExternalStringTable : public RootVisitor {
  public:
   explicit MarkExternalPointerFromExternalStringTable(
@@ -1203,7 +1203,7 @@ class MarkExternalPointerFromExternalStringTable : public RootVisitor {
 
   MarkExternalPointerTableVisitor visitor;
 };
-#endif  // V8_ENABLE_SANDBOX
+#endif  // V8_COMPRESS_POINTERS
 
 // Implementation of WeakObjectRetainer for mark compact GCs. All marked objects
 // are retained.
@@ -2019,7 +2019,7 @@ void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
     }
   }
 
-#ifdef V8_ENABLE_SANDBOX
+#ifdef V8_COMPRESS_POINTERS
   DCHECK(IsSharedExternalPointerType(kExternalStringResourceTag));
   DCHECK(IsSharedExternalPointerType(kExternalStringResourceDataTag));
   // All ExternalString resources are stored in the shared external pointer
@@ -2030,6 +2030,19 @@ void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
   MarkExternalPointerFromExternalStringTable external_string_visitor(
       &shared_table, shared_space);
   client_heap->external_string_table_.IterateAll(&external_string_visitor);
+#endif  // V8_COMPRESS_POINTERS
+
+#ifdef V8_ENABLE_SANDBOX
+  TrustedPointerTable* const tpt = &client->trusted_pointer_table();
+  tpt->IterateActiveEntriesIn(
+      client->heap()->trusted_pointer_space(),
+      [collector = this](TrustedPointerHandle handle, Address content) {
+        Tagged<HeapObject> heap_obj = Cast<HeapObject>(Tagged<Object>(content));
+        DCHECK(IsExposedTrustedObject(heap_obj));
+        if (!HeapLayout::InWritableSharedSpace(heap_obj)) return;
+        collector->MarkRootObject(Root::kClientHeap, heap_obj,
+                                  MarkingHelper::WorklistTarget::kRegular);
+      });
 #endif  // V8_ENABLE_SANDBOX
 }
 
