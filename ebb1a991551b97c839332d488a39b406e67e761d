@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e4fde5b_fd5626d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-09-28T14:58:47Z",
+      "side": 1,
+      "message": "Hi Clemens,\n\nPlease take a look when you have a chance, a similar fix was also applied to ScopeInfo a while back https://crrev.com/c/5688778\n\nI had to include BIG_ENDIAN macros as (strangely) a test crashes on little endian (including on x64) without it.",
+      "revId": "ebb1a991551b97c839332d488a39b406e67e761d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
