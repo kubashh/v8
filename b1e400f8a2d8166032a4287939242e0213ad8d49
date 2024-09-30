@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cd1ffe0_b454a086",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-30T14:18:09Z",
+      "side": 1,
+      "message": "Good idea, thanks!",
+      "revId": "b1e400f8a2d8166032a4287939242e0213ad8d49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9a524d5_9712bbc3",
@@ -48,6 +65,30 @@
       "writtenOn": "2024-09-30T14:10:57Z",
       "side": 1,
       "message": "Nit: here and below, please add a local `Register scratch \u003d x21;` to be uniform.",
+      "range": {
+        "startLine": 2545,
+        "startChar": 68,
+        "endLine": 2545,
+        "endChar": 73
+      },
+      "revId": "b1e400f8a2d8166032a4287939242e0213ad8d49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9a2361e_3c3923d3",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-30T14:18:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9a524d5_9712bbc3",
       "range": {
         "startLine": 2545,
         "startChar": 68,
