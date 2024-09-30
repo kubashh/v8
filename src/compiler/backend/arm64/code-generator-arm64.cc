@@ -860,7 +860,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ cmp(cp, temp);
         __ Assert(eq, AbortReason::kWrongFunctionContext);
       }
+#ifdef V8_ENABLE_LEAPTIERING
+      uint32_t num_arguments =
+          i.InputUint32(instr->JSCallArgumentCountInputIndex());
+      __ CallJSFunction(func, num_arguments);
+#else
       __ CallJSFunction(func);
+#endif  // V8_ENABLE_LEAPTIERING
       RecordCallPosition(instr);
       frame_access_state()->ClearSPDelta();
       break;
