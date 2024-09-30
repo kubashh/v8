@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4060c954_4dbc4a47",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4013,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-30T09:39:16Z",
+      "side": 1,
+      "message": "Oh that\u0027s a good point. I added an explicit `scratch` register parameter to these three functions now.",
+      "parentUuid": "ea750083_aacfd4d1",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81535771_4dcbac0e",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56111f65_94902350",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-30T09:39:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81535771_4dcbac0e",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e390b28_21c37f76",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-09-16T11:32:07Z",
       "side": 1,
       "message": "Aren\u0027t you adding this argument for non-leaptiering configurations too?",
+      "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3206ff2e_94dd477f",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2616,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-30T09:39:16Z",
+      "side": 1,
+      "message": "I guess so, but we do the same for the entrypoint_tag above, which is also only used when the sandbox is enabled. We could wrap all of this in `#ifdef`s, but I\u0027m not sure it\u0027s worth it since we mostly care about the sandbox configuration and otherwise simply ignore these values.",
+      "parentUuid": "7e390b28_21c37f76",
       "revId": "430049c2db75d6722ab1454e4ab9a3b9e1e9c144",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

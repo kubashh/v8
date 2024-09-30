@@ -46,6 +46,30 @@
       },
       "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be937c4_5e27e4b7",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-09-30T09:39:16Z",
+      "side": 1,
+      "message": "Right good point. That\u0027d also be in-line with what we do for Wasm currently. I\u0027ll give it a try as a follow-up. That way, we can see if it\u0027s noticeably worse than then conditional-select on arm64.",
+      "parentUuid": "6be6559f_1d90977a",
+      "range": {
+        "startLine": 3230,
+        "startChar": 0,
+        "endLine": 3231,
+        "endChar": 9
+      },
+      "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
