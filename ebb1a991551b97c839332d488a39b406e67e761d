@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b32a893_fff28373",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-09-30T10:48:06Z",
+      "side": 1,
+      "message": "thank you for reviewing, i\u0027ll go ahead and land it it as is then.",
+      "parentUuid": "8ffc1816_2f1aaed9",
+      "revId": "ebb1a991551b97c839332d488a39b406e67e761d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87a1034b_cd8dc353",
