@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "763bd9eb_d708b5f0",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-30T14:37:09Z",
+      "side": 0,
+      "message": "Right, we don\u0027t need this because we anyway DCHECK after the call",
+      "range": {
+        "startLine": 1340,
+        "startChar": 0,
+        "endLine": 1341,
+        "endChar": 29
+      },
+      "revId": "ca603f8eb292bcf6126abf1d6549798219a45411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

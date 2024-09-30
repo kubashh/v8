@@ -16,6 +16,115 @@
       "message": "PTAL",
       "revId": "986cbeeb317eed04da6c1ab6c272805a64a6df37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d792de07_7560f2ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-30T14:37:09Z",
+      "side": 1,
+      "message": "Nice, thanks! LGTM, just super nits about comments if you feel like changing it.",
+      "revId": "986cbeeb317eed04da6c1ab6c272805a64a6df37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1910401_2bbb512c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-30T14:37:09Z",
+      "side": 1,
+      "message": "nit: ` around descriptor\nNote: I guess we don\u0027t have to use backticks for initial and minimum because that won\u0027t help code-indexing. But let\u0027s use \u0027 in line 1304 too.",
+      "range": {
+        "startLine": 1276,
+        "startChar": 46,
+        "endLine": 1276,
+        "endChar": 56
+      },
+      "revId": "986cbeeb317eed04da6c1ab6c272805a64a6df37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9cfb363_7340d38b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-30T14:37:09Z",
+      "side": 1,
+      "message": "nit: I like the \"Returns std::nullopt on error (exception or error set in the thrower).\" style comments you added for the helpers, can we change this too?",
+      "range": {
+        "startLine": 1277,
+        "startChar": 3,
+        "endLine": 1277,
+        "endChar": 25
+      },
+      "revId": "986cbeeb317eed04da6c1ab6c272805a64a6df37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4657bce_769d2916",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-30T14:37:09Z",
+      "side": 1,
+      "message": "nit: \"Parse \u0027maximum\u0027 of the \\`descriptor`\" or delete? Same in line 1429",
+      "range": {
+        "startLine": 1419,
+        "startChar": 5,
+        "endLine": 1419,
+        "endChar": 31
+      },
+      "revId": "986cbeeb317eed04da6c1ab6c272805a64a6df37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "065b32c1_c86846d7",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2024-09-30T14:37:09Z",
+      "side": 1,
+      "message": "nit: again backticks here and 1525?",
+      "range": {
+        "startLine": 1513,
+        "startChar": 39,
+        "endLine": 1513,
+        "endChar": 49
+      },
+      "revId": "986cbeeb317eed04da6c1ab6c272805a64a6df37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
