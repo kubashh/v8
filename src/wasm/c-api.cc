@@ -85,7 +85,8 @@ auto ReadLebU64(const byte_t** pos) -> uint64_t {
   return n;
 }
 
-ValKind V8ValueTypeToWasm(i::wasm::ValueType v8_valtype) {
+template <i::wasm::TypeIndexKind index_kind>
+ValKind V8ValueTypeToWasm(i::wasm::ValueTypeImpl<index_kind> v8_valtype) {
   switch (v8_valtype.kind()) {
     case i::wasm::kI32:
       return I32;
@@ -98,9 +99,9 @@ ValKind V8ValueTypeToWasm(i::wasm::ValueType v8_valtype) {
     case i::wasm::kRef:
     case i::wasm::kRefNull:
       switch (v8_valtype.heap_representation()) {
-        case i::wasm::HeapType::kFunc:
+        case i::wasm::HeapTypeImpl<index_kind>::kFunc:
           return FUNCREF;
-        case i::wasm::HeapType::kExtern:
+        case i::wasm::HeapTypeImpl<index_kind>::kExtern:
           return ANYREF;
         default:
           // TODO(wasm+): support new value types
@@ -1441,7 +1442,7 @@ namespace {
 
 class SignatureHelper : public i::AllStatic {
  public:
-  static const i::wasm::FunctionSig* Canonicalize(FuncType* type) {
+  static const i::wasm::CanonicalSig* Canonicalize(FuncType* type) {
     std::vector<i::wasm::ValueType> types;
     types.reserve(type->results().size() + type->params().size());
 
@@ -1455,13 +1456,13 @@ class SignatureHelper : public i::AllStatic {
 
     i::wasm::FunctionSig non_canonical_sig{type->results().size(),
                                            type->params().size(), types.data()};
-    uint32_t canonical_id =
+    i::wasm::TypeIndex<i::wasm::kCanonicalized> canonical_id =
         i::wasm::GetTypeCanonicalizer()->AddRecursiveGroup(&non_canonical_sig);
     return i::wasm::GetTypeCanonicalizer()->LookupFunctionSignature(
         canonical_id);
   }
 
-  static own<FuncType> FromV8Sig(const i::wasm::FunctionSig* sig) {
+  static own<FuncType> FromV8Sig(const i::wasm::CanonicalSig* sig) {
     int result_arity = static_cast<int>(sig->return_count());
     int param_arity = static_cast<int>(sig->parameter_count());
     ownvec<ValType> results = ownvec<ValType>::make_uninitialized(result_arity);
@@ -1494,7 +1495,7 @@ class SignatureHelper : public i::AllStatic {
     return sig;
   }
 
-  static const i::wasm::FunctionSig* GetSig(
+  static const i::wasm::CanonicalSig* GetSig(
       i::DirectHandle<i::JSFunction> function) {
     return i::Cast<i::WasmCapiFunction>(*function)->sig();
   }
@@ -1618,7 +1619,7 @@ i::Handle<i::Object> WasmRefToV8(i::Isolate* isolate, const Ref* ref) {
 void PrepareFunctionData(
     i::Isolate* isolate,
     i::DirectHandle<i::WasmExportedFunctionData> function_data,
-    const i::wasm::FunctionSig* sig) {
+    const i::wasm::CanonicalSig* sig) {
   // If the data is already populated, return immediately.
   // TODO(saelo): We need to use full pointer comparison here while not all Code
   // objects have migrated into trusted space.
@@ -1636,10 +1637,10 @@ void PrepareFunctionData(
       i::wasm::CWasmArgumentsPacker::TotalSize(sig));
 }
 
-void PushArgs(const i::wasm::FunctionSig* sig, const Val args[],
+void PushArgs(const i::wasm::CanonicalSig* sig, const Val args[],
               i::wasm::CWasmArgumentsPacker* packer, StoreImpl* store) {
   for (size_t i = 0; i < sig->parameter_count(); i++) {
-    i::wasm::ValueType type = sig->GetParam(i);
+    i::wasm::CanonicalValueType type = sig->GetParam(i);
     switch (type.kind()) {
       case i::wasm::kI32:
         packer->Push(args[i].i32());
@@ -1672,11 +1673,11 @@ void PushArgs(const i::wasm::FunctionSig* sig, const Val args[],
   }
 }
 
-void PopArgs(const i::wasm::FunctionSig* sig, Val results[],
+void PopArgs(const i::wasm::CanonicalSig* sig, Val results[],
              i::wasm::CWasmArgumentsPacker* packer, StoreImpl* store) {
   packer->Reset();
   for (size_t i = 0; i < sig->return_count(); i++) {
-    i::wasm::ValueType type = sig->GetReturn(i);
+    i::wasm::CanonicalValueType type = sig->GetReturn(i);
     switch (type.kind()) {
       case i::wasm::kI32:
         results[i] = Val(packer->Pop<int32_t>());
@@ -1772,7 +1773,7 @@ auto Func::call(const Val args[], Val results[]) const -> own<Trap> {
   int function_index = function_data->function_index();
   const i::wasm::WasmModule* module = instance_data->module();
   // Caching {sig} would give a ~10% reduction in overhead.
-  const i::wasm::FunctionSig* sig =
+  const i::wasm::CanonicalSig* sig =
       i::wasm::GetTypeCanonicalizer()->LookupFunctionSignature(
           module->canonical_sig_id(
               module->functions[function_index].sig_index));

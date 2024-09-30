@@ -138,8 +138,8 @@ WasmCode* WasmImportWrapperCache::ModificationScope::AddWrapper(
 
 WasmCode* WasmImportWrapperCache::CompileWasmImportCallWrapper(
     Isolate* isolate, NativeModule* native_module, ImportCallKind kind,
-    const FunctionSig* sig, uint32_t canonical_sig_index, bool source_positions,
-    int expected_arity, Suspend suspend) {
+    const CanonicalSig* sig, TypeIndex<kCanonicalized> canonical_sig_index,
+    bool source_positions, int expected_arity, Suspend suspend) {
   CompilationEnv env = CompilationEnv::ForModule(native_module);
   WasmCompilationResult result = compiler::CompileWasmImportCallWrapper(
       &env, kind, sig, source_positions, expected_arity, suspend);
@@ -206,10 +206,9 @@ void WasmImportWrapperCache::Free(std::vector<WasmCode*>& wrappers) {
   wrappers.clear();
 }
 
-WasmCode* WasmImportWrapperCache::MaybeGet(ImportCallKind kind,
-                                           uint32_t canonical_type_index,
-                                           int expected_arity,
-                                           Suspend suspend) const {
+WasmCode* WasmImportWrapperCache::MaybeGet(
+    ImportCallKind kind, TypeIndex<kCanonicalized> canonical_type_index,
+    int expected_arity, Suspend suspend) const {
   base::MutexGuard lock(&mutex_);
 
   auto it =

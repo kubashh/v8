@@ -1108,7 +1108,7 @@ DecodeResult ValidateSingleFunction(Zone* zone, const WasmModule* module,
   // is the case, and exit early if so.
   if (module->function_was_validated(func_index)) return {};
   const WasmFunction* func = &module->functions[func_index];
-  bool is_shared = module->types[func->sig_index].is_shared;
+  bool is_shared = module->type(func->sig_index).is_shared;
   FunctionBody body{func->sig, func->code.offset(), code.begin(), code.end(),
                     is_shared};
   WasmDetectedFeatures detected_features;
@@ -1651,9 +1651,9 @@ namespace {
 
 bool IsI16Array(wasm::ValueType type, const WasmModule* module) {
   if (!type.is_object_reference() || !type.has_index()) return false;
-  uint32_t reftype = type.ref_index();
+  TypeIndex<kModuleRelative> reftype = type.ref_index();
   if (!module->has_array(reftype)) return false;
-  return module->isorecursive_canonical_type_ids[reftype] ==
+  return module->isorecursive_canonical_type_id(reftype) ==
          TypeCanonicalizer::kPredefinedArrayI16Index;
 }
 
@@ -1661,9 +1661,9 @@ bool IsI8Array(wasm::ValueType type, const WasmModule* module,
                bool allow_nullable) {
   if (!type.is_object_reference() || !type.has_index()) return false;
   if (!allow_nullable && type.is_nullable()) return false;
-  uint32_t reftype = type.ref_index();
+  TypeIndex<kModuleRelative> reftype = type.ref_index();
   if (!module->has_array(reftype)) return false;
-  return module->isorecursive_canonical_type_ids[reftype] ==
+  return module->isorecursive_canonical_type_id(reftype) ==
          TypeCanonicalizer::kPredefinedArrayI8Index;
 }
 
@@ -4222,12 +4222,10 @@ void CompilationStateImpl::TierUpAllFunctions() {
   }
 }
 
-WasmCode* CompileImportWrapperForTest(Isolate* isolate,
-                                      NativeModule* native_module,
-                                      ImportCallKind kind,
-                                      const FunctionSig* sig,
-                                      uint32_t canonical_type_index,
-                                      int expected_arity, Suspend suspend) {
+WasmCode* CompileImportWrapperForTest(
+    Isolate* isolate, NativeModule* native_module, ImportCallKind kind,
+    const CanonicalSig* sig, TypeIndex<kCanonicalized> canonical_type_index,
+    int expected_arity, Suspend suspend) {
   bool source_positions = is_asmjs_module(native_module->module());
   if (v8_flags.wasm_jitless) {
     WasmImportWrapperCache::ModificationScope cache_scope(

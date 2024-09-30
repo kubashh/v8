@@ -6540,7 +6540,7 @@ class LiftoffCompiler {
 
   void StructNew(FullDecoder* decoder, const StructIndexImmediate& imm,
                  bool initial_values_on_stack) {
-    LiftoffRegister rtt = RttCanon(imm.index, {});
+    LiftoffRegister rtt = RttCanon(imm.typeidx(), {});
 
     CallBuiltin(Builtin::kWasmAllocateStructWithRtt,
                 MakeSig::Returns(kRef).Params(kRtt, kI32),
@@ -6650,7 +6650,7 @@ class LiftoffCompiler {
     int elem_size = value_kind_size(elem_kind);
     // Allocate the array.
     {
-      LiftoffRegister rtt = RttCanon(imm.index, {});
+      LiftoffRegister rtt = RttCanon(imm.typeidx(), {});
       CallBuiltin(Builtin::kWasmAllocateArray_Uninitialized,
                   MakeSig::Returns(kRef).Params(kRtt, kI32, kI32),
                   {VarState{kRtt, rtt, 0},
@@ -6834,7 +6834,7 @@ class LiftoffCompiler {
   void ArrayNewFixed(FullDecoder* decoder, const ArrayIndexImmediate& array_imm,
                      const IndexImmediate& length_imm,
                      const Value* /* elements */, Value* /* result */) {
-    LiftoffRegister rtt = RttCanon(array_imm.index, {});
+    LiftoffRegister rtt = RttCanon(array_imm.typeidx(), {});
     ValueKind elem_kind = array_imm.array_type->element_type().kind();
     int32_t elem_count = length_imm.index;
     // Allocate the array.
@@ -6872,7 +6872,7 @@ class LiftoffCompiler {
     FUZZER_HEAVY_INSTRUCTION;
     LiftoffRegList pinned;
 
-    LiftoffRegister rtt = pinned.set(RttCanon(array_imm.index, pinned));
+    LiftoffRegister rtt = pinned.set(RttCanon(array_imm.typeidx(), pinned));
 
     LiftoffRegister is_element_reg =
         pinned.set(__ GetUnusedRegister(kGpReg, pinned));
@@ -6992,12 +6992,13 @@ class LiftoffCompiler {
     __ PushRegister(kI32, dst);
   }
 
-  LiftoffRegister RttCanon(uint32_t type_index, LiftoffRegList pinned) {
+  LiftoffRegister RttCanon(TypeIndex<kModuleRelative> type_index,
+                           LiftoffRegList pinned) {
     LiftoffRegister rtt = pinned.set(__ GetUnusedRegister(kGpReg, pinned));
     LOAD_TAGGED_PTR_INSTANCE_FIELD(rtt.gp(), ManagedObjectMaps, pinned);
     __ LoadTaggedPointer(
         rtt.gp(), rtt.gp(), no_reg,
-        wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(type_index));
+        wasm::ObjectAccess::ElementOffsetInTaggedFixedArray(type_index.index));
     return rtt;
   }
 
@@ -7042,7 +7043,7 @@ class LiftoffCompiler {
     __ LoadMap(tmp1, obj_reg);
     // {tmp1} now holds the object's map.
 
-    if (module->types[rtt_type.ref_index()].is_final) {
+    if (module->type(rtt_type.ref_index()).is_final) {
       // In this case, simply check for map equality.
       __ emit_cond_jump(kNotEqual, no_match, rtt_type.kind(), tmp1, rtt_reg,
                         frozen);
@@ -7091,8 +7092,8 @@ class LiftoffCompiler {
     __ bind(&match);
   }
 
-  void RefTest(FullDecoder* decoder, uint32_t ref_index, const Value& obj,
-               Value* /* result_val */, bool null_succeeds) {
+  void RefTest(FullDecoder* decoder, TypeIndex<kModuleRelative> ref_index,
+               const Value& obj, Value* /* result_val */, bool null_succeeds) {
     Label return_false, done;
     LiftoffRegList pinned;
     LiftoffRegister rtt_reg = pinned.set(RttCanon(ref_index, pinned));
@@ -7153,8 +7154,8 @@ class LiftoffCompiler {
     }
   }
 
-  void RefCast(FullDecoder* decoder, uint32_t ref_index, const Value& obj,
-               Value* result, bool null_succeeds) {
+  void RefCast(FullDecoder* decoder, TypeIndex<kModuleRelative> ref_index,
+               const Value& obj, Value* result, bool null_succeeds) {
     if (v8_flags.experimental_wasm_assume_ref_cast_succeeds) return;
 
     Label* trap_label =
@@ -7211,8 +7212,8 @@ class LiftoffCompiler {
     }
   }
 
-  void BrOnCast(FullDecoder* decoder, uint32_t ref_index, const Value& obj,
-                Value* /* result_on_branch */, uint32_t depth,
+  void BrOnCast(FullDecoder* decoder, TypeIndex<kModuleRelative> ref_index,
+                const Value& obj, Value* /* result_on_branch */, uint32_t depth,
                 bool null_succeeds) {
     // Avoid having sequences of branches do duplicate work.
     if (depth != decoder->control_depth() - 1) {
@@ -7241,9 +7242,9 @@ class LiftoffCompiler {
     __ bind(&cont_false);
   }
 
-  void BrOnCastFail(FullDecoder* decoder, uint32_t ref_index, const Value& obj,
-                    Value* /* result_on_fallthrough */, uint32_t depth,
-                    bool null_succeeds) {
+  void BrOnCastFail(FullDecoder* decoder, TypeIndex<kModuleRelative> ref_index,
+                    const Value& obj, Value* /* result_on_fallthrough */,
+                    uint32_t depth, bool null_succeeds) {
     // Avoid having sequences of branches do duplicate work.
     if (depth != decoder->control_depth() - 1) {
       __ PrepareForBranch(decoder->control_at(depth)->br_merge()->arity, {});
@@ -8559,7 +8560,7 @@ class LiftoffCompiler {
     }
 
     bool needs_type_check = !EquivalentTypes(
-        table->type.AsNonNull(), ValueType::Ref(imm.sig_imm.index),
+        table->type.AsNonNull(), ValueType::Ref(imm.sig_index()),
         decoder->module_, decoder->module_);
     bool needs_null_check = table->type.is_nullable();
 
@@ -8579,8 +8580,8 @@ class LiftoffCompiler {
       // Compare against expected signature.
       // Since Liftoff code is never serialized (hence not reused across
       // isolates / processes) the canonical signature ID is a static integer.
-      uint32_t canonical_sig_id =
-          decoder->module_->canonical_sig_id(imm.sig_imm.index);
+      TypeIndex<kCanonicalized> canonical_sig_id =
+          decoder->module_->canonical_sig_id(imm.sig_index());
       Label* sig_mismatch_label =
           AddOutOfLineTrap(decoder, Builtin::kThrowWasmTrapFuncSigMismatch);
       __ DropValues(1);
@@ -8595,7 +8596,7 @@ class LiftoffCompiler {
         Label success_label;
         FREEZE_STATE(frozen);
         __ emit_i32_cond_jumpi(kEqual, &success_label, real_sig_id.gp_reg(),
-                               canonical_sig_id, frozen);
+                               canonical_sig_id.index, frozen);
         if (needs_null_check) {
           __ emit_i32_cond_jumpi(kEqual, sig_mismatch_label,
                                  real_sig_id.gp_reg(), -1, frozen);
@@ -8627,7 +8628,7 @@ class LiftoffCompiler {
                              kTypeInfoOffset);
         // Step 2: check the list's length if needed.
         uint32_t rtt_depth =
-            GetSubtypingDepth(decoder->module_, imm.sig_imm.index);
+            GetSubtypingDepth(decoder->module_, imm.sig_index());
         if (rtt_depth >= kMinimumSupertypeArraySize) {
           ScopedTempRegister list_length{temps, kGpReg};
           int offset =
@@ -8659,7 +8660,7 @@ class LiftoffCompiler {
       } else {
         FREEZE_STATE(trapping);
         __ emit_i32_cond_jumpi(kNotEqual, sig_mismatch_label,
-                               real_sig_id.gp_reg(), canonical_sig_id,
+                               real_sig_id.gp_reg(), canonical_sig_id.index,
                                trapping);
       }
     } else {
@@ -9408,8 +9409,7 @@ std::unique_ptr<DebugSideTable> GenerateLiftoffDebugSideTable(
   base::Vector<const uint8_t> function_bytes =
       wire_bytes.GetFunctionBytes(function);
   CompilationEnv env = CompilationEnv::ForModule(native_module);
-  bool is_shared =
-      native_module->module()->types[function->sig_index].is_shared;
+  bool is_shared = native_module->module()->type(function->sig_index).is_shared;
   FunctionBody func_body{function->sig, 0, function_bytes.begin(),
                          function_bytes.end(), is_shared};
 

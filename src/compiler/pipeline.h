@@ -90,7 +90,7 @@ class Pipeline : public AllStatic {
 
   static wasm::WasmCompilationResult
   GenerateCodeForWasmNativeStubFromTurboshaft(
-      const wasm::WasmModule* module, const wasm::FunctionSig* sig,
+      const wasm::WasmModule* module, const wasm::CanonicalSig* sig,
       wasm::WrapperCompilationInfo wrapper_info, const char* debug_name,
       const AssemblerOptions& assembler_options,
       SourcePositionTable* source_positions);

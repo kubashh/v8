@@ -21,6 +21,10 @@ inline MachineRepresentation GetMachineRepresentation(ValueType type) {
   return type.machine_representation();
 }
 
+inline MachineRepresentation GetMachineRepresentation(CanonicalValueType type) {
+  return type.machine_representation();
+}
+
 inline MachineRepresentation GetMachineRepresentation(MachineType type) {
   return type.representation();
 }

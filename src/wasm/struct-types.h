@@ -19,10 +19,12 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-class StructType : public ZoneObject {
+template <TypeIndexKind index_kind>
+class StructTypeImpl : public ZoneObject {
  public:
-  StructType(uint32_t field_count, uint32_t* field_offsets,
-             const ValueType* reps, const bool* mutabilities)
+  StructTypeImpl(uint32_t field_count, uint32_t* field_offsets,
+                 const ValueTypeImpl<index_kind>* reps,
+                 const bool* mutabilities)
       : field_count_(field_count),
         field_offsets_(field_offsets),
         reps_(reps),
@@ -30,7 +32,7 @@ class StructType : public ZoneObject {
 
   uint32_t field_count() const { return field_count_; }
 
-  ValueType field(uint32_t index) const {
+  ValueTypeImpl<index_kind> field(uint32_t index) const {
     DCHECK_LT(index, field_count_);
     return reps_[index];
   }
@@ -41,14 +43,14 @@ class StructType : public ZoneObject {
   }
 
   // Iteration support.
-  base::iterator_range<const ValueType*> fields() const {
+  base::iterator_range<const ValueTypeImpl<index_kind>*> fields() const {
     return {reps_, reps_ + field_count_};
   }
   base::iterator_range<const bool*> mutabilities() const {
     return {mutabilities_, mutabilities_ + field_count_};
   }
 
-  bool operator==(const StructType& other) const {
+  bool operator==(const StructTypeImpl& other) const {
     if (this == &other) return true;
     if (field_count() != other.field_count()) return false;
     return std::equal(fields().begin(), fields().end(),
@@ -56,7 +58,9 @@ class StructType : public ZoneObject {
            std::equal(mutabilities().begin(), mutabilities().end(),
                       other.mutabilities().begin());
   }
-  bool operator!=(const StructType& other) const { return !(*this == other); }
+  bool operator!=(const StructTypeImpl& other) const {
+    return !(*this == other);
+  }
 
   // Returns the offset of this field in the runtime representation of the
   // object, from the start of the object fields (disregarding the object
@@ -135,12 +139,13 @@ class StructType : public ZoneObject {
           field_count_(field_count),
           cursor_(0),
           field_offsets_(zone_->AllocateArray<uint32_t>(field_count_)),
-          buffer_(
-              zone->AllocateArray<ValueType>(static_cast<int>(field_count))),
+          buffer_(zone->AllocateArray<ValueTypeImpl<index_kind>>(
+              static_cast<int>(field_count))),
           mutabilities_(
               zone->AllocateArray<bool>(static_cast<int>(field_count))) {}
 
-    void AddField(ValueType type, bool mutability, uint32_t offset = 0) {
+    void AddField(ValueTypeImpl<index_kind> type, bool mutability,
+                  uint32_t offset = 0) {
       DCHECK_LT(cursor_, field_count_);
       if (cursor_ > 0) {
         field_offsets_[cursor_ - 1] = offset;
@@ -159,10 +164,10 @@ class StructType : public ZoneObject {
       field_offsets_[field_count_ - 1] = size;
     }
 
-    StructType* Build(ComputeOffsets compute_offsets = kComputeOffsets) {
+    StructTypeImpl* Build(ComputeOffsets compute_offsets = kComputeOffsets) {
       DCHECK_EQ(cursor_, field_count_);
-      StructType* result = zone_->New<StructType>(field_count_, field_offsets_,
-                                                  buffer_, mutabilities_);
+      StructTypeImpl* result = zone_->New<StructTypeImpl>(
+          field_count_, field_offsets_, buffer_, mutabilities_);
       if (compute_offsets == kComputeOffsets) {
         result->InitializeOffsets();
       } else {
@@ -185,7 +190,7 @@ class StructType : public ZoneObject {
     const uint32_t field_count_;
     uint32_t cursor_;
     uint32_t* field_offsets_;
-    ValueType* const buffer_;
+    ValueTypeImpl<index_kind>* const buffer_;
     bool* const mutabilities_;
   };
 
@@ -198,13 +203,18 @@ class StructType : public ZoneObject {
   bool offsets_initialized_ = false;
 #endif
   uint32_t* const field_offsets_;
-  const ValueType* const reps_;
+  const ValueTypeImpl<index_kind>* const reps_;
   const bool* const mutabilities_;
 };
 
-inline std::ostream& operator<<(std::ostream& out, StructType type) {
+using StructType = StructTypeImpl<kModuleRelative>;
+using CanonicalStructType = StructTypeImpl<kCanonicalized>;
+
+template <TypeIndexKind index_kind>
+inline std::ostream& operator<<(std::ostream& out,
+                                StructTypeImpl<index_kind> type) {
   out << "[";
-  for (ValueType field : type.fields()) {
+  for (ValueTypeImpl<index_kind> field : type.fields()) {
     out << field.name() << ", ";
   }
   out << "]";
@@ -212,7 +222,8 @@ inline std::ostream& operator<<(std::ostream& out, StructType type) {
 }
 
 // Support base::hash<StructType>.
-inline size_t hash_value(const StructType& type) {
+template <TypeIndexKind index_kind>
+inline size_t hash_value(const StructTypeImpl<index_kind>& type) {
   return base::Hasher{}
       .Add(type.field_count())
       .AddRange(type.fields())
@@ -220,32 +231,39 @@ inline size_t hash_value(const StructType& type) {
       .hash();
 }
 
-class ArrayType : public ZoneObject {
+template <TypeIndexKind index_kind>
+class ArrayTypeImpl : public ZoneObject {
  public:
-  constexpr explicit ArrayType(ValueType rep, bool mutability)
+  constexpr explicit ArrayTypeImpl(ValueTypeImpl<index_kind> rep,
+                                   bool mutability)
       : rep_(rep), mutability_(mutability) {}
 
-  ValueType element_type() const { return rep_; }
+  ValueTypeImpl<index_kind> element_type() const { return rep_; }
   bool mutability() const { return mutability_; }
 
-  bool operator==(const ArrayType& other) const {
+  bool operator==(const ArrayTypeImpl& other) const {
     return rep_ == other.rep_ && mutability_ == other.mutability_;
   }
-  bool operator!=(const ArrayType& other) const {
+  bool operator!=(const ArrayTypeImpl& other) const {
     return rep_ != other.rep_ || mutability_ != other.mutability_;
   }
 
   static const intptr_t kRepOffset;
 
  private:
-  const ValueType rep_;
+  const ValueTypeImpl<index_kind> rep_;
   const bool mutability_;
 };
 
+using ArrayType = ArrayTypeImpl<kModuleRelative>;
+using CanonicalArrayType = ArrayTypeImpl<kCanonicalized>;
+
+template <>
 inline constexpr intptr_t ArrayType::kRepOffset = offsetof(ArrayType, rep_);
 
 // Support base::hash<ArrayType>.
-inline size_t hash_value(const ArrayType& type) {
+template <TypeIndexKind index_kind>
+inline size_t hash_value(const ArrayTypeImpl<index_kind>& type) {
   return base::Hasher::Combine(type.element_type(), type.mutability());
 }
 

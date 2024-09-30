@@ -77,7 +77,7 @@ class WireBytesRef {
 struct WasmFunction {
   const FunctionSig* sig = nullptr;  // signature of the function.
   uint32_t func_index = 0;           // index into the function table.
-  uint32_t sig_index = 0;            // index into the signature table.
+  TypeIndex<kModuleRelative> sig_index{0};  // index into the signature table.
   // TODO(clemensb): Should we add canonical_sig_id and canonical_sig?
   WireBytesRef code = {};            // code of this function.
   bool imported = false;
@@ -113,7 +113,7 @@ struct WasmTag {
   const FunctionSig* ToFunctionSig() const { return sig; }
 
   const WasmTagSig* sig;  // type signature of the tag.
-  uint32_t sig_index;
+  TypeIndex<kModuleRelative> sig_index;
 };
 
 enum ModuleOrigin : uint8_t {
@@ -446,33 +446,39 @@ class V8_EXPORT_PRIVATE AsmJsOffsetInformation {
 // Used as the supertype for a type at the top of the type hierarchy.
 constexpr uint32_t kNoSuperType = std::numeric_limits<uint32_t>::max();
 
-struct TypeDefinition {
+template <TypeIndexKind index_kind>
+struct TypeDefinitionImpl {
   enum Kind : int8_t { kFunction, kStruct, kArray };
 
-  constexpr TypeDefinition(const FunctionSig* sig, uint32_t supertype,
-                           bool is_final, bool is_shared)
+  using FunctionSigImpl = Signature<ValueTypeImpl<index_kind>>;
+
+  constexpr TypeDefinitionImpl(const FunctionSigImpl* sig,
+                               TypeIndex<index_kind> supertype, bool is_final,
+                               bool is_shared)
       : function_sig(sig),
         supertype(supertype),
         kind(kFunction),
         is_final(is_final),
         is_shared(is_shared) {}
-  constexpr TypeDefinition(const StructType* type, uint32_t supertype,
-                           bool is_final, bool is_shared)
+  constexpr TypeDefinitionImpl(const StructTypeImpl<index_kind>* type,
+                               TypeIndex<index_kind> supertype, bool is_final,
+                               bool is_shared)
       : struct_type(type),
         supertype(supertype),
         kind(kStruct),
         is_final(is_final),
         is_shared(is_shared) {}
-  constexpr TypeDefinition(const ArrayType* type, uint32_t supertype,
-                           bool is_final, bool is_shared)
+  constexpr TypeDefinitionImpl(const ArrayTypeImpl<index_kind>* type,
+                               TypeIndex<index_kind> supertype, bool is_final,
+                               bool is_shared)
       : array_type(type),
         supertype(supertype),
         kind(kArray),
         is_final(is_final),
         is_shared(is_shared) {}
-  constexpr TypeDefinition() = default;
+  constexpr TypeDefinitionImpl() = default;
 
-  bool operator==(const TypeDefinition& other) const {
+  bool operator==(const TypeDefinitionImpl& other) const {
     if (supertype != other.supertype) return false;
     if (kind != other.kind) return false;
     if (is_final != other.is_final) return false;
@@ -483,21 +489,24 @@ struct TypeDefinition {
     return *array_type == *other.array_type;
   }
 
-  bool operator!=(const TypeDefinition& other) const {
+  bool operator!=(const TypeDefinitionImpl& other) const {
     return !(*this == other);
   }
 
   union {
-    const FunctionSig* function_sig = nullptr;
-    const StructType* struct_type;
-    const ArrayType* array_type;
+    const FunctionSigImpl* function_sig = nullptr;
+    const StructTypeImpl<index_kind>* struct_type;
+    const ArrayTypeImpl<index_kind>* array_type;
   };
-  uint32_t supertype = kNoSuperType;
+  TypeIndex<index_kind> supertype{kNoSuperType};
   Kind kind = kFunction;
   bool is_final = false;
   bool is_shared = false;
   uint8_t subtyping_depth = 0;
 };
+
+using TypeDefinition = TypeDefinitionImpl<kModuleRelative>;
+using CanonicalTypeDef = TypeDefinitionImpl<kCanonicalized>;
 
 struct V8_EXPORT_PRIVATE WasmDebugSymbols {
   static constexpr int kNumTypes = 3;
@@ -700,9 +709,18 @@ struct V8_EXPORT_PRIVATE WasmModule {
   bool has_shared_part = false;
 
   std::vector<TypeDefinition> types;  // by type index
+  TypeDefinition type(TypeIndex<kModuleRelative> index) const {
+    return types[index.index];
+  }
+
   // Maps each type index to its global (cross-module) canonical index as per
   // isorecursive type canonicalization.
-  std::vector<uint32_t> isorecursive_canonical_type_ids;
+  std::vector<TypeIndex<kCanonicalized>> isorecursive_canonical_type_ids;
+  TypeIndex<kCanonicalized> isorecursive_canonical_type_id(
+      TypeIndex<kModuleRelative> index) const {
+    return isorecursive_canonical_type_ids[index.index];
+  }
+
   std::vector<WasmFunction> functions;
   std::vector<WasmGlobal> globals;
   std::vector<WasmDataSegment> data_segments;
@@ -747,95 +765,111 @@ struct V8_EXPORT_PRIVATE WasmModule {
   // decoding.
   void AddTypeForTesting(TypeDefinition type) {
     types.push_back(type);
-    if (type.supertype != kNoSuperType) {
+    if (type.supertype.index != kNoSuperType) {
       // Set the subtyping depth. Outside of unit tests this is done by the
       // module decoder.
       DCHECK_GT(types.size(), 0);
-      DCHECK_LT(type.supertype, types.size() - 1);
-      types.back().subtyping_depth = types[type.supertype].subtyping_depth + 1;
+      DCHECK_LT(type.supertype.index, types.size() - 1);
+      types.back().subtyping_depth =
+          types[type.supertype.index].subtyping_depth + 1;
     }
     // Isorecursive canonical type will be computed later.
-    isorecursive_canonical_type_ids.push_back(kNoSuperType);
+    isorecursive_canonical_type_ids.push_back(
+        TypeIndex<kCanonicalized>{kNoSuperType});
   }
 
   void AddSignatureForTesting(const FunctionSig* sig, uint32_t supertype,
                               bool is_final, bool is_shared) {
     DCHECK_NOT_NULL(sig);
-    AddTypeForTesting(TypeDefinition(sig, supertype, is_final, is_shared));
+    AddTypeForTesting(TypeDefinition(sig, TypeIndex<kModuleRelative>{supertype},
+                                     is_final, is_shared));
   }
 
   void AddStructTypeForTesting(const StructType* type, uint32_t supertype,
                                bool is_final, bool is_shared) {
     DCHECK_NOT_NULL(type);
-    AddTypeForTesting(TypeDefinition(type, supertype, is_final, is_shared));
+    AddTypeForTesting(TypeDefinition(
+        type, TypeIndex<kModuleRelative>{supertype}, is_final, is_shared));
   }
 
   void AddArrayTypeForTesting(const ArrayType* type, uint32_t supertype,
                               bool is_final, bool is_shared) {
     DCHECK_NOT_NULL(type);
-    AddTypeForTesting(TypeDefinition(type, supertype, is_final, is_shared));
+    AddTypeForTesting(TypeDefinition(
+        type, TypeIndex<kModuleRelative>{supertype}, is_final, is_shared));
   }
 
   // ================ Accessors ================================================
-  bool has_type(uint32_t index) const { return index < types.size(); }
-
-  bool has_signature(uint32_t index) const {
-    return index < types.size() &&
-           types[index].kind == TypeDefinition::kFunction;
+  bool has_type(TypeIndex<kModuleRelative> index) const {
+    return index.index < types.size();
   }
-  const FunctionSig* signature(uint32_t index) const {
+
+  bool has_signature(TypeIndex<kModuleRelative> index) const {
+    return index.index < types.size() &&
+           types[index.index].kind == TypeDefinition::kFunction;
+  }
+  const FunctionSig* signature(TypeIndex<kModuleRelative> index) const {
     DCHECK(has_signature(index));
     size_t num_types = types.size();
-    V8_ASSUME(index < num_types);
-    return types[index].function_sig;
+    V8_ASSUME(index.index < num_types);
+    return types[index.index].function_sig;
   }
 
-  uint32_t canonical_sig_id(uint32_t index) const {
+  TypeIndex<kCanonicalized> canonical_sig_id(
+      TypeIndex<kModuleRelative> index) const {
     DCHECK(has_signature(index));
     size_t num_types = isorecursive_canonical_type_ids.size();
-    V8_ASSUME(index < num_types);
-    return isorecursive_canonical_type_ids[index];
+    V8_ASSUME(index.index < num_types);
+    return isorecursive_canonical_type_ids[index.index];
   }
 
-  bool has_struct(uint32_t index) const {
-    return index < types.size() && types[index].kind == TypeDefinition::kStruct;
+  bool has_struct(TypeIndex<kModuleRelative> index) const {
+    return index.index < types.size() &&
+           types[index.index].kind == TypeDefinition::kStruct;
   }
 
-  const StructType* struct_type(uint32_t index) const {
+  const StructType* struct_type(TypeIndex<kModuleRelative> index) const {
     DCHECK(has_struct(index));
     size_t num_types = types.size();
-    V8_ASSUME(index < num_types);
-    return types[index].struct_type;
+    V8_ASSUME(index.index < num_types);
+    return types[index.index].struct_type;
   }
 
-  bool has_array(uint32_t index) const {
-    return index < types.size() && types[index].kind == TypeDefinition::kArray;
+  bool has_array(TypeIndex<kModuleRelative> index) const {
+    return index.index < types.size() &&
+           types[index.index].kind == TypeDefinition::kArray;
   }
-  const ArrayType* array_type(uint32_t index) const {
+  const ArrayType* array_type(TypeIndex<kModuleRelative> index) const {
     DCHECK(has_array(index));
     size_t num_types = types.size();
-    V8_ASSUME(index < num_types);
-    return types[index].array_type;
+    V8_ASSUME(index.index < num_types);
+    return types[index.index].array_type;
   }
 
-  uint32_t supertype(uint32_t index) const {
+  TypeIndex<kModuleRelative> supertype(TypeIndex<kModuleRelative> index) const {
     size_t num_types = types.size();
-    V8_ASSUME(index < num_types);
-    return types[index].supertype;
+    V8_ASSUME(index.index < num_types);
+    return types[index.index].supertype;
   }
-  bool has_supertype(uint32_t index) const {
-    return supertype(index) != kNoSuperType;
+  bool has_supertype(TypeIndex<kModuleRelative> index) const {
+    return supertype(index).index != kNoSuperType;
   }
 
   // Linear search. Returns -1 if types are empty.
-  int MaxCanonicalTypeIndex() const {
-    if (isorecursive_canonical_type_ids.empty()) return -1;
-    return *std::max_element(isorecursive_canonical_type_ids.begin(),
-                             isorecursive_canonical_type_ids.end());
+  TypeIndex<kCanonicalized> MaxCanonicalTypeIndex() const {
+    if (isorecursive_canonical_type_ids.empty()) {
+      return TypeIndex<kCanonicalized>{~0u};
+    }
+    return *std::max_element(
+        isorecursive_canonical_type_ids.begin(),
+        isorecursive_canonical_type_ids.end(),
+        [](TypeIndex<kCanonicalized> a, TypeIndex<kCanonicalized> b) {
+          return a.index < b.index;
+        });
   }
 
   bool function_is_shared(int func_index) const {
-    return types[functions[func_index].sig_index].is_shared;
+    return type(functions[func_index].sig_index).is_shared;
   }
 
   bool function_was_validated(int func_index) const {
@@ -918,7 +952,7 @@ int GetNearestWasmFunction(const WasmModule* module, uint32_t byte_offset);
 // The result is capped to {kV8MaxRttSubtypingDepth + 1}.
 // Invalid cyclic hierarchies will return -1.
 V8_EXPORT_PRIVATE int GetSubtypingDepth(const WasmModule* module,
-                                        uint32_t type_index);
+                                        TypeIndex<kModuleRelative> type_index);
 
 // Interface to the storage (wire bytes) of a wasm module.
 // It is illegal for anyone receiving a ModuleWireBytes to store pointers based
@@ -1056,7 +1090,7 @@ class TruncatedUserString {
 // between parameter types and return types. If {buffer} is non-empty, it will
 // be null-terminated, even if the signature is cut off. Returns the number of
 // characters written, excluding the terminating null-byte.
-size_t PrintSignature(base::Vector<char> buffer, const wasm::FunctionSig*,
+size_t PrintSignature(base::Vector<char> buffer, const CanonicalSig*,
                       char delimiter = ':');
 
 V8_EXPORT_PRIVATE size_t

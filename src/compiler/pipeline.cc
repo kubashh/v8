@@ -3135,7 +3135,7 @@ wasm::WasmCompilationResult Pipeline::GenerateCodeForWasmNativeStub(
 // static
 wasm::WasmCompilationResult
 Pipeline::GenerateCodeForWasmNativeStubFromTurboshaft(
-    const wasm::WasmModule* module, const wasm::FunctionSig* sig,
+    const wasm::WasmModule* module, const wasm::CanonicalSig* sig,
     wasm::WrapperCompilationInfo wrapper_info, const char* debug_name,
     const AssemblerOptions& options, SourcePositionTable* source_positions) {
   wasm::WasmEngine* wasm_engine = wasm::GetWasmEngine();

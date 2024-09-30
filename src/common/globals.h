@@ -2709,6 +2709,14 @@ using WasmCodePointer = uint32_t;
 using WasmCodePointer = Address;
 #endif
 
+#if V8_ENABLE_WEBASSEMBLY
+namespace wasm {
+
+enum TypeIndexKind : bool { kCanonicalized, kModuleRelative };
+
+}  // namespace wasm
+#endif
+
 }  // namespace internal
 
 // Tag dispatching support for atomic loads and stores.

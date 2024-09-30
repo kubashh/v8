@@ -51,7 +51,8 @@ uint8_t* raw_buffer_ptr(MaybeHandle<JSArrayBuffer> buffer, int offset) {
 }
 
 Handle<Map> CreateStructMap(Isolate* isolate, const WasmModule* module,
-                            int struct_index, Handle<Map> opt_rtt_parent,
+                            TypeIndex<kModuleRelative> struct_index,
+                            Handle<Map> opt_rtt_parent,
                             DirectHandle<WasmTrustedInstanceData> trusted_data,
                             Handle<WasmInstanceObject> instance) {
   const wasm::StructType* type = module->struct_type(struct_index);
@@ -79,7 +80,8 @@ Handle<Map> CreateStructMap(Isolate* isolate, const WasmModule* module,
 }
 
 Handle<Map> CreateArrayMap(Isolate* isolate, const WasmModule* module,
-                           int array_index, Handle<Map> opt_rtt_parent,
+                           TypeIndex<kModuleRelative> array_index,
+                           Handle<Map> opt_rtt_parent,
                            DirectHandle<WasmTrustedInstanceData> trusted_data,
                            Handle<WasmInstanceObject> instance) {
   const wasm::ArrayType* type = module->array_type(array_index);
@@ -106,25 +108,25 @@ Handle<Map> CreateArrayMap(Isolate* isolate, const WasmModule* module,
 }  // namespace
 
 void CreateMapForType(Isolate* isolate, const WasmModule* module,
-                      int type_index,
+                      TypeIndex<kModuleRelative> type_index,
                       Handle<WasmTrustedInstanceData> trusted_data,
                       Handle<WasmInstanceObject> instance,
                       Handle<FixedArray> maybe_shared_maps) {
   // Recursive calls for supertypes may already have created this map.
-  if (IsMap(maybe_shared_maps->get(type_index))) return;
+  if (IsMap(maybe_shared_maps->get(type_index.index))) return;
 
-  uint32_t canonical_type_index =
-      module->isorecursive_canonical_type_ids[type_index];
+  TypeIndex<kCanonicalized> canonical_type_index =
+      module->isorecursive_canonical_type_ids[type_index.index];
 
   // Try to find the canonical map for this type in the isolate store.
   DirectHandle<WeakFixedArray> canonical_rtts =
       direct_handle(isolate->heap()->wasm_canonical_rtts(), isolate);
   DCHECK_GT(static_cast<uint32_t>(canonical_rtts->length()),
-            canonical_type_index);
+            canonical_type_index.index);
   Tagged<MaybeObject> maybe_canonical_map =
-      canonical_rtts->get(canonical_type_index);
+      canonical_rtts->get(canonical_type_index.index);
   if (!maybe_canonical_map.IsCleared()) {
-    maybe_shared_maps->set(type_index,
+    maybe_shared_maps->set(type_index.index,
                            maybe_canonical_map.GetHeapObjectAssumeWeak());
     return;
   }
@@ -133,18 +135,19 @@ void CreateMapForType(Isolate* isolate, const WasmModule* module,
   // If the type with {type_index} has an explicit supertype, make sure the
   // map for that supertype is created first, so that the supertypes list
   // that's cached on every RTT can be set up correctly.
-  uint32_t supertype = module->supertype(type_index);
-  if (supertype != kNoSuperType) {
+  TypeIndex<kModuleRelative> supertype = module->supertype(type_index);
+  if (supertype.valid()) {
     // This recursion is safe, because kV8MaxRttSubtypingDepth limits the
     // number of recursive steps, so we won't overflow the stack.
     CreateMapForType(isolate, module, supertype, trusted_data, instance,
                      maybe_shared_maps);
     // We look up the supertype in {maybe_shared_maps} as a shared type can only
     // inherit from a shared type and vice verca.
-    rtt_parent = handle(Cast<Map>(maybe_shared_maps->get(supertype)), isolate);
+    rtt_parent =
+        handle(Cast<Map>(maybe_shared_maps->get(supertype.index)), isolate);
   }
   DirectHandle<Map> map;
-  switch (module->types[type_index].kind) {
+  switch (module->type(type_index).kind) {
     case TypeDefinition::kStruct:
       map = CreateStructMap(isolate, module, type_index, rtt_parent,
                             trusted_data, instance);
@@ -157,8 +160,8 @@ void CreateMapForType(Isolate* isolate, const WasmModule* module,
       map = CreateFuncRefMap(isolate, rtt_parent);
       break;
   }
-  canonical_rtts->set(canonical_type_index, MakeWeak(*map));
-  maybe_shared_maps->set(type_index, *map);
+  canonical_rtts->set(canonical_type_index.index, MakeWeak(*map));
+  maybe_shared_maps->set(type_index.index, *map);
 }
 
 namespace {
@@ -351,32 +354,41 @@ bool ResolveBoundJSFastApiFunction(const wasm::FunctionSig* expected_sig,
          api_function_index == 0;
 }
 
-bool IsStringRef(wasm::ValueType type) {
-  return type.is_reference_to(wasm::HeapType::kString);
+bool IsStringRef(wasm::CanonicalValueType type) {
+  return type.is_reference_to(wasm::CanonicalHeapType::kString);
 }
 
-bool IsExternRef(wasm::ValueType type) {
-  return type.is_reference_to(wasm::HeapType::kExtern);
+bool IsExternRef(wasm::CanonicalValueType type) {
+  return type.is_reference_to(wasm::CanonicalHeapType::kExtern);
 }
 
-bool IsStringOrExternRef(wasm::ValueType type) {
+bool IsStringOrExternRef(wasm::CanonicalValueType type) {
   return IsStringRef(type) || IsExternRef(type);
 }
 
-bool IsDataViewGetterSig(const wasm::FunctionSig* sig,
-                         wasm::ValueType return_type) {
+constexpr CanonicalValueType kCanonicalExternRef =
+    CanonicalValueType::RefNull(CanonicalHeapType::kExtern);
+constexpr CanonicalValueType kCanonicalI32 =
+    CanonicalValueType::Primitive(kI32);
+constexpr CanonicalValueType kCanonicalF64 =
+    CanonicalValueType::Primitive(kF64);
+
+bool IsDataViewGetterSig(const wasm::CanonicalSig* sig,
+                         wasm::ValueKind return_type) {
   return sig->parameter_count() == 3 && sig->return_count() == 1 &&
-         sig->GetParam(0) == wasm::kWasmExternRef &&
-         sig->GetParam(1) == wasm::kWasmI32 &&
-         sig->GetParam(2) == wasm::kWasmI32 && sig->GetReturn(0) == return_type;
+         sig->GetParam(0) == kCanonicalExternRef &&
+         sig->GetParam(1) == kCanonicalI32 &&
+         sig->GetParam(2) == kCanonicalI32 &&
+         sig->GetReturn(0) == CanonicalValueType::Primitive(return_type);
 }
 
-bool IsDataViewSetterSig(const wasm::FunctionSig* sig,
-                         wasm::ValueType value_type) {
+bool IsDataViewSetterSig(const wasm::CanonicalSig* sig,
+                         wasm::ValueKind value_type) {
   return sig->parameter_count() == 4 && sig->return_count() == 0 &&
-         sig->GetParam(0) == wasm::kWasmExternRef &&
-         sig->GetParam(1) == wasm::kWasmI32 && sig->GetParam(2) == value_type &&
-         sig->GetParam(3) == wasm::kWasmI32;
+         sig->GetParam(0) == kCanonicalExternRef &&
+         sig->GetParam(1) == kCanonicalI32 &&
+         sig->GetParam(2) == CanonicalValueType::Primitive(value_type) &&
+         sig->GetParam(3) == kCanonicalI32;
 }
 
 const MachineSignature* GetFunctionSigForFastApiImport(
@@ -404,7 +416,7 @@ const MachineSignature* GetFunctionSigForFastApiImport(
 // - JSFunction with Builtin id (e.g. `parseFloat`).
 WellKnownImport CheckForWellKnownImport(
     DirectHandle<WasmTrustedInstanceData> trusted_instance_data, int func_index,
-    DirectHandle<JSReceiver> callable, const wasm::FunctionSig* sig) {
+    DirectHandle<JSReceiver> callable, const wasm::CanonicalSig* sig) {
   WellKnownImport kGeneric = WellKnownImport::kGeneric;  // "using" is C++20.
   if (trusted_instance_data.is_null()) return kGeneric;
   // Check for plain JS functions.
@@ -422,7 +434,7 @@ WellKnownImport CheckForWellKnownImport(
       case Builtin::kNumberParseFloat:
         if (sig->parameter_count() == 1 && sig->return_count() == 1 &&
             IsStringRef(sig->GetParam(0)) &&
-            sig->GetReturn(0) == wasm::kWasmF64) {
+            sig->GetReturn(0) == kCanonicalF64) {
           return WellKnownImport::kParseFloat;
         }
         break;
@@ -512,141 +524,141 @@ WellKnownImport CheckForWellKnownImport(
           IsStringRef(sig->GetParam(0)) && IsStringRef(sig->GetReturn(0))) {
         return WellKnownImport::kStringToLowerCaseStringref;
       } else if (sig->parameter_count() == 1 && sig->return_count() == 1 &&
-                 sig->GetParam(0) == wasm::kWasmExternRef &&
-                 sig->GetReturn(0) == wasm::kWasmExternRef) {
+                 sig->GetParam(0) == kCanonicalExternRef &&
+                 sig->GetReturn(0) == kCanonicalExternRef) {
         return WellKnownImport::kStringToLowerCaseImported;
       }
       break;
 #endif
     case Builtin::kDataViewPrototypeGetBigInt64:
-      if (IsDataViewGetterSig(sig, wasm::kWasmI64)) {
+      if (IsDataViewGetterSig(sig, kI64)) {
         return WellKnownImport::kDataViewGetBigInt64;
       }
       break;
     case Builtin::kDataViewPrototypeGetBigUint64:
-      if (IsDataViewGetterSig(sig, wasm::kWasmI64)) {
+      if (IsDataViewGetterSig(sig, kI64)) {
         return WellKnownImport::kDataViewGetBigUint64;
       }
       break;
     case Builtin::kDataViewPrototypeGetFloat32:
-      if (IsDataViewGetterSig(sig, wasm::kWasmF32)) {
+      if (IsDataViewGetterSig(sig, kF32)) {
         return WellKnownImport::kDataViewGetFloat32;
       }
       break;
     case Builtin::kDataViewPrototypeGetFloat64:
-      if (IsDataViewGetterSig(sig, wasm::kWasmF64)) {
+      if (IsDataViewGetterSig(sig, kF64)) {
         return WellKnownImport::kDataViewGetFloat64;
       }
       break;
     case Builtin::kDataViewPrototypeGetInt8:
       if (sig->parameter_count() == 2 && sig->return_count() == 1 &&
-          sig->GetParam(0) == wasm::kWasmExternRef &&
-          sig->GetParam(1) == wasm::kWasmI32 &&
-          sig->GetReturn(0) == wasm::kWasmI32) {
+          sig->GetParam(0) == kCanonicalExternRef &&
+          sig->GetParam(1) == kCanonicalI32 &&
+          sig->GetReturn(0) == kCanonicalI32) {
         return WellKnownImport::kDataViewGetInt8;
       }
       break;
     case Builtin::kDataViewPrototypeGetInt16:
-      if (IsDataViewGetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewGetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewGetInt16;
       }
       break;
     case Builtin::kDataViewPrototypeGetInt32:
-      if (IsDataViewGetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewGetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewGetInt32;
       }
       break;
     case Builtin::kDataViewPrototypeGetUint8:
       if (sig->parameter_count() == 2 && sig->return_count() == 1 &&
-          sig->GetParam(0) == wasm::kWasmExternRef &&
-          sig->GetParam(1) == wasm::kWasmI32 &&
-          sig->GetReturn(0) == wasm::kWasmI32) {
+          sig->GetParam(0) == kCanonicalExternRef &&
+          sig->GetParam(1) == kCanonicalI32 &&
+          sig->GetReturn(0) == kCanonicalI32) {
         return WellKnownImport::kDataViewGetUint8;
       }
       break;
     case Builtin::kDataViewPrototypeGetUint16:
-      if (IsDataViewGetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewGetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewGetUint16;
       }
       break;
     case Builtin::kDataViewPrototypeGetUint32:
-      if (IsDataViewGetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewGetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewGetUint32;
       }
       break;
 
     case Builtin::kDataViewPrototypeSetBigInt64:
-      if (IsDataViewSetterSig(sig, wasm::kWasmI64)) {
+      if (IsDataViewSetterSig(sig, kI64)) {
         return WellKnownImport::kDataViewSetBigInt64;
       }
       break;
     case Builtin::kDataViewPrototypeSetBigUint64:
-      if (IsDataViewSetterSig(sig, wasm::kWasmI64)) {
+      if (IsDataViewSetterSig(sig, kI64)) {
         return WellKnownImport::kDataViewSetBigUint64;
       }
       break;
     case Builtin::kDataViewPrototypeSetFloat32:
-      if (IsDataViewSetterSig(sig, wasm::kWasmF32)) {
+      if (IsDataViewSetterSig(sig, kF32)) {
         return WellKnownImport::kDataViewSetFloat32;
       }
       break;
     case Builtin::kDataViewPrototypeSetFloat64:
-      if (IsDataViewSetterSig(sig, wasm::kWasmF64)) {
+      if (IsDataViewSetterSig(sig, kF64)) {
         return WellKnownImport::kDataViewSetFloat64;
       }
       break;
     case Builtin::kDataViewPrototypeSetInt8:
       if (sig->parameter_count() == 3 && sig->return_count() == 0 &&
-          sig->GetParam(0) == wasm::kWasmExternRef &&
-          sig->GetParam(1) == wasm::kWasmI32 &&
-          sig->GetParam(2) == wasm::kWasmI32) {
+          sig->GetParam(0) == kCanonicalExternRef &&
+          sig->GetParam(1) == kCanonicalI32 &&
+          sig->GetParam(2) == kCanonicalI32) {
         return WellKnownImport::kDataViewSetInt8;
       }
       break;
     case Builtin::kDataViewPrototypeSetInt16:
-      if (IsDataViewSetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewSetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewSetInt16;
       }
       break;
     case Builtin::kDataViewPrototypeSetInt32:
-      if (IsDataViewSetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewSetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewSetInt32;
       }
       break;
     case Builtin::kDataViewPrototypeSetUint8:
       if (sig->parameter_count() == 3 && sig->return_count() == 0 &&
-          sig->GetParam(0) == wasm::kWasmExternRef &&
-          sig->GetParam(1) == wasm::kWasmI32 &&
-          sig->GetParam(2) == wasm::kWasmI32) {
+          sig->GetParam(0) == kCanonicalExternRef &&
+          sig->GetParam(1) == kCanonicalI32 &&
+          sig->GetParam(2) == kCanonicalI32) {
         return WellKnownImport::kDataViewSetUint8;
       }
       break;
     case Builtin::kDataViewPrototypeSetUint16:
-      if (IsDataViewSetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewSetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewSetUint16;
       }
       break;
     case Builtin::kDataViewPrototypeSetUint32:
-      if (IsDataViewSetterSig(sig, wasm::kWasmI32)) {
+      if (IsDataViewSetterSig(sig, kI32)) {
         return WellKnownImport::kDataViewSetUint32;
       }
       break;
     case Builtin::kDataViewPrototypeGetByteLength:
       if (sig->parameter_count() == 1 && sig->return_count() == 1 &&
-          sig->GetParam(0) == wasm::kWasmExternRef &&
-          sig->GetReturn(0) == kWasmF64) {
+          sig->GetParam(0) == kCanonicalExternRef &&
+          sig->GetReturn(0) == kCanonicalF64) {
         return WellKnownImport::kDataViewByteLength;
       }
       break;
     case Builtin::kNumberPrototypeToString:
       if (sig->parameter_count() == 2 && sig->return_count() == 1 &&
-          sig->GetParam(0) == wasm::kWasmI32 &&
-          sig->GetParam(1) == wasm::kWasmI32 &&
+          sig->GetParam(0) == kCanonicalI32 &&
+          sig->GetParam(1) == kCanonicalI32 &&
           IsStringOrExternRef(sig->GetReturn(0))) {
         return WellKnownImport::kIntToString;
       }
       if (sig->parameter_count() == 1 && sig->return_count() == 1 &&
-          sig->GetParam(0) == wasm::kWasmF64 &&
+          sig->GetParam(0) == kCanonicalF64 &&
           IsStringOrExternRef(sig->GetReturn(0))) {
         return WellKnownImport::kDoubleToString;
       }
@@ -655,14 +667,14 @@ WellKnownImport CheckForWellKnownImport(
       // (string, string, i32) -> (i32).
       if (sig->parameter_count() == 3 && sig->return_count() == 1 &&
           IsStringRef(sig->GetParam(0)) && IsStringRef(sig->GetParam(1)) &&
-          sig->GetParam(2) == wasm::kWasmI32 &&
-          sig->GetReturn(0) == wasm::kWasmI32) {
+          sig->GetParam(2) == kCanonicalI32 &&
+          sig->GetReturn(0) == kCanonicalI32) {
         return WellKnownImport::kStringIndexOf;
       } else if (sig->parameter_count() == 3 && sig->return_count() == 1 &&
-                 sig->GetParam(0) == wasm::kWasmExternRef &&
-                 sig->GetParam(1) == wasm::kWasmExternRef &&
-                 sig->GetParam(2) == wasm::kWasmI32 &&
-                 sig->GetReturn(0) == wasm::kWasmI32) {
+                 sig->GetParam(0) == kCanonicalExternRef &&
+                 sig->GetParam(1) == kCanonicalExternRef &&
+                 sig->GetParam(2) == kCanonicalI32 &&
+                 sig->GetReturn(0) == kCanonicalI32) {
         return WellKnownImport::kStringIndexOfImported;
       }
       break;
@@ -676,8 +688,9 @@ WellKnownImport CheckForWellKnownImport(
 
 ResolvedWasmImport::ResolvedWasmImport(
     DirectHandle<WasmTrustedInstanceData> trusted_instance_data, int func_index,
-    Handle<JSReceiver> callable, const wasm::FunctionSig* expected_sig,
-    uint32_t expected_canonical_type_index, WellKnownImport preknown_import) {
+    Handle<JSReceiver> callable, const wasm::CanonicalSig* expected_sig,
+    TypeIndex<kCanonicalized> expected_canonical_type_index,
+    WellKnownImport preknown_import) {
   SetCallable(callable->GetIsolate(), callable);
   kind_ = ComputeKind(trusted_instance_data, func_index, expected_sig,
                       expected_canonical_type_index, preknown_import);
@@ -700,8 +713,9 @@ void ResolvedWasmImport::SetCallable(Isolate* isolate,
 
 ImportCallKind ResolvedWasmImport::ComputeKind(
     DirectHandle<WasmTrustedInstanceData> trusted_instance_data, int func_index,
-    const wasm::FunctionSig* expected_sig,
-    uint32_t expected_canonical_type_index, WellKnownImport preknown_import) {
+    const wasm::CanonicalSig* expected_sig,
+    TypeIndex<kCanonicalized> expected_canonical_type_index,
+    WellKnownImport preknown_import) {
   // If we already have a compile-time import, simply pass that through.
   if (IsCompileTimeImport(preknown_import)) {
     well_known_status_ = preknown_import;
@@ -1871,9 +1885,11 @@ bool InstanceBuilder::ProcessImportedFunction(
         func_index, Cast<WasmExternalFunction>(*value)->func_ref());
   }
   auto js_receiver = Cast<JSReceiver>(value);
-  uint32_t sig_index = module_->functions[func_index].sig_index;
-  uint32_t canonical_sig_index = module_->canonical_sig_id(sig_index);
-  const FunctionSig* expected_sig =
+  TypeIndex<kModuleRelative> sig_index =
+      module_->functions[func_index].sig_index;
+  TypeIndex<kCanonicalized> canonical_sig_index =
+      module_->canonical_sig_id(sig_index);
+  const CanonicalSig* expected_sig =
       GetTypeCanonicalizer()->LookupFunctionSignature(canonical_sig_index);
   ResolvedWasmImport resolved(trusted_instance_data, func_index, js_receiver,
                               expected_sig, canonical_sig_index,
@@ -1920,11 +1936,9 @@ bool InstanceBuilder::ProcessImportedFunction(
       NativeModule* native_module = trusted_instance_data->native_module();
       int expected_arity = static_cast<int>(expected_sig->parameter_count());
       WasmImportWrapperCache* cache = GetWasmImportWrapperCache();
-      uint32_t canonical_sig_id =
-          module_->canonical_sig_id(module_->functions[func_index].sig_index);
       WasmCodeRefScope code_ref_scope;
-      WasmCode* wasm_code =
-          cache->MaybeGet(kind, canonical_sig_id, expected_arity, kNoSuspend);
+      WasmCode* wasm_code = cache->MaybeGet(kind, canonical_sig_index,
+                                            expected_arity, kNoSuspend);
       if (wasm_code == nullptr) {
         {
           WasmImportWrapperCache::ModificationScope cache_scope(cache);

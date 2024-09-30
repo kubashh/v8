@@ -2726,7 +2726,7 @@ void WasmDispatchTable::WasmDispatchTablePrint(std::ostream& os) {
   // Only print up to 55 elements; otherwise print the first 50 and "[...]".
   int printed = len > 55 ? 50 : len;
   for (int i = 0; i < printed; ++i) {
-    os << "\n " << std::setw(8) << i << ": sig: " << sig(i)
+    os << "\n " << std::setw(8) << i << ": sig: " << sig(i).index
        << "; target: " << AsHex::Address(target(i))
        << "; implicit_arg: " << Brief(implicit_arg(i));
   }

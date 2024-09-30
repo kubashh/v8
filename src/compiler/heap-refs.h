@@ -41,7 +41,9 @@ class Register;
 }  // namespace interpreter
 
 namespace wasm {
-class ValueType;
+template <TypeIndexKind index_kind>
+class ValueTypeImpl;
+using ValueType = ValueTypeImpl<kModuleRelative>;
 struct WasmModule;
 }  // namespace wasm
 

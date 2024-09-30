@@ -384,9 +384,11 @@ inline WasmCodePointer WasmDispatchTable::target(int index) const {
   return ReadField<WasmCodePointer>(OffsetOf(index) + kTargetBias);
 }
 
-inline int WasmDispatchTable::sig(int index) const {
+inline wasm::TypeIndex<wasm::kCanonicalized> WasmDispatchTable::sig(
+    int index) const {
   DCHECK_LT(index, length());
-  return ReadField<int>(OffsetOf(index) + kSigBias);
+  return wasm::TypeIndex<wasm::kCanonicalized>{
+      ReadField<uint32_t>(OffsetOf(index) + kSigBias)};
 }
 
 #if V8_ENABLE_DRUMBRAKE

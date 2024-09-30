@@ -26,13 +26,9 @@ namespace v8::internal::wasm {
 WasmCompilationResult WasmCompilationUnit::ExecuteCompilation(
     CompilationEnv* env, const WireBytesStorage* wire_bytes_storage,
     Counters* counters, WasmDetectedFeatures* detected) {
-  WasmCompilationResult result;
-  if (func_index_ < static_cast<int>(env->module->num_imported_functions)) {
-    result = ExecuteImportWrapperCompilation(env);
-  } else {
-    result =
-        ExecuteFunctionCompilation(env, wire_bytes_storage, counters, detected);
-  }
+  DCHECK_GE(func_index_, static_cast<int>(env->module->num_imported_functions));
+  WasmCompilationResult result =
+      ExecuteFunctionCompilation(env, wire_bytes_storage, counters, detected);
 
   if (result.succeeded() && counters) {
     counters->wasm_generated_code_size()->Increment(
@@ -47,25 +43,12 @@ WasmCompilationResult WasmCompilationUnit::ExecuteCompilation(
   return result;
 }
 
-WasmCompilationResult WasmCompilationUnit::ExecuteImportWrapperCompilation(
-    CompilationEnv* env) {
-  const FunctionSig* sig = env->module->functions[func_index_].sig;
-  // Assume the wrapper is going to be a JS function with matching arity at
-  // instantiation time.
-  auto kind = kDefaultImportCallKind;
-  bool source_positions = is_asmjs_module(env->module);
-  WasmCompilationResult result = compiler::CompileWasmImportCallWrapper(
-      env, kind, sig, source_positions,
-      static_cast<int>(sig->parameter_count()), wasm::kNoSuspend);
-  return result;
-}
-
 WasmCompilationResult WasmCompilationUnit::ExecuteFunctionCompilation(
     CompilationEnv* env, const WireBytesStorage* wire_bytes_storage,
     Counters* counters, WasmDetectedFeatures* detected) {
   const WasmFunction* func = &env->module->functions[func_index_];
   base::Vector<const uint8_t> code = wire_bytes_storage->GetCode(func->code);
-  bool is_shared = env->module->types[func->sig_index].is_shared;
+  bool is_shared = env->module->type(func->sig_index).is_shared;
   wasm::FunctionBody func_body{func->sig, func->code.offset(), code.begin(),
                                code.end(), is_shared};
 
@@ -195,8 +178,7 @@ void WasmCompilationUnit::CompileWasmFunction(Counters* counters,
                                               const WasmFunction* function,
                                               ExecutionTier tier) {
   ModuleWireBytes wire_bytes(native_module->wire_bytes());
-  bool is_shared =
-      native_module->module()->types[function->sig_index].is_shared;
+  bool is_shared = native_module->module()->type(function->sig_index).is_shared;
   FunctionBody function_body{function->sig, function->code.offset(),
                              wire_bytes.start() + function->code.offset(),
                              wire_bytes.start() + function->code.end_offset(),
@@ -220,8 +202,9 @@ void WasmCompilationUnit::CompileWasmFunction(Counters* counters,
 }
 
 JSToWasmWrapperCompilationUnit::JSToWasmWrapperCompilationUnit(
-    Isolate* isolate, const FunctionSig* sig, uint32_t canonical_sig_index,
-    const WasmModule* module, WasmEnabledFeatures enabled_features)
+    Isolate* isolate, const CanonicalSig* sig,
+    TypeIndex<kCanonicalized> canonical_sig_index, const WasmModule* module,
+    WasmEnabledFeatures enabled_features)
     : isolate_(isolate),
       sig_(sig),
       canonical_sig_index_(canonical_sig_index),
@@ -280,7 +263,7 @@ Handle<Code> JSToWasmWrapperCompilationUnit::Finalize() {
     PROFILE(isolate_, CodeCreateEvent(LogEventListener::CodeTag::kStub,
                                       Cast<AbstractCode>(code), name));
   }
-  isolate_->heap()->js_to_wasm_wrappers()->set(canonical_sig_index_,
+  isolate_->heap()->js_to_wasm_wrappers()->set(canonical_sig_index_.index,
                                                MakeWeak(code->wrapper()));
   Counters* counters = isolate_->counters();
   counters->wasm_generated_code_size()->Increment(code->body_size());
@@ -291,8 +274,8 @@ Handle<Code> JSToWasmWrapperCompilationUnit::Finalize() {
 
 // static
 Handle<Code> JSToWasmWrapperCompilationUnit::CompileJSToWasmWrapper(
-    Isolate* isolate, const FunctionSig* sig, uint32_t canonical_sig_index,
-    const WasmModule* module) {
+    Isolate* isolate, const CanonicalSig* sig,
+    TypeIndex<kCanonicalized> canonical_sig_index, const WasmModule* module) {
   // Run the compilation unit synchronously.
   WasmEnabledFeatures enabled_features =
       WasmEnabledFeatures::FromIsolate(isolate);

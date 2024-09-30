@@ -89,8 +89,9 @@ base::Vector<const char> GetDebugName(Zone* zone,
                                       int index);
 enum WasmCallKind { kWasmFunction, kWasmImportWrapper, kWasmCapiFunction };
 
+template <typename T>
 V8_EXPORT_PRIVATE CallDescriptor* GetWasmCallDescriptor(
-    Zone* zone, const wasm::FunctionSig* signature,
+    Zone* zone, const Signature<T>* signature,
     WasmCallKind kind = kWasmFunction, bool need_frame_state = false);
 
 template <typename T>

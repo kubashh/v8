@@ -32,7 +32,9 @@ class FeedbackCell;
 class SharedFunctionInfo;
 
 namespace wasm {
-class ValueType;
+template <TypeIndexKind index_kind>
+class ValueTypeImpl;
+using ValueType = ValueTypeImpl<kModuleRelative>;
 }
 
 namespace compiler {

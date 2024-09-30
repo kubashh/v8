@@ -14,8 +14,6 @@
 
 #include <inttypes.h>
 
-#include <optional>
-
 #include "src/base/bounds.h"
 #include "src/base/small-vector.h"
 #include "src/base/strings.h"
@@ -285,7 +283,7 @@ std::pair<HeapType, uint32_t> read_heap_type(Decoder* decoder,
           type_index, kV8MaxWasmTypes);
       return {HeapType(HeapType::kBottom), length};
     }
-    return {HeapType(type_index), length};
+    return {HeapType(TypeIndex<kModuleRelative>{type_index}), length};
   }
 }
 
@@ -399,9 +397,9 @@ bool ValidateHeapType(Decoder* decoder, const uint8_t* pc,
   // A {nullptr} module is accepted if we are not validating anyway (e.g. for
   // opcode length computation).
   if (!ValidationTag::validate && module == nullptr) return true;
-  if (!VALIDATE(type.ref_index() < module->types.size())) {
+  if (!VALIDATE(type.ref_index().index < module->types.size())) {
     DecodeError<ValidationTag>(decoder, pc, "Type index %u is out of bounds",
-                               type.ref_index());
+                               type.ref_index().index);
     return false;
   }
   return true;
@@ -556,6 +554,10 @@ struct SigIndexImmediate : public IndexImmediate {
   SigIndexImmediate(Decoder* decoder, const uint8_t* pc,
                     ValidationTag validate = {})
       : IndexImmediate(decoder, pc, "signature index", validate) {}
+
+  TypeIndex<kModuleRelative> typeidx() const {
+    return TypeIndex<kModuleRelative>{index};
+  }
 };
 
 struct StructIndexImmediate : public IndexImmediate {
@@ -565,6 +567,10 @@ struct StructIndexImmediate : public IndexImmediate {
   StructIndexImmediate(Decoder* decoder, const uint8_t* pc,
                        ValidationTag validate = {})
       : IndexImmediate(decoder, pc, "struct index", validate) {}
+
+  TypeIndex<kModuleRelative> typeidx() const {
+    return TypeIndex<kModuleRelative>{index};
+  }
 };
 
 struct ArrayIndexImmediate : public IndexImmediate {
@@ -574,6 +580,10 @@ struct ArrayIndexImmediate : public IndexImmediate {
   ArrayIndexImmediate(Decoder* decoder, const uint8_t* pc,
                       ValidationTag validate = {})
       : IndexImmediate(decoder, pc, "array index", validate) {}
+
+  TypeIndex<kModuleRelative> typeidx() const {
+    return TypeIndex<kModuleRelative>{index};
+  }
 };
 
 struct CallFunctionImmediate : public IndexImmediate {
@@ -615,7 +625,7 @@ struct BlockTypeImmediate {
   uint32_t length = 1;
   // After decoding, either {sig_index} is set XOR {sig} points to
   // {single_return_sig_storage}.
-  uint32_t sig_index = kInlineSignatureSentinel;
+  TypeIndex<kModuleRelative> sig_index{kInlineSignatureSentinel};
   FunctionSig sig{0, 0, single_return_sig_storage};
   // Internal field, potentially pointed to by {sig}. Do not access directly.
   ValueType single_return_sig_storage[1];
@@ -650,7 +660,7 @@ struct BlockTypeImmediate {
       }
     } else {
       sig = FunctionSig{0, 0, nullptr};
-      sig_index = static_cast<uint32_t>(block_type);
+      sig_index = TypeIndex<kModuleRelative>{static_cast<uint32_t>(block_type)};
     }
   }
 
@@ -701,6 +711,10 @@ struct CallIndirectImmediate {
       : sig_imm(decoder, pc, "singature index", validate),
         table_imm(decoder, pc + sig_imm.length, validate),
         length(sig_imm.length + table_imm.length) {}
+
+  TypeIndex<kModuleRelative> sig_index() const {
+    return TypeIndex<kModuleRelative>{sig_imm.index};
+  }
 };
 
 struct BranchTableImmediate {
@@ -959,7 +973,7 @@ struct TableCopyImmediate {
 
 struct HeapTypeImmediate {
   uint32_t length;
-  HeapType type{kBottom};
+  HeapType type{HeapType::kBottom};
 
   template <typename ValidationTag>
   HeapTypeImmediate(WasmEnabledFeatures enabled, Decoder* decoder,
@@ -1266,19 +1280,19 @@ struct ControlBase : public PcForErrors<ValidationTag::validate> {
     const Value& length)                                                       \
   F(I31GetS, const Value& input, Value* result)                                \
   F(I31GetU, const Value& input, Value* result)                                \
-  F(RefTest, uint32_t ref_index, const Value& obj, Value* result,              \
-    bool null_succeeds)                                                        \
+  F(RefTest, TypeIndex<kModuleRelative> ref_index, const Value& obj,           \
+    Value* result, bool null_succeeds)                                         \
   F(RefTestAbstract, const Value& obj, HeapType type, Value* result,           \
     bool null_succeeds)                                                        \
-  F(RefCast, uint32_t ref_index, const Value& obj, Value* result,              \
-    bool null_succeeds)                                                        \
+  F(RefCast, TypeIndex<kModuleRelative> ref_index, const Value& obj,           \
+    Value* result, bool null_succeeds)                                         \
   F(RefCastAbstract, const Value& obj, HeapType type, Value* result,           \
     bool null_succeeds)                                                        \
   F(AssertNullTypecheck, const Value& obj, Value* result)                      \
   F(AssertNotNullTypecheck, const Value& obj, Value* result)                   \
-  F(BrOnCast, uint32_t ref_index, const Value& obj, Value* result_on_branch,   \
-    uint32_t depth, bool null_succeeds)                                        \
-  F(BrOnCastFail, uint32_t ref_index, const Value& obj,                        \
+  F(BrOnCast, TypeIndex<kModuleRelative> ref_index, const Value& obj,          \
+    Value* result_on_branch, uint32_t depth, bool null_succeeds)               \
+  F(BrOnCastFail, TypeIndex<kModuleRelative> ref_index, const Value& obj,      \
     Value* result_on_fallthrough, uint32_t depth, bool null_succeeds)          \
   F(BrOnCastAbstract, const Value& obj, HeapType type,                         \
     Value* result_on_branch, uint32_t depth, bool null_succeeds)               \
@@ -1691,20 +1705,20 @@ class WasmDecoder : public Decoder {
   }
 
   bool Validate(const uint8_t* pc, SigIndexImmediate& imm) {
-    if (!VALIDATE(module_->has_signature(imm.index))) {
+    if (!VALIDATE(module_->has_signature(imm.typeidx()))) {
       DecodeError(pc, "invalid signature index: %u", imm.index);
       return false;
     }
-    imm.sig = module_->signature(imm.index);
+    imm.sig = module_->signature(imm.typeidx());
     return true;
   }
 
   bool Validate(const uint8_t* pc, StructIndexImmediate& imm) {
-    if (!VALIDATE(module_->has_struct(imm.index))) {
+    if (!VALIDATE(module_->has_struct(imm.typeidx()))) {
       DecodeError(pc, "invalid struct index: %u", imm.index);
       return false;
     }
-    imm.struct_type = module_->struct_type(imm.index);
+    imm.struct_type = module_->struct_type(imm.typeidx());
     return true;
   }
 
@@ -1720,11 +1734,11 @@ class WasmDecoder : public Decoder {
   }
 
   bool Validate(const uint8_t* pc, ArrayIndexImmediate& imm) {
-    if (!VALIDATE(module_->has_array(imm.index))) {
+    if (!VALIDATE(module_->has_array(imm.typeidx()))) {
       DecodeError(pc, "invalid array index: %u", imm.index);
       return false;
     }
-    imm.array_type = module_->array_type(imm.index);
+    imm.array_type = module_->array_type(imm.typeidx());
     return true;
   }
 
@@ -1769,7 +1783,7 @@ class WasmDecoder : public Decoder {
     // relation (neither sub nor super) to the type of the table. The type
     // of the function will be checked at runtime.
 
-    imm.sig = module_->signature(imm.sig_imm.index);
+    imm.sig = module_->signature(imm.sig_index());
     return true;
   }
 
@@ -2005,16 +2019,9 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
-  bool ValidateType(const uint8_t* pc, IndexImmediate& imm) {
-    if (!VALIDATE(module_->has_type(imm.index))) {
-      DecodeError(pc, "invalid type index: %u", imm.index);
-      return false;
-    }
-    return true;
-  }
-
   bool ValidateSignature(const uint8_t* pc, IndexImmediate& imm) {
-    if (!VALIDATE(module_->has_signature(imm.index))) {
+    if (!VALIDATE(
+            module_->has_signature(TypeIndex<kModuleRelative>{imm.index}))) {
       DecodeError(pc, "invalid signature index: %u", imm.index);
       return false;
     }
@@ -3986,7 +3993,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     this->detected_->add_typed_funcref();
     SigIndexImmediate imm(this, this->pc_ + 1, validate);
     if (!this->Validate(this->pc_ + 1, imm)) return 0;
-    Value func_ref = Pop(ValueType::RefNull(imm.index));
+    Value func_ref = Pop(ValueType::RefNull(imm.typeidx()));
     PoppedArgVector args = PopArgs(imm.sig);
     Value* returns = PushReturns(imm.sig);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(CallRef, func_ref, imm.sig, args.data(),
@@ -4005,7 +4012,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                         "tail call return types mismatch");
       return 0;
     }
-    Value func_ref = Pop(ValueType::RefNull(imm.index));
+    Value func_ref = Pop(ValueType::RefNull(imm.typeidx()));
     PoppedArgVector args = PopArgs(imm.sig);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(ReturnCallRef, func_ref, imm.sig,
                                        args.data());
@@ -4782,7 +4789,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         StructIndexImmediate imm(this, this->pc_ + opcode_length, validate);
         if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
         PoppedArgVector args = PopArgs(imm.struct_type);
-        Value* value = Push(ValueType::Ref(imm.index));
+        Value* value = Push(ValueType::Ref(imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructNew, imm, args.data(), value);
         return opcode_length + imm.length;
       }
@@ -4801,7 +4808,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             }
           }
         }
-        Value* value = Push(ValueType::Ref(imm.index));
+        Value* value = Push(ValueType::Ref(imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructNewDefault, imm, value);
         return opcode_length + imm.length;
       }
@@ -4819,7 +4826,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
               field_type.name().c_str());
           return 0;
         }
-        Value struct_obj = Pop(ValueType::RefNull(field.struct_imm.index));
+        Value struct_obj = Pop(ValueType::RefNull(field.struct_imm.typeidx()));
         Value* value = Push(field_type);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructGet, struct_obj, field, true,
                                            value);
@@ -4840,7 +4847,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
               field.struct_imm.index, field_type.name().c_str());
           return 0;
         }
-        Value struct_obj = Pop(ValueType::RefNull(field.struct_imm.index));
+        Value struct_obj = Pop(ValueType::RefNull(field.struct_imm.typeidx()));
         Value* value = Push(field_type.Unpacked());
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructGet, struct_obj, field,
                                            opcode == kExprStructGetS, value);
@@ -4857,7 +4864,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           return 0;
         }
         auto [struct_obj, field_value] =
-            Pop(ValueType::RefNull(field.struct_imm.index),
+            Pop(ValueType::RefNull(field.struct_imm.typeidx()),
                 struct_type->field(field.field_imm.index).Unpacked());
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructSet, struct_obj, field,
                                            field_value);
@@ -4868,7 +4875,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         if (!this->Validate(this->pc_ + opcode_length, imm)) return 0;
         auto [initial_value, length] =
             Pop(imm.array_type->element_type().Unpacked(), kWasmI32);
-        Value* value = Push(ValueType::Ref(imm.index));
+        Value* value = Push(ValueType::Ref(imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNew, imm, length, initial_value,
                                            value);
         return opcode_length + imm.length;
@@ -4884,7 +4891,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           return 0;
         }
         Value length = Pop(kWasmI32);
-        Value* value = Push(ValueType::Ref(imm.index));
+        Value* value = Push(ValueType::Ref(imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewDefault, imm, length, value);
         return opcode_length + imm.length;
       }
@@ -4910,7 +4917,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
 
         auto [offset, length] = Pop(kWasmI32, kWasmI32);
 
-        Value* array = Push(ValueType::Ref(array_imm.index));
+        Value* array = Push(ValueType::Ref(array_imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewSegment, array_imm,
                                            data_segment, offset, length, array);
         return opcode_length + array_imm.length + data_segment.length;
@@ -4949,7 +4956,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         }
 
         auto [offset, length] = Pop(kWasmI32, kWasmI32);
-        Value* array = Push(ValueType::Ref(array_imm.index));
+        Value* array = Push(ValueType::Ref(array_imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewSegment, array_imm,
                                            elem_segment, offset, length, array);
         return opcode_length + array_imm.length + elem_segment.length;
@@ -4981,8 +4988,9 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                                     validate);
         if (!this->ValidateDataSegment(data_index_pc, data_segment)) return 0;
 
-        auto [array, array_index, data_offset, length] = Pop(
-            ValueType::RefNull(array_imm.index), kWasmI32, kWasmI32, kWasmI32);
+        auto [array, array_index, data_offset, length] =
+            Pop(ValueType::RefNull(array_imm.typeidx()), kWasmI32, kWasmI32,
+                kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayInitSegment, array_imm,
                                            data_segment, array, array_index,
                                            data_offset, length);
@@ -5026,8 +5034,9 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           return 0;
         }
 
-        auto [array, array_index, elem_offset, length] = Pop(
-            ValueType::RefNull(array_imm.index), kWasmI32, kWasmI32, kWasmI32);
+        auto [array, array_index, elem_offset, length] =
+            Pop(ValueType::RefNull(array_imm.typeidx()), kWasmI32, kWasmI32,
+                kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayInitSegment, array_imm,
                                            elem_segment, array, array_index,
                                            elem_offset, length);
@@ -5046,7 +5055,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
               imm.array_type->element_type().name().c_str());
           return 0;
         }
-        auto [array_obj, index] = Pop(ValueType::RefNull(imm.index), kWasmI32);
+        auto [array_obj, index] =
+            Pop(ValueType::RefNull(imm.typeidx()), kWasmI32);
         Value* value = Push(imm.array_type->element_type().Unpacked());
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayGet, array_obj, imm, index,
                                            opcode == kExprArrayGetS, value);
@@ -5063,7 +5073,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
               imm.index, imm.array_type->element_type().name().c_str());
           return 0;
         }
-        auto [array_obj, index] = Pop(ValueType::RefNull(imm.index), kWasmI32);
+        auto [array_obj, index] =
+            Pop(ValueType::RefNull(imm.typeidx()), kWasmI32);
         Value* value = Push(imm.array_type->element_type());
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayGet, array_obj, imm, index,
                                            true, value);
@@ -5079,7 +5090,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           return 0;
         }
         auto [array_obj, index, value] =
-            Pop(ValueType::RefNull(imm.index), kWasmI32,
+            Pop(ValueType::RefNull(imm.typeidx()), kWasmI32,
                 imm.array_type->element_type().Unpacked());
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArraySet, array_obj, imm, index,
                                            value);
@@ -5117,8 +5128,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           return 0;
         }
         auto [dst, dst_index, src, src_index, length] =
-            Pop(ValueType::RefNull(dst_imm.index), kWasmI32,
-                ValueType::RefNull(src_imm.index), kWasmI32, kWasmI32);
+            Pop(ValueType::RefNull(dst_imm.typeidx()), kWasmI32,
+                ValueType::RefNull(src_imm.typeidx()), kWasmI32, kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayCopy, dst, dst_index, src,
                                            src_index, src_imm, length);
         return opcode_length + dst_imm.length + src_imm.length;
@@ -5135,7 +5146,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         }
 
         auto [array, offset, value, length] =
-            Pop(ValueType::RefNull(array_imm.index), kWasmI32,
+            Pop(ValueType::RefNull(array_imm.typeidx()), kWasmI32,
                 array_imm.array_type->element_type().Unpacked(), kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayFill, array_imm, array, offset,
                                            value, length);
@@ -5161,7 +5172,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                                              element_type.Unpacked());
         FunctionSig element_sig(0, elem_count, element_types.data());
         PoppedArgVector elements = PopArgs(&element_sig);
-        Value* result = Push(ValueType::Ref(array_imm.index));
+        Value* result = Push(ValueType::Ref(array_imm.typeidx()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewFixed, array_imm, length_imm,
                                            elements.data(), result);
         return opcode_length + array_imm.length + length_imm.length;

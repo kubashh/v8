@@ -73,12 +73,12 @@ wasm::WasmCompilationResult ExecuteTurbofanWasmCompilation(
 
 // Compiles an import call wrapper, which allows Wasm to call imports.
 V8_EXPORT_PRIVATE wasm::WasmCompilationResult CompileWasmImportCallWrapper(
-    wasm::CompilationEnv* env, wasm::ImportCallKind, const wasm::FunctionSig*,
+    wasm::CompilationEnv* env, wasm::ImportCallKind, const wasm::CanonicalSig*,
     bool source_positions, int expected_arity, wasm::Suspend);
 
 // Compiles a host call wrapper, which allows Wasm to call host functions.
 wasm::WasmCompilationResult CompileWasmCapiCallWrapper(
-    wasm::NativeModule*, const wasm::FunctionSig*);
+    wasm::NativeModule*, const wasm::CanonicalSig*);
 
 bool IsFastCallSupportedSignature(const v8::CFunctionInfo*);
 // Compiles a wrapper to call a Fast API function from Wasm.
@@ -88,12 +88,12 @@ wasm::WasmCompilationResult CompileWasmJSFastCallWrapper(
 // Returns an TurbofanCompilationJob or TurboshaftCompilationJob object
 // (depending on the --turboshaft-wasm-wrappers flag) for a JS to Wasm wrapper.
 std::unique_ptr<OptimizedCompilationJob> NewJSToWasmCompilationJob(
-    Isolate* isolate, const wasm::FunctionSig* sig,
+    Isolate* isolate, const wasm::CanonicalSig* sig,
     const wasm::WasmModule* module, wasm::WasmEnabledFeatures enabled_features);
 
 MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                          const wasm::WasmModule* module,
-                                         const wasm::FunctionSig* sig,
+                                         const wasm::CanonicalSig* sig,
                                          wasm::ImportCallKind kind,
                                          int expected_arity,
                                          wasm::Suspend suspend);
@@ -110,7 +110,7 @@ enum CWasmEntryParameters {
 // Compiles a stub with C++ linkage, to be called from Execution::CallWasm,
 // which knows how to feed it its parameters.
 V8_EXPORT_PRIVATE Handle<Code> CompileCWasmEntry(Isolate*,
-                                                 const wasm::FunctionSig*);
+                                                 const wasm::CanonicalSig*);
 
 // Values from the instance object are cached between Wasm-level function calls.
 // This struct allows the SSA environment handling this cache to be defined
@@ -293,7 +293,8 @@ class WasmGraphBuilder {
   // and will later help us generate better code if this call gets inlined.
   Node* CallDirect(uint32_t index, base::Vector<Node*> args,
                    base::Vector<Node*> rets, wasm::WasmCodePosition position);
-  Node* CallIndirect(uint32_t table_index, uint32_t sig_index,
+  Node* CallIndirect(uint32_t table_index,
+                     wasm::TypeIndex<wasm::kModuleRelative> sig_index,
                      base::Vector<Node*> args, base::Vector<Node*> rets,
                      wasm::WasmCodePosition position);
   Node* CallRef(const wasm::FunctionSig* sig, base::Vector<Node*> args,
@@ -302,7 +303,8 @@ class WasmGraphBuilder {
 
   Node* ReturnCall(uint32_t index, base::Vector<Node*> args,
                    wasm::WasmCodePosition position);
-  Node* ReturnCallIndirect(uint32_t table_index, uint32_t sig_index,
+  Node* ReturnCallIndirect(uint32_t table_index,
+                           wasm::TypeIndex<wasm::kModuleRelative> sig_index,
                            base::Vector<Node*> args,
                            wasm::WasmCodePosition position);
   Node* ReturnCallRef(const wasm::FunctionSig* sig, base::Vector<Node*> args,
@@ -460,7 +462,7 @@ class WasmGraphBuilder {
                 wasm::WasmCodePosition position);
   Node* I31GetU(Node* input, CheckForNull null_check,
                 wasm::WasmCodePosition position);
-  Node* RttCanon(uint32_t type_index);
+  Node* RttCanon(wasm::TypeIndex<wasm::kModuleRelative> type_index);
 
   Node* RefTest(Node* object, Node* rtt, WasmTypeCheckConfig config);
   Node* RefTestAbstract(Node* object, WasmTypeCheckConfig config);
@@ -669,7 +671,8 @@ class WasmGraphBuilder {
   void LoadIndirectFunctionTable(uint32_t table_index, Node** ift_size,
                                  Node** ift_sig_ids, Node** ift_targets,
                                  Node** ift_instances);
-  Node* BuildIndirectCall(uint32_t table_index, uint32_t sig_index,
+  Node* BuildIndirectCall(uint32_t table_index,
+                          wasm::TypeIndex<wasm::kModuleRelative> sig_index,
                           base::Vector<Node*> args, base::Vector<Node*> rets,
                           wasm::WasmCodePosition position,
                           IsReturnCall continuation);

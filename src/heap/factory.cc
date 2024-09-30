@@ -1705,7 +1705,7 @@ Handle<WasmTypeInfo> Factory::NewWasmTypeInfo(
 Handle<WasmImportData> Factory::NewWasmImportData(
     DirectHandle<HeapObject> callable, wasm::Suspend suspend,
     MaybeDirectHandle<WasmTrustedInstanceData> instance_data,
-    const wasm::FunctionSig* sig) {
+    const wasm::CanonicalSig* sig) {
   DCHECK(wasm::GetTypeCanonicalizer()->Contains(sig));
   Tagged<Map> map = *wasm_import_data_map();
   auto result = Cast<WasmImportData>(AllocateRawWithImmortalMap(
@@ -1789,7 +1789,7 @@ Handle<WasmJSFunctionData> Factory::NewWasmJSFunctionData(
     DirectHandle<Code> wrapper_code, DirectHandle<Map> rtt,
     wasm::Suspend suspend, wasm::Promise promise, uintptr_t signature_hash) {
   // TODO(clemensb): Should this be passed instead of looked up here?
-  const wasm::FunctionSig* sig =
+  const wasm::CanonicalSig* sig =
       wasm::GetTypeCanonicalizer()->LookupFunctionSignature(
           canonical_sig_index);
   DirectHandle<WasmImportData> import_data = NewWasmImportData(
@@ -1867,7 +1867,7 @@ Handle<WasmExportedFunctionData> Factory::NewWasmExportedFunctionData(
     DirectHandle<WasmTrustedInstanceData> instance_data,
     DirectHandle<WasmFuncRef> func_ref,
     DirectHandle<WasmInternalFunction> internal_function,
-    const wasm::FunctionSig* sig, uint32_t canonical_type_index,
+    const wasm::CanonicalSig* sig, uint32_t canonical_type_index,
     int wrapper_budget, wasm::Promise promise) {
   DCHECK(wasm::GetTypeCanonicalizer()->Contains(sig));
   int func_index = internal_function->function_index();
@@ -1900,7 +1900,7 @@ Handle<WasmExportedFunctionData> Factory::NewWasmExportedFunctionData(
 Handle<WasmCapiFunctionData> Factory::NewWasmCapiFunctionData(
     Address call_target, DirectHandle<Foreign> embedder_data,
     DirectHandle<Code> wrapper_code, DirectHandle<Map> rtt,
-    const wasm::FunctionSig* sig, uintptr_t signature_hash) {
+    const wasm::CanonicalSig* sig, uintptr_t signature_hash) {
   DirectHandle<WasmImportData> import_data =
       NewWasmImportData(undefined_value(), wasm::kNoSuspend,
                         DirectHandle<WasmTrustedInstanceData>(), sig);

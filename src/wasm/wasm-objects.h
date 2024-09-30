@@ -119,12 +119,12 @@ class ImportedFunctionEntry {
   // Initialize this entry as a Wasm to JS call. This accepts the isolate as a
   // parameter since it allocates a WasmImportData.
   void SetGenericWasmToJs(Isolate*, DirectHandle<JSReceiver> callable,
-                          wasm::Suspend suspend, const wasm::FunctionSig* sig);
+                          wasm::Suspend suspend, const wasm::CanonicalSig* sig);
   V8_EXPORT_PRIVATE void SetCompiledWasmToJs(Isolate*,
                                              DirectHandle<JSReceiver> callable,
                                              wasm::WasmCode* wasm_to_js_wrapper,
                                              wasm::Suspend suspend,
-                                             const wasm::FunctionSig* sig);
+                                             const wasm::CanonicalSig* sig);
 
   // Initialize this entry as a Wasm to Wasm call.
   void SetWasmToWasm(Tagged<WasmTrustedInstanceData> target_instance_object,
@@ -694,7 +694,8 @@ class WasmTagObject
 
   // Checks whether the given {sig} has the same parameter types as the
   // serialized signature stored within this tag object.
-  bool MatchesSignature(uint32_t expected_canonical_type_index);
+  bool MatchesSignature(
+      wasm::TypeIndex<wasm::kCanonicalized> expected_canonical_type_index);
 
   static Handle<WasmTagObject> New(
       Isolate* isolate, const wasm::FunctionSig* sig,
@@ -826,13 +827,14 @@ class WasmDispatchTable : public TrustedObject {
   // Smi::zero() (if the entry was cleared).
   inline Tagged<Object> implicit_arg(int index) const;
   inline WasmCodePointer target(int index) const;
-  inline int sig(int index) const;
+  inline wasm::TypeIndex<wasm::kCanonicalized> sig(int index) const;
 
   // Set an entry for indirect calls.
   // {implicit_arg} has to be a WasmImportData, a WasmTrustedInstanceData, or
   // Smi::zero().
   void V8_EXPORT_PRIVATE Set(int index, Tagged<Object> implicit_arg,
-                             WasmCodePointer call_target, int sig_id
+                             WasmCodePointer call_target,
+                             wasm::TypeIndex<wasm::kCanonicalized> sig_id
 #if V8_ENABLE_DRUMBRAKE
                              ,
                              uint32_t function_index
@@ -910,9 +912,11 @@ void V8_EXPORT_PRIVATE
 DecodeI64ExceptionValue(DirectHandle<FixedArray> encoded_values,
                         uint32_t* encoded_index, uint64_t* value);
 
-bool UseGenericWasmToJSWrapper(wasm::ImportCallKind kind,
-                               const wasm::FunctionSig* sig,
-                               wasm::Suspend suspend);
+template <wasm::TypeIndexKind index_kind>
+bool UseGenericWasmToJSWrapper(
+    wasm::ImportCallKind kind,
+    const Signature<wasm::ValueTypeImpl<index_kind>>* sig,
+    wasm::Suspend suspend);
 
 // A Wasm function that is wrapped and exported to JavaScript.
 // Representation of WebAssembly.Function JavaScript-level object.
@@ -928,7 +932,7 @@ class WasmExportedFunction : public JSFunction {
 
   // Return a null-terminated string with the debug name in the form
   // 'js-to-wasm:<sig>'.
-  static std::unique_ptr<char[]> GetDebugName(const wasm::FunctionSig* sig);
+  static std::unique_ptr<char[]> GetDebugName(const wasm::CanonicalSig* sig);
 
   OBJECT_CONSTRUCTORS(WasmExportedFunction, JSFunction);
 };
@@ -954,14 +958,15 @@ class WasmCapiFunction : public JSFunction {
 
   static Handle<WasmCapiFunction> New(Isolate* isolate, Address call_target,
                                       DirectHandle<Foreign> embedder_data,
-                                      const wasm::FunctionSig* sig,
+                                      const wasm::CanonicalSig* sig,
                                       uintptr_t signature_hash);
 
-  const wasm::FunctionSig* sig() const;
+  const wasm::CanonicalSig* sig() const;
 
   // Checks whether the given {sig} has the same parameter types as the
   // serialized signature stored within this C-API function object.
-  bool MatchesSignature(uint32_t other_canonical_sig_index) const;
+  bool MatchesSignature(
+      wasm::TypeIndex<wasm::kCanonicalized> other_canonical_sig_index) const;
 
   OBJECT_CONSTRUCTORS(WasmCapiFunction, JSFunction);
 };
@@ -1013,7 +1018,8 @@ class WasmExportedFunctionData
 
   DECL_PRIMITIVE_ACCESSORS(sig, const wasm::FunctionSig*)
 
-  bool MatchesSignature(uint32_t other_canonical_sig_index);
+  bool MatchesSignature(
+      wasm::TypeIndex<wasm::kCanonicalized> other_canonical_sig_index);
 
   // Dispatched behavior.
   DECL_PRINTER(WasmExportedFunctionData)
@@ -1114,8 +1120,9 @@ class WasmJSFunctionData
  public:
   Tagged<JSReceiver> GetCallable() const;
   wasm::Suspend GetSuspend() const;
-  const wasm::FunctionSig* GetSignature() const;
-  bool MatchesSignature(uint32_t other_canonical_sig_index) const;
+  const wasm::CanonicalSig* GetSignature() const;
+  bool MatchesSignature(
+      wasm::TypeIndex<wasm::kCanonicalized> other_canonical_sig_index) const;
 
   // Dispatched behavior.
   DECL_PRINTER(WasmJSFunctionData)
@@ -1445,7 +1452,7 @@ namespace wasm {
 // {expected}. If the typecheck succeeds, returns the wasm representation of the
 // object; otherwise, returns the empty handle.
 MaybeHandle<Object> JSToWasmObject(Isolate* isolate, Handle<Object> value,
-                                   ValueType expected,
+                                   CanonicalValueType expected,
                                    const char** error_message);
 
 // Utility which canonicalizes {expected} in addition.

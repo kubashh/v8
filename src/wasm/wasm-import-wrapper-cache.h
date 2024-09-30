@@ -26,10 +26,11 @@ using FunctionSig = Signature<ValueType>;
 class WasmImportWrapperCache {
  public:
   struct CacheKey {
-    CacheKey(ImportCallKind kind, uint32_t canonical_type_index,
-             int expected_arity, Suspend suspend)
+    CacheKey(ImportCallKind kind,
+             TypeIndex<kCanonicalized> canonical_type_index, int expected_arity,
+             Suspend suspend)
         : kind(kind),
-          canonical_type_index(canonical_type_index),
+          canonical_type_index(canonical_type_index.index),
           expected_arity(expected_arity),
           suspend(suspend) {}
 
@@ -78,10 +79,9 @@ class WasmImportWrapperCache {
 
   // Thread-safe. Returns nullptr if the key doesn't exist in the map.
   // Adds the returned code to the surrounding WasmCodeRefScope.
-  V8_EXPORT_PRIVATE WasmCode* MaybeGet(ImportCallKind kind,
-                                       uint32_t canonical_type_index,
-                                       int expected_arity,
-                                       Suspend suspend) const;
+  V8_EXPORT_PRIVATE WasmCode* MaybeGet(
+      ImportCallKind kind, TypeIndex<kCanonicalized> canonical_type_index,
+      int expected_arity, Suspend suspend) const;
 
   WasmCode* Lookup(Address pc) const;
 
@@ -100,7 +100,7 @@ class WasmImportWrapperCache {
 
   WasmCode* CompileWasmImportCallWrapper(
       Isolate* isolate, NativeModule* native_module, ImportCallKind kind,
-      const FunctionSig* sig, uint32_t canonical_sig_index,
+      const CanonicalSig* sig, TypeIndex<kCanonicalized> canonical_sig_index,
       bool source_positions, int expected_arity, Suspend suspend);
 
  private:

@@ -14,7 +14,7 @@ type PodArrayOfWasmValueType extends ByteArray
 type ManagedWasmNativeModule extends Foreign
     constexpr 'Managed<wasm::NativeModule>';
 
-type RawFunctionSigPtr extends RawPtr constexpr 'const wasm::FunctionSig*';
+type RawFunctionSigPtr extends RawPtr constexpr 'const wasm::CanonicalSig*';
 
 extern enum IndexType extends uint8 constexpr 'wasm::IndexType' {
   kI32,

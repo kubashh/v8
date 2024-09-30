@@ -15,7 +15,9 @@ namespace v8 {
 namespace internal {
 
 namespace wasm {
-class ValueType;
+template <TypeIndexKind index_kind>
+class ValueTypeImpl;
+using ValueType = ValueTypeImpl<kModuleRelative>;
 using FunctionSig = Signature<ValueType>;
 }  // namespace wasm
 

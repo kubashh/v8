@@ -2929,20 +2929,18 @@ Node* WasmGraphBuilder::CallDirect(uint32_t index, base::Vector<Node*> args,
   return BuildWasmCall(sig, args, rets, position, GetInstanceData());
 }
 
-Node* WasmGraphBuilder::CallIndirect(uint32_t table_index, uint32_t sig_index,
-                                     base::Vector<Node*> args,
-                                     base::Vector<Node*> rets,
-                                     wasm::WasmCodePosition position) {
+Node* WasmGraphBuilder::CallIndirect(
+    uint32_t table_index, wasm::TypeIndex<wasm::kModuleRelative> sig_index,
+    base::Vector<Node*> args, base::Vector<Node*> rets,
+    wasm::WasmCodePosition position) {
   return BuildIndirectCall(table_index, sig_index, args, rets, position,
                            kCallContinues);
 }
 
-Node* WasmGraphBuilder::BuildIndirectCall(uint32_t table_index,
-                                          uint32_t sig_index,
-                                          base::Vector<Node*> args,
-                                          base::Vector<Node*> rets,
-                                          wasm::WasmCodePosition position,
-                                          IsReturnCall continuation) {
+Node* WasmGraphBuilder::BuildIndirectCall(
+    uint32_t table_index, wasm::TypeIndex<wasm::kModuleRelative> sig_index,
+    base::Vector<Node*> args, base::Vector<Node*> rets,
+    wasm::WasmCodePosition position, IsReturnCall continuation) {
   DCHECK_NOT_NULL(args[0]);
   DCHECK_NOT_NULL(env_);
 
@@ -2991,9 +2989,10 @@ Node* WasmGraphBuilder::BuildIndirectCall(uint32_t table_index,
   // Skip check if table type matches declared signature.
   if (needs_type_check) {
     // Embed the expected signature ID as a relocatable constant.
-    uint32_t canonical_sig_id = env_->module->canonical_sig_id(sig_index);
+    wasm::TypeIndex<wasm::kCanonicalized> canonical_sig_id =
+        env_->module->canonical_sig_id(sig_index);
     Node* expected_sig_id = mcgraph()->RelocatableInt32Constant(
-        canonical_sig_id, RelocInfo::WASM_CANONICAL_SIG_ID);
+        canonical_sig_id.index, RelocInfo::WASM_CANONICAL_SIG_ID);
 
     Node* loaded_sig = gasm_->LoadFromObject(
         MachineType::Int32(), dispatch_table,
@@ -3001,7 +3000,7 @@ Node* WasmGraphBuilder::BuildIndirectCall(uint32_t table_index,
                       gasm_->IntPtrConstant(WasmDispatchTable::kSigBias)));
     Node* sig_match = gasm_->Word32Equal(loaded_sig, expected_sig_id);
 
-    if (!env_->module->types[sig_index].is_final) {
+    if (!env_->module->type(sig_index).is_final) {
       // Do a full subtyping check.
       auto end_label = gasm_->MakeLabel();
       gasm_->GotoIf(sig_match, &end_label);
@@ -3204,10 +3203,9 @@ Node* WasmGraphBuilder::ReturnCall(uint32_t index, base::Vector<Node*> args,
   return BuildWasmReturnCall(sig, args, position, GetInstanceData());
 }
 
-Node* WasmGraphBuilder::ReturnCallIndirect(uint32_t table_index,
-                                           uint32_t sig_index,
-                                           base::Vector<Node*> args,
-                                           wasm::WasmCodePosition position) {
+Node* WasmGraphBuilder::ReturnCallIndirect(
+    uint32_t table_index, wasm::TypeIndex<wasm::kModuleRelative> sig_index,
+    base::Vector<Node*> args, wasm::WasmCodePosition position) {
   return BuildIndirectCall(table_index, sig_index, args, {}, position,
                            kReturnCall);
 }
@@ -5621,8 +5619,9 @@ void WasmGraphBuilder::ArrayInitSegment(uint32_t segment_index, Node* array,
   SetSourcePosition(control(), position);
 }
 
-Node* WasmGraphBuilder::RttCanon(uint32_t type_index) {
-  Node* rtt = graph()->NewNode(gasm_->simplified()->RttCanon(type_index),
+Node* WasmGraphBuilder::RttCanon(
+    wasm::TypeIndex<wasm::kModuleRelative> type_index) {
+  Node* rtt = graph()->NewNode(gasm_->simplified()->RttCanon(type_index.index),
                                GetInstanceData());
   return SetType(rtt, wasm::ValueType::Rtt(type_index));
 }
@@ -7031,7 +7030,7 @@ namespace {
 class WasmWrapperGraphBuilder : public WasmGraphBuilder {
  public:
   WasmWrapperGraphBuilder(Zone* zone, MachineGraph* mcgraph,
-                          const wasm::FunctionSig* sig,
+                          const wasm::CanonicalSig* sig,
                           ParameterMode parameter_mode, Isolate* isolate,
                           compiler::SourcePositionTable* spt,
                           wasm::WasmEnabledFeatures features)
@@ -7179,7 +7178,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
   }
 
   int AddArgumentNodes(base::Vector<Node*> args, int pos, int param_count,
-                       const wasm::FunctionSig* sig, Node* context) {
+                       const wasm::CanonicalSig* sig, Node* context) {
     // Convert wasm numbers to JS values and drop the instance node.
     for (int i = 0; i < param_count; ++i) {
       Node* param = Param(i + 1);
@@ -7188,7 +7187,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     return pos;
   }
 
-  Node* ToJS(Node* node, wasm::ValueType type, Node* context) {
+  Node* ToJS(Node* node, wasm::CanonicalValueType type, Node* context) {
     switch (type.kind()) {
       case wasm::kI32:
         return BuildChangeInt32ToNumber(node);
@@ -7201,28 +7200,28 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         return BuildChangeFloat64ToNumber(node);
       case wasm::kRef:
         switch (type.heap_representation_non_shared()) {
-          case wasm::HeapType::kEq:
-          case wasm::HeapType::kI31:
-          case wasm::HeapType::kStruct:
-          case wasm::HeapType::kArray:
-          case wasm::HeapType::kAny:
-          case wasm::HeapType::kExtern:
-          case wasm::HeapType::kString:
-          case wasm::HeapType::kNone:
-          case wasm::HeapType::kNoFunc:
-          case wasm::HeapType::kNoExtern:
-          case wasm::HeapType::kExn:
-          case wasm::HeapType::kNoExn:
+          case wasm::CanonicalHeapType::kEq:
+          case wasm::CanonicalHeapType::kI31:
+          case wasm::CanonicalHeapType::kStruct:
+          case wasm::CanonicalHeapType::kArray:
+          case wasm::CanonicalHeapType::kAny:
+          case wasm::CanonicalHeapType::kExtern:
+          case wasm::CanonicalHeapType::kString:
+          case wasm::CanonicalHeapType::kNone:
+          case wasm::CanonicalHeapType::kNoFunc:
+          case wasm::CanonicalHeapType::kNoExtern:
+          case wasm::CanonicalHeapType::kExn:
+          case wasm::CanonicalHeapType::kNoExn:
             return node;
-          case wasm::HeapType::kBottom:
-          case wasm::HeapType::kStringViewWtf8:
-          case wasm::HeapType::kStringViewWtf16:
-          case wasm::HeapType::kStringViewIter:
+          case wasm::CanonicalHeapType::kBottom:
+          case wasm::CanonicalHeapType::kStringViewWtf8:
+          case wasm::CanonicalHeapType::kStringViewWtf16:
+          case wasm::CanonicalHeapType::kStringViewIter:
             UNREACHABLE();
-          case wasm::HeapType::kFunc:
+          case wasm::CanonicalHeapType::kFunc:
           default:
             if (type.heap_representation_non_shared() ==
-                    wasm::HeapType::kFunc ||
+                    wasm::CanonicalHeapType::kFunc ||
                 wasm::GetTypeCanonicalizer()->IsFunctionSignature(
                     type.ref_index())) {
               // Function reference. Extract the external function.
@@ -7252,30 +7251,30 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         }
       case wasm::kRefNull:
         switch (type.heap_representation_non_shared()) {
-          case wasm::HeapType::kExtern:
-          case wasm::HeapType::kNoExtern:
-          case wasm::HeapType::kExn:
-          case wasm::HeapType::kNoExn:
+          case wasm::CanonicalHeapType::kExtern:
+          case wasm::CanonicalHeapType::kNoExtern:
+          case wasm::CanonicalHeapType::kExn:
+          case wasm::CanonicalHeapType::kNoExn:
             return node;
-          case wasm::HeapType::kNone:
-          case wasm::HeapType::kNoFunc:
+          case wasm::CanonicalHeapType::kNone:
+          case wasm::CanonicalHeapType::kNoFunc:
             return LOAD_ROOT(NullValue, null_value);
-          case wasm::HeapType::kEq:
-          case wasm::HeapType::kStruct:
-          case wasm::HeapType::kArray:
-          case wasm::HeapType::kString:
-          case wasm::HeapType::kI31:
-          case wasm::HeapType::kAny: {
+          case wasm::CanonicalHeapType::kEq:
+          case wasm::CanonicalHeapType::kStruct:
+          case wasm::CanonicalHeapType::kArray:
+          case wasm::CanonicalHeapType::kString:
+          case wasm::CanonicalHeapType::kI31:
+          case wasm::CanonicalHeapType::kAny: {
             auto done = gasm_->MakeLabel(MachineRepresentation::kTaggedPointer);
             gasm_->GotoIfNot(IsNull(node, type), &done, node);
             gasm_->Goto(&done, LOAD_ROOT(NullValue, null_value));
             gasm_->Bind(&done);
             return done.PhiAt(0);
           }
-          case wasm::HeapType::kFunc:
+          case wasm::CanonicalHeapType::kFunc:
           default: {
             if (type.heap_representation_non_shared() ==
-                    wasm::HeapType::kFunc ||
+                    wasm::CanonicalHeapType::kFunc ||
                 wasm::GetTypeCanonicalizer()->IsFunctionSignature(
                     type.ref_index())) {
               // Function reference. Extract the external function.
@@ -7532,7 +7531,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* thread_in_wasm_flag_address_;
   };
 
-  Node* BuildMultiReturnFixedArrayFromIterable(const wasm::FunctionSig* sig,
+  Node* BuildMultiReturnFixedArrayFromIterable(const wasm::CanonicalSig* sig,
                                                Node* iterable, Node* context) {
     Node* length = gasm_->BuildChangeUint31ToSmi(
         mcgraph()->Uint32Constant(static_cast<uint32_t>(sig->return_count())));
@@ -7606,7 +7605,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     return jsval;
   }
 
-  bool QualifiesForFastTransform(const wasm::FunctionSig*) {
+  bool QualifiesForFastTransform(const wasm::CanonicalSig*) {
     const int wasm_count = static_cast<int>(sig_->parameter_count());
     for (int i = 0; i < wasm_count; ++i) {
       wasm::ValueType type = sig_->GetParam(i);
@@ -8467,7 +8466,7 @@ void BuildInlinedJSToWasmWrapper(Zone* zone, MachineGraph* mcgraph,
 }
 
 std::unique_ptr<OptimizedCompilationJob> NewJSToWasmCompilationJob(
-    Isolate* isolate, const wasm::FunctionSig* sig,
+    Isolate* isolate, const wasm::CanonicalSig* sig,
     const wasm::WasmModule* module,
     wasm::WasmEnabledFeatures enabled_features) {
   std::unique_ptr<char[]> debug_name = WasmExportedFunction::GetDebugName(sig);
@@ -8559,7 +8558,7 @@ MachineGraph* CreateCommonMachineGraph(Zone* zone) {
 }
 
 wasm::WasmCompilationResult CompileWasmMathIntrinsic(
-    wasm::ImportCallKind kind, const wasm::FunctionSig* sig) {
+    wasm::ImportCallKind kind, const wasm::CanonicalSig* sig) {
   DCHECK_EQ(1, sig->return_count());
 
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
@@ -8617,7 +8616,7 @@ wasm::WasmCompilationResult CompileWasmMathIntrinsic(
 
 wasm::WasmCompilationResult CompileWasmImportCallWrapper(
     wasm::CompilationEnv* env, wasm::ImportCallKind kind,
-    const wasm::FunctionSig* sig, bool source_positions, int expected_arity,
+    const wasm::CanonicalSig* sig, bool source_positions, int expected_arity,
     wasm::Suspend suspend) {
   DCHECK_NE(wasm::ImportCallKind::kLinkError, kind);
   DCHECK_NE(wasm::ImportCallKind::kWasmToWasm, kind);
@@ -8701,7 +8700,7 @@ wasm::WasmCompilationResult CompileWasmImportCallWrapper(
 }
 
 wasm::WasmCompilationResult CompileWasmCapiCallWrapper(
-    wasm::NativeModule* native_module, const wasm::FunctionSig* sig) {
+    wasm::NativeModule* native_module, const wasm::CanonicalSig* sig) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.CompileWasmCapiFunction");
   const char* debug_name = "WasmCapiCall";
@@ -8783,7 +8782,7 @@ wasm::WasmCompilationResult CompileWasmJSFastCallWrapper(
 
 MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                          const wasm::WasmModule* module,
-                                         const wasm::FunctionSig* sig,
+                                         const wasm::CanonicalSig* sig,
                                          wasm::ImportCallKind kind,
                                          int expected_arity,
                                          wasm::Suspend suspend) {
@@ -8859,7 +8858,8 @@ MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
                                            : compile_with_turbofan();
 }
 
-Handle<Code> CompileCWasmEntry(Isolate* isolate, const wasm::FunctionSig* sig) {
+Handle<Code> CompileCWasmEntry(Isolate* isolate,
+                               const wasm::CanonicalSig* sig) {
   DCHECK(!v8_flags.wasm_jitless);
 
   std::unique_ptr<Zone> zone = std::make_unique<Zone>(

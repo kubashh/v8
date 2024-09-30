@@ -46,7 +46,9 @@ class WasmResumeData;
 #if V8_ENABLE_WEBASSEMBLY
 namespace wasm {
 struct WasmModule;
-class ValueType;
+template <TypeIndexKind index_kind>
+class ValueTypeImpl;
+using ValueType = ValueTypeImpl<kModuleRelative>;
 using FunctionSig = Signature<ValueType>;
 }  // namespace wasm
 #endif

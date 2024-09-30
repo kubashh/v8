@@ -28,7 +28,8 @@ std::ostream& operator<<(std::ostream& os, const FunctionSig& sig) {
   return os;
 }
 
-bool IsJSCompatibleSignature(const FunctionSig* sig) {
+template <TypeIndexKind index_kind>
+bool IsJSCompatibleSignature(const Signature<ValueTypeImpl<index_kind>>* sig) {
   for (auto type : sig->all()) {
     // Rtts are internal-only. They should never be part of a signature.
     DCHECK(!type.is_rtt());
@@ -47,6 +48,9 @@ bool IsJSCompatibleSignature(const FunctionSig* sig) {
   }
   return true;
 }
+
+bool IsJSCompatibleSignature(const Signature<ValueType>*);
+bool IsJSCompatibleSignature(const Signature<CanonicalValueType>*);
 
 // Define constexpr arrays.
 constexpr uint8_t LoadType::kLoadSizeLog2[];

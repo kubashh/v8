@@ -4799,8 +4799,9 @@ class TurboshaftAssemblerOpInterface
     return ReduceIfReachableAssertNotNull(object, type, trap_id);
   }
 
-  V<Map> RttCanon(V<FixedArray> rtts, uint32_t type_index) {
-    return ReduceIfReachableRttCanon(rtts, type_index);
+  V<Map> RttCanon(V<FixedArray> rtts,
+                  wasm::TypeIndex<wasm::kModuleRelative> type_index) {
+    return ReduceIfReachableRttCanon(rtts, type_index.index);
   }
 
   V<Word32> WasmTypeCheck(V<Object> object, OptionalV<Map> rtt,
