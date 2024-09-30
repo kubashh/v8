@@ -33,6 +33,23 @@
       "message": "Thanks for the review Michael, sending to CQ\n\nBest\nRichard",
       "revId": "69c8120ae461997543310dea8990dda505001399",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23795e30_7bd6f5ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177474
+      },
+      "writtenOn": "2024-09-30T14:18:19Z",
+      "side": 1,
+      "message": "It seems I no longer have commit rights to V8. Could you PTAL Dominik?",
+      "revId": "69c8120ae461997543310dea8990dda505001399",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
