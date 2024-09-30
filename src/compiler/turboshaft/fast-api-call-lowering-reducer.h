@@ -135,7 +135,7 @@ class FastApiCallLoweringReducer : public Next {
           isolate_, frame_state, __ NoContextConstant(), LazyDeoptOnThrow::kNo,
           {});
 
-      GOTO(done, FastApiCallOp::kFailureValue, __ TagSmi(0));
+      __ Unreachable();
     }
 
     if (BIND(handle_error)) {
