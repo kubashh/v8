@@ -16,6 +16,57 @@
       "message": "Hi Clemens,\n\nPlease take a look when you have a chance, a similar fix was also applied to ScopeInfo a while back https://crrev.com/c/5688778\n\nI had to include BIG_ENDIAN macros as (strangely) a test crashes on little endian (including on x64) without it.",
       "revId": "ebb1a991551b97c839332d488a39b406e67e761d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f3918b_c2a4fe9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-30T10:45:09Z",
+      "side": 1,
+      "message": "Ah, nice! Sorry that I didn\u0027t think of this.\n\nLGTM with one comment (I think it\u0027s good to always zero-initialize this).",
+      "revId": "ebb1a991551b97c839332d488a39b406e67e761d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87a1034b_cd8dc353",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-30T10:45:09Z",
+      "side": 1,
+      "message": "Let\u0027s do this unconditionally.",
+      "revId": "ebb1a991551b97c839332d488a39b406e67e761d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac5cf054_66dbe22b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-09-30T10:45:09Z",
+      "side": 1,
+      "message": "Same here of course.",
+      "revId": "ebb1a991551b97c839332d488a39b406e67e761d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
