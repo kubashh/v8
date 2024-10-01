@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d03467f_3c80ca24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-01T15:19:12Z",
+      "side": 1,
+      "message": "LGTM with a naming nit.",
+      "revId": "d9ef09ba2367b9a980c23843078a4e20b67945cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c54d530_30c57bf7",
+        "filename": "src/wasm/wasm-code-pointer-table-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-01T15:19:12Z",
+      "side": 1,
+      "message": "nit: `...WithRwxWrite...` would be (slightly) easier to read.\n\nWe could also consider dropping the suffix from the name (also in line 43), and fully rely on the compiler\u0027s overload resolution. I don\u0027t feel strongly about it either way.",
+      "range": {
+        "startLine": 48,
+        "startChar": 27,
+        "endLine": 48,
+        "endChar": 57
+      },
+      "revId": "d9ef09ba2367b9a980c23843078a4e20b67945cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
