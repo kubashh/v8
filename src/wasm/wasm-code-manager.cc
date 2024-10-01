@@ -549,7 +549,7 @@ bool WasmCode::ShouldAllocateCodePointerHandle(int index, Kind kind) {
 
 // static
 WasmCodePointerTable::Handle WasmCode::MaybeAllocateCodePointerHandle(
-    NativeModule* native_module, int index, Kind kind) {
+    NativeModule* native_module, int index, Kind kind, Address address) {
   if (index != kAnonymousFuncIndex) {
     DCHECK(!ShouldAllocateCodePointerHandle(index, kind));
     return native_module->GetCodePointerHandle(index);
@@ -559,7 +559,8 @@ WasmCodePointerTable::Handle WasmCode::MaybeAllocateCodePointerHandle(
     case kWasmToCapiWrapper:
     case kWasmToJsWrapper:
       DCHECK(ShouldAllocateCodePointerHandle(index, kind));
-      return GetProcessWideWasmCodePointerTable()->AllocateUninitializedEntry();
+      return GetProcessWideWasmCodePointerTable()->AllocateAndInitializeEntry(
+          address);
     case kJumpTable:
       DCHECK(!ShouldAllocateCodePointerHandle(index, kind));
       return WasmCodePointerTable::kInvalidHandle;
@@ -1200,8 +1201,7 @@ void NativeModule::InitializeJumpTableForLazyCompilation(
     code_pointer_table->SetEntrypointWithWriteScope(
         code_pointer_handles_[i],
         lazy_compile_table_->instruction_start() +
-            JumpTableAssembler::LazyCompileSlotIndexToOffset(i),
-        write_scope);
+            JumpTableAssembler::LazyCompileSlotIndexToOffset(i));
   }
 }
 
@@ -1751,6 +1751,9 @@ void NativeModule::PatchJumpTableLocked(const CodeSpaceData& code_space_data,
                         : kNullAddress;
   JumpTableAssembler::PatchJumpTableSlot(jump_table_slot, far_jump_table_slot,
                                          target);
+  DCHECK_LT(slot_index, code_pointer_handles_size_);
+  GetProcessWideWasmCodePointerTable()->SetEntrypointWithWriteScope(
+      code_pointer_handles_[slot_index], target);
 }
 
 void NativeModule::AddCodeSpaceLocked(base::AddressRegion region) {

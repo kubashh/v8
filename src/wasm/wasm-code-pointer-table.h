@@ -83,8 +83,7 @@ class V8_EXPORT_PRIVATE WasmCodePointerTable
   // The Unlocked version can be used in loops, but you need to hold a
   // `WriteScope` while calling it.
   inline void SetEntrypoint(uint32_t index, Address value);
-  inline void SetEntrypointWithWriteScope(uint32_t index, Address value,
-                                          WriteScope& write_scope);
+  inline void SetEntrypointWithWriteScope(uint32_t index, Address value);
 
   // Allocates a new entry in the table and optionally initialize it.
   inline uint32_t AllocateAndInitializeEntry(Address entrypoint);
