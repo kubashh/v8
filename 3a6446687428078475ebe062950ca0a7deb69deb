@@ -16,6 +16,23 @@
       "message": "@nicohartmann@chromium.org: PTAL as second reviewer to meet the submit requirements!",
       "revId": "3a6446687428078475ebe062950ca0a7deb69deb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f5da98_95fe2098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-10-01T13:47:28Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "3a6446687428078475ebe062950ca0a7deb69deb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
