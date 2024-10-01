@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8cf77c5_390bec55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-01T15:16:18Z",
+      "side": 1,
+      "message": "Is this a backmerge that applies cleanly? I think this is important to know for the backports",
+      "revId": "cef3e038cb2b92c3d89b162a4864a9627aa304d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
