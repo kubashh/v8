@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "96868ec0_089f9ee4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-01T08:39:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf4fc60a_e14f2489",
+      "range": {
+        "startLine": 10,
+        "startChar": 41,
+        "endLine": 10,
+        "endChar": 50
+      },
+      "revId": "ec022f08a2cdecb618d7bfb34d3874e4e6c9382f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c1c2a687_186fe228",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -71,6 +95,30 @@
       "writtenOn": "2024-10-01T08:37:16Z",
       "side": 1,
       "message": "nit: previous",
+      "range": {
+        "startLine": 540,
+        "startChar": 39,
+        "endLine": 540,
+        "endChar": 46
+      },
+      "revId": "ec022f08a2cdecb618d7bfb34d3874e4e6c9382f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be7f4298_3e4af2c1",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-01T08:39:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8ae3247_9d92f709",
       "range": {
         "startLine": 540,
         "startChar": 39,
