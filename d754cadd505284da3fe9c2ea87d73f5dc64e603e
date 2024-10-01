@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c35cbf96_011584cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-01T14:49:18Z",
+      "side": 1,
+      "message": "lgtm src/heap",
+      "revId": "d754cadd505284da3fe9c2ea87d73f5dc64e603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "64067f7e_3051f8c7",
         "filename": "src/objects/map.cc",
         "patchSetId": 2
