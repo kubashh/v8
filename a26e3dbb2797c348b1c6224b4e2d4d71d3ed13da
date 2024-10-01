@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b82a5a_4e5e6530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-01T14:08:26Z",
+      "side": 1,
+      "message": "+bikineev for the test.\n+saelo for testing method in EPT.\n\nptal.",
+      "revId": "a26e3dbb2797c348b1c6224b4e2d4d71d3ed13da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
