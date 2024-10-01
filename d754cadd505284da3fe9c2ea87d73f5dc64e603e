@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33d42345_8841cb6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-01T14:37:59Z",
+      "side": 1,
+      "message": "Jakob, PTAL.\n+Omer for src/heap.",
+      "revId": "d754cadd505284da3fe9c2ea87d73f5dc64e603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64067f7e_3051f8c7",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-01T14:37:59Z",
+      "side": 1,
+      "message": "FYI, I alpha-sorted the Wasm types and added `WASM_MEMORY_OBJECT_TYPE`.",
+      "revId": "d754cadd505284da3fe9c2ea87d73f5dc64e603e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
