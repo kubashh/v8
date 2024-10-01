@@ -16,6 +16,23 @@
       "message": "Is this a backmerge that applies cleanly? I think this is important to know for the backports",
       "revId": "cef3e038cb2b92c3d89b162a4864a9627aa304d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df65482c_6d581cc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2024-10-01T15:38:42Z",
+      "side": 1,
+      "message": "Could you also incorporate this change for multiple interleaved scavengers: https://chromium-review.googlesource.com/c/v8/v8/+/5899522",
+      "revId": "cef3e038cb2b92c3d89b162a4864a9627aa304d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
