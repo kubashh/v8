@@ -3335,9 +3335,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   DECODE(ThrowRef) {
     this->detected_->add_exnref();
     Value value = Pop();
-    if (!VALIDATE(
-            (value.type.kind() == kRef || value.type.kind() == kRefNull) &&
-            value.type.heap_type() == HeapType::kExn)) {
+    if (!VALIDATE(IsSubtypeOf(value.type, kWasmExnRef, this->module_))) {
       this->DecodeError("invalid type for throw_ref: expected exnref, found %s",
                         value.type.name().c_str());
       return 0;

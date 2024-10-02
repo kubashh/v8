@@ -2955,6 +2955,8 @@ TEST_F(FunctionBodyDecoderTest, ThrowRef) {
   ExpectValidates(sigs.v_v(), {kExprBlock, kExnRefCode, WASM_TRY_TABLE_OP,
                                U32V_1(1), CatchKind::kCatchAllRef, 0, kExprEnd,
                                kExprBr, 1, kExprEnd, kExprThrowRef});
+  ExpectValidates(sigs.v_v(), {kExprBlock, kVoidCode, kExprUnreachable,
+                               kExprThrowRef, kExprEnd});
   ExpectFailure(sigs.v_v(),
                 {WASM_REF_NULL(WASM_HEAP_TYPE(HeapType(HeapType::kExtern))),
                  kExprThrowRef},
