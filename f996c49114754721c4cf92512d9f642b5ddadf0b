@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b2603f8f_e31a5a51",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T14:33:09Z",
+      "side": 0,
+      "message": "Forgot this... will create a follow up.",
+      "parentUuid": "ea752f91_ded61b9c",
+      "range": {
+        "startLine": 572,
+        "startChar": 18,
+        "endLine": 572,
+        "endChar": 31
+      },
+      "revId": "f996c49114754721c4cf92512d9f642b5ddadf0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "aa1458ac_544ef749",
         "filename": "tools/clusterfuzz/foozzie/v8_foozzie_test.py",
         "patchSetId": 2
