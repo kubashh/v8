@@ -2024,6 +2024,14 @@ uint32_t NativeModule::GetFunctionIndexFromJumpTableSlot(
 
 uint32_t NativeModule::GetFunctionIndexFromIndirectCallTarget(
     WasmCodePointer target) const {
+#ifdef V8_ENABLE_WASM_CODE_POINTER_TABLE
+  for (uint32_t i = 0; i < code_pointer_handles_size_; i++) {
+    if (code_pointer_handles_[i] == target) {
+      return module_->num_imported_functions + i;
+    }
+  }
+  UNREACHABLE();
+#else
   // The indirect call target always points to the entry in the main jump table.
   // See `GetIndirectCallTarget()` for the reverse operation.
   Address jt_start = jump_table_start();
@@ -2035,6 +2043,7 @@ uint32_t NativeModule::GetFunctionIndexFromIndirectCallTarget(
   uint32_t declared_function_index =
       JumpTableAssembler::SlotOffsetToIndex(jt_offset);
   return module_->num_imported_functions + declared_function_index;
+#endif
 }
 
 Builtin NativeModule::GetBuiltinInJumptableSlot(Address target) const {
@@ -2070,13 +2079,14 @@ WasmCodePointerTable::Handle NativeModule::GetCodePointerHandle(
 }
 
 WasmCodePointer NativeModule::GetIndirectCallTarget(int func_index) const {
-  DCHECK_GE(func_index, module_->num_imported_functions);
-  func_index -= module_->num_imported_functions;
-  DCHECK_LT(func_index, module_->num_declared_functions);
-  Address jump_table_slot =
-      jump_table_start() +
-      JumpTableAssembler::JumpSlotIndexToOffset(func_index);
-  return jump_table_slot;
+  DCHECK_GE(func_index, num_imported_functions());
+  DCHECK_LT(func_index, num_functions());
+
+#ifdef V8_ENABLE_WASM_CODE_POINTER_TABLE
+  return GetCodePointerHandle(func_index);
+#else
+  return jump_table_start() + JumpTableOffset(module(), func_index);
+#endif
 }
 
 NativeModule::~NativeModule() {
