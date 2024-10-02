@@ -85,6 +85,8 @@ class JSDisposableStackBase
   static void HandleErrorInDisposal(
       Isolate* isolate, DirectHandle<JSDisposableStackBase> disposable_stack,
       Handle<Object> current_error);
+  static MaybeHandle<Object> CheckExceptionOnIsolateAndHandleErrorInDisposal(
+      Isolate* isolate, DirectHandle<JSDisposableStackBase> disposable_stack);
 
   TQ_OBJECT_CONSTRUCTORS(JSDisposableStackBase)
 };
