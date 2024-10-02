@@ -39,6 +39,30 @@
       },
       "revId": "d9ef09ba2367b9a980c23843078a4e20b67945cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60473248_85162fa8",
+        "filename": "src/wasm/wasm-code-pointer-table-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-02T07:16:02Z",
+      "side": 1,
+      "message": "Done.\nThe overloading doesn\u0027t work in this case, since the WriteScope can be an RwxWriteScope in some configurations.",
+      "parentUuid": "0c54d530_30c57bf7",
+      "range": {
+        "startLine": 48,
+        "startChar": 27,
+        "endLine": 48,
+        "endChar": 57
+      },
+      "revId": "d9ef09ba2367b9a980c23843078a4e20b67945cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
