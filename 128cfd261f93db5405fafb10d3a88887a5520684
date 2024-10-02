@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa15b35_6fdc6af0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-02T06:44:56Z",
+      "side": 1,
+      "message": "I forgot that Darius is OOO. Nico, could you take a look?",
+      "revId": "128cfd261f93db5405fafb10d3a88887a5520684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
