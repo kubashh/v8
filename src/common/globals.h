@@ -1238,7 +1238,9 @@ enum AllocationSpace {
   FIRST_GROWABLE_PAGED_SPACE = OLD_SPACE,
   LAST_GROWABLE_PAGED_SPACE = TRUSTED_SPACE,
   FIRST_SWEEPABLE_SPACE = NEW_SPACE,
-  LAST_SWEEPABLE_SPACE = SHARED_TRUSTED_SPACE
+  LAST_SWEEPABLE_SPACE = SHARED_TRUSTED_SPACE,
+  FIRST_LO_SPACE = NEW_LO_SPACE,
+  LAST_LO_SPACE = TRUSTED_LO_SPACE,
 };
 constexpr int kSpaceTagSize = 4;
 static_assert(FIRST_SPACE == 0);
@@ -1256,6 +1258,9 @@ constexpr bool IsAnySharedSpace(AllocationSpace space) {
 }
 constexpr bool IsAnyNewSpace(AllocationSpace space) {
   return space == NEW_SPACE || space == NEW_LO_SPACE;
+}
+constexpr bool IsAnyLargeObjectSpace(AllocationSpace space) {
+  return space >= FIRST_LO_SPACE && space <= LAST_LO_SPACE;
 }
 
 constexpr const char* ToString(AllocationSpace space) {

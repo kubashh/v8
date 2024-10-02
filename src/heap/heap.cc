@@ -4474,6 +4474,39 @@ bool Heap::InSpaceSlow(Address addr, AllocationSpace space) const {
   }
   if (!HasBeenSetUp()) return false;
 
+  // We can only lookup the metadata for addresses pointing into regular-sized
+  // MemoryChunks. We need to check the large object spaces first to filter them
+  // out.
+
+  if (IsAnyLargeObjectSpace(space)) {
+    switch (space) {
+      case LO_SPACE:
+        return lo_space_->ContainsSlow(addr);
+      case CODE_LO_SPACE:
+        return code_lo_space_->ContainsSlow(addr);
+      case NEW_LO_SPACE:
+        return new_lo_space_->ContainsSlow(addr);
+      case SHARED_LO_SPACE:
+        return shared_lo_space_->ContainsSlow(addr);
+      case SHARED_TRUSTED_LO_SPACE:
+        return shared_trusted_lo_space_->ContainsSlow(addr);
+      case TRUSTED_LO_SPACE:
+        return trusted_lo_space_->ContainsSlow(addr);
+      default:
+        UNREACHABLE();
+    }
+  }
+
+  if ((lo_space_ && lo_space_->ContainsSlow(addr)) ||
+      (code_lo_space_ && code_lo_space_->ContainsSlow(addr)) ||
+      (new_lo_space_ && new_lo_space_->ContainsSlow(addr)) ||
+      (shared_lo_space_ && shared_lo_space_->ContainsSlow(addr)) ||
+      (shared_trusted_lo_space_ &&
+       shared_trusted_lo_space_->ContainsSlow(addr)) ||
+      (trusted_lo_space_ && trusted_lo_space_->ContainsSlow(addr))) {
+    return false;
+  }
+
   switch (space) {
     case NEW_SPACE:
       return new_space_->ContainsSlow(addr);
@@ -4487,20 +4520,10 @@ bool Heap::InSpaceSlow(Address addr, AllocationSpace space) const {
       return trusted_space_->ContainsSlow(addr);
     case SHARED_TRUSTED_SPACE:
       return shared_trusted_space_->ContainsSlow(addr);
-    case LO_SPACE:
-      return lo_space_->ContainsSlow(addr);
-    case CODE_LO_SPACE:
-      return code_lo_space_->ContainsSlow(addr);
-    case NEW_LO_SPACE:
-      return new_lo_space_->ContainsSlow(addr);
-    case SHARED_LO_SPACE:
-      return shared_lo_space_->ContainsSlow(addr);
-    case SHARED_TRUSTED_LO_SPACE:
-      return shared_trusted_lo_space_->ContainsSlow(addr);
-    case TRUSTED_LO_SPACE:
-      return trusted_lo_space_->ContainsSlow(addr);
     case RO_SPACE:
       return read_only_space_->ContainsSlow(addr);
+    default:
+      UNREACHABLE();
   }
   UNREACHABLE();
 }
