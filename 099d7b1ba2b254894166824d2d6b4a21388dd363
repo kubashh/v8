@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "099d7b1ba2b254894166824d2d6b4a21388dd363",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c27a5596_75a45e77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-02T10:52:00Z",
+      "side": 1,
+      "message": "Thanks! LGTM with a nit.",
+      "revId": "099d7b1ba2b254894166824d2d6b4a21388dd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00704826_c5d07f52",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3337,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-02T10:52:00Z",
+      "side": 1,
+      "message": "nit: for even more simplification, is it enough to say `Pop(kWasmExnRef)` here, and drop lines 3338-3342?",
+      "range": {
+        "startLine": 3337,
+        "startChar": 18,
+        "endLine": 3337,
+        "endChar": 23
+      },
+      "revId": "099d7b1ba2b254894166824d2d6b4a21388dd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
