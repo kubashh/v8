@@ -731,5 +731,20 @@ TEST_F(HeapTest, BlackAllocatedPages) {
   EXPECT_TRUE(in_free_list(page, next));
 }
 
+TEST_F(HeapTest, ContainsSlow) {
+  Isolate* iso = isolate();
+  ManualGCScope manual_gc_scope(iso);
+
+  Heap* heap = iso->heap();
+  SimulateFullSpace(heap->old_space());
+
+  // Allocate an object on a new page.
+  HandleScope scope(iso);
+  DirectHandle<FixedArray> arr =
+      iso->factory()->NewFixedArray(1, AllocationType::kOld);
+  CHECK(heap->old_space()->ContainsSlow(arr->address()));
+  CHECK(!heap->old_space()->ContainsSlow(0));
+}
+
 }  // namespace internal
 }  // namespace v8
