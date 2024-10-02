@@ -56,6 +56,30 @@
       },
       "revId": "099d7b1ba2b254894166824d2d6b4a21388dd363",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "209a31e5_ff2a8364",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3337,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-02T11:06:00Z",
+      "side": 1,
+      "message": "Good call! That seems to work (with a small change in the error message expectation), done.",
+      "parentUuid": "00704826_c5d07f52",
+      "range": {
+        "startLine": 3337,
+        "startChar": 18,
+        "endLine": 3337,
+        "endChar": 23
+      },
+      "revId": "099d7b1ba2b254894166824d2d6b4a21388dd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
