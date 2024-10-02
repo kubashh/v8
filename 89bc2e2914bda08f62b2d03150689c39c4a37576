@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a59cfac5_10c01ad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T10:38:39Z",
+      "side": 1,
+      "message": "Thanks! I fixed this already in the follow-up that I have still in the pipeline and haven\u0027t landed yet. Should prioritize landing that one.",
+      "revId": "89bc2e2914bda08f62b2d03150689c39c4a37576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
