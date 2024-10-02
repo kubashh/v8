@@ -16,6 +16,40 @@
       "message": "wdyt? should be fine to just reload the LookupIterator thing, but then again... the whole code area is a bit shaky.",
       "revId": "7beff71a5bd465ad8fdf184560093601366c9d75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e78a64f_b6123e8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-02T19:01:37Z",
+      "side": 1,
+      "message": "lgtm % question. Maybe a second pair of eyes from someone else on the runtime team would be good too, LookupIterator is complex.",
+      "revId": "7beff71a5bd465ad8fdf184560093601366c9d75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee4f655_95c29d28",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-02T19:01:37Z",
+      "side": 1,
+      "message": "Would it be incorrect for this to be `it-\u003estate() \u003d\u003d TYPED_ARRAY_INDEX_NOT_FOUND`? Is it possible to be another state that\u0027s not `DATA`?",
+      "revId": "7beff71a5bd465ad8fdf184560093601366c9d75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
