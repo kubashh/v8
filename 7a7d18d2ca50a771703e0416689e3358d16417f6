@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bcb53f9_7851460e",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 0,
+      "message": "Why was this line removed?\nIs it guaranteed that no two consecutive elements in the match array are strings?",
+      "range": {
+        "startLine": 55,
+        "startChar": 8,
+        "endLine": 55,
+        "endChar": 18
+      },
+      "revId": "7a7d18d2ca50a771703e0416689e3358d16417f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

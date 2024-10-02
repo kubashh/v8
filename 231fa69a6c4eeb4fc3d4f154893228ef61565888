@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d459144_07b50dc2",
+        "filename": "src/runtime/runtime-regexp.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 1,
+      "message": "```suggestion\n  //   - either: one smi that encodes offset and length\n```",
+      "range": {
+        "startLine": 1283,
+        "startChar": 30,
+        "endLine": 1283,
+        "endChar": 36
+      },
+      "revId": "231fa69a6c4eeb4fc3d4f154893228ef61565888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcf61376_2e82621f",
+        "filename": "src/strings/string-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 1,
+      "message": "```suggestion\n  uint32_t truncated_hash \u003d hash \u0026 ~(1u \u003c\u003c kSmiValueSize);\n```",
+      "range": {
+        "startLine": 403,
+        "startChar": 43,
+        "endLine": 403,
+        "endChar": 45
+      },
+      "revId": "231fa69a6c4eeb4fc3d4f154893228ef61565888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c739d7c_4918d08e",
+        "filename": "src/strings/string-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 1,
+      "message": "Please add comments explaining the ix0/ix1 cases.",
+      "range": {
+        "startLine": 405,
+        "startChar": 2,
+        "endLine": 405,
+        "endChar": 4
+      },
+      "revId": "231fa69a6c4eeb4fc3d4f154893228ef61565888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1d24609_9b3140e6",
+        "filename": "src/strings/string-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 1,
+      "message": "```suggestion\n  uint32_t truncated_hash \u003d hash \u0026 ~(1u \u003c\u003c kSmiValueSize);\n```",
+      "range": {
+        "startLine": 444,
+        "startChar": 43,
+        "endLine": 444,
+        "endChar": 45
+      },
+      "revId": "231fa69a6c4eeb4fc3d4f154893228ef61565888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84e49bc1_28f419bc",
+        "filename": "src/strings/string-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 1,
+      "message": "Please also add a comment here. At a first glance this looked like some sort of restricted linear probing",
+      "range": {
+        "startLine": 447,
+        "startChar": 6,
+        "endLine": 447,
+        "endChar": 7
+      },
+      "revId": "231fa69a6c4eeb4fc3d4f154893228ef61565888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9e8c12b_0e345b62",
+        "filename": "src/strings/string-builder.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2024-10-02T13:58:29Z",
+      "side": 1,
+      "message": "I am surprised that this whole cache provides any benefits, given how expensive these comparisons are.\nCould you also verify on pinpoint on M1 before landing (M1 results are usually more stable than x64 linux ones).",
+      "range": {
+        "startLine": 453,
+        "startChar": 5,
+        "endLine": 453,
+        "endChar": 11
+      },
+      "revId": "231fa69a6c4eeb4fc3d4f154893228ef61565888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
