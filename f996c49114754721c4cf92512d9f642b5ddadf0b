@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97d50aae_dbfd0ad5",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 0,
+      "message": "These two calls lead to searching for patterns, whose configuration lists are empty since a long time. Unlikely that we ever need this again.",
+      "revId": "f996c49114754721c4cf92512d9f642b5ddadf0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa1458ac_544ef749",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 0,
+      "message": "Lots of test cases that dealt with stack-trace differences are now obsolete.",
+      "revId": "f996c49114754721c4cf92512d9f642b5ddadf0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1658cdbd_5592096f",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 0,
+      "message": "Besides passing/not passing the v8_suppressions.js file, this doesn\u0027t do anything any longer. Hence the test is obsolete.",
+      "revId": "f996c49114754721c4cf92512d9f642b5ddadf0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df6f614c_6d3e36c0",
+        "filename": "tools/clusterfuzz/foozzie/v8_suppressions.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 0,
+      "message": "This is part of error message titles, which are turned off on the V8 side during differential fuzzing.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 36
+      },
+      "revId": "f996c49114754721c4cf92512d9f642b5ddadf0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a93a69_9fd989d1",
+        "filename": "tools/clusterfuzz/foozzie/v8_suppressions.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 0,
+      "message": "This is a relic from before we ignored crashes in general. Now all output after a crash is ignored anyways.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 25
+      },
+      "revId": "f996c49114754721c4cf92512d9f642b5ddadf0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

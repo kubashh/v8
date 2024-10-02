@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5b8ab41_d32d7b90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "82cfd6f2ea438239c6d5825eba31479272cc6aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13973c1_70a450c3",
+        "filename": "tools/clusterfuzz/foozzie/testdata/build1/d8.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-02T13:10:32Z",
+      "side": 1,
+      "message": "Keep testing that certain lines are ignored, like this.",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "82cfd6f2ea438239c6d5825eba31479272cc6aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
