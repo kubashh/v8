@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5e811ff_1fc46df4",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-02T21:28:21Z",
+      "side": 1,
+      "message": "We have a call to this function here and in line 85. But it seems that they cannot be called recursively so I guess it is okay to not get the resolved promise here and simply return it. Please let me know if you disagree.",
+      "range": {
+        "startLine": 169,
+        "startChar": 11,
+        "endLine": 169,
+        "endChar": 46
+      },
+      "revId": "e789612ec93bcff113212aad03833542200f82a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14ce8944_3e135388",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-02T21:28:21Z",
+      "side": 1,
+      "message": "We actually needed the second try/catch for calling `ResolveAPromiseWithValueAndReturnIt`. When I removed it, I got a DCHECK failure in `Throw` here. When `Throw` is called, the isolate should not have any exception. So we need to clear the exception from isolate before this line, and it is better to do it in a try/catch instead of manually changing it.",
+      "revId": "e789612ec93bcff113212aad03833542200f82a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

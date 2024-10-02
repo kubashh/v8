@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "775b0b9a_7e23a447",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-02T21:28:21Z",
+      "side": 1,
+      "message": "I guess we can review this CL. I removed the test for now. If I find a way to write it, I will add it in a follow-up CL.",
+      "revId": "e965217a4337430f8058f9a2be3fd1cc42a08e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
