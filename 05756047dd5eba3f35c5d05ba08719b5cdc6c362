@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "876c92d9_2a821b6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "overall lgtm, some comments.",
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "754370f2_b73871d9",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2538,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "throughout: can you add a static assert that these registers don\u0027t alias the JS calling convention registers?",
+      "range": {
+        "startLine": 2538,
+        "startChar": 29,
+        "endLine": 2538,
+        "endChar": 32
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecf8b3aa_79e259ce",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2554,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "if this is sufficiently different for V8_ENABLE_LEAPTIERING to justify splitting off to a separate function, maybe V8_ENABLE_SANDBOX should also have a separate function rather than a within-function ifdef? Would be good to be consistent",
+      "range": {
+        "startLine": 2554,
+        "startChar": 21,
+        "endLine": 2554,
+        "endChar": 35
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3eece92_2e84f12b",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4017,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "how about having the below offset computation change the `scratch` value instead of a separate offset (i.e. make `scratch` an inner pointer into the dispatch table pointing at the entrypoint), and then deref the parameter count with `MemOperand(scratch, JSDispatchEntry::kCodeObjectOffset)`?",
+      "range": {
+        "startLine": 4017,
+        "startChar": 0,
+        "endLine": 4017,
+        "endChar": 70
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dbb894b_0b170fc7",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4023,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "the parameter count is in the code object offset? Might be worth a naming cleanup in a followup.",
+      "range": {
+        "startLine": 4023,
+        "startChar": 0,
+        "endLine": 4023,
+        "endChar": 69
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ee9ba06_c8130f8e",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4025,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "why a load + mask instead of a 16-bit load?",
+      "range": {
+        "startLine": 4025,
+        "startChar": 2,
+        "endLine": 4025,
+        "endChar": 5
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19b1fe7b_d34f72c8",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-02T10:50:17Z",
+      "side": 1,
+      "message": "by the same logic as your reply to Igor above, maybe it\u0027s not worth splitting `CallJSFunction` into two signatures just to avoid this unused input on the non-leaptiering configs.",
+      "range": {
+        "startLine": 1564,
+        "startChar": 7,
+        "endLine": 1564,
+        "endChar": 28
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
