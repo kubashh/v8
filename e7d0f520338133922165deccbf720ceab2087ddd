@@ -16,6 +16,144 @@
       "message": "Fixed patchset to not include unintentional file.",
       "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8220d70c_1d4e4974",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "Can `EnableLogWithFilterDataOnAllIsolates` be called while there is already an active `EtwIsolateCaptureStateMonitor`? Probably not, because the ETW callback thread is blocked in a `WaitFor`. I wonder if that might be a problem for the caller, though, not sure how these calls to the ETW callbacks are implemented by the Windows ETW system.",
+      "range": {
+        "startLine": 275,
+        "startChar": 28,
+        "endLine": 275,
+        "endChar": 64
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b360ba41_b510a445",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "Is it possible for `EnableLogWithFilterDataOnAllIsolates` to be called when there is already an active `EtwIsolateCaptureStateMonitor`? Would that cause problems?",
+      "range": {
+        "startLine": 281,
+        "startChar": 2,
+        "endLine": 281,
+        "endChar": 65
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcde049e_8f7d7961",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "A new Isolate might be created while we are in a `WaitFor` here, but this probably shouldn\u0027t be a problem. However, what happens if an existing Isolate gets destroyed while it is emitting ETW data? `Notify` would not be called, and we would reach the timeout, I guess?",
+      "range": {
+        "startLine": 282,
+        "startChar": 32,
+        "endLine": 282,
+        "endChar": 61
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e73639_180da1c1",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "The `EtwIsolateCaptureStateMonitor` object will never be deleted?",
+      "range": {
+        "startLine": 304,
+        "startChar": 3,
+        "endLine": 304,
+        "endChar": 22
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5136050_4e663b0a",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "A new Isolate could be created while we are in the `WaitFor`, but probably this should not be an issue. But what if an Isolate gets destroyed during the `WaitFor`, while it is emitting ETW events?",
+      "range": {
+        "startLine": 319,
+        "startChar": 32,
+        "endLine": 319,
+        "endChar": 61
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c1ad83e_e8f025a8",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "The EtwIsolateCaptureStateMonitor object will never be deleted?",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 22
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

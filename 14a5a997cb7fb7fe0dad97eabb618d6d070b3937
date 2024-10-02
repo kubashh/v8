@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "152a2337_ceeb98d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "The idea and implementation look good to me, with some comments.\nI don\u0027t have the rights to +1 though.",
+      "parentUuid": "09d4e782_3af80c91",
+      "revId": "14a5a997cb7fb7fe0dad97eabb618d6d070b3937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab3bb547_a613a82f",
         "filename": "include/v8-version.h",
         "patchSetId": 1
@@ -78,6 +96,30 @@
       "writtenOn": "2024-10-01T21:13:21Z",
       "side": 1,
       "message": "I didn\u0027t see something like VLOG used in the v8 repo.  Is there something I could change these logging lines into that could stay in the code for help with debugging?",
+      "range": {
+        "startLine": 40,
+        "startChar": 2,
+        "endLine": 40,
+        "endChar": 11
+      },
+      "revId": "14a5a997cb7fb7fe0dad97eabb618d6d070b3937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c2436f_233114fc",
+        "filename": "src/diagnostics/etw-isolate-capture-state-monitor-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-02T13:26:59Z",
+      "side": 1,
+      "message": "I see that in the v8 repo it is normal to log to stdout, but only when a specific tracing flag is set, maybe we could do the same here?",
+      "parentUuid": "2318d52f_8e5dda59",
       "range": {
         "startLine": 40,
         "startChar": 2,
