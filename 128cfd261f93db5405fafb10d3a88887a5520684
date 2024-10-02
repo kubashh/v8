@@ -16,6 +16,23 @@
       "message": "I forgot that Darius is OOO. Nico, could you take a look?",
       "revId": "128cfd261f93db5405fafb10d3a88887a5520684",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83de0c61_6987d99d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-10-02T07:15:37Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "128cfd261f93db5405fafb10d3a88887a5520684",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
