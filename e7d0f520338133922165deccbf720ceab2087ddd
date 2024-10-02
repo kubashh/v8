@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6075bfb6_bfe92ba7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-02T06:15:29Z",
+      "side": 1,
+      "message": "Fixed patchset to not include unintentional file.",
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
