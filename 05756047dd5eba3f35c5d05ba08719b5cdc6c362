@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdb79bed_af271a08",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4023,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-03T15:39:26Z",
+      "side": 1,
+      "message": "Thanks",
+      "parentUuid": "462f8408_7b7890e7",
+      "range": {
+        "startLine": 4023,
+        "startChar": 0,
+        "endLine": 4023,
+        "endChar": 69
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ee9ba06_c8130f8e",
@@ -290,6 +314,30 @@
       "side": 1,
       "message": "Did that now, PTAL!",
       "parentUuid": "19b1fe7b_d34f72c8",
+      "range": {
+        "startLine": 1564,
+        "startChar": 7,
+        "endLine": 1564,
+        "endChar": 28
+      },
+      "revId": "05756047dd5eba3f35c5d05ba08719b5cdc6c362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a584186_92b08b9a",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-03T15:39:26Z",
+      "side": 1,
+      "message": "nice, thanks",
+      "parentUuid": "e2fbc499_bfa70e41",
       "range": {
         "startLine": 1564,
         "startChar": 7,
