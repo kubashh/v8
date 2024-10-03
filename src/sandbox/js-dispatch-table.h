@@ -57,9 +57,6 @@ struct JSDispatchEntry {
   // for efficient entry allocation, see TryAllocateEntryFromFreelist.
   inline uint32_t GetNextFreelistEntryIndex() const;
 
-  // Mark this entry as alive during garbage collection.
-  inline void Mark();
-
   // Unmark this entry during sweeping.
   inline void Unmark();
 
