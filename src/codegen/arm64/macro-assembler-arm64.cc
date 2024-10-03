@@ -2536,8 +2536,8 @@ void MacroAssembler::CallJSFunction(Register function_object,
                                     uint16_t argument_count) {
   Register code = kJavaScriptCallCodeStartRegister;
 #if V8_ENABLE_LEAPTIERING
-  Register dispatch_handle = x20;
-  Register parameter_count = x19;
+  Register dispatch_handle = kJavaScriptCallDispatchHandleRegister;
+  Register parameter_count = x20;
   Register scratch = x21;
 
   Ldr(dispatch_handle.W(),
@@ -2568,10 +2568,11 @@ void MacroAssembler::JumpJSFunction(Register function_object,
                                     JumpMode jump_mode) {
   Register code = kJavaScriptCallCodeStartRegister;
 #if V8_ENABLE_LEAPTIERING
+  Register dispatch_handle = kJavaScriptCallDispatchHandleRegister;
   Register scratch = x21;
-  Ldr(code.W(),
+  Ldr(dispatch_handle.W(),
       FieldMemOperand(function_object, JSFunction::kDispatchHandleOffset));
-  LoadEntrypointFromJSDispatchTable(code, code, scratch);
+  LoadEntrypointFromJSDispatchTable(code, dispatch_handle, scratch);
   DCHECK_EQ(jump_mode, JumpMode::kJump);
   // We jump through x17 here because for Branch Identification (BTI) we use
   // "Call" (`bti c`) rather than "Jump" (`bti j`) landing pads for tail-called
@@ -2878,7 +2879,7 @@ void MacroAssembler::InvokeFunctionCode(
   DCHECK_EQ(function, x1);
   DCHECK_IMPLIES(new_target.is_valid(), new_target == x3);
 
-  Register dispatch_handle = x20;
+  Register dispatch_handle = kJavaScriptCallDispatchHandleRegister;
   Ldr(dispatch_handle.W(),
       FieldMemOperand(function, JSFunction::kDispatchHandleOffset));
 
@@ -3976,7 +3977,7 @@ void MacroAssembler::LoadCodeEntrypointViaCodePointer(Register destination,
 void MacroAssembler::LoadEntrypointFromJSDispatchTable(Register destination,
                                                        Register dispatch_handle,
                                                        Register scratch) {
-  DCHECK(!AreAliased(destination, scratch));
+  DCHECK(!AreAliased(destination, dispatch_handle, scratch));
   ASM_CODE_COMMENT(this);
 
   Register index = destination;
@@ -3988,7 +3989,7 @@ void MacroAssembler::LoadEntrypointFromJSDispatchTable(Register destination,
 
 void MacroAssembler::LoadParameterCountFromJSDispatchTable(
     Register destination, Register dispatch_handle, Register scratch) {
-  DCHECK(!AreAliased(destination, scratch));
+  DCHECK(!AreAliased(destination, dispatch_handle, scratch));
   ASM_CODE_COMMENT(this);
 
   Register index = destination;
@@ -4002,7 +4003,7 @@ void MacroAssembler::LoadParameterCountFromJSDispatchTable(
 void MacroAssembler::LoadEntrypointAndParameterCountFromJSDispatchTable(
     Register entrypoint, Register parameter_count, Register dispatch_handle,
     Register scratch) {
-  DCHECK(!AreAliased(entrypoint, parameter_count, scratch));
+  DCHECK(!AreAliased(entrypoint, parameter_count, dispatch_handle, scratch));
   ASM_CODE_COMMENT(this);
 
   Register index = parameter_count;
