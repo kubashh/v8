@@ -41,6 +41,10 @@ Address JSDispatchEntry::GetCodePointer() const {
   return (payload >> kObjectPointerShift) | kHeapObjectTag;
 }
 
+Tagged<Code> JSDispatchEntry::GetCode() const {
+  return Cast<Code>(Tagged<Object>(GetCodePointer()));
+}
+
 uint16_t JSDispatchEntry::GetParameterCount() const {
   // Loading a pointer out of a freed entry will always result in an invalid
   // pointer (e.g. upper bits set or nullptr). However, here we're just loading
@@ -52,8 +56,8 @@ uint16_t JSDispatchEntry::GetParameterCount() const {
 }
 
 Tagged<Code> JSDispatchTable::GetCode(JSDispatchHandle handle) {
-  Address ptr = GetCodeAddress(handle);
-  return Cast<Code>(Tagged<Object>(ptr));
+  uint32_t index = HandleToIndex(handle);
+  return at(index).GetCode();
 }
 
 void JSDispatchTable::SetCode(JSDispatchHandle handle, Tagged<Code> new_code) {
@@ -135,19 +139,6 @@ uint32_t JSDispatchEntry::GetNextFreelistEntryIndex() const {
   return static_cast<uint32_t>(entrypoint_.load(std::memory_order_relaxed));
 }
 
-void JSDispatchEntry::Mark() {
-  // TODO(saelo): we probably don't need this loop: if another thread does a
-  // SetCode in between, then that should trigger a write barrier which will
-  // mark the entry as alive.
-  bool success;
-  do {
-    Address old_value = encoded_word_.load(std::memory_order_relaxed);
-    Address new_value = old_value | kMarkingBit;
-    success = encoded_word_.compare_exchange_strong(old_value, new_value,
-                                                    std::memory_order_relaxed);
-  } while (!success);
-}
-
 void JSDispatchEntry::Unmark() {
   Address value = encoded_word_.load(std::memory_order_relaxed);
   value &= ~kMarkingBit;
@@ -182,8 +173,16 @@ void JSDispatchTable::Mark(JSDispatchHandle handle) {
   // The read-only space is immortal and cannot be written to.
   if (index < kEndOfInternalReadOnlySegment) return;
 
+  JSDispatchEntry& entry = at(index);
+  Address old_value = entry.encoded_word_.load(std::memory_order_relaxed);
+  Address new_value = old_value | JSDispatchEntry::kMarkingBit;
+
+  // We don't check if the cas succeeded. If another thread does a
+  // SetCode in between, then that should trigger a write barrier which will
+  // mark the entry as alive.
   CFIMetadataWriteScope write_scope("JSDispatchTable write");
-  at(index).Mark();
+  entry.encoded_word_.compare_exchange_strong(old_value, new_value,
+                                              std::memory_order_relaxed);
 }
 
 #ifdef DEBUG
@@ -219,6 +218,14 @@ void JSDispatchTable::IterateMarkedEntriesIn(Space* space, Callback callback) {
       callback(IndexToHandle(index));
     }
   });
+}
+
+template <typename Callback>
+uint32_t JSDispatchTable::Sweep(Space* space, Counters* counters,
+                                Callback callback) {
+  uint32_t num_live_entries = GenericSweep(space, callback);
+  counters->js_dispatch_table_entries_count()->AddSample(num_live_entries);
+  return num_live_entries;
 }
 
 }  // namespace internal
