@@ -4558,6 +4558,15 @@ void MacroAssembler::BailoutIfDeoptimized(Register scratch) {
   TailCallBuiltin(Builtin::kCompileLazyDeoptimizedCode, not_zero);
 }
 
+void MacroAssembler::AssertNotDeoptimized() {
+  int offset = InstructionStream::kCodeOffset - InstructionStream::kHeaderSize;
+  Register scratch = kScratchRegister;
+  LoadProtectedPointerField(scratch,
+                            Operand(kJavaScriptCallCodeStartRegister, offset));
+  TestCodeIsMarkedForDeoptimization(scratch);
+  Assert(zero, AbortReason::kInvokeDeopted);
+}
+
 void MacroAssembler::CallForDeoptimization(Builtin target, int, Label* exit,
                                            DeoptimizeKind kind, Label* ret,
                                            Label*) {
