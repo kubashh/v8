@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60511ee_ffd50a04",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 4012,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-03T15:51:01Z",
+      "side": 1,
+      "message": "Good idea! Added here and in the other routines that load the parameter count",
+      "parentUuid": "ffbf8d85_e43e9e74",
+      "range": {
+        "startLine": 4012,
+        "startChar": 2,
+        "endLine": 4012,
+        "endChar": 6
+      },
+      "revId": "0999bdff3701d04838fa9c0edf46890f2e4327d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20a203b1_ec333fb7",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-10-03T15:39:26Z",
       "side": 1,
       "message": "this could also be `movzwq` instead of masking",
+      "range": {
+        "startLine": 713,
+        "startChar": 2,
+        "endLine": 713,
+        "endChar": 6
+      },
+      "revId": "0999bdff3701d04838fa9c0edf46890f2e4327d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e4a5b33_10f5167b",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-03T15:51:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20a203b1_ec333fb7",
       "range": {
         "startLine": 713,
         "startChar": 2,
