@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce048670_140c047b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-03T12:41:48Z",
+      "side": 1,
+      "message": "Thanks for putting this test together, really nice! I wonder if we can make it work with just --stress-compaction as that would be closer to reality. But otherwise, doing it this way should also be fine",
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb8aa17_d5724fb2",
+        "filename": "test/unittests/heap/heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-03T12:41:48Z",
+      "side": 1,
+      "message": "Would --stress-compaction work if you added 2-3 of these almost-empty segments?",
+      "range": {
+        "startLine": 751,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 15
+      },
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d6b651c_3269d962",
+        "filename": "test/unittests/heap/heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-03T12:41:48Z",
+      "side": 1,
+      "message": "Would it be worth asserting that the ExternalPointerHandle of this object changes after GC?",
+      "range": {
+        "startLine": 767,
+        "startChar": 23,
+        "endLine": 767,
+        "endChar": 38
+      },
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
