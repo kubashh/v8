@@ -459,6 +459,10 @@ void Deoptimizer::DeoptimizeMarkedCode(Isolate* isolate) {
   }
 #endif
 
+#ifdef V8_ENABLE_LEAPTIERING
+  JSDispatchTable::instance()->DiscardDeoptimized(isolate);
+#endif  // V8_ENABLE_LEAPTIERING
+
   ActivationsFinder visitor(topmost_optimized_code,
                             safe_to_deopt_topmost_optimized_code);
   // Iterate over the stack of this thread.

@@ -1484,10 +1484,11 @@ TEST(TestOptimizeAfterBytecodeFlushingCandidate) {
   {
     v8::HandleScope scope(CcTest::isolate());
     CompileRun(
-        "%PrepareFunctionForOptimization(foo);"
+        "%PrepareFunctionForOptimization(foo); foo();"
         "%OptimizeFunctionOnNextCall(foo); foo();");
   }
 
+  CHECK(function->is_compiled(isolate));
   // Simulate one final GC and make sure the candidate wasn't flushed.
   {
     DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
@@ -4615,14 +4616,14 @@ TEST(ObjectsInEagerlyDeoptimizedCodeAreWeak) {
         "bar();"
         "bar();"
         "%OptimizeFunctionOnNextCall(bar);"
-        "bar();"
-        "%DeoptimizeFunction(bar);");
+        "bar();");
 
     DirectHandle<JSFunction> bar = Cast<JSFunction>(v8::Utils::OpenDirectHandle(
         *v8::Local<v8::Function>::Cast(CcTest::global()
                                            ->Get(context.local(), v8_str("bar"))
                                            .ToLocalChecked())));
     code = handle(bar->code(isolate), isolate);
+    CompileRun("%DeoptimizeFunction(bar);");
     code = scope.CloseAndEscape(code);
   }
 

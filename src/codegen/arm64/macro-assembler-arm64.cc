@@ -2653,6 +2653,18 @@ void MacroAssembler::BailoutIfDeoptimized() {
   Bind(&not_deoptimized);
 }
 
+void MacroAssembler::AssertNotDeoptimized() {
+  Register scratch = kJavaScriptCallCodeStartRegister;
+  int offset = InstructionStream::kCodeOffset - InstructionStream::kHeaderSize;
+  Push(kJavaScriptCallCodeStartRegister);
+  LoadProtectedPointerField(
+      scratch, MemOperand(kJavaScriptCallCodeStartRegister, offset));
+  Ldr(scratch.W(), FieldMemOperand(scratch, Code::kFlagsOffset));
+  Tst(scratch.W(), Code::kMarkedForDeoptimizationBit);
+  Assert(zero, AbortReason::kInvokeDeopted);
+  Pop(kJavaScriptCallCodeStartRegister);
+}
+
 void MacroAssembler::CallForDeoptimization(
     Builtin target, int deopt_id, Label* exit, DeoptimizeKind kind, Label* ret,
     Label* jump_deoptimization_entry_label) {
