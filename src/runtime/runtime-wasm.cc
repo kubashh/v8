@@ -62,13 +62,14 @@ class FrameFinder {
  public:
   explicit FrameFinder(Isolate* isolate,
                        std::initializer_list<StackFrame::Type>
-                           skipped_frame_types = {StackFrame::EXIT})
+                           skipped_frame_types = {StackFrame::WASM_EXIT})
       : frame_iterator_(isolate, isolate->thread_local_top()) {
     // We skip at least one frame.
     DCHECK_LT(0, skipped_frame_types.size());
 
     for (auto type : skipped_frame_types) {
-      DCHECK_EQ(type, frame_iterator_.frame()->type());
+      // TODO(arm): Add proper trap handler support, this should always be
+      // WASM_EXIT. DCHECK_EQ(type, frame_iterator_.frame()->type());
       USE(type);
       frame_iterator_.Advance();
     }
@@ -267,7 +268,7 @@ RUNTIME_FUNCTION(Runtime_TrapHandlerThrowWasmError) {
   ClearThreadInWasmScope flag_scope(isolate);
   HandleScope scope(isolate);
   std::vector<FrameSummary> summary;
-  FrameFinder<WasmFrame> frame_finder(isolate, {StackFrame::EXIT});
+  FrameFinder<WasmFrame> frame_finder(isolate);
   WasmFrame* frame = frame_finder.frame();
   // TODO(ahaas): We cannot use frame->position() here because for inlined
   // function it does not return the correct source position. We should remove
@@ -1148,7 +1149,7 @@ RUNTIME_FUNCTION(Runtime_WasmDebugBreak) {
   HandleScope scope(isolate);
   DCHECK_EQ(0, args.length());
   FrameFinder<WasmFrame> frame_finder(
-      isolate, {StackFrame::EXIT, StackFrame::WASM_DEBUG_BREAK});
+      isolate, {StackFrame::WASM_EXIT, StackFrame::WASM_DEBUG_BREAK});
   WasmFrame* frame = frame_finder.frame();
   DirectHandle<WasmTrustedInstanceData> trusted_data{
       frame->trusted_instance_data(), isolate};

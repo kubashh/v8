@@ -2057,8 +2057,8 @@ void MacroAssembler::CallRuntime(const Runtime::Function* f,
   Mov(x0, num_arguments);
   Mov(x1, ExternalReference::Create(f));
 
-  bool switch_to_central = options().is_wasm;
-  CallBuiltin(Builtins::RuntimeCEntry(f->result_size, switch_to_central));
+  bool wasm_exit_frame = options().is_wasm;
+  CallBuiltin(Builtins::RuntimeCEntry(f->result_size, wasm_exit_frame));
 }
 
 void MacroAssembler::JumpToExternalReference(const ExternalReference& builtin,
@@ -3138,7 +3138,7 @@ void MacroAssembler::EnterFrame(StackFrame::Type type) {
       }
 #if V8_ENABLE_WEBASSEMBLY
       if (type == StackFrame::WASM || type == StackFrame::WASM_LIFTOFF_SETUP ||
-          type == StackFrame::WASM_EXIT) {
+          type == StackFrame::WASM_TO_CAPI) {
         fourth_reg = kWasmImplicitArgRegister;
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -3166,7 +3166,8 @@ void MacroAssembler::EnterExitFrame(const Register& scratch, int extra_space,
   DCHECK(frame_type == StackFrame::EXIT ||
          frame_type == StackFrame::BUILTIN_EXIT ||
          frame_type == StackFrame::API_ACCESSOR_EXIT ||
-         frame_type == StackFrame::API_CALLBACK_EXIT);
+         frame_type == StackFrame::API_CALLBACK_EXIT ||
+         frame_type == StackFrame::WASM_EXIT);
 
   // Set up the new stack frame.
   Push<MacroAssembler::kSignLR>(lr, fp);

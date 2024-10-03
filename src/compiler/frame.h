@@ -111,6 +111,10 @@ class V8_EXPORT_PRIVATE Frame : public ZoneObject {
     allocated_double_registers_ = regs;
   }
 
+  bool DidAllocateRegister(int code) const {
+    return allocated_registers_->Contains(code);
+  }
+
   bool DidAllocateDoubleRegisters() const {
     return !allocated_double_registers_->IsEmpty();
   }

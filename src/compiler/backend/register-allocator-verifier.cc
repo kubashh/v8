@@ -62,7 +62,8 @@ int GetValue(const ImmediateOperand* imm) {
 
 RegisterAllocatorVerifier::RegisterAllocatorVerifier(
     Zone* zone, const RegisterConfiguration* config,
-    const InstructionSequence* sequence, const Frame* frame)
+    const InstructionSequence* sequence, const Frame* frame,
+    bool has_callee_saved)
     : zone_(zone),
       config_(config),
       sequence_(sequence),
@@ -70,7 +71,8 @@ RegisterAllocatorVerifier::RegisterAllocatorVerifier(
       assessments_(zone),
       outstanding_assessments_(zone),
       spill_slot_delta_(frame->GetTotalFrameSlotCount() -
-                        frame->GetSpillSlotCount()) {
+                        frame->GetSpillSlotCount()),
+      has_callee_saved_(has_callee_saved) {
   constraints_.reserve(sequence->instructions().size());
   // TODO(dcarney): model unique constraints.
   // Construct OperandConstraints for all InstructionOperands, eliminating
@@ -318,12 +320,25 @@ void BlockAssessments::PerformParallelMoves(const ParallelMove* moves) {
   map_for_moves_.clear();
 }
 
-void BlockAssessments::DropRegisters() {
+void BlockAssessments::DropRegisters(bool has_callee_saved) {
   for (auto iterator = map().begin(), end = map().end(); iterator != end;) {
     auto current = iterator;
     ++iterator;
     InstructionOperand op = current->first;
-    if (op.IsAnyRegister()) map().erase(current);
+    if (op.IsAnyRegister()) {
+#if defined(V8_TARGET_ARCH_ARM64)
+#define CALLEE_SAVE_REGISTERS x19, x20, x21, x22, x23, x24, x25
+#else
+#define CALLEE_SAVE_REGISTERS
+#endif
+      const RegList kCalleeSaveRegisters = {CALLEE_SAVE_REGISTERS};
+      LocationOperand lop = LocationOperand::cast(op);
+      int code = lop.register_code();
+      if (!has_callee_saved ||
+          !kCalleeSaveRegisters.has(Register::from_code(code))) {
+        map().erase(current);
+      }
+    }
   }
 }
 
@@ -578,7 +593,10 @@ void RegisterAllocatorVerifier::VerifyGapMoves() {
         block_assessments->Drop(*instr->TempAt(i));
       }
       if (instr->IsCall()) {
-        block_assessments->DropRegisters();
+        bool has_callee_saved =
+            has_callee_saved_ && !block->IsDeferred() &&
+            (instr->arch_opcode() == ArchOpcode::kArchCallWasmFunction);
+        block_assessments->DropRegisters(has_callee_saved);
       }
       if (instr->HasReferenceMap()) {
         block_assessments->CheckReferenceMap(instr->reference_map());

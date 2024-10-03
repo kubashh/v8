@@ -93,8 +93,7 @@ constexpr Register kLiftoffFrameSetupFunctionReg = r4;
 // x16: ip0, x17: ip1, x18: platform register, x26: root, x28: base, x29: fp,
 // x30: lr, x31: xzr.
 constexpr RegList kLiftoffAssemblerGpCacheRegs = {
-    x0,  x1,  x2,  x3,  x4,  x5,  x6,  x7,  x8,  x9,  x10, x11,
-    x12, x13, x14, x15, x19, x20, x21, x22, x23, x24, x25, x27};
+    x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x27};
 
 // d15: fp_zero, d28-d31: not allocatable registers, d30-d31: macro-assembler
 // scratch V Registers.

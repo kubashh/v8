@@ -819,6 +819,7 @@ StackFrame::Type SafeStackFrameType(StackFrame::Type candidate) {
     case StackFrame::WASM_DEBUG_BREAK:
     case StackFrame::WASM_EXIT:
     case StackFrame::WASM_LIFTOFF_SETUP:
+    case StackFrame::WASM_TO_CAPI:
     case StackFrame::WASM_TO_JS:
     case StackFrame::WASM_SEGMENT_START:
 #if V8_ENABLE_DRUMBRAKE
@@ -878,7 +879,7 @@ StackFrame::Type StackFrameIterator::ComputeStackFrameType(
       case wasm::WasmCode::kWasmFunction:
         return StackFrame::WASM;
       case wasm::WasmCode::kWasmToCapiWrapper:
-        return StackFrame::WASM_EXIT;
+        return StackFrame::WASM_TO_CAPI;
       case wasm::WasmCode::kWasmToJsWrapper:
         return StackFrame::WASM_TO_JS;
 #if V8_ENABLE_DRUMBRAKE
@@ -1081,6 +1082,13 @@ void ExitFrame::ComputeCallerState(State* state) const {
   state->pc_address = ResolveReturnAddressLocation(
       reinterpret_cast<Address*>(fp() + ExitFrameConstants::kCallerPCOffset));
   state->callee_pc = kNullAddress;
+  if (type() == WASM_EXIT) {
+    for (int i = 0; i < 7; i++) {
+      static constexpr int kOffset = 1 * kSystemPointerSize;
+      state->callee_saved_addresses[i] =
+          reinterpret_cast<Address*>(sp() + kOffset + i * kSystemPointerSize);
+    }
+  }
   if (V8_EMBEDDED_CONSTANT_POOL_BOOL) {
     state->constant_pool_address = reinterpret_cast<Address*>(
         fp() + ExitFrameConstants::kConstantPoolOffset);
@@ -1097,8 +1105,8 @@ StackFrame::Type ExitFrame::GetStateForFramePointer(Address fp, State* state) {
   if (fp == 0) return NO_FRAME_TYPE;
   StackFrame::Type type = ComputeFrameType(fp);
 #if V8_ENABLE_WEBASSEMBLY
-  Address sp = type == WASM_EXIT ? WasmExitFrame::ComputeStackPointer(fp)
-                                 : ExitFrame::ComputeStackPointer(fp);
+  Address sp = type == WASM_TO_CAPI ? WasmToCAPIFrame::ComputeStackPointer(fp)
+                                    : ExitFrame::ComputeStackPointer(fp);
 #else
   Address sp = ExitFrame::ComputeStackPointer(fp);
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -1126,6 +1134,7 @@ StackFrame::Type ExitFrame::ComputeFrameType(Address fp) {
     case API_CALLBACK_EXIT:
 #if V8_ENABLE_WEBASSEMBLY
     case WASM_EXIT:
+    case WASM_TO_CAPI:
     case STACK_SWITCH:
 #endif  // V8_ENABLE_WEBASSEMBLY
       return frame_type;
@@ -1141,8 +1150,8 @@ Address ExitFrame::ComputeStackPointer(Address fp) {
 }
 
 #if V8_ENABLE_WEBASSEMBLY
-Address WasmExitFrame::ComputeStackPointer(Address fp) {
-  // For WASM_EXIT frames, {sp} is only needed for finding the PC slot,
+Address WasmToCAPIFrame::ComputeStackPointer(Address fp) {
+  // For WASM_TO_CAPI frames, {sp} is only needed for finding the PC slot,
   // everything else is handled via safepoint information.
   Address sp = fp + WasmExitFrameConstants::kWasmInstanceDataOffset;
   DCHECK_EQ(sp - 1 * kPCOnStackSize,
@@ -1341,6 +1350,33 @@ void StackFrame::Print(StringStream* accumulator, PrintMode mode,
   accumulator->Add(" [pc: %p]\n", reinterpret_cast<void*>(pc()));
 }
 
+void StackFrame::PrintBrief(StringStream* accumulator, PrintMode mode,
+                            int index) const {
+  DisallowGarbageCollection no_gc;
+  PrintIndex(accumulator, mode, index);
+  if (type() == StackFrame::STUB) {
+    InnerPointerToCodeCache::InnerPointerToCodeCacheEntry* entry =
+        isolate()->inner_pointer_to_code_cache()->GetCacheEntry(pc());
+    CHECK(entry->code.has_value());
+    Tagged<GcSafeCode> code = entry->code.value();
+    if (code->builtin_id() == Builtin::kWasmToJsWrapperCSA) {
+      accumulator->Add("WasmToJSWrapperCSA");
+    } else {
+      accumulator->Add(StringForStackFrameType(type()));
+    }
+  } else {
+    accumulator->Add(StringForStackFrameType(type()));
+  }
+  accumulator->Add(" [pc: %p, fp: %p, sp: %p]", reinterpret_cast<void*>(pc()),
+                   reinterpret_cast<void*>(fp()),
+                   reinterpret_cast<void*>(sp()));
+  for (int i = 0; i < 7; i++) {
+    accumulator->Add(" %p",
+                     reinterpret_cast<void*>(state_.callee_saved_addresses[i]));
+  }
+  accumulator->Add("\n");
+}
+
 void BuiltinExitFrame::Print(StringStream* accumulator, PrintMode mode,
                              int index) const {
   DisallowGarbageCollection no_gc;
@@ -1443,6 +1479,70 @@ void CommonFrame::ComputeCallerState(State* state) const {
       fp() + StandardFrameConstants::kCallerPCOffset));
   state->callee_fp = fp();
   state->callee_pc = maybe_unauthenticated_pc();
+  int callee_saved_total = 7;
+  if (type() == WASM_TO_JS || type() == WASM) {
+    wasm::WasmCode* wasm_code =
+        wasm::GetWasmCodeManager()
+            ->LookupCodeAndSafepoint(isolate(), maybe_unauthenticated_pc())
+            .first;
+    int frame_header_size = WasmFrameConstants::kFixedFrameSizeFromFp;
+    if (wasm_code->is_liftoff() && wasm_code->frame_has_feedback_slot()) {
+      // Frame has Wasm feedback slot.
+      frame_header_size += kSystemPointerSize;
+    }
+    int spill_slot_space =
+        wasm_code->stack_slots() * kSystemPointerSize -
+        (frame_header_size + StandardFrameConstants::kFixedFrameSizeAboveFp);
+
+    FullObjectSlot frame_header_base(
+        &Memory<Address>(fp() - frame_header_size));
+    FullObjectSlot callee_saved_end =
+        FullObjectSlot(frame_header_base.address() - spill_slot_space);
+
+    int callee_saved_slots =
+        std::min(callee_saved_total, wasm_code->callee_saved_slots());
+    for (int i = 0; i < callee_saved_total; i++) {
+      if (i < callee_saved_slots) {
+        FullObjectSlot slot(callee_saved_end.address() +
+                            (i * kSystemPointerSize));
+        state->callee_saved_addresses[i] =
+            reinterpret_cast<Address*>(slot.address());
+      } else {
+        state->callee_saved_addresses[i] = callee_saved_address(i);
+      }
+    }
+  } else if (type() == STUB) {
+    InnerPointerToCodeCache::InnerPointerToCodeCacheEntry* entry =
+        isolate()->inner_pointer_to_code_cache()->GetCacheEntry(pc());
+    CHECK(entry->code.has_value());
+    Tagged<GcSafeCode> code = entry->code.value();
+    bool is_wasm_to_js = code->builtin_id() == Builtin::kWasmToJsWrapperCSA;
+    if (is_wasm_to_js) {
+      int frame_header_size = TypedFrameConstants::kFixedFrameSizeFromFp;
+      int spill_slot_space =
+          code->stack_slots() * kSystemPointerSize -
+          (frame_header_size + StandardFrameConstants::kFixedFrameSizeAboveFp);
+      FullObjectSlot frame_header_base(
+          &Memory<Address>(fp() - frame_header_size));
+      FullObjectSlot callee_saved_end =
+          FullObjectSlot(frame_header_base.address() - spill_slot_space);
+
+      for (int i = 0; i < callee_saved_total; i++) {
+        FullObjectSlot slot(callee_saved_end.address() +
+                            (i * kSystemPointerSize));
+        state->callee_saved_addresses[i] =
+            reinterpret_cast<Address*>(slot.address());
+      }
+    } else {
+      for (int i = 0; i < callee_saved_total; i++) {
+        state->callee_saved_addresses[i] = callee_saved_address(i);
+      }
+    }
+  } else {
+    for (int i = 0; i < callee_saved_total; i++) {
+      state->callee_saved_addresses[i] = callee_saved_address(i);
+    }
+  }
   state->constant_pool_address = reinterpret_cast<Address*>(
       fp() + StandardFrameConstants::kConstantPoolOffset);
 }
@@ -1690,7 +1790,7 @@ void WasmFrame::Iterate(RootVisitor* v) const {
       Memory<intptr_t>(fp() + CommonFrameConstants::kContextOrFrameTypeOffset);
   DCHECK(StackFrame::IsTypeMarker(marker));
   StackFrame::Type type = StackFrame::MarkerToType(marker);
-  DCHECK(type == WASM_TO_JS || type == WASM || type == WASM_EXIT ||
+  DCHECK(type == WASM_TO_JS || type == WASM || type == WASM_TO_CAPI ||
          type == WASM_SEGMENT_START);
 #endif
 
@@ -1772,6 +1872,17 @@ void WasmFrame::Iterate(RootVisitor* v) const {
               safepoint_entry.tagged_slots().size());
     VisitSpillSlots(isolate(), v, spill_space_end,
                     safepoint_entry.tagged_slots());
+
+    uint32_t tagged_register_indexes =
+        safepoint_entry.tagged_register_indexes();
+    while (tagged_register_indexes != 0) {
+      int reg_code = base::bits::CountTrailingZeros(tagged_register_indexes);
+      tagged_register_indexes &= ~(1 << reg_code);
+      if (reg_code >= 19 && reg_code <= 25) {
+        FullObjectSlot tagged_callee_saved(callee_saved_address(reg_code - 19));
+        v->VisitRootPointer(Root::kStackRoots, nullptr, tagged_callee_saved);
+      }
+    }
   }
 
   // Visit tagged parameters that have been passed to the function of this

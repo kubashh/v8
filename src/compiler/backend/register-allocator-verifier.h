@@ -152,7 +152,7 @@ class BlockAssessments : public ZoneObject {
     map_.erase(operand);
     stale_ref_stack_slots_.erase(operand);
   }
-  void DropRegisters();
+  void DropRegisters(bool has_callee_saved);
   void AddDefinition(InstructionOperand operand, int virtual_register) {
     auto existent = map_.find(operand);
     if (existent != map_.end()) {
@@ -206,7 +206,7 @@ class RegisterAllocatorVerifier final : public ZoneObject {
  public:
   RegisterAllocatorVerifier(Zone* zone, const RegisterConfiguration* config,
                             const InstructionSequence* sequence,
-                            const Frame* frame);
+                            const Frame* frame, bool has_callee_saved);
   RegisterAllocatorVerifier(const RegisterAllocatorVerifier&) = delete;
   RegisterAllocatorVerifier& operator=(const RegisterAllocatorVerifier&) =
       delete;
@@ -274,6 +274,7 @@ class RegisterAllocatorVerifier final : public ZoneObject {
   const InstructionSequence* sequence() const { return sequence_; }
   Constraints* constraints() { return &constraints_; }
   int spill_slot_delta() const { return spill_slot_delta_; }
+  bool has_callee_saved() const { return has_callee_saved_; }
 
   static void VerifyInput(const OperandConstraint& constraint);
   static void VerifyTemp(const OperandConstraint& constraint);
@@ -301,6 +302,7 @@ class RegisterAllocatorVerifier final : public ZoneObject {
   ZoneMap<RpoNumber, BlockAssessments*> assessments_;
   ZoneMap<RpoNumber, DelayedAssessments*> outstanding_assessments_;
   int spill_slot_delta_;
+  bool has_callee_saved_;
   // TODO(chromium:725559): remove after we understand this bug's root cause.
   const char* caller_info_ = nullptr;
 };

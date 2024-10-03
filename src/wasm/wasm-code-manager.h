@@ -223,6 +223,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
   int unpadded_binary_size() const { return unpadded_binary_size_; }
   int stack_slots() const { return stack_slots_; }
   int ool_spills() const { return ool_spills_; }
+  int callee_saved_slots() const { return callee_saved_slots_; }
   uint16_t first_tagged_parameter_slot() const {
     return tagged_parameter_slots_ >> 16;
   }
@@ -358,9 +359,10 @@ class V8_EXPORT_PRIVATE WasmCode final {
 
   WasmCode(NativeModule* native_module, int index,
            base::Vector<uint8_t> instructions, int stack_slots, int ool_spills,
-           uint32_t tagged_parameter_slots, int safepoint_table_offset,
-           int handler_table_offset, int constant_pool_offset,
-           int code_comments_offset, int unpadded_binary_size,
+           int callee_saved_slots, uint32_t tagged_parameter_slots,
+           int safepoint_table_offset, int handler_table_offset,
+           int constant_pool_offset, int code_comments_offset,
+           int unpadded_binary_size,
            base::Vector<const uint8_t> protected_instructions_data,
            base::Vector<const uint8_t> reloc_info,
            base::Vector<const uint8_t> source_position_table,
@@ -385,6 +387,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
         constant_pool_offset_(constant_pool_offset),
         stack_slots_(stack_slots),
         ool_spills_(ool_spills),
+        callee_saved_slots_(callee_saved_slots),
         tagged_parameter_slots_(tagged_parameter_slots),
         safepoint_table_offset_(safepoint_table_offset),
         handler_table_offset_(handler_table_offset),
@@ -443,6 +446,7 @@ class V8_EXPORT_PRIVATE WasmCode final {
   const int constant_pool_offset_;
   const int stack_slots_;
   const int ool_spills_;
+  const int callee_saved_slots_;
   // Number and position of tagged parameters passed to this function via the
   // stack, packed into a single uint32. These values are used by the stack
   // walker (e.g. GC) to find references.
@@ -573,7 +577,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // The returned code still needs to be published via {PublishCode}.
   std::unique_ptr<WasmCode> AddCode(
       int index, const CodeDesc& desc, int stack_slots, int ool_spill_count,
-      uint32_t tagged_parameter_slots,
+      int callee_saved_slots, uint32_t tagged_parameter_slots,
       base::Vector<const uint8_t> protected_instructions,
       base::Vector<const uint8_t> source_position_table,
       base::Vector<const uint8_t> inlining_positions,
@@ -919,7 +923,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
 
   std::unique_ptr<WasmCode> AddCodeWithCodeSpace(
       int index, const CodeDesc& desc, int stack_slots, int ool_spill_count,
-      uint32_t tagged_parameter_slots,
+      int callee_saved_slots, uint32_t tagged_parameter_slots,
       base::Vector<const uint8_t> protected_instructions_data,
       base::Vector<const uint8_t> source_position_table,
       base::Vector<const uint8_t> inlining_positions,

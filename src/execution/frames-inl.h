@@ -136,6 +136,9 @@ inline ExitFrame::ExitFrame(StackFrameIteratorBase* iterator)
 inline BuiltinExitFrame::BuiltinExitFrame(StackFrameIteratorBase* iterator)
     : ExitFrame(iterator) {}
 
+inline WasmExitFrame::WasmExitFrame(StackFrameIteratorBase* iterator)
+    : ExitFrame(iterator) {}
+
 inline Tagged<Object> BuiltinExitFrame::receiver_slot_object() const {
   // The receiver is the first argument on the frame.
   // fp[1]: return address.
@@ -334,7 +337,7 @@ inline WasmSegmentStartFrame::WasmSegmentStartFrame(
     StackFrameIteratorBase* iterator)
     : WasmFrame(iterator) {}
 
-inline WasmExitFrame::WasmExitFrame(StackFrameIteratorBase* iterator)
+inline WasmToCAPIFrame::WasmToCAPIFrame(StackFrameIteratorBase* iterator)
     : WasmFrame(iterator) {}
 
 #if V8_ENABLE_DRUMBRAKE

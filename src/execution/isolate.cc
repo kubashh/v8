@@ -626,7 +626,13 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
     }
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
+  int i = 0;
   for (StackFrameIterator it(this, thread); !it.done(); it.Advance()) {
+    // HeapStringAllocator allocator;
+    // StringStream accumulator(&allocator, StringStream::kPrintObjectConcise);
+    // it.frame()->PrintBrief(&accumulator, i::StackFrame::OVERVIEW, i++);
+    // std::cout << accumulator.ToCString();
+    USE(i);
     it.frame()->Iterate(v);
   }
 }

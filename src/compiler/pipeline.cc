@@ -3044,6 +3044,11 @@ wasm::WasmCompilationResult WrapperCompilationResult(
   result.protected_instructions_data =
       code_generator->GetProtectedInstructionsData();
   result.frame_slot_count = code_generator->frame()->GetTotalFrameSlotCount();
+  result.frame_callee_saved_count =
+      code_generator->frame()->GetTotalFrameSlotCount() -
+      (code_generator->frame()->GetFixedSlotCount() +
+       code_generator->frame()->GetSpillSlotCount() +
+       code_generator->frame()->GetReturnSlotCount());
   result.tagged_parameter_slots = call_descriptor->GetTaggedParameterSlots();
   result.result_tier = wasm::ExecutionTier::kTurbofan;
   if (kind == CodeKind::WASM_TO_JS_FUNCTION) {
@@ -3447,6 +3452,11 @@ void Pipeline::GenerateCodeForWasmFunction(
 
   result->instr_buffer = code_generator->masm()->ReleaseBuffer();
   result->frame_slot_count = code_generator->frame()->GetTotalFrameSlotCount();
+  result->frame_callee_saved_count =
+      code_generator->frame()->GetTotalFrameSlotCount() -
+      (code_generator->frame()->GetFixedSlotCount() +
+       code_generator->frame()->GetSpillSlotCount() +
+       code_generator->frame()->GetReturnSlotCount());
   result->tagged_parameter_slots = call_descriptor->GetTaggedParameterSlots();
   result->source_positions = code_generator->GetSourcePositionTable();
   result->inlining_positions = SerializeInliningPositions(*inlining_positions);
@@ -3667,6 +3677,11 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
 
   result->instr_buffer = code_generator->masm()->ReleaseBuffer();
   result->frame_slot_count = code_generator->frame()->GetTotalFrameSlotCount();
+  result->frame_callee_saved_count =
+      code_generator->frame()->GetTotalFrameSlotCount() -
+      (code_generator->frame()->GetFixedSlotCount() +
+       code_generator->frame()->GetSpillSlotCount() +
+       code_generator->frame()->GetReturnSlotCount());
   result->tagged_parameter_slots = call_descriptor->GetTaggedParameterSlots();
   result->source_positions = code_generator->GetSourcePositionTable();
   result->inlining_positions = SerializeInliningPositions(inlining_positions);
@@ -4241,7 +4256,8 @@ void PipelineImpl::AllocateRegisters(const RegisterConfiguration* config,
     verifier_zone.reset(
         new Zone(data->allocator(), kRegisterAllocatorVerifierZoneName));
     verifier = verifier_zone->New<RegisterAllocatorVerifier>(
-        verifier_zone.get(), config, data->sequence(), data->frame());
+        verifier_zone.get(), config, data->sequence(), data->frame(),
+        data->info()->callee_saved_registers());
   }
 
 #ifdef DEBUG

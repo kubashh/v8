@@ -242,7 +242,7 @@ class RegisterAllocationData final : public ZoneObject {
   RegisterAllocationData(const RegisterConfiguration* config,
                          Zone* allocation_zone, Frame* frame,
                          InstructionSequence* code, TickCounter* tick_counter,
-                         const char* debug_name = nullptr);
+                         bool callee_saved, const char* debug_name = nullptr);
 
   const ZoneVector<TopLevelLiveRange*>& live_ranges() const {
     return live_ranges_;
@@ -285,6 +285,8 @@ class RegisterAllocationData final : public ZoneObject {
   Frame* frame() const { return frame_; }
   const char* debug_name() const { return debug_name_; }
   const RegisterConfiguration* config() const { return config_; }
+
+  bool has_callee_saved() const { return callee_saved_; }
 
   MachineRepresentation RepresentationFor(int virtual_register);
 
@@ -366,6 +368,7 @@ class RegisterAllocationData final : public ZoneObject {
   ZoneVector<ZoneVector<LiveRange*>> spill_state_;
   TickCounter* const tick_counter_;
   ZoneMap<TopLevelLiveRange*, AllocatedOperand*> slot_for_const_range_;
+  bool callee_saved_;
 };
 
 // Representation of the non-empty interval [start,end[.
@@ -1407,7 +1410,8 @@ class LiveRangeBuilder final : public ZoneObject {
 
   static int FixedLiveRangeID(int index) { return -index - 1; }
   int FixedFPLiveRangeID(int index, MachineRepresentation rep);
-  TopLevelLiveRange* FixedLiveRangeFor(int index, SpillMode spill_mode);
+  TopLevelLiveRange* FixedLiveRangeFor(int index, SpillMode spill_mode,
+                                       bool allocated = true);
   TopLevelLiveRange* FixedFPLiveRangeFor(int index, MachineRepresentation rep,
                                          SpillMode spill_mode);
   TopLevelLiveRange* FixedSIMD128LiveRangeFor(int index, SpillMode spill_mode);

@@ -477,7 +477,8 @@ class TFPipelineData {
     register_allocation_data_ =
         register_allocation_zone()->New<RegisterAllocationData>(
             config, register_allocation_zone(), frame(), sequence(),
-            &info()->tick_counter(), debug_name());
+            &info()->tick_counter(), info()->callee_saved_registers(),
+            debug_name());
   }
 
   void InitializeOsrHelper() {

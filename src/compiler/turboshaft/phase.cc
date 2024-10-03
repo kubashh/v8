@@ -23,7 +23,7 @@ void PipelineData::InitializeRegisterComponent(
   auto& zone = register_component_->zone;
   register_component_->allocation_data = zone.New<RegisterAllocationData>(
       config, zone, frame(), sequence(), &info()->tick_counter(),
-      debug_name_.get());
+      info()->callee_saved_registers(), debug_name_.get());
 }
 
 AccountingAllocator* PipelineData::allocator() const {

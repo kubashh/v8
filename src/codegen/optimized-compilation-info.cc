@@ -177,7 +177,7 @@ StackFrame::Type OptimizedCompilationInfo::GetOutputStackFrameType() const {
     case CodeKind::WASM_FUNCTION:
       return StackFrame::WASM;
     case CodeKind::WASM_TO_CAPI_FUNCTION:
-      return StackFrame::WASM_EXIT;
+      return StackFrame::WASM_TO_CAPI;
     case CodeKind::JS_TO_WASM_FUNCTION:
       return StackFrame::JS_TO_WASM;
     case CodeKind::WASM_TO_JS_FUNCTION:

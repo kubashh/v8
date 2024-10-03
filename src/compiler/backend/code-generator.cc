@@ -596,6 +596,10 @@ void CodeGenerator::RecordSafepoint(ReferenceMap* references, int pc_offset) {
       if (index < frame_header_offset) continue;
       safepoint.DefineTaggedStackSlot(index);
     }
+    if (operand.IsRegister()) {
+      safepoint.DefineTaggedRegister(
+          LocationOperand::cast(operand).register_code());
+    }
   }
 }
 

@@ -42,6 +42,7 @@
 //       - ConstructEntryFrame
 //     - ExitFrame
 //       - BuiltinExitFrame
+//       - WasmExitFrame
 //     - StubFrame
 //       - JsToWasmFrame
 //       - CWasmEntryFrame
@@ -50,7 +51,7 @@
 //       - FastConstructFrame
 //       - BuiltinContinuationFrame
 //     - WasmFrame
-//       - WasmExitFrame
+//       - WasmToCAPIFrame
 //       - WasmToJsFrame
 //       - WasmInterpreterEntryFrame (#if V8_ENABLE_DRUMBRAKE)
 //     - WasmDebugBreakFrame
@@ -124,6 +125,7 @@ class StackHandler {
   IF_WASM_DRUMBRAKE(V, WASM_INTERPRETER_ENTRY, WasmInterpreterEntryFrame) \
   IF_WASM(V, WASM_DEBUG_BREAK, WasmDebugBreakFrame)                       \
   IF_WASM(V, C_WASM_ENTRY, CWasmEntryFrame)                               \
+  IF_WASM(V, WASM_TO_CAPI, WasmToCAPIFrame)                               \
   IF_WASM(V, WASM_EXIT, WasmExitFrame)                                    \
   IF_WASM(V, WASM_LIFTOFF_SETUP, WasmLiftoffSetupFrame)                   \
   IF_WASM(V, WASM_SEGMENT_START, WasmSegmentStartFrame)                   \
@@ -177,6 +179,9 @@ class StackFrame {
     Address fp = kNullAddress;
     Address* pc_address = nullptr;
     Address callee_fp = kNullAddress;
+    Address* callee_saved_addresses[7] = {
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+    };
     Address callee_pc = kNullAddress;
     Address* constant_pool_address = nullptr;
     bool is_profiler_entry_frame = false;
@@ -323,6 +328,9 @@ class StackFrame {
   }
 
   Address* pc_address() const { return state_.pc_address; }
+  Address* callee_saved_address(int i) const {
+    return state_.callee_saved_addresses[i];
+  }
 
   Address* constant_pool_address() const {
     return state_.constant_pool_address;
@@ -367,6 +375,8 @@ class StackFrame {
   enum PrintMode { OVERVIEW, DETAILS };
   virtual void Print(StringStream* accumulator, PrintMode mode,
                      int index) const;
+
+  void PrintBrief(StringStream* accumulator, PrintMode mode, int index) const;
 
   Isolate* isolate() const { return isolate_; }
 
@@ -933,6 +943,17 @@ class BuiltinExitFrame : public ExitFrame {
   friend class StackFrameIteratorBase;
 };
 
+class WasmExitFrame : public ExitFrame {
+ public:
+  Type type() const override { return WASM_EXIT; }
+
+ protected:
+  inline explicit WasmExitFrame(StackFrameIteratorBase* iterator);
+
+ private:
+  friend class StackFrameIteratorBase;
+};
+
 // Api callback exit frames are a special case of exit frames, which are used
 // whenever an Api functions (such as v8::Function or v8::FunctionTemplate) are
 // called. Their main purpose is to support preprocessing of exceptions thrown
@@ -1294,13 +1315,13 @@ class WasmSegmentStartFrame : public WasmFrame {
 };
 
 // Wasm to C-API exit frame.
-class WasmExitFrame : public WasmFrame {
+class WasmToCAPIFrame : public WasmFrame {
  public:
-  Type type() const override { return WASM_EXIT; }
+  Type type() const override { return WASM_TO_CAPI; }
   static Address ComputeStackPointer(Address fp);
 
  protected:
-  inline explicit WasmExitFrame(StackFrameIteratorBase* iterator);
+  inline explicit WasmToCAPIFrame(StackFrameIteratorBase* iterator);
 
  private:
   friend class StackFrameIteratorBase;

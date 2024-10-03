@@ -403,7 +403,8 @@ class Pipeline {
       verifier_zone.reset(
           new Zone(allocator, kRegisterAllocatorVerifierZoneName));
       verifier = verifier_zone->New<RegisterAllocatorVerifier>(
-          verifier_zone.get(), config, data()->sequence(), data()->frame());
+          verifier_zone.get(), config, data()->sequence(), data()->frame(),
+          data()->info()->callee_saved_registers());
     }
 
 #ifdef DEBUG

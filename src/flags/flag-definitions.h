@@ -1681,6 +1681,8 @@ DEFINE_NEG_NEG_IMPLICATION(liftoff, wasm_deopt)
 // Deopt support for wasm is not implemented for Turbofan.
 DEFINE_IMPLICATION(wasm_deopt, turboshaft_wasm)
 
+DEFINE_BOOL(wasm_callee_saved, false, "")
+
 // Declare command-line flags for Wasm features. Warning: avoid using these
 // flags directly in the implementation. Instead accept
 // wasm::WasmEnabledFeatures for configurability.

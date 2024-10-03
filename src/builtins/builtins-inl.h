@@ -122,13 +122,13 @@ constexpr Builtin Builtins::LoadGlobalICInOptimizedCode(
 // static
 constexpr Builtin Builtins::CEntry(int result_size, ArgvMode argv_mode,
                                    bool builtin_exit_frame,
-                                   bool switch_to_central_stack) {
+                                   bool wasm_exit_frame) {
   // Aliases for readability below.
   const int rs = result_size;
   const ArgvMode am = argv_mode;
   const bool be = builtin_exit_frame;
 
-  if (switch_to_central_stack) {
+  if (wasm_exit_frame) {
     DCHECK_EQ(result_size, 1);
     DCHECK_EQ(argv_mode, ArgvMode::kStack);
     DCHECK_EQ(builtin_exit_frame, false);
@@ -154,8 +154,8 @@ constexpr Builtin Builtins::CEntry(int result_size, ArgvMode argv_mode,
 
 // static
 constexpr Builtin Builtins::RuntimeCEntry(int result_size,
-                                          bool switch_to_central_stack) {
-  return CEntry(result_size, ArgvMode::kStack, false, switch_to_central_stack);
+                                          bool wasm_exit_frame) {
+  return CEntry(result_size, ArgvMode::kStack, false, wasm_exit_frame);
 }
 
 // static

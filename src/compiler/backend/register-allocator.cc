@@ -25,6 +25,12 @@ namespace compiler {
     if (v8_flags.trace_turbo_alloc) PrintF(__VA_ARGS__); \
   } while (false)
 
+#if defined(V8_TARGET_ARCH_ARM64)
+#define CALLEE_SAVE_REGISTERS x19, x20, x21, x22, x23, x24, x25
+#else
+#define CALLEE_SAVE_REGISTERS
+#endif
+
 namespace {
 
 static constexpr int kFloat32Bit =
@@ -1169,7 +1175,7 @@ void RegisterAllocationData::PhiMapValue::CommitAssignment(
 
 RegisterAllocationData::RegisterAllocationData(
     const RegisterConfiguration* config, Zone* zone, Frame* frame,
-    InstructionSequence* code, TickCounter* tick_counter,
+    InstructionSequence* code, TickCounter* tick_counter, bool callee_saved,
     const char* debug_name)
     : allocation_zone_(zone),
       frame_(frame),
@@ -1196,7 +1202,8 @@ RegisterAllocationData::RegisterAllocationData(
       spill_state_(code->InstructionBlockCount(), ZoneVector<LiveRange*>(zone),
                    zone),
       tick_counter_(tick_counter),
-      slot_for_const_range_(zone) {
+      slot_for_const_range_(zone),
+      callee_saved_(callee_saved) {
   if (kFPAliasing == AliasingKind::kCombine) {
     fixed_float_live_ranges_.resize(
         kNumberOfFixedRangesPerRegister * this->config()->num_float_registers(),
@@ -1837,7 +1844,8 @@ int LiveRangeBuilder::FixedFPLiveRangeID(int index, MachineRepresentation rep) {
 }
 
 TopLevelLiveRange* LiveRangeBuilder::FixedLiveRangeFor(int index,
-                                                       SpillMode spill_mode) {
+                                                       SpillMode spill_mode,
+                                                       bool allocated) {
   int offset = spill_mode == SpillMode::kSpillAtDefinition
                    ? 0
                    : config()->num_general_registers();
@@ -1848,7 +1856,7 @@ TopLevelLiveRange* LiveRangeBuilder::FixedLiveRangeFor(int index,
     result = data()->NewLiveRange(FixedLiveRangeID(offset + index), rep);
     DCHECK(result->IsFixed());
     result->set_assigned_register(index);
-    data()->MarkAllocated(rep, index);
+    if (allocated) data()->MarkAllocated(rep, index);
     if (spill_mode == SpillMode::kSpillDeferred) {
       result->set_deferred_fixed();
     }
@@ -2045,15 +2053,28 @@ void LiveRangeBuilder::ProcessInstructions(const InstructionBlock* block,
     }
 
     if (instr->ClobbersRegisters()) {
+      const RegList kCalleeSaveRegisters = {CALLEE_SAVE_REGISTERS};
+      // TODO(arm): We only support callee-saved registers for wasm calls in
+      // non-deferred blocks, for now.
+      bool callee_saved =
+          data()->has_callee_saved() && !block->IsDeferred() &&
+          (instr->arch_opcode() == ArchOpcode::kArchCallWasmFunction);
       for (int i = 0; i < config()->num_allocatable_general_registers(); ++i) {
         // Create a UseInterval at this instruction for all fixed registers,
         // (including the instruction outputs). Adding another UseInterval here
         // is OK because AddUseInterval will just merge it with the existing
         // one at the end of the range.
         int code = config()->GetAllocatableGeneralCode(i);
-        TopLevelLiveRange* range = FixedLiveRangeFor(code, spill_mode);
-        range->AddUseInterval(curr_position, curr_position.End(),
-                              allocation_zone());
+        if (!callee_saved ||
+            !kCalleeSaveRegisters.has(Register::from_code(code))) {
+          // TODO(arm): Passing false here ensures callee-saved registers that
+          // are only used because calls in deferred blocks clobber them, are
+          // not counted towards the set of allocated registers to save and
+          // restore. We should find a better solution.
+          TopLevelLiveRange* range = FixedLiveRangeFor(code, spill_mode, false);
+          range->AddUseInterval(curr_position, curr_position.End(),
+                                allocation_zone());
+        }
       }
     }
 
@@ -3085,7 +3106,14 @@ LiveRange* LinearScanAllocator::AssignRegisterOnReload(LiveRange* range,
   if (new_end != range->End()) {
     TRACE("Found new end for %d:%d at %d\n", range->TopLevel()->vreg(),
           range->relative_id(), new_end.value());
-    LiveRange* tail = SplitRangeAt(range, new_end);
+    // TODO(arm): Make sure we split the range on the gap position rather than
+    // the instruction start. Otherwise, when callee-saved registers are
+    // supported, we may spill to a register and registers live until the
+    // instruction start cannot be considered.
+    // We should find a better solution.
+    LifetimePosition gap_pos =
+        new_end.IsGapPosition() ? new_end : new_end.FullStart().End();
+    LiveRange* tail = SplitRangeAt(range, gap_pos);
     AddToUnhandled(tail);
   }
   SetLiveRangeAssignedRegister(range, reg);
@@ -4344,6 +4372,14 @@ void LinearScanAllocator::AllocateBlockedReg(LiveRange* current,
     // Register becomes blocked before the current range end. Split before that
     // position.
     new_end = block_pos[reg].Start();
+    if (data()->has_callee_saved()) {
+      // TODO(arm): Make sure we split the range on the gap position rather than
+      // the instruction start. Otherwise, when callee-saved registers are
+      // supported, we may spill to a register and registers live until the
+      // instruction start cannot be considered.  We should find a better
+      // solution.
+      new_end = new_end.IsGapPosition() ? new_end : new_end.FullStart().End();
+    }
   }
 
   // If there is no register available at all, we can only spill this range.
@@ -4762,7 +4798,10 @@ void ReferenceMapPopulator::PopulateReferenceMaps() {
     if (!data()->code()->IsReference(range->vreg())) continue;
     // Skip empty live ranges.
     if (range->IsEmpty()) continue;
-    if (range->has_preassigned_slot()) continue;
+    // TODO(arm): We needed to ensure we record reference maps for pre-assigned
+    // slots, in particular the Wasm instance object. This needs more
+    // investigation.
+    // if (range->has_preassigned_slot()) continue;
     candidate_ranges.push_back(range);
   }
   std::sort(candidate_ranges.begin(), candidate_ranges.end(),
@@ -4842,23 +4881,37 @@ void ReferenceMapPopulator::PopulateReferenceMaps() {
         continue;
       }
 
-      // Check if the live range is spilled and the safe point is after
-      // the spill position.
+      const RegList kCalleeSaveRegisters = {CALLEE_SAVE_REGISTERS};
+      bool callee_saved = cur->HasRegisterAssigned() &&
+                          kCalleeSaveRegisters.has(
+                              Register::from_code(cur->assigned_register()));
+
       int spill_index = range->IsSpilledOnlyInDeferredBlocks(data()) ||
                                 range->LateSpillingSelected()
                             ? cur->Start().ToInstructionIndex()
                             : range->spill_start_index();
 
       if (!spill_operand.IsInvalid() && safe_point >= spill_index) {
-        TRACE("Pointer for range %d (spilled at %d) at safe point %d\n",
-              range->vreg(), spill_index, safe_point);
-        map->RecordReference(AllocatedOperand::cast(spill_operand));
+        // TODO(arm): Callee-saved registers are only supported in non-deferred
+        // blocks.
+        if (!callee_saved || !range->IsSpilledOnlyInDeferredBlocks(data())) {
+          TRACE(
+              "Pointer for range %d (spilled at %d) at safe point %d -- %s "
+              "%s\n",
+              range->vreg(), spill_index, safe_point,
+              range->IsSpilledOnlyInDeferredBlocks(data())
+                  ? "spilled-only-in-deferred-blocks"
+                  : "",
+              range->LateSpillingSelected() ? "late-spilling" : "");
+          map->RecordReference(AllocatedOperand::cast(spill_operand));
+        }
       }
 
-      if (!cur->spilled()) {
+      if (!cur->spilled() || callee_saved) {
         TRACE(
-            "Pointer in register for range %d:%d (start at %d) "
+            "Pointer in register %s for range %d:%d (start at %d) "
             "at safe point %d\n",
+            RegisterName(Register::from_code(cur->assigned_register())),
             range->vreg(), cur->relative_id(), cur->Start().value(),
             safe_point);
         InstructionOperand operand = cur->GetAssignedOperand();

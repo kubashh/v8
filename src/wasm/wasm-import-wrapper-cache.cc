@@ -97,12 +97,14 @@ WasmCode* WasmImportWrapperCache::ModificationScope::AddWrapper(
   FlushInstructionCache(code_space.begin(), code_space.size());
   const int frame_slot_count = result.frame_slot_count;
   const int ool_spill_count = result.ool_spill_count;
+  const int callee_saved_slots = result.frame_callee_saved_count;
   constexpr bool frame_has_feedback_slot = false;
   WasmCode* code = new WasmCode{nullptr /* no NativeModule */,
                                 kAnonymousFuncIndex,
                                 code_space,
                                 frame_slot_count,
                                 ool_spill_count,
+                                callee_saved_slots,
                                 result.tagged_parameter_slots,
                                 safepoint_table_offset,
                                 handler_table_offset,

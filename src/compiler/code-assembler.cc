@@ -1121,19 +1121,17 @@ Node* CodeAssembler::CallRuntimeImpl(
     std::initializer_list<TNode<Object>> args) {
   int result_size = Runtime::FunctionForId(function)->result_size;
 #if V8_ENABLE_WEBASSEMBLY
-  bool switch_to_the_central_stack =
-      state_->kind_ == CodeKind::WASM_FUNCTION ||
-      state_->kind_ == CodeKind::WASM_TO_JS_FUNCTION ||
-      state_->kind_ == CodeKind::JS_TO_WASM_FUNCTION ||
-      state_->builtin_ == Builtin::kJSToWasmWrapper ||
-      state_->builtin_ == Builtin::kJSToWasmHandleReturns ||
-      state_->builtin_ == Builtin::kWasmToJsWrapperCSA ||
-      wasm::BuiltinLookup::IsWasmBuiltinId(state_->builtin_);
+  bool wasm_exit_frame = state_->kind_ == CodeKind::WASM_FUNCTION ||
+                         state_->kind_ == CodeKind::WASM_TO_JS_FUNCTION ||
+                         state_->kind_ == CodeKind::JS_TO_WASM_FUNCTION ||
+                         state_->builtin_ == Builtin::kJSToWasmWrapper ||
+                         state_->builtin_ == Builtin::kJSToWasmHandleReturns ||
+                         state_->builtin_ == Builtin::kWasmToJsWrapperCSA ||
+                         wasm::BuiltinLookup::IsWasmBuiltinId(state_->builtin_);
 #else
-  bool switch_to_the_central_stack = false;
+  bool wasm_exit_frame = false;
 #endif
-  Builtin centry =
-      Builtins::RuntimeCEntry(result_size, switch_to_the_central_stack);
+  Builtin centry = Builtins::RuntimeCEntry(result_size, wasm_exit_frame);
   TNode<Code> centry_code =
       HeapConstantNoHole(isolate()->builtins()->code_handle(centry));
   constexpr size_t kMaxNumArgs = 7;
@@ -1213,19 +1211,17 @@ void CodeAssembler::TailCallRuntimeImpl(
     std::initializer_list<TNode<Object>> args) {
   int result_size = Runtime::FunctionForId(function)->result_size;
 #if V8_ENABLE_WEBASSEMBLY
-  bool switch_to_the_central_stack =
-      state_->kind_ == CodeKind::WASM_FUNCTION ||
-      state_->kind_ == CodeKind::WASM_TO_JS_FUNCTION ||
-      state_->kind_ == CodeKind::JS_TO_WASM_FUNCTION ||
-      state_->builtin_ == Builtin::kJSToWasmWrapper ||
-      state_->builtin_ == Builtin::kJSToWasmHandleReturns ||
-      state_->builtin_ == Builtin::kWasmToJsWrapperCSA ||
-      wasm::BuiltinLookup::IsWasmBuiltinId(state_->builtin_);
+  bool wasm_exit_frame = state_->kind_ == CodeKind::WASM_FUNCTION ||
+                         state_->kind_ == CodeKind::WASM_TO_JS_FUNCTION ||
+                         state_->kind_ == CodeKind::JS_TO_WASM_FUNCTION ||
+                         state_->builtin_ == Builtin::kJSToWasmWrapper ||
+                         state_->builtin_ == Builtin::kJSToWasmHandleReturns ||
+                         state_->builtin_ == Builtin::kWasmToJsWrapperCSA ||
+                         wasm::BuiltinLookup::IsWasmBuiltinId(state_->builtin_);
 #else
-  bool switch_to_the_central_stack = false;
+  bool wasm_exit_frame = false;
 #endif
-  Builtin centry =
-      Builtins::RuntimeCEntry(result_size, switch_to_the_central_stack);
+  Builtin centry = Builtins::RuntimeCEntry(result_size, wasm_exit_frame);
   TNode<Code> centry_code =
       HeapConstantNoHole(isolate()->builtins()->code_handle(centry));
 

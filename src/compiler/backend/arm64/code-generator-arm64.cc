@@ -685,7 +685,55 @@ void EmitFpOrNeonUnop(MacroAssembler* masm, Fn fn, Instruction* instr,
     }                                                                       \
   } while (0)
 
+namespace {
+CPURegList CalleeSavedRegistersOnFrame(const CallDescriptor* call_descriptor,
+                                       const OptimizedCompilationInfo* info,
+                                       const Frame* frame) {
+  const RegList kCalleeSavedRegisters = {x19, x20, x21, x22, x23, x24, x25};
+  CPURegList saves(64, kCalleeSavedRegisters);
+
+  if (v8_flags.wasm_callee_saved &&
+      info->code_kind() == CodeKind::WASM_TO_JS_FUNCTION) {
+    saves.Align();
+    return saves;
+  }
+
+  if (info->code_kind() == CodeKind::BUILTIN) {
+    Builtin builtin = info->builtin();
+    if (builtin == Builtin::kWasmToJsWrapperCSA) {
+      saves.Align();
+      return saves;
+    }
+  }
+
+  if (!info->callee_saved_registers()) {
+    return CPURegList(kXRegSizeInBits, call_descriptor->CalleeSavedRegisters());
+  }
+
+  for (Register reg : kCalleeSavedRegisters) {
+    if (!frame->DidAllocateRegister(reg.code())) {
+      saves.Remove(reg);
+    }
+  }
+  saves.Align();
+  return saves;
+}
+
+}  // namespace
+
 void CodeGenerator::AssembleDeconstructFrame() {
+  auto call_descriptor = linkage()->GetIncomingDescriptor();
+
+  // Restore registers.
+  CPURegList saves =
+      CalleeSavedRegistersOnFrame(call_descriptor, info(), frame());
+  __ PopCPURegList(saves);
+
+  // Restore fp registers.
+  CPURegList saves_fp =
+      CPURegList(kDRegSizeInBits, call_descriptor->CalleeSavedFPRegisters());
+  __ PopCPURegList(saves_fp);
+
   __ Mov(sp, fp);
   __ Pop<MacroAssembler::kAuthLR>(fp, lr);
 
@@ -3577,9 +3625,10 @@ void CodeGenerator::FinishFrame(Frame* frame) {
   }
 
   CPURegList saves =
-      CPURegList(kXRegSizeInBits, call_descriptor->CalleeSavedRegisters());
+      CalleeSavedRegistersOnFrame(call_descriptor, info(), frame);
   saved_count = saves.Count();
   if (saved_count != 0) {
+    frame->AlignSavedCalleeRegisterSlots(16);
     frame->AllocateSavedCalleeRegisterSlots(saved_count);
   }
   frame->AlignFrame(16);
@@ -3595,7 +3644,7 @@ void CodeGenerator::AssembleConstructFrame() {
       frame()->GetTotalFrameSlotCount() - frame()->GetFixedSlotCount();
 
   CPURegList saves =
-      CPURegList(kXRegSizeInBits, call_descriptor->CalleeSavedRegisters());
+      CalleeSavedRegistersOnFrame(call_descriptor, info(), frame());
   DCHECK_EQ(saves.Count() % 2, 0);
   CPURegList saves_fp =
       CPURegList(kDRegSizeInBits, call_descriptor->CalleeSavedFPRegisters());
@@ -3755,16 +3804,6 @@ void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
   if (returns != 0) {
     __ Drop(returns);
   }
-
-  // Restore registers.
-  CPURegList saves =
-      CPURegList(kXRegSizeInBits, call_descriptor->CalleeSavedRegisters());
-  __ PopCPURegList(saves);
-
-  // Restore fp registers.
-  CPURegList saves_fp =
-      CPURegList(kDRegSizeInBits, call_descriptor->CalleeSavedFPRegisters());
-  __ PopCPURegList(saves_fp);
 
   unwinding_info_writer_.MarkBlockWillExit();
 

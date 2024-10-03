@@ -36,6 +36,8 @@ wasm::WasmCompilationResult ExecuteTurboshaftWasmCompilation(
                    data.func_index),
       &zone, CodeKind::WASM_FUNCTION);
 
+  if (v8_flags.wasm_callee_saved) info.set_callee_saved_registers();
+
   if (info.trace_turbo_json()) {
     TurboCfgFile tcf;
     tcf << AsC1VCompilation(&info);

@@ -3356,7 +3356,9 @@ void Builtins::Generate_WasmDebugBreak(MacroAssembler* masm) {
 
     // Save all parameter registers. They might hold live values, we restore
     // them after the runtime call.
-    __ PushXRegList(WasmDebugBreakFrameConstants::kPushedGpRegs);
+    CPURegList saves(64, WasmDebugBreakFrameConstants::kPushedGpRegs);
+    saves.Align();
+    __ PushCPURegList(saves);
     __ PushQRegList(WasmDebugBreakFrameConstants::kPushedFpRegs);
 
     // Initialize the JavaScript context with 0. CEntry will use it to
@@ -3366,7 +3368,7 @@ void Builtins::Generate_WasmDebugBreak(MacroAssembler* masm) {
 
     // Restore registers.
     __ PopQRegList(WasmDebugBreakFrameConstants::kPushedFpRegs);
-    __ PopXRegList(WasmDebugBreakFrameConstants::kPushedGpRegs);
+    __ PopCPURegList(saves);
   }
   __ Ret();
 }
@@ -4508,7 +4510,7 @@ void Builtins::Generate_WasmToOnHeapWasmToJsTrampoline(MacroAssembler* masm) {
 
 void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
                                ArgvMode argv_mode, bool builtin_exit_frame,
-                               bool switch_to_central_stack) {
+                               bool wasm_exit_frame) {
   ASM_LOCATION("CEntry::Generate entry");
 
   using ER = ExternalReference;
@@ -4542,31 +4544,39 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
     __ Sub(argv_input, argv_input, kReceiverOnStackSize);
   }
 
-  // If ArgvMode::kStack, argc is reused below and must be retained across the
-  // call in a callee-saved register.
-  static constexpr Register argc = x22;
-
   // Enter the exit frame.
-  const int kNoExtraSpace = 0;
+  int extra_space = 0;
+  // If ArgvMode::kStack, argc is saved on the stack below.
+  if (argv_mode == ArgvMode::kStack) {
+    extra_space = 1;
+  }
+
   FrameScope scope(masm, StackFrame::MANUAL);
-  __ EnterExitFrame(
-      x10, kNoExtraSpace,
-      builtin_exit_frame ? StackFrame::BUILTIN_EXIT : StackFrame::EXIT);
+  StackFrame::Type type = StackFrame::EXIT;
+  if (builtin_exit_frame) {
+    type = StackFrame::BUILTIN_EXIT;
+  } else if (wasm_exit_frame) {
+    extra_space += 7;
+    DCHECK_EQ(argv_mode, ArgvMode::kStack);
+    type = StackFrame::WASM_EXIT;
+  }
+  __ EnterExitFrame(x10, extra_space, type);
 
   if (argv_mode == ArgvMode::kStack) {
-    __ Mov(argc, argc_input);
+    __ Str(argc_input, ExitFrameStackSlotOperand(0));
   }
 
 #if V8_ENABLE_WEBASSEMBLY
-  if (switch_to_central_stack) {
+  if (wasm_exit_frame) {
+    DCHECK_EQ(argv_mode, ArgvMode::kStack);
+    __ Stp(x19, x20, ExitFrameStackSlotOperand(1 * kSystemPointerSize));
+    __ Stp(x21, x22, ExitFrameStackSlotOperand(3 * kSystemPointerSize));
+    __ Stp(x23, x24, ExitFrameStackSlotOperand(5 * kSystemPointerSize));
+    __ Str(x25, ExitFrameStackSlotOperand(7 * kSystemPointerSize));
     SwitchToTheCentralStackIfNeeded(masm, argc_input, target_input, argv_input);
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-  // x21 : argv
-  // x22 : argc
-  // x23 : call target
-  //
   // The stack (on entry) holds the arguments and the receiver, with the
   // receiver at the highest address:
   //
@@ -4593,7 +4603,7 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
   __ Swap(target_input, argv_input);
   static constexpr Register target = x11;
   static constexpr Register argv = x1;
-  static_assert(!AreAliased(argc_input, argc, target, argv));
+  static_assert(!AreAliased(argc_input, target, argv));
 
   // Prepare AAPCS64 arguments to pass to the builtin.
   static_assert(argc_input == x0);  // Already in the right spot.
@@ -4610,7 +4620,7 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
   const Register& result = x0;
 
 #if V8_ENABLE_WEBASSEMBLY
-  if (switch_to_central_stack) {
+  if (wasm_exit_frame) {
     SwitchFromTheCentralStackIfNeeded(masm);
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -4623,8 +4633,15 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
   __ B(eq, &exception_returned);
 
   // The call succeeded, so unwind the stack and return.
+  if (wasm_exit_frame) {
+    DCHECK_EQ(argv_mode, ArgvMode::kStack);
+    __ Ldp(x19, x20, ExitFrameStackSlotOperand(1 * kSystemPointerSize));
+    __ Ldp(x21, x22, ExitFrameStackSlotOperand(3 * kSystemPointerSize));
+    __ Ldp(x23, x24, ExitFrameStackSlotOperand(5 * kSystemPointerSize));
+    __ Ldr(x25, ExitFrameStackSlotOperand(7 * kSystemPointerSize));
+  }
   if (argv_mode == ArgvMode::kStack) {
-    __ Mov(x11, argc);  // x11 used as scratch, just til DropArguments below.
+    __ Ldr(x11, ExitFrameStackSlotOperand(0));
     __ LeaveExitFrame(x10, x9);
     __ DropArguments(x11);
   } else {

@@ -9376,6 +9376,7 @@ WasmCompilationResult ExecuteLiftoffCompilation(
   result.protected_instructions_data = compiler->GetProtectedInstructionsData();
   result.frame_slot_count = compiler->GetTotalFrameSlotCountForGC();
   result.ool_spill_count = compiler->OolSpillCount();
+  result.frame_callee_saved_count = 0;
   auto* lowered_call_desc = GetLoweredCallDescriptor(&zone, call_descriptor);
   result.tagged_parameter_slots = lowered_call_desc->GetTaggedParameterSlots();
   result.func_index = compiler_options.func_index;

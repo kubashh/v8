@@ -179,10 +179,10 @@ class Builtins {
 
   static inline constexpr Builtin CEntry(int result_size, ArgvMode argv_mode,
                                          bool builtin_exit_frame = false,
-                                         bool switch_to_central_stack = false);
+                                         bool wasm_exit_frame = false);
 
-  static inline constexpr Builtin RuntimeCEntry(
-      int result_size, bool switch_to_central_stack = false);
+  static inline constexpr Builtin RuntimeCEntry(int result_size,
+                                                bool wasm_exit_frame = false);
 
   static inline constexpr Builtin InterpreterCEntry(int result_size);
   static inline constexpr Builtin InterpreterPushArgsThenCall(
@@ -294,7 +294,7 @@ class Builtins {
 
   static void Generate_CEntry(MacroAssembler* masm, int result_size,
                               ArgvMode argv_mode, bool builtin_exit_frame,
-                              bool switch_to_central_stack);
+                              bool wasm_exit_frame);
 
   static bool AllowDynamicFunction(Isolate* isolate,
                                    DirectHandle<JSFunction> target,
