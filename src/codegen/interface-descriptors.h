@@ -97,6 +97,7 @@ namespace internal {
   V(InterpreterPushArgsThenCall)                     \
   V(InterpreterPushArgsThenConstruct)                \
   V(JSTrampoline)                                    \
+  V(JSBuiltinTrampoline)                             \
   V(KeyedHasICBaseline)                              \
   V(KeyedHasICWithVector)                            \
   V(KeyedLoad)                                       \
@@ -730,7 +731,7 @@ constexpr EmptyDoubleRegisterArray DoubleRegisterArray() { return {}; }
     kActualArgumentsCount,                                  \
     ##__VA_ARGS__,                                          \
     kParameterCount,                                        \
-    kContext = kParameterCount /* implicit parameter */     \
+    kContext = kParameterCount, /* implicit parameter */    \
   };
 
 #define DEFINE_JS_PARAMETERS_NO_CONTEXT(...)                \
@@ -891,10 +892,22 @@ class JSTrampolineDescriptor
     : public StaticJSCallInterfaceDescriptor<JSTrampolineDescriptor> {
  public:
   SANDBOX_EXPOSED_DESCRIPTOR(kJSEntrypointTag)
+  DEFINE_JS_PARAMETERS(kDispatchHandle)
+  DEFINE_JS_PARAMETER_TYPES(MachineType::Int32())
+
+  DECLARE_JS_COMPATIBLE_DESCRIPTOR(JSTrampolineDescriptor)
+
+  static constexpr auto registers();
+};
+
+class JSBuiltinTrampolineDescriptor
+    : public StaticJSCallInterfaceDescriptor<JSBuiltinTrampolineDescriptor> {
+ public:
+  INTERNAL_DESCRIPTOR()
   DEFINE_JS_PARAMETERS()
   DEFINE_JS_PARAMETER_TYPES()
 
-  DECLARE_JS_COMPATIBLE_DESCRIPTOR(JSTrampolineDescriptor)
+  DECLARE_JS_COMPATIBLE_DESCRIPTOR(JSBuiltinTrampolineDescriptor)
 };
 
 // Descriptor used for code using the RegExp calling convention, in particular

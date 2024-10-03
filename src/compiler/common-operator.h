@@ -763,7 +763,7 @@ class StartNode final : public CommonNodeWrapperBase {
   // The receiver is counted as part of formal parameters.
   static constexpr int kReceiverOutputCount = 1;
   // These outputs are in addition to formal parameters.
-  static constexpr int kExtraOutputCount = 4;
+  static constexpr int kExtraOutputCount = 5;
 
   // Takes the formal parameter count of the current function (including
   // receiver) and returns the number of value outputs of the start node.
@@ -771,16 +771,20 @@ class StartNode final : public CommonNodeWrapperBase {
     constexpr int kClosure = 1;
     constexpr int kNewTarget = 1;
     constexpr int kArgCount = 1;
+    constexpr int kDispatchHandle = 1;
     constexpr int kContext = 1;
-    static_assert(kClosure + kNewTarget + kArgCount + kContext ==
+    static_assert(kClosure + kNewTarget + kArgCount + kDispatchHandle +
+                      kContext ==
                   kExtraOutputCount);
     // Checking related linkage methods here since they rely on Start node
     // layout.
     DCHECK_EQ(-1, Linkage::kJSCallClosureParamIndex);
     DCHECK_EQ(argc + 0, Linkage::GetJSCallNewTargetParamIndex(argc));
     DCHECK_EQ(argc + 1, Linkage::GetJSCallArgCountParamIndex(argc));
-    DCHECK_EQ(argc + 2, Linkage::GetJSCallContextParamIndex(argc));
-    return argc + kClosure + kNewTarget + kArgCount + kContext;
+    DCHECK_EQ(argc + 2, Linkage::GetJSCallDispatchHandleParamIndex(argc));
+    DCHECK_EQ(argc + 3, Linkage::GetJSCallContextParamIndex(argc));
+    return argc + kClosure + kNewTarget + kArgCount + +kDispatchHandle +
+           kContext;
   }
 
   int FormalParameterCount() const {
@@ -836,16 +840,16 @@ class StartNode final : public CommonNodeWrapperBase {
     // at -1).
     // TODO(jgruber): Consider starting at 0.
     DCHECK_EQ(Linkage::GetJSCallNewTargetParamIndex(FormalParameterCount()) + 1,
-              node()->op()->ValueOutputCount() - 3);
-    return node()->op()->ValueOutputCount() - 3;
+              node()->op()->ValueOutputCount() - 4);
+    return node()->op()->ValueOutputCount() - 4;
   }
   int ArgCountOutputIndex() const {
     // Indices assigned to parameters are off-by-one (Parameters indices start
     // at -1).
     // TODO(jgruber): Consider starting at 0.
     DCHECK_EQ(Linkage::GetJSCallArgCountParamIndex(FormalParameterCount()) + 1,
-              node()->op()->ValueOutputCount() - 2);
-    return node()->op()->ValueOutputCount() - 2;
+              node()->op()->ValueOutputCount() - 3);
+    return node()->op()->ValueOutputCount() - 3;
   }
   int ContextOutputIndex() const {
     // Indices assigned to parameters are off-by-one (Parameters indices start

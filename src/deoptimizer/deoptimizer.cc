@@ -2521,7 +2521,9 @@ void Deoptimizer::DoComputeBuiltinContinuation(
     // Only tagged and int32 arguments are supported, and int32 only for the
     // arguments count on JavaScript builtins.
     if (type == MachineType::Int32()) {
-      CHECK_EQ(code, kJavaScriptCallArgCountRegister.code());
+      // TODO(saelo) ???
+      CHECK(code == kJavaScriptCallArgCountRegister.code() ||
+            code == kJavaScriptCallDispatchHandleRegister.code());
       has_argc = true;
     } else {
       // Any other argument must be a tagged value.

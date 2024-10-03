@@ -7701,7 +7701,12 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     const int wasm_param_count = static_cast<int>(sig_->parameter_count());
 
     // Build the start and the JS parameter nodes.
-    Start(wasm_param_count + 5);
+    // TODO(saelo): this should probably be a constant with a descriptive name.
+    // As far as I understand, it's the number of additional parameters in the
+    // JS calling convention. Also there should be a static_assert here that it
+    // matches the number of parameters in the JSTrampolineDescriptor?
+    // static_assert
+    Start(wasm_param_count + 6);
 
     // Create the js_closure and js_context parameters.
     Node* js_closure = Param(Linkage::kJSCallClosureParamIndex, "%closure");
@@ -8015,7 +8020,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         [[fallthrough]];
       case wasm::ImportCallKind::kJSFunctionArityMismatch: {
         int pushed_count = std::max(expected_arity, wasm_count);
-        base::SmallVector<Node*, 16> args(pushed_count + 7);
+        base::SmallVector<Node*, 16> args(pushed_count + 8);
         int pos = 0;
 
         args[pos++] = callable_node;  // target callable.
@@ -8032,6 +8037,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         args[pos++] = undefined_node;  // new target
         args[pos++] =
             Int32Constant(JSParameterCount(wasm_count));  // argument count
+        // TODO(saelo) either kPlaceholderDispatchHandle or actually load it
+        // here?
+        args[pos++] = Int32Constant(0xffffffff);  // TODO(saelo) dispatch handle
 
         Node* function_context =
             gasm_->LoadContextFromJSFunction(callable_node);

@@ -1367,7 +1367,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   // only be used after arguments adaptation has been performed already.
   void TailCallJSCode(TNode<Code> code, TNode<Context> context,
                       TNode<JSFunction> function, TNode<Object> new_target,
-                      TNode<Int32T> arg_count);
+                      TNode<Int32T> arg_count,
+                      TNode<JSDispatchHandleT> dispatch_handle);
 
   template <class... TArgs>
   TNode<Object> CallJS(Builtin builtin, TNode<Context> context,
@@ -1391,7 +1392,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                                       TNode<Object> new_target, TArgs... args) {
     Callable callable = Builtins::CallableFor(isolate(), builtin);
     // Only descriptors with |new_target| parameter are allowed here.
-    DCHECK_EQ(callable.descriptor(), JSTrampolineDescriptor{});
+    DCHECK(callable.descriptor() == JSTrampolineDescriptor{} ||
+           callable.descriptor() == JSBuiltinTrampolineDescriptor{});
     int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
     TNode<Int32T> arity = Int32Constant(argc);
     TNode<Object> receiver = LoadRoot(RootIndex::kUndefinedValue);

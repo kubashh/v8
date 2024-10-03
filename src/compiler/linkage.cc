@@ -497,12 +497,16 @@ CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
                                              Operator::Properties properties) {
   const size_t return_count = 1;
   const size_t context_count = 1;
+  const size_t dispatch_handle_count = 1;
   const size_t new_target_count = 1;
   const size_t num_args_count = 1;
-  const size_t parameter_count =
-      js_parameter_count + new_target_count + num_args_count + context_count;
+  const size_t parameter_count = js_parameter_count + new_target_count +
+                                 num_args_count + dispatch_handle_count +
+                                 context_count;
 
   LocationSignature::Builder locations(zone, return_count, parameter_count);
+
+  // Keep in sync with builtins-descriptors.h
 
   // All JS calls have exactly one return value.
   locations.AddReturn(regloc(kReturnRegister0, MachineType::AnyTagged()));
@@ -521,6 +525,10 @@ CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
   // Add JavaScript call argument count.
   locations.AddParam(
       regloc(kJavaScriptCallArgCountRegister, MachineType::Int32()));
+
+  // Add dispatch handle.
+  locations.AddParam(
+      regloc(kJavaScriptCallDispatchHandleRegister, MachineType::Int32()));
 
   // Add context.
   locations.AddParam(regloc(kContextRegister, MachineType::AnyTagged()));
@@ -604,6 +612,7 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
                           : MachineType::AnyTagged()));
     }
   }
+
   // Add context.
   if (context_count) {
     locations.AddParam(regloc(kContextRegister, MachineType::AnyTagged()));
@@ -706,8 +715,10 @@ LinkageLocation Linkage::GetOsrValueLocation(int index) const {
   if (index == kOsrContextSpillSlotIndex) {
     // Context. Use the parameter location of the context spill slot.
     // Parameter (arity + 2) is special for the context of the function frame.
-    // >> context_index = target + receiver + params + new_target + #args
-    int context_index = 1 + 1 + parameter_count + 1 + 1;
+    // >> context_index = target + receiver + params + new_target + #args +
+    // dispatch_handle
+    // TODO(saelo) add static assert
+    int context_index = 1 + 1 + parameter_count + 1 + 1 + 1;
     return incoming_->GetInputLocation(context_index);
   } else if (index >= first_stack_slot) {
     // Local variable stored in this (callee) stack.

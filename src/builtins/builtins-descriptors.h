@@ -13,6 +13,7 @@ namespace v8 {
 namespace internal {
 
 // Define interface descriptors for builtins with JS linkage.
+// Keep in sync with Linkage::GetJSCallDescriptor
 #define DEFINE_TFJ_INTERFACE_DESCRIPTOR(Name, Argc, ...)                 \
   struct Builtin_##Name##_InterfaceDescriptor {                          \
     enum ParameterIndices {                                              \
@@ -20,10 +21,11 @@ namespace internal {
       ##__VA_ARGS__,                                                     \
       kJSNewTarget,                                                      \
       kJSActualArgumentsCount,                                           \
+      kJSDispatchHandle,                                                 \
       kContext,                                                          \
       kParameterCount,                                                   \
     };                                                                   \
-    static_assert((Argc) == static_cast<uint16_t>(kParameterCount - 4 +  \
+    static_assert((Argc) == static_cast<uint16_t>(kParameterCount - 5 +  \
                                                   kJSArgcReceiverSlots), \
                   "Inconsistent set of arguments");                      \
     static_assert(kJSTarget == -1, "Unexpected kJSTarget index value");  \

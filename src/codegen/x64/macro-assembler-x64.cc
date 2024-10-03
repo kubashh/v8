@@ -1186,6 +1186,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     FrameScope scope(this, StackFrame::INTERNAL);
     // Push a copy of the target function, the new target and the actual
     // argument count.
+    Push(kJavaScriptCallDispatchHandleRegister);
     Push(kJavaScriptCallTargetRegister);
     Push(kJavaScriptCallNewTargetRegister);
     SmiTag(kJavaScriptCallArgCountRegister);
@@ -1201,6 +1202,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     SmiUntagUnsigned(kJavaScriptCallArgCountRegister);
     Pop(kJavaScriptCallNewTargetRegister);
     Pop(kJavaScriptCallTargetRegister);
+    Pop(kJavaScriptCallDispatchHandleRegister);
   }
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
   JumpCodeObject(rcx, kJSEntrypointTag, jump_mode);

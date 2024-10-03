@@ -228,7 +228,11 @@ CallInterfaceDescriptor Builtins::CallInterfaceDescriptorFor(Builtin builtin) {
     default:
       Builtins::Kind kind = Builtins::KindOf(builtin);
       DCHECK_NE(BCH, kind);
-      if (kind == TSJ || kind == TFJ || kind == CPP) {
+      if (kind == CPP) {
+        // TODO should this be JSTrampolineDescriptor
+        return JSBuiltinTrampolineDescriptor{};
+      }
+      if (kind == TSJ || kind == TFJ) {
         return JSTrampolineDescriptor{};
       }
       UNREACHABLE();
@@ -245,7 +249,8 @@ Callable Builtins::CallableFor(Isolate* isolate, Builtin builtin) {
 // static
 bool Builtins::HasJSLinkage(Builtin builtin) {
   DCHECK_NE(BCH, Builtins::KindOf(builtin));
-  return CallInterfaceDescriptorFor(builtin) == JSTrampolineDescriptor{};
+  return CallInterfaceDescriptorFor(builtin) == JSTrampolineDescriptor{} ||
+         CallInterfaceDescriptorFor(builtin) == JSBuiltinTrampolineDescriptor{};
 }
 
 // static
