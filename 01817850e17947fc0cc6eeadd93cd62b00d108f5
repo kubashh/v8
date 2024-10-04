@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c82cec21_e3df8de0",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-04T11:56:49Z",
+      "side": 1,
+      "message": "Yeah, I checked locally. It breaks on a pkey machine with this line, but all the tests pass if I remove it.\nI also added the pku bot which should catch this",
+      "parentUuid": "87b31b55_b11dce6a",
+      "range": {
+        "startLine": 3017,
+        "startChar": 0,
+        "endLine": 3017,
+        "endChar": 63
+      },
+      "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66b827aa_af2dec8b",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 11
