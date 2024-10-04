@@ -50,6 +50,24 @@
       "message": "Would it be incorrect for this to be `it-\u003estate() \u003d\u003d TYPED_ARRAY_INDEX_NOT_FOUND`? Is it possible to be another state that\u0027s not `DATA`?",
       "revId": "7beff71a5bd465ad8fdf184560093601366c9d75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c134122_38268359",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-10-04T08:14:03Z",
+      "side": 1,
+      "message": "It would not be incorrect, but I think it\u0027s clearer \u0026 more foolproof to write the condition this way (we fallthrough to \"case LookupIterator::DATA\" only if it\u0027s indeed LookupIterator::DATA).\n\nI added a dcheck here though that it\u0027s one of those two things.",
+      "parentUuid": "0ee4f655_95c29d28",
+      "revId": "7beff71a5bd465ad8fdf184560093601366c9d75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
