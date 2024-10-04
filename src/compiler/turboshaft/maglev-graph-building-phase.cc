@@ -1299,6 +1299,10 @@ class GraphBuildingNodeProcessor {
       arguments.push_back(callee);
       arguments.push_back(Map(node->new_target()));
       arguments.push_back(__ Word32Constant(actual_parameter_count));
+      // TODO(saelo) is this correct here?
+      if (!Builtins::IsCpp(node->shared_function_info().builtin_id())) {
+        arguments.push_back(__ Word32Constant(0xffffffff));  // TODO(saelo)
+      }
       arguments.push_back(Map(node->receiver()));
       for (int i = 0; i < node->num_args(); i++) {
         arguments.push_back(Map(node->arg(i)));
@@ -1328,6 +1332,7 @@ class GraphBuildingNodeProcessor {
       }
       arguments.push_back(Map(node->new_target()));
       arguments.push_back(__ Word32Constant(actual_parameter_count));
+      arguments.push_back(__ Word32Constant(0xffffffff));  // TODO(saelo)
 
       // Load the context from {callee}.
       OpIndex context =
@@ -1457,6 +1462,7 @@ class GraphBuildingNodeProcessor {
     }
 
     auto descriptor = Builtins::CallInterfaceDescriptorFor(node->builtin());
+    // TODO(saelo) add dispatch handle parameter?
     if (descriptor.HasContextParameter()) {
       arguments.push_back(Map(node->context_input()));
     }

@@ -2494,6 +2494,11 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   Builtin builtin = Builtins::GetBuiltinFromBytecodeOffset(bytecode_offset);
   CallInterfaceDescriptor continuation_descriptor =
       Builtins::CallInterfaceDescriptorFor(builtin);
+  // TODO(saelo): remove this temporary hack. This code should be able to handle
+  // the kJavaScriptCallDispatchHandleRegister.
+  if (continuation_descriptor == JSTrampolineDescriptor{}) {
+    continuation_descriptor = JSBuiltinTrampolineDescriptor{};
+  }
 
   const RegisterConfiguration* config = RegisterConfiguration::Default();
 

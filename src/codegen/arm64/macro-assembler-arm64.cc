@@ -1512,6 +1512,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
   //  -- x0 : actual argument count
   //  -- x1 : target function (preserved for callee)
   //  -- x3 : new target (preserved for callee)
+  //  -- x4 : dispatch handle (preserved for callee)
   // -----------------------------------
   {
     FrameScope scope(this, StackFrame::INTERNAL);
@@ -1519,7 +1520,8 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     // argument count.
     SmiTag(kJavaScriptCallArgCountRegister);
     Push(kJavaScriptCallTargetRegister, kJavaScriptCallNewTargetRegister,
-         kJavaScriptCallArgCountRegister, padreg);
+         kJavaScriptCallArgCountRegister,
+         kJavaScriptCallDispatchHandleRegister);
     // Push another copy as a parameter to the runtime call.
     PushArgument(kJavaScriptCallTargetRegister);
 
@@ -1527,7 +1529,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     Mov(x2, x0);
 
     // Restore target function, new target and actual argument count.
-    Pop(padreg, kJavaScriptCallArgCountRegister,
+    Pop(kJavaScriptCallDispatchHandleRegister, kJavaScriptCallArgCountRegister,
         kJavaScriptCallNewTargetRegister, kJavaScriptCallTargetRegister);
     SmiUntag(kJavaScriptCallArgCountRegister);
   }

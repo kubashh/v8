@@ -268,6 +268,8 @@ void ArrayBuiltinsAssembler::VisitAllTypedArrayElements(
 
 TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
+  // auto dispatch_handle =
+  // UncheckedParameter<JSDispatchHandleT>(Descriptor::kJSDispatchHandle);
   auto context = Parameter<Context>(Descriptor::kContext);
   CSA_DCHECK(this, IsUndefined(Parameter<Object>(Descriptor::kJSNewTarget)));
 
@@ -355,6 +357,8 @@ TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
     // from the current frame here in order to reduce register pressure on the
     // fast path.
     TNode<JSFunction> target = LoadTargetFromFrame();
+    // TailCallBuiltin(Builtin::kArrayPop, context, target, UndefinedConstant(),
+    //                 argc, dispatch_handle);
     TailCallBuiltin(Builtin::kArrayPop, context, target, UndefinedConstant(),
                     argc);
   }
@@ -371,6 +375,8 @@ TF_BUILTIN(ArrayPrototypePush, CodeStubAssembler) {
   Label runtime(this, Label::kDeferred);
 
   auto argc = UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
+  // auto dispatch_handle =
+  // UncheckedParameter<JSDispatchHandleT>(Descriptor::kJSDispatchHandle);
   auto context = Parameter<Context>(Descriptor::kContext);
   CSA_DCHECK(this, IsUndefined(Parameter<Object>(Descriptor::kJSNewTarget)));
 
@@ -482,6 +488,9 @@ TF_BUILTIN(ArrayPrototypePush, CodeStubAssembler) {
     TNode<JSFunction> target = LoadTargetFromFrame();
     TailCallBuiltin(Builtin::kArrayPush, context, target, UndefinedConstant(),
                     argc);
+    // TailCallBuiltin(Builtin::kArrayPush, context, target,
+    // UndefinedConstant(),
+    //                 argc, dispatch_handle);
   }
 }
 

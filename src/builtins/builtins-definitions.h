@@ -147,7 +147,7 @@ namespace internal {
   ASM(ConstructBoundFunction, JSTrampoline)                                    \
   ASM(ConstructedNonConstructable, JSTrampoline)                               \
   /* ES6 section 7.3.13 Construct (F, [argumentsList], [newTarget]) */         \
-  ASM(Construct, JSTrampoline)                                                 \
+  ASM(Construct, JSBuiltinTrampoline)                                          \
   ASM(ConstructVarargs, ConstructVarargs)                                      \
   TFC(ConstructWithSpread, ConstructWithSpread)                                \
   TFC(ConstructWithSpread_Baseline, ConstructWithSpread_Baseline)              \
@@ -229,7 +229,7 @@ namespace internal {
                                                                                \
   /* Code life-cycle */                                                        \
   TFC(CompileLazy, JSTrampoline)                                               \
-  TFC(CompileLazyDeoptimizedCode, JSTrampoline)                                \
+  TFC(CompileLazyDeoptimizedCode, JSTrampoline) /* different descriptor? */    \
   TFC(InstantiateAsmJs, JSTrampoline)                                          \
   ASM(NotifyDeoptimized, Void)                                                 \
                                                                                \
