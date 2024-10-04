@@ -42,6 +42,17 @@ V8_INLINE bool GetIsolateFromHeapObject(Tagged<HeapObject> object,
   return true;
 }
 
+V8_INLINE StringForwardingTable* GetStringForwardingTableFromSharedString(
+    Tagged<String> object) {
+  DCHECK(HeapLayout::InWritableSharedSpace(object));
+  DCHECK(object->IsShared());
+  // StringForwardingTable is the same for all isolates (shared space and client
+  // isolates).
+  MemoryChunk* chunk = MemoryChunk::FromHeapObject(object);
+  Heap* heap = chunk->GetHeap();
+  return Isolate::FromHeap(heap)->string_forwarding_table();
+}
+
 // Use this function instead of Internals::GetIsolateForSandbox for internal
 // code, as this function is fully inlinable.
 V8_INLINE static Isolate* GetIsolateForSandbox(Tagged<HeapObject> object) {
