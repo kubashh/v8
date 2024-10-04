@@ -206,6 +206,8 @@ class V8_EXPORT_PRIVATE JSDispatchTable
   // Returns the number of live entries after sweeping.
   uint32_t Sweep(Space* space, Counters* counters);
 
+  void DiscardDeoptimized(Isolate* isolate);
+
   // Iterate over all active entries in the given space.
   //
   // The callback function will be invoked once for every entry that is

@@ -69,6 +69,17 @@ uint32_t JSDispatchTable::Sweep(Space* space, Counters* counters) {
   return num_live_entries;
 }
 
+void JSDispatchTable::DiscardDeoptimized(Isolate* isolate) {
+  Space* space = isolate->heap()->js_dispatch_table_space();
+  JSDispatchTable::instance()->IterateActiveEntriesIn(
+      space, [&](JSDispatchHandle handle) {
+        Tagged<Code> code = GetCode(handle);
+        if (code->is_optimized_code() && code->marked_for_deoptimization()) {
+          SetCode(handle, *BUILTIN_CODE(isolate, CompileLazy));
+        }
+      });
+}
+
 #ifdef DEBUG
 // Static
 std::atomic<bool> JSDispatchTable::initialized_ = false;

@@ -508,7 +508,13 @@ void MaglevAssembler::Prologue(Graph* graph) {
 
   CodeEntry();
 
+#ifdef V8_ENABLE_LEAPTIERING
+#ifdef DEBUG
+  AssertNotDeoptimized();
+#endif  // DEBUG
+#else
   BailoutIfDeoptimized(rbx);
+#endif  // V8_ENABLE_LEAPTIERING
 
   if (graph->has_recursive_calls()) {
     BindJumpTarget(code_gen_state()->entry_label());

@@ -420,7 +420,8 @@ class ActivationsFinder : public ThreadVisitor {
 
 // Replace pc on the stack for codes marked for deoptimization.
 // static
-void Deoptimizer::DeoptimizeMarkedCode(Isolate* isolate) {
+void Deoptimizer::DeoptimizeMarkedCode(Isolate* isolate,
+                                       bool patch_dispatch_table) {
   DisallowGarbageCollection no_gc;
 
   Tagged<GcSafeCode> topmost_optimized_code;
@@ -458,6 +459,12 @@ void Deoptimizer::DeoptimizeMarkedCode(Isolate* isolate) {
     }
   }
 #endif
+
+#ifdef V8_ENABLE_LEAPTIERING
+  if (patch_dispatch_table) {
+    JSDispatchTable::instance()->DiscardDeoptimized(isolate);
+  }
+#endif  // V8_ENABLE_LEAPTIERING
 
   ActivationsFinder visitor(topmost_optimized_code,
                             safe_to_deopt_topmost_optimized_code);
@@ -502,14 +509,15 @@ void Deoptimizer::DeoptimizeFunction(Tagged<JSFunction> function,
     // refer to that code. The code cannot be shared across native contexts,
     // so we only need to search one.
     code->set_marked_for_deoptimization(true);
-#ifndef V8_ENABLE_LEAPTIERING_BOOL
+#ifdef V8_ENABLE_LEAPTIERING_BOOL
+    function->UpdateCode(*BUILTIN_CODE(isolate, CompileLazy));
+#else
     // The code in the function's optimized code feedback vector slot might
     // be different from the code on the function - evict it if necessary.
     function->feedback_vector()->EvictOptimizedCodeMarkedForDeoptimization(
         isolate, function->shared(), "unlinking code marked for deopt");
 #endif  // !V8_ENABLE_LEAPTIERING_BOOL
-
-    DeoptimizeMarkedCode(isolate);
+    DeoptimizeMarkedCode(isolate, false);
   }
 }
 

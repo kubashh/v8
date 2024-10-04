@@ -106,7 +106,8 @@ class Deoptimizer : public Malloced {
   // Deoptimizes all optimized code that has been previously marked
   // (via code->set_marked_for_deoptimization) and unlinks all functions that
   // refer to that code.
-  static void DeoptimizeMarkedCode(Isolate* isolate);
+  static void DeoptimizeMarkedCode(Isolate* isolate,
+                                   bool patch_dispatch_table = true);
 
   // Deoptimizes all optimized code that implements the given function (whether
   // directly or inlined).
