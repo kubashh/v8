@@ -11,6 +11,7 @@ namespace v8 {
 namespace internal {
 
 class HeapObjectLayout;
+class StringForwardingTable;
 
 // Computes the pointer compression cage base from any read only or writable
 // heap object. The resulting value is intended to be used only as a hoisted
@@ -22,6 +23,9 @@ V8_INLINE PtrComprCageBase GetPtrComprCageBase(Tagged<HeapObject> object);
 V8_INLINE Heap* GetHeapFromWritableObject(Tagged<HeapObject> object);
 
 V8_INLINE Isolate* GetIsolateFromWritableObject(Tagged<HeapObject> object);
+
+V8_INLINE StringForwardingTable* GetStringForwardingTableFromSharedString(
+    Tagged<String> object);
 
 // Support `*this` for HeapObjectLayout subclasses.
 // TODO(leszeks): Change the NEVER_READ_ONLY_SPACE_IMPL macro to pass `this`
