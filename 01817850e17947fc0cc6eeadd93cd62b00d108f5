@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab09de27_6d0e7c46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-04T09:08:49Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b827aa_af2dec8b",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-04T09:08:49Z",
+      "side": 1,
+      "message": "Here and elsewhere in this CL: Is this `#define` really making things simpler? The worklist for the functions to be flushed would be empty with leaptiering, right?",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 306,
+        "endChar": 29
+      },
+      "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
