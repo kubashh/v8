@@ -87,6 +87,30 @@
       },
       "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c10ef958_5cd2bdd1",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-10-04T09:51:04Z",
+      "side": 1,
+      "message": "Ifaik we should now have a way of creating the table without compression enabled. So I do hope we\u0027ll get there soonish...",
+      "parentUuid": "f937742c_667bd426",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 306,
+        "endChar": 29
+      },
+      "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
