@@ -221,6 +221,14 @@ void JSDispatchTable::IterateMarkedEntriesIn(Space* space, Callback callback) {
   });
 }
 
+template <typename Callback>
+uint32_t JSDispatchTable::Sweep(Space* space, Counters* counters,
+                                Callback callback) {
+  uint32_t num_live_entries = GenericSweep(space, callback);
+  counters->js_dispatch_table_entries_count()->AddSample(num_live_entries);
+  return num_live_entries;
+}
+
 }  // namespace internal
 }  // namespace v8
 
