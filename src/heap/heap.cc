@@ -2577,6 +2577,7 @@ void Heap::RecomputeLimits(GarbageCollector collector, base::TimeTicks time) {
     return;
   }
   if (using_initial_limit()) {
+    DCHECK(IsYoungGenerationCollector(collector));
     return;
   }
 
@@ -2620,9 +2621,6 @@ void Heap::RecomputeLimitsAfterLoadingIfNeeded() {
     return;
   }
   update_allocation_limits_after_loading_ = false;
-  if (using_initial_limit()) {
-    return;
-  }
 
   if (!v8_flags.update_allocation_limits_after_loading) return;
 
@@ -2639,6 +2637,7 @@ void Heap::RecomputeLimitsAfterLoadingIfNeeded() {
   old_generation_wasted_at_last_gc_ = OldGenerationWastedBytes();
   external_memory_.UpdateLowSinceMarkCompact(external_memory_.total());
   embedder_size_at_last_gc_ = EmbedderSizeOfObjects();
+  set_using_initial_limit(false);
 
   auto new_limits = ComputeNewAllocationLimits(this);
   size_t new_old_generation_allocation_limit =
