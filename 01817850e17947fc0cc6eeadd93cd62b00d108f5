@@ -63,6 +63,30 @@
       },
       "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f937742c_667bd426",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-04T09:17:09Z",
+      "side": 1,
+      "message": "Ack. Keep as you like. Personally, if we cannot remove it we may as well remove a bunch of ifdefs. If you have reason to believe we can remove it \"soon\" it\u0027s nice to have the markers for removal.",
+      "parentUuid": "34693af4_e021f72c",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 306,
+        "endChar": 29
+      },
+      "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
