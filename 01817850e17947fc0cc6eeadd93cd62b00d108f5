@@ -39,6 +39,30 @@
       },
       "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34693af4_e021f72c",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-10-04T09:14:48Z",
+      "side": 1,
+      "message": "Yeah, I don\u0027t have a strong opinion. We can keep the list and just not populate it. \n\nThe reason I added it is I hope that we can port leaptiering to non-sandbox builds and remove all the code inside the ifndefs.",
+      "parentUuid": "66b827aa_af2dec8b",
+      "range": {
+        "startLine": 306,
+        "startChar": 8,
+        "endLine": 306,
+        "endChar": 29
+      },
+      "revId": "01817850e17947fc0cc6eeadd93cd62b00d108f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
