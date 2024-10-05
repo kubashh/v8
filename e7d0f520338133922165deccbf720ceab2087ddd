@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45ed8c00_e4590237",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-05T06:44:11Z",
+      "side": 1,
+      "message": "Only one call from the OS will ever arrive at a time for a given process and provider.  There\u0027s a thread I started with the Windows fundamentals team that you are on to confirm that.",
+      "parentUuid": "8220d70c_1d4e4974",
+      "range": {
+        "startLine": 275,
+        "startChar": 28,
+        "endLine": 275,
+        "endChar": 64
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b360ba41_b510a445",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-10-02T13:26:59Z",
       "side": 1,
       "message": "Is it possible for `EnableLogWithFilterDataOnAllIsolates` to be called when there is already an active `EtwIsolateCaptureStateMonitor`? Would that cause problems?",
+      "range": {
+        "startLine": 281,
+        "startChar": 2,
+        "endLine": 281,
+        "endChar": 65
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cc10112_95484b3f",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-05T06:44:11Z",
+      "side": 1,
+      "message": "If we timeout waiting for a Notify that never comes from some isolate for whatever reason, there will still (at least in this current patchset) be a monitor that it can Notify, however the shell thread which received the original ETW callback will no longer be waiting for that Notify.  \n\nIt is possible that during that period a new callback is received, but there shouldn\u0027t be a race as it will be allocating a new monitor with its own isolate count and be queueing a new set of corresponding interrupt requests.",
+      "parentUuid": "b360ba41_b510a445",
       "range": {
         "startLine": 281,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc653b70_d002d130",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-05T06:44:11Z",
+      "side": 1,
+      "message": "Yes, if notify is not called we will timeout - which is OK other than (in this patchset) my intentional leak of the monitor.",
+      "parentUuid": "bcde049e_8f7d7961",
+      "range": {
+        "startLine": 282,
+        "startChar": 32,
+        "endLine": 282,
+        "endChar": 61
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6e73639_180da1c1",
@@ -100,6 +172,30 @@
       "writtenOn": "2024-10-02T13:26:59Z",
       "side": 1,
       "message": "The `EtwIsolateCaptureStateMonitor` object will never be deleted?",
+      "range": {
+        "startLine": 304,
+        "startChar": 3,
+        "endLine": 304,
+        "endChar": 22
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1028b48_47252bde",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-05T06:44:11Z",
+      "side": 1,
+      "message": "See the comment for line 352. The leak was intentional but I think I can do better - especially because the timeout may not be so exceptional.",
+      "parentUuid": "d6e73639_180da1c1",
       "range": {
         "startLine": 304,
         "startChar": 3,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7e1757b_452b4576",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-05T06:44:11Z",
+      "side": 1,
+      "message": "In this case we timeout while waiting for the notify - which should be OK besides the intentional leak which I plan to change.",
+      "parentUuid": "a5136050_4e663b0a",
+      "range": {
+        "startLine": 319,
+        "startChar": 32,
+        "endLine": 319,
+        "endChar": 61
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c1ad83e_e8f025a8",
@@ -146,6 +266,30 @@
       "writtenOn": "2024-10-02T13:26:59Z",
       "side": 1,
       "message": "The EtwIsolateCaptureStateMonitor object will never be deleted?",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 22
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c34fe428_14a35f24",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-05T06:44:11Z",
+      "side": 1,
+      "message": "If we timeout I can\u0027t be sure that an outstanding isolate won\u0027t eventually call notify on the monitor which could lead to an access violation.  My thinking was that the best solution is to intentionally leak it.\n\nThinking more... I could instead pass weak pointers and let the isolates share ownership of the monitor.  I\u0027ll try that.",
+      "parentUuid": "6c1ad83e_e8f025a8",
       "range": {
         "startLine": 352,
         "startChar": 4,
