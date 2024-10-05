@@ -70,45 +70,42 @@ function overrideSettings(settings, settingOverrides) {
   }
 }
 
-function* randomInputGen(engine) {
-  const inputDir = path.resolve(program.input_dir);
 
-  const v8Corpus = new corpus.Corpus(inputDir, 'v8');
-  const chakraCorpus = new corpus.Corpus(inputDir, 'chakra');
-  const spiderMonkeyCorpus = new corpus.Corpus(inputDir, 'spidermonkey');
-  const jscCorpus = new corpus.Corpus(inputDir, 'WebKit/JSTests');
-  const crashTestsCorpus = new corpus.Corpus(inputDir, 'CrashTests');
+class Runner {
+  
+}
 
-  for (let i = 0; i < program.no_of_files; i++) {
-    let inputs;
-    if (engine === 'V8') {
-      inputs = getRandomInputs(
-          v8Corpus,
-          random.shuffle([chakraCorpus, spiderMonkeyCorpus, jscCorpus,
-                          crashTestsCorpus, v8Corpus]),
-          MAX_TEST_INPUTS_PER_TEST);
-    } else if (engine == 'chakra') {
-      inputs = getRandomInputs(
-          chakraCorpus,
-          random.shuffle([v8Corpus, spiderMonkeyCorpus, jscCorpus,
-                          crashTestsCorpus]),
-          MAX_TEST_INPUTS_PER_TEST);
-    } else if (engine == 'spidermonkey') {
-      inputs = getRandomInputs(
-          spiderMonkeyCorpus,
-          random.shuffle([v8Corpus, chakraCorpus, jscCorpus,
-                          crashTestsCorpus]),
-          MAX_TEST_INPUTS_PER_TEST);
-    } else {
-      inputs = getRandomInputs(
-          jscCorpus,
-          random.shuffle([chakraCorpus, spiderMonkeyCorpus, v8Corpus,
-                          crashTestsCorpus]),
-          MAX_TEST_INPUTS_PER_TEST);
-    }
+class AllTestsRunner extends Runner {
+  constructor(primary) {
+    super();
+    this.primary = primary;
+    const inputDir = path.resolve(program.input_dir);
+    this.corpi = {
+      'v8': new corpus.Corpus(inputDir, 'v8'),
+      'chakra': new corpus.Corpus(inputDir, 'chakra'),
+      'spidermonkey': new corpus.Corpus(inputDir, 'spidermonkey'),
+      'jsc': new corpus.Corpus(inputDir, 'WebKit/JSTests'),
+      'crash': new corpus.Corpus(inputDir, 'CrashTests'),
+    };
+  }
 
-    if (inputs.length > 0) {
-      yield inputs;
+  get corpusValues() {
+    Object.values(this.corpi)
+  }
+
+  function* randomInputGen() {
+    const primary = this.corpi[this.primary];
+    const secondary = Object.values(this.corpi);
+
+    for (let i = 0; i < program.no_of_files; i++) {
+      const inputs = getRandomInputs(
+          primary,
+          random.shuffle(secondary),
+          MAX_TEST_INPUTS_PER_TEST);
+
+      if (inputs.length > 0) {
+        yield inputs;
+      }
     }
   }
 }
