@@ -632,7 +632,15 @@ void Parser::DeserializeScopeChain(
         ast_value_factory(), mode, info);
 
     DeclarationScope* receiver_scope = original_scope_->GetReceiverScope();
-    if (receiver_scope->HasReceiverToDeserialize()) {
+    // If the function is a static initializer function, the function body spans
+    // across the part of the class body that contains static initializers,
+    // which may contain instance initializers in between, and those instance
+    // initializers could access the receiver from the computed field keys. So
+    // always allocate the receiver for static initializers to make it
+    // reparsable.
+    if (receiver_scope->HasReceiverToDeserialize() ||
+        flags().function_kind() ==
+            FunctionKind::kClassStaticInitializerFunction) {
       receiver_scope->DeserializeReceiver(ast_value_factory());
     }
     if (info->has_module_in_scope_chain()) {
