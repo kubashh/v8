@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31bb6e18_0189adfe",
+        "filename": "tools/clusterfuzz/js_fuzzer/run.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-07T07:35:36Z",
+      "side": 0,
+      "message": "These conditions weren\u0027t fully symmetric. Only in the V8 part, the v8 corpus was also part of the overall corpus list. I\u0027ve made these equal now in the new implementation, which simplifies it a lot. It just changes the balance a little from which corpus tests are selected. The non-v8 engine parts aren\u0027t really maintained or used by us anyways.",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 84,
+        "endChar": 6
+      },
+      "revId": "96b93a39be5e8a305c1a00cdae23f0e70876155f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
