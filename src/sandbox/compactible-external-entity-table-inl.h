@@ -5,6 +5,8 @@
 #ifndef V8_SANDBOX_COMPACTIBLE_EXTERNAL_ENTITY_TABLE_INL_H_
 #define V8_SANDBOX_COMPACTIBLE_EXTERNAL_ENTITY_TABLE_INL_H_
 
+#include <algorithm>
+
 #include "src/logging/counters.h"
 #include "src/sandbox/compactible-external-entity-table.h"
 #include "src/sandbox/external-entity-table-inl.h"
@@ -204,6 +206,12 @@ void CompactibleExternalEntityTable<Entry,
   if (v8_flags.stress_compaction) {
     should_compact = num_free_entries > Base::kEntriesPerSegment;
   }
+
+  if (force_compaction_for_testing_) {
+    should_compact = true;
+    num_segments_to_evacuate = std::max(1u, num_segments_to_evacuate);
+  }
+  force_compaction_for_testing_ = false;
 
   if (should_compact) {
     // If we're compacting, attempt to free up the last N segments so that they

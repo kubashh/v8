@@ -109,6 +109,12 @@ class V8_EXPORT_PRIVATE CompactibleExternalEntityTable
     // This is expected to be called at the start of the GC marking phase.
     void StartCompactingIfNeeded();
 
+    // Force compactions of segments in the space. At least one segment (the
+    // last segment) will be evacuated.
+    void ForceCompactionOnNextMajorGCForTesting() {
+      force_compaction_for_testing_ = true;
+    }
+
    private:
     friend class CompactibleExternalEntityTable<Entry, size>;
     friend class ExternalPointerTable;
@@ -162,6 +168,8 @@ class V8_EXPORT_PRIVATE CompactibleExternalEntityTable
 
     // Mutex guarding access to the invalidated_fields_ set.
     base::Mutex invalidated_fields_mutex_;
+
+    bool force_compaction_for_testing_ = false;
   };
 
   // Allocate an EPT entry from the space's freelist, or add a freshly-allocated
