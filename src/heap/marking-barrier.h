@@ -64,6 +64,7 @@ class MarkingBarrier {
 #if DEBUG
   void AssertMarkingIsActivated() const;
   void AssertSharedMarkingIsActivated() const;
+  bool IsMarked(const Tagged<HeapObject> value) const;
 #endif  // DEBUG
 
  private:
