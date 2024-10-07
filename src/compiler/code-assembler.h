@@ -1285,6 +1285,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   //
   template <typename T = Object, class... TArgs>
   TNode<T> CallBuiltin(Builtin id, TNode<Object> context, TArgs... args) {
+    DCHECK_WITH_MSG(!Builtins::HasJSLinkage(id), "Use CallJS instead");
+    Builtins::ValidateArgumentCountForCalling(id, sizeof...(args));
     TNode<RawPtrT> old_sp;
 #if V8_ENABLE_WEBASSEMBLY
     bool maybe_needs_switch = wasm::BuiltinLookup::IsWasmBuiltinId(builtin()) &&
@@ -1307,6 +1309,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   template <class... TArgs>
   void CallBuiltinVoid(Builtin id, TNode<Object> context, TArgs... args) {
+    DCHECK_WITH_MSG(!Builtins::HasJSLinkage(id), "Use CallJS instead");
+    Builtins::ValidateArgumentCountForCalling(id, sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), id);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     CallStubR(StubCallMode::kCallCodeObject, callable.descriptor(), target,
@@ -1315,6 +1319,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   template <class... TArgs>
   void TailCallBuiltin(Builtin id, TNode<Object> context, TArgs... args) {
+    Builtins::ValidateArgumentCountForCalling(id, sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), id);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStub(callable.descriptor(), target, context, args...);
@@ -1352,10 +1357,70 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallBuiltinThenBytecodeDispatch(Builtin builtin, Node* context,
                                            TArgs... args) {
+    Builtins::ValidateArgumentCountForCalling(builtin, sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), builtin);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStubThenBytecodeDispatchImpl(callable.descriptor(), target, context,
                                          {args...});
+  }
+
+  // Call a builtin with JS linkage. This is similar to CallBuiltin but
+  // computes and supplies some of the arguments, such as the argument count.
+  template <class... TArgs>
+  TNode<Object> CallJSBuiltin(Builtin builtin, TNode<Context> context,
+                              TNode<Object> function,
+                              std::optional<TNode<Object>> new_target,
+                              TNode<Object> receiver, TArgs... args) {
+    DCHECK(Builtins::HasJSLinkage(builtin));
+    // Additional arguments: target, new_target, argc, dispatch handle,
+    // receiver.
+    int additional_arguments = 5;
+    Builtins::ValidateArgumentCountForCalling(
+        builtin, additional_arguments + sizeof...(args));
+
+    Callable callable = Builtins::CallableFor(isolate(), builtin);
+    int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
+    TNode<Int32T> arity = Int32Constant(argc);
+    constexpr uint32_t kInvalidJSDispatchHandle = -1;  // TODO
+    TNode<JSDispatchHandleT> dispatch_handle = UncheckedCast<JSDispatchHandleT>(
+        Uint32Constant(kInvalidJSDispatchHandle));
+    TNode<Code> target = HeapConstantNoHole(callable.code());
+    return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
+                               new_target, arity, dispatch_handle,
+                               {receiver, args...}));
+  }
+
+  // Call the given JavaScript callable through one of the JS Call builtins.
+  template <class... TArgs>
+  TNode<Object> CallJS(Builtin builtin, TNode<Context> context,
+                       TNode<Object> function, TNode<Object> receiver,
+                       TArgs... args) {
+    DCHECK(Builtins::IsAnyCall(builtin));
+    Callable callable = Builtins::CallableFor(isolate(), builtin);
+    int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
+    TNode<Int32T> arity = Int32Constant(argc);
+    TNode<Code> target = HeapConstantNoHole(callable.code());
+    return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
+                               std::nullopt, arity, std::nullopt,
+                               {receiver, args...}));
+  }
+
+  // Construct the given JavaScript callable through a JS Construct builtin.
+  template <class... TArgs>
+  TNode<Object> ConstructJS(Builtin builtin, TNode<Context> context,
+                            TNode<Object> function, TNode<Object> new_target,
+                            TArgs... args) {
+    // Consider creating a Builtins::IsAnyConstruct if we ever expect other
+    // Construct builtins here.
+    DCHECK_EQ(builtin, Builtin::kConstruct);
+    Callable callable = Builtins::CallableFor(isolate(), builtin);
+    int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
+    TNode<Int32T> arity = Int32Constant(argc);
+    TNode<Object> receiver = LoadRoot(RootIndex::kUndefinedValue);
+    TNode<Code> target = HeapConstantNoHole(callable.code());
+    return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
+                               new_target, arity, std::nullopt,
+                               {receiver, args...}));
   }
 
   // Tailcalls to the given code object with JSCall linkage. The JS arguments
@@ -1367,45 +1432,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   // only be used after arguments adaptation has been performed already.
   void TailCallJSCode(TNode<Code> code, TNode<Context> context,
                       TNode<JSFunction> function, TNode<Object> new_target,
-                      TNode<Int32T> arg_count);
-
-  template <class... TArgs>
-  TNode<Object> CallJS(Builtin builtin, TNode<Context> context,
-                       TNode<Object> function,
-                       std::optional<TNode<Object>> new_target,
-                       TNode<Object> receiver, TArgs... args) {
-    Callable callable = Builtins::CallableFor(isolate(), builtin);
-    // CallTrampolineDescriptor doesn't have |new_target| parameter.
-    DCHECK_IMPLIES(callable.descriptor() == CallTrampolineDescriptor{},
-                   !new_target.has_value());
-    int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
-    TNode<Int32T> arity = Int32Constant(argc);
-    TNode<Code> target = HeapConstantNoHole(callable.code());
-    return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
-                               new_target, arity, {receiver, args...}));
-  }
-
-  template <class... TArgs>
-  TNode<Object> ConstructJSWithTarget(Builtin builtin, TNode<Context> context,
-                                      TNode<Object> function,
-                                      TNode<Object> new_target, TArgs... args) {
-    Callable callable = Builtins::CallableFor(isolate(), builtin);
-    // Only descriptors with |new_target| parameter are allowed here.
-    DCHECK_EQ(callable.descriptor(), JSTrampolineDescriptor{});
-    int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
-    TNode<Int32T> arity = Int32Constant(argc);
-    TNode<Object> receiver = LoadRoot(RootIndex::kUndefinedValue);
-    TNode<Code> target = HeapConstantNoHole(callable.code());
-    return CAST(CallJSStubImpl(callable.descriptor(), target, context, function,
-                               new_target, arity, {receiver, args...}));
-  }
-
-  template <class... TArgs>
-  TNode<Object> ConstructJS(Builtin builtin, TNode<Context> context,
-                            TNode<Object> target, TArgs... args) {
-    return CallOrConstructJSWithTarget(builtin, context, target, target,
-                                       args...);
-  }
+                      TNode<Int32T> arg_count,
+                      TNode<JSDispatchHandleT> dispatch_handle);
 
   Node* CallCFunctionN(Signature<MachineType>* signature, int input_count,
                        Node* const* inputs);
@@ -1517,7 +1545,9 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                        TNode<Object> target, TNode<Object> context,
                        TNode<Object> function,
                        std::optional<TNode<Object>> new_target,
-                       TNode<Int32T> arity, std::initializer_list<Node*> args);
+                       TNode<Int32T> arity,
+                       std::optional<TNode<JSDispatchHandleT>> dispatch_handle,
+                       std::initializer_list<Node*> args);
 
   Node* CallStubN(StubCallMode call_mode,
                   const CallInterfaceDescriptor& descriptor, int input_count,
