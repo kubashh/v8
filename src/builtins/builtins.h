@@ -200,6 +200,7 @@ class Builtins {
   V8_EXPORT_PRIVATE static Callable CallableFor(Isolate* isolate,
                                                 Builtin builtin);
   static bool HasJSLinkage(Builtin builtin);
+  static void ValidateArgumentCountForCalling(Builtin builtin, int argc);
 
   // Returns the number builtin's parameters passed on the stack.
   V8_EXPORT_PRIVATE static int GetStackParameterCount(Builtin builtin);

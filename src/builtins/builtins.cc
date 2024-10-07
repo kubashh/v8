@@ -228,7 +228,11 @@ CallInterfaceDescriptor Builtins::CallInterfaceDescriptorFor(Builtin builtin) {
     default:
       Builtins::Kind kind = Builtins::KindOf(builtin);
       DCHECK_NE(BCH, kind);
-      if (kind == TSJ || kind == TFJ || kind == CPP) {
+      if (kind == CPP) {
+        // TODO should this be JSTrampolineDescriptor
+        return JSBuiltinTrampolineDescriptor{};
+      }
+      if (kind == TSJ || kind == TFJ) {
         return JSTrampolineDescriptor{};
       }
       UNREACHABLE();
@@ -245,7 +249,45 @@ Callable Builtins::CallableFor(Isolate* isolate, Builtin builtin) {
 // static
 bool Builtins::HasJSLinkage(Builtin builtin) {
   DCHECK_NE(BCH, Builtins::KindOf(builtin));
-  return CallInterfaceDescriptorFor(builtin) == JSTrampolineDescriptor{};
+  return CallInterfaceDescriptorFor(builtin) == JSTrampolineDescriptor{} ||
+         CallInterfaceDescriptorFor(builtin) == JSBuiltinTrampolineDescriptor{};
+}
+
+// static
+void Builtins::ValidateArgumentCountForCalling(Builtin builtin, int argc) {
+#ifdef DEBUG
+  Builtins::Kind kind = Builtins::KindOf(builtin);
+  // For most builtins, we can just look at the expected number of parameters
+  // in the CallInterfaceDescriptor. TFJ, TSJ, and CPP builtins just use the
+  // JSTrampolineDescriptor though, so we need to obtain the actual expected
+  // parameter count in other ways.
+  int js_reg_params = JSTrampolineDescriptor::kParameterCount;
+  bool allow_varargs = false;
+  int expected_parameters;
+  switch (kind) {
+    // TODO(ishell): Can GetFormalParameterCount and GetStackParameterCount be
+    // merged?
+    case CPP:
+      // TODO(saelo): drop the -1
+      expected_parameters =
+          js_reg_params - 1 + GetFormalParameterCount(builtin);
+      break;
+    case TFJ:
+    case TSJ:
+      expected_parameters = js_reg_params + GetStackParameterCount(builtin);
+      break;
+    default:
+      CallInterfaceDescriptor descriptor = CallInterfaceDescriptorFor(builtin);
+      allow_varargs = descriptor.AllowVarArgs();
+      expected_parameters = descriptor.GetParameterCount();
+  }
+
+  if (allow_varargs) {
+    DCHECK_GE(argc, expected_parameters);
+  } else {
+    DCHECK_EQ(argc, expected_parameters);
+  }
+#endif  // DEBUG
 }
 
 // static

@@ -1285,6 +1285,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   //
   template <typename T = Object, class... TArgs>
   TNode<T> CallBuiltin(Builtin id, TNode<Object> context, TArgs... args) {
+    DCHECK_WITH_MSG(!Builtins::HasJSLinkage(id), "Use CallJS instead");
+    Builtins::ValidateArgumentCountForCalling(id, sizeof...(args));
     TNode<RawPtrT> old_sp;
 #if V8_ENABLE_WEBASSEMBLY
     bool maybe_needs_switch = wasm::BuiltinLookup::IsWasmBuiltinId(builtin()) &&
@@ -1307,6 +1309,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   template <class... TArgs>
   void CallBuiltinVoid(Builtin id, TNode<Object> context, TArgs... args) {
+    DCHECK_WITH_MSG(!Builtins::HasJSLinkage(id), "Use CallJS instead");
+    Builtins::ValidateArgumentCountForCalling(id, sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), id);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     CallStubR(StubCallMode::kCallCodeObject, callable.descriptor(), target,
@@ -1315,6 +1319,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   template <class... TArgs>
   void TailCallBuiltin(Builtin id, TNode<Object> context, TArgs... args) {
+    Builtins::ValidateArgumentCountForCalling(id, sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), id);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStub(callable.descriptor(), target, context, args...);
@@ -1352,6 +1357,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallBuiltinThenBytecodeDispatch(Builtin builtin, Node* context,
                                            TArgs... args) {
+    Builtins::ValidateArgumentCountForCalling(builtin, sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), builtin);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStubThenBytecodeDispatchImpl(callable.descriptor(), target, context,
@@ -1367,13 +1373,17 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   // only be used after arguments adaptation has been performed already.
   void TailCallJSCode(TNode<Code> code, TNode<Context> context,
                       TNode<JSFunction> function, TNode<Object> new_target,
-                      TNode<Int32T> arg_count);
+                      TNode<Int32T> arg_count,
+                      TNode<JSDispatchHandleT> dispatch_handle);
 
+  // Similar to CallBuiltin, but automatically computes the JS argument count.
   template <class... TArgs>
   TNode<Object> CallJS(Builtin builtin, TNode<Context> context,
                        TNode<Object> function,
                        std::optional<TNode<Object>> new_target,
                        TNode<Object> receiver, TArgs... args) {
+    // TODO(saelo): enable here and below
+    // Builtins::ValidateArgumentCountForCalling(builtin, 4 + sizeof...(args));
     Callable callable = Builtins::CallableFor(isolate(), builtin);
     // CallTrampolineDescriptor doesn't have |new_target| parameter.
     DCHECK_IMPLIES(callable.descriptor() == CallTrampolineDescriptor{},
@@ -1391,7 +1401,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                                       TNode<Object> new_target, TArgs... args) {
     Callable callable = Builtins::CallableFor(isolate(), builtin);
     // Only descriptors with |new_target| parameter are allowed here.
-    DCHECK_EQ(callable.descriptor(), JSTrampolineDescriptor{});
+    DCHECK(callable.descriptor() == JSTrampolineDescriptor{} ||
+           callable.descriptor() == JSBuiltinTrampolineDescriptor{});
     int argc = JSParameterCount(static_cast<int>(sizeof...(args)));
     TNode<Int32T> arity = Int32Constant(argc);
     TNode<Object> receiver = LoadRoot(RootIndex::kUndefinedValue);

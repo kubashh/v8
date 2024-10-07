@@ -1309,6 +1309,12 @@ Node* CodeAssembler::CallStubRImpl(StubCallMode call_mode,
   DCHECK(call_mode == StubCallMode::kCallCodeObject ||
          call_mode == StubCallMode::kCallBuiltinPointer);
 
+  if (descriptor.AllowVarArgs()) {
+    DCHECK_LE(descriptor.GetParameterCount(), args.size());
+  } else {
+    DCHECK_EQ(descriptor.GetParameterCount(), args.size());
+  }
+
   constexpr size_t kMaxNumArgs = 10;
   DCHECK_GE(kMaxNumArgs, args.size());
 
@@ -1330,17 +1336,26 @@ Node* CodeAssembler::CallJSStubImpl(const CallInterfaceDescriptor& descriptor,
                                     std::initializer_list<Node*> args) {
   constexpr size_t kMaxNumArgs = 10;
   DCHECK_GE(kMaxNumArgs, args.size());
+  // int num_additional_params = 0;
   NodeArray<kMaxNumArgs + 5> inputs;
   inputs.Add(target);
   inputs.Add(function);
   if (new_target) {
+    // num_additional_params += 1;
     inputs.Add(*new_target);
   }
   inputs.Add(arity);
+  if (descriptor == JSTrampolineDescriptor{}) {
+    // num_additional_params += 1;
+    inputs.Add(arity);  // TODO(saelo) fix
+  }
   for (auto arg : args) inputs.Add(arg);
   if (descriptor.HasContextParameter()) {
+    // num_additional_params += 1;
     inputs.Add(context);
   }
+  // CHECK_EQ(descriptor.GetParameterCount() + num_additional_params,
+  // inputs.size());
   return CallStubN(StubCallMode::kCallCodeObject, descriptor, inputs.size(),
                    inputs.data());
 }
@@ -1391,13 +1406,16 @@ template V8_EXPORT_PRIVATE void CodeAssembler::TailCallBytecodeDispatch(
 void CodeAssembler::TailCallJSCode(TNode<Code> code, TNode<Context> context,
                                    TNode<JSFunction> function,
                                    TNode<Object> new_target,
-                                   TNode<Int32T> arg_count) {
+                                   TNode<Int32T> arg_count,
+                                   TNode<JSDispatchHandleT> dispatch_handle) {
   JSTrampolineDescriptor descriptor;
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), descriptor, descriptor.GetStackParameterCount(),
-      CallDescriptor::kFixedTargetRegister, Operator::kNoProperties);
+      CallDescriptor::kFixedTargetRegister, Operator::kNoProperties,
+      StubCallMode::kCallCodeObject);
 
-  Node* nodes[] = {code, function, new_target, arg_count, context};
+  Node* nodes[] = {code,      function,        new_target,
+                   arg_count, dispatch_handle, context};
   CHECK_EQ(descriptor.GetParameterCount() + 2, arraysize(nodes));
   raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes);
 }
