@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddec322b_521ee8e6",
+        "filename": "test/unittests/heap/heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-07T12:56:52Z",
+      "side": 1,
+      "message": "I looked into before sending the CL and tried again today. I cannot make it work with just `--stress-compaction`.\nTo elaborate: If we want to an entry on segment X to be evacuated, we need to have at least 1 non-empty (so that it\u0027s not discarded) and non-full (so that it contributes to the freelist) segment before X. `--stress-compaction` requires the number of free entries is greater than the number of entries in a segment, so I would need to have at least 2 non-empty non-full segments before X. Because entries are allocated as marked, it takes 2 GCs for to join the freelist. With Scavenger, after 2 GCs an object is promoted to old space, and the object needs to die young for the crash to occur, so there\u0027s not a lot of opportunities to manipulate the EPT. It\u0027s possible for all of this to come together in the wild if the freelist order lines up (which likely takes multiple GC cycles) such that we get the right number of segments and free entries in the young EPT. In a testing scenario, I can\u0027t reasonably recreate the scenario.",
+      "parentUuid": "ddb8aa17_d5724fb2",
+      "range": {
+        "startLine": 751,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 15
+      },
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d6b651c_3269d962",
         "filename": "test/unittests/heap/heap-unittest.cc",
         "patchSetId": 3
@@ -71,6 +95,30 @@
       "writtenOn": "2024-10-03T12:41:48Z",
       "side": 1,
       "message": "Would it be worth asserting that the ExternalPointerHandle of this object changes after GC?",
+      "range": {
+        "startLine": 767,
+        "startChar": 23,
+        "endLine": 767,
+        "endChar": 38
+      },
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82563686_0d5ae6db",
+        "filename": "test/unittests/heap/heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-07T12:56:52Z",
+      "side": 1,
+      "message": "I don\u0027t think it would. I called it `to_be_evacuated` but in practice the entry is marked for evacuation but then the object needs to die. In practice it is never really evacuated, and we should not read the ExternalPointerHandle after the object dies.",
+      "parentUuid": "8d6b651c_3269d962",
       "range": {
         "startLine": 767,
         "startChar": 23,
