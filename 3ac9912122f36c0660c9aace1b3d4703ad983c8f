@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8cd642d_c67ffd2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-07T13:03:01Z",
+      "side": 1,
+      "message": "As discussed, this relaxes what is being accepted for i64 index values on the JS API.\nOne downside is that the error message produced by `i::BigInt::FromObject` does not mention the API method or parameter index, but I didn\u0027t find a nice way to catch and amend the message. And totally replacing the exception by a fresh one has a chance to drop important information.",
+      "revId": "3ac9912122f36c0660c9aace1b3d4703ad983c8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
