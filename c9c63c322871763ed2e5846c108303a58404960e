@@ -16,6 +16,23 @@
       "message": "Thanks for adding Camillo, Paolo.  Uploaded another patchset to rename a debug helper class to EtwDebug per your last comment.",
       "revId": "c9c63c322871763ed2e5846c108303a58404960e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "108646a6_0d55da11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-07T20:35:34Z",
+      "side": 1,
+      "message": "There are some follow-up work items that I\u0027d like to pursue.  We can land this change for an incremental improvement, or we can expand it to cover the additional work below (no harm should come to anyone\u0027s existing scenarios by landing the change as is).  Please let me know what you prefer.\n\n1. Capture state works for un-filtered (by URL) recording profiles, but the filtered code path still works as it did previously (only capturing state when the ETW tracing session is first started for this provider).  This happens because of an early return when is_etw_enabled is already true in the ETWEnableCallback function before we reach EnableLogWithFilterDataOnAllIsolates.  Probably some other minor code changes are needed beyond that so that the filtered path works the same way as the unfiltered.\n\n2. A unit test is still needed to cover the timeout and happy path for the ETW monitor.  An integration test would ideally also exist (or maybe it could also be another unit test if we can successfully mock all the dependencies?) for ensuring the expected source and method events are emitted from v8 when multiple ETW trace sessions are started and a capture state callback occurs.\n\n3. The current mechanism for scheduling emission of source and method events from the isolate thread only works if JavaScript is scheduled to run again at some point in the future.  We need to replace or augment the current mechanism to ensure we emit the necessary metadata when a capture state callback occurs and JS doesn\u0027t subsequently run.  I filed another feature request for this issue: https://issues.chromium.org/issues/371898615",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
