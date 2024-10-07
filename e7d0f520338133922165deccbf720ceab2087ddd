@@ -298,6 +298,30 @@
       },
       "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356b2eae_45908269",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-07T18:11:51Z",
+      "side": 1,
+      "message": "Fixed in patchset 4.",
+      "parentUuid": "c34fe428_14a35f24",
+      "range": {
+        "startLine": 352,
+        "startChar": 4,
+        "endLine": 352,
+        "endChar": 22
+      },
+      "revId": "e7d0f520338133922165deccbf720ceab2087ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
