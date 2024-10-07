@@ -362,8 +362,16 @@ class BranchEliminationReducer : public Next {
           }
         }
       }
-    } else if ([[maybe_unused]] const ReturnOp* return_op =
-                   last_op.template TryCast<ReturnOp>()) {
+    } else if (last_op.template Is<ReturnOp>()) {
+      if (Asm().current_block()->PredecessorCount() == 1 &&
+          Asm().current_block()->begin() ==
+              __ output_graph().next_operation_index()) {
+        const Block* prev_block = Asm().current_block()->LastPredecessor();
+        if (prev_block->LastOperation(__ output_graph())
+                .template Is<SwitchOp>()) {
+          goto no_change;
+        }
+      }
       // The destination block in the old graph ends with a Return
       // and the old destination is a merge block, so we can directly
       // inline the destination block in place of the Goto.
