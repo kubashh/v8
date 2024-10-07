@@ -88,17 +88,41 @@ MaybeHandle<Object> JSDisposableStackBase::DisposeResources(
 
     //  e. If method is not undefined, then
     if (!IsUndefined(*method)) {
-      //    i. Let result be Completion(Call(method, value)).
-      v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
-      try_catch.SetVerbose(false);
-      try_catch.SetCaptureMessage(false);
+      {
+        //    i. Let result be Completion(Call(method, value)).
+        v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
+        try_catch.SetVerbose(false);
+        try_catch.SetCaptureMessage(false);
 
-      if (call_type == DisposeMethodCallType::kValueIsReceiver) {
-        result = Execution::Call(isolate, method, value, 0, nullptr);
-      } else if (call_type == DisposeMethodCallType::kValueIsArgument) {
-        result = Execution::Call(
-            isolate, method, ReadOnlyRoots(isolate).undefined_value_handle(), 1,
-            argv);
+        if (call_type == DisposeMethodCallType::kValueIsReceiver) {
+          result = Execution::Call(isolate, method, value, 0, nullptr);
+        } else if (call_type == DisposeMethodCallType::kValueIsArgument) {
+          result = Execution::Call(
+              isolate, method, ReadOnlyRoots(isolate).undefined_value_handle(),
+              1, argv);
+        }
+
+        if (result.is_null()) {
+          //    iii. If result is a throw completion, then
+          //      1. If completion is a throw completion, then
+          //        a. Set result to result.[[Value]].
+          //        b. Let suppressed be completion.[[Value]].
+          //        c. Let error be a newly created SuppressedError object.
+          //        d. Perform CreateNonEnumerableDataPropertyOrThrow(error,
+          //        "error", result).
+          //        e. Perform CreateNonEnumerableDataPropertyOrThrow(error,
+          //         "suppressed", suppressed).
+          //        f. Set completion to ThrowCompletion(error).
+          //      2. Else,
+          //        a. Set completion to result.
+          DCHECK(try_catch.HasCaught());
+          DCHECK(isolate->has_exception());
+          Handle<Object> current_error(isolate->exception(), isolate);
+          if (!isolate->is_catchable_by_javascript(*current_error)) {
+            return {};
+          }
+          HandleErrorInDisposal(isolate, disposable_stack, current_error);
+        }
       }
 
       Handle<Object> result_handle;
@@ -107,32 +131,30 @@ MaybeHandle<Object> JSDisposableStackBase::DisposeResources(
       //      2. Set hasAwaited to true.
       if (result.ToHandle(&result_handle)) {
         if (hint == DisposeMethodHint::kAsyncDispose) {
+          v8::TryCatch try_catch(reinterpret_cast<v8::Isolate*>(isolate));
+          try_catch.SetVerbose(false);
+          try_catch.SetCaptureMessage(false);
+
           DCHECK_NE(resources_type, DisposableStackResourcesType::kAllSync);
           disposable_stack->set_length(length);
 
           disposable_stack->set_hasAwaited(true);
 
-          return ResolveAPromiseWithValueAndReturnIt(isolate, result_handle);
+          MaybeHandle<JSReceiver> resolved_promise =
+              ResolveAPromiseWithValueAndReturnIt(isolate, result_handle);
+
+          if (resolved_promise.is_null()) {
+            DCHECK(try_catch.HasCaught());
+            DCHECK(isolate->has_exception());
+            Handle<Object> current_error(isolate->exception(), isolate);
+            if (!isolate->is_catchable_by_javascript(*current_error)) {
+              return {};
+            }
+            HandleErrorInDisposal(isolate, disposable_stack, current_error);
+          } else {
+            return resolved_promise;
+          }
         }
-      } else {
-        //    iii. If result is a throw completion, then
-        //      1. If completion is a throw completion, then
-        //        a. Set result to result.[[Value]].
-        //        b. Let suppressed be completion.[[Value]].
-        //        c. Let error be a newly created SuppressedError object.
-        //        d. Perform CreateNonEnumerableDataPropertyOrThrow(error,
-        //        "error", result). e. Perform
-        //        CreateNonEnumerableDataPropertyOrThrow(error, "suppressed",
-        //        suppressed). f. Set completion to ThrowCompletion(error).
-        //      2. Else,
-        //        a. Set completion to result.
-        DCHECK(isolate->has_exception());
-        DCHECK(try_catch.HasCaught());
-        Handle<Object> current_error(isolate->exception(), isolate);
-        if (!isolate->is_catchable_by_javascript(*current_error)) {
-          return {};
-        }
-        HandleErrorInDisposal(isolate, disposable_stack, current_error);
       }
     } else {
       //  Else,
