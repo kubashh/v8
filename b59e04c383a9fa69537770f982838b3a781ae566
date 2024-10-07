@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a514754_776a8249",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2024-10-07T15:58:30Z",
+      "side": 1,
+      "message": "wdyt? Patchset 2 is the fix. Not very happy how ugly it is...",
+      "revId": "b59e04c383a9fa69537770f982838b3a781ae566",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
