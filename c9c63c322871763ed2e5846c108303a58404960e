@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e921725e_eca1bae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-07T19:50:37Z",
+      "side": 1,
+      "message": "Thanks for adding Camillo, Paolo.  Uploaded another patchset to rename a debug helper class to EtwDebug per your last comment.",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

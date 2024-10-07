@@ -39,6 +39,30 @@
       },
       "revId": "d618b63dc4e41b4bac39f4500467588d8240de19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db983efc_d3fecdcd",
+        "filename": "src/diagnostics/etw-debug-win.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-07T19:50:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bd13891_c798f4a9",
+      "range": {
+        "startLine": 15,
+        "startChar": 6,
+        "endLine": 15,
+        "endChar": 11
+      },
+      "revId": "d618b63dc4e41b4bac39f4500467588d8240de19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
