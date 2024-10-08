@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "4a1a6cbc6d3aa5e62cb163b357cf1d8e25f170cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1decb92a_a3e59e5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-10-08T12:27:51Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4a1a6cbc6d3aa5e62cb163b357cf1d8e25f170cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eb27ad6_af32347b",
+        "filename": "src/maglev/maglev-post-hoc-optimizations-processors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-10-08T12:27:51Z",
+      "side": 1,
+      "message": "Nit:\n\n```\n// This map check cannot be hoisted if the function was previously deoptimized. \n// Hoisting it could lead to a deopt loop, we abort the optimization instead.\n```",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 46
+      },
+      "revId": "4a1a6cbc6d3aa5e62cb163b357cf1d8e25f170cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
