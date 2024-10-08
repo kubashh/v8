@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ae62de6_1ff7596d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-08T12:20:10Z",
+      "side": 1,
+      "message": "Thanks for the review and the help with the pinpoint jobs! 😊",
+      "revId": "c140ef95bbf87f84c846697bdb6c218cfeab70b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
