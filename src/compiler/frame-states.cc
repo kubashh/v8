@@ -233,12 +233,16 @@ FrameState CreateJavaScriptBuiltinContinuationFrameState(
   }
 
   Node* new_target = jsgraph->UndefinedConstant();
+  // TODO(saelo): use proper constant
+  Node* dh = jsgraph->ConstantNoHole(0xffffffff);
 
   // Register parameters follow stack parameters. The context will be added by
   // instruction selector during FrameState translation.
+  static_assert(4 == JSTrampolineDescriptor::kParameterCount);
   actual_parameters.push_back(target);      // kJavaScriptCallTargetRegister
   actual_parameters.push_back(new_target);  // kJavaScriptCallNewTargetRegister
   actual_parameters.push_back(argc);        // kJavaScriptCallArgCountRegister
+  actual_parameters.push_back(dh);          // kJavaScriptDispatchHandleRegister
 
   return CreateBuiltinContinuationFrameStateCommon(
       jsgraph,

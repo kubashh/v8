@@ -1360,7 +1360,7 @@ class MaglevFrameTranslationBuilder {
     int literal_id = GetDeoptLiteral(GetSharedFunctionInfo(frame));
     int height = frame.parameters().length();
 
-    constexpr int kExtraFixedJSFrameParameters = 3;
+    constexpr int kExtraFixedJSFrameParameters = 4;
     if (frame.is_javascript()) {
       translation_array_builder_->BeginJavaScriptBuiltinContinuationFrame(
           bailout_id, literal_id, height + kExtraFixedJSFrameParameters);
@@ -1386,7 +1386,9 @@ class MaglevFrameTranslationBuilder {
     // Extra fixed JS frame parameters. These at the end since JS builtins
     // push their parameters in reverse order.
     if (frame.is_javascript()) {
-      static_assert(kExtraFixedJSFrameParameters == 3);
+      static_assert(JSTrampolineDescriptor::kParameterCount ==
+                    kExtraFixedJSFrameParameters);
+      static_assert(kExtraFixedJSFrameParameters == 4);
       // kJavaScriptCallTargetRegister
       translation_array_builder_->StoreLiteral(
           GetDeoptLiteral(frame.javascript_target()));
@@ -1396,6 +1398,9 @@ class MaglevFrameTranslationBuilder {
       // kJavaScriptCallArgCountRegister
       translation_array_builder_->StoreLiteral(GetDeoptLiteral(
           Smi::FromInt(Builtins::GetStackParameterCount(frame.builtin_id()))));
+      // kJavaScriptCallDispatchHandleRegister
+      translation_array_builder_->StoreLiteral(
+          GetDeoptLiteral(Smi::FromInt(0xffffffff)));
     }
 
     // Context
