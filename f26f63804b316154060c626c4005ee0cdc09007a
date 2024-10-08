@@ -16,6 +16,24 @@
       "message": "Hello,\n\nJFYI, this change has broken RISC-V build in Maglev code:\n```\n../../src/maglev/maglev-ir.cc:5562:54: error: too many arguments to function call, expected single argument \u0027function_object\u0027, have 2 arguments\n 5562 |     __ CallJSFunction(kJavaScriptCallTargetRegister, expected_parameter_count_);\n      |     ~~~~~~~~~~~~~~~~~                                ^~~~~~~~~~~~~~~~~~~~~~~~~\n../../src/codegen/riscv/macro-assembler-riscv.h:335:8: note: \u0027CallJSFunction\u0027 declared here\n  335 |   void CallJSFunction(Register function_object);\n      |        ^              ~~~~~~~~~~~~~~~~~~~~~~~~\n1 error generated.\n```",
       "revId": "f26f63804b316154060c626c4005ee0cdc09007a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c66a6616_e2853f92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3529302
+      },
+      "writtenOn": "2024-10-08T08:17:08Z",
+      "side": 1,
+      "message": "Please see https://chromium-review.googlesource.com/c/v8/v8/+/5912938 for possible fix.",
+      "parentUuid": "6a73fbae_f8550706",
+      "revId": "f26f63804b316154060c626c4005ee0cdc09007a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
