@@ -40,6 +40,9 @@ class V8_EXPORT TypedArray : public ArrayBufferView {
    */
   size_t Length();
 
+  static std::pair<void*, size_t> GetDataAndSize(Isolate* isolate,
+                                                 Local<TypedArray> object);
+
   V8_INLINE static TypedArray* Cast(Value* value) {
 #ifdef V8_ENABLE_CHECKS
     CheckCast(value);
