@@ -9,7 +9,9 @@
 
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
+#include "src/execution/isolate-utils-inl.h"
 #include "src/execution/isolate-utils.h"
+#include "src/execution/isolate.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory.h"
 #include "src/heap/heap-layout-inl.h"
@@ -1153,8 +1155,7 @@ void ExternalString::VisitExternalPointers(ObjectVisitor* visitor) {
   visitor->VisitExternalPointer(this, ExternalPointerSlot(&resource_data_));
 }
 
-Address ExternalString::resource_as_address() const {
-  Isolate* isolate = GetIsolateForSandbox(this);
+Address ExternalString::resource_as_address(Isolate* isolate) const {
   return resource_.load(isolate);
 }
 
@@ -1190,20 +1191,28 @@ void ExternalString::DisposeResource(Isolate* isolate) {
 }
 
 const ExternalOneByteString::Resource* ExternalOneByteString::resource() const {
-  return reinterpret_cast<const Resource*>(resource_as_address());
+  Isolate* isolate = GetIsolateForSandbox(this);
+  return reinterpret_cast<const Resource*>(resource_as_address(isolate));
 }
 
-ExternalOneByteString::Resource* ExternalOneByteString::mutable_resource() {
-  return reinterpret_cast<Resource*>(resource_as_address());
+const ExternalOneByteString::Resource* ExternalOneByteString::resource(
+    Isolate* isolate) const {
+  return reinterpret_cast<const Resource*>(resource_as_address(isolate));
+}
+
+ExternalOneByteString::Resource* ExternalOneByteString::mutable_resource(
+    Isolate* isolate) {
+  return reinterpret_cast<Resource*>(resource_as_address(isolate));
 }
 
 void ExternalOneByteString::update_data_cache(Isolate* isolate) {
   DisallowGarbageCollection no_gc;
   if (is_uncached()) {
-    if (resource()->IsCacheable()) mutable_resource()->UpdateDataCache();
+    if (resource(isolate)->IsCacheable())
+      mutable_resource(isolate)->UpdateDataCache();
   } else {
     resource_data_.store(isolate,
-                         reinterpret_cast<Address>(resource()->data()));
+                         reinterpret_cast<Address>(resource(isolate)->data()));
   }
 }
 
@@ -1223,8 +1232,12 @@ void ExternalOneByteString::set_resource(
 }
 
 const uint8_t* ExternalOneByteString::GetChars() const {
+  return GetChars(GetIsolateForSandbox(this));
+}
+
+const uint8_t* ExternalOneByteString::GetChars(Isolate* isolate) const {
   DisallowGarbageCollection no_gc;
-  auto res = resource();
+  auto res = resource(isolate);
   if (is_uncached()) {
     if (res->IsCacheable()) {
       // TODO(solanes): Teach TurboFan/CSA to not bailout to the runtime to
@@ -1234,11 +1247,7 @@ const uint8_t* ExternalOneByteString::GetChars() const {
 #if DEBUG
     // Check that this method is called only from the main thread if we have an
     // uncached string with an uncacheable resource.
-    {
-      Isolate* isolate;
-      DCHECK_IMPLIES(GetIsolateFromHeapObject(this, &isolate),
-                     ThreadId::Current() == isolate->thread_id());
-    }
+    DCHECK_EQ(ThreadId::Current(), isolate->thread_id());
 #endif
   }
 
@@ -1253,20 +1262,28 @@ uint8_t ExternalOneByteString::Get(
 }
 
 const ExternalTwoByteString::Resource* ExternalTwoByteString::resource() const {
-  return reinterpret_cast<const Resource*>(resource_as_address());
+  Isolate* isolate = GetIsolateFromWritableObject(this);
+  return reinterpret_cast<const Resource*>(resource_as_address(isolate));
 }
 
-ExternalTwoByteString::Resource* ExternalTwoByteString::mutable_resource() {
-  return reinterpret_cast<Resource*>(resource_as_address());
+const ExternalTwoByteString::Resource* ExternalTwoByteString::resource(
+    Isolate* isolate) const {
+  return reinterpret_cast<const Resource*>(resource_as_address(isolate));
+}
+
+ExternalTwoByteString::Resource* ExternalTwoByteString::mutable_resource(
+    Isolate* isolate) {
+  return reinterpret_cast<Resource*>(resource_as_address(isolate));
 }
 
 void ExternalTwoByteString::update_data_cache(Isolate* isolate) {
   DisallowGarbageCollection no_gc;
   if (is_uncached()) {
-    if (resource()->IsCacheable()) mutable_resource()->UpdateDataCache();
+    if (resource(isolate)->IsCacheable())
+      mutable_resource(isolate)->UpdateDataCache();
   } else {
     resource_data_.store(isolate,
-                         reinterpret_cast<Address>(resource()->data()));
+                         reinterpret_cast<Address>(resource(isolate)->data()));
   }
 }
 
@@ -1286,8 +1303,12 @@ void ExternalTwoByteString::set_resource(
 }
 
 const uint16_t* ExternalTwoByteString::GetChars() const {
+  return GetChars(GetIsolateForSandbox(this));
+}
+
+const uint16_t* ExternalTwoByteString::GetChars(Isolate* isolate) const {
   DisallowGarbageCollection no_gc;
-  auto res = resource();
+  auto res = resource(isolate);
   if (is_uncached()) {
     if (res->IsCacheable()) {
       // TODO(solanes): Teach TurboFan/CSA to not bailout to the runtime to
@@ -1297,11 +1318,7 @@ const uint16_t* ExternalTwoByteString::GetChars() const {
 #if DEBUG
     // Check that this method is called only from the main thread if we have an
     // uncached string with an uncacheable resource.
-    {
-      Isolate* isolate;
-      DCHECK_IMPLIES(GetIsolateFromHeapObject(this, &isolate),
-                     ThreadId::Current() == isolate->thread_id());
-    }
+    DCHECK_EQ(ThreadId::Current(), isolate->thread_id());
 #endif
   }
 

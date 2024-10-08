@@ -2066,7 +2066,8 @@ TEST(InternalizeExternalStringUncachedWithCopyTwoByte) {
 // strings with cacheable resources through MakeExternal. One byte version.
 TEST(CheckCachedDataInternalExternalUncachedString) {
   CcTest::InitializeVM();
-  Factory* factory = CcTest::i_isolate()->factory();
+  i::Isolate* i_isolate = CcTest::i_isolate();
+  Factory* factory = i_isolate->factory();
   v8::HandleScope scope(CcTest::isolate());
 
   // Due to different size restrictions the string needs to be small but not too
@@ -2097,11 +2098,11 @@ TEST(CheckCachedDataInternalExternalUncachedString) {
   // If the sandbox is enabled, string objects will always be cacheable because
   // they are smaller.
   CHECK(V8_ENABLE_SANDBOX_BOOL || external_string->is_uncached());
-  CHECK(external_string->resource()->IsCacheable());
+  CHECK(external_string->resource(i_isolate)->IsCacheable());
   if (!V8_ENABLE_SANDBOX_BOOL) {
-    CHECK_NOT_NULL(external_string->resource()->cached_data());
-    CHECK_EQ(external_string->resource()->cached_data(),
-             external_string->resource()->data());
+    CHECK_NOT_NULL(external_string->resource(i_isolate)->cached_data());
+    CHECK_EQ(external_string->resource(i_isolate)->cached_data(),
+             external_string->resource(i_isolate)->data());
   }
 }
 

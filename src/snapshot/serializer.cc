@@ -678,7 +678,7 @@ void Serializer::ObjectSerializer::SerializeExternalString() {
   // with the encoded external reference, which we restore upon deserialize.
   // For the rest we serialize them to look like ordinary sequential strings.
   auto string = Cast<ExternalString>(object_);
-  Address resource = string->resource_as_address();
+  Address resource = string->resource_as_address(isolate());
   ExternalReferenceEncoder::Value reference;
   if (serializer_->external_reference_encoder_.TryEncode(resource).To(
           &reference)) {
@@ -719,14 +719,14 @@ void Serializer::ObjectSerializer::SerializeExternalStringAsSequentialString() {
     allocation_size = SeqOneByteString::SizeFor(length);
     content_size = length * kCharSize;
     resource = reinterpret_cast<const uint8_t*>(
-        Cast<ExternalOneByteString>(string)->resource()->data());
+        Cast<ExternalOneByteString>(string)->resource(isolate())->data());
   } else {
     map = internalized ? roots.internalized_two_byte_string_map()
                        : roots.seq_two_byte_string_map();
     allocation_size = SeqTwoByteString::SizeFor(length);
     content_size = length * kShortSize;
     resource = reinterpret_cast<const uint8_t*>(
-        Cast<ExternalTwoByteString>(string)->resource()->data());
+        Cast<ExternalTwoByteString>(string)->resource(isolate())->data());
   }
 
   SnapshotSpace space = SnapshotSpace::kOld;

@@ -1091,7 +1091,7 @@ V8_OBJECT class ExternalString : public UncachedExternalString {
   int ExternalPayloadSize() const;
 
   // Used in the serializer/deserializer.
-  inline Address resource_as_address() const;
+  inline Address resource_as_address(Isolate* isolate) const;
   inline void set_address_as_resource(Isolate* isolate, Address address);
   inline uint32_t GetResourceRefForDeserialization();
   inline void SetResourceRefForSerialization(uint32_t ref);
@@ -1131,6 +1131,7 @@ V8_OBJECT class ExternalOneByteString : public ExternalString {
 
   // The underlying resource.
   inline const Resource* resource() const;
+  inline const Resource* resource(Isolate* isolate) const;
 
   // It is assumed that the previous resource is null. If it is not null, then
   // it is the responsability of the caller the handle the previous resource.
@@ -1146,6 +1147,7 @@ V8_OBJECT class ExternalOneByteString : public ExternalString {
   inline void update_data_cache(Isolate* isolate);
 
   inline const uint8_t* GetChars() const;
+  inline const uint8_t* GetChars(Isolate* isolate) const;
 
   // Dispatched behavior.
   inline uint8_t Get(int index,
@@ -1153,7 +1155,7 @@ V8_OBJECT class ExternalOneByteString : public ExternalString {
 
  private:
   // The underlying resource as a non-const pointer.
-  inline Resource* mutable_resource();
+  inline Resource* mutable_resource(Isolate* isolate);
 } V8_OBJECT_END;
 
 static_assert(sizeof(ExternalOneByteString) == sizeof(ExternalString));
@@ -1168,6 +1170,7 @@ V8_OBJECT class ExternalTwoByteString : public ExternalString {
 
   // The underlying string resource.
   inline const Resource* resource() const;
+  inline const Resource* resource(Isolate* isolate) const;
 
   // It is assumed that the previous resource is null. If it is not null, then
   // it is the responsability of the caller the handle the previous resource.
@@ -1183,6 +1186,7 @@ V8_OBJECT class ExternalTwoByteString : public ExternalString {
   inline void update_data_cache(Isolate* isolate);
 
   inline const uint16_t* GetChars() const;
+  inline const uint16_t* GetChars(Isolate* isolate) const;
 
   // Dispatched behavior.
   inline uint16_t Get(
@@ -1193,7 +1197,7 @@ V8_OBJECT class ExternalTwoByteString : public ExternalString {
 
  private:
   // The underlying resource as a non-const pointer.
-  inline Resource* mutable_resource();
+  inline Resource* mutable_resource(Isolate* isolate);
 } V8_OBJECT_END;
 
 static_assert(sizeof(ExternalTwoByteString) == sizeof(ExternalString));
