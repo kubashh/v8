@@ -103,6 +103,41 @@
       "parentUuid": "6e260f0d_6279bf32",
       "revId": "c9c63c322871763ed2e5846c108303a58404960e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6ef9692_6c6497d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-08T20:47:55Z",
+      "side": 1,
+      "message": "Here\u0027s an update after running the `git cl upstream` command...",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afa6237c_659a5b61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-08T20:47:55Z",
+      "side": 1,
+      "message": "`gl cl --set-upstream-to\u003dorigin/main` prints the cl help message.  I don\u0027t think it is recognized as a valid command.\n\nI see `git cl upstream` is a command.  Running it shows:\n\n```\nC:\\v8\\v8\u003egit cl upstream\nrefs/remotes/origin/main\n```\n\n`git cl upstream --help` shows:\n`Usage: git cl upstream [options] [new upstream branch]`\n\nSo I did a `git cl upstream origin/main` but it looks like that just sets it to what it already was:\n\n```\nC:\\v8\\v8\u003egit cl upstream origin/main\nUpstream branch set to refs/remotes/origin/main\n```",
+      "parentUuid": "5448346c_4f492ffa",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
