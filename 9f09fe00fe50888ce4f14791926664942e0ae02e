@@ -51,6 +51,24 @@
       "parentUuid": "f894e37f_9d9cb6cb",
       "revId": "9f09fe00fe50888ce4f14791926664942e0ae02e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ff020a_b38cb3d6",
+        "filename": "src/trap-handler/handler-inside.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-08T13:16:15Z",
+      "side": 1,
+      "message": "I am still looking into this. It would indeed be better to store the precise offset of the load/store instructions. A small issue is that, however, these are builtins, and therefore the list of `protected_instructions` offsets should be somehow stored with the builtin metadata in the snapshot, which is not a small change.",
+      "parentUuid": "763d6d4d_61cb923f",
+      "revId": "9f09fe00fe50888ce4f14791926664942e0ae02e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [

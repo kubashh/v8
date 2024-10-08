@@ -16,6 +16,24 @@
       "message": "Drive-by notes and questions...\n1) Note that this list is not complete. In case of API function `CallApiCallback` builtin similarly pushes `v8::FunctionCallbackInfo::kArgsLength` number of values to the stack.\n2) I wonder, would it simplify things if we store just the \"limit\" value in the frame instead of `scan_count` + `original_sp`? Then we could always scan slots from `sp()` to this \"limit\".\n3) Does this frame contain raw non-aligned pointers that can be confused with HeapObject values? Can we let the GC scan the whole frame?",
       "revId": "fe67d52f45a5c125d63f6c77a9cc5dbdefc6a89d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b6ba33_31a9ead1",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 45
+      },
+      "lineNbr": 3634,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2024-10-08T13:16:15Z",
+      "side": 1,
+      "message": "1) I\u0027ll need to correct the comment, then.\n2) Thanks for the suggestion! Storing the \"limit\" stack pointer is indeed much cleaner. I will implement this as soon as possible.\n3) Yes, there are a few values spilled in the stack frame, and between them also aligned pointers (`valuetypes_array_ptr`) and odd integers (`param_count`, `return_count`). I assumed that odd integers, although small, might be confused with tagged pointers; if that was not the case then the code can be further simplified!)",
+      "parentUuid": "ae93c361_059541f6",
+      "revId": "fe67d52f45a5c125d63f6c77a9cc5dbdefc6a89d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
