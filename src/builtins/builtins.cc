@@ -228,7 +228,7 @@ CallInterfaceDescriptor Builtins::CallInterfaceDescriptorFor(Builtin builtin) {
     default:
       Builtins::Kind kind = Builtins::KindOf(builtin);
       DCHECK_NE(BCH, kind);
-      if (kind == TSJ || kind == TFJ || kind == CPP) {
+      if (kind == CPP || kind == TSJ || kind == TFJ) {
         return JSTrampolineDescriptor{};
       }
       UNREACHABLE();

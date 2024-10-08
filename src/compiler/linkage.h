@@ -455,9 +455,15 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
     return parameter_count + 1;  // Parameter (arity + 1) is special.
   }
 
+  // A special {Parameter} index for JSCalls that represents the dispatch
+  // handle.
+  static constexpr int GetJSCallDispatchHandleParamIndex(int parameter_count) {
+    return parameter_count + 2;  // Parameter (arity + 2) is special.
+  }
+
   // A special {Parameter} index for JSCalls that represents the context.
   static constexpr int GetJSCallContextParamIndex(int parameter_count) {
-    return parameter_count + 2;  // Parameter (arity + 2) is special.
+    return parameter_count + 3;  // Parameter (arity + 3) is special.
   }
 
   // A special {Parameter} index for JSCalls that represents the closure.

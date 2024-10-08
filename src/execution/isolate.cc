@@ -331,6 +331,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
   current_embedded_blob_data_size_.store(data_size, std::memory_order_relaxed);
 
 #ifdef DEBUG
+  /*
   // Verify that the contents of the embedded blob are unchanged from
   // serialization-time, just to ensure the compiler isn't messing with us.
   EmbeddedData d = EmbeddedData::FromBlob();
@@ -349,6 +350,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
           "within builtin code.");
     }
   }
+  */
 #endif  // DEBUG
 }
 

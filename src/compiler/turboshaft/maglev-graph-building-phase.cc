@@ -1299,6 +1299,7 @@ class GraphBuildingNodeProcessor {
       arguments.push_back(callee);
       arguments.push_back(Map(node->new_target()));
       arguments.push_back(__ Word32Constant(actual_parameter_count));
+      arguments.push_back(__ Word32Constant(0xffffffff));  // TODO(saelo)
       arguments.push_back(Map(node->receiver()));
       for (int i = 0; i < node->num_args(); i++) {
         arguments.push_back(Map(node->arg(i)));
@@ -1328,6 +1329,7 @@ class GraphBuildingNodeProcessor {
       }
       arguments.push_back(Map(node->new_target()));
       arguments.push_back(__ Word32Constant(actual_parameter_count));
+      arguments.push_back(__ Word32Constant(0xffffffff));  // TODO(saelo)
 
       // Load the context from {callee}.
       OpIndex context =
@@ -1457,6 +1459,7 @@ class GraphBuildingNodeProcessor {
     }
 
     auto descriptor = Builtins::CallInterfaceDescriptorFor(node->builtin());
+    // TODO(saelo) add dispatch handle parameter?
     if (descriptor.HasContextParameter()) {
       arguments.push_back(Map(node->context_input()));
     }
@@ -4517,9 +4520,12 @@ class GraphBuildingNodeProcessor {
 
     // Extra fixed JS frame parameters. These are at the end since JS builtins
     // push their parameters in reverse order.
-    constexpr int kExtraFixedJSFrameParameters = 3;
+    constexpr int kExtraFixedJSFrameParameters = 4;
     if (frame.is_javascript()) {
-      static_assert(kExtraFixedJSFrameParameters == 3);
+      static_assert(kExtraFixedJSFrameParameters == 4);
+      DCHECK_EQ(Builtins::CallInterfaceDescriptorFor(frame.builtin_id())
+                    .GetRegisterParameterCount(),
+                kExtraFixedJSFrameParameters);
       // kJavaScriptCallTargetRegister
       builder.AddInput(MachineType::AnyTagged(),
                        __ HeapConstant(frame.javascript_target().object()));
@@ -4531,6 +4537,9 @@ class GraphBuildingNodeProcessor {
           MachineType::AnyTagged(),
           __ SmiConstant(Smi::FromInt(
               Builtins::GetStackParameterCount(frame.builtin_id()))));
+      // kJavaScriptCallDispatchHandleRegister
+      builder.AddInput(MachineType::AnyTagged(),
+                       __ SmiConstant(Smi::FromInt(0xffffffff)));
     }
 
     // Context
@@ -4896,7 +4905,10 @@ class GraphBuildingNodeProcessor {
                               : FrameStateType::kBuiltinContinuation;
     uint16_t parameter_count =
         static_cast<uint16_t>(maglev_frame.parameters().length());
-    constexpr int kExtraFixedJSFrameParameters = 3;
+    constexpr int kExtraFixedJSFrameParameters = 4;
+    DCHECK_EQ(Builtins::CallInterfaceDescriptorFor(maglev_frame.builtin_id())
+                  .GetRegisterParameterCount(),
+              kExtraFixedJSFrameParameters);
     if (maglev_frame.is_javascript()) {
       parameter_count += kExtraFixedJSFrameParameters;
     }
