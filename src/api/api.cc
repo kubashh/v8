@@ -4267,6 +4267,13 @@ void v8::TypedArray::CheckCast(Value* that) {
                   "Value is not a TypedArray");
 }
 
+// static
+std::pair<void*, size_t> v8::TypedArray::GetDataAndSize(
+    v8::Isolate* isolate, v8::Local<v8::TypedArray> object) {
+  auto tagged_obj = *Utils::OpenDirectHandle(*object);
+  return std::make_pair(tagged_obj->DataPtr(), tagged_obj->GetByteLength()).;
+}
+
 #define CHECK_TYPED_ARRAY_CAST(Type, typeName, TYPE, ctype)                \
   void v8::Type##Array::CheckCast(Value* that) {                           \
     auto obj = *Utils::OpenDirectHandle(that);                             \
