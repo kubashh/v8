@@ -50,6 +50,41 @@
       "message": "Cool, I will have a detailed look tomorrow.\n\nPlease no cherry picks (you should merge into the main branch). BTW is this a Microsoft default instruction/setup? I\u0027ve seen now quite a few CLs from MS that are cherry-picks (which you should only ever use for security backmerges) and `git cl upload` will on a branch created from `main` should produce a default CL.",
       "revId": "c9c63c322871763ed2e5846c108303a58404960e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e260f0d_6279bf32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-08T18:23:46Z",
+      "side": 1,
+      "message": "I didn\u0027t intend to do a cherry pick (and my current branch is based off of main). Could you offer me some guidance on how to recover?\n\nThe short version is my branch is based off main, but this CL didn\u0027t start this way due to some initial build errors I encountered.\n\nWhen I initially pulled the latest changes for main (in my full Chromium enlistment), the branch wasn\u0027t stable (crashed on startup). I went looking for the latest known good Canary instead by checking out the tag that corresponded to the latest release at the time.  I don\u0027t believe there\u0027s any particular MSFT guidance to do that, it just seemed like the right thing to do.\n\nFrom there I developed my change and, once it was ready, I then uploaded my changes with a git cl upload, but to my surprise it included a v8-version.h file that wasn\u0027t part of my change. I figured that was because I was uploading a set of commits for a release branch that included the v8-version.h change plus my commits.\n\nI rebased my changes off of main and did another git cl upload and the unwanted file disappeared from the diff. I have continued from there.  My git log (for the v8 repo) that I\u0027m doing a git cl upload from now looks like this:\n\n\n```\ncommit 7bc0f9bbcde8762be8a5603e0072901b776d321f (HEAD -\u003e v8_etw_capture_state)\nAuthor: Bo Cupp \u003cpcupp@microsoft.com\u003e\nDate:   Mon Oct 7 12:44:41 2024 -0700\n\n    Rename v8::internal::Debug -\u003e v8::internal::EtwDebug\n\ncommit 2484ea7603a637ad0f1421892bab5fe963d17b4b\nAuthor: Bo Cupp \u003cpcupp@microsoft.com\u003e\nDate:   Mon Oct 7 10:49:38 2024 -0700\n\n    Use weak_ptr for monitor to avoid leaking in case of timeout\n\ncommit e2d18724de5bc29ae2885af3acc310101f2bd489\nAuthor: Bo Cupp \u003cpcupp@microsoft.com\u003e\nDate:   Thu Oct 3 23:35:27 2024 -0700\n\n    Add a etw-debug flag and _DEBUG guards for ETW log statements\n\ncommit 850a4729262308ba9f2e185d485c6a9e89776285\nAuthor: Bo Cupp \u003cpcupp@microsoft.com\u003e\nDate:   Fri Sep 27 16:20:16 2024 -0700\n\n    Implement capture state support for v8 provider (a bunch of debug statements still in there).\n\ncommit 6ea9baba45cd95ccd210fa90869c51c01467fac7 (origin/main, origin/HEAD, main)\nAuthor: Michael Achenbach \u003cmachenbach@chromium.org\u003e\nDate:   Tue Oct 1 18:40:19 2024 +0000\n\n    Revert \"Reland \"[GC] Simplify old generation limits initialization\"\"\n```\n\nWhat marks this CL as a cherry-pick and can I clear that from the CL in some way?",
+      "parentUuid": "a8e544b2_d4653a5b",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9add34bd_0af1013e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419747
+      },
+      "writtenOn": "2024-10-08T18:23:46Z",
+      "side": 1,
+      "message": "Sharing some history of the CL and questions related to Camillo\u0027s latest comment on cherry-picking.",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
