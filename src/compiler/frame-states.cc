@@ -233,12 +233,18 @@ FrameState CreateJavaScriptBuiltinContinuationFrameState(
   }
 
   Node* new_target = jsgraph->UndefinedConstant();
+  // The dispatch handle isn't used by the continuation builtins.
+  Node* dh = jsgraph->ConstantNoHole(kInvalidDispatchHandle);
 
   // Register parameters follow stack parameters. The context will be added by
   // instruction selector during FrameState translation.
+  DCHECK_EQ(
+      Builtins::CallInterfaceDescriptorFor(name).GetRegisterParameterCount(),
+      4);
   actual_parameters.push_back(target);      // kJavaScriptCallTargetRegister
   actual_parameters.push_back(new_target);  // kJavaScriptCallNewTargetRegister
   actual_parameters.push_back(argc);        // kJavaScriptCallArgCountRegister
+  actual_parameters.push_back(dh);          // kJavaScriptDispatchHandleRegister
 
   return CreateBuiltinContinuationFrameStateCommon(
       jsgraph,
