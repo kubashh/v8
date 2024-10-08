@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44084c27_7a755377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-08T12:12:08Z",
+      "side": 1,
+      "message": "Hi! I think this is ready for a first round of review. See https://docs.google.com/document/d/1WkyEynMluvIr0LBmrapyF7MiE8wIHFHnlP5B6FFhQuA/edit#heading\u003dh.c44c9y2o0s3i for context. It seems to be pretty much working now, except for non-leaptiering builds. I guess for now, those will require another bunch of `#ifdef V8_ENABLE_LEAPTIERING`, at least I couldn\u0027t come up with a better solution so far.\n\nSee the follow-up CL for an example of how this will be used. Basically, it\u0027ll give us a trusted way of obtaining the dispatch entry used for calling a function. We could consider storing these also in the JS frames, which might help the deoptimizer and other code that inspects frames. But I haven\u0027t thought about that too deply.\n\nI\u0027ll also do another pass and add more DCHECKs and static_asserts where we make assumptions about the JS calling convention.\n\nHappy to discuss more details offline, let me know!",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0287905e_1e3268c8",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-08T12:12:08Z",
+      "side": 1,
+      "message": "Let me know if you have thoughts here. It took me a while to understand that this was the interface descriptor that I cared about, and that the others that also use `DEFINE_JS_PARAMETERS` are basically \"builtins with a js-like calling convention\". So happy to add more documentation or change names if that makes things more clear.",
+      "range": {
+        "startLine": 890,
+        "startChar": 0,
+        "endLine": 890,
+        "endChar": 80
+      },
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f597d7a_4e7a1c2b",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-08T12:12:08Z",
+      "side": 1,
+      "message": "There\u0027s a bit of misc. refactoring here, e.g. to split CallJS (used to call a JS callable object via a CallX builtin) and CallJSBuiltin (used to directly call a builtin with JS linkage). Happy to move this to a separate CL if you think that\u0027d be useful.",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
