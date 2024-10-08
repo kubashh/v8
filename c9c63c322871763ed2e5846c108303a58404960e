@@ -85,6 +85,24 @@
       "message": "Sharing some history of the CL and questions related to Camillo\u0027s latest comment on cherry-picking.",
       "revId": "c9c63c322871763ed2e5846c108303a58404960e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5448346c_4f492ffa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2024-10-08T18:43:06Z",
+      "side": 1,
+      "message": "Can you try `git cl --set-upstream-to\u003dorigin/main` ?",
+      "parentUuid": "6e260f0d_6279bf32",
+      "revId": "c9c63c322871763ed2e5846c108303a58404960e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
