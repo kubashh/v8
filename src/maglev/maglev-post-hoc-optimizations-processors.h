@@ -126,10 +126,12 @@ class LoopOptimizationProcessor {
     DCHECK(loop_effects);
     // Conservatively not hoist map checks if we ever deoptimized this function
     // to avoid deopt loops.
-    if (was_deoptimized) return ProcessResult::kContinue;
+    // If hoisting of this check fails we neet to abort (and not continue) to
+    // ensure we are not hoisting over checks.
+    if (was_deoptimized) return ProcessResult::kSkipBlock;
     ValueNode* object = maps->receiver_input().node();
     if (IsLoopPhi(object)) {
-      return ProcessResult::kContinue;
+      return ProcessResult::kSkipBlock;
     }
     if (!loop_effects->unstable_aspects_cleared && CanHoist(maps)) {
       if (auto j = current_block->predecessor_at(0)
@@ -137,12 +139,10 @@ class LoopOptimizationProcessor {
                        ->TryCast<CheckpointedJump>()) {
         maps->SetEagerDeoptInfo(zone, j->eager_deopt_info()->top_frame(),
                                 maps->eager_deopt_info()->feedback_to_update());
-      } else {
-        return ProcessResult::kContinue;
+        return ProcessResult::kHoist;
       }
-      return ProcessResult::kHoist;
     }
-    return ProcessResult::kContinue;
+    return ProcessResult::kSkipBlock;
   }
 
   template <typename NodeT>
