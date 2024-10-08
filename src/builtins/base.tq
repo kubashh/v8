@@ -622,6 +622,13 @@ const false: constexpr bool generates 'false';
 extern enum LanguageMode extends bool { kStrict, kSloppy }
 type LanguageModeSmi extends Smi;
 
+// Dispatch handle constant used when tailcalling into C++ builtins. As these
+// currently don't use the dispatch handle parameter, we can just use a constant
+// here. Alternatively, we could obtain the "real" dispatch handle (the one used
+// for calling the torque builtin) through a new CSA function that accesses the
+// kJSCallDispatchHandle parameter.
+const kInvalidDispathHandle: uint32 = 0xffffffff;
+
 const SKIP_WRITE_BARRIER:
     constexpr WriteBarrierMode generates 'SKIP_WRITE_BARRIER';
 const UNSAFE_SKIP_WRITE_BARRIER:
