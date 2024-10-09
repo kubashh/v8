@@ -1368,7 +1368,7 @@ class StoreType {
 };
 
 std::optional<wasm::ValueKind> WasmReturnTypeFromSignature(
-    const FunctionSig* wasm_signature);
+    const CanonicalSig* wasm_signature);
 
 // Lowers a signature for 32 bit platforms by replacing i64 parameters and
 // returns with two i32s each.
