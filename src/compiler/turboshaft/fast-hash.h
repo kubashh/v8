@@ -19,7 +19,8 @@ namespace v8::internal::compiler::turboshaft {
 V8_INLINE size_t fast_hash_combine() { return 0u; }
 V8_INLINE size_t fast_hash_combine(size_t acc) { return acc; }
 V8_INLINE size_t fast_hash_combine(size_t acc, size_t value) {
-  return 17 * acc + value;
+  return (value << 5) ^ (value >> 27) ^ value;
+  // return 17 * acc + value;
 }
 template <typename T, typename... Ts>
 V8_INLINE size_t fast_hash_combine(T const& v, Ts const&... vs);
