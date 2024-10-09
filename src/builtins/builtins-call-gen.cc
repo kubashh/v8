@@ -875,6 +875,8 @@ TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
   auto context = Parameter<Context>(Descriptor::kContext);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
+  auto dispatch_handle =
+      UncheckedParameter<JSDispatchHandleT>(Descriptor::kDispatchHandle);
 
   Label if_call(this), if_construct(this);
   Branch(IsUndefined(new_target), &if_call, &if_construct);
@@ -905,7 +907,7 @@ TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
     // Tail call to the stub while leaving all the incoming JS arguments on
     // the stack.
     TailCallBuiltin(Builtin::kHandleApiConstruct, context, target, new_target,
-                    argc);
+                    argc, dispatch_handle);
   }
 }
 

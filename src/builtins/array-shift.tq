@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 namespace array {
-extern builtin ArrayShift(Context, JSFunction, JSAny, int32): JSAny;
+extern builtin ArrayShift(Context, JSFunction, JSAny, int32, uint32): JSAny;
 
 macro TryFastArrayShift(implicit context: Context)(receiver: JSAny): JSAny
     labels Slow, Runtime {
@@ -103,7 +103,7 @@ transitioning javascript builtin ArrayPrototypeShift(
   } label Runtime {
     tail ArrayShift(
         context, LoadTargetFromFrame(), Undefined,
-        Convert<int32>(arguments.actual_count));
+        Convert<int32>(arguments.actual_count), kInvalidDispathHandle);
   }
 }
 }

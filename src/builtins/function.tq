@@ -13,7 +13,7 @@ javascript builtin FunctionPrototypeHasInstance(
 }
 
 extern transitioning builtin FunctionPrototypeBind(
-    implicit context: Context)(JSFunction, JSAny, int32): JSAny;
+    implicit context: Context)(JSFunction, JSAny, int32, uint32): JSAny;
 
 const kLengthDescriptorIndex: constexpr int32
     generates 'JSFunctionOrBoundFunctionOrWrappedFunction::kLengthDescriptorIndex'
@@ -108,7 +108,8 @@ transitioning javascript builtin FastFunctionPrototypeBind(
     }
   } label Slow {
     tail FunctionPrototypeBind(
-        LoadTargetFromFrame(), newTarget, Convert<int32>(argc));
+        LoadTargetFromFrame(), newTarget, Convert<int32>(argc),
+        kInvalidDispathHandle);
   }
 }
 }  // namespace function

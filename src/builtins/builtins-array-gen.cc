@@ -268,6 +268,8 @@ void ArrayBuiltinsAssembler::VisitAllTypedArrayElements(
 
 TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
+  auto dispatch_handle =
+      UncheckedParameter<JSDispatchHandleT>(Descriptor::kJSDispatchHandle);
   auto context = Parameter<Context>(Descriptor::kContext);
   CSA_DCHECK(this, IsUndefined(Parameter<Object>(Descriptor::kJSNewTarget)));
 
@@ -356,7 +358,7 @@ TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
     // fast path.
     TNode<JSFunction> target = LoadTargetFromFrame();
     TailCallBuiltin(Builtin::kArrayPop, context, target, UndefinedConstant(),
-                    argc);
+                    argc, dispatch_handle);
   }
 }
 
@@ -371,6 +373,8 @@ TF_BUILTIN(ArrayPrototypePush, CodeStubAssembler) {
   Label runtime(this, Label::kDeferred);
 
   auto argc = UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
+  auto dispatch_handle =
+      UncheckedParameter<JSDispatchHandleT>(Descriptor::kJSDispatchHandle);
   auto context = Parameter<Context>(Descriptor::kContext);
   CSA_DCHECK(this, IsUndefined(Parameter<Object>(Descriptor::kJSNewTarget)));
 
@@ -481,7 +485,7 @@ TF_BUILTIN(ArrayPrototypePush, CodeStubAssembler) {
     // fast path.
     TNode<JSFunction> target = LoadTargetFromFrame();
     TailCallBuiltin(Builtin::kArrayPush, context, target, UndefinedConstant(),
-                    argc);
+                    argc, dispatch_handle);
   }
 }
 
