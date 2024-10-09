@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecfce36c_ad2f85b7",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T11:58:41Z",
+      "side": 1,
+      "message": "Ah, I suppose I should have reviewed the next CL in the chain first, as it modifies exactly that relocation code.",
+      "parentUuid": "b976e3b9_6303eaf0",
+      "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "198332ca_ca5bcb49",
         "filename": "src/compiler/turboshaft/index.h",
         "patchSetId": 1
