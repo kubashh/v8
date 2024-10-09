@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5886464c_ee343040",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-09T16:07:37Z",
+      "side": 1,
+      "message": "First round of comments.",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d313251_aa0157f6",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-09T16:07:37Z",
+      "side": 1,
+      "message": "Do dispatch handles look like Smis? We might need to store them in tagged form.",
+      "range": {
+        "startLine": 1524,
+        "startChar": 9,
+        "endLine": 1524,
+        "endChar": 46
+      },
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0287905e_1e3268c8",
@@ -37,6 +77,57 @@
         "endLine": 890,
         "endChar": 80
       },
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6819f8bb_a7fe0d59",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-09T16:07:37Z",
+      "side": 1,
+      "message": "It feels like we should be passing this new argument everywhere, so this should rather be a part of `DEFINE_JS_PARAMETERS`/`DEFINE_JS_PARAMETER_TYPES` macros.\nThe idea behind `DEFINE_JS_PARAMETERS*` macros is that there are helper \"impl\" builtins which receive additional arguments on top of regular JS parameters and the \"parent\" builtin (which has a regular JS calling convention) just adds some data and passes the rest of JS arguments as is.",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02f2d1dd_fd12617a",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-09T16:07:37Z",
+      "side": 1,
+      "message": "Parent `StaticJSCallInterfaceDescriptor` class already defines the right set of registers.",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "800c40fc_db5f9f1b",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-09T16:07:37Z",
+      "side": 1,
+      "message": "While you are here... I believe it\u0027s a duplicate of `JSTrampolineDescriptor` and should be removed.",
       "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
