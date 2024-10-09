@@ -39,6 +39,30 @@
       },
       "revId": "788b579172169a733fcd8e7b7008c2a37f50f80d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a09d65_8bf65d6c",
+        "filename": "test/wasm-js/wasm-js.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-09T09:48:06Z",
+      "side": 1,
+      "message": "Good to know, thanks!",
+      "parentUuid": "22b29be8_27b7019d",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 0
+      },
+      "revId": "788b579172169a733fcd8e7b7008c2a37f50f80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
