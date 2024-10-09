@@ -16,6 +16,40 @@
       "message": "PTAL, thanks",
       "revId": "7a50d777e209ed14ce67e451d76488eeb42d7aa4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a418dd45_83466456",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1118844
+      },
+      "writtenOn": "2024-10-09T10:48:38Z",
+      "side": 1,
+      "message": "If we always allocate it we should be able to cover this with `HasReceiverToDeserializer()` instead?",
+      "revId": "7a50d777e209ed14ce67e451d76488eeb42d7aa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aa7a323_4aeb6fc4",
+        "filename": "test/mjsunit/regress/regress-crbug-371237564.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1118844
+      },
+      "writtenOn": "2024-10-09T10:48:38Z",
+      "side": 1,
+      "message": "Would preparsing this irrelevant code instead of parsing it avoid the issue? Perhaps that\u0027s the even better solution?",
+      "revId": "7a50d777e209ed14ce67e451d76488eeb42d7aa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
