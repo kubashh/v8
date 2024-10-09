@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "788b579172169a733fcd8e7b7008c2a37f50f80d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22b29be8_27b7019d",
+        "filename": "test/wasm-js/wasm-js.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-09T09:47:01Z",
+      "side": 1,
+      "message": "This could be the same issue as the memory64/exception failures just above, this would be fixed by:\nhttps://github.com/WebAssembly/spec/pull/1831",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 0
+      },
+      "revId": "788b579172169a733fcd8e7b7008c2a37f50f80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
