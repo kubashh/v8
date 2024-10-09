@@ -46,6 +46,30 @@
       },
       "revId": "69b9f72ab1c381696ec304fc9a9b8b304bb0dd6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d90ba02e_d0a90af0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2844,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-09T12:51:30Z",
+      "side": 1,
+      "message": "SG, I\u0027ll do this as a follow up",
+      "parentUuid": "0a114b45_795330d6",
+      "range": {
+        "startLine": 2844,
+        "startChar": 5,
+        "endLine": 2844,
+        "endChar": 8
+      },
+      "revId": "69b9f72ab1c381696ec304fc9a9b8b304bb0dd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
