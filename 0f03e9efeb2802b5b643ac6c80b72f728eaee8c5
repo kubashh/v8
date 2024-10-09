@@ -33,6 +33,24 @@
       "message": "What does the \"MajorGC\" part mean here? If this is the young-gen space, won\u0027t it compact also during the next minor GC?",
       "revId": "0f03e9efeb2802b5b643ac6c80b72f728eaee8c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9ae015e_e1bcd138",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-09T13:57:53Z",
+      "side": 1,
+      "message": "Two things:\n1) Afaict, we don\u0027t compact the EPT on minor GCs. The `StartCompacting` method of EPT is only called for full GCs.\n2) The bug requires interleaved GCs, so we need an ongoing incremental major GC in the background for the minor GC to trigger a crash.",
+      "parentUuid": "1e2e8c52_f26dde51",
+      "revId": "0f03e9efeb2802b5b643ac6c80b72f728eaee8c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
