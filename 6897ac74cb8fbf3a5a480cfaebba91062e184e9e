@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "293a0638_12f453f1",
+        "filename": "test/unittests/heap/heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T13:39:32Z",
+      "side": 1,
+      "message": "I see, thanks for the explanation! I guess I\u0027m asking because this seems like an issue that --stress-compaction should help find, and if that doesn\u0027t work, then maybe this indicates a problem with --stress-compaction?\nFor example, would it work if we changed the logic to be more aggressive, something like:\n```\n  if (v8_flags.stress_compaction) {\n    should_compact \u003d num_segments() \u003e 1;\n    num_segments_to_evacuate \u003d std::max(1u, num_segments_to_evacuate);\n  }\n```\nMaybe that\u0027d be worth trying. I could imagine that that also won\u0027t work because now the evacuation happens too early though, so if that\u0027s the case, let\u0027s just go with your solution.",
+      "parentUuid": "ddec322b_521ee8e6",
+      "range": {
+        "startLine": 751,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 15
+      },
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d6b651c_3269d962",
         "filename": "test/unittests/heap/heap-unittest.cc",
         "patchSetId": 3
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "I don\u0027t think it would. I called it `to_be_evacuated` but in practice the entry is marked for evacuation but then the object needs to die. In practice it is never really evacuated, and we should not read the ExternalPointerHandle after the object dies.",
       "parentUuid": "8d6b651c_3269d962",
+      "range": {
+        "startLine": 767,
+        "startChar": 23,
+        "endLine": 767,
+        "endChar": 38
+      },
+      "revId": "6897ac74cb8fbf3a5a480cfaebba91062e184e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49e55d94_a94aa4a9",
+        "filename": "test/unittests/heap/heap-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T13:39:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "82563686_0d5ae6db",
       "range": {
         "startLine": 767,
         "startChar": 23,

@@ -16,6 +16,23 @@
       "message": "ping saelo@",
       "revId": "0f03e9efeb2802b5b643ac6c80b72f728eaee8c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e2e8c52_f26dde51",
+        "filename": "src/sandbox/compactible-external-entity-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T13:39:32Z",
+      "side": 1,
+      "message": "What does the \"MajorGC\" part mean here? If this is the young-gen space, won\u0027t it compact also during the next minor GC?",
+      "revId": "0f03e9efeb2802b5b643ac6c80b72f728eaee8c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
