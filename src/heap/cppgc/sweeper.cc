@@ -1534,7 +1534,7 @@ void Sweeper::WaitForConcurrentSweepingForTesting() {
 
 bool Sweeper::SweepForAllocationIfRunning(NormalPageSpace* space, size_t size,
                                           v8::base::TimeDelta max_duration) {
-  return impl_->SweepForAllocationIfRunning(space, size, max_duration);
+  return false;
 }
 
 bool Sweeper::IsSweepingOnMutatorThread() const {
