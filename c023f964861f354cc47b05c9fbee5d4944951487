@@ -16,6 +16,63 @@
       "message": "LGTM",
       "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80af3699_7895da74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T11:39:47Z",
+      "side": 1,
+      "message": "LGTM with high-level (design) questions about long-term maintainability/security (which are possibly better suited to an offline discussion/chat).",
+      "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b976e3b9_6303eaf0",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T11:39:47Z",
+      "side": 1,
+      "message": "Just to double check: there are four possible combinations of `Is64()` and `V8_ENABLE_WASM_CODE_POINTER_TABLE` and they are all different from each other:\n- `Is64() \u0026\u0026 V8_ENABLE_WASM_CODE_POINTER_TABLE`: This returns a `Word32` (!) here (namely the function index), which the instruction selector relocates to an `int64_t` (still a function index, for indexing into the CPT). Is this correct? In particular, I\u0027m worried that when we write a `WasmCodePtr` here we depend on `V8_ENABLE_WASM_CODE_POINTER_TABLE`, but when we read it in the instruction selector at   \nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/backend/instruction-selector-impl.h;l\u003d429;drc\u003d0afdaad03fc3fc271a751cb77dea8c8efb84b49f we depend on `Is64` instead.\n- `Is64() \u0026\u0026 !V8_ENABLE_WASM_CODE_POINTER_TABLE`: We write a `Word64` function index here, which the instruction selector relocates to an `int64_t` absolute address.\n- `!Is64() \u0026\u0026 V8_ENABLE_WASM_CODE_POINTER_TABLE`: We write a `Word32` function index here, which the instruction selector relocates to an `int32_t` function index into the CPT.\n- `!Is64() \u0026\u0026 !V8_ENABLE_WASM_CODE_POINTER_TABLE`: We write a `Word32` function index here, which the instruction selector relocates to an `int32_t` absolute address.\n\nIs this correct? I have a vague, uneasy feeling about this much (implicit) type/bit-width juggling happening, but I also don\u0027t know of a better solution.",
+      "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "198332ca_ca5bcb49",
+        "filename": "src/compiler/turboshaft/index.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T11:39:47Z",
+      "side": 1,
+      "message": "Could we get rid of the `WordPtr` variant? Right now, this change makes `CallTarget` more permissive, in the sense that we will catch fewer potential errors. Is there some way we can make it stricter instead?",
+      "range": {
+        "startLine": 536,
+        "startChar": 33,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
