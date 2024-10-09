@@ -664,7 +664,7 @@ void MaglevAssembler::GenerateCheckConstTrackingLetCellFooter(Register context,
 
   LoadTaggedField(data, data,
                   FixedArray::OffsetOfElementAt(
-                      index - Context::MIN_CONTEXT_EXTENDED_SLOTS));
+                      2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS)));
 
   // If the field is already marked as "not a constant", storing a
   // different value is fine. But if it's anything else (including the hole,

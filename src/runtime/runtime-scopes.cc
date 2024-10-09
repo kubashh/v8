@@ -936,10 +936,11 @@ MaybeHandle<Object> StoreLookupSlot(
     }
     if ((attributes & READ_ONLY) == 0) {
       if (v8_flags.const_tracking_let && holder_context->IsScriptContext()) {
-        Context::UpdateConstTrackingLetSideData(holder_context, index, value,
-                                                isolate);
+        Context::StoreContextElementAndUpdateSideData(holder_context, index,
+                                                      value, isolate);
+      } else {
+        Cast<Context>(holder)->set(index, *value);
       }
-      Cast<Context>(holder)->set(index, *value);
     } else if (!is_sloppy_function_name || is_strict(language_mode)) {
       THROW_NEW_ERROR(isolate,
                       NewTypeError(MessageTemplate::kConstAssign, name));
@@ -1029,11 +1030,11 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalNoHoleCheckForReplLetOrConst) {
   // by functions using the LdaContextSlot bytecode, and such accesses are not
   // regarded as "immutable" when optimizing.
   if (v8_flags.const_tracking_let) {
-    Context::UpdateConstTrackingLetSideData(
+    Context::StoreContextElementAndUpdateSideData(
         script_context, lookup_result.slot_index, value, isolate);
+  } else {
+    script_context->set(lookup_result.slot_index, *value);
   }
-
-  script_context->set(lookup_result.slot_index, *value);
   return *value;
 }
 

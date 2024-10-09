@@ -1241,7 +1241,7 @@ bool CompilationDependencies::DependOnConstTrackingLet(
     ContextRef script_context, size_t index, JSHeapBroker* broker) {
   if (v8_flags.const_tracking_let) {
     OptionalObjectRef maybe_side_data =
-        script_context.TryGetSideData(broker, static_cast<int>(index));
+        script_context.TryGetLetConstSideData(broker, static_cast<int>(index));
     // The side data element is either
     // - kConstMarker (the value is a constant thus far but no code depends on
     //   it yet)
@@ -1259,6 +1259,27 @@ bool CompilationDependencies::DependOnConstTrackingLet(
           (!side_data.IsSmi() && !side_data.IsUndefined())) {
         RecordDependency(
             zone_->New<ConstTrackingLetDependency>(script_context, index));
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool CompilationDependencies::DependOnMutableHeapNumber(
+    ContextRef script_context, size_t index, JSHeapBroker* broker) {
+  if (v8_flags.const_tracking_let) {
+    OptionalObjectRef maybe_side_data =
+        script_context.TryGetIsMutableNumberSideData(broker,
+                                                     static_cast<int>(index));
+    if (maybe_side_data.has_value()) {
+      ObjectRef side_data = maybe_side_data.value();
+      if ((side_data.IsSmi() &&
+           side_data.AsSmi() ==
+               Smi::ToInt(ConstTrackingLetCell::kIsMutableHeapNumberMarker)) ||
+          (!side_data.IsSmi() && !side_data.IsUndefined())) {
+        // RecordDependency(
+        //     zone_->New<ConstTrackingLetDependency>(script_context, index));
         return true;
       }
     }

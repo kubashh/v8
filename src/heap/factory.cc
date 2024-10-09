@@ -1313,7 +1313,7 @@ Handle<Context> Factory::NewScriptContext(DirectHandle<NativeContext> outer,
 
   DirectHandle<FixedArray> side_data;
   if (v8_flags.const_tracking_let) {
-    side_data = NewFixedArray(scope_info->ContextLocalCount());
+    side_data = NewFixedArray(2 * scope_info->ContextLocalCount());
   } else {
     side_data = empty_fixed_array();
   }

@@ -991,8 +991,8 @@ OptionalObjectRef ContextRef::get(JSHeapBroker* broker, int index) const {
   return TryMakeRef(broker, object()->get(index));
 }
 
-OptionalObjectRef ContextRef::TryGetSideData(JSHeapBroker* broker,
-                                             int index) const {
+OptionalObjectRef ContextRef::TryGetLetConstSideData(JSHeapBroker* broker,
+                                                     int index) const {
   if (!object()->IsScriptContext()) {
     return {};
   }
@@ -1009,7 +1009,28 @@ OptionalObjectRef ContextRef::TryGetSideData(JSHeapBroker* broker,
   // we compile in the background.
   FixedArrayRef side_data_fixed_array = maybe_side_data.value().AsFixedArray();
   return side_data_fixed_array.TryGet(
-      broker, index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
+      broker, 2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS));
+}
+
+OptionalObjectRef ContextRef::TryGetIsMutableNumberSideData(
+    JSHeapBroker* broker, int index) const {
+  if (!object()->IsScriptContext()) {
+    return {};
+  }
+
+  // No side data for slots which are not variables in the context.
+  if (index < Context::MIN_CONTEXT_EXTENDED_SLOTS) {
+    return {};
+  }
+
+  OptionalObjectRef maybe_side_data =
+      get(broker, Context::CONST_TRACKING_LET_SIDE_DATA_INDEX);
+  if (!maybe_side_data.has_value()) return {};
+  // The FixedArray itself will stay constant, but its contents may change while
+  // we compile in the background.
+  FixedArrayRef side_data_fixed_array = maybe_side_data.value().AsFixedArray();
+  return side_data_fixed_array.TryGet(
+      broker, 2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS) + 1);
 }
 
 void JSHeapBroker::InitializeAndStartSerializing(

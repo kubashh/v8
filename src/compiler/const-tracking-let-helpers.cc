@@ -25,7 +25,7 @@ void GenerateCheckConstTrackingLetSideData(Node* context, Node** effect,
       context, *effect, *control);
   Node* side_data_value = *effect = jsgraph->graph()->NewNode(
       jsgraph->simplified()->LoadField(
-          AccessBuilder::ForFixedArraySlot(side_data_index)),
+          AccessBuilder::ForFixedArraySlot(2 * side_data_index)),
       side_data, *effect, *control);
 
   // TODO(v8:13567): If the value is the same as the value we already have, we
@@ -52,7 +52,7 @@ bool IsConstTrackingLetVariableSurelyNotConstant(
         context.get(broker, Context::CONST_TRACKING_LET_SIDE_DATA_INDEX);
     if (side_data.has_value()) {
       OptionalObjectRef side_data_value =
-          side_data->AsFixedArray().TryGet(broker, side_data_index);
+          side_data->AsFixedArray().TryGet(broker, 2 * side_data_index);
       if (side_data_value.has_value()) {
         auto value = side_data_value.value();
         if (value.IsSmi() &&

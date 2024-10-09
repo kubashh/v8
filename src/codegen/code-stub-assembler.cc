@@ -3415,13 +3415,12 @@ TNode<Map> CodeStubAssembler::LoadJSArrayElementsMap(
   TNode<IntPtrT> offset =
       IntPtrAdd(IntPtrConstant(Context::FIRST_JS_ARRAY_MAP_SLOT),
                 ChangeInt32ToIntPtr(kind));
-  return UncheckedCast<Map>(LoadContextElement(native_context, offset));
+  return LoadContextElementAsMap(native_context, offset);
 }
 
 TNode<Map> CodeStubAssembler::LoadJSArrayElementsMap(
     ElementsKind kind, TNode<NativeContext> native_context) {
-  return UncheckedCast<Map>(
-      LoadContextElement(native_context, Context::ArrayMapIndex(kind)));
+  return LoadContextElementAsMap(native_context, Context::ArrayMapIndex(kind));
 }
 
 TNode<Uint32T> CodeStubAssembler::LoadFunctionKind(TNode<JSFunction> function) {
@@ -11097,8 +11096,8 @@ TNode<JSObject> CodeStubAssembler::CreateAsyncFromSyncIterator(
     TNode<Context> context, TNode<JSReceiver> sync_iterator,
     TNode<Object> next) {
   const TNode<NativeContext> native_context = LoadNativeContext(context);
-  const TNode<Map> map = CAST(LoadContextElement(
-      native_context, Context::ASYNC_FROM_SYNC_ITERATOR_MAP_INDEX));
+  const TNode<Map> map = LoadContextElementAsMap(
+      native_context, Context::ASYNC_FROM_SYNC_ITERATOR_MAP_INDEX);
   const TNode<JSObject> iterator = AllocateJSObjectFromMap(map);
 
   StoreObjectFieldNoWriteBarrier(
@@ -16238,8 +16237,8 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResult(
     TNode<Context> context, TNode<Object> value, TNode<Boolean> done) {
   CSA_DCHECK(this, IsBoolean(done));
   TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> map = CAST(
-      LoadContextElement(native_context, Context::ITERATOR_RESULT_MAP_INDEX));
+  TNode<Map> map = LoadContextElementAsMap(native_context,
+                                           Context::ITERATOR_RESULT_MAP_INDEX);
   TNode<HeapObject> result = Allocate(JSIteratorResult::kSize);
   StoreMapNoWriteBarrier(result, map);
   StoreObjectFieldRoot(result, JSIteratorResult::kPropertiesOrHashOffset,
@@ -16263,8 +16262,8 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResultForEntry(
   StoreObjectFieldNoWriteBarrier(elements, FixedArray::kLengthOffset, length);
   StoreFixedArrayElement(elements, 0, key);
   StoreFixedArrayElement(elements, 1, value);
-  TNode<Map> array_map = CAST(LoadContextElement(
-      native_context, Context::JS_ARRAY_PACKED_ELEMENTS_MAP_INDEX));
+  TNode<Map> array_map = LoadContextElementAsMap(
+      native_context, Context::JS_ARRAY_PACKED_ELEMENTS_MAP_INDEX);
   TNode<HeapObject> array =
       Allocate(ALIGN_TO_ALLOCATION_ALIGNMENT(JSArray::kHeaderSize));
   StoreMapNoWriteBarrier(array, array_map);
@@ -16272,8 +16271,8 @@ TNode<JSObject> CodeStubAssembler::AllocateJSIteratorResultForEntry(
                        RootIndex::kEmptyFixedArray);
   StoreObjectFieldNoWriteBarrier(array, JSArray::kElementsOffset, elements);
   StoreObjectFieldNoWriteBarrier(array, JSArray::kLengthOffset, length);
-  TNode<Map> iterator_map = CAST(
-      LoadContextElement(native_context, Context::ITERATOR_RESULT_MAP_INDEX));
+  TNode<Map> iterator_map = LoadContextElementAsMap(
+      native_context, Context::ITERATOR_RESULT_MAP_INDEX);
   TNode<HeapObject> result = Allocate(JSIteratorResult::kSize);
   StoreMapNoWriteBarrier(result, iterator_map);
   StoreObjectFieldRoot(result, JSIteratorResult::kPropertiesOrHashOffset,
@@ -16290,8 +16289,8 @@ TNode<JSObject> CodeStubAssembler::AllocatePromiseWithResolversResult(
     TNode<Context> context, TNode<Object> promise, TNode<Object> resolve,
     TNode<Object> reject) {
   TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> map = CAST(LoadContextElement(
-      native_context, Context::PROMISE_WITHRESOLVERS_RESULT_MAP_INDEX));
+  TNode<Map> map = LoadContextElementAsMap(
+      native_context, Context::PROMISE_WITHRESOLVERS_RESULT_MAP_INDEX);
   TNode<HeapObject> result = Allocate(JSPromiseWithResolversResult::kSize);
   StoreMapNoWriteBarrier(result, map);
   StoreObjectFieldRoot(result,
@@ -17152,8 +17151,8 @@ TNode<JSFunction> CodeStubAssembler::AllocateRootFunctionWithContext(
       UncheckedCast<SharedFunctionInfo>(LoadRoot(function));
   const TNode<NativeContext> native_context =
       maybe_native_context ? *maybe_native_context : LoadNativeContext(context);
-  const TNode<Map> map = CAST(LoadContextElement(
-      native_context, Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX));
+  const TNode<Map> map = LoadContextElementAsMap(
+      native_context, Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX);
   const TNode<HeapObject> fun = Allocate(JSFunction::kSizeWithoutPrototype);
   static_assert(JSFunction::kSizeWithoutPrototype == 7 * kTaggedSize);
   StoreMapNoWriteBarrier(fun, map);
@@ -17499,8 +17498,8 @@ TNode<JSArray> CodeStubAssembler::ArrayCreate(TNode<Context> context,
   BIND(&next);
   TNode<Smi> length_smi = CAST(length);
 
-  TNode<Map> array_map = CAST(LoadContextElement(
-      context, Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX));
+  TNode<Map> array_map = LoadContextElementAsMap(
+      context, Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX);
 
   // TODO(delphick): Consider using
   // AllocateUninitializedJSArrayWithElements to avoid initializing an

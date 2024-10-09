@@ -712,7 +712,10 @@ class ContextRef : public HeapObjectRef {
   ScopeInfoRef scope_info(JSHeapBroker* broker) const;
 
   // Only returns a value if the index is valid for this ContextRef.
-  OptionalObjectRef TryGetSideData(JSHeapBroker* broker, int index) const;
+  OptionalObjectRef TryGetLetConstSideData(JSHeapBroker* broker,
+                                           int index) const;
+  OptionalObjectRef TryGetIsMutableNumberSideData(JSHeapBroker* broker,
+                                                  int index) const;
 };
 
 #define BROKER_NATIVE_CONTEXT_FIELDS(V)          \

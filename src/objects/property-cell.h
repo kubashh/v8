@@ -97,12 +97,17 @@ class PropertyCell
 #endif  // DEBUG
 };
 
+// TODO: change the name to include mutable number stuff.
 class ConstTrackingLetCell
     : public TorqueGeneratedConstTrackingLetCell<ConstTrackingLetCell,
                                                  HeapObject> {
  public:
   static constexpr Tagged<Smi> kConstMarker = Smi::FromInt(1);
   static constexpr Tagged<Smi> kNonConstMarker = Smi::FromInt(0);
+
+  static constexpr Tagged<Smi> kIsInitializedWithSmiMarker = Smi::FromInt(0);
+  static constexpr Tagged<Smi> kIsMutableHeapNumberMarker = Smi::FromInt(1);
+  static constexpr Tagged<Smi> kIsTaggedMaker = Smi::FromInt(2);
 
   static inline bool IsNotConst(Tagged<Object> object);
 

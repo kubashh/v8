@@ -7,11 +7,15 @@
 #include <optional>
 
 #include "src/ast/modules.h"
+#include "src/base/logging.h"
 #include "src/debug/debug.h"
 #include "src/execution/isolate-inl.h"
 #include "src/init/bootstrapper.h"
 #include "src/objects/dependent-code.h"
+#include "src/objects/heap-number.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/module-inl.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/string-set-inl.h"
 
 namespace v8::internal {
@@ -476,7 +480,7 @@ Tagged<ConstTrackingLetCell> Context::GetOrCreateConstTrackingLetCell(
   DCHECK(v8_flags.const_tracking_let);
   DCHECK(script_context->IsScriptContext());
   int side_data_index =
-      static_cast<int>(index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
+      2 * static_cast<int>(index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
   DirectHandle<FixedArray> side_data(
       Cast<FixedArray>(script_context->get(CONST_TRACKING_LET_SIDE_DATA_INDEX)),
       isolate);
@@ -495,11 +499,115 @@ bool Context::ConstTrackingLetSideDataIsConst(size_t index) const {
   DCHECK(v8_flags.const_tracking_let);
   DCHECK(IsScriptContext());
   int side_data_index =
-      static_cast<int>(index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
+      2 * static_cast<int>(index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
   Tagged<FixedArray> side_data =
       Cast<FixedArray>(get(CONST_TRACKING_LET_SIDE_DATA_INDEX));
   Tagged<Object> object = side_data->get(side_data_index);
   return !ConstTrackingLetCell::IsNotConst(object);
+}
+
+void Context::StoreContextElementAndUpdateSideData(
+    DirectHandle<Context> script_context, int index,
+    DirectHandle<Object> new_value, Isolate* isolate) {
+  DCHECK(v8_flags.const_tracking_let);
+  DCHECK(script_context->IsScriptContext());
+  DirectHandle<Object> old_value(script_context->get(index), isolate);
+
+  const int let_const_index = 2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
+  const int is_mutable_number_index = let_const_index + 1;
+  DirectHandle<FixedArray> side_data(
+      Cast<FixedArray>(
+          script_context->get(Context::CONST_TRACKING_LET_SIDE_DATA_INDEX)),
+      isolate);
+  if (IsTheHole(*old_value)) {
+    // Setting the initial value. Here we cannot assert the corresponding side
+    // data is `undefined` - that won't hold w/ variable redefinitions in REPL.
+    side_data->set(let_const_index, ConstTrackingLetCell::kConstMarker);
+    if (Is<HeapNumber>(*new_value)) {
+      side_data->set(is_mutable_number_index,
+                     ConstTrackingLetCell::kIsMutableHeapNumberMarker);
+      script_context->set(index, *isolate->factory()->NewHeapNumber(
+                                     Cast<HeapNumber>(*new_value)->value()));
+    } else {
+      if (Is<Smi>(*new_value)) {
+        side_data->set(is_mutable_number_index,
+                       ConstTrackingLetCell::kIsInitializedWithSmiMarker);
+      } else {
+        side_data->set(is_mutable_number_index,
+                       ConstTrackingLetCell::kIsTaggedMaker);
+      }
+      script_context->set(index, *new_value);
+    }
+    return;
+  }
+
+  // If it is the same value, all side table info is the same.
+  if (*old_value == *new_value) {
+    return;
+  }
+
+  // From now on, we know the value is no longer a constant. If there's a
+  // DependentCode, invalidate it.
+  Tagged<Object> let_const_data = side_data->get(let_const_index);
+  if (IsConstTrackingLetCell(let_const_data)) {
+    DependentCode::DeoptimizeDependencyGroups(
+        isolate, Cast<ConstTrackingLetCell>(let_const_data),
+        DependentCode::kConstTrackingLetChangedGroup);
+  } else {
+    // The value is not constant, but it also was not used as a constant
+    // (there's no code to invalidate). No action needed here; the data will
+    // be updated below.
+
+    // If the CHECK fails, there's a code path which initializes or assigns a
+    // top-level `let` variable but doesn't update the side data.
+    CHECK(IsSmi(let_const_data));
+  }
+  side_data->set(let_const_index, ConstTrackingLetCell::kNonConstMarker);
+
+  Tagged<Object> is_mutable_number_data =
+      side_data->get(is_mutable_number_index);
+  if (IsConstTrackingLetCell(is_mutable_number_data)) {
+    // We should deopt the code.
+    UNREACHABLE();
+  } else {
+    DCHECK(IsSmi(is_mutable_number_data));
+    if (is_mutable_number_data ==
+        ConstTrackingLetCell::kIsInitializedWithSmiMarker) {
+      DCHECK(Is<Smi>(*old_value));
+      if (Is<Smi>(*new_value)) {
+        // No side data change.
+        script_context->set(index, *new_value);
+      } else if (Is<HeapNumber>(*new_value)) {
+        side_data->set(is_mutable_number_index,
+                       ConstTrackingLetCell::kIsMutableHeapNumberMarker);
+        script_context->set(index, *isolate->factory()->NewHeapNumber(
+                                       Cast<HeapNumber>(*new_value)->value()));
+      } else {
+        side_data->set(is_mutable_number_index,
+                       ConstTrackingLetCell::kIsTaggedMaker);
+        script_context->set(index, *new_value);
+      }
+    } else if (is_mutable_number_data ==
+               ConstTrackingLetCell::kIsMutableHeapNumberMarker) {
+      DCHECK(Is<HeapNumber>(*old_value));
+      if (Is<Smi>(*new_value)) {
+        // No side data change.
+        Cast<HeapNumber>(old_value)->set_value(
+            static_cast<double>(Cast<Smi>(*new_value).value()));
+      } else if (Is<HeapNumber>(*new_value)) {
+        // No side data change.
+        Cast<HeapNumber>(old_value)->set_value(
+            Cast<HeapNumber>(*new_value)->value());
+      } else {
+        side_data->set(is_mutable_number_index,
+                       ConstTrackingLetCell::kIsTaggedMaker);
+        script_context->set(index, *new_value);
+      }
+    } else {
+      DCHECK_EQ(is_mutable_number_data, ConstTrackingLetCell::kIsTaggedMaker);
+      script_context->set(index, *new_value);
+    }
+  }
 }
 
 void Context::UpdateConstTrackingLetSideData(
@@ -508,7 +616,7 @@ void Context::UpdateConstTrackingLetSideData(
   DCHECK(v8_flags.const_tracking_let);
   DCHECK(script_context->IsScriptContext());
   DirectHandle<Object> old_value(script_context->get(index), isolate);
-  const int side_data_index = index - Context::MIN_CONTEXT_EXTENDED_SLOTS;
+  const int side_data_index = 2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
   DirectHandle<FixedArray> side_data(
       Cast<FixedArray>(
           script_context->get(Context::CONST_TRACKING_LET_SIDE_DATA_INDEX)),

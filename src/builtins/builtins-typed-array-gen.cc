@@ -40,7 +40,7 @@ TNode<JSArrayBuffer> TypedArrayBuiltinsAssembler::AllocateEmptyOnHeapBuffer(
     TNode<Context> context) {
   TNode<NativeContext> native_context = LoadNativeContext(context);
   TNode<Map> map =
-      CAST(LoadContextElement(native_context, Context::ARRAY_BUFFER_MAP_INDEX));
+      LoadContextElementAsMap(native_context, Context::ARRAY_BUFFER_MAP_INDEX);
   TNode<FixedArray> empty_fixed_array = EmptyFixedArrayConstant();
 
   TNode<JSArrayBuffer> buffer = UncheckedCast<JSArrayBuffer>(

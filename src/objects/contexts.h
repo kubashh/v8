@@ -685,6 +685,10 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
       DirectHandle<Context> script_context, int index,
       DirectHandle<Object> new_value, Isolate* isolate);
 
+  static void StoreContextElementAndUpdateSideData(
+      DirectHandle<Context> script_context, int index,
+      DirectHandle<Object> new_value, Isolate* isolate);
+
   static const int kNotFound = -1;
 
   // Dispatched behavior.

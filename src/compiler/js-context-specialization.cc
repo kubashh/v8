@@ -169,6 +169,17 @@ Reduction JSContextSpecialization::ReduceJSLoadContext(Node* node) {
   if (!access.immutable() &&
       !broker()->dependencies()->DependOnConstTrackingLet(
           concrete, access.index(), broker())) {
+    if (concrete.object()->IsScriptContext() &&
+        broker()->dependencies()->DependOnMutableHeapNumber(
+            concrete, access.index(), broker())) {
+      const Operator* op = jsgraph_->javascript()->LoadContextDoubleElement(
+          depth, access.index());
+      NodeProperties::ReplaceContextInput(
+          node, jsgraph()->ConstantNoHole(concrete, broker()));
+      NodeProperties::ChangeOp(node, op);
+      return Changed(node);
+    }
+
     // We found the requested context object but since the context slot is
     // mutable we can only partially reduce the load.
     return SimplifyJSLoadContext(
@@ -251,6 +262,18 @@ Reduction JSContextSpecialization::ReduceJSStoreScriptContext(Node* node) {
       GetSpecializationContext(broker(), context, &depth, outer());
   if (IsConstTrackingLetVariableSurelyNotConstant(maybe_context, depth,
                                                   side_data_index, broker())) {
+    if (maybe_context.has_value() &&
+        maybe_context->object()->IsScriptContext() &&
+        broker()->dependencies()->DependOnMutableHeapNumber(
+            *maybe_context, access.index(), broker())) {
+      const Operator* op = jsgraph_->javascript()->StoreContextDoubleElement(
+          depth, access.index());
+      NodeProperties::ReplaceContextInput(
+          node, jsgraph()->ConstantNoHole(*maybe_context, broker()));
+      NodeProperties::ChangeOp(node, op);
+      return Changed(node);
+    }
+
     // The value is not a constant any more, so we don't need to generate
     // code for invalidating the side data.
     const Operator* op =

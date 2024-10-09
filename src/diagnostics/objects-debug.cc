@@ -916,7 +916,7 @@ void Context::ContextVerify(Isolate* isolate) {
     CHECK(IsFixedArray(side_data));
     Tagged<FixedArray> side_data_array = Cast<FixedArray>(side_data);
     if (v8_flags.const_tracking_let) {
-      for (int i = 0; i < side_data_array->length(); i++) {
+      for (int i = 0; i < side_data_array->length(); i += 2) {
         Tagged<Object> element = side_data_array->get(i);
         if (IsSmi(element)) {
           CHECK(element == ConstTrackingLetCell::kConstMarker ||

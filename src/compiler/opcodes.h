@@ -198,14 +198,16 @@
   V(JSGetSuperConstructor)             \
   V(JSFindNonDefaultConstructorOrConstruct)
 
-#define JS_CONTEXT_OP_LIST(V) \
-  V(JSHasContextExtension)    \
-  V(JSLoadContext)            \
-  V(JSStoreContext)           \
-  V(JSStoreScriptContext)     \
-  V(JSCreateFunctionContext)  \
-  V(JSCreateCatchContext)     \
-  V(JSCreateWithContext)      \
+#define JS_CONTEXT_OP_LIST(V)    \
+  V(JSHasContextExtension)       \
+  V(JSLoadContext)               \
+  V(JSLoadContextDoubleElement)  \
+  V(JSStoreContext)              \
+  V(JSStoreScriptContext)        \
+  V(JSStoreContextDoubleElement) \
+  V(JSCreateFunctionContext)     \
+  V(JSCreateCatchContext)        \
+  V(JSCreateWithContext)         \
   V(JSCreateBlockContext)
 
 #define JS_CALL_OP_LIST(V) \

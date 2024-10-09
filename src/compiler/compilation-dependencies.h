@@ -87,6 +87,9 @@ class V8_EXPORT CompilationDependencies : public ZoneObject {
   bool DependOnConstTrackingLet(ContextRef script_context, size_t index,
                                 JSHeapBroker* broker);
 
+  bool DependOnMutableHeapNumber(ContextRef script_context, size_t index,
+                                 JSHeapBroker* broker);
+
   // Return the validity of the given protector and, if true, record the
   // assumption that the protector remains valid.
   bool DependOnProtector(PropertyCellRef cell);

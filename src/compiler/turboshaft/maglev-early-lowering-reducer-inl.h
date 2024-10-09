@@ -188,7 +188,7 @@ class MaglevEarlyLoweringReducer : public Next {
                      Context::CONST_TRACKING_LET_SIDE_DATA_INDEX));
     V<Object> index_data = __ LoadTaggedField(
         side_data, FixedArray::OffsetOfElementAt(
-                       index - Context::MIN_CONTEXT_EXTENDED_SLOTS));
+                       2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS)));
     // If the field is already marked as "not a constant", storing a
     // different value is fine. But if it's anything else (including the hole,
     // which means no value was stored yet), deopt this code. The lower tier
