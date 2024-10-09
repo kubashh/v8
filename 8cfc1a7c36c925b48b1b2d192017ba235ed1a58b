@@ -16,6 +16,24 @@
       "message": "lgtm, but what was the issue with the first attempt?",
       "revId": "8cfc1a7c36c925b48b1b2d192017ba235ed1a58b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a647852f_8bf86231",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-09T16:31:32Z",
+      "side": 1,
+      "message": "Thanks for the review! The reason was DCHECK failure on the CSS bot. I\u0027ve added this to the commit message as well.",
+      "parentUuid": "cc169152_ad690692",
+      "revId": "8cfc1a7c36c925b48b1b2d192017ba235ed1a58b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
