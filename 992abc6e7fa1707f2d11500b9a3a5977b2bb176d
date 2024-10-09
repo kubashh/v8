@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8585928_a15fbedb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-09T14:26:11Z",
+      "side": 1,
+      "message": "PTAL: Clemens for overall review, Matthias for src/compiler/OWNERship.\n\nIn terms of line count this is a bit large, but most of it is extremely mechanical s/FunctionSig/CanonicalSig/, so I hope it\u0027s manageable.\n\nI\u0027ll work on removing the added casts next.",
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4a12725_ebb9020e",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-09T14:26:11Z",
+      "side": 1,
+      "message": "We could choose to introduce global constants for these, e.g. `kWasmCanonicalI64`. I haven\u0027t formed an opinion yet on whether that\u0027d be worth it.",
+      "range": {
+        "startLine": 3797,
+        "startChar": 16,
+        "endLine": 3797,
+        "endChar": 63
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60d669d5_aa59eb3c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3825,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-09T14:26:11Z",
+      "side": 1,
+      "message": "A small drive-by sandbox hardening change, because it fit in well with changes I had to make anyway.",
+      "range": {
+        "startLine": 3825,
+        "startChar": 2,
+        "endLine": 3825,
+        "endChar": 73
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
