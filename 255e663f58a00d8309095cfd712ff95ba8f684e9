@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d360b0e8_5eaf83d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3296408
+      },
+      "writtenOn": "2024-10-09T06:26:09Z",
+      "side": 1,
+      "message": "Hi Lu! It seems the review requires one more LGTM, could you stamp it? Thank you",
+      "revId": "255e663f58a00d8309095cfd712ff95ba8f684e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
