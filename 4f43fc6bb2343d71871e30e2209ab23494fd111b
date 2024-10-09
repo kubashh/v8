@@ -16,6 +16,23 @@
       "message": "/ping verwaest, liviurau",
       "revId": "4f43fc6bb2343d71871e30e2209ab23494fd111b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15fa55f4_fe4a9e29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1378025
+      },
+      "writtenOn": "2024-10-09T23:14:33Z",
+      "side": 1,
+      "message": "hey liviurau, I need another +1 (because i\u0027m not a v8 committer)",
+      "revId": "4f43fc6bb2343d71871e30e2209ab23494fd111b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
