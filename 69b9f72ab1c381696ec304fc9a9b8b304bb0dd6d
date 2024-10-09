@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cef3bfb_109d30d2",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2844,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-09T12:45:13Z",
+      "side": 1,
+      "message": "It would probably be nicer to always have the notrack parameter in jmp() and move the ifdef into the `jmp()` function, wdyt?",
+      "range": {
+        "startLine": 2844,
+        "startChar": 5,
+        "endLine": 2844,
+        "endChar": 8
+      },
+      "revId": "69b9f72ab1c381696ec304fc9a9b8b304bb0dd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
