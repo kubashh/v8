@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "390d5472_9cb8f13c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-09T14:58:15Z",
+      "side": 1,
+      "message": "LGTM for `src/compiler`.",
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d4a12725_ebb9020e",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -31,6 +48,30 @@
       "writtenOn": "2024-10-09T14:26:11Z",
       "side": 1,
       "message": "We could choose to introduce global constants for these, e.g. `kWasmCanonicalI64`. I haven\u0027t formed an opinion yet on whether that\u0027d be worth it.",
+      "range": {
+        "startLine": 3797,
+        "startChar": 16,
+        "endLine": 3797,
+        "endChar": 63
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a7b3f9e_c4ebcf76",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-09T14:58:15Z",
+      "side": 1,
+      "message": "I mean they are constexpr, so this would only help in terms of conciseness and the whole `kWasmStringRef` vs. `kWasmRefString` continues to cause confusions, so those short names are sometimes also just a risk.",
+      "parentUuid": "d4a12725_ebb9020e",
       "range": {
         "startLine": 3797,
         "startChar": 16,
@@ -59,6 +100,29 @@
         "startChar": 2,
         "endLine": 3825,
         "endChar": 73
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e12340_2a2a003f",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-09T14:58:15Z",
+      "side": 1,
+      "message": "Follow-up-question: Could it simplify uses in the future if we also populated the `wasm_canonical_sig_`?\nThen all code paths that are fine with canonicalized types could just use the `CanonicalSig` and stop caring about whether it\u0027s a wrapper or not.",
+      "range": {
+        "startLine": 429,
+        "startChar": 4,
+        "endLine": 429,
+        "endChar": 27
       },
       "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
