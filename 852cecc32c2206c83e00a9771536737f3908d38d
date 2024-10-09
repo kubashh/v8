@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97066003_ad3a5cc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T18:11:50Z",
+      "side": 1,
+      "message": "LGTM with clarification questions",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f27289cd_0aff1c9b",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T18:11:50Z",
+      "side": 1,
+      "message": "Just to double check: There is no other way to map from CPT handles (indices into the process-wide CPT) to function indices besides going via this double resolution of `handle -CPT-\u003e address -CodeSpaces-\u003e func_index`? In particular, there\u0027s no inherent \"structure\" to the handles, they are just allocated first-come-first-serve, right?",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8af8ed84_ef24a3ee",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T18:11:50Z",
+      "side": 1,
+      "message": "Could we add a `DCHECK_EQ(code-\u003ekind(), kWasmFunction)` here?",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2324877_cd6dfad3",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T18:11:50Z",
+      "side": 1,
+      "message": "This linear search could introduce accidental quadratic complexity in callers. I briefly looked into the current callers of `GetFunctionIndexFromIndirectCallTarget` and it seems to be fine, but I wanted to double check with you: One caller is in `#ifdef DEBUG` code in `Validate()` (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-code-manager.cc;l\u003d378?q\u003dGetFunctionIndexFromIndirectCallTarget); the other one in serialization (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-serialization.cc;l\u003d522?q\u003dGetFunctionIndexFromIndirectCallTarget) which we only run for the purpose of the code cache, which only applies to Turbofan-generated functions. About this, I am not 100% it\u0027s not going to be a problem, e.g., for a Turbofan-compiled function with many `call_indirect`s in a module with many functions. We should 1. watch out for serialization regressions with this configuration (do you happen to have numbers on that?) or 2. is it feasible to add a hash set-based reverse mapping?",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfa83712_ba06603b",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-09T18:11:50Z",
+      "side": 1,
+      "message": "It\u0027s a little bit weird (in terms of naming) that the \"more generic\"-sounding `GetCallTarget` calls out to `GetIndirectCallTarget`, but I don\u0027t have a suggestion to improve this. So feel free to just mark this as resolved.",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
