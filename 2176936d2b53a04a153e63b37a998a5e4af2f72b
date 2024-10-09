@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3860b63_99bbdbfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T16:52:39Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d313251_aa0157f6",
@@ -48,6 +65,30 @@
       "writtenOn": "2024-10-09T16:07:37Z",
       "side": 1,
       "message": "Do dispatch handles look like Smis? We might need to store them in tagged form.",
+      "range": {
+        "startLine": 1524,
+        "startChar": 9,
+        "endLine": 1524,
+        "endChar": 46
+      },
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29cff819_f51b8b44",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1524,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T16:52:39Z",
+      "side": 1,
+      "message": "Right yes, they look like Smis. I\u0027ve added a `static_assert` here that the shift amount is greater than 0 so that the lower bits are zero.",
+      "parentUuid": "0d313251_aa0157f6",
       "range": {
         "startLine": 1524,
         "startChar": 9,
@@ -100,6 +141,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e258f404_4460ed35",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T16:52:39Z",
+      "side": 1,
+      "message": "So this was something I was also wondering about. I got the impression that we basically have:\n* The \"real\" JavaScript calling convention, used when invoking a JS function and specified by the JSTrampolineDescriptor, and\n* A number of \"JS-like\" calling conventions, used for various internal builtins that happen to need mostly the same arguments as the \"real\" JS calling convention.\n\nFor example, the ConstructX descriptors below are used by various Construct builtins that (afaiu) implement the logic for invoking a constructor (for example, ConstructWithSpread is I think directly invoked from the Interpreter: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/x64/builtins-x64.cc;l\u003d1413;drc\u003d5360eddb94a622591b119111e6adf85e6f7541c9). So they are not really \"impl\" builtins, more like \"forwarding\" ones? However, for those the dispatch handle parameter doesn\u0027t make sense as they are invoked directly (i.e. hardcoded into e.g. the interpreter code). The dispatch handle really only makes sense for \"real\" JS function code that is invoked from a JSFunction object (where the dispatch handle comes from). So I\u0027m not sure where we would take the dispatch handle from when calling these other builtins. We could of course just use the kInvalidDispatchHandle, but then I guess why add the parameter in the first place?",
+      "parentUuid": "6819f8bb_a7fe0d59",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "02f2d1dd_fd12617a",
         "filename": "src/codegen/interface-descriptors.h",
         "patchSetId": 12
@@ -111,6 +170,24 @@
       "writtenOn": "2024-10-09T16:07:37Z",
       "side": 1,
       "message": "Parent `StaticJSCallInterfaceDescriptor` class already defines the right set of registers.",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d5108aa_8547ebbf",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-09T16:52:39Z",
+      "side": 1,
+      "message": "I guess this depends on the discussion above, but currently it\u0027s needed to add `kJavaScriptCallDispatchHandleRegister` just for this interface descriptor.",
+      "parentUuid": "02f2d1dd_fd12617a",
       "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
