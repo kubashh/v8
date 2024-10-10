@@ -56,6 +56,30 @@
       },
       "revId": "52cd8a3d877aa42a3567687b8f760835c3201699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de8be0d2_4f39e1fc",
+        "filename": "tools/wasm/update-wasm-spec-tests.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-10T14:48:47Z",
+      "side": 1,
+      "message": "Yeah, it does not error out, but `log_and_run` produces one additional line of output, which I wanted to avoid.",
+      "parentUuid": "04cf03fa_0ea290b6",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "52cd8a3d877aa42a3567687b8f760835c3201699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
