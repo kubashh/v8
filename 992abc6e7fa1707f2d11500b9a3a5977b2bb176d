@@ -149,6 +149,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bc6d3d2e_f9d2b342",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-10T16:56:02Z",
+      "side": 1,
+      "message": "Well, it turns out that the visual noise is error-prone: `Ref` vs `RefNull` is easy to overlook in such a long line. So now I\u0027m convinced that introducing (some commonly used) global constants is worth it 😊",
+      "parentUuid": "4b0b585b_d388d5c2",
+      "range": {
+        "startLine": 3797,
+        "startChar": 16,
+        "endLine": 3797,
+        "endChar": 63
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "60d669d5_aa59eb3c",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
