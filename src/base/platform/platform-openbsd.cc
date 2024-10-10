@@ -18,7 +18,7 @@
 #include <fcntl.h>      // open
 #include <stdarg.h>
 #include <strings.h>    // index
-#include <sys/mman.h>   // mmap & munmap
+#include <sys/mman.h>   // mmap & munmap & mimmutable
 #include <sys/stat.h>   // open
 #include <unistd.h>     // sysconf
 
@@ -121,6 +121,22 @@ void OS::SignalCodeMovingGC() {
 }
 
 void OS::AdjustSchedulingParams() {}
+
+// static
+void OS::SetDataReadOnly(void* address, size_t size, bool immutable) {
+  CHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
+  CHECK_EQ(0, size % CommitPageSize());
+
+  if (mprotect(address, size, PROT_READ) != 0) {
+    FATAL("Failed to protect data memory at %p +%zu; error %d\n", address, size,
+          errno);
+  }
+
+  if (immutable && (mimmutable(address, sizeof(address)) == -1)) {
+    FATAL("unable to set immutability at %p +%zu; error %d\n", address, size,
+          errno);
+  }
+}
 
 std::optional<OS::MemoryRange> OS::GetFirstFreeMemoryRangeWithin(
     OS::Address boundary_start, OS::Address boundary_end, size_t minimum_size,

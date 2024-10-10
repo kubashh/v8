@@ -356,7 +356,8 @@ class V8_BASE_EXPORT OS {
                                                MemoryPermission access);
 
   // Make part of the process's data memory read-only.
-  static void SetDataReadOnly(void* address, size_t size);
+  static void SetDataReadOnly(void* address, size_t size,
+                              bool immutable = false);
 
  private:
   // These classes use the private memory management API below.

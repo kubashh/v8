@@ -296,7 +296,7 @@ bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
                                 address, size, access);
 }
 
-void OS::SetDataReadOnly(void* address, size_t size) {
+void OS::SetDataReadOnly(void* address, size_t size, bool immutable) {
   CHECK(OS::SetPermissions(address, size, MemoryPermission::kRead));
 }
 

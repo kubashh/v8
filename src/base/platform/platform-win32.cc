@@ -1065,7 +1065,7 @@ bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
   return result != nullptr;
 }
 
-void OS::SetDataReadOnly(void* address, size_t size) {
+void OS::SetDataReadOnly(void* address, size_t size, bool immutable) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
 

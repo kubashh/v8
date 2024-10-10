@@ -806,7 +806,7 @@ void FlagList::FreezeFlags() {
   // first unprotect the memory again.
   // Note that for string flags we only protect the pointer itself, but not the
   // string storage. TODO(12887): Fix this.
-  base::OS::SetDataReadOnly(&v8_flags, sizeof(v8_flags));
+  base::OS::SetDataReadOnly(&v8_flags, sizeof(v8_flags), /*immutable=*/true);
 }
 
 // static
