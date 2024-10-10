@@ -16,6 +16,23 @@
       "message": "Thanks for the reviews! The fix for the red bots was easy (and contrary to Gerrit\u0027s warning, the diff view between patch sets does show all relevant changes); not sure why I lost the +1s, please someone +1 again.",
       "revId": "fbf3b9692d9821269a552ce4352d81baa2575e66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "143bea6b_39ec17dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-10T12:03:16Z",
+      "side": 1,
+      "message": "LGTM, but still compile errors",
+      "revId": "fbf3b9692d9821269a552ce4352d81baa2575e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
