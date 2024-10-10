@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "487d0121_3fc5bb97",
+        "filename": "src/flags/flags.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-10T09:24:40Z",
+      "side": 1,
+      "message": "Can this be part of SetDataReadonly? Maybe with an additonal optional parameter: `SetDataReadOnly(void* address, size_t size, bool immutable\u003dfalse)`",
+      "range": {
+        "startLine": 813,
+        "startChar": 12,
+        "endLine": 813,
+        "endChar": 27
+      },
+      "revId": "85225775d59970abc4c05978ddbef397de08a5b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
