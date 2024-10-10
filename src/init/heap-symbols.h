@@ -170,7 +170,10 @@
 
 #define NOT_IMPORTANT_INTERNALIZED_STRING_LIST_GENERATOR(V, _)                \
   INTERNALIZED_STRING_LIST_GENERATOR_INTL(V, _)                               \
+  V(_, access_string, "access")                                               \
+  V(_, accessor_string, "accessor")                                           \
   V(_, add_string, "add")                                                     \
+  V(_, addInitializer_string, "addInitializer")                               \
   V(_, AggregateError_string, "AggregateError")                               \
   V(_, always_string, "always")                                               \
   V(_, anonymous_string, "anonymous")                                         \
@@ -207,6 +210,7 @@
   V(_, caller_string, "caller")                                               \
   V(_, cause_string, "cause")                                                 \
   V(_, character_string, "character")                                         \
+  V(_, class_string, "class")                                                 \
   V(_, code_string, "code")                                                   \
   V(_, column_string, "column")                                               \
   V(_, computed_string, "<computed>")                                         \
@@ -263,6 +267,7 @@
   V(_, exception_string, "exception")                                         \
   V(_, exec_string, "exec")                                                   \
   V(_, false_string, "false")                                                 \
+  V(_, field_string, "field")                                                 \
   V(_, fields_string, "fields")                                               \
   V(_, FinalizationRegistry_string, "FinalizationRegistry")                   \
   V(_, flags_string, "flags")                                                 \
@@ -320,6 +325,7 @@
   V(_, jsMemoryEstimate_string, "jsMemoryEstimate")                           \
   V(_, jsMemoryRange_string, "jsMemoryRange")                                 \
   V(_, keys_string, "keys")                                                   \
+  V(_, kind_string, "kind")                                                   \
   V(_, largestUnit_string, "largestUnit")                                     \
   V(_, lastIndex_string, "lastIndex")                                         \
   V(_, let_string, "let")                                                     \
@@ -380,6 +386,7 @@
   V(_, plainTime_string, "plainTime")                                         \
   V(_, position_string, "position")                                           \
   V(_, preventExtensions_string, "preventExtensions")                         \
+  V(_, private_string, "private")                                             \
   V(_, private_constructor_string, "#constructor")                            \
   V(_, Promise_string, "Promise")                                             \
   V(_, promise_string, "promise")                                             \
@@ -427,6 +434,7 @@
   V(_, sourceText_string, "sourceText")                                       \
   V(_, stack_string, "stack")                                                 \
   V(_, stackTraceLimit_string, "stackTraceLimit")                             \
+  V(_, static_string, "static")                                               \
   V(_, static_initializer_string, "<static_initializer>")                     \
   V(_, sticky_string, "sticky")                                               \
   V(_, String_string, "String")                                               \
