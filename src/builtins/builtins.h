@@ -8,6 +8,7 @@
 #include "src/base/flags.h"
 #include "src/builtins/builtins-definitions.h"
 #include "src/common/globals.h"
+#include "src/objects/tagged.h"
 #include "src/objects/type-hints.h"
 #include "src/sandbox/code-entrypoint-tag.h"
 
@@ -57,6 +58,15 @@ enum class Builtin : int32_t {
 #undef EXTRACT_NAME
 };
 
+enum class Builtin_ISX : int32_t {
+#define DEF_ENUM(Name, ...) k##Name = static_cast<int32_t>(Builtin::k##Name),
+  BUILTIN_ISX_LIST(DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM,
+                   DEF_ENUM, DEF_ENUM, DEF_ENUM)
+#undef DEF_ENUM
+  // kStoreFastElementIC_InBounds =
+  // static_cast<int32_t>(Builtin::kStoreFastElementIC_InBounds),
+};
+
 V8_INLINE constexpr bool operator<(Builtin a, Builtin b) {
   using type = typename std::underlying_type<Builtin>::type;
   return static_cast<type>(a) < static_cast<type>(b);
@@ -73,6 +83,8 @@ class Builtins {
 
   Builtins(const Builtins&) = delete;
   Builtins& operator=(const Builtins&) = delete;
+
+  std::vector<Tagged<Code>> isx_builtins;
 
   void TearDown();
 
@@ -92,6 +104,9 @@ class Builtins {
                      ADD_ONE, ADD_ONE, ADD_ONE);
   static constexpr int kBuiltinTier0Count = 0 BUILTIN_LIST_TIER0(
       ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE);
+  static constexpr int kBuiltinISXCount =
+      0 BUILTIN_ISX_LIST(ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE,
+                         ADD_ONE, ADD_ONE, ADD_ONE);
 #undef ADD_ONE
 
   static constexpr Builtin kFirst = static_cast<Builtin>(0);
@@ -124,6 +139,18 @@ class Builtins {
   template <Builtin builtin>
   static constexpr size_t WasmBuiltinHandleArrayIndex();
 #endif
+
+  static constexpr bool IsISXBuiltinId(Builtin builtin) {
+    switch (static_cast<int32_t>(builtin)) {
+#define DEF_ENUM(Name, ...) case static_cast<int32_t>(Builtin_ISX::k##Name):
+      BUILTIN_ISX_LIST(DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM,
+                       DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM)
+      return true;
+      default:
+        return false;
+    }
+#undef DEF_ENUM
+  }
 
   static constexpr bool IsBuiltinId(Builtin builtin) {
     return builtin != Builtin::kNoBuiltinId;
