@@ -683,7 +683,8 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // to a function index.
   uint32_t GetFunctionIndexFromJumpTableSlot(Address slot_address) const;
 
-  uint32_t GetFunctionIndexFromIndirectCallTarget(WasmCodePointer target) const;
+  std::map<WasmCodePointer, uint32_t>
+  CreateIndirectCallTargetToFunctionIndexMap() const;
 
   // For cctests, where we build both WasmModule and the runtime objects
   // on the fly, and bypass the instance builder pipeline.
