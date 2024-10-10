@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "907c8f39_34bceb7c",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-10T11:49:25Z",
+      "side": 1,
+      "message": "After the follow-up CL and getting a bit better understanding, the four cases are as described in my first comment, except that\n- the `Is64() \u0026\u0026 V8_ENABLE_WASM_CODE_POINTER_TABLE` case will relocate to an `int32_t` CPT handle, not `int64_t`, and\n- the `V8_ENABLE_WASM_CODE_POINTER_TABLE` cases will relocate to CPT handles, not function indices as I described before (the CPT is process wide, so there is no relation between CPT handles and function indices).",
+      "parentUuid": "ecfce36c_ad2f85b7",
+      "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198332ca_ca5bcb49",
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "I don\u0027t know how to make this stricter. The WordPtr is still used for direct calls.\nE.g. when we embed the address of builtin call targets in wasm:\n```\nV\u003cWordPtr\u003e builtin \u003d\n            __ RelocatableWasmBuiltinCallTarget(Builtin::kWasmStackGuard);\n```\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/stack-check-lowering-reducer.h;l\u003d127;drc\u003d8b1017f685a9cbd1abd9900a1c87ee9fe6b68fd9",
       "parentUuid": "198332ca_ca5bcb49",
+      "range": {
+        "startLine": 536,
+        "startChar": 33,
+        "endLine": 536,
+        "endChar": 40
+      },
+      "revId": "c023f964861f354cc47b05c9fbee5d4944951487",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de437974_1908a47c",
+        "filename": "src/compiler/turboshaft/index.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-10T11:49:25Z",
+      "side": 1,
+      "message": "Oh, right. LGTM then.",
+      "parentUuid": "d75ca9f5_123747f2",
       "range": {
         "startLine": 536,
         "startChar": 33,
