@@ -16,6 +16,23 @@
       "message": "Oli, PTAL @ all\nNico, PTAL @ compiler",
       "revId": "59fc6e8ea32c75b26e8e9668b134e0b096c4afdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3997a12_0a54b946",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-10-10T16:00:14Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "59fc6e8ea32c75b26e8e9668b134e0b096c4afdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
