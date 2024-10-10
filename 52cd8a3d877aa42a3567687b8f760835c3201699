@@ -16,6 +16,46 @@
       "message": "This should help organize tests a bit better on our side. We currently just put them all in the top-level directory.",
       "revId": "52cd8a3d877aa42a3567687b8f760835c3201699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ba03171_241f8437",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-10T14:47:26Z",
+      "side": 1,
+      "message": "Nice, LGTM with a nit.",
+      "revId": "52cd8a3d877aa42a3567687b8f760835c3201699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04cf03fa_0ea290b6",
+        "filename": "tools/wasm/update-wasm-spec-tests.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-10T14:47:26Z",
+      "side": 1,
+      "message": "`mkdir -p` does not error out if the directory already exists, so I think you could even remove this condition.",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "52cd8a3d877aa42a3567687b8f760835c3201699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
