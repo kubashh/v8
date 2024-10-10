@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16a41ef4_cf836704",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-10T11:32:35Z",
+      "side": 1,
+      "message": "yeah, they\u0027re just allocated one by one and while they will mostly end up being incremental, there\u0027s no guarantee for this.",
+      "parentUuid": "f27289cd_0aff1c9b",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8af8ed84_ef24a3ee",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d79db75_720f1b61",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-10T11:32:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8af8ed84_ef24a3ee",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2324877_cd6dfad3",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-10-09T18:11:50Z",
       "side": 1,
       "message": "This linear search could introduce accidental quadratic complexity in callers. I briefly looked into the current callers of `GetFunctionIndexFromIndirectCallTarget` and it seems to be fine, but I wanted to double check with you: One caller is in `#ifdef DEBUG` code in `Validate()` (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-code-manager.cc;l\u003d378?q\u003dGetFunctionIndexFromIndirectCallTarget); the other one in serialization (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-serialization.cc;l\u003d522?q\u003dGetFunctionIndexFromIndirectCallTarget) which we only run for the purpose of the code cache, which only applies to Turbofan-generated functions. About this, I am not 100% it\u0027s not going to be a problem, e.g., for a Turbofan-compiled function with many `call_indirect`s in a module with many functions. We should 1. watch out for serialization regressions with this configuration (do you happen to have numbers on that?) or 2. is it feasible to add a hash set-based reverse mapping?",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b4649e7_d3871070",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-10T11:32:35Z",
+      "side": 1,
+      "message": "I think we also care about the memory size of the NativeModule, right?\n\nSince the map is only needed once during serialization, I changed the code to create such a lookup map on demand and use that instead. PTAL",
+      "parentUuid": "d2324877_cd6dfad3",
       "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
