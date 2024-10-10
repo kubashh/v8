@@ -104,6 +104,23 @@
       "message": "It reach TC39 concesus on 2024-10-09",
       "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5771a701_01fc9133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2024-10-10T22:35:02Z",
+      "side": 1,
+      "message": "@syg PTAL",
+      "revId": "d981a4edab442084a1c47d2889556479f8c6b418",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
