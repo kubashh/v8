@@ -50,6 +50,29 @@
       "message": "LGTM, sorry for the late review.\nI can\u0027t really evaluate the used instructions and their semantics in the code generator (I\u0027m not firm with any of them) but the tests seem to cover that.",
       "revId": "a1a7f457e694065dfb75979b1d14b5f62c0efea0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48716f49_948bc654",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4696,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-10-10T14:57:25Z",
+      "side": 1,
+      "message": "Why are those two not Simd256?",
+      "range": {
+        "startLine": 4696,
+        "startChar": 13,
+        "endLine": 4696,
+        "endChar": 26
+      },
+      "revId": "a1a7f457e694065dfb75979b1d14b5f62c0efea0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
