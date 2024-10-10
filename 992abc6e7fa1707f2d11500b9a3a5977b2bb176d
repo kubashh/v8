@@ -125,6 +125,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4b0b585b_d388d5c2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-10T11:58:43Z",
+      "side": 1,
+      "message": "Either way, I\u0027d like to postpone that discussion and decision and (potential) refactoring. Perhaps one of the two variants (canonical or module-specific) will end up being rare enough that we\u0027ll only need global constants for the other.",
+      "parentUuid": "b668a588_00b19214",
+      "range": {
+        "startLine": 3797,
+        "startChar": 16,
+        "endLine": 3797,
+        "endChar": 63
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "60d669d5_aa59eb3c",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -171,6 +195,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "08c4ba60_556977ce",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-10T11:58:43Z",
+      "side": 1,
+      "message": "Perhaps. Let\u0027s postpone that until we see a concrete benefit though. Perhaps we\u0027ll also move towards using canonical types for function compilation, but that\u0027d be a bigger (and mostly unrelated) project, and I\u0027m not sure whether it\u0027d be a good idea overall.",
+      "parentUuid": "a5e12340_2a2a003f",
+      "range": {
+        "startLine": 429,
+        "startChar": 4,
+        "endLine": 429,
+        "endChar": 27
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b5159fee_c3141732",
         "filename": "src/compiler/wasm-compiler-definitions.cc",
         "patchSetId": 1
@@ -182,6 +230,24 @@
       "writtenOn": "2024-10-10T08:58:40Z",
       "side": 1,
       "message": "I was considering to propose that we pass a reinterpret_cast\u0027ed `FunctionSig*` here, since we don\u0027t seem to care if it\u0027s canonicalized or not. But I think this opens the door for more confusion of the two, so in the end I support this templatized version.",
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05a19918_55bf76ad",
+        "filename": "src/compiler/wasm-compiler-definitions.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-10T11:58:43Z",
+      "side": 1,
+      "message": "Agreed. I think we should try not to rely on `reinterpret_cast`, and also over time also minimize the use of these templatizations: _most_ code should know what kind of signature it\u0027s operating on.",
+      "parentUuid": "b5159fee_c3141732",
       "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
