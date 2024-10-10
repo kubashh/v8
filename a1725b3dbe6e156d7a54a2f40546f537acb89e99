@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47b118be_bbe2111d",
+        "filename": "src/wasm/canonical-types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-10T08:23:16Z",
+      "side": 1,
+      "message": "Added two static_asserts and a TODO to reconsider. I agree that there\u0027s room for improvement, but I think it\u0027s good enough for now.",
+      "parentUuid": "238b5cc4_017db27a",
+      "revId": "a1725b3dbe6e156d7a54a2f40546f537acb89e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d5b8650_682a8d07",
@@ -65,6 +83,30 @@
       "writtenOn": "2024-10-09T16:12:02Z",
       "side": 1,
       "message": "This can be dropped now (interesting that we never used this).",
+      "range": {
+        "startLine": 328,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 44
+      },
+      "revId": "a1725b3dbe6e156d7a54a2f40546f537acb89e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67f3cd98_20c4c30b",
+        "filename": "src/wasm/canonical-types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-10T08:23:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d5b8650_682a8d07",
       "range": {
         "startLine": 328,
         "startChar": 0,
