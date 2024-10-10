@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b936aee0_03f45606",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-10T10:04:36Z",
+      "side": 1,
+      "message": "Semantics look good. I have syntactic concerns about referring to everything as internal. I would prefer a different term if possible.",
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1521ae5b_165b19e1",
+        "filename": "include/v8-context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-10T10:04:36Z",
+      "side": 1,
+      "message": "Here and elsewhere, can use a different name? `internal` is already used for the namespace.",
+      "range": {
+        "startLine": 500,
+        "startChar": 11,
+        "endLine": 500,
+        "endChar": 19
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57a52596_a688b706",
+        "filename": "include/v8-handle-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-10T10:04:36Z",
+      "side": 1,
+      "message": "`location` or `value` instead of `internal`?",
+      "range": {
+        "startLine": 90,
+        "startChar": 48,
+        "endLine": 90,
+        "endChar": 56
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4d28e0d_6b9f80ec",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-10T10:04:36Z",
+      "side": 1,
+      "message": "`UnderlyingType` or `UnwrappedType`? to avoid the term `internal` which I find to be overloaded",
+      "range": {
+        "startLine": 1631,
+        "startChar": 8,
+        "endLine": 1631,
+        "endChar": 20
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3969c9a2_d99b0dc8",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2024-10-10T10:04:36Z",
+      "side": 1,
+      "message": "Where/when are these new variants used?",
+      "range": {
+        "startLine": 235,
+        "startChar": 9,
+        "endLine": 235,
+        "endChar": 32
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
