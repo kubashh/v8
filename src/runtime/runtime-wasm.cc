@@ -530,10 +530,15 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
   DCHECK(isolate->context().is_null());
   isolate->set_context(ref->native_context());
 
+<<<<<<< HEAD   (c36b4f Version 12.6.228.37)
   std::unique_ptr<wasm::ValueType[]> reps;
   wasm::FunctionSig sig =
       wasm::SerializedSignatureHelper::DeserializeSignature(ref->sig(), &reps);
   Handle<Object> origin = handle(ref->call_origin(), isolate);
+=======
+  const wasm::FunctionSig* sig = import_data->sig();
+  DirectHandle<Object> origin(import_data->call_origin(), isolate);
+>>>>>>> CHANGE (5fcbf3 [wasm] Don't tier up wrapper if signature depends on other i)
 
   if (IsWasmFuncRef(*origin)) {
     // The tierup for `WasmInternalFunction is special, as there is no instance.
@@ -568,10 +573,32 @@ RUNTIME_FUNCTION(Runtime_TierUpWasmToJSWrapper) {
   Handle<WasmInstanceObject> instance_object(
       WasmInstanceObject::cast(ref->instance()), isolate);
   if (IsTuple2(*origin)) {
+<<<<<<< HEAD   (c36b4f Version 12.6.228.37)
     Handle<Tuple2> tuple = Handle<Tuple2>::cast(origin);
     instance_object =
         handle(WasmInstanceObject::cast(tuple->value1()), isolate);
     origin = handle(tuple->value2(), isolate);
+=======
+    auto tuple = Cast<Tuple2>(origin);
+    Handle<WasmTrustedInstanceData> call_origin_trusted_data(
+        Cast<WasmInstanceObject>(tuple->value1())->trusted_data(isolate),
+        isolate);
+    // TODO(371565065): We do not tier up the wrapper if the JS function wasn't
+    // imported in the current instance but the signature is specific to the
+    // importing instance. Remove this bailout again.
+    if (trusted_data->module() != call_origin_trusted_data->module()) {
+      for (wasm::ValueType type : sig->all()) {
+        if (type.has_index()) {
+          // Reset the tiering budget, so that we don't have to deal with the
+          // underflow.
+          import_data->set_wrapper_budget(Smi::kMaxValue);
+          return ReadOnlyRoots(isolate).undefined_value();
+        }
+      }
+    }
+    trusted_data = call_origin_trusted_data;
+    origin = direct_handle(tuple->value2(), isolate);
+>>>>>>> CHANGE (5fcbf3 [wasm] Don't tier up wrapper if signature depends on other i)
   }
   Handle<WasmTrustedInstanceData> trusted_data(
       instance_object->trusted_data(isolate), isolate);
