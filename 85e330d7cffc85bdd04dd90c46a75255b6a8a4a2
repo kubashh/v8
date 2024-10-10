@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a7ea09_ffd9272f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-10T12:25:22Z",
+      "side": 1,
+      "message": "I switched terminology from \"internal\" to \"representation\".",
+      "parentUuid": "b936aee0_03f45606",
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1521ae5b_165b19e1",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-10-10T10:04:36Z",
       "side": 1,
       "message": "Here and elsewhere, can use a different name? `internal` is already used for the namespace.",
+      "range": {
+        "startLine": 500,
+        "startChar": 11,
+        "endLine": 500,
+        "endChar": 19
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8efc3893_50635ffc",
+        "filename": "include/v8-context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-10T12:25:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1521ae5b_165b19e1",
       "range": {
         "startLine": 500,
         "startChar": 11,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14d253db_8b3f6dca",
+        "filename": "include/v8-handle-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-10T12:25:22Z",
+      "side": 1,
+      "message": "I\u0027m changing to `repr`, as this now returns a `RepresentationType`.",
+      "parentUuid": "57a52596_a688b706",
+      "range": {
+        "startLine": 90,
+        "startChar": 48,
+        "endLine": 90,
+        "endChar": 56
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d28e0d_6b9f80ec",
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "105ebaa9_8a1571f5",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1631,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-10T12:25:22Z",
+      "side": 1,
+      "message": "I\u0027m changing to `RepresentationType`.",
+      "parentUuid": "c4d28e0d_6b9f80ec",
+      "range": {
+        "startLine": 1631,
+        "startChar": 8,
+        "endLine": 1631,
+        "endChar": 20
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3969c9a2_d99b0dc8",
@@ -100,6 +190,30 @@
       "writtenOn": "2024-10-10T10:04:36Z",
       "side": 1,
       "message": "Where/when are these new variants used?",
+      "range": {
+        "startLine": 235,
+        "startChar": 9,
+        "endLine": 235,
+        "endChar": 32
+      },
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb5667d_ba6e6d0f",
+        "filename": "src/handles/maybe-handles.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-10T12:25:22Z",
+      "side": 1,
+      "message": "These exist for indirect handles and were missing from direct ones. They are not used yet for DH, only for H. But we want to have the same interface for H and DH, to facilitate the migration.",
+      "parentUuid": "3969c9a2_d99b0dc8",
       "range": {
         "startLine": 235,
         "startChar": 9,
