@@ -16,6 +16,24 @@
       "message": "Leftover code?\n\nAlso (totally optional bikeshed), how about to avoid the ternary operator:\n```\nstd::map\u003cWasmCodePointer, uint32_t\u003e function_index_map;\nif (native_module_) {\n  function_index_map \u003d std::move(native_module_-\u003eCreateIndirectCallTargetToFunctionIndexMap());\n}\n```",
       "revId": "70ba989bc78d80a0b688456c18b4e141e6d9be6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c35f115f_faf03a10",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-10T12:39:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c61839f5_0b0b0cdf",
+      "revId": "70ba989bc78d80a0b688456c18b4e141e6d9be6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
