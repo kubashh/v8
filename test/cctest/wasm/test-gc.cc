@@ -25,7 +25,7 @@ namespace internal {
 namespace wasm {
 namespace test_gc {
 
-using F = std::pair<ValueType, bool>;
+using F = std::pair<ModuleValueType, bool>;
 
 class WasmGCTester {
  public:
@@ -85,8 +85,8 @@ class WasmGCTester {
   uint8_t DefineStruct(std::initializer_list<F> fields,
                        uint32_t supertype = kNoSuperType,
                        bool is_final = false) {
-    StructType::Builder type_builder(&zone_,
-                                     static_cast<uint32_t>(fields.size()));
+    ModuleStructType::Builder type_builder(
+        &zone_, static_cast<uint32_t>(fields.size()));
     for (F field : fields) {
       type_builder.AddField(field.first, field.second);
     }
@@ -260,8 +260,9 @@ class WasmGCTester {
     WasmCodePointer wasm_call_target =
         trusted_instance_data_->GetCallTarget(function_index);
     DirectHandle<Object> object_ref = instance_object_;
-    DirectHandle<Code> c_wasm_entry =
-        compiler::CompileCWasmEntry(isolate_, sig);
+    // TODO(366180605): Drop the cast!
+    DirectHandle<Code> c_wasm_entry = compiler::CompileCWasmEntry(
+        isolate_, reinterpret_cast<const CanonicalSig*>(sig));
     Execution::CallWasm(isolate_, c_wasm_entry, wasm_call_target, object_ref,
                         packer->argv());
   }

@@ -1475,7 +1475,7 @@ class SignatureHelper : public i::AllStatic {
 
     i::wasm::FunctionSig non_canonical_sig{type->results().size(),
                                            type->params().size(), types.data()};
-    uint32_t canonical_id =
+    i::wasm::CanonicalTypeIndex canonical_id =
         i::wasm::GetTypeCanonicalizer()->AddRecursiveGroup(&non_canonical_sig);
     return i::wasm::GetTypeCanonicalizer()->LookupFunctionSignature(
         canonical_id);
@@ -1636,8 +1636,9 @@ void PrepareFunctionData(
     return;
   }
   // Compile wrapper code.
-  i::DirectHandle<i::Code> wrapper_code =
-      i::compiler::CompileCWasmEntry(isolate, sig);
+  // TODO(366180605): Drop the cast!
+  i::DirectHandle<i::Code> wrapper_code = i::compiler::CompileCWasmEntry(
+      isolate, reinterpret_cast<const i::wasm::CanonicalSig*>(sig));
   function_data->set_c_wrapper_code(*wrapper_code);
   // Compute packed args size.
   function_data->set_packed_args_size(
