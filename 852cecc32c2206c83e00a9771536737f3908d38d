@@ -123,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f1ae1f_b9e70b73",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2024-10-10T12:10:11Z",
+      "side": 1,
+      "message": "Right, memory usage is a good point. LGTM as-is, but we could optionally use `absl::flat_hash_map` instead of `std::map` (O(1) instead of O(n) lookup, more cache-friendly, fewer allocations.)",
+      "parentUuid": "1b4649e7_d3871070",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfa83712_ba06603b",
