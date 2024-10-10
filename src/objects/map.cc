@@ -167,6 +167,9 @@ VisitorId Map::GetVisitorId(Tagged<Map> map) {
     case CONST_TRACKING_LET_CELL_TYPE:
       return kVisitConstTrackingLetCell;
 
+    case CONTEXT_SLOT_REPR_CELL_TYPE:
+      return kVisitContextSlotReprCell;
+
     case TRANSITION_ARRAY_TYPE:
       return kVisitTransitionArray;
 

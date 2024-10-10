@@ -7,11 +7,16 @@
 #include <optional>
 
 #include "src/ast/modules.h"
+#include "src/base/logging.h"
 #include "src/debug/debug.h"
 #include "src/execution/isolate-inl.h"
 #include "src/init/bootstrapper.h"
 #include "src/objects/dependent-code.h"
+#include "src/objects/heap-number.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/module-inl.h"
+#include "src/objects/oddball.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/string-set-inl.h"
 
 namespace v8::internal {
@@ -473,13 +478,8 @@ Handle<Object> Context::Lookup(Handle<Context> context, Handle<String> name,
 
 Tagged<ConstTrackingLetCell> Context::GetOrCreateConstTrackingLetCell(
     DirectHandle<Context> script_context, size_t index, Isolate* isolate) {
-  DCHECK(v8_flags.const_tracking_let);
-  DCHECK(script_context->IsScriptContext());
-  int side_data_index =
-      static_cast<int>(index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
-  DirectHandle<FixedArray> side_data(
-      Cast<FixedArray>(script_context->get(CONST_TRACKING_LET_SIDE_DATA_INDEX)),
-      isolate);
+  DirectHandle<FixedArray> side_data(script_context->GetSideData(), isolate);
+  int side_data_index = GetSideDataIndexForLetConst(static_cast<int>(index));
   Tagged<Object> object = side_data->get(side_data_index);
   if (!IsConstTrackingLetCell(object)) {
     // If these CHECKs fail, there's a code path which initializes or assigns a
@@ -491,43 +491,72 @@ Tagged<ConstTrackingLetCell> Context::GetOrCreateConstTrackingLetCell(
   return Cast<ConstTrackingLetCell>(object);
 }
 
-bool Context::ConstTrackingLetSideDataIsConst(size_t index) const {
-  DCHECK(v8_flags.const_tracking_let);
-  DCHECK(IsScriptContext());
+Tagged<ContextSlotReprCell> Context::GetOrCreateContextSlotRepr(
+    DirectHandle<Context> script_context, size_t index, Isolate* isolate) {
+  DirectHandle<FixedArray> side_data(script_context->GetSideData(), isolate);
   int side_data_index =
-      static_cast<int>(index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
-  Tagged<FixedArray> side_data =
-      Cast<FixedArray>(get(CONST_TRACKING_LET_SIDE_DATA_INDEX));
+      GetSideDataIndexForContextSlotRepr(static_cast<int>(index));
   Tagged<Object> object = side_data->get(side_data_index);
+  if (!IsContextSlotReprCell(object)) {
+    CHECK(IsSmi(object));
+    auto cell = *isolate->factory()->NewContextSlotReprCell(object.ToSmi());
+    side_data->set(side_data_index, cell);
+  }
+  return Cast<ContextSlotReprCell>(object);
+}
+
+bool Context::ConstTrackingLetSideDataIsConst(size_t index) const {
+  Tagged<Object> object = GetConstTrackingLetData(static_cast<int>(index));
   return !ConstTrackingLetCell::IsNotConst(object);
 }
 
-void Context::UpdateConstTrackingLetSideData(
+namespace {
+ContextSlotRepr GeneralizeContextSlotRepr(ContextSlotRepr old_repr,
+                                          ContextSlotRepr new_repr) {
+  if (old_repr == kMutableHeapNumber && new_repr == kSmi) {
+    // We remain in mutable heap number if we see a Smi.
+    return kMutableHeapNumber;
+  }
+  // Otherwise representation rank always grow.
+  return static_cast<ContextSlotRepr>(
+      std::max(static_cast<int>(old_repr), static_cast<int>(new_repr)));
+}
+}  // namespace
+
+void Context::StoreContextElementAndUpdateSideData(
     DirectHandle<Context> script_context, int index,
     DirectHandle<Object> new_value, Isolate* isolate) {
-  DCHECK(v8_flags.const_tracking_let);
-  DCHECK(script_context->IsScriptContext());
+  DirectHandle<FixedArray> side_data(script_context->GetSideData(), isolate);
   DirectHandle<Object> old_value(script_context->get(index), isolate);
-  const int side_data_index = index - Context::MIN_CONTEXT_EXTENDED_SLOTS;
-  DirectHandle<FixedArray> side_data(
-      Cast<FixedArray>(
-          script_context->get(Context::CONST_TRACKING_LET_SIDE_DATA_INDEX)),
-      isolate);
+  const int let_const_index = GetSideDataIndexForLetConst(index);
+  const int context_slot_repr_index = GetSideDataIndexForContextSlotRepr(index);
+
   if (IsTheHole(*old_value)) {
     // Setting the initial value. Here we cannot assert the corresponding side
     // data is `undefined` - that won't hold w/ variable redefinitions in REPL.
-    side_data->set(side_data_index, ConstTrackingLetCell::kConstMarker);
+    side_data->set(let_const_index, ConstTrackingLetCell::kConstMarker);
+    ContextSlotRepr repr = ContextSlotReprCell::RepresentationOf(*new_value);
+    side_data->set(context_slot_repr_index, Smi::FromInt(repr));
+    if (repr == ContextSlotRepr::kMutableHeapNumber) {
+      script_context->set(index, *isolate->factory()->NewHeapNumber(
+                                     Cast<HeapNumber>(*new_value)->value()));
+    } else {
+      script_context->set(index, *new_value);
+    }
     return;
   }
+
+  // If it is the same value, all side table info is the same.
   if (*old_value == *new_value) {
     return;
   }
+
   // From now on, we know the value is no longer a constant. If there's a
   // DependentCode, invalidate it.
-  Tagged<Object> data = side_data->get(side_data_index);
-  if (IsConstTrackingLetCell(data)) {
+  Tagged<Object> let_const_data = side_data->get(let_const_index);
+  if (IsConstTrackingLetCell(let_const_data)) {
     DependentCode::DeoptimizeDependencyGroups(
-        isolate, Cast<ConstTrackingLetCell>(data),
+        isolate, Cast<ConstTrackingLetCell>(let_const_data),
         DependentCode::kConstTrackingLetChangedGroup);
   } else {
     // The value is not constant, but it also was not used as a constant
@@ -536,9 +565,61 @@ void Context::UpdateConstTrackingLetSideData(
 
     // If the CHECK fails, there's a code path which initializes or assigns a
     // top-level `let` variable but doesn't update the side data.
-    CHECK(IsSmi(data));
+    CHECK(IsSmi(let_const_data));
   }
-  side_data->set(side_data_index, ConstTrackingLetCell::kNonConstMarker);
+  side_data->set(let_const_index, ConstTrackingLetCell::kNonConstMarker);
+
+  // Check if we should deopt if we changed slot representation.
+  ContextSlotRepr expected_repr;
+  ContextSlotRepr new_value_repr =
+      ContextSlotReprCell::RepresentationOf(*new_value);
+  Tagged<Object> context_slot_repr = side_data->get(context_slot_repr_index);
+  if (IsContextSlotReprCell(context_slot_repr)) {
+    // Invalidate code if the representation has changed.
+    Tagged<ContextSlotReprCell> cell =
+        Cast<ContextSlotReprCell>(context_slot_repr);
+    expected_repr = cell->repr();
+    if (new_value_repr != expected_repr) {
+      DependentCode::DeoptimizeDependencyGroups(
+          isolate, Cast<ContextSlotReprCell>(context_slot_repr),
+          DependentCode::kContextSlotReprGroup);
+    }
+  } else {
+    DCHECK(IsSmi(context_slot_repr));
+    expected_repr =
+        static_cast<ContextSlotRepr>(Cast<Smi>(context_slot_repr).value());
+  }
+
+  // Update representation.
+  ContextSlotRepr updated_repr =
+      GeneralizeContextSlotRepr(expected_repr, new_value_repr);
+  side_data->set(context_slot_repr_index, Smi::FromInt(updated_repr));
+
+  // Update slot value.
+  if (expected_repr == ContextSlotRepr::kMutableHeapNumber) {
+    DCHECK(Is<HeapNumber>(*old_value));
+    if (updated_repr == ContextSlotRepr::kMutableHeapNumber) {
+      if (Is<Smi>(*new_value)) {
+        Cast<HeapNumber>(old_value)->set_value(
+            static_cast<double>(Cast<Smi>(*new_value).value()));
+      } else {
+        DCHECK(Is<HeapNumber>(*new_value));
+        Cast<HeapNumber>(old_value)->set_value(
+            Cast<HeapNumber>(*new_value)->value());
+      }
+    } else {
+      // The only possible transition.
+      DCHECK_EQ(updated_repr, ContextSlotRepr::kOther);
+      script_context->set(index, *new_value);
+    }
+  } else if (updated_repr == ContextSlotRepr::kMutableHeapNumber) {
+    // Allocate a new heap number.
+    DCHECK(Is<HeapNumber>(*new_value));
+    script_context->set(index, *isolate->factory()->NewHeapNumber(
+                                   Cast<HeapNumber>(*new_value)->value()));
+  } else {
+    script_context->set(index, *new_value);
+  }
 }
 
 bool NativeContext::HasTemplateLiteralObject(Tagged<JSArray> array) {

@@ -73,8 +73,8 @@ TNode<JSRegExpResult> RegExpBuiltinsAssembler::AllocateRegExpResult(
 
   GotoIf(has_indices, &result_has_indices);
   {
-    TNode<Map> map = CAST(LoadContextElement(LoadNativeContext(context),
-                                             Context::REGEXP_RESULT_MAP_INDEX));
+    TNode<Map> map = LoadContextElementAsMap(LoadNativeContext(context),
+                                             Context::REGEXP_RESULT_MAP_INDEX);
     std::tie(var_array, var_elements) =
         AllocateUninitializedJSArrayWithElements(
             elements_kind, map, length, no_gc_site, length_intptr,
@@ -85,8 +85,8 @@ TNode<JSRegExpResult> RegExpBuiltinsAssembler::AllocateRegExpResult(
   BIND(&result_has_indices);
   {
     TNode<Map> map =
-        CAST(LoadContextElement(LoadNativeContext(context),
-                                Context::REGEXP_RESULT_WITH_INDICES_MAP_INDEX));
+        LoadContextElementAsMap(LoadNativeContext(context),
+                                Context::REGEXP_RESULT_WITH_INDICES_MAP_INDEX);
     std::tie(var_array, var_elements) =
         AllocateUninitializedJSArrayWithElements(
             elements_kind, map, length, no_gc_site, length_intptr,
@@ -805,8 +805,8 @@ void RegExpBuiltinsAssembler::BranchIfFastRegExp(
 
   // Verify the prototype.
 
-  TNode<Map> initial_proto_initial_map = CAST(
-      LoadContextElement(native_context, Context::REGEXP_PROTOTYPE_MAP_INDEX));
+  TNode<Map> initial_proto_initial_map = LoadContextElementAsMap(
+      native_context, Context::REGEXP_PROTOTYPE_MAP_INDEX);
 
   DescriptorIndexNameValue properties_to_check[2];
   int property_count = 0;
@@ -1441,9 +1441,9 @@ TNode<Number> RegExpBuiltinsAssembler::AdvanceStringIndex(
 TNode<Object> RegExpMatchAllAssembler::CreateRegExpStringIterator(
     TNode<NativeContext> native_context, TNode<Object> regexp,
     TNode<String> string, TNode<BoolT> global, TNode<BoolT> full_unicode) {
-  TNode<Map> map = CAST(LoadContextElement(
+  TNode<Map> map = LoadContextElementAsMap(
       native_context,
-      Context::INITIAL_REGEXP_STRING_ITERATOR_PROTOTYPE_MAP_INDEX));
+      Context::INITIAL_REGEXP_STRING_ITERATOR_PROTOTYPE_MAP_INDEX);
 
   // 4. Let iterator be ObjectCreate(%RegExpStringIteratorPrototype%, «
   // [[IteratingRegExp]], [[IteratedString]], [[Global]], [[Unicode]],

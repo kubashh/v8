@@ -45,6 +45,7 @@ namespace internal {
   V(HeapNumber)                      \
   V(Hole)                            \
   V(Map)                             \
+  V(ContextSlotReprCell)             \
   V(NativeContext)                   \
   V(Oddball)                         \
   V(PreparseData)                    \

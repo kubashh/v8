@@ -205,6 +205,8 @@ const char* DependentCode::DependencyGroupName(DependencyGroup group) {
       return "allocation-site-transition-changed";
     case kConstTrackingLetChangedGroup:
       return "const-tracking-let-changed";
+    case kContextSlotReprGroup:
+      return "context-slot-repr";
   }
   UNREACHABLE();
 }

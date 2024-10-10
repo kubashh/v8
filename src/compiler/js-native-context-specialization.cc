@@ -1358,10 +1358,9 @@ Reduction JSNativeContextSpecialization::ReduceJSStoreGlobal(Node* node) {
     // Thus, we must check the const tracking let side data and potentially
     // invalidate the constness.
     if (v8_flags.const_tracking_let) {
-      int side_data_index =
-          ConstTrackingLetSideDataIndexForAccess(feedback.slot_index());
-      GenerateCheckConstTrackingLetSideData(script_context, &effect, &control,
-                                            side_data_index, jsgraph_);
+      GenerateCheckConstTrackingLetSideData(
+          script_context, &effect, &control,
+          static_cast<int>(feedback.slot_index()), jsgraph_);
       // If we're still here (not deopted) the side data implied that the
       // variable was already not-a-constant, so we can just store into it.
     }

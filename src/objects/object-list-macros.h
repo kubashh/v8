@@ -221,6 +221,7 @@ namespace internal {
   V(MegaDomHandler)                             \
   V(Module)                                     \
   V(Microtask)                                  \
+  V(ContextSlotReprCell)                        \
   V(Name)                                       \
   V(NameDictionary)                             \
   V(NameToIndexHashTable)                       \

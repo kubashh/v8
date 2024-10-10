@@ -25,9 +25,11 @@
 #include "src/compiler/turbofan-types.h"
 #include "src/compiler/type-cache.h"
 #include "src/execution/protectors.h"
+#include "src/objects/heap-number.h"
 #include "src/objects/js-generator.h"
 #include "src/objects/module-inl.h"
 #include "src/objects/objects-inl.h"
+#include "src/utils/boxed-float.h"
 
 namespace v8 {
 namespace internal {
@@ -1579,6 +1581,24 @@ Reduction JSTypedLowering::ReduceJSLoadContext(Node* node) {
   return Changed(node);
 }
 
+Reduction JSTypedLowering::ReduceJSLoadContextDoubleElement(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSLoadContextDoubleElement, node->opcode());
+  ContextAccess const& access = ContextAccessOf(node->op());
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* control = graph()->start();
+
+  DCHECK_EQ(access.depth(), 0);
+  Node* heap_number = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForContextSlot(access.index())),
+      context, effect, control);
+  Node* value = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForHeapNumberValue()), heap_number,
+      heap_number, control);
+  ReplaceWithValue(node, value, effect);
+  return Changed(value);
+}
+
 Reduction JSTypedLowering::ReduceJSStoreContext(Node* node) {
   DCHECK_EQ(IrOpcode::kJSStoreContext, node->opcode());
   ContextAccess const& access = ContextAccessOf(node->op());
@@ -1599,6 +1619,25 @@ Reduction JSTypedLowering::ReduceJSStoreContext(Node* node) {
       node,
       simplified()->StoreField(AccessBuilder::ForContextSlot(access.index())));
   return Changed(node);
+}
+
+Reduction JSTypedLowering::ReduceJSStoreContextDoubleElement(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSStoreContextDoubleElement, node->opcode());
+  ContextAccess const& access = ContextAccessOf(node->op());
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* control = graph()->start();
+  Node* value = NodeProperties::GetValueInput(node, 0);
+
+  DCHECK_EQ(access.depth(), 0);
+  Node* heap_number = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForContextSlot(access.index())),
+      context, effect, control);
+  effect = graph()->NewNode(
+      simplified()->StoreField(AccessBuilder::ForHeapNumberValue()),
+      heap_number, value, heap_number, control);
+  ReplaceWithValue(node, value, effect);
+  return Changed(value);
 }
 
 Node* JSTypedLowering::BuildGetModuleCell(Node* node) {
@@ -2609,8 +2648,12 @@ Reduction JSTypedLowering::Reduce(Node* node) {
       return ReduceJSLoadNamed(node);
     case IrOpcode::kJSLoadContext:
       return ReduceJSLoadContext(node);
+    case IrOpcode::kJSLoadContextDoubleElement:
+      return ReduceJSLoadContextDoubleElement(node);
     case IrOpcode::kJSStoreContext:
       return ReduceJSStoreContext(node);
+    case IrOpcode::kJSStoreContextDoubleElement:
+      return ReduceJSStoreContextDoubleElement(node);
     case IrOpcode::kJSLoadModule:
       return ReduceJSLoadModule(node);
     case IrOpcode::kJSStoreModule:

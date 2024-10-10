@@ -278,8 +278,8 @@ void BaseCollectionsAssembler::AddConstructorEntriesFromIterable(
 
   CSA_DCHECK(this, Word32BinaryNot(IsUndefined(iterator.object)));
 
-  TNode<Map> fast_iterator_result_map = CAST(
-      LoadContextElement(native_context, Context::ITERATOR_RESULT_MAP_INDEX));
+  TNode<Map> fast_iterator_result_map = LoadContextElementAsMap(
+      native_context, Context::ITERATOR_RESULT_MAP_INDEX);
 
   Goto(&loop);
   BIND(&loop);
@@ -518,7 +518,7 @@ TNode<Map> BaseCollectionsAssembler::GetInitialCollectionPrototype(
       initial_prototype_index = Context::INITIAL_WEAKSET_PROTOTYPE_MAP_INDEX;
       break;
   }
-  return CAST(LoadContextElement(native_context, initial_prototype_index));
+  return LoadContextElementAsMap(native_context, initial_prototype_index);
 }
 
 TNode<BoolT> BaseCollectionsAssembler::HasInitialCollectionPrototype(
@@ -725,7 +725,7 @@ TNode<HeapObject> CollectionsBuiltinsAssembler::AllocateJSCollectionIterator(
       LoadObjectField(collection, JSCollection::kTableOffset);
   const TNode<NativeContext> native_context = LoadNativeContext(context);
   const TNode<Map> iterator_map =
-      CAST(LoadContextElement(native_context, map_index));
+      LoadContextElementAsMap(native_context, map_index);
   const TNode<HeapObject> iterator =
       AllocateInNewSpace(IteratorType::kHeaderSize);
   StoreMapNoWriteBarrier(iterator, iterator_map);

@@ -991,25 +991,33 @@ OptionalObjectRef ContextRef::get(JSHeapBroker* broker, int index) const {
   return TryMakeRef(broker, object()->get(index));
 }
 
-OptionalObjectRef ContextRef::TryGetSideData(JSHeapBroker* broker,
-                                             int index) const {
-  if (!object()->IsScriptContext()) {
-    return {};
-  }
-
-  // No side data for slots which are not variables in the context.
-  if (index < Context::MIN_CONTEXT_EXTENDED_SLOTS) {
-    return {};
-  }
-
+OptionalFixedArrayRef ContextRef::TryGetSideData(JSHeapBroker* broker) const {
+  if (!object()->IsScriptContext()) return {};
   OptionalObjectRef maybe_side_data =
-      get(broker, Context::CONST_TRACKING_LET_SIDE_DATA_INDEX);
-  if (!maybe_side_data.has_value()) return {};
+      get(broker, Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX);
+  DCHECK(maybe_side_data.has_value());
   // The FixedArray itself will stay constant, but its contents may change while
   // we compile in the background.
-  FixedArrayRef side_data_fixed_array = maybe_side_data.value().AsFixedArray();
-  return side_data_fixed_array.TryGet(
-      broker, index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
+  return maybe_side_data.value().AsFixedArray();
+}
+
+OptionalObjectRef ContextRef::TryGetLetConstData(JSHeapBroker* broker,
+                                                 int index) const {
+  // No side data for slots which are not variables in the context.
+  if (index < Context::MIN_CONTEXT_EXTENDED_SLOTS) return {};
+  OptionalFixedArrayRef side_data = TryGetSideData(broker);
+  if (!side_data.has_value()) return {};
+  return side_data->TryGet(broker, Context::GetSideDataIndexForLetConst(index));
+}
+
+OptionalObjectRef ContextRef::TryGetContextSlotRepr(JSHeapBroker* broker,
+                                                    int index) const {
+  // No side data for slots which are not variables in the context.
+  if (index < Context::MIN_CONTEXT_EXTENDED_SLOTS) return {};
+  OptionalFixedArrayRef side_data = TryGetSideData(broker);
+  if (!side_data.has_value()) return {};
+  return side_data->TryGet(broker,
+                           Context::GetSideDataIndexForContextSlotRepr(index));
 }
 
 void JSHeapBroker::InitializeAndStartSerializing(

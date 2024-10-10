@@ -660,12 +660,11 @@ void MaglevAssembler::GenerateCheckConstTrackingLetCellFooter(Register context,
   // Load the const tracking let side data.
   LoadTaggedField(
       data, context,
-      Context::OffsetOfElementAt(Context::CONST_TRACKING_LET_SIDE_DATA_INDEX));
+      Context::OffsetOfElementAt(Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX));
 
   LoadTaggedField(data, data,
                   FixedArray::OffsetOfElementAt(
-                      index - Context::MIN_CONTEXT_EXTENDED_SLOTS));
-
+                      Context::GetSideDataIndexForLetConst(index)));
   // If the field is already marked as "not a constant", storing a
   // different value is fine. But if it's anything else (including the hole,
   // which means no value was stored yet), deopt this code. The lower tier code

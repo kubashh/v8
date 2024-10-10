@@ -488,6 +488,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       AllocationType allocation = AllocationType::kOld);
   Handle<ConstTrackingLetCell> NewConstTrackingLetCell(
       AllocationType allocation = AllocationType::kOld);
+  Handle<ContextSlotReprCell> NewContextSlotReprCell(
+      Tagged<Smi> repr, AllocationType allocation = AllocationType::kOld);
   Handle<PropertyCell> NewProtector();
 
   Handle<FeedbackCell> NewNoClosuresCell();

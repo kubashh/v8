@@ -671,6 +671,11 @@ DEFINE_BOOL_READONLY(dict_property_const_tracking,
 DEFINE_BOOL(const_tracking_let, true,
             "Use const tracking on top-level `let` variables")
 
+DEFINE_BOOL(script_context_mutable_heap_number, true,
+            "Use mutable heap numbers in script contexts")
+// It relies on const tracking let side table.
+DEFINE_IMPLICATION(script_context_mutable_heap_number, const_tracking_let)
+
 DEFINE_UINT(max_opt, 999,
             "Set the maximal optimisation tier: "
             "> 3 == any, 0 == ignition/interpreter, 1 == sparkplug/baseline, "

@@ -73,8 +73,8 @@ TNode<JSObject> ObjectBuiltinsAssembler::ConstructAccessorDescriptor(
     TNode<Context> context, TNode<Object> getter, TNode<Object> setter,
     TNode<BoolT> enumerable, TNode<BoolT> configurable) {
   TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> map = CAST(LoadContextElement(
-      native_context, Context::ACCESSOR_PROPERTY_DESCRIPTOR_MAP_INDEX));
+  TNode<Map> map = LoadContextElementAsMap(
+      native_context, Context::ACCESSOR_PROPERTY_DESCRIPTOR_MAP_INDEX);
   TNode<JSObject> js_desc = AllocateJSObjectFromMap(map);
 
   StoreObjectFieldNoWriteBarrier(
@@ -95,8 +95,8 @@ TNode<JSObject> ObjectBuiltinsAssembler::ConstructDataDescriptor(
     TNode<Context> context, TNode<Object> value, TNode<BoolT> writable,
     TNode<BoolT> enumerable, TNode<BoolT> configurable) {
   TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> map = CAST(LoadContextElement(
-      native_context, Context::DATA_PROPERTY_DESCRIPTOR_MAP_INDEX));
+  TNode<Map> map = LoadContextElementAsMap(
+      native_context, Context::DATA_PROPERTY_DESCRIPTOR_MAP_INDEX);
   TNode<JSObject> js_desc = AllocateJSObjectFromMap(map);
 
   StoreObjectFieldNoWriteBarrier(js_desc,
@@ -1333,8 +1333,8 @@ TF_BUILTIN(CreateIterResultObject, ObjectBuiltinsAssembler) {
   const auto context = Parameter<Context>(Descriptor::kContext);
 
   const TNode<NativeContext> native_context = LoadNativeContext(context);
-  const TNode<Map> map = CAST(
-      LoadContextElement(native_context, Context::ITERATOR_RESULT_MAP_INDEX));
+  const TNode<Map> map = LoadContextElementAsMap(
+      native_context, Context::ITERATOR_RESULT_MAP_INDEX);
 
   const TNode<JSObject> result = AllocateJSObjectFromMap(map);
 
@@ -1606,8 +1606,8 @@ TNode<JSObject> ObjectBuiltinsAssembler::FromPropertyDescriptor(
   BIND(&if_generic_desc);
   {
     TNode<NativeContext> native_context = LoadNativeContext(context);
-    TNode<Map> map = CAST(LoadContextElement(
-        native_context, Context::SLOW_OBJECT_WITH_OBJECT_PROTOTYPE_MAP));
+    TNode<Map> map = LoadContextElementAsMap(
+        native_context, Context::SLOW_OBJECT_WITH_OBJECT_PROTOTYPE_MAP);
     // We want to preallocate the slots for value, writable, get, set,
     // enumerable and configurable - a total of 6
     TNode<HeapObject> properties = AllocatePropertyDictionary(6);
