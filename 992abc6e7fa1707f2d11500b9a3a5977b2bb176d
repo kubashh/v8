@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fe1e9701_ce54a1f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-10T08:58:40Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d4a12725_ebb9020e",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "I mean they are constexpr, so this would only help in terms of conciseness and the whole `kWasmStringRef` vs. `kWasmRefString` continues to cause confusions, so those short names are sometimes also just a risk.",
       "parentUuid": "d4a12725_ebb9020e",
+      "range": {
+        "startLine": 3797,
+        "startChar": 16,
+        "endLine": 3797,
+        "endChar": 63
+      },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b668a588_00b19214",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3797,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-10T08:58:40Z",
+      "side": 1,
+      "message": "I like the idea of introducing constants to avoid boilerplate here. I would suggest `wasm::kCanonicalI64`.",
+      "parentUuid": "2a7b3f9e_c4ebcf76",
       "range": {
         "startLine": 3797,
         "startChar": 16,
@@ -124,6 +165,23 @@
         "endLine": 429,
         "endChar": 27
       },
+      "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5159fee_c3141732",
+        "filename": "src/compiler/wasm-compiler-definitions.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-10T08:58:40Z",
+      "side": 1,
+      "message": "I was considering to propose that we pass a reinterpret_cast\u0027ed `FunctionSig*` here, since we don\u0027t seem to care if it\u0027s canonicalized or not. But I think this opens the door for more confusion of the two, so in the end I support this templatized version.",
       "revId": "992abc6e7fa1707f2d11500b9a3a5977b2bb176d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
