@@ -568,6 +568,9 @@ class V8_EXPORT_PRIVATE RelocIterator : public RelocIteratorBase<RelocInfo> {
   explicit RelocIterator(EmbeddedData* embedded_data, Tagged<Code> code,
                          int mode_mask);
 
+  explicit RelocIterator(EmbeddedData* embedded_data, Tagged<Code> code,
+                         size_t isx_idx, int mode_mask);
+
   RelocIterator(RelocIterator&&) V8_NOEXCEPT = default;
   RelocIterator(const RelocIterator&) = delete;
   RelocIterator& operator=(const RelocIterator&) = delete;

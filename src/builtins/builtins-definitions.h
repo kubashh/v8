@@ -2268,6 +2268,13 @@ namespace internal {
                IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, \
                V)
 
+// V8 should keep the order of ISX same as original builtin order, please see
+// WriteISXBuiltin.
+#define BUILTIN_ISX_LIST(CPP, TSJ, TFJ, TSC, TFC, TFS, TFH, BCH, ASM)      \
+  TFH(KeyedStoreIC_SloppyArguments_NoTransitionHandleCOW, StoreWithVector) \
+  TFH(StoreFastElementIC_InBounds, StoreWithVector)                        \
+  TFH(StoreFastElementIC_NoTransitionGrowAndHandleCOW, StoreWithVector)
+
 }  // namespace internal
 }  // namespace v8
 

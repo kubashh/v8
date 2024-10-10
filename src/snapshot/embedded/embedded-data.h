@@ -57,6 +57,8 @@ class EmbeddedData final {
   // Create the embedded blob from the given Isolate's heap state.
   static EmbeddedData NewFromIsolate(Isolate* isolate);
 
+  void UpdateForISXBuiltin();
+
   // Returns the global embedded blob (usually physically located in .text and
   // .rodata).
   static EmbeddedData FromBlob() {
@@ -138,11 +140,14 @@ class EmbeddedData final {
   }
 
   inline Address InstructionStartOf(Builtin builtin) const;
+  inline Address InstructionStartOfISX(size_t isx_idx) const;
   inline Address InstructionEndOf(Builtin builtin) const;
   inline uint32_t InstructionSizeOf(Builtin builtin) const;
+  inline uint32_t InstructionSizeOfISX(size_t isx_idx) const;
   inline Address InstructionStartOfBytecodeHandlers() const;
   inline Address InstructionEndOfBytecodeHandlers() const;
   inline Address MetadataStartOf(Builtin builtin) const;
+  inline Address MetadataStartOfISX(size_t isx_idx) const;
 
   uint32_t AddressForHashing(Address addr) {
     DCHECK(IsInCodeRange(addr));
@@ -152,6 +157,8 @@ class EmbeddedData final {
 
   // Padded with kCodeAlignment.
   inline uint32_t PaddedInstructionSizeOf(Builtin builtin) const;
+
+  inline uint32_t PaddedInstructionSizeOfISX(size_t isx_idx) const;
 
   size_t CreateEmbeddedBlobDataHash() const;
   size_t CreateEmbeddedBlobCodeHash() const;
@@ -241,7 +248,10 @@ class EmbeddedData final {
     return IsolateHashOffset() + IsolateHashSize();
   }
   static constexpr uint32_t LayoutDescriptionTableSize() {
-    return sizeof(struct LayoutDescription) * kTableSize;
+    return sizeof(struct LayoutDescription) *
+           (kTableSize + static_cast<uint32_t>(Builtins::kBuiltinISXCount));
+    // return sizeof(struct LayoutDescription) * (kTableSize +
+    // static_cast<uint32_t>(Builtin_ISX::kCount));
   }
   static constexpr uint32_t BuiltinLookupEntryTableOffset() {
     return LayoutDescriptionTableOffset() + LayoutDescriptionTableSize();
@@ -276,6 +286,15 @@ class EmbeddedData final {
             data_ + LayoutDescriptionTableOffset());
     return descs[static_cast<int>(builtin)];
   }
+
+  const struct LayoutDescription& LayoutDescriptionForISX(size_t idx) const {
+    const struct LayoutDescription* descs =
+        reinterpret_cast<const struct LayoutDescription*>(
+            data_ + LayoutDescriptionTableOffset());
+    return descs[static_cast<int>(Builtins::kBuiltinCount + idx)];
+  }
+
+  void UpdateForISXBuiltinImpl(Builtin b);
 
   const BuiltinLookupEntry* BuiltinLookupEntry(
       ReorderedBuiltinIndex index) const {
