@@ -1627,14 +1627,17 @@ class ValueHelper final {
  public:
 #ifdef V8_ENABLE_DIRECT_HANDLE
   static constexpr Address kTaggedNullAddress = 1;
-  static constexpr Address kEmpty = kTaggedNullAddress;
+
+  using InternalType = internal::Address;
+  static constexpr InternalType kEmpty = kTaggedNullAddress;
 #else
-  static constexpr Address kEmpty = kNullAddress;
+  using InternalType = internal::Address*;
+  static constexpr InternalType kEmpty = nullptr;
 #endif  // V8_ENABLE_DIRECT_HANDLE
 
   template <typename T>
   V8_INLINE static bool IsEmpty(T* value) {
-    return reinterpret_cast<Address>(value) == kEmpty;
+    return ValueAsInternal(value) == kEmpty;
   }
 
   // Returns a handle's "value" for all kinds of abstract handles. For Local,
@@ -1661,6 +1664,16 @@ class ValueHelper final {
     return *reinterpret_cast<T**>(slot);
   }
 
+  template <typename T>
+  V8_INLINE static InternalType ValueAsInternal(const T* value) {
+    return reinterpret_cast<InternalType>(value);
+  }
+
+  template <typename T>
+  V8_INLINE static T* InternalAsValue(InternalType internal) {
+    return reinterpret_cast<T*>(internal);
+  }
+
 #else  // !V8_ENABLE_DIRECT_HANDLE
 
   template <typename T>
@@ -1671,6 +1684,16 @@ class ValueHelper final {
   template <typename T, bool check_null = true, typename S>
   V8_INLINE static T* SlotAsValue(S* slot) {
     return reinterpret_cast<T*>(slot);
+  }
+
+  template <typename T>
+  V8_INLINE static InternalType ValueAsInternal(const T* value) {
+    return const_cast<InternalType>(reinterpret_cast<const Address*>(value));
+  }
+
+  template <typename T>
+  V8_INLINE static T* InternalAsValue(InternalType internal) {
+    return reinterpret_cast<T*>(internal);
   }
 
 #endif  // V8_ENABLE_DIRECT_HANDLE

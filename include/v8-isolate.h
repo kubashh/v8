@@ -1758,7 +1758,7 @@ class V8_EXPORT Isolate {
   template <class K, class V, class Traits>
   friend class PersistentValueMapBase;
 
-  internal::Address* GetDataFromSnapshotOnce(size_t index);
+  internal::ValueHelper::InternalType GetDataFromSnapshotOnce(size_t index);
   void HandleExternalMemoryInterrupt();
 };
 
@@ -1779,10 +1779,11 @@ uint32_t Isolate::GetNumberOfDataSlots() {
 
 template <class T>
 MaybeLocal<T> Isolate::GetDataFromSnapshotOnce(size_t index) {
-  if (auto slot = GetDataFromSnapshotOnce(index); slot) {
+  if (auto internal = GetDataFromSnapshotOnce(index);
+      internal != internal::ValueHelper::kEmpty) {
     internal::PerformCastCheck(
-        internal::ValueHelper::SlotAsValue<T, false>(slot));
-    return Local<T>::FromSlot(slot);
+        internal::ValueHelper::InternalAsValue<T>(internal));
+    return Local<T>::FromInternal(internal);
   }
   return {};
 }
