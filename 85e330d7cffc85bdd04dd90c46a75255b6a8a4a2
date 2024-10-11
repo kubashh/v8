@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aad93162_014e7872",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-11T21:45:15Z",
+      "side": 1,
+      "message": "Done, as we discussed offline.",
+      "parentUuid": "252806ae_751e9f1e",
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1521ae5b_165b19e1",
