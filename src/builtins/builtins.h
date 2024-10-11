@@ -204,7 +204,7 @@ class Builtins {
   static CallInterfaceDescriptor CallInterfaceDescriptorFor(Builtin builtin);
   V8_EXPORT_PRIVATE static Callable CallableFor(Isolate* isolate,
                                                 Builtin builtin);
-  static bool HasJSLinkage(Builtin builtin);
+  V8_EXPORT_PRIVATE static bool HasJSLinkage(Builtin builtin);
 
   // Returns the number builtin's parameters passed on the stack.
   V8_EXPORT_PRIVATE static int GetStackParameterCount(Builtin builtin);
