@@ -150,6 +150,9 @@ class V8FileLogger : public LogEventListener {
   // Emits an event with an int value -> (name, value).
   void IntPtrTEvent(const char* name, intptr_t value);
 
+  // Emits cache info
+  void CacheInfo(const char* info);
+
   // Emits memory management events for C allocated structures.
   void NewEvent(const char* name, void* object, size_t size);
   void DeleteEvent(const char* name, void* object);

@@ -226,7 +226,7 @@ bool Scavenger::HandleLargeObject(Tagged<Map> map, Tagged<HeapObject> object,
   }
   return false;
 }
-
+#define FIELD_ADDR(p, offset) ((p).ptr() + offset - kHeapObjectTag)
 template <typename THeapObjectSlot,
           Scavenger::PromotionHeapChoice promotion_heap_choice>
 SlotCallbackResult Scavenger::EvacuateObjectDefault(
@@ -235,6 +235,10 @@ SlotCallbackResult Scavenger::EvacuateObjectDefault(
   static_assert(std::is_same<THeapObjectSlot, FullHeapObjectSlot>::value ||
                     std::is_same<THeapObjectSlot, HeapObjectSlot>::value,
                 "Only FullHeapObjectSlot and HeapObjectSlot are expected here");
+
+  EightWaySetAssociativeCache* cache_model_ = Heap::FromWritableHeapObject(object)->cache_model();
+  cache_model_->Access(reinterpret_cast<uintptr_t>(FIELD_ADDR(map, Map::kInstanceSizeInWordsOffset)), true, heap_dump::MemoryAccessReason::kFetchInstanceSize);
+
   SLOW_DCHECK(object->SizeFromMap(map) == object_size);
   CopyAndForwardResult result;
 
@@ -366,6 +370,10 @@ SlotCallbackResult Scavenger::EvacuateObject(THeapObjectSlot slot,
   int size = source->SizeFromMap(map);
   // Cannot use ::cast() below because that would add checks in debug mode
   // that require re-reading the map.
+
+  EightWaySetAssociativeCache* cache_model_ = Heap::FromWritableHeapObject(source)->cache_model();
+  cache_model_->Access(reinterpret_cast<uintptr_t>(FIELD_ADDR(map, Map::kVisitorIdOffset)), true, heap_dump::MemoryAccessReason::kFetchVisitorId);
+
   VisitorId visitor_id = map->visitor_id();
   switch (visitor_id) {
     case kVisitThinString:
@@ -403,7 +411,11 @@ SlotCallbackResult Scavenger::ScavengeObject(THeapObjectSlot p,
   // Synchronized load that consumes the publishing CAS of MigrateObject. We
   // need memory ordering in order to read the page header of the forwarded
   // object (using Heap::InYoungGeneration).
+
   MapWord first_word = object->map_word(kAcquireLoad);
+
+  EightWaySetAssociativeCache* cache_model = Heap::FromWritableHeapObject(object)->cache_model();
+  cache_model->Access(reinterpret_cast<uintptr_t>(first_word.ptr()), true, heap_dump::MemoryAccessReason::kObjectFirstWord);
 
   // If the first word is a forwarding address, the object has already been
   // copied.
@@ -472,6 +484,7 @@ class ScavengeVisitor final : public NewSpaceVisitor<ScavengeVisitor> {
     return false;
   }
 
+  EightWaySetAssociativeCache* const cache_model_;
  private:
   template <typename TSlot>
   V8_INLINE void VisitHeapObjectImpl(TSlot slot,

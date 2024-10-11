@@ -30,6 +30,7 @@
 #include "src/common/globals.h"
 #include "src/heap/allocation-observer.h"
 #include "src/heap/allocation-result.h"
+#include "src/heap/cache-model.h"
 #include "src/heap/gc-callbacks.h"
 #include "src/heap/heap-allocator.h"
 #include "src/heap/marking-state.h"
@@ -75,6 +76,7 @@ class HeapTester;
 class TestMemoryAllocatorScope;
 }  // namespace heap
 
+class EightWaySetAssociativeCache;
 class ArrayBufferCollector;
 class ArrayBufferSweeper;
 class BackingStore;
@@ -1078,6 +1080,9 @@ class Heap final {
     return incremental_marking_.get();
   }
 
+  EightWaySetAssociativeCache* cache_model() const {
+    return cache_model_.get();
+  }
   // ===========================================================================
   // Concurrent marking API. ===================================================
   // ===========================================================================
@@ -2271,6 +2276,7 @@ class Heap final {
 
   std::unique_ptr<MemoryAllocator> memory_allocator_;
   std::unique_ptr<IncrementalMarking> incremental_marking_;
+  std::unique_ptr<EightWaySetAssociativeCache> cache_model_;
   std::unique_ptr<ConcurrentMarking> concurrent_marking_;
   std::unique_ptr<MemoryMeasurement> memory_measurement_;
   std::unique_ptr<MemoryReducer> memory_reducer_;

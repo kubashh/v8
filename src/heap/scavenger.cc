@@ -7,6 +7,7 @@
 #include <atomic>
 #include <optional>
 
+#include "src/logging/log.h"
 #include "src/common/globals.h"
 #include "src/handles/global-handles.h"
 #include "src/heap/array-buffer-sweeper.h"
@@ -43,8 +44,9 @@ class IterateAndScavengePromotedObjectsVisitor final : public ObjectVisitor {
  public:
   IterateAndScavengePromotedObjectsVisitor(Scavenger* scavenger,
                                            bool record_slots)
-      : scavenger_(scavenger), record_slots_(record_slots) {}
+      : cache_model_(scavenger->heap()->cache_model()), scavenger_(scavenger), record_slots_(record_slots) {}
 
+  EightWaySetAssociativeCache* const cache_model_;
   V8_INLINE void VisitMapPointer(Tagged<HeapObject> host) final {
     if (!record_slots_) return;
     MapWord map_word = host->map_word(kRelaxedLoad);
@@ -367,6 +369,13 @@ class V8_NODISCARD ScopedFullHeapCrashKey {
 void ScavengerCollector::CollectGarbage() {
   ScopedFullHeapCrashKey collect_full_heap_dump_if_crash(isolate_);
 
+  heap_->cache_model()->InvalidateCache();
+  {
+    LOG(heap_->isolate(), CacheInfo("Scavenger: Start collecting..."));
+    std::string s = std::format("Used heap size: {}",  heap_->SizeOfObjects());
+    LOG(heap_->isolate(), CacheInfo(s.c_str()));
+  }
+
   auto* new_space = SemiSpaceNewSpace::From(heap_->new_space());
   new_space->GarbageCollectionPrologue();
   new_space->EvacuatePrologue();
@@ -569,6 +578,14 @@ void ScavengerCollector::CollectGarbage() {
 
   isolate_->global_handles()->UpdateListOfYoungNodes();
   isolate_->traced_handles()->UpdateListOfYoungNodes();
+
+  heap_->cache_model()->DumpCacheHitRate();
+  {
+    LOG(heap_->isolate(), CacheInfo("Scavenger: Completed..."));
+    std::string s = std::format("After scavenging: Survived YoungObj size: {}, Used heap size: {}",
+        heap_->SurvivedYoungObjectSize(),  heap_->SizeOfObjects());
+    LOG(heap_->isolate(), CacheInfo(s.c_str()));
+  }
 
   // Update how much has survived scavenge.
   heap_->IncrementYoungSurvivorsCounter(heap_->SurvivedYoungObjectSize());
@@ -993,6 +1010,7 @@ RootScavengeVisitor::RootScavengeVisitor(Scavenger* scavenger)
 
 ScavengeVisitor::ScavengeVisitor(Scavenger* scavenger)
     : NewSpaceVisitor<ScavengeVisitor>(scavenger->heap()->isolate()),
+      cache_model_(scavenger->heap()->cache_model()),
       scavenger_(scavenger) {}
 
 }  // namespace internal
