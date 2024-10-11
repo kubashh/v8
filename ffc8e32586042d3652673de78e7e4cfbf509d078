@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "365f86d3_d019801a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-11T12:33:34Z",
+      "side": 1,
+      "message": "Wrong bug. This should have been the one:\nhttps://crbug.com/40286021",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 14
+      },
+      "revId": "ffc8e32586042d3652673de78e7e4cfbf509d078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
