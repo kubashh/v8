@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ccaf132_2aa939fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-11T06:35:40Z",
+      "side": 1,
+      "message": "I tried to explain it in #1 in the commit message.\n\u003e ... an abstract type for the internal representation of a handle; to be\n\u003e  precise, this type corresponds to the internal representation of\n\u003e  `v8::Local` and `v8::internal::DirectHandle`. As of now, it is `Address*`\n\u003e  in production builds, where indirect handles are used everywhere,\n\u003e  or `Address` in the CSS build, where direct handles are enabled.\n\nEssentially, if you have:\n```\nv8::Local\u003cT\u003e x;\nauto repr \u003d x.repr();\nv8::Local\u003cT\u003e y \u003d v8::Local\u003cT\u003e::FromRepr(repr);\n```\nyou end up with the exact same local.\n\nI can add that to a comment in v8-internal.h too.",
+      "parentUuid": "448d8e00_0138e981",
+      "revId": "85e330d7cffc85bdd04dd90c46a75255b6a8a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1521ae5b_165b19e1",
         "filename": "include/v8-context.h",
         "patchSetId": 2
