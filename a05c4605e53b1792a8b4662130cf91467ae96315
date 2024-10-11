@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "768a22ba_30f5f34f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-10-11T18:22:37Z",
+      "side": 1,
+      "message": "Hi Darius,\n\nPlease let me know if you want the macro removed so it applies globally.",
+      "revId": "a05c4605e53b1792a8b4662130cf91467ae96315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
