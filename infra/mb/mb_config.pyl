@@ -543,7 +543,7 @@
     'release_arm64_no_pointer_compression_trybot': [
       'release_trybot', 'arm64', 'v8_disable_pointer_compression'],
     'release_android_arm': [
-      'release_bot', 'arm', 'android', 'minimal_symbols',
+      'release_bot', 'x86', 'android', 'minimal_symbols',
       'android_strip_outputs'],
     'release_android_arm64': [
       'release_bot', 'arm64', 'android', 'minimal_symbols',
