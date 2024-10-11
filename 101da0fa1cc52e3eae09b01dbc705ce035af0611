@@ -51,6 +51,24 @@
       "parentUuid": "54f3a768_f2610dda",
       "revId": "101da0fa1cc52e3eae09b01dbc705ce035af0611",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c80f91_6c19a439",
+        "filename": "test/unittests/compiler/x64/instruction-selector-x64-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2520,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-10-11T09:33:38Z",
+      "side": 1,
+      "message": "Thanks! :)",
+      "parentUuid": "62f3ef48_dda0ce34",
+      "revId": "101da0fa1cc52e3eae09b01dbc705ce035af0611",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
