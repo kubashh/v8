@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6552afef_ffadaa96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-11T10:27:15Z",
+      "side": 1,
+      "message": "PTAL. Next stage after https://crrev.com/c/5886352",
+      "revId": "2ba5e3c3f77cfd0ab183439a0486c15ab7b9d4a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
