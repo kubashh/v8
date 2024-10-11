@@ -7,6 +7,7 @@
 
 #include "src/base/build_config.h"
 #include "src/base/macros.h"
+#include "src/heap/cache-model.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/marking.h"
 #include "src/heap/memory-chunk-layout.h"
@@ -155,10 +156,19 @@ MarkingBitmap* MarkingBitmap::FromAddress(Address address) {
 }
 
 // static
+void MarkingBitmap::CacheMarkBitFromAddress(EightWaySetAssociativeCache* cache_model, Address address) {
+  const auto index = AddressToIndex(address);
+  MarkBit::CellType* cell = FromAddress(address)->cells() + IndexToCell(index);
+
+  cache_model->Access(reinterpret_cast<uintptr_t>(cell), true, heap_dump::MemoryAccessReason::kMarkingBitMap);
+}
+
+// static
 MarkBit MarkingBitmap::MarkBitFromAddress(Address address) {
   const auto index = AddressToIndex(address);
   const auto mask = IndexInCellMask(index);
   MarkBit::CellType* cell = FromAddress(address)->cells() + IndexToCell(index);
+
   return MarkBit(cell, mask);
 }
 
@@ -257,12 +267,20 @@ inline Address MarkingBitmap::FindPreviousValidObject(const PageMetadata* page,
 }
 
 // static
+MarkBit MarkBit::From(EightWaySetAssociativeCache* cache_model, Address address) {
+  MarkingBitmap::CacheMarkBitFromAddress(cache_model, address);
+  return MarkingBitmap::MarkBitFromAddress(address);
+}
+
+// static
 MarkBit MarkBit::From(Address address) {
   return MarkingBitmap::MarkBitFromAddress(address);
 }
 
 // static
 MarkBit MarkBit::From(Tagged<HeapObject> heap_object) {
+  EightWaySetAssociativeCache* cache_model = Heap::FromWritableHeapObject(heap_object)->cache_model();
+  MarkingBitmap::CacheMarkBitFromAddress(cache_model, heap_object.ptr());
   return MarkingBitmap::MarkBitFromAddress(heap_object.ptr());
 }
 

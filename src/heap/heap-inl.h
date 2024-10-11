@@ -292,7 +292,7 @@ bool Heap::InYoungGeneration(Tagged<HeapObject> heap_object) {
   if (v8_flags.sticky_mark_bits) {
     return !MemoryChunk::FromHeapObject(heap_object)
                 ->IsOnlyOldOrMajorMarkingOn() &&
-           !MarkBit::From(heap_object.address())
+           !MarkBit::From(Heap::FromWritableHeapObject(heap_object)->cache_model(), heap_object.address())
                 .template Get<AccessMode::ATOMIC>();
   }
   bool result = MemoryChunk::FromHeapObject(heap_object)->InYoungGeneration();

@@ -248,8 +248,8 @@ MemoryAllocator::AllocateUninitializedChunkAt(BaseSpace* space,
     }
   }
 
-  LOG(isolate_,
-      NewEvent("MemoryChunk", reinterpret_cast<void*>(base), chunk_size));
+  //LOG(isolate_,
+  //    NewEvent("MemoryChunk", reinterpret_cast<void*>(base), chunk_size));
 
   Address area_start = base + MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(
                                   space->identity());
@@ -337,7 +337,7 @@ void MemoryAllocator::UnregisterReadOnlyPage(ReadOnlyPageMetadata* page) {
 
 void MemoryAllocator::FreeReadOnlyPage(ReadOnlyPageMetadata* chunk) {
   DCHECK(!chunk->Chunk()->IsFlagSet(MemoryChunk::PRE_FREED));
-  LOG(isolate_, DeleteEvent("MemoryChunk", chunk));
+  //LOG(isolate_, DeleteEvent("MemoryChunk", chunk));
 
   UnregisterSharedMemoryChunk(chunk);
 
@@ -357,7 +357,7 @@ void MemoryAllocator::FreeReadOnlyPage(ReadOnlyPageMetadata* chunk) {
 void MemoryAllocator::PreFreeMemory(MutablePageMetadata* chunk_metadata) {
   MemoryChunk* chunk = chunk_metadata->Chunk();
   DCHECK(!chunk->IsFlagSet(MemoryChunk::PRE_FREED));
-  LOG(isolate_, DeleteEvent("MemoryChunk", chunk_metadata));
+  //LOG(isolate_, DeleteEvent("MemoryChunk", chunk_metadata));
   UnregisterMutableMemoryChunk(chunk_metadata);
   isolate_->heap()->RememberUnmappedPage(
       reinterpret_cast<Address>(chunk_metadata),

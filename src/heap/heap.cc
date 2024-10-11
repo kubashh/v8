@@ -5639,6 +5639,8 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
   incremental_marking_.reset(
       new IncrementalMarking(this, mark_compact_collector_->weak_objects()));
 
+  cache_model_.reset(new EightWaySetAssociativeCache(this, 64, 32 * 1024));
+
   if (v8_flags.concurrent_marking || v8_flags.parallel_marking) {
     concurrent_marking_.reset(
         new ConcurrentMarking(this, mark_compact_collector_->weak_objects()));

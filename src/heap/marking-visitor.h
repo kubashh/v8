@@ -8,6 +8,7 @@
 #include "src/base/logging.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate.h"
+#include "src/heap/cache-model.h"
 #include "src/heap/marking-state.h"
 #include "src/heap/marking-worklist.h"
 #include "src/heap/marking.h"
@@ -55,6 +56,7 @@ class MarkingVisitorBase : public ConcurrentHeapVisitor<int, ConcreteVisitor> {
                      bool should_keep_ages_unchanged,
                      uint16_t code_flushing_increase)
       : ConcurrentHeapVisitor<int, ConcreteVisitor>(heap->isolate()),
+        cache_model_(heap->cache_model()),
         local_marking_worklists_(local_marking_worklists),
         local_weak_objects_(local_weak_objects),
         heap_(heap),
@@ -78,6 +80,7 @@ class MarkingVisitorBase : public ConcurrentHeapVisitor<int, ConcreteVisitor> {
 #endif  // V8_ENABLE_SANDBOX
   {
   }
+  EightWaySetAssociativeCache* const cache_model_;
 
   V8_INLINE int VisitDescriptorArrayStrongly(Tagged<Map> map,
                                              Tagged<DescriptorArray> object);
