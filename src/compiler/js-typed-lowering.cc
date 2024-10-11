@@ -1949,6 +1949,10 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
       node->InsertInput(graph()->zone(), formal_count + 2, new_target);
       node->InsertInput(graph()->zone(), formal_count + 3,
                         jsgraph()->ConstantNoHole(JSParameterCount(arity)));
+#ifdef V8_ENABLE_LEAPTIERING
+      node->InsertInput(graph()->zone(), formal_count + 4,
+                        jsgraph()->ConstantNoHole(kPlaceholderDispatchHandle));
+#endif
       NodeProperties::ChangeOp(node,
                                common()->Call(Linkage::GetJSCallDescriptor(
                                    graph()->zone(), false, 1 + formal_count,
@@ -1972,6 +1976,10 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
       node->InsertInput(graph()->zone(), 2, new_target);
       node->InsertInput(graph()->zone(), 3,
                         jsgraph()->ConstantNoHole(JSParameterCount(arity)));
+#ifdef V8_ENABLE_LEAPTIERING
+      node->InsertInput(graph()->zone(), 4,
+                        jsgraph()->ConstantNoHole(kPlaceholderDispatchHandle));
+#endif
       NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
     } else {
       // Patch {node} to a direct call.
@@ -1979,6 +1987,10 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
       node->InsertInput(graph()->zone(), arity + 2, new_target);
       node->InsertInput(graph()->zone(), arity + 3,
                         jsgraph()->ConstantNoHole(JSParameterCount(arity)));
+#ifdef V8_ENABLE_LEAPTIERING
+      node->InsertInput(graph()->zone(), arity + 4,
+                        jsgraph()->ConstantNoHole(kPlaceholderDispatchHandle));
+#endif
       NodeProperties::ChangeOp(node,
                                common()->Call(Linkage::GetJSCallDescriptor(
                                    graph()->zone(), false, 1 + arity,
