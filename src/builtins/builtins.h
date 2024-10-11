@@ -167,6 +167,8 @@ class Builtins {
       ConvertReceiverMode = ConvertReceiverMode::kAny);
   static inline constexpr Builtin Call(
       ConvertReceiverMode = ConvertReceiverMode::kAny);
+  // Whether the given builtin is one of the JS function call builtins.
+  static inline constexpr bool IsAnyCall(Builtin builtin);
 
   static inline constexpr Builtin NonPrimitiveToPrimitive(
       ToPrimitiveHint hint = ToPrimitiveHint::kDefault);
