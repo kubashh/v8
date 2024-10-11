@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d630d8e5_959dae6a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-10-11T12:33:40Z",
+      "side": 1,
+      "message": "JS_ARRAY_PROTOTYPE_TYPE is a nice idea but it\u0027s not as simple, because it\u0027s not a JS_OBJECT_TYPE but a JS_ARRAY_TYPE, and we don\u0027t have range checks for those. Changed the former though.",
+      "parentUuid": "b4144cf7_210627a0",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d79d4e4_eaf3604d",
         "filename": "src/execution/isolate-inl.h",
         "patchSetId": 2
