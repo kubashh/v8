@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e245d86_086e66eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-11T13:39:39Z",
+      "side": 1,
+      "message": "I think this CL now works correctly on both leaptiering and non-leaptiering configurations. I\u0027ve also split out some parts into a separate CL",
+      "revId": "c19c5fdc5634da3f0027102d6f2c64c24b157829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

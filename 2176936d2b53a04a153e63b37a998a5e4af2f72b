@@ -211,6 +211,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1907c661_6e4e0e2d",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-11T13:39:39Z",
+      "side": 1,
+      "message": "Well if we define `JSTrampolineDescriptor` as \"descriptor for code that can be installed on a JSFunction\", then the various kConstructX builtins should use a different descriptor. From a sandbox perspective, this also makes a difference because this descriptor is marked as `INTERNAL_DESCRIPTOR()` (so the builtins cannot directly be invoked from within the sandbox) while the `JSTrampolineDescriptor` is sandbox-exposed).",
+      "parentUuid": "800c40fc_db5f9f1b",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7f597d7a_4e7a1c2b",
         "filename": "src/compiler/code-assembler.h",
         "patchSetId": 12
@@ -222,6 +240,24 @@
       "writtenOn": "2024-10-08T12:12:08Z",
       "side": 1,
       "message": "There\u0027s a bit of misc. refactoring here, e.g. to split CallJS (used to call a JS callable object via a CallX builtin) and CallJSBuiltin (used to directly call a builtin with JS linkage). Happy to move this to a separate CL if you think that\u0027d be useful.",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4c9eeb4_b646b519",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-11T13:39:39Z",
+      "side": 1,
+      "message": "Moved into a separate CL now.",
+      "parentUuid": "7f597d7a_4e7a1c2b",
       "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
