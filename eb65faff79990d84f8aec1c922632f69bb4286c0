@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd513936_56651b0c",
+        "filename": "src/execution/isolate-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-10-11T13:47:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8d79d4e4_eaf3604d",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "843adfa2_e1a94aac",
@@ -118,6 +136,24 @@
       "writtenOn": "2024-10-11T12:23:48Z",
       "side": 1,
       "message": "Ditto: checking against (not existing yet) `JS_STRING_PROTOTYPE_TYPE` would be way cheaper.",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "399ca62d_6a492a77",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6116,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-10-11T13:47:09Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "843adfa2_e1a94aac",
       "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
