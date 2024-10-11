@@ -16,6 +16,74 @@
       "message": "ptal",
       "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1fdfde1_1d021da4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-11T12:23:48Z",
+      "side": 1,
+      "message": "it feels like we can dramatically simplify this stuff",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4144cf7_210627a0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-11T12:23:48Z",
+      "side": 1,
+      "message": "It feels like it should be enough to just check the instance type against `JS_OBJECT_PROTOTYPE_TYPE` and (not existing yet) `JS_ARRAY_PROTOTYPE_TYPE`. Is it important that the object must belong to the same creation context?",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d79d4e4_eaf3604d",
+        "filename": "src/execution/isolate-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-11T12:23:48Z",
+      "side": 1,
+      "message": "Ditto: checking against `JS_ARRAY_PROTOTYPE_TYPE` would be way cheaper.",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "843adfa2_e1a94aac",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6116,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-11T12:23:48Z",
+      "side": 1,
+      "message": "Ditto: checking against (not existing yet) `JS_STRING_PROTOTYPE_TYPE` would be way cheaper.",
+      "revId": "eb65faff79990d84f8aec1c922632f69bb4286c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
