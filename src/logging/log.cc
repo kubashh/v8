@@ -1329,6 +1329,14 @@ bool V8FileLogger::is_logging() {
 TIMER_EVENTS_LIST(V)
 #undef V
 
+void V8FileLogger::CacheInfo(const char* info) {
+  if (!v8_flags.log) return;
+  VMStateIfMainThread<LOGGING> state(isolate_);
+  MSG_BUILDER();
+  msg << "Cache" << kNext << info;
+  msg.WriteToLogFile();
+}
+
 void V8FileLogger::NewEvent(const char* name, void* object, size_t size) {
   if (!v8_flags.log) return;
   VMStateIfMainThread<LOGGING> state(isolate_);

@@ -23,6 +23,7 @@ YoungGenerationMarkingVisitor<marking_mode>::YoungGenerationMarkingVisitor(
     Heap* heap,
     PretenuringHandler::PretenuringFeedbackMap* local_pretenuring_feedback)
     : Base(heap->isolate()),
+      cache_model_(heap->cache_model()),
       isolate_(heap->isolate()),
       marking_worklists_local_(
           heap->minor_mark_sweep_collector()->marking_worklists(),

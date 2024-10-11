@@ -358,6 +358,8 @@ void MarkCompactCollector::StartMarking() {
   // The state for background thread is saved here and maintained for the whole
   // GC cycle. Both CppHeap and regular V8 heap will refer to this flag.
   use_background_threads_in_cycle_ = heap_->ShouldUseBackgroundThreads();
+  LOG(heap_->isolate(), CacheInfo("Start Marking"));
+  heap_->cache_model()->InvalidateCache();
 
   if (v8_flags.sticky_mark_bits) {
     heap()->Unmark();
@@ -455,6 +457,9 @@ void MarkCompactCollector::CollectGarbage() {
   }
 
   heap_->memory_measurement()->FinishProcessing(native_context_stats_);
+
+  heap_->cache_model()->DumpCacheHitRate();
+  LOG(heap_->isolate(), CacheInfo("Finished Marking"));
 
   Sweep();
   Evacuate();

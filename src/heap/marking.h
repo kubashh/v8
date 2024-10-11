@@ -9,6 +9,7 @@
 
 #include "src/base/atomic-utils.h"
 #include "src/common/globals.h"
+#include "src/heap/cache-model.h"
 #include "src/heap/marking-worklist.h"
 #include "src/objects/heap-object.h"
 #include "src/objects/map.h"
@@ -23,6 +24,7 @@ class MarkBit final {
   using CellType = uintptr_t;
   static_assert(sizeof(CellType) == sizeof(base::AtomicWord));
 
+  V8_ALLOW_UNUSED static inline MarkBit From(EightWaySetAssociativeCache*, Address);
   V8_ALLOW_UNUSED static inline MarkBit From(Address);
   V8_ALLOW_UNUSED static inline MarkBit From(Tagged<HeapObject>);
 
@@ -146,6 +148,8 @@ class V8_EXPORT_PRIVATE MarkingBitmap final {
   V8_INLINE static MarkingBitmap* Cast(Address addr) {
     return reinterpret_cast<MarkingBitmap*>(addr);
   }
+
+  V8_INLINE static void CacheMarkBitFromAddress(EightWaySetAssociativeCache* cache_model, Address address);
 
   // Gets the MarkBit for an `address` which may be unaligned (include the tag
   // bit).

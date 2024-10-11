@@ -429,6 +429,7 @@ class PromotedPageRecordMigratedSlotVisitor final
   explicit PromotedPageRecordMigratedSlotVisitor(MutablePageMetadata* host_page)
       : NewSpaceVisitor<PromotedPageRecordMigratedSlotVisitor>(
             host_page->heap()->isolate()),
+        cache_model_(host_page->heap()->cache_model()),
         host_chunk_(host_page->Chunk()),
         host_page_(host_page),
         ephemeron_remembered_set_(
@@ -437,6 +438,7 @@ class PromotedPageRecordMigratedSlotVisitor final
            host_page->owner_identity() == LO_SPACE);
   }
 
+  EightWaySetAssociativeCache* const cache_model_;
   void Process(Tagged<HeapObject> object) {
     Tagged<Map> map = object->map(cage_base());
     if (Map::ObjectFieldsFrom(map->visitor_id()) == ObjectFields::kDataOnly) {

@@ -19,6 +19,7 @@
 #include "src/objects/js-weak-refs-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/map.h"
+#include "src/objects/map-inl.h"
 #include "src/objects/module-inl.h"
 #include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/objects-inl.h"
@@ -96,6 +97,12 @@ template <typename ResultType, typename ConcreteVisitor>
 ResultType HeapVisitor<ResultType, ConcreteVisitor>::Visit(
     Tagged<Map> map, Tagged<HeapObject> object) {
   ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
+
+#define FIELD_ADDR(p, offset) ((p).ptr() + offset - kHeapObjectTag)
+
+  EightWaySetAssociativeCache* cache_model_ = visitor->cache_model_;
+  cache_model_->Access(reinterpret_cast<uintptr_t>(FIELD_ADDR(map, Map::kVisitorIdOffset)), true, heap_dump::MemoryAccessReason::kFetchVisitorId);
+
   switch (map->visitor_id()) {
 #define CASE(TypeName)                                                        \
   case kVisit##TypeName:                                                      \
@@ -269,6 +276,10 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitJSObjectSubclass(
 
   ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
   visitor->template VisitMapPointerIfNeeded<VisitorId::kVisitJSObject>(object);
+
+  EightWaySetAssociativeCache* cache_model_ = visitor->cache_model_;
+  cache_model_->Access(reinterpret_cast<uintptr_t>(FIELD_ADDR(map, Map::kInstanceSizeInWordsOffset)), true, heap_dump::MemoryAccessReason::kInstanceSizeInWordsOffset);
+
   const int used_size = map->UsedInstanceSize();
   // It is important to visit only the used field and ignore the slack fields
   // because the slack fields may be trimmed concurrently and we don't want to
@@ -302,6 +313,9 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitWithBodyDescriptor(
 
   ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
   visitor->template VisitMapPointerIfNeeded<visitor_id>(object);
+
+  EightWaySetAssociativeCache* cache_model_ = visitor->cache_model_;
+  cache_model_->Access(reinterpret_cast<uintptr_t>(FIELD_ADDR(map, Map::kInstanceSizeInWordsOffset)), true, heap_dump::MemoryAccessReason::kInstanceSizeInWordsOffset);
   const int size = TBodyDescriptor::SizeOf(map, object);
   TBodyDescriptor::IterateBody(map, object, size, visitor);
   return size;
@@ -380,7 +394,10 @@ ConcurrentHeapVisitor<ResultType, ConcreteVisitor>::VisitStringLocked(
   // The object has been locked. At this point shared read access is
   // guaranteed but we must re-read the map and check whether the string has
   // transitioned.
+
   Tagged<Map> map = object->map();
+  EightWaySetAssociativeCache* cache_model_ = visitor->cache_model_;
+  cache_model_->Access(reinterpret_cast<uintptr_t>(FIELD_ADDR(map, Map::kVisitorIdOffset)), true, heap_dump::MemoryAccessReason::kFetchVisitorId);
   int size;
   switch (map->visitor_id()) {
 #define UNSAFE_STRING_TRANSITION_TARGET_CASE(VisitorIdType, TypeName)         \

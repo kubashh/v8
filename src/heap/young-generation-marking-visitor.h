@@ -23,7 +23,7 @@ class YoungGenerationMarkingVisitor final
     : public NewSpaceVisitor<YoungGenerationMarkingVisitor<marking_mode>> {
  public:
   using Base = NewSpaceVisitor<YoungGenerationMarkingVisitor<marking_mode>>;
-
+  EightWaySetAssociativeCache* const cache_model_;
   enum class ObjectVisitationMode {
     kVisitDirectly,
     kPushToWorklist,
