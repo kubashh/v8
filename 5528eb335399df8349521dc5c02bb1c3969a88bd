@@ -94,6 +94,30 @@
       },
       "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f865fc97_16523658",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3231,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-11T12:39:57Z",
+      "side": 1,
+      "message": "Now done with https://chromium-review.googlesource.com/c/v8/v8/+/5925256",
+      "parentUuid": "a51e7dbd_d458fc7d",
+      "range": {
+        "startLine": 3230,
+        "startChar": 0,
+        "endLine": 3231,
+        "endChar": 9
+      },
+      "revId": "5528eb335399df8349521dc5c02bb1c3969a88bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
