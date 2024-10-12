@@ -16,6 +16,23 @@
       "message": "PTAL, Thanks!",
       "revId": "59073aa5c78878acf10c942066f9d63c4fe5e70e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97d9b3b3_2411655c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2024-10-12T14:04:55Z",
+      "side": 1,
+      "message": "Oh sorry about that, I build and tested the CL on an Arm64 Windows machine rather than x64, as I didn\u0027t think x64 would be impacted, as the assembler shouldn\u0027t need a Zone there.\n\nLGTM anyways!\n\nThanks,\nPierre",
+      "revId": "59073aa5c78878acf10c942066f9d63c4fe5e70e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
