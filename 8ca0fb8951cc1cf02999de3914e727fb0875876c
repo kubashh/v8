@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb32b3f_3a799914",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-14T10:23:03Z",
+      "side": 1,
+      "message": "nit: `functionality`",
+      "range": {
+        "startLine": 19,
+        "startChar": 25,
+        "endLine": 19,
+        "endChar": 38
+      },
+      "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0c184e20_d85e48a1",
@@ -31,6 +54,23 @@
       "writtenOn": "2024-04-15T12:41:19Z",
       "side": 1,
       "message": "LGTM with comments.",
+      "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f684124_56a4072c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-14T10:23:03Z",
+      "side": 1,
+      "message": "What\u0027s the state of this CL?",
       "revId": "8ca0fb8951cc1cf02999de3914e727fb0875876c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
