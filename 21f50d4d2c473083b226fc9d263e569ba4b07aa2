@@ -97,6 +97,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c7804f1e_048bd80b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-14T11:45:38Z",
+      "side": 1,
+      "message": "Ah I see. Yeah a \"partially-reserved\" sandbox is not as secure as a \"full\" sandbox as unrelated memory mappings might end up inside the sandbox address space where an attacker could corrupt them. Probably we\u0027ll eventually want to drop support for this feature, but there are currently no plans to do that.",
+      "parentUuid": "9fcf7e3c_0027449e",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 25
+      },
+      "revId": "21f50d4d2c473083b226fc9d263e569ba4b07aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "64b31781_6533319c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
