@@ -181,6 +181,15 @@ std::ostream& operator<<(std::ostream& os, GenericUnopOp::Kind kind) {
   }
 }
 
+std::ostream& operator<<(std::ostream& os, ReinterpretWord32SignOp::Sign sign) {
+  switch (sign) {
+    case ReinterpretWord32SignOp::Sign::kSigned:
+      return os << "Signed";
+    case ReinterpretWord32SignOp::Sign::kUnsigned:
+      return os << "Unsigned";
+  }
+}
+
 std::ostream& operator<<(std::ostream& os, WordUnaryOp::Kind kind) {
   switch (kind) {
     case WordUnaryOp::Kind::kReverseBytes:
