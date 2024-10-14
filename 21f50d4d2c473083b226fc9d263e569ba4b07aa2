@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca8c5d41_26645688",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-10-14T11:29:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab277d6d_05a4a78c",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "21f50d4d2c473083b226fc9d263e569ba4b07aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1edf066_1402c53b",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-14T09:02:30Z",
       "side": 1,
       "message": "Where does that happen? Isn\u0027t the sandbox now always 1TB?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 25
+      },
+      "revId": "21f50d4d2c473083b226fc9d263e569ba4b07aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fcf7e3c_0027449e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2024-10-14T11:29:50Z",
+      "side": 1,
+      "message": "It seems that if sandbox failed to initialize with default size, it will try to allocate smaller memory space: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/sandbox/sandbox.cc;l\u003d127;drc\u003d59da32f5027e5a1c01f1b353f4144bd471b7757a.\n\nAnd according to my test, sandbox will actually allocate 512GB or 256GB memory on LoongArch abi1.0 system, I updated the inaccurate commit message.\n\nThis \"partially-reserved\" situation seems to cause `SandboxTest.Contains` unittest to fail, not sure how bad it will influence real world application.",
+      "parentUuid": "a1edf066_1402c53b",
       "range": {
         "startLine": 19,
         "startChar": 0,
