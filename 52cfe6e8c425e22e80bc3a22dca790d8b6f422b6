@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d2cbd04_6b5ac61d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-14T10:15:50Z",
+      "side": 1,
+      "message": "Nikos, Michi, both PTAL. This would be helpful for me to get DirectHandle compilation errors early when touching code that is partially DirectHandle ported (rather than getting those errors on CQ).",
+      "revId": "52cfe6e8c425e22e80bc3a22dca790d8b6f422b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
