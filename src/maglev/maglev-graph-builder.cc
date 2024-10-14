@@ -2678,6 +2678,8 @@ bool MaglevGraphBuilder::TryReduceCompareEqualAgainstConstant() {
 
 template <Operation kOperation>
 void MaglevGraphBuilder::VisitCompareOperation() {
+  if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
+
   // Compare opcodes are not always commutative. We sort the ones which are for
   // better CSE coverage.
   auto SortCommute = [](ValueNode*& left, ValueNode*& right) {
@@ -2690,6 +2692,30 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       std::swap(left, right);
     }
   };
+
+  auto TryConstantFoldInt32 = [&](ValueNode* left, ValueNode* right) {
+    if (left->Is<Int32Constant>() && right->Is<Int32Constant>()) {
+      int left_value = left->Cast<Int32Constant>()->value();
+      int right_value = right->Cast<Int32Constant>()->value();
+      SetAccumulator(GetBooleanConstant(
+          OperationValue<kOperation>(left_value, right_value)));
+      return true;
+    }
+    return false;
+  };
+
+  auto TryConstantFoldEqual = [&](ValueNode* left, ValueNode* right) {
+    if (left == right) {
+      SetAccumulator(
+          GetBooleanConstant(kOperation == Operation::kEqual ||
+                             kOperation == Operation::kStrictEqual ||
+                             kOperation == Operation::kLessThanOrEqual ||
+                             kOperation == Operation::kGreaterThanOrEqual));
+      return true;
+    }
+    return false;
+  };
+
   FeedbackNexus nexus = FeedbackNexusForOperand(1);
   switch (nexus.GetCompareOperationFeedback()) {
     case CompareOperationHint::kNone:
@@ -2701,43 +2727,50 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       // constants in different representations.
       ValueNode* left = GetInt32(LoadRegister(0));
       ValueNode* right = GetInt32(GetAccumulator());
-      if (left == right) {
-        SetAccumulator(
-            GetBooleanConstant(kOperation == Operation::kEqual ||
-                               kOperation == Operation::kStrictEqual ||
-                               kOperation == Operation::kLessThanOrEqual ||
-                               kOperation == Operation::kGreaterThanOrEqual));
-        return;
-      }
-      if (left->Is<Int32Constant>() && right->Is<Int32Constant>()) {
-        int left_value = left->Cast<Int32Constant>()->value();
-        int right_value = right->Cast<Int32Constant>()->value();
-        SetAccumulator(GetBooleanConstant(
-            OperationValue<kOperation>(left_value, right_value)));
-        return;
-      }
+      if (TryConstantFoldEqual(left, right)) return;
+      if (TryConstantFoldInt32(left, right)) return;
       SortCommute(left, right);
       SetAccumulator(AddNewNode<Int32Compare>({left, right}, kOperation));
       return;
     }
     case CompareOperationHint::kNumberOrBoolean:
-      if (kOperation != Operation::kEqual) {
-        if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
-        break;
-      }
-      [[fallthrough]];
     case CompareOperationHint::kNumber: {
-      // TODO(leszeks): we could support kNumberOrOddball with
-      // BranchIfFloat64Compare, but we'd need to special case comparing
-      // oddballs with NaN value (e.g. undefined) against themselves.
+      ValueNode* left = LoadRegister(0);
+      ValueNode* right = GetAccumulator();
+      if (left->value_representation() == ValueRepresentation::kInt32 &&
+          right->value_representation() == ValueRepresentation::kInt32) {
+        if (TryConstantFoldEqual(left, right)) return;
+        if (TryConstantFoldInt32(left, right)) return;
+        SortCommute(left, right);
+        SetAccumulator(AddNewNode<Int32Compare>({left, right}, kOperation));
+        return;
+      }
+      if (kOperation == Operation::kEqual &&
+          nexus.GetCompareOperationFeedback() !=
+              CompareOperationHint::kNumber) {
+        // TODO(leszeks): we could support kNumberOrOddball with
+        // BranchIfFloat64Compare, but we'd need to special case comparing
+        // oddballs with NaN value (e.g. undefined) against themselves.
+        // As long as we can show that at least one cannot be undefined we can
+        // proceed.
+        bool both_maybe_undefined =
+            !(left->value_representation() == ValueRepresentation::kInt32 ||
+              right->value_representation() == ValueRepresentation::kInt32 ||
+              CheckType(left, NodeType::kBoolean) ||
+              CheckType(left, NodeType::kNumber) ||
+              CheckType(right, NodeType::kBoolean) ||
+              CheckType(right, NodeType::kNumber));
+        if (both_maybe_undefined) {
+          break;
+        }
+      }
       ToNumberHint to_number_hint =
           nexus.GetCompareOperationFeedback() ==
                   CompareOperationHint::kNumberOrBoolean
               ? ToNumberHint::kAssumeNumberOrBoolean
               : ToNumberHint::kDisallowToNumber;
-      ValueNode* left = GetFloat64ForToNumber(LoadRegister(0), to_number_hint);
-      ValueNode* right =
-          GetFloat64ForToNumber(GetAccumulator(), to_number_hint);
+      left = GetFloat64ForToNumber(left, to_number_hint);
+      right = GetFloat64ForToNumber(right, to_number_hint);
       if (left->Is<Float64Constant>() && right->Is<Float64Constant>()) {
         double left_value = left->Cast<Float64Constant>()->value().get_scalar();
         double right_value =
@@ -2762,6 +2795,7 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       left = GetInternalizedString(iterator_.GetRegisterOperand(0));
       right =
           GetInternalizedString(interpreter::Register::virtual_accumulator());
+      if (TryConstantFoldEqual(left, right)) return;
       SetAccumulator(BuildTaggedEqual(left, right));
       return;
     }
@@ -2773,26 +2807,18 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       ValueNode* right = GetAccumulator();
       BuildCheckSymbol(left);
       BuildCheckSymbol(right);
+      if (TryConstantFoldEqual(left, right)) return;
       SetAccumulator(BuildTaggedEqual(left, right));
       return;
     }
     case CompareOperationHint::kString: {
-      if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
-
       ValueNode* left = LoadRegister(0);
       ValueNode* right = GetAccumulator();
       BuildCheckString(left);
       BuildCheckString(right);
 
       ValueNode* result;
-      if (left == right) {
-        SetAccumulator(
-            GetBooleanConstant(kOperation == Operation::kEqual ||
-                               kOperation == Operation::kStrictEqual ||
-                               kOperation == Operation::kLessThanOrEqual ||
-                               kOperation == Operation::kGreaterThanOrEqual));
-        return;
-      }
+      if (TryConstantFoldEqual(left, right)) return;
       ValueNode* tagged_left = GetTaggedValue(left);
       ValueNode* tagged_right = GetTaggedValue(right);
       switch (kOperation) {
@@ -2826,10 +2852,8 @@ void MaglevGraphBuilder::VisitCompareOperation() {
     case CompareOperationHint::kBigInt:
     case CompareOperationHint::kNumberOrOddball:
     case CompareOperationHint::kReceiverOrNullOrUndefined:
-      if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
       break;
     case CompareOperationHint::kReceiver: {
-      if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
       DCHECK(kOperation == Operation::kEqual ||
              kOperation == Operation::kStrictEqual);
 
