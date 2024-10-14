@@ -30,7 +30,6 @@ inline MaybeHandle<To> Cast(MaybeHandle<From> value,
   return MaybeHandle<To>(value.location_);
 }
 
-#ifdef V8_ENABLE_DIRECT_HANDLE
 template <typename T>
 template <typename S>
 bool MaybeHandle<T>::ToHandle(DirectHandle<S>* out) const {
@@ -42,7 +41,6 @@ bool MaybeHandle<T>::ToHandle(DirectHandle<S>* out) const {
     return true;
   }
 }
-#endif
 
 MaybeObjectHandle::MaybeObjectHandle(Tagged<MaybeObject> object,
                                      Isolate* isolate) {
@@ -176,6 +174,8 @@ inline std::ostream& operator<<(std::ostream& os, MaybeDirectHandle<T> handle) {
   return os << handle.ToHandleChecked();
 }
 
+#endif  // V8_ENABLE_DIRECT_HANDLE
+
 MaybeObjectDirectHandle::MaybeObjectDirectHandle(Tagged<MaybeObject> object,
                                                  Isolate* isolate) {
   Tagged<HeapObject> heap_object;
@@ -265,29 +265,27 @@ DirectHandle<Object> MaybeObjectDirectHandle::object() const {
   return handle_.ToHandleChecked();
 }
 
-#endif  // V8_ENABLE_DIRECT_HANDLE
-
 template <typename T>
-V8_INLINE MaybeHandle<T> indirect_handle(MaybeDirectHandle<T> maybe_handle,
-                                         Isolate* isolate) {
+V8_INLINE MaybeIndirectHandle<T> indirect_handle(
+    MaybeDirectHandle<T> maybe_handle, Isolate* isolate) {
 #ifdef V8_ENABLE_DIRECT_HANDLE
   if (DirectHandle<T> handle; maybe_handle.ToHandle(&handle))
     return indirect_handle(handle, isolate);
   return {};
 #else
-  return maybe_handle;
+  return maybe_handle.handle_;
 #endif
 }
 
 template <typename T>
-V8_INLINE MaybeHandle<T> indirect_handle(MaybeDirectHandle<T> maybe_handle,
-                                         LocalIsolate* isolate) {
+V8_INLINE MaybeIndirectHandle<T> indirect_handle(
+    MaybeDirectHandle<T> maybe_handle, LocalIsolate* isolate) {
 #ifdef V8_ENABLE_DIRECT_HANDLE
   if (DirectHandle<T> handle; maybe_handle.ToHandle(&handle))
     return indirect_handle(handle, isolate);
   return {};
 #else
-  return maybe_handle;
+  return maybe_handle.handle_;
 #endif
 }
 

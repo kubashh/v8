@@ -4590,8 +4590,8 @@ bool IsBuiltinCalendar(Isolate* isolate, Handle<String> id) {
 
 int32_t CalendarIndex(Isolate* isolate, Handle<String> id) { return 0; }
 // #sec-isvalidtimezonename
-bool IsValidTimeZoneName(Isolate* isolate, Handle<String> time_zone) {
-  return IsUTC(isolate, time_zone);
+bool IsValidTimeZoneName(Isolate* isolate, DirectHandle<String> time_zone) {
+  return IsUTC(isolate, indirect_handle(time_zone, isolate));
 }
 // #sec-canonicalizetimezonename
 Handle<String> CanonicalizeTimeZoneName(Isolate* isolate,
