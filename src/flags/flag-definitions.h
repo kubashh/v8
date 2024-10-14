@@ -275,7 +275,6 @@ DEFINE_BOOL(js_shipping, true, "enable all shipped JavaScript features")
   V(harmony_import_assertions, "harmony import assertions (deprecated)")
 
 #define JAVASCRIPT_INPROGRESS_FEATURES_BASE(V)                               \
-  V(js_explicit_resource_management, "explicit resource management")         \
   V(js_float16array,                                                         \
     "Float16Array, Math.f16round, DataView.getFloat16, DataView.setFloat16") \
   V(js_decorators, "decorators")                                             \
@@ -318,7 +317,8 @@ DEFINE_BOOL(js_shipping, true, "enable all shipped JavaScript features")
   V(js_promise_withresolvers, "Promise.withResolvers")                 \
   V(js_regexp_duplicate_named_groups, "RegExp duplicate named groups") \
   V(js_regexp_modifiers, "RegExp modifiers")                           \
-  V(js_promise_try, "Promise.try")
+  V(js_promise_try, "Promise.try")                                     \
+  V(js_explicit_resource_management, "explicit resource management")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_SHIPPING(V)                                  \
