@@ -122,6 +122,12 @@ class PageMetadata : public MutablePageMetadata {
 #endif  // DEBUG
   }
 
+  void ZeroOrDiscardUnusedMemory(Address addr, size_t size);
+
+  // Computes OS page boundaries for unused memory.
+  V8_EXPORT_PRIVATE static std::optional<base::AddressRegion>
+  ComputeDiscardMemoryArea(Address start, Address end);
+
  private:
   friend class MemoryAllocator;
 };
