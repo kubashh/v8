@@ -210,6 +210,22 @@ abc();                                    // 0350
       {"start":321,"end":400,"count":0} ]
   );
 
+  await TestCoverage(
+    "await using in a block",
+    `
+async function() {               // 0000
+    await using x = {            // 0050
+    value: 1,                    // 0100
+    [Symbol.asyncDispose]() {    // 0150
+      return 42;                 // 0200
+    } };                         // 0250
+  }();                           // 0300
+    `,
+    [ {"start":0,"end":301,"count":1},
+      {"start":51,"end":299,"count":1},
+      {"start":151,"end":299,"count":0} ]
+  );
+
   %DebugToggleBlockCoverage(false);
 
 })();
