@@ -116,12 +116,20 @@ inline DirectHandle<To> Cast(DirectHandle<From> value,
   return DirectHandle<To>(value.obj_);
 }
 
+#else
+
+template <typename To, typename From>
+inline DirectHandle<To> Cast(DirectHandle<From> value,
+                             const v8::SourceLocation& loc) {
+  return DirectHandle<To>(Cast<To>(value.handle_));
+}
+
+#endif  // V8_ENABLE_DIRECT_HANDLE
+
 template <typename T>
 inline std::ostream& operator<<(std::ostream& os, DirectHandle<T> handle) {
   return os << Brief(*handle);
 }
-
-#endif  // V8_ENABLE_DIRECT_HANDLE
 
 template <typename T>
 V8_INLINE DirectHandle<T> direct_handle(Tagged<T> object, Isolate* isolate) {
@@ -338,21 +346,22 @@ bool DirectHandleBase::is_identical_to(const DirectHandleBase& that) const {
 #endif  // V8_ENABLE_DIRECT_HANDLE
 
 template <typename T>
-V8_INLINE Handle<T> indirect_handle(DirectHandle<T> handle, Isolate* isolate) {
+V8_INLINE IndirectHandle<T> indirect_handle(DirectHandle<T> handle,
+                                            Isolate* isolate) {
 #ifdef V8_ENABLE_DIRECT_HANDLE
-  return Handle<T>(*handle, isolate);
+  return IndirectHandle<T>(*handle, isolate);
 #else
-  return handle;
+  return handle.handle_;
 #endif
 }
 
 template <typename T>
-V8_INLINE Handle<T> indirect_handle(DirectHandle<T> handle,
-                                    LocalIsolate* isolate) {
+V8_INLINE IndirectHandle<T> indirect_handle(DirectHandle<T> handle,
+                                            LocalIsolate* isolate) {
 #ifdef V8_ENABLE_DIRECT_HANDLE
-  return Handle<T>(*handle, isolate);
+  return IndirectHandle<T>(*handle, isolate);
 #else
-  return handle;
+  return handle.handle_;
 #endif
 }
 
