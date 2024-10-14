@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d38a31ee_315556e6",
+        "filename": "src/heap/memory-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-14T14:01:56Z",
+      "side": 0,
+      "message": "I move this to PageMetadata because the MemoryAllocator shouldn\u0027t really know about the free list/FreeSpace.",
+      "revId": "4eb14d53407b566807f9801e2596858f39f9c929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc003b06_d592c285",
+        "filename": "src/heap/mutable-page-metadata.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-14T14:01:56Z",
+      "side": 0,
+      "message": "Moved this to PageMetadata as well because the sweeper already invokes this on PageMetadata and this method doesn\u0027t really make sense for large pages.",
+      "revId": "4eb14d53407b566807f9801e2596858f39f9c929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

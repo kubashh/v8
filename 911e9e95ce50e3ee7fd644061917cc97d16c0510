@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d38e860_32021917",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-14T14:01:56Z",
+      "side": 1,
+      "message": "@mlippautz: Can you PTAL at this already? The mac/arm64 bot is still red, I am currently looking into this. I hope to address the comments and crash together.",
+      "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42013a75_481edad1",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-14T14:01:56Z",
+      "side": 1,
+      "message": "I will disable this flag by default before landing.",
+      "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd3c959a_6be94201",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-14T14:01:56Z",
+      "side": 1,
+      "message": "I will make this conditional on `should_reduce_memory` again before landing.",
+      "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
