@@ -182,5 +182,54 @@ void PageMetadata::DestroyBlackArea(Address start, Address end) {
   owner()->NotifyBlackAreaDestroyed(end - start);
 }
 
+// static
+std::optional<base::AddressRegion> PageMetadata::ComputeDiscardMemoryArea(
+    Address start, Address end) {
+  const size_t page_size = MemoryAllocator::GetCommitPageSize();
+  const Address discard_start = RoundUp(start, page_size);
+  const Address discard_end = RoundDown(end, page_size);
+
+  if (discard_start < discard_end) {
+    return base::AddressRegion(discard_start, discard_end - discard_start);
+  } else {
+    return {};
+  }
+}
+
+void PageMetadata::ZeroOrDiscardUnusedMemory(Address addr, size_t size) {
+  if (size < FreeSpace::kSize) {
+    return;
+  }
+
+  const Address unused_start = addr + FreeSpace::kSize;
+  DCHECK(ContainsLimit(unused_start));
+  const Address unused_end = addr + size;
+  DCHECK(ContainsLimit(unused_end));
+
+  const std::optional<base::AddressRegion> discard_area =
+      ComputeDiscardMemoryArea(unused_start, unused_end);
+
+  if (discard_area) {
+    v8::PageAllocator* page_allocator =
+        heap()->memory_allocator()->page_allocator(owner_identity());
+    DiscardSealedMemoryScope discard_scope("Discard unused memory");
+    CHECK(page_allocator->DiscardSystemPages(
+        reinterpret_cast<void*>(discard_area->begin()), discard_area->size()));
+
+    if (v8_flags.zero_partial_pages) {
+      // Now zero unused memory right before and after the discarded OS pages to
+      // help with OS page compression.
+      memset(reinterpret_cast<void*>(unused_start), 0,
+             discard_area->begin() - unused_start);
+      memset(reinterpret_cast<void*>(discard_area->end()), 0,
+             unused_end - discard_area->end());
+    }
+  } else if (v8_flags.zero_partial_pages) {
+    // Unused memory does not span a full OS page. Simply clear all of the
+    // unused memory. This helps with OS page compression.
+    memset(reinterpret_cast<void*>(unused_start), 0, unused_end - unused_start);
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
