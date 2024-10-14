@@ -921,7 +921,7 @@ V8_INLINE size_t Sweeper::FreeAndProcessFreedMemory(
   // contribute to reduce the memory footprint. On the other hand, these calls
   // become expensive the more memory is allocated in the system and can result
   // in hangs. Thus, it is better to not discard on Windows.
-  if (should_reduce_memory) page->DiscardUnusedMemory(free_start, size);
+  page->ClearOrDiscardUnusedMemory(free_start, size);
 #endif  // !V8_OS_WIN
 
   if (v8_flags.sticky_mark_bits) {
@@ -1443,7 +1443,7 @@ void Sweeper::SweepEmptyNewSpacePage(PageMetadata* page) {
   paged_space->RelinkFreeListCategories(page);
 
   if (heap_->ShouldReduceMemory()) {
-    page->DiscardUnusedMemory(start, size);
+    page->ClearOrDiscardUnusedMemory(start, size);
     // Only decrement counter when we discard unused system pages.
     ActiveSystemPages active_system_pages_after_sweeping;
     active_system_pages_after_sweeping.Init(

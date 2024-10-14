@@ -20,16 +20,48 @@
 namespace v8 {
 namespace internal {
 
-void MutablePageMetadata::DiscardUnusedMemory(Address addr, size_t size) {
-  base::AddressRegion memory_area =
-      MemoryAllocator::ComputeDiscardMemoryArea(addr, size);
-  if (memory_area.size() != 0) {
-    MemoryAllocator* memory_allocator = heap_->memory_allocator();
+// static
+std::optional<base::AddressRegion>
+MutablePageMetadata::ComputeDiscardMemoryArea(Address start, Address end) {
+  const size_t page_size = MemoryAllocator::GetCommitPageSize();
+  const Address discard_start = RoundUp(start, page_size);
+  const Address discard_end = RoundDown(end, page_size);
+
+  if (discard_start < discard_end) {
+    return base::AddressRegion(discard_start, discard_end - discard_start);
+  } else {
+    return {};
+  }
+}
+
+void MutablePageMetadata::ClearOrDiscardUnusedMemory(Address addr,
+                                                     size_t size) {
+  if (size < FreeSpace::kSize) {
+    return;
+  }
+
+  const Address unused_start = addr + FreeSpace::kSize;
+  const Address unused_end = addr + size;
+
+  const std::optional<base::AddressRegion> discard_area =
+      ComputeDiscardMemoryArea(unused_start, unused_end);
+
+  if (discard_area) {
     v8::PageAllocator* page_allocator =
-        memory_allocator->page_allocator(owner_identity());
+        heap()->memory_allocator()->page_allocator(owner_identity());
     DiscardSealedMemoryScope discard_scope("Discard unused memory");
     CHECK(page_allocator->DiscardSystemPages(
-        reinterpret_cast<void*>(memory_area.begin()), memory_area.size()));
+        reinterpret_cast<void*>(discard_area->begin()), discard_area->size()));
+
+    // Now clear unused memory right before and after the discarded OS pages.
+    memset(reinterpret_cast<void*>(unused_start), 0,
+           discard_area->begin() - unused_start);
+    memset(reinterpret_cast<void*>(discard_area->end()), 0,
+           unused_end - discard_area->end());
+  } else {
+    // Unused memory does not span a full OS page. Simply clear all of the
+    // unused memory.
+    memset(reinterpret_cast<void*>(unused_start), 0, unused_end - unused_start);
   }
 }
 

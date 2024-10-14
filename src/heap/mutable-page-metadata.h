@@ -83,7 +83,11 @@ class MutablePageMetadata : public MemoryChunkMetadata {
       ExternalBackingStoreType type, MutablePageMetadata* from,
       MutablePageMetadata* to, size_t amount);
 
-  void DiscardUnusedMemory(Address addr, size_t size);
+  void ClearOrDiscardUnusedMemory(Address addr, size_t size);
+
+  // Computes OS page boundaries for unused memory.
+  static std::optional<base::AddressRegion> ComputeDiscardMemoryArea(
+      Address start, Address end);
 
   base::Mutex* mutex() const { return mutex_; }
   base::SharedMutex* shared_mutex() const { return shared_mutex_; }
