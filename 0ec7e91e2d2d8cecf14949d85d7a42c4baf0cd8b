@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe6b4cf_7873df2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-14T11:16:42Z",
+      "side": 1,
+      "message": "PTAL, this one\u0027s really easy 😊",
+      "revId": "0ec7e91e2d2d8cecf14949d85d7a42c4baf0cd8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
