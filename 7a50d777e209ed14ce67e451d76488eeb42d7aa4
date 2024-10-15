@@ -50,6 +50,24 @@
       "message": "Would preparsing this irrelevant code instead of parsing it avoid the issue? Perhaps that\u0027s the even better solution?",
       "revId": "7a50d777e209ed14ce67e451d76488eeb42d7aa4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e0773d_dd45bc4e",
+        "filename": "test/mjsunit/regress/regress-crbug-371237564.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2024-10-15T11:00:29Z",
+      "side": 1,
+      "message": "I guess not; `static [this]...` would hit the same issue I guess.",
+      "parentUuid": "3aa7a323_4aeb6fc4",
+      "revId": "7a50d777e209ed14ce67e451d76488eeb42d7aa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
