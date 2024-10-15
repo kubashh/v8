@@ -68,6 +68,24 @@
       "message": "I will make this conditional on `should_reduce_memory` again before landing.",
       "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2468f96_5c217514",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-15T07:47:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cd3c959a_6be94201",
+      "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

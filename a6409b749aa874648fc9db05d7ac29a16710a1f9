@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f859709_c48888be",
+        "filename": "src/heap/page-metadata.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-15T07:47:08Z",
+      "side": 1,
+      "message": "Why is this even on `PageMetadata`? I would argue that we should ideally not implement \"logic\" on the metadata but merely hold data.\n\nCan we move this logic to the sweeper completely?",
+      "range": {
+        "startLine": 187,
+        "startChar": 49,
+        "endLine": 187,
+        "endChar": 73
+      },
+      "revId": "a6409b749aa874648fc9db05d7ac29a16710a1f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
