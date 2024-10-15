@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a220d0_34e55eba",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3606,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-15T09:54:53Z",
+      "side": 1,
+      "message": "Thanks, I think that\u0027s much less confusing. It still probably won\u0027t be very obvious to anyone not familiar with maglev in which cases emission of a `SignHint` is needed. Would that be clearer if I understood the semantics of Maglev? If yes, then no need to follow-up on anything here, if not, is there a simple rule that could be added as a comment on the `Word32SignHintOp`?",
+      "parentUuid": "2cd11e30_6e942998",
+      "range": {
+        "startLine": 3606,
+        "startChar": 17,
+        "endLine": 3606,
+        "endChar": 44
+      },
+      "revId": "a52f4878a399d9399239c7e46ca55df7bc1cfc71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fddef63_4789cabe",
