@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5852fe5d_7d9c9025",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-10-15T09:47:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "befb7189_20f93213",
+      "range": {
+        "startLine": 15,
+        "startChar": 63,
+        "endLine": 15,
+        "endChar": 68
+      },
+      "revId": "a52f4878a399d9399239c7e46ca55df7bc1cfc71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7bdcdeab_de97234d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -83,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2cd11e30_6e942998",
+        "filename": "src/compiler/turboshaft/maglev-graph-building-phase.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3606,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-10-15T09:47:55Z",
+      "side": 1,
+      "message": "You\u0027re right, this whole Reintrepret mechanism wasn\u0027t very clean, since, for instance, the result of Int32ShiftRightLogical is a Uint32 and not a Int32 that has to be interpreted as Uint32.\n\nSo, I\u0027ve now changed things a bit to have a Word32SignHint that is applied pretty much where ReintrepretWord32 was used. What do you think?",
+      "parentUuid": "e068b292_946912d9",
+      "range": {
+        "startLine": 3606,
+        "startChar": 17,
+        "endLine": 3606,
+        "endChar": 44
+      },
+      "revId": "a52f4878a399d9399239c7e46ca55df7bc1cfc71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fddef63_4789cabe",
         "filename": "src/compiler/turboshaft/operations.h",
         "patchSetId": 2
@@ -94,6 +142,30 @@
       "writtenOn": "2024-10-14T13:04:27Z",
       "side": 1,
       "message": "Nit: Same question as for the commit message.",
+      "range": {
+        "startLine": 1540,
+        "startChar": 3,
+        "endLine": 1540,
+        "endChar": 7
+      },
+      "revId": "a52f4878a399d9399239c7e46ca55df7bc1cfc71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1e50d69_caffb126",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-10-15T09:47:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fddef63_4789cabe",
       "range": {
         "startLine": 1540,
         "startChar": 3,
@@ -117,6 +189,30 @@
       "writtenOn": "2024-10-14T13:04:27Z",
       "side": 1,
       "message": "Nit: formatting",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 8
+      },
+      "revId": "a52f4878a399d9399239c7e46ca55df7bc1cfc71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bba9291_ee8e680c",
+        "filename": "test/mjsunit/turboshaft/maglev-frontend/regress-373025979.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2024-10-15T09:47:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c4aae63_2047edd0",
       "range": {
         "startLine": 24,
         "startChar": 0,
