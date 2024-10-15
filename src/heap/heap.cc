@@ -2689,10 +2689,7 @@ void Heap::MarkCompact() {
     EvaluateOldSpaceLocalPretenuring(size_of_objects_before_gc);
   }
   // This should be updated before PostGarbageCollectionProcessing, which
-  // can cause another GC. Take into account the objects promoted during
-  // GC.
-  old_generation_allocation_counter_at_last_gc_ +=
-      static_cast<size_t>(promoted_objects_size_);
+  // can cause another GC.
   old_generation_size_at_last_gc_ = OldGenerationSizeOfObjects();
   old_generation_wasted_at_last_gc_ = OldGenerationWastedBytes();
   external_memory_.UpdateLowSinceMarkCompact(external_memory_.total());

@@ -339,6 +339,8 @@ class V8_EXPORT_PRIVATE GCTracer {
   void SampleAllocation(base::TimeTicks current, size_t new_space_counter_bytes,
                         size_t old_generation_counter_bytes,
                         size_t embedder_counter_bytes);
+  void ReportPromotedSize(base::TimeTicks current,
+                          size_t promoted_objects_size);
 
   void AddCompactionEvent(double duration, size_t live_bytes_compacted);
 
@@ -560,6 +562,8 @@ class V8_EXPORT_PRIVATE GCTracer {
   SmoothedBytesAndDuration new_generation_allocations_{
       kSmoothedAllocationSpeedDecayRate};
   SmoothedBytesAndDuration old_generation_allocations_{
+      kSmoothedAllocationSpeedDecayRate};
+  SmoothedBytesAndDuration promoted_allocations_{
       kSmoothedAllocationSpeedDecayRate};
   SmoothedBytesAndDuration embedder_generation_allocations_{
       kSmoothedAllocationSpeedDecayRate};
