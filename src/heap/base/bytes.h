@@ -58,6 +58,32 @@ inline double AverageSpeed(
       static_cast<double>(min_non_empty_speed));
 }
 
+class SmoothedBytesAndDuration {
+ public:
+  SmoothedBytesAndDuration(v8::base::TimeDelta decay) : decay_(decay) {}
+
+  void Update(BytesAndDuration bytes_and_duration) {
+    if (bytes_and_duration.duration.IsZero()) {
+      return;
+    }
+    double new_speed = bytes_and_duration.bytes /
+                       bytes_and_duration.duration.InMillisecondsF();
+    speed_ =
+        new_speed + (speed_ - new_speed) *
+                        exp2(-bytes_and_duration.duration.InMillisecondsF() /
+                             decay_.InMillisecondsF());
+  }
+  // Return memory (in bytes) over time (in millis).
+  double GetSpeed() const { return speed_; }
+  double GetSpeed(v8::base::TimeDelta decay) const {
+    return speed_ * exp2(-decay.InMillisecondsF() / decay_.InMillisecondsF());
+  }
+
+ private:
+  double speed_ = 0.0;
+  const v8::base::TimeDelta decay_;
+};
+
 }  // namespace heap::base
 
 #endif  // V8_HEAP_BASE_BYTES_H_
