@@ -16,6 +16,29 @@
       "message": "Moved the code to the sweeper. PTALA",
       "revId": "b284764c4764d7f92463328216de049160417470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab7d6d5_7340f351",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-16T11:00:07Z",
+      "side": 1,
+      "message": "Can you incorporate Windows somehow to make it at least use the zeroing instead of discarding? I think this would require making the mechanism a bit more flexible.",
+      "range": {
+        "startLine": 919,
+        "startChar": 5,
+        "endLine": 919,
+        "endChar": 14
+      },
+      "revId": "b284764c4764d7f92463328216de049160417470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
