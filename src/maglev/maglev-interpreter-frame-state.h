@@ -244,15 +244,21 @@ class NodeInfo {
   bool any_map_is_unstable() const { return any_map_is_unstable_; }
 
  private:
-  NodeType type_ = NodeType::kUnknown;
+  static int constexpr kNodeTypeBits = 16;
 
-  bool any_map_is_unstable_ = false;
+#define NODE_TYPE_SIZE(Name, Value) \
+  static_assert(static_cast<int>(NodeType::k##Name) < (1L << kNodeTypeBits));
+  NODE_TYPE_LIST(NODE_TYPE_SIZE)
+#undef NODE_TYPE_SIZE
+  NodeType type_ : kNodeTypeBits = NodeType::kUnknown;
+
+  bool any_map_is_unstable_ : 1 = false;
 
   // Maps for a node. Sets of maps that only contain stable maps are valid
   // across side-effecting calls, as long as we install a dependency, otherwise
   // they are cleared on side-effects.
   // TODO(v8:7700): Investigate a better data structure to use than ZoneMap.
-  bool possible_maps_are_known_ = false;
+  bool possible_maps_are_known_ : 1 = false;
   PossibleMaps possible_maps_;
 
   AlternativeNodes alternative_;
@@ -1118,21 +1124,14 @@ struct LoopEffects {
   ZoneSet<ValueNode*> objects_written;
   ZoneSet<KnownNodeAspects::LoadedPropertyMapKey> keys_cleared;
   ZoneSet<InlinedAllocation*> allocations;
-  bool unstable_aspects_cleared = false;
-  bool may_have_aliasing_contexts = false;
-  void Clear() {
-    context_slot_written.clear();
-    objects_written.clear();
-    keys_cleared.clear();
-    allocations.clear();
-    unstable_aspects_cleared = false;
-  }
+  bool unstable_aspects_cleared : 1 = false;
+  bool may_have_aliasing_contexts : 1 = false;
   void Merge(const LoopEffects* other) {
-    if (!unstable_aspects_cleared) {
-      unstable_aspects_cleared = other->unstable_aspects_cleared;
+    if (other->unstable_aspects_cleared) {
+      unstable_aspects_cleared = true;
     }
-    if (!may_have_aliasing_contexts) {
-      may_have_aliasing_contexts = other->may_have_aliasing_contexts;
+    if (other->may_have_aliasing_contexts) {
+      may_have_aliasing_contexts = true;
     }
     context_slot_written.insert(other->context_slot_written.begin(),
                                 other->context_slot_written.end());
