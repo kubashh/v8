@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ba5ec85_b6db7bdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-10-16T11:54:58Z",
+      "side": 1,
+      "message": "lgtm with comment",
+      "revId": "d3656ca291cc9807d2847eed54814a6da82955ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a91ee627_63be8dfe",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-10-16T11:54:58Z",
+      "side": 1,
+      "message": "Nitpick: should you also add asserts that those 4 unwanted elements kinds are *not* in the range of valid atomics elements kinds?",
+      "range": {
+        "startLine": 78,
+        "startChar": 2,
+        "endLine": 78,
+        "endChar": 15
+      },
+      "revId": "d3656ca291cc9807d2847eed54814a6da82955ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
