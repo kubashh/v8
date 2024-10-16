@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ea3a10f_e54b7582",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-16T13:54:59Z",
+      "side": 1,
+      "message": "lgtm w/ more questions around the Windows behavior",
+      "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c4149b2_7b3ddcaa",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "Maybe. Zeroing would get more expensive as well. That\u0027s why I would rather not do it in this CL and not block the ChromeOS folks from testing this mode.",
       "parentUuid": "8c4149b2_7b3ddcaa",
+      "range": {
+        "startLine": 983,
+        "startChar": 6,
+        "endLine": 983,
+        "endChar": 12
+      },
+      "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "678b5b83_94e1ceeb",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-16T13:54:59Z",
+      "side": 1,
+      "message": "If we Finch this flag on all platforms we want to Finch with Windows supoport for zeroing instead of disard, right?\n\nChromeOS can also test the flag already locally if we zero for Windows.\n\nAm I missimg something?",
+      "parentUuid": "1a9c53e8_82a392b1",
       "range": {
         "startLine": 983,
         "startChar": 6,
