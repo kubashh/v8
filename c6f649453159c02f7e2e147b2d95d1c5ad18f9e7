@@ -39,6 +39,30 @@
       },
       "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a9c53e8_82a392b1",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-16T13:52:13Z",
+      "side": 1,
+      "message": "Maybe. Zeroing would get more expensive as well. That\u0027s why I would rather not do it in this CL and not block the ChromeOS folks from testing this mode.",
+      "parentUuid": "8c4149b2_7b3ddcaa",
+      "range": {
+        "startLine": 983,
+        "startChar": 6,
+        "endLine": 983,
+        "endChar": 12
+      },
+      "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
