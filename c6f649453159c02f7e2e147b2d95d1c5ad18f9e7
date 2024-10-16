@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cec9d6f1_77d1be08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-16T12:49:31Z",
+      "side": 1,
+      "message": "Enabled zeroing on Windows. PTALA",
+      "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
