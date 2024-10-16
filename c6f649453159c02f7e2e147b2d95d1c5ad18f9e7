@@ -16,6 +16,29 @@
       "message": "Enabled zeroing on Windows. PTALA",
       "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c4149b2_7b3ddcaa",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-16T13:28:58Z",
+      "side": 1,
+      "message": "This needs adjusting for Windows to also 0 the area that we didn\u0027t discard, no?",
+      "range": {
+        "startLine": 983,
+        "startChar": 6,
+        "endLine": 983,
+        "endChar": 12
+      },
+      "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
