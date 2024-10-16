@@ -800,6 +800,12 @@ ThreadTicks ThreadTicks::Now() {
     return ThreadTicks(now);
   UNREACHABLE();
 #elif V8_OS_DARWIN
+  ComputeThreadTicks();
+  asm volatile("" : : : "memory");
+  ComputeThreadTicks();
+  asm volatile("" : : : "memory");
+  ComputeThreadTicks();
+  asm volatile("" : : : "memory");
   return ThreadTicks(ComputeThreadTicks());
 #elif V8_OS_FUCHSIA
   return ThreadTicks(GetFuchsiaThreadTicks());
