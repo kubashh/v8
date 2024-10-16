@@ -635,11 +635,11 @@ void GCTracer::SampleAllocation(base::TimeTicks current,
   old_generation_allocation_counter_bytes_ = old_generation_counter_bytes;
   embedder_allocation_counter_bytes_ = embedder_counter_bytes;
 
-  recorded_new_generation_allocations_.Push(
+  new_generation_allocations_.Update(
       BytesAndDuration(new_space_allocated_bytes, allocation_duration));
-  recorded_old_generation_allocations_.Push(
+  old_generation_allocations_.Update(
       BytesAndDuration(old_generation_allocated_bytes, allocation_duration));
-  recorded_embedder_generation_allocations_.Push(
+  embedder_generation_allocations_.Update(
       BytesAndDuration(embedder_allocated_bytes, allocation_duration));
 
   if (v8_flags.memory_balancer) {
@@ -1310,45 +1310,22 @@ double GCTracer::CombineSpeedsInBytesPerMillisecond(double default_speed,
   return default_speed * optional_speed / (default_speed + optional_speed);
 }
 
-double GCTracer::NewSpaceAllocationThroughputInBytesPerMillisecond(
-    std::optional<base::TimeDelta> selected_duration) const {
-  return BoundedAverageSpeed(recorded_new_generation_allocations_,
-                             selected_duration);
+double GCTracer::NewSpaceAllocationThroughputInBytesPerMillisecond() const {
+  return new_generation_allocations_.GetThroughput();
 }
 
-double GCTracer::OldGenerationAllocationThroughputInBytesPerMillisecond(
-    std::optional<base::TimeDelta> selected_duration) const {
-  return BoundedAverageSpeed(recorded_old_generation_allocations_,
-                             selected_duration);
-}
-
-double GCTracer::EmbedderAllocationThroughputInBytesPerMillisecond(
-    std::optional<base::TimeDelta> selected_duration) const {
-  return BoundedAverageSpeed(recorded_embedder_generation_allocations_,
-                             selected_duration);
-}
-
-double GCTracer::AllocationThroughputInBytesPerMillisecond(
-    std::optional<base::TimeDelta> selected_duration) const {
-  return NewSpaceAllocationThroughputInBytesPerMillisecond(selected_duration) +
-         OldGenerationAllocationThroughputInBytesPerMillisecond(
-             selected_duration);
-}
-
-double GCTracer::CurrentAllocationThroughputInBytesPerMillisecond() const {
-  return AllocationThroughputInBytesPerMillisecond(kThroughputTimeFrame);
-}
-
-double GCTracer::CurrentOldGenerationAllocationThroughputInBytesPerMillisecond()
+double GCTracer::OldGenerationAllocationThroughputInBytesPerMillisecond()
     const {
-  return OldGenerationAllocationThroughputInBytesPerMillisecond(
-      kThroughputTimeFrame);
+  return old_generation_allocations_.GetThroughput();
 }
 
-double GCTracer::CurrentEmbedderAllocationThroughputInBytesPerMillisecond()
-    const {
-  return EmbedderAllocationThroughputInBytesPerMillisecond(
-      kThroughputTimeFrame);
+double GCTracer::EmbedderAllocationThroughputInBytesPerMillisecond() const {
+  return embedder_generation_allocations_.GetThroughput();
+}
+
+double GCTracer::AllocationThroughputInBytesPerMillisecond() const {
+  return NewSpaceAllocationThroughputInBytesPerMillisecond() +
+         OldGenerationAllocationThroughputInBytesPerMillisecond();
 }
 
 double GCTracer::AverageSurvivalRatio() const {
