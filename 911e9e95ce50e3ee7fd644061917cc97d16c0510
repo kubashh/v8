@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e275232_2b8be2f1",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-16T14:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42013a75_481edad1",
+      "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd3c959a_6be94201",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "cd3c959a_6be94201",
+      "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "385bec04_41c15605",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-16T14:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2468f96_5c217514",
       "revId": "911e9e95ce50e3ee7fd644061917cc97d16c0510",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
