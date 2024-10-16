@@ -39,6 +39,30 @@
       },
       "revId": "d3656ca291cc9807d2847eed54814a6da82955ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae3b05a2_c0d97078",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-16T17:42:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a91ee627_63be8dfe",
+      "range": {
+        "startLine": 78,
+        "startChar": 2,
+        "endLine": 78,
+        "endChar": 15
+      },
+      "revId": "d3656ca291cc9807d2847eed54814a6da82955ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
