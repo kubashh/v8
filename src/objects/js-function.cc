@@ -17,6 +17,7 @@
 #include "src/ic/ic.h"
 #include "src/init/bootstrapper.h"
 #include "src/objects/feedback-cell-inl.h"
+#include "src/objects/instance-type.h"
 #include "src/strings/string-builder-inl.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -989,6 +990,7 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case ODDBALL_TYPE:
     case PROPERTY_CELL_TYPE:
     case CONST_TRACKING_LET_CELL_TYPE:
+    case CONTEXT_SLOT_REPR_CELL_TYPE:
     case SHARED_FUNCTION_INFO_TYPE:
     case SYMBOL_TYPE:
     case ALLOCATION_SITE_TYPE:

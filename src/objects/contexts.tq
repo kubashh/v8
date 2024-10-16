@@ -186,7 +186,7 @@ extern enum ContextSlot extends intptr constexpr 'Context::Field' {
   WRAPPED_FUNCTION_MAP_INDEX: Slot<NativeContext, Map>,
 
   @sameEnumValueAs(MIN_CONTEXT_SLOTS)
-  CONST_TRACKING_LET_SIDE_DATA_INDEX: Slot<Context, HeapObject>,
+  SCRIPT_CONTEXT_SIDE_DATA_INDEX: Slot<Context, FixedArray>,
 
   MIN_CONTEXT_SLOTS,
   MIN_CONTEXT_EXTENDED_SLOTS,
@@ -195,17 +195,27 @@ extern enum ContextSlot extends intptr constexpr 'Context::Field' {
 
 @export
 macro LoadContextElement(c: Context, i: intptr): Object {
-  return c.elements[i];
+  return LoadContextElementImpl(c, i);
 }
 
 @export
 macro LoadContextElement(c: Context, i: Smi): Object {
-  return c.elements[i];
+  return LoadContextElementImpl(c, SmiUntag(i));
 }
 
 @export
 macro LoadContextElement(c: Context, i: constexpr int32): Object {
-  return c.elements[i];
+  return LoadContextElementImpl(c, i);
+}
+
+@export
+macro LoadContextElementAsMap(c: Context, i: intptr): Map {
+  return Cast<Map>(c.elements[i]) otherwise unreachable;
+}
+
+@export
+macro LoadContextElementAsMap(c: Context, i: constexpr int32): Map {
+  return Cast<Map>(c.elements[i]) otherwise unreachable;
 }
 
 @export
@@ -226,22 +236,19 @@ macro StoreContextElement(c: Context, i: constexpr int32, o: Object): void {
 @export
 macro StoreContextElementAndUpdateSideData(
     c: Context, i: intptr, o: Object): void {
-  UpdateConstTrackingLetSideData(c, i, o);
-  c.elements[i] = o;
+  StoreContextElementAndUpdateSideDataImpl(c, i, o);
 }
 
 @export
 macro StoreContextElementAndUpdateSideData(
     c: Context, i: constexpr int32, o: Object): void {
-  UpdateConstTrackingLetSideData(c, i, o);
-  c.elements[i] = o;
+  StoreContextElementAndUpdateSideDataImpl(c, i, o);
 }
 
 builtin StoreCurrentScriptContextSlotBaseline(o: Object, i: Smi): JSAny {
   const context = internal::LoadContextFromBaseline();
   const index = SmiUntag(i);
-  UpdateConstTrackingLetSideData(context, index, o);
-  context.elements[index] = o;
+  StoreContextElementAndUpdateSideDataImpl(context, index, o);
   return Undefined;
 }
 
@@ -256,46 +263,97 @@ builtin StoreScriptContextSlotBaseline(
   }
 
   const index = SmiUntag(i);
-  UpdateConstTrackingLetSideData(context, index, o);
-  context.elements[index] = o;
+  StoreContextElementAndUpdateSideDataImpl(context, index, o);
   return Undefined;
 }
 
 namespace runtime {
 extern runtime InvalidateDependentCodeForConstTrackingLet(Context, Object):
     JSAny;
+extern runtime InvalidateDependentCodeForContextSlot(Context, Object): JSAny;
 }  // namespace runtime
 
-macro UpdateConstTrackingLetSideData(
-    c: Context, index: intptr, newValue: Object): void {
+macro GetScriptContextSideData(c: Context): FixedArray {
   const scriptContext = Cast<ScriptContext>(c) otherwise unreachable;
-
-  const sideDataIndex = index - ContextSlot::MIN_CONTEXT_EXTENDED_SLOTS;
   const sideData: Object = *ContextSlot(
-      scriptContext, ContextSlot::CONST_TRACKING_LET_SIDE_DATA_INDEX);
+      scriptContext, ContextSlot::SCRIPT_CONTEXT_SIDE_DATA_INDEX);
+  return Cast<FixedArray>(sideData) otherwise unreachable;
+}
 
-  const sideDataFixedArray: FixedArray =
-      Cast<FixedArray>(sideData) otherwise return;
-  if (sideDataFixedArray.length == 0) {
+macro GetSideDataIndexForLetConst(i: intptr): intptr {
+  return 2 * (i - ContextSlot::MIN_CONTEXT_EXTENDED_SLOTS);
+}
+
+macro GetSideDataIndexForContextSlotRepr(i: intptr): intptr {
+  return GetSideDataIndexForLetConst(i) + 1;
+}
+
+macro LoadContextElementImpl(c: Context, i: intptr): Object {
+  const val = c.elements[i];
+  if (IsMutableHeapNumber(c, i, val)) {
+    const number = Cast<HeapNumber>(val) otherwise unreachable;
+    return AllocateHeapNumberWithValue(number.value);
+  }
+  return val;
+}
+
+macro GetContextSlotRepresentation(o: Object): intptr {
+  if (IsUndefined(o)) return kContextSlotReprUndefined;
+  if (Is<Smi>(o)) return kContextSlotReprSmi;
+  if (Is<HeapNumber>(o)) return kContextSlotReprMutableHeapNumber;
+  return kContextSlotReprOther;
+}
+
+macro GeneralizeContextSlotRepr(oldRepr: intptr, newRepr: intptr): intptr {
+  if (oldRepr == kContextSlotReprMutableHeapNumber &&
+      newRepr == kContextSlotReprSmi) {
+    // We remain in mutable heap number if we see a Smi.
+    return kContextSlotReprMutableHeapNumber;
+  }
+  // Otherwise representation rank always grow.
+  if (newRepr > oldRepr) return newRepr;
+  return oldRepr;
+}
+
+// Keep up-to-date with Context::StoreContextElementAndUpdateSideData.
+macro StoreContextElementAndUpdateSideDataImpl(
+    c: Context, i: intptr, newValue: Object): void {
+  const sideData = GetScriptContextSideData(c);
+  if (sideData.length == 0) {
     // No side data (maybe the const tracking let flag is not on).
+    c.elements[i] = newValue;
     return;
   }
 
-  const oldValue = c.elements[index];
+  const oldValue = c.elements[i];
+  const letConstIndex = GetSideDataIndexForLetConst(i);
+  const contextSlotReprIndex = letConstIndex + 1;
+
   if (oldValue == TheHole) {
     // Setting the initial value.
-    dcheck(sideDataFixedArray.objects[sideDataIndex] == Undefined);
-    sideDataFixedArray.objects[sideDataIndex] =
-        kConstTrackingLetCellConstMarker;
+    dcheck(sideData.objects[letConstIndex] == Undefined);
+    dcheck(sideData.objects[contextSlotReprIndex] == Undefined);
+    sideData.objects[letConstIndex] = kConstTrackingLetCellConstMarker;
+    const repr = GetContextSlotRepresentation(newValue);
+    sideData.objects[contextSlotReprIndex] = SmiTag(repr);
+    if (Is<HeapNumber>(newValue)) {
+      const number = Cast<HeapNumber>(newValue) otherwise unreachable;
+      c.elements[i] = AllocateHeapNumberWithValue(number.value);
+    } else {
+      c.elements[i] = newValue;
+    }
     return;
   }
+
+  // If it is the same value, all side table info is the same.
   if (TaggedEqual(oldValue, newValue)) {
     return;
   }
+
   // From now on, we know the value is no longer a constant. If there's a
   // DependentCode, invalidate it.
-  const data = sideDataFixedArray.objects[sideDataIndex];
-  typeswitch (data) {
+  const letConstData = sideData.objects[letConstIndex];
+  typeswitch (letConstData) {
     case (_s: Smi): {
       // The value is not constant after this write, but it also was not used as
       // a constant (there's no code to invalidate). No action needed here; the
@@ -310,8 +368,87 @@ macro UpdateConstTrackingLetSideData(
       unreachable;
     }
   }
-  sideDataFixedArray.objects[sideDataIndex] =
-      kConstTrackingLetCellNonConstMarker;
+  sideData.objects[letConstIndex] = kConstTrackingLetCellNonConstMarker;
+
+  // Check if we should deopt if we changed slot representation.
+  let expectedRepr: intptr;
+  const newValueRepr = GetContextSlotRepresentation(newValue);
+  typeswitch (sideData.objects[contextSlotReprIndex]) {
+    case (cell: ContextSlotReprCell): {
+      expectedRepr = SmiUntag(cell.raw_repr);
+      if (expectedRepr != newValueRepr) {
+        runtime::InvalidateDependentCodeForContextSlot(c, cell);
+      }
+    }
+    case (repr: Smi): {
+      expectedRepr = SmiUntag(repr);
+    }
+    case (Object): {
+      unreachable;
+    }
+  }
+
+  // Update representation.
+  const updatedRepr = GeneralizeContextSlotRepr(expectedRepr, newValueRepr);
+  sideData.objects[contextSlotReprIndex] = SmiTag(updatedRepr);
+
+  // Update slot value.
+  if (expectedRepr == kContextSlotReprMutableHeapNumber) {
+    dcheck(Is<HeapNumber>(oldValue));
+    if (updatedRepr == kContextSlotReprMutableHeapNumber) {
+      const oldNumber = Cast<HeapNumber>(oldValue) otherwise unreachable;
+      typeswitch (newValue) {
+        case (number: Smi): {
+          oldNumber.value = SmiToFloat64(number);
+        }
+        case (number: HeapNumber): {
+          oldNumber.value = number.value;
+        }
+        case (Object): {
+          unreachable;
+        }
+      }
+    } else {
+      // The only possible transition.
+      dcheck(updatedRepr == kContextSlotReprOther);
+      c.elements[i] = newValue;
+    }
+  } else if (updatedRepr == kContextSlotReprMutableHeapNumber) {
+    // Allocate a new heap number.
+    dcheck(Is<HeapNumber>(newValue));
+    const number = Cast<HeapNumber>(newValue) otherwise unreachable;
+    c.elements[i] = AllocateHeapNumberWithValue(number.value);
+  } else {
+    c.elements[i] = newValue;
+  }
+}
+
+macro IsMutableHeapNumber(c: Context, index: intptr, val: Object): bool {
+  if (!Is<ScriptContext>(c)) return false;
+  if (!Is<HeapNumber>(val)) return false;
+  const sideData = GetScriptContextSideData(c);
+  if (sideData.length == 0) {
+    // No side data (maybe the const tracking let flag is not on).
+    return false;
+  }
+  if (index < ContextSlot::MIN_CONTEXT_EXTENDED_SLOTS) {
+    return false;
+  }
+  const contextSlotReprIndex = GetSideDataIndexForContextSlotRepr(index);
+  typeswitch (sideData.objects[contextSlotReprIndex]) {
+    case (Undefined): {
+      return false;
+    }
+    case (cell: ContextSlotReprCell): {
+      return SmiUntag(cell.raw_repr) == kContextSlotReprMutableHeapNumber;
+    }
+    case (repr: Smi): {
+      return SmiUntag(repr) == kContextSlotReprMutableHeapNumber;
+    }
+    case (Object): {
+      unreachable;
+    }
+  }
 }
 
 // A dummy used instead of a context constant for runtime calls that don't need

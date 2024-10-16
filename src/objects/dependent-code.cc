@@ -9,6 +9,8 @@
 #include "src/objects/allocation-site-inl.h"
 #include "src/objects/dependent-code-inl.h"
 #include "src/objects/map.h"
+#include "src/objects/objects.h"
+#include "src/objects/property-cell.h"
 
 namespace v8 {
 namespace internal {
@@ -23,6 +25,8 @@ Tagged<DependentCode> DependentCode::GetDependentCode(
     return Cast<AllocationSite>(object)->dependent_code();
   } else if (IsConstTrackingLetCell(object)) {
     return Cast<ConstTrackingLetCell>(object)->dependent_code();
+  } else if (IsContextSlotReprCell(object)) {
+    return Cast<ContextSlotReprCell>(object)->dependent_code();
   }
   UNREACHABLE();
 }
@@ -37,6 +41,8 @@ void DependentCode::SetDependentCode(Handle<HeapObject> object,
     Cast<AllocationSite>(object)->set_dependent_code(*dep);
   } else if (IsConstTrackingLetCell(*object)) {
     Cast<ConstTrackingLetCell>(object)->set_dependent_code(*dep);
+  } else if (IsContextSlotReprCell(*object)) {
+    Cast<ContextSlotReprCell>(object)->set_dependent_code(*dep);
   } else {
     UNREACHABLE();
   }
@@ -205,6 +211,8 @@ const char* DependentCode::DependencyGroupName(DependencyGroup group) {
       return "allocation-site-transition-changed";
     case kConstTrackingLetChangedGroup:
       return "const-tracking-let-changed";
+    case kContextSlotReprGroup:
+      return "context-slot-repr";
   }
   UNREACHABLE();
 }

@@ -32,6 +32,7 @@ namespace internal {
   V(CodeWrapper)                     \
   V(ConsString)                      \
   V(ConstTrackingLetCell)            \
+  V(ContextSlotReprCell)             \
   V(CoverageInfo)                    \
   V(DataHandler)                     \
   V(DebugInfo)                       \

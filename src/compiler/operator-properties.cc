@@ -79,12 +79,14 @@ bool OperatorProperties::NeedsExactContext(const Operator* op) {
     case IrOpcode::kJSHasProperty:
     case IrOpcode::kJSHasContextExtension:
     case IrOpcode::kJSLoadContext:
+    case IrOpcode::kJSLoadContextDoubleElement:
     case IrOpcode::kJSLoadModule:
     case IrOpcode::kJSLoadNamed:
     case IrOpcode::kJSLoadNamedFromSuper:
     case IrOpcode::kJSLoadProperty:
     case IrOpcode::kJSStoreContext:
     case IrOpcode::kJSStoreScriptContext:
+    case IrOpcode::kJSStoreContextDoubleElement:
     case IrOpcode::kJSDefineKeyedOwnPropertyInLiteral:
     case IrOpcode::kJSStoreGlobal:
     case IrOpcode::kJSStoreInArrayLiteral:

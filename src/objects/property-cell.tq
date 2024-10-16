@@ -18,3 +18,17 @@ extern class ConstTrackingLetCell extends HeapObject {
 
 const kConstTrackingLetCellConstMarker: Smi = SmiTag(1);
 const kConstTrackingLetCellNonConstMarker: Smi = SmiTag(0);
+
+extern class ContextSlotReprCell extends HeapObject {
+  dependent_code: DependentCode;
+  raw_repr: Smi;
+}
+
+const kContextSlotReprUndefined:
+    constexpr int31 generates 'ContextSlotReprCell::kUndefined';
+const kContextSlotReprSmi:
+    constexpr int31 generates 'ContextSlotReprCell::kSmi';
+const kContextSlotReprMutableHeapNumber:
+    constexpr int31 generates 'ContextSlotReprCell::kMutableHeapNumber';
+const kContextSlotReprOther:
+    constexpr int31 generates 'ContextSlotReprCell::kOther';

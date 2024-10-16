@@ -48,8 +48,8 @@ class ShadowRealmBuiltinsAssembler : public CodeStubAssembler {
 TNode<JSObject> ShadowRealmBuiltinsAssembler::AllocateJSWrappedFunction(
     TNode<Context> context, TNode<Object> target) {
   TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> map = CAST(
-      LoadContextElement(native_context, Context::WRAPPED_FUNCTION_MAP_INDEX));
+  TNode<Map> map = LoadContextElementAsMap(native_context,
+                                           Context::WRAPPED_FUNCTION_MAP_INDEX);
   TNode<JSObject> wrapped = AllocateJSObjectFromMap(map);
   StoreObjectFieldNoWriteBarrier(
       wrapped, JSWrappedFunction::kWrappedTargetFunctionOffset, target);
@@ -179,9 +179,9 @@ TF_BUILTIN(ShadowRealmGetWrappedValue, ShadowRealmBuiltinsAssembler) {
   // Verify that prototype matches the function prototype of the target
   // context.
   TNode<Object> prototype = LoadMapPrototype(map);
-  TNode<Object> function_map =
-      LoadContextElement(target_context, Context::WRAPPED_FUNCTION_MAP_INDEX);
-  TNode<Object> function_prototype = LoadMapPrototype(CAST(function_map));
+  TNode<Map> function_map = LoadContextElementAsMap(
+      target_context, Context::WRAPPED_FUNCTION_MAP_INDEX);
+  TNode<Object> function_prototype = LoadMapPrototype(function_map);
   GotoIf(TaggedNotEqual(prototype, function_prototype), &slow_wrap);
 
   // 1. Let internalSlotsList be the internal slots listed in Table 2, plus

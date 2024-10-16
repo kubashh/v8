@@ -1315,7 +1315,7 @@ Handle<Context> Factory::NewScriptContext(DirectHandle<NativeContext> outer,
 
   DirectHandle<FixedArray> side_data;
   if (v8_flags.const_tracking_let) {
-    side_data = NewFixedArray(scope_info->ContextLocalCount());
+    side_data = NewFixedArray(2 * scope_info->ContextLocalCount());
   } else {
     side_data = empty_fixed_array();
   }
@@ -1326,7 +1326,7 @@ Handle<Context> Factory::NewScriptContext(DirectHandle<NativeContext> outer,
   DisallowGarbageCollection no_gc;
   context->set_scope_info(*scope_info);
   context->set_previous(*outer);
-  context->set(Context::CONST_TRACKING_LET_SIDE_DATA_INDEX, *side_data);
+  context->set(Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX, *side_data);
   DCHECK(context->IsScriptContext());
   return handle(context, isolate());
 }
@@ -2217,6 +2217,20 @@ Handle<ConstTrackingLetCell> Factory::NewConstTrackingLetCell(
   cell->set_dependent_code(
       DependentCode::empty_dependent_code(ReadOnlyRoots(isolate())),
       SKIP_WRITE_BARRIER);
+  return handle(cell, isolate());
+}
+
+Handle<ContextSlotReprCell> Factory::NewContextSlotReprCell(
+    Tagged<Smi> repr, AllocationType allocation) {
+  static_assert(ContextSlotReprCell::kSize <= kMaxRegularHeapObjectSize);
+  Tagged<ContextSlotReprCell> cell = Cast<ContextSlotReprCell>(
+      AllocateRawWithImmortalMap(ContextSlotReprCell::kSize, allocation,
+                                 *global_context_slot_repr_cell_map()));
+  DisallowGarbageCollection no_gc;
+  cell->set_dependent_code(
+      DependentCode::empty_dependent_code(ReadOnlyRoots(isolate())),
+      SKIP_WRITE_BARRIER);
+  cell->set_raw_repr(repr);
   return handle(cell, isolate());
 }
 

@@ -1770,9 +1770,17 @@ Type Typer::Visitor::TypeJSLoadContext(Node* node) {
   }
 }
 
+Type Typer::Visitor::TypeJSLoadContextDoubleElement(Node* node) {
+  return TypeJSLoadContext(node);
+}
+
 Type Typer::Visitor::TypeJSStoreContext(Node* node) { UNREACHABLE(); }
 
 Type Typer::Visitor::TypeJSStoreScriptContext(Node* node) { UNREACHABLE(); }
+
+Type Typer::Visitor::TypeJSStoreContextDoubleElement(Node* node) {
+  UNREACHABLE();
+}
 
 Type Typer::Visitor::TypeJSCreateFunctionContext(Node* node) {
   return Type::OtherInternal();

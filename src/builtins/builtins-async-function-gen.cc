@@ -93,8 +93,8 @@ TF_BUILTIN(AsyncFunctionEnter, AsyncFunctionBuiltinsAssembler) {
 
   // Allocate and initialize the async function object.
   TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> async_function_object_map = CAST(LoadContextElement(
-      native_context, Context::ASYNC_FUNCTION_OBJECT_MAP_INDEX));
+  TNode<Map> async_function_object_map = LoadContextElementAsMap(
+      native_context, Context::ASYNC_FUNCTION_OBJECT_MAP_INDEX);
   TNode<JSAsyncFunctionObject> async_function_object =
       UncheckedCast<JSAsyncFunctionObject>(
           AllocateInNewSpace(JSAsyncFunctionObject::kHeaderSize));

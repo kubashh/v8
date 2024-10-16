@@ -843,10 +843,12 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       CheckTypeIs(node, Type::Boolean());
       break;
     case IrOpcode::kJSLoadContext:
+    case IrOpcode::kJSLoadContextDoubleElement:
       CheckTypeIs(node, Type::Any());
       break;
     case IrOpcode::kJSStoreContext:
     case IrOpcode::kJSStoreScriptContext:
+    case IrOpcode::kJSStoreContextDoubleElement:
       CheckNotTyped(node);
       break;
     case IrOpcode::kJSCreateFunctionContext:

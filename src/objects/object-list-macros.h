@@ -115,6 +115,7 @@ namespace internal {
   V(Constructor)                                \
   V(ConstTrackingLetCell)                       \
   V(Context)                                    \
+  V(ContextSlotReprCell)                        \
   V(CoverageInfo)                               \
   V(DataHandler)                                \
   V(DeoptimizationData)                         \

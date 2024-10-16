@@ -39,6 +39,7 @@
 #include "src/objects/js-disposable-stack.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/objects.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/trusted-object.h"
 #include "src/objects/turbofan-types-inl.h"
 #include "src/objects/turboshaft-types-inl.h"
@@ -911,12 +912,13 @@ void Context::ContextVerify(Isolate* isolate) {
   for (int i = 0; i < length(); i++) {
     VerifyObjectField(isolate, OffsetOfElementAt(i));
   }
+  // TODO!
   if (IsScriptContext()) {
-    Tagged<Object> side_data = get(CONST_TRACKING_LET_SIDE_DATA_INDEX);
+    Tagged<Object> side_data = get(SCRIPT_CONTEXT_SIDE_DATA_INDEX);
     CHECK(IsFixedArray(side_data));
     Tagged<FixedArray> side_data_array = Cast<FixedArray>(side_data);
     if (v8_flags.const_tracking_let) {
-      for (int i = 0; i < side_data_array->length(); i++) {
+      for (int i = 0; i < side_data_array->length(); i += 2) {
         Tagged<Object> element = side_data_array->get(i);
         if (IsSmi(element)) {
           CHECK(element == ConstTrackingLetCell::kConstMarker ||
@@ -1510,6 +1512,10 @@ void PropertyCell::PropertyCellVerify(Isolate* isolate) {
 
 void ConstTrackingLetCell::ConstTrackingLetCellVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::ConstTrackingLetCellVerify(*this, isolate);
+}
+
+void ContextSlotReprCell::ContextSlotReprCellVerify(Isolate* isolate) {
+  TorqueGeneratedClassVerifiers::ContextSlotReprCellVerify(*this, isolate);
 }
 
 void TrustedObject::TrustedObjectVerify(Isolate* isolate) {

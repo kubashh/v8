@@ -249,7 +249,7 @@ TF_BUILTIN(FastNewClosure, ConstructorBuiltinsAssembler) {
   // as the map of the allocated object.
   const TNode<NativeContext> native_context = LoadNativeContext(context);
   const TNode<Map> function_map =
-      CAST(LoadContextElement(native_context, function_map_index));
+      LoadContextElementAsMap(native_context, function_map_index);
 
   // Create a new closure from the given function info in new space
   TNode<IntPtrT> instance_size_in_bytes =
@@ -397,7 +397,7 @@ TNode<Context> ConstructorBuiltinsAssembler::FastNewFunctionContext(
     default:
       UNREACHABLE();
   }
-  TNode<Map> map = CAST(LoadContextElement(native_context, index));
+  TNode<Map> map = LoadContextElementAsMap(native_context, index);
   // Set up the header.
   StoreMapNoWriteBarrier(function_context, map);
   TNode<IntPtrT> min_context_slots = IntPtrConstant(Context::MIN_CONTEXT_SLOTS);

@@ -264,6 +264,21 @@ Tagged<Map> Context::GetInitialJSArrayMap(ElementsKind kind) const {
   return Cast<Map>(initial_js_array_map);
 }
 
+Tagged<FixedArray> Context::GetSideData() const {
+  DCHECK(v8_flags.const_tracking_let);
+  DCHECK(IsScriptContext());
+  return Cast<FixedArray>(get(SCRIPT_CONTEXT_SIDE_DATA_INDEX));
+}
+
+Tagged<Object> Context::GetConstTrackingLetData(int index) const {
+  return GetSideData()->get(GetSideDataIndexForLetConst(index));
+}
+
+Tagged<Object> Context::GetContextSlotRepr(int index) const {
+  DCHECK(v8_flags.script_context_mutable_heap_number);
+  return GetSideData()->get(GetSideDataIndexForContextSlotRepr(index));
+}
+
 EXTERNAL_POINTER_ACCESSORS(NativeContext, microtask_queue, MicrotaskQueue*,
                            kMicrotaskQueueOffset,
                            kNativeContextMicrotaskQueueTag)

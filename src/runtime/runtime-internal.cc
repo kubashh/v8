@@ -15,6 +15,7 @@
 #include "src/handles/maybe-handles.h"
 #include "src/logging/counters.h"
 #include "src/numbers/conversions.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/template-objects-inl.h"
 #include "src/runtime/runtime-utils.h"
 #include "src/utils/ostreams.h"
@@ -757,6 +758,15 @@ RUNTIME_FUNCTION(Runtime_InvalidateDependentCodeForConstTrackingLet) {
   DependentCode::DeoptimizeDependencyGroups(
       isolate, *const_tracking_let_cell,
       DependentCode::kConstTrackingLetChangedGroup);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_InvalidateDependentCodeForContextSlot) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  auto context_slot_cell = Cast<ContextSlotReprCell>(args.at<HeapObject>(0));
+  DependentCode::DeoptimizeDependencyGroups(
+      isolate, *context_slot_cell, DependentCode::kContextSlotReprGroup);
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
