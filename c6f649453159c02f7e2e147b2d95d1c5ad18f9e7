@@ -128,6 +128,30 @@
       },
       "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20fb15a1_78f32611",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-16T15:51:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ef54d3d4_d3e0205d",
+      "range": {
+        "startLine": 983,
+        "startChar": 6,
+        "endLine": 983,
+        "endChar": 12
+      },
+      "revId": "c6f649453159c02f7e2e147b2d95d1c5ad18f9e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
