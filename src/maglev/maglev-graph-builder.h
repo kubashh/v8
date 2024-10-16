@@ -1935,6 +1935,7 @@ class MaglevGraphBuilder {
   V(StringConstructor)                         \
   V(StringFromCharCode)                        \
   V(StringPrototypeCharCodeAt)                 \
+  V(StringPrototypeCharAt)                     \
   V(StringPrototypeCodePointAt)                \
   V(StringPrototypeIterator)                   \
   IF_INTL(V, StringPrototypeLocaleCompareIntl) \

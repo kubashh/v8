@@ -8086,6 +8086,17 @@ ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeCodePointAt(
       BuiltinStringPrototypeCharCodeOrCodePointAt::kCodePointAt);
 }
 
+ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeCharAt(
+    compiler::JSFunctionRef target, CallArguments& args) {
+  if (!CanSpeculateCall()) {
+    return ReduceResult::Fail();
+  }
+  ValueNode* char_code;
+  GET_VALUE_OR_ABORT(char_code,
+                     TryReduceStringPrototypeCharCodeAt(target, args));
+  return AddNewNode<BuiltinStringFromCharCode>({char_code});
+}
+
 ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeIterator(
     compiler::JSFunctionRef target, CallArguments& args) {
   if (!CanSpeculateCall()) {
