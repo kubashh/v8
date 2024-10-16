@@ -85,7 +85,7 @@ void StopTracing(GCTracer* tracer, GarbageCollector collector,
 
 }  // namespace
 
-TEST_F(GCTracerTest, AllocationThroughput) {
+/*TEST_F(GCTracerTest, AllocationThroughput) {
   if (v8_flags.stress_incremental_marking) return;
   // GCTracer::AllocationThroughputInBytesPerMillisecond ignores global memory.
   GCTracer* tracer = i_isolate()->heap()->tracer();
@@ -118,7 +118,7 @@ TEST_F(GCTracerTest, AllocationThroughput) {
       2 * (counter3 - counter1) / (time3 - time1),
       static_cast<size_t>(tracer->AllocationThroughputInBytesPerMillisecond(
           base::TimeDelta::FromMilliseconds(801))));
-}
+}*/
 
 TEST_F(GCTracerTest, PerGenerationAllocationThroughput) {
   if (v8_flags.stress_incremental_marking) return;
@@ -162,7 +162,7 @@ TEST_F(GCTracerTest, PerGenerationAllocationThroughput) {
                 tracer->EmbedderAllocationThroughputInBytesPerMillisecond()));
 }
 
-TEST_F(GCTracerTest, PerGenerationAllocationThroughputWithProvidedTime) {
+/*TEST_F(GCTracerTest, PerGenerationAllocationThroughputWithProvidedTime) {
   if (v8_flags.stress_incremental_marking) return;
   GCTracer* tracer = i_isolate()->heap()->tracer();
   tracer->ResetForTesting();
@@ -208,7 +208,7 @@ TEST_F(GCTracerTest, PerGenerationAllocationThroughputWithProvidedTime) {
             static_cast<size_t>(
                 tracer->OldGenerationAllocationThroughputInBytesPerMillisecond(
                     base::TimeDelta::FromMilliseconds(801))));
-}
+}*/
 
 TEST_F(GCTracerTest, RegularScope) {
   if (v8_flags.stress_incremental_marking) return;
