@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0fbdf41_7369897b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-10-16T14:37:29Z",
+      "side": 1,
+      "message": "PTAL. I had to remove the test, because it ran into some other DCHECK, and I had to change the code slightly, because the type of `sig` changed from `FunctionSig*` to `FunctionSig`.",
+      "revId": "b80d9be92bfb8a6fda73bfea3fd9e74527a68fcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
