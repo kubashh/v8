@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76938a11_edf59076",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-10-16T11:29:02Z",
+      "side": 1,
+      "message": "PTAL. Not sure how relevant this is / how often we enter this path for ATOMs, but there\u0027s no reason to keep the old limitation around.",
+      "revId": "c90a9b3c8a9bac72376a1f4ffbac655f3a85855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
