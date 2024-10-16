@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae4965b_d2d8fc75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2024-10-16T14:45:03Z",
+      "side": 1,
+      "message": "This CL now zeros all unused memory on Windows with --zero-unused-memory. PTALA",
+      "revId": "efb44613ba9913ac4c6ba40a4c69619d7926a2b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
