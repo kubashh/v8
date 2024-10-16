@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1630244a_3bf3d48d",
+        "filename": "src/regexp/regexp-macro-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-10-16T11:05:15Z",
+      "side": 1,
+      "message": "The interpreter overrides with 1 / doesn\u0027t use slack.",
+      "parentUuid": "aa0d8b11_75314983",
+      "range": {
+        "startLine": 55,
+        "startChar": 14,
+        "endLine": 55,
+        "endChar": 42
+      },
+      "revId": "e54d8deb52f37344eddcc878c7dd1be50125ee9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94ab93b6_35c08c45",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-10-16T08:47:43Z",
       "side": 1,
       "message": "Can you move this comment down to `kStackLimitSlackSlotCount`, where it belongs?",
+      "range": {
+        "startLine": 43,
+        "startChar": 2,
+        "endLine": 44,
+        "endChar": 71
+      },
+      "revId": "e54d8deb52f37344eddcc878c7dd1be50125ee9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1095e855_1fcffb7a",
+        "filename": "src/regexp/regexp-stack.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2024-10-16T11:05:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94ab93b6_35c08c45",
       "range": {
         "startLine": 43,
         "startChar": 2,
