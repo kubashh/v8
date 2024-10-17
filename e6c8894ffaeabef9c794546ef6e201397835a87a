@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48149fff_1e92dfcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-10-17T10:51:36Z",
+      "side": 1,
+      "message": "I think you have to remove the regression test. The test fails for a different reason.",
+      "revId": "e6c8894ffaeabef9c794546ef6e201397835a87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
