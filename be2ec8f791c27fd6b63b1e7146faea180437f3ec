@@ -16,6 +16,24 @@
       "message": "This isn\u0027t a great fix for two reasons:\n\n(1) Clang on Linux emulates GCC for compatibility, so `V8_CC_GNU` is actually set for regular Clang-on-Linux builds.\n\n(2) Having two copies of the \u0027{\u0027 character confuses simpler tools that don\u0027t take #ifdefs into account, such as VSCode\u0027s (and probably many other editors\u0027) matching-parentheses highlighting, or cpplint.py\u0027s detection of which \u0027}\u0027 should or shouldn\u0027t have a \u0027;\u0027 after them.\n\nI think a better solution would be something like:\n```\n// This condition is true for any compiler except GCC.\n#if defined(__clang__) || !defined(V8_CC_GNU)\n  V8_INLINE\n#endif\n  bool Bind(Block* block) {\n```\n\nCan you please send a follow-up?",
       "revId": "be2ec8f791c27fd6b63b1e7146faea180437f3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c281906e_9c096d77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-10-17T19:11:10Z",
+      "side": 1,
+      "message": "not a problem, let me make the change on the main branch.",
+      "parentUuid": "32a2853f_3c649be8",
+      "revId": "be2ec8f791c27fd6b63b1e7146faea180437f3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
