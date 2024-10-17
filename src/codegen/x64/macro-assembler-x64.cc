@@ -1182,6 +1182,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
   //  -- rax : actual argument count
   //  -- rdx : new target (preserved for callee)
   //  -- rdi : target function (preserved for callee)
+  //  -- r15 : dispatch handle (preserved for callee)
   // -----------------------------------
   ASM_CODE_COMMENT(this);
   {
@@ -1192,6 +1193,9 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     Push(kJavaScriptCallNewTargetRegister);
     SmiTag(kJavaScriptCallArgCountRegister);
     Push(kJavaScriptCallArgCountRegister);
+    // No need to SmiTag since dispatch handles always look like Smis.
+    static_assert(kJSDispatchHandleShift > 0);
+    Push(kJavaScriptCallDispatchHandleRegister);
     // Function is also the parameter to the runtime call.
     Push(kJavaScriptCallTargetRegister);
 
@@ -1199,6 +1203,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     movq(rcx, rax);
 
     // Restore target function, new target and actual argument count.
+    Pop(kJavaScriptCallDispatchHandleRegister);
     Pop(kJavaScriptCallArgCountRegister);
     SmiUntagUnsigned(kJavaScriptCallArgCountRegister);
     Pop(kJavaScriptCallNewTargetRegister);
