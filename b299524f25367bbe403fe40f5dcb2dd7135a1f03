@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a74342b_5ef424aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-17T13:33:32Z",
+      "side": 1,
+      "message": "PTAL. I ran into failing tests with a new regression test and I thought it\u0027s just wrong to treat termination like uncaught exceptions. Let me know if you disagree :)",
+      "revId": "b299524f25367bbe403fe40f5dcb2dd7135a1f03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
