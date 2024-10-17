@@ -157,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91d29623_3ca8844d",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-17T10:20:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e258f404_4460ed35",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02f2d1dd_fd12617a",
@@ -192,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee0fee91_29440c45",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-17T10:20:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6d5108aa_8547ebbf",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "800c40fc_db5f9f1b",
@@ -223,6 +259,24 @@
       "side": 1,
       "message": "Well if we define `JSTrampolineDescriptor` as \"descriptor for code that can be installed on a JSFunction\", then the various kConstructX builtins should use a different descriptor. From a sandbox perspective, this also makes a difference because this descriptor is marked as `INTERNAL_DESCRIPTOR()` (so the builtins cannot directly be invoked from within the sandbox) while the `JSTrampolineDescriptor` is sandbox-exposed).",
       "parentUuid": "800c40fc_db5f9f1b",
+      "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "095c2506_2b5d209e",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-17T10:20:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1907c661_6e4e0e2d",
       "revId": "2176936d2b53a04a153e63b37a998a5e4af2f72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

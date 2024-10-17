@@ -16,6 +16,46 @@
       "message": "Friendly ping :)",
       "revId": "900c340a8f8af8bb3a3fa432f2f6141c3e024eca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f32957ed_daa21ffa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-17T10:20:32Z",
+      "side": 1,
+      "message": "nice! lgtm with a nit",
+      "revId": "900c340a8f8af8bb3a3fa432f2f6141c3e024eca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c61236_f1e4a11f",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-17T10:20:32Z",
+      "side": 1,
+      "message": "Nit: unnecessary `+`.",
+      "range": {
+        "startLine": 790,
+        "startChar": 54,
+        "endLine": 790,
+        "endChar": 55
+      },
+      "revId": "900c340a8f8af8bb3a3fa432f2f6141c3e024eca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
