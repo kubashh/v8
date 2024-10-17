@@ -63,4 +63,22 @@ if (v8_enable_google_benchmark) {
       "//third_party/google_benchmark_chrome:google_benchmark",
     ]
   }
+
+  v8_executable("isolate_getter_benchmark") {
+    testonly = true
+
+    configs = []
+
+    sources = [
+      "benchmark-main.cc",
+      "benchmark-utils.cc",
+      "benchmark-utils.h",
+      "isolate-getter.cc",
+    ]
+
+    deps = [
+      "//:v8",
+      "//third_party/google_benchmark_chrome:google_benchmark",
+    ]
+  }
 }
