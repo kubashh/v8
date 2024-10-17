@@ -31,6 +31,7 @@
 #include "src/heap/sweeper.h"
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/slots.h"
@@ -839,6 +840,11 @@ void Scavenger::ScavengePage(MutablePageMetadata* page) {
   }
 }
 
+__attribute__((noinline)) void ScavengeVisitorVisitObject(
+    ScavengeVisitor& scavenge_visitor, Tagged<HeapObject> object) {
+  scavenge_visitor.Visit(object);
+}
+
 void Scavenger::Process(JobDelegate* delegate) {
   ScavengeVisitor scavenge_visitor(this);
 
@@ -849,7 +855,7 @@ void Scavenger::Process(JobDelegate* delegate) {
     ObjectAndSize object_and_size;
     while (!local_promotion_list_.ShouldEagerlyProcessPromotionList() &&
            local_copied_list_.Pop(&object_and_size)) {
-      scavenge_visitor.Visit(object_and_size.first);
+      ScavengeVisitorVisitObject(scavenge_visitor, object_and_size.first);
       done = false;
       if (delegate && ((++objects % kInterruptThreshold) == 0)) {
         if (!local_copied_list_.IsLocalEmpty()) {

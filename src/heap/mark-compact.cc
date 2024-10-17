@@ -1897,6 +1897,12 @@ void MarkCompactCollector::MarkObjectsFromClientHeaps() {
       });
 }
 
+__attribute__((noinline)) void ClientNewSpaceIterateFast(
+    MarkCompactCollector::SharedHeapObjectVisitor& visitor,
+    PtrComprCageBase cage_base, Tagged<HeapObject> object) {
+  object->IterateFast(cage_base, &visitor);
+}
+
 void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
   // There is no OLD_TO_SHARED remembered set for the young generation. We
   // therefore need to iterate each object and check whether it points into the
@@ -1917,7 +1923,7 @@ void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
     DCHECK(!client_heap->allocator()->new_space_allocator()->IsLabValid());
     for (PageMetadata* page : *new_space) {
       for (Tagged<HeapObject> obj : HeapObjectRange(page)) {
-        obj->IterateFast(cage_base, &visitor);
+        ClientNewSpaceIterateFast(visitor, cage_base, obj);
       }
     }
   }
