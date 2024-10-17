@@ -33,6 +33,42 @@
       "message": "Could you also incorporate this change for multiple interleaved scavengers: https://chromium-review.googlesource.com/c/v8/v8/+/5899522",
       "revId": "cef3e038cb2b92c3d89b162a4864a9627aa304d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "096630a9_2fc9abbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-10-17T13:22:42Z",
+      "side": 1,
+      "message": "Thanks for checking the CL, yes, it applied cleanly. For all backmerges that have conflicts, I\u0027m adding comments explaining what was the conflict and how it was solved.",
+      "parentUuid": "c8cf77c5_390bec55",
+      "revId": "cef3e038cb2b92c3d89b162a4864a9627aa304d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806bd8e0_34c930b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-10-17T13:22:42Z",
+      "side": 1,
+      "message": "Thanks for checking, I added the CL to the topic: https://crrev.com/c/5924805/1\nCould you please review it again? I would need two votes to merge the CL",
+      "parentUuid": "df65482c_6d581cc4",
+      "revId": "cef3e038cb2b92c3d89b162a4864a9627aa304d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
