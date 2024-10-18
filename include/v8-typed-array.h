@@ -9,6 +9,7 @@
 
 #include "v8-array-buffer.h"  // NOLINT(build/include_directory)
 #include "v8-local-handle.h"  // NOLINT(build/include_directory)
+#include "v8-memory-span.h"
 #include "v8config.h"         // NOLINT(build/include_directory)
 
 namespace v8 {

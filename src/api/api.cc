@@ -4268,6 +4268,14 @@ void v8::TypedArray::CheckCast(Value* that) {
                   "Value is not a TypedArray");
 }
 
+// static
+v8::MemorySpan<uint8_t> v8::TypedArray::GetDataAndByteLength(
+    v8::Isolate* isolate, v8::Local<v8::TypedArray> object) {
+  auto tagged_obj = *Utils::OpenDirectHandle(*object);
+  return MemorySpan<uint8_t>(reinterpret_cast<uint8_t*>(tagged_obj->DataPtr()),
+                             tagged_obj->GetByteLength());
+}
+
 #define CHECK_TYPED_ARRAY_CAST(Type, typeName, TYPE, ctype)                \
   void v8::Type##Array::CheckCast(Value* that) {                           \
     auto obj = *Utils::OpenDirectHandle(that);                             \
@@ -9236,6 +9244,40 @@ size_t v8::ArrayBufferView::CopyContents(void* dest, size_t byte_length) {
     memcpy(dest, source, bytes_to_copy);
   }
   return bytes_to_copy;
+}
+
+v8::MemorySpan<uint8_t> v8::ArrayBufferView::GetContents(
+    v8::MemorySpan<uint8_t> storage) {
+  internal::DisallowGarbageCollection no_gc;
+  auto self = Utils::OpenDirectHandle(this);
+  // i::Isolate* i_isolate = obj->GetIsolate();
+  if (internal::IsJSTypedArray(*self)) {
+    i::Tagged<i::JSTypedArray> typed_array = i::Cast<i::JSTypedArray>(*self);
+    if (typed_array->is_on_heap()) {
+      // The provided storage does not have enough capacity for the content of
+      // the TypedArray.
+      CHECK_LE(self->byte_length(), storage.size());
+      size_t bytes_to_copy = self->byte_length();
+      const uint8_t* source =
+          reinterpret_cast<uint8_t*>(typed_array->DataPtr());
+      memcpy(reinterpret_cast<void*>(storage.data()), source, bytes_to_copy);
+      return {storage.data(), bytes_to_copy};
+    }
+    // The TypedArray already has off-heap storage, just return a view on it.
+    return {reinterpret_cast<uint8_t*>(typed_array->DataPtr()),
+            self->byte_length()};
+  }
+  if (i::IsJSDataView(*self)) {
+    i::Tagged<i::JSDataView> data_view = i::Cast<i::JSDataView>(*self);
+    return {reinterpret_cast<uint8_t*>(data_view->data_pointer()),
+            data_view->byte_length()};
+  }
+  // Other types of ArrayBufferView always have an off-heap storage.
+  DCHECK(i::IsJSRabGsabDataView(*self));
+  i::Tagged<i::JSRabGsabDataView> data_view =
+      i::Cast<i::JSRabGsabDataView>(*self);
+  return {reinterpret_cast<uint8_t*>(data_view->data_pointer()),
+          data_view->GetByteLength()};
 }
 
 bool v8::ArrayBufferView::HasBuffer() const {
