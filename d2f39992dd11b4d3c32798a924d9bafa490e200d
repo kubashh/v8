@@ -16,6 +16,23 @@
       "message": "Regarding the failing tests, I\u0027ve seen this, but the tests ever pass being run manually. I modified the test to output the result, it\u0027s just as expected all the time:\n\npab-sc@lpi4a:~$ ./d8 --test test/mjsunit/mjsunit.js test/mjsunit/asm/embenchen/fannkuch.js --random-seed\u003d-2112458564 --nohard-abort --test\n123456789\n213456789\n231456789\n321456789\n312456789\n132456789\n234156789\n324156789\n342156789\n432156789\n423156789\n243156789\n341256789\n431256789\n413256789\n143256789\n134256789\n314256789\n412356789\n142356789\n124356789\n214356789\n241356789\n421356789\n234516789\n324516789\n342516789\n432516789\n423516789\n243516789\nPfannkuchen(9) \u003d 30.\n\npab-sc@lpi4a:~$",
       "revId": "d2f39992dd11b4d3c32798a924d9bafa490e200d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db894382_aa15f3be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2024-10-18T01:54:57Z",
+      "side": 1,
+      "message": "I open a issue to track tryjob failed(https://issues.chromium.org/issues/374094210).",
+      "revId": "d2f39992dd11b4d3c32798a924d9bafa490e200d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
