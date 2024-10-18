@@ -3468,6 +3468,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       TNode<PropertyDescriptorObject> descriptor, TNode<Object> value,
       TNode<Uint32T> details, Label* if_bailout);
 
+  void GetPropertyImpl(TNode<Context> context, TNode<Object> receiver,
+                       TNode<Object> object, TNode<Object> key,
+                       Label* if_notfound, Label* if_slow, Label* if_proxy,
+                       bool handle_private_names);
+
   TNode<Object> GetProperty(TNode<Context> context, TNode<Object> receiver,
                             Handle<Name> name) {
     return GetProperty(context, receiver, HeapConstantNoHole(name));

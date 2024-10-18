@@ -423,6 +423,7 @@ extern enum MessageTemplate {
   kBadSortComparisonFunction,
   kIncompatibleMethodReceiver,
   kInvalidDataViewAccessorOffset,
+  kInvalidDecoratorAddInitializer,
   kTypedArraySetOffsetOutOfBounds,
   kInvalidArgument,
   kInvalidRegExpExecResult,
@@ -487,6 +488,7 @@ extern enum MessageTemplate {
   kStrictReadOnlyProperty,
   kInvalidUsingInForInLoop,
   kIllegalInvocation,
+  kInvalidPrivateMemberWrite,
   ...
 }
 
@@ -757,6 +759,8 @@ extern transitioning macro HasProperty_Inline(
     implicit context: Context)(JSReceiver, JSAny): Boolean;
 extern builtin LoadIC(
     Context, JSAny, JSAny, TaggedIndex, FeedbackVector): JSAny;
+
+extern builtin PrivateGet(implicit context: Context)(JSAny, JSAny): JSAny;
 
 extern macro SetPropertyStrict(Context, Object, Object, Object): Object;
 

@@ -1477,6 +1477,22 @@ void Builtins::Generate_MaglevFunctionEntryStackCheck_WithNewTarget(
   Generate_MaglevFunctionEntryStackCheck(masm, true);
 }
 
+TF_BUILTIN(PrivateGet, CodeStubAssembler) {
+  auto object = Parameter<Object>(Descriptor::kObject);
+  auto key = Parameter<Object>(Descriptor::kKey);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  Label if_notfound(this), if_not_found_or_proxy(this, Label::kDeferred),
+      if_slow(this, Label::kDeferred);
+
+  GetPropertyImpl(context, object, object, key, &if_not_found_or_proxy,
+                  &if_slow, &if_not_found_or_proxy, true);
+  BIND(&if_slow);
+  TailCallRuntime(Runtime::kGetProperty, context, object, key);
+
+  BIND(&if_not_found_or_proxy);
+  ThrowTypeError(context, MessageTemplate::kInvalidPrivateMemberRead, key);
+}
+
 // ES6 [[Get]] operation.
 TF_BUILTIN(GetProperty, CodeStubAssembler) {
   auto object = Parameter<Object>(Descriptor::kObject);
@@ -1487,35 +1503,8 @@ TF_BUILTIN(GetProperty, CodeStubAssembler) {
   Label if_notfound(this), if_proxy(this, Label::kDeferred),
       if_slow(this, Label::kDeferred);
 
-  CodeStubAssembler::LookupPropertyInHolder lookup_property_in_holder =
-      [=, this](TNode<HeapObject> receiver, TNode<HeapObject> holder,
-                TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
-                TNode<Name> unique_name, Label* next_holder,
-                Label* if_bailout) {
-        TVARIABLE(Object, var_value);
-        Label if_found(this);
-        // If we get here then it's guaranteed that |object| (and thus the
-        // |receiver|) is a JSReceiver.
-        TryGetOwnProperty(context, receiver, CAST(holder), holder_map,
-                          holder_instance_type, unique_name, &if_found,
-                          &var_value, next_holder, if_bailout,
-                          kExpectingJSReceiver);
-        BIND(&if_found);
-        Return(var_value.value());
-      };
-
-  CodeStubAssembler::LookupElementInHolder lookup_element_in_holder =
-      [=, this](TNode<HeapObject> receiver, TNode<HeapObject> holder,
-                TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
-                TNode<IntPtrT> index, Label* next_holder, Label* if_bailout) {
-        // Not supported yet.
-        Use(next_holder);
-        Goto(if_bailout);
-      };
-
-  TryPrototypeChainLookup(object, object, key, lookup_property_in_holder,
-                          lookup_element_in_holder, &if_notfound, &if_slow,
-                          &if_proxy);
+  GetPropertyImpl(context, object, object, key, &if_notfound, &if_slow,
+                  &if_proxy, false);
 
   BIND(&if_notfound);
   Return(UndefinedConstant());
@@ -1546,33 +1535,8 @@ TF_BUILTIN(GetPropertyWithReceiver, CodeStubAssembler) {
   Label if_notfound(this), if_proxy(this, Label::kDeferred),
       if_slow(this, Label::kDeferred);
 
-  CodeStubAssembler::LookupPropertyInHolder lookup_property_in_holder =
-      [=, this](TNode<HeapObject> receiver, TNode<HeapObject> holder,
-                TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
-                TNode<Name> unique_name, Label* next_holder,
-                Label* if_bailout) {
-        TVARIABLE(Object, var_value);
-        Label if_found(this);
-        TryGetOwnProperty(context, receiver, CAST(holder), holder_map,
-                          holder_instance_type, unique_name, &if_found,
-                          &var_value, next_holder, if_bailout,
-                          kExpectingAnyReceiver);
-        BIND(&if_found);
-        Return(var_value.value());
-      };
-
-  CodeStubAssembler::LookupElementInHolder lookup_element_in_holder =
-      [=, this](TNode<HeapObject> receiver, TNode<HeapObject> holder,
-                TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
-                TNode<IntPtrT> index, Label* next_holder, Label* if_bailout) {
-        // Not supported yet.
-        Use(next_holder);
-        Goto(if_bailout);
-      };
-
-  TryPrototypeChainLookup(receiver, object, key, lookup_property_in_holder,
-                          lookup_element_in_holder, &if_notfound, &if_slow,
-                          &if_proxy);
+  GetPropertyImpl(context, receiver, object, key, &if_notfound, &if_slow,
+                  &if_proxy, false);
 
   BIND(&if_notfound);
   Label throw_reference_error(this);
