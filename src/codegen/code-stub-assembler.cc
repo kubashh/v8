@@ -11598,6 +11598,41 @@ void CodeStubAssembler::InitializePropertyDescriptorObject(
   BIND(&done);
 }
 
+void CodeStubAssembler::GetPropertyImpl(
+    TNode<Context> context, TNode<Object> receiver, TNode<Object> object,
+    TNode<Object> key, Label* if_notfound, Label* if_slow, Label* if_proxy,
+    ExpectedReceiverMode expected_receiver_mode, bool handle_private_names) {
+  CodeStubAssembler::LookupPropertyInHolder lookup_property_in_holder =
+      [=, this](TNode<HeapObject> receiver, TNode<HeapObject> holder,
+                TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
+                TNode<Name> unique_name, Label* next_holder,
+                Label* if_bailout) {
+        TVARIABLE(Object, var_value);
+        Label if_found(this);
+        // If we get here then it's guaranteed that |object| (and thus the
+        // |receiver|) is a JSReceiver.
+        TryGetOwnProperty(context, receiver, CAST(holder), holder_map,
+                          holder_instance_type, unique_name, &if_found,
+                          &var_value, next_holder, if_bailout,
+                          expected_receiver_mode);
+        BIND(&if_found);
+        Return(var_value.value());
+      };
+
+  CodeStubAssembler::LookupElementInHolder lookup_element_in_holder =
+      [=, this](TNode<HeapObject> receiver, TNode<HeapObject> holder,
+                TNode<Map> holder_map, TNode<Int32T> holder_instance_type,
+                TNode<IntPtrT> index, Label* next_holder, Label* if_bailout) {
+        // Not supported.
+        Use(next_holder);
+        Goto(if_bailout);
+      };
+
+  TryPrototypeChainLookup(receiver, object, key, lookup_property_in_holder,
+                          lookup_element_in_holder, if_notfound, if_slow,
+                          if_proxy, handle_private_names);
+}
+
 TNode<PropertyDescriptorObject>
 CodeStubAssembler::AllocatePropertyDescriptorObject(TNode<Context> context) {
   TNode<HeapObject> result = Allocate(PropertyDescriptorObject::kSize);
