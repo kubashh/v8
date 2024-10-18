@@ -16,6 +16,24 @@
       "message": "I think you have to remove the regression test. The test fails for a different reason.",
       "revId": "e6c8894ffaeabef9c794546ef6e201397835a87a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4866db6d_2040695b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3562289
+      },
+      "writtenOn": "2024-10-18T07:21:27Z",
+      "side": 1,
+      "message": "Thank you for reviewing this cherry-pick. But, I updated the original patchset to make it work on M126 codebase because the original patch set required many dependency CLs to be merged into M126 as it was. I guess that the test failures came from my changes. Do you think the changed codes in `//src/runtime/runtime-wasm.cc` make sense?",
+      "parentUuid": "48149fff_1e92dfcc",
+      "revId": "e6c8894ffaeabef9c794546ef6e201397835a87a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
