@@ -33,6 +33,24 @@
       "message": "I open a issue to track tryjob failed(https://issues.chromium.org/issues/374094210).",
       "revId": "d2f39992dd11b4d3c32798a924d9bafa490e200d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0cc0bf_07bafed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3296408
+      },
+      "writtenOn": "2024-10-18T03:04:06Z",
+      "side": 1,
+      "message": "This is not CI problem, the test fails being run as a part os mjsunit pack, but if you try to reproduce it running standalone command from the log, then it passes. As I founded out the test was broken from between 10 and 15 Oct. Gonna check it out",
+      "parentUuid": "db894382_aa15f3be",
+      "revId": "d2f39992dd11b4d3c32798a924d9bafa490e200d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
