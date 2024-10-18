@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e1fc602_c7b196b9",
+        "filename": "src/builtins/decorators.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-10-18T16:46:30Z",
+      "side": 1,
+      "message": "The access objects for private methods and accessors must close around the brand and the object itself. I\u0027ll add 3 new builtins with the methods/accessors/auto-accessors CLS.",
+      "range": {
+        "startLine": 42,
+        "startChar": 33,
+        "endLine": 42,
+        "endChar": 51
+      },
+      "revId": "f56e3bf76022655dada78c4d1ba624575ca2e9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92955390_22b5bffc",
+        "filename": "src/builtins/decorators.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2024-10-18T16:46:30Z",
+      "side": 1,
+      "message": "Performing 2 checks here is suboptimal, but I didn\u0027t find any CSA code that could be used to throw when the private property is not present. This CL is already XL, if we want to optimize this, I can add a TODO and do it as a follow up.",
+      "range": {
+        "startLine": 64,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 32
+      },
+      "revId": "f56e3bf76022655dada78c4d1ba624575ca2e9d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
