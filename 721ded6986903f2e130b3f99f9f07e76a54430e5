@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3eb6f63_5f50587c",
+        "filename": "test/mjsunit/sandbox/regress/regress-342297062-1.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-18T12:59:19Z",
+      "side": 0,
+      "message": "This is the new testcase, the others are just renamed. I made the test for the interpreter the first one as that seems most intuitive.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 62
+      },
+      "revId": "721ded6986903f2e130b3f99f9f07e76a54430e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
