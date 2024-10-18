@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2758872d_ceca0b92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-18T11:21:18Z",
+      "side": 1,
+      "message": "LGTM, and triggering submit to reduce red bots on the waterfall.",
+      "revId": "39b71400a99d5a6c9be8801f57f359c7c6fb1760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
