@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15e40c45_2981e716",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9245,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-10-21T08:25:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a046dfbc_bb4d1a2c",
+      "range": {
+        "startLine": 9245,
+        "startChar": 17,
+        "endLine": 9245,
+        "endChar": 26
+      },
+      "revId": "ac467290105a23522788e8ad64729459d4bc4c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1ffbbf6_d8c47061",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-10-21T07:36:11Z",
       "side": 1,
       "message": "Are we getting the Isolate from the page here internally somewhere? I guess there\u0027s external pointer table accessors involved underneath?",
+      "range": {
+        "startLine": 9246,
+        "startChar": 1,
+        "endLine": 9246,
+        "endChar": 3
+      },
+      "revId": "ac467290105a23522788e8ad64729459d4bc4c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e41f3bc_df2d6703",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9246,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-10-21T08:25:37Z",
+      "side": 1,
+      "message": "I\u0027m not sure, but looking at the code I don\u0027t think so. As far as I understand, the `v8::ArrayBufferView` already gets uncompressed when the pointer is passed from V8 to the bindings code. From the uncompressed pointer we can get the cage base. From there we can add the statically known `external_pointer()` which I guess is the area in the cage where backing stores get allocated, and in that area we use the 32-bit `base_pointer` of the `ArrayBufferView` to get the actual pointer to the backing store.\nIn other words, I think we don\u0027t need the isolate after uncompressing the pointer, and then we don\u0027t go through the external pointer table to get the data pointer, because the data pointer points into the cage and not outside the cage.",
+      "parentUuid": "a1ffbbf6_d8c47061",
       "range": {
         "startLine": 9246,
         "startChar": 1,
