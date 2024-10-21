@@ -650,7 +650,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   }
 
   void LoadTaggedFieldWithoutDecompressing(const Register& destination,
-                                           const MemOperand& field_operand) {
+                                           const MemOperand& field_operand,
+                                           const Register& scratch = no_reg) {
     LoadTaggedField(destination, field_operand);
   }
 
