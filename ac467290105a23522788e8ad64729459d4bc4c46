@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "ac467290105a23522788e8ad64729459d4bc4c46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a046dfbc_bb4d1a2c",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9245,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-21T07:36:11Z",
+      "side": 1,
+      "message": "stale comment",
+      "range": {
+        "startLine": 9245,
+        "startChar": 17,
+        "endLine": 9245,
+        "endChar": 26
+      },
+      "revId": "ac467290105a23522788e8ad64729459d4bc4c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ffbbf6_d8c47061",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9246,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-21T07:36:11Z",
+      "side": 1,
+      "message": "Are we getting the Isolate from the page here internally somewhere? I guess there\u0027s external pointer table accessors involved underneath?",
+      "range": {
+        "startLine": 9246,
+        "startChar": 1,
+        "endLine": 9246,
+        "endChar": 3
+      },
+      "revId": "ac467290105a23522788e8ad64729459d4bc4c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
