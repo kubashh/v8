@@ -392,8 +392,10 @@ inline void MaglevAssembler::LoadTaggedField(Register result, Register object,
 
 inline void MaglevAssembler::LoadTaggedFieldWithoutDecompressing(
     Register result, Register object, int offset) {
+  TemporaryRegisterScope temps(this);
+  Register scratch = temps.AcquireScratch();
   MacroAssembler::LoadTaggedFieldWithoutDecompressing(
-      result, FieldMemOperand(object, offset));
+      result, FieldMemOperand(object, offset), scratch);
 }
 
 inline void MaglevAssembler::LoadTaggedSignedField(Register result,
