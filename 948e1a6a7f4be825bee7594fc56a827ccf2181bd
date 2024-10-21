@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6950943_00ecd7cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-21T13:57:53Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "948e1a6a7f4be825bee7594fc56a827ccf2181bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80f77611_79892f35",
+        "filename": "src/base/bounded-page-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-21T13:57:53Z",
+      "side": 1,
+      "message": "It looks like we have the same issue here. Could you please fix it too?",
+      "revId": "948e1a6a7f4be825bee7594fc56a827ccf2181bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
