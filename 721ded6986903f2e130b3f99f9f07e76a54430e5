@@ -22,6 +22,30 @@
       },
       "revId": "721ded6986903f2e130b3f99f9f07e76a54430e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a90816b_b03c084e",
+        "filename": "test/mjsunit/sandbox/regress/regress-342297062-1.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-21T13:01:41Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "b3eb6f63_5f50587c",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 62
+      },
+      "revId": "721ded6986903f2e130b3f99f9f07e76a54430e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
