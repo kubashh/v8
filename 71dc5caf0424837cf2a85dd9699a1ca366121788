@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7c6fcb_847b8fc3",
+        "filename": "src/base/bounded-page-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 3691195
+      },
+      "writtenOn": "2024-10-21T15:17:51Z",
+      "side": 1,
+      "message": "Seems like the following few functions operator on page_allocator_ without the lock either",
+      "revId": "71dc5caf0424837cf2a85dd9699a1ca366121788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
