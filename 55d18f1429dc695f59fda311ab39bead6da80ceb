@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b62f524_6622ca07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-21T11:29:14Z",
+      "side": 1,
+      "message": "I think the way this is set up right now is problematic. There\u0027s nothing that actually only the ROPM from a C++ perspective.",
+      "revId": "55d18f1429dc695f59fda311ab39bead6da80ceb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
