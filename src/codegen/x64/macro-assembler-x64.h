@@ -724,7 +724,8 @@ class V8_EXPORT_PRIVATE MacroAssembler
   // pointer compression is enabled.
   void LoadTaggedField(TaggedRegister destination, Operand field_operand);
   void LoadTaggedFieldWithoutDecompressing(Register destination,
-                                           Operand field_operand);
+                                           Operand field_operand,
+                                           Register scratch = no_reg);
 
   // Loads a field containing a Smi and decompresses it if pointer compression
   // is enabled.

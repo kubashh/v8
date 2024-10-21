@@ -303,8 +303,9 @@ void MacroAssembler::LoadTaggedField(TaggedRegister destination,
   LoadTaggedFieldWithoutDecompressing(destination.reg(), field_operand);
 }
 
-void MacroAssembler::LoadTaggedFieldWithoutDecompressing(
-    Register destination, Operand field_operand) {
+void MacroAssembler::LoadTaggedFieldWithoutDecompressing(Register destination,
+                                                         Operand field_operand,
+                                                         Register scratch) {
   mov_tagged(destination, field_operand);
 }
 
