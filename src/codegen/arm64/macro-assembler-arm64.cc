@@ -3568,7 +3568,8 @@ void MacroAssembler::LoadTaggedField(const Register& destination,
 }
 
 void MacroAssembler::LoadTaggedFieldWithoutDecompressing(
-    const Register& destination, const MemOperand& field_operand) {
+    const Register& destination, const MemOperand& field_operand,
+    const Register& scratch) {
   if (COMPRESS_POINTERS_BOOL) {
     Ldr(destination.W(), field_operand);
   } else {
