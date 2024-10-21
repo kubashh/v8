@@ -156,6 +156,24 @@
       "message": "It\u0027s a little bit weird (in terms of naming) that the \"more generic\"-sounding `GetCallTarget` calls out to `GetIndirectCallTarget`, but I don\u0027t have a suggestion to improve this. So feel free to just mark this as resolved.",
       "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec1c5b80_ea0b81ef",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2024-10-21T12:02:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dfa83712_ba06603b",
+      "revId": "852cecc32c2206c83e00a9771536737f3908d38d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
