@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e268e4a_94451e89",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-21T19:54:02Z",
+      "side": 1,
+      "message": "I don\u0027t know why the formatter combine steps in comments. thanks for the catch.",
+      "parentUuid": "7600f54d_6e64a3c2",
+      "range": {
+        "startLine": 114,
+        "startChar": 32,
+        "endLine": 114,
+        "endChar": 76
+      },
+      "revId": "e965217a4337430f8058f9a2be3fd1cc42a08e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49bf4140_942ea132",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-10-02T23:08:25Z",
       "side": 1,
       "message": "This refactoring is incorrect because callers to `CheckExceptionOnIsolateAndHandleErrorInDisposal` are dropping the return values, which used to be inline in the caller. This makes a case for this to be refactored as a preprocess macro instead of a function (and is also the reason why things like `ASSIGN_RETURN_ON_EXCEPTION_VALUE` are macros, because they need to return from the caller).",
+      "revId": "e965217a4337430f8058f9a2be3fd1cc42a08e20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0890b15d_a660c581",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-21T19:54:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49bf4140_942ea132",
       "revId": "e965217a4337430f8058f9a2be3fd1cc42a08e20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
