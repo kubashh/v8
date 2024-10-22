@@ -8,6 +8,7 @@
 #include "src/base/flags.h"
 #include "src/builtins/builtins-definitions.h"
 #include "src/common/globals.h"
+#include "src/objects/tagged.h"
 #include "src/objects/type-hints.h"
 #include "src/sandbox/code-entrypoint-tag.h"
 
@@ -48,13 +49,31 @@ enum class Builtin : int32_t {
   kNoBuiltinId = -1,
 #define DEF_ENUM(Name, ...) k##Name,
   BUILTIN_LIST(DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM,
-               DEF_ENUM, DEF_ENUM, DEF_ENUM)
+               DEF_ENUM, DEF_ENUM, DEF_ENUM, IGNORE_BUILTIN)
 #undef DEF_ENUM
 #define EXTRACT_NAME(Name, ...) k##Name,
   // Define kFirstBytecodeHandler,
   kFirstBytecodeHandler =
       FirstFromVarArgs(BUILTIN_LIST_BYTECODE_HANDLERS(EXTRACT_NAME) 0)
 #undef EXTRACT_NAME
+};
+
+// This enum contain all builtin id which we would like to add an ISX version
+// for it.
+enum class Builtin_needs_ISX : int32_t {
+#define DEF_ENUM(Name, ...) k##Name = static_cast<int32_t>(Builtin::k##Name),
+  BUILTIN_LIST_ISX(DEF_ENUM)
+#undef DEF_ENUM
+};
+
+// This emum is an index map for above enum (mapped from builtin id to index in
+// all ISX builtin). For example, if we take Builtin_A as first ISX builtin,
+// Builtin_needs_ISX::kBuiltin_A equals to the (builtin id) of Builtin_A, but
+// Builtin_ISX_id::kBuiltin_A is 0 (means the fist ISX builtin).
+enum class Builtin_ISX_id : int32_t {
+#define DEF_ENUM(Name, ...) k##Name,
+  BUILTIN_LIST_ISX(DEF_ENUM)
+#undef DEF_ENUM
 };
 
 V8_INLINE constexpr bool operator<(Builtin a, Builtin b) {
@@ -74,6 +93,8 @@ class Builtins {
   Builtins(const Builtins&) = delete;
   Builtins& operator=(const Builtins&) = delete;
 
+  std::vector<Tagged<Code>> isx_builtins;
+
   void TearDown();
 
   // Disassembler support.
@@ -89,9 +110,10 @@ class Builtins {
 #define ADD_ONE(Name, ...) +1
   static constexpr int kBuiltinCount =
       0 BUILTIN_LIST(ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE,
-                     ADD_ONE, ADD_ONE, ADD_ONE);
+                     ADD_ONE, ADD_ONE, ADD_ONE, IGNORE_BUILTIN);
   static constexpr int kBuiltinTier0Count = 0 BUILTIN_LIST_TIER0(
       ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE, ADD_ONE);
+  static constexpr int kBuiltinISXCount = 0 BUILTIN_LIST_ISX(ADD_ONE);
 #undef ADD_ONE
 
   static constexpr Builtin kFirst = static_cast<Builtin>(0);
@@ -124,6 +146,22 @@ class Builtins {
   template <Builtin builtin>
   static constexpr size_t WasmBuiltinHandleArrayIndex();
 #endif
+
+  static constexpr int32_t GetISXBuiltinIdx(Builtin builtin) {
+    switch (static_cast<int32_t>(builtin)) {
+#define DEF_ENUM(Name, ...)                              \
+  case static_cast<int32_t>(Builtin_needs_ISX::k##Name): \
+    return static_cast<int32_t>(Builtin_ISX_id::k##Name);
+      BUILTIN_LIST_ISX(DEF_ENUM)
+      default:
+        return -1;
+    }
+#undef DEF_ENUM
+  }
+
+  static constexpr bool IsISXBuiltinId(Builtin builtin) {
+    return GetISXBuiltinIdx(builtin) != -1;
+  }
 
   static constexpr bool IsBuiltinId(Builtin builtin) {
     return builtin != Builtin::kNoBuiltinId;
@@ -410,7 +448,8 @@ class Builtins {
                               compiler::turboshaft::Graph& graph, Zone* zone);
 
   BUILTIN_LIST(IGNORE_BUILTIN, DECLARE_TS, DECLARE_TF, DECLARE_TS, DECLARE_TF,
-               DECLARE_TF, DECLARE_TF, IGNORE_BUILTIN, DECLARE_ASM)
+               DECLARE_TF, DECLARE_TF, IGNORE_BUILTIN, DECLARE_ASM,
+               IGNORE_BUILTIN)
 
 #undef DECLARE_ASM
 #undef DECLARE_TF
