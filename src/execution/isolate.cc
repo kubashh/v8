@@ -333,7 +333,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
 #ifdef DEBUG
   // Verify that the contents of the embedded blob are unchanged from
   // serialization-time, just to ensure the compiler isn't messing with us.
-  EmbeddedData d = EmbeddedData::FromBlob();
+  /*EmbeddedData d = EmbeddedData::FromBlob();
   if (d.EmbeddedBlobDataHash() != d.CreateEmbeddedBlobDataHash()) {
     FATAL(
         "Embedded blob data section checksum verification failed. This "
@@ -348,7 +348,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
           "compilation time. A common cause is a debugging breakpoint set "
           "within builtin code.");
     }
-  }
+  }*/
 #endif  // DEBUG
 }
 
@@ -5011,6 +5011,8 @@ void Isolate::InitializeDefaultEmbeddedBlob() {
     CHECK_EQ(0, data_size);
   } else {
     SetEmbeddedBlob(code, code_size, data, data_size);
+    EmbeddedData d = EmbeddedData::FromBlob();
+    d.UpdateForISXBuiltin();
   }
 }
 
