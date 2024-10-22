@@ -774,20 +774,32 @@ BytecodeArrayBuilder& BytecodeArrayBuilder::StoreGlobal(
 }
 
 BytecodeArrayBuilder& BytecodeArrayBuilder::LoadContextSlot(
-    Register context, int slot_index, int depth,
+    Register context, Variable* variable, int depth,
     ContextSlotMutability mutability) {
-  if (context.is_current_context() && depth == 0) {
-    if (mutability == kImmutableSlot) {
+  int slot_index = variable->index();
+  if (mutability == kImmutableSlot) {
+    if (context.is_current_context() && depth == 0) {
       OutputLdaImmutableCurrentContextSlot(slot_index);
     } else {
-      DCHECK_EQ(kMutableSlot, mutability);
-      OutputLdaCurrentContextSlot(slot_index);
+      OutputLdaImmutableContextSlot(context, slot_index, depth);
     }
-  } else if (mutability == kImmutableSlot) {
-    OutputLdaImmutableContextSlot(context, slot_index, depth);
   } else {
-    DCHECK_EQ(mutability, kMutableSlot);
-    OutputLdaContextSlot(context, slot_index, depth);
+    DCHECK_EQ(kMutableSlot, mutability);
+    if (v8_flags.script_context_mutable_heap_number &&
+        variable->scope()->is_script_scope() &&
+        variable->mode() == VariableMode::kLet) {
+      if (context.is_current_context() && depth == 0) {
+        OutputLdaCurrentScriptContextSlot(slot_index);
+      } else {
+        OutputLdaScriptContextSlot(context, slot_index, depth);
+      }
+    } else {
+      if (context.is_current_context() && depth == 0) {
+        OutputLdaCurrentContextSlot(slot_index);
+      } else {
+        OutputLdaContextSlot(context, slot_index, depth);
+      }
+    }
   }
   return *this;
 }

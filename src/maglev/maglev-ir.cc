@@ -27,6 +27,7 @@
 #include "src/objects/instance-type.h"
 #include "src/objects/js-array.h"
 #include "src/objects/js-generator.h"
+#include "src/objects/property-cell.h"
 #include "src/roots/static-roots.h"
 #ifdef V8_ENABLE_MAGLEV
 #include "src/maglev/maglev-assembler-inl.h"
@@ -3345,6 +3346,58 @@ void CheckConstTrackingLetCellTagged::GenerateCode(
 
   __ EmitEagerDeopt(this, DeoptimizeReason::kConstTrackingLet);
   __ bind(&done);
+}
+
+void UpdateContextSlotRepresentation::SetValueLocationConstraints() {
+  UseRegister(context_input());
+  set_temporaries_needed(2);
+}
+
+void UpdateContextSlotRepresentation::GenerateCode(
+    MaglevAssembler* masm, const ProcessingState& state) {
+  __ RecordComment("UpdateContextSlotRepresentation");
+  MaglevAssembler::TemporaryRegisterScope temps(masm);
+  ZoneLabelRef update_repr(masm);
+
+  Register context = ToRegister(context_input());
+  Register side_data = temps.Acquire();
+  Register repr = temps.Acquire();
+
+  // Load side data representation.
+  __ LoadTaggedField(
+      side_data, context,
+      Context::OffsetOfElementAt(Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX));
+  __ LoadTaggedField(repr, side_data,
+                     FixedArray::OffsetOfElementAt(
+                         Context::GetSideDataIndexForContextSlotRepr(index())));
+
+  // Side data hasn't been update it yet.
+  __ CompareRoot(repr, RootIndex::kUndefinedValue);
+  __ JumpIf(kEqual, *update_repr);
+
+  // If not a smi, we call the runtime.
+  __ JumpIfNotSmi(
+      repr, __ MakeDeferredCode(
+                [](MaglevAssembler* masm, Register repr, ZoneLabelRef done,
+                   UpdateContextSlotRepresentation* node) {
+                  SaveRegisterStateForCall save_register_state(
+                      masm, node->register_snapshot());
+                  __ Push(repr);
+                  __ Move(kContextRegister, masm->native_context().object());
+                  __ CallRuntime(
+                      Runtime::kInvalidateDependentCodeForContextSlot, 1);
+                  masm->DefineLazyDeoptPoint(node->lazy_deopt_info());
+                },
+                repr, update_repr, this));
+
+  __ bind(*update_repr);
+  __ Move(repr,
+          Smi::FromInt(static_cast<int>(ContextSlotRepresentation::kOther)));
+  __ StoreTaggedFieldNoWriteBarrier(
+      side_data,
+      FixedArray::OffsetOfElementAt(
+          Context::GetSideDataIndexForContextSlotRepr(index())),
+      repr);
 }
 
 void CheckString::SetValueLocationConstraints() {
@@ -7068,6 +7121,11 @@ void CheckMapsWithMigration::PrintParams(
 void CheckInt32Condition::PrintParams(
     std::ostream& os, MaglevGraphLabeller* graph_labeller) const {
   os << "(" << condition() << ", " << reason() << ")";
+}
+
+void UpdateContextSlotRepresentation::PrintParams(
+    std::ostream& os, MaglevGraphLabeller* graph_labeller) const {
+  os << "(" << index_ << ")";
 }
 
 void CheckConstTrackingLetCell::PrintParams(

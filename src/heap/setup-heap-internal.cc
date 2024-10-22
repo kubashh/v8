@@ -40,6 +40,7 @@
 #include "src/objects/oddball-inl.h"
 #include "src/objects/ordered-hash-table.h"
 #include "src/objects/promise.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/property-descriptor-object.h"
 #include "src/objects/script.h"
 #include "src/objects/shared-function-info.h"
@@ -761,6 +762,8 @@ bool Heap::CreateLateReadOnlyNonJSReceiverMaps() {
 
     ALLOCATE_MAP(CONST_TRACKING_LET_CELL_TYPE, ConstTrackingLetCell::kSize,
                  global_const_tracking_let_cell)
+    ALLOCATE_MAP(CONTEXT_SLOT_REPR_CELL_TYPE, ContextSlotReprCell::kSize,
+                 global_context_slot_repr_cell)
 
     IF_WASM(ALLOCATE_MAP, WASM_IMPORT_DATA_TYPE, WasmImportData::kSize,
             wasm_import_data)

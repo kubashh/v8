@@ -7,6 +7,8 @@
 
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects/dependent-code-inl.h"
+#include "src/objects/heap-number.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/property-cell.h"
 
@@ -77,6 +79,30 @@ bool ConstTrackingLetCell::IsNotConst(Tagged<Object> object) {
   DCHECK(IsConstTrackingLetCell(object) ||
          (object == kNonConstMarker || object == kConstMarker));
   return object == kNonConstMarker;
+}
+
+TQ_OBJECT_CONSTRUCTORS_IMPL(ContextSlotReprCell)
+
+ACCESSORS(ContextSlotReprCell, dependent_code, Tagged<DependentCode>,
+          kDependentCodeOffset)
+
+ACCESSORS(ContextSlotReprCell, raw_repr, Tagged<Smi>, kRawReprOffset)
+
+// static
+ContextSlotRepresentation ContextSlotReprCell::RepresentationOf(
+    Tagged<Object> object) {
+  if (IsUndefined(object)) return ContextSlotRepresentation::kUndefined;
+  if (Is<Smi>(object)) return ContextSlotRepresentation::kSmi;
+  if (Is<HeapNumber>(object))
+    return ContextSlotRepresentation::kMutableHeapNumber;
+  return ContextSlotRepresentation::kOther;
+}
+
+ContextSlotRepresentation ContextSlotReprCell::repr() const {
+  return static_cast<ContextSlotRepresentation>(raw_repr().value());
+}
+void ContextSlotReprCell::set_repr(ContextSlotRepresentation repr) {
+  set_raw_repr(Smi::FromInt(static_cast<int>(repr)));
 }
 
 }  // namespace internal

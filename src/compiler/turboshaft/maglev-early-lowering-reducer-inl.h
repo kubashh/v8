@@ -12,6 +12,7 @@
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/representations.h"
+#include "src/compiler/turboshaft/runtime-call-descriptors.h"
 #include "src/deoptimizer/deoptimize-reason.h"
 #include "src/objects/contexts.h"
 #include "src/objects/instance-type-inl.h"
@@ -184,11 +185,11 @@ class MaglevEarlyLoweringReducer : public Next {
                                  const FeedbackSource& feedback) {
     // Load the const tracking let side data.
     V<Object> side_data = __ LoadTaggedField(
-        context, Context::OffsetOfElementAt(
-                     Context::CONST_TRACKING_LET_SIDE_DATA_INDEX));
+        context,
+        Context::OffsetOfElementAt(Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX));
     V<Object> index_data = __ LoadTaggedField(
         side_data, FixedArray::OffsetOfElementAt(
-                       index - Context::MIN_CONTEXT_EXTENDED_SLOTS));
+                       Context::GetSideDataIndexForLetConst(index)));
     // If the field is already marked as "not a constant", storing a
     // different value is fine. But if it's anything else (including the hole,
     // which means no value was stored yet), deopt this code. The lower tier
@@ -197,6 +198,36 @@ class MaglevEarlyLoweringReducer : public Next {
         index_data, __ SmiConstant(ConstTrackingLetCell::kNonConstMarker));
     __ DeoptimizeIfNot(is_const, frame_state,
                        DeoptimizeReason::kConstTrackingLet, feedback);
+  }
+
+  void UpdateContextSlotRepresentation(V<Context> context, int index,
+                                       V<FrameState> frame_state,
+                                       V<NativeContext> native_context) {
+    Label<> update_repr(this);
+    int side_data_offset = FixedArray::OffsetOfElementAt(
+        Context::GetSideDataIndexForLetConst(index));
+
+    V<Object> side_data = __ LoadTaggedField(
+        context,
+        Context::OffsetOfElementAt(Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX));
+    V<Object> index_data = __ LoadTaggedField(side_data, side_data_offset);
+
+    GOTO_IF(__ RootEqual(index_data, RootIndex::kUndefinedValue, isolate_),
+            update_repr);
+
+    IF_NOT (__ ObjectIsSmi(index_data)) {
+      __ CallRuntime_InvalidateDependentCodeForContextSlot(
+          isolate_, frame_state, native_context, {index_data});
+      GOTO(update_repr);
+    }
+    GOTO(update_repr);
+
+    BIND(update_repr);
+    __ Store(side_data,
+             __ SmiConstant(Smi::FromInt(
+                 static_cast<int>(ContextSlotRepresentation::kOther))),
+             StoreOp::Kind::TaggedBase(), MemoryRepresentation::TaggedSigned(),
+             WriteBarrierKind::kNoWriteBarrier, side_data_offset);
   }
 
   V<Smi> UpdateJSArrayLength(V<Word32> length_raw, V<JSArray> object,

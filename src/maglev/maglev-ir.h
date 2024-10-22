@@ -340,6 +340,7 @@ class ExceptionHandlerInfo;
   V(HandleNoHeapWritesInterrupt)              \
   V(ReduceInterruptBudgetForLoop)             \
   V(ReduceInterruptBudgetForReturn)           \
+  V(UpdateContextSlotRepresentation)          \
   V(ThrowReferenceErrorIfHole)                \
   V(ThrowSuperNotCalledIfHole)                \
   V(ThrowSuperAlreadyCalledIfNotHole)         \
@@ -6435,6 +6436,41 @@ class CheckConstTrackingLetCellTagged
   }
 #endif
 
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
+
+  auto options() const { return std::tuple{index_}; }
+
+  int index() const { return index_; }
+
+ private:
+  int index_;
+};
+
+class UpdateContextSlotRepresentation
+    : public FixedInputNodeT<1, UpdateContextSlotRepresentation> {
+  using Base = FixedInputNodeT<1, UpdateContextSlotRepresentation>;
+
+ public:
+  explicit UpdateContextSlotRepresentation(uint64_t bitfield, int index)
+      : Base(bitfield), index_(index) {}
+
+  static constexpr OpProperties kProperties =
+      OpProperties::LazyDeopt() | OpProperties::DeferredCall();
+  static constexpr
+      typename Base::InputTypes kInputTypes{ValueRepresentation::kTagged};
+
+  static constexpr int kContextIndex = 0;
+  Input& context_input() { return input(kContextIndex); }
+
+#ifdef V8_COMPRESS_POINTERS
+  void MarkTaggedInputsAsDecompressing() {
+    context_input().node()->SetTaggedResultNeedsDecompress();
+  }
+#endif
+
+  int MaxCallStackArgs() const { return 1; }
   void SetValueLocationConstraints();
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;

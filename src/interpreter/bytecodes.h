@@ -84,11 +84,15 @@ namespace interpreter {
   V(LdaConstant, ImplicitRegisterUse::kWriteAccumulator, OperandType::kIdx)    \
   V(LdaContextSlot, ImplicitRegisterUse::kWriteAccumulator, OperandType::kReg, \
     OperandType::kIdx, OperandType::kUImm)                                     \
-  V(LdaImmutableContextSlot, ImplicitRegisterUse::kWriteAccumulator,           \
-    OperandType::kReg, OperandType::kIdx, OperandType::kUImm)                  \
   V(LdaCurrentContextSlot, ImplicitRegisterUse::kWriteAccumulator,             \
     OperandType::kIdx)                                                         \
+  V(LdaImmutableContextSlot, ImplicitRegisterUse::kWriteAccumulator,           \
+    OperandType::kReg, OperandType::kIdx, OperandType::kUImm)                  \
   V(LdaImmutableCurrentContextSlot, ImplicitRegisterUse::kWriteAccumulator,    \
+    OperandType::kIdx)                                                         \
+  V(LdaScriptContextSlot, ImplicitRegisterUse::kWriteAccumulator,              \
+    OperandType::kReg, OperandType::kIdx, OperandType::kUImm)                  \
+  V(LdaCurrentScriptContextSlot, ImplicitRegisterUse::kWriteAccumulator,       \
     OperandType::kIdx)                                                         \
   /* - [Register Loads ] */                                                    \
   V(Star, ImplicitRegisterUse::kReadAccumulator, OperandType::kRegOut)         \

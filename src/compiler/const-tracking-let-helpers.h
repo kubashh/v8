@@ -15,8 +15,6 @@ class HeapBroker;
 class JSGraph;
 class Node;
 
-int ConstTrackingLetSideDataIndexForAccess(size_t access_index);
-
 void GenerateCheckConstTrackingLetSideData(Node* context, Node** effect,
                                            Node** control, int side_data_index,
                                            JSGraph* jsgraph);

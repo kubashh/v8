@@ -595,12 +595,19 @@ void JSGenericLowering::LowerJSLoadContext(Node* node) {
   UNREACHABLE();  // Eliminated in typed lowering.
 }
 
+void JSGenericLowering::LowerJSLoadContextDoubleElement(Node* node) {
+  UNREACHABLE();  // Eliminated in typed lowering.
+}
 
 void JSGenericLowering::LowerJSStoreContext(Node* node) {
   UNREACHABLE();  // Eliminated in typed lowering.
 }
 
 void JSGenericLowering::LowerJSStoreScriptContext(Node* node) {
+  UNREACHABLE();  // Eliminated in context specialization.
+}
+
+void JSGenericLowering::LowerJSStoreContextDoubleElement(Node* node) {
   UNREACHABLE();  // Eliminated in context specialization.
 }
 

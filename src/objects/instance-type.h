@@ -315,6 +315,8 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
   V(_, GlobalPropertyCellMap, global_property_cell_map, PropertyCell)     \
   V(_, GlobalConstTrackingLetCellMap, global_const_tracking_let_cell_map, \
     ConstTrackingLetCell)                                                 \
+  V(_, GlobalContextSlotReprCellMap, global_context_slot_repr_cell_map,   \
+    ContextSlotReprCell)                                                  \
   V(_, HeapNumberMap, heap_number_map, HeapNumber)                        \
   V(_, WeakFixedArrayMap, weak_fixed_array_map, WeakFixedArray)           \
   V(_, ScopeInfoMap, scope_info_map, ScopeInfo)                           \

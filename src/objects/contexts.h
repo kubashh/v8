@@ -6,6 +6,7 @@
 #define V8_OBJECTS_CONTEXTS_H_
 
 #include "include/v8-promise.h"
+#include "src/common/globals.h"
 #include "src/objects/fixed-array.h"
 #include "src/objects/function-kind.h"
 #include "src/objects/ordered-hash-table.h"
@@ -553,8 +554,9 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
     // These slots hold values in debug evaluate contexts.
     WRAPPED_CONTEXT_INDEX = MIN_CONTEXT_EXTENDED_SLOTS,
 
-    // This slot holds the const tracking let side data.
-    CONST_TRACKING_LET_SIDE_DATA_INDEX = MIN_CONTEXT_SLOTS,
+    // This slot collects script context side data. E.g., let constness and slot
+    // representation.
+    SCRIPT_CONTEXT_SIDE_DATA_INDEX = MIN_CONTEXT_SLOTS,
   };
 
   static const int kExtensionSize =
@@ -676,12 +678,27 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
 
   inline Tagged<Map> GetInitialJSArrayMap(ElementsKind kind) const;
 
+  inline Tagged<FixedArray> GetSideData() const;
+  inline Tagged<Object> GetConstTrackingLetData(int index) const;
+  inline Tagged<Object> GetContextSlotRepr(int index) const;
+
   static Tagged<ConstTrackingLetCell> GetOrCreateConstTrackingLetCell(
+      DirectHandle<Context> context, size_t index, Isolate* isolate);
+  static Tagged<ContextSlotReprCell> GetOrCreateContextSlotRepr(
       DirectHandle<Context> context, size_t index, Isolate* isolate);
 
   bool ConstTrackingLetSideDataIsConst(size_t index) const;
 
-  static void UpdateConstTrackingLetSideData(
+  static int GetSideDataIndexForLetConst(int index) {
+    DCHECK_GE(index, Context::MIN_CONTEXT_EXTENDED_SLOTS);
+    return 2 * (index - Context::MIN_CONTEXT_EXTENDED_SLOTS);
+  }
+
+  static int GetSideDataIndexForContextSlotRepr(int index) {
+    return GetSideDataIndexForLetConst(index) + 1;
+  }
+
+  static void StoreScriptContextElementAndUpdateSideData(
       DirectHandle<Context> script_context, int index,
       DirectHandle<Object> new_value, Isolate* isolate);
 

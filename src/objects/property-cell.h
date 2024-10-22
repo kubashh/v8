@@ -104,6 +104,10 @@ class ConstTrackingLetCell
   static constexpr Tagged<Smi> kConstMarker = Smi::FromInt(1);
   static constexpr Tagged<Smi> kNonConstMarker = Smi::FromInt(0);
 
+  static constexpr Tagged<Smi> kIsInitializedWithSmiMarker = Smi::FromInt(0);
+  static constexpr Tagged<Smi> kIsMutableHeapNumberMarker = Smi::FromInt(1);
+  static constexpr Tagged<Smi> kIsTaggedMaker = Smi::FromInt(2);
+
   static inline bool IsNotConst(Tagged<Object> object);
 
   // [dependent_code]: code that depends on the constness of the value.
@@ -116,6 +120,38 @@ class ConstTrackingLetCell
       FixedBodyDescriptor<kDependentCodeOffset, kSize, kSize>;
 
   TQ_OBJECT_CONSTRUCTORS(ConstTrackingLetCell)
+
+ private:
+  friend class Factory;
+};
+
+enum class ContextSlotRepresentation : uint32_t {
+  kUndefined = 0,
+  kSmi = 1,
+  kMutableHeapNumber = 2,
+  kOther = 3,
+};
+
+class ContextSlotReprCell
+    : public TorqueGeneratedContextSlotReprCell<ContextSlotReprCell,
+                                                HeapObject> {
+ public:
+  static inline ContextSlotRepresentation RepresentationOf(
+      Tagged<Object> object);
+
+  DECL_ACCESSORS(dependent_code, Tagged<DependentCode>)
+  DECL_ACCESSORS(raw_repr, Tagged<Smi>)
+
+  DECL_PRINTER(ContextSlotReprCell)
+  DECL_VERIFIER(ContextSlotReprCell)
+
+  inline ContextSlotRepresentation repr() const;
+  inline void set_repr(ContextSlotRepresentation repr);
+
+  using BodyDescriptor =
+      FixedBodyDescriptor<kDependentCodeOffset, kSize, kSize>;
+
+  TQ_OBJECT_CONSTRUCTORS(ContextSlotReprCell)
 
  private:
   friend class Factory;

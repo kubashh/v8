@@ -153,6 +153,17 @@ struct RuntimeCallDescriptor {
     static constexpr Operator::Properties kProperties = Operator::kNoWrite;
   };
 
+  struct InvalidateDependentCodeForContextSlot
+      : public Descriptor<InvalidateDependentCodeForContextSlot> {
+    static constexpr auto kFunction =
+        Runtime::kInvalidateDependentCodeForContextSlot;
+    using arguments_t = std::tuple<V<Object>>;
+    using result_t = V<Object>;
+
+    static constexpr bool kNeedsFrameState = true;
+    static constexpr Operator::Properties kProperties = Operator::kNoProperties;
+  };
+
   struct PropagateException : public Descriptor<PropagateException> {
     static constexpr auto kFunction = Runtime::kPropagateException;
     using arguments_t = std::tuple<>;

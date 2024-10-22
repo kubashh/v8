@@ -759,9 +759,26 @@ void BaselineCompiler::VisitLdaContextSlot() {
   __ LdaContextSlot(context, index, depth);
 }
 
+void BaselineCompiler::VisitLdaScriptContextSlot() {
+  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
+  Register context = scratch_scope.AcquireScratch();
+  LoadRegister(context, 0);
+  uint32_t index = Index(1);
+  uint32_t depth = Uint(2);
+  __ LdaContextSlot(context, index, depth);
+}
+
 void BaselineCompiler::VisitLdaImmutableContextSlot() { VisitLdaContextSlot(); }
 
 void BaselineCompiler::VisitLdaCurrentContextSlot() {
+  BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
+  Register context = scratch_scope.AcquireScratch();
+  __ LoadContext(context);
+  __ LoadTaggedField(kInterpreterAccumulatorRegister, context,
+                     Context::OffsetOfElementAt(Index(0)));
+}
+
+void BaselineCompiler::VisitLdaCurrentScriptContextSlot() {
   BaselineAssembler::ScratchRegisterScope scratch_scope(&basm_);
   Register context = scratch_scope.AcquireScratch();
   __ LoadContext(context);

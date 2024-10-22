@@ -181,8 +181,10 @@ std::ostream& operator<<(std::ostream& os, ContextAccess const& access) {
 
 ContextAccess const& ContextAccessOf(Operator const* op) {
   DCHECK(op->opcode() == IrOpcode::kJSLoadContext ||
+         op->opcode() == IrOpcode::kJSLoadContextDoubleElement ||
          op->opcode() == IrOpcode::kJSStoreContext ||
-         op->opcode() == IrOpcode::kJSStoreScriptContext);
+         op->opcode() == IrOpcode::kJSStoreScriptContext ||
+         op->opcode() == IrOpcode::kJSStoreContextDoubleElement);
   return OpParameter<ContextAccess>(op);
 }
 
@@ -1239,6 +1241,16 @@ const Operator* JSOperatorBuilder::LoadContext(size_t depth, size_t index,
       access);                                   // parameter
 }
 
+const Operator* JSOperatorBuilder::LoadContextDoubleElement(size_t depth,
+                                                            size_t index) {
+  ContextAccess access(depth, index, false);
+  return zone()->New<Operator1<ContextAccess>>(  // --
+      IrOpcode::kJSLoadContextDoubleElement,     // opcode
+      Operator::kNoWrite | Operator::kNoThrow,   // flags
+      "JSLoadContextDoubleElement",              // name
+      0, 1, 0, 1, 1, 0,                          // counts
+      access);                                   // parameter
+}
 
 const Operator* JSOperatorBuilder::StoreContext(size_t depth, size_t index) {
   ContextAccess access(depth, index, false);
@@ -1255,6 +1267,17 @@ const Operator* JSOperatorBuilder::StoreScriptContext(size_t depth,
   ContextAccess access(depth, index, false);
   return zone()->New<Operator1<ContextAccess>>(  // --
       IrOpcode::kJSStoreScriptContext,           // opcode
+      Operator::kNoRead | Operator::kNoThrow,    // flags
+      "JSStoreScriptContext",                    // name
+      1, 1, 1, 0, 1, 0,                          // counts
+      access);                                   // parameter
+}
+
+const Operator* JSOperatorBuilder::StoreContextDoubleElement(size_t depth,
+                                                             size_t index) {
+  ContextAccess access(depth, index, false);
+  return zone()->New<Operator1<ContextAccess>>(  // --
+      IrOpcode::kJSStoreContextDoubleElement,    // opcode
       Operator::kNoRead | Operator::kNoThrow,    // flags
       "JSStoreScriptContext",                    // name
       1, 1, 1, 0, 1, 0,                          // counts

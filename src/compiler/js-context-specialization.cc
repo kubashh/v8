@@ -169,6 +169,17 @@ Reduction JSContextSpecialization::ReduceJSLoadContext(Node* node) {
   if (!access.immutable() &&
       !broker()->dependencies()->DependOnConstTrackingLet(
           concrete, access.index(), broker())) {
+    if (concrete.object()->IsScriptContext() &&
+        broker()->dependencies()->DependOnContextSlotRepr(
+            concrete, access.index(), broker())) {
+      const Operator* op = jsgraph_->javascript()->LoadContextDoubleElement(
+          depth, access.index());
+      NodeProperties::ReplaceContextInput(
+          node, jsgraph()->ConstantNoHole(concrete, broker()));
+      NodeProperties::ChangeOp(node, op);
+      return Changed(node);
+    }
+
     // We found the requested context object but since the context slot is
     // mutable we can only partially reduce the load.
     return SimplifyJSLoadContext(
@@ -241,7 +252,7 @@ Reduction JSContextSpecialization::ReduceJSStoreScriptContext(Node* node) {
 
   const ContextAccess& access = ContextAccessOf(node->op());
   size_t depth = access.depth();
-  int side_data_index = ConstTrackingLetSideDataIndexForAccess(access.index());
+  int index = static_cast<int>(access.index());
 
   // First walk up the context chain in the graph until we reduce the depth to 0
   // or hit a node that does not have a CreateXYZContext operator.
@@ -249,8 +260,20 @@ Reduction JSContextSpecialization::ReduceJSStoreScriptContext(Node* node) {
 
   OptionalContextRef maybe_context =
       GetSpecializationContext(broker(), context, &depth, outer());
-  if (IsConstTrackingLetVariableSurelyNotConstant(maybe_context, depth,
-                                                  side_data_index, broker())) {
+  if (IsConstTrackingLetVariableSurelyNotConstant(maybe_context, depth, index,
+                                                  broker())) {
+    if (maybe_context.has_value() &&
+        maybe_context->object()->IsScriptContext() &&
+        broker()->dependencies()->DependOnContextSlotRepr(
+            *maybe_context, access.index(), broker())) {
+      const Operator* op = jsgraph_->javascript()->StoreContextDoubleElement(
+          depth, access.index());
+      NodeProperties::ReplaceContextInput(
+          node, jsgraph()->ConstantNoHole(*maybe_context, broker()));
+      NodeProperties::ChangeOp(node, op);
+      return Changed(node);
+    }
+
     // The value is not a constant any more, so we don't need to generate
     // code for invalidating the side data.
     const Operator* op =
@@ -272,8 +295,8 @@ Reduction JSContextSpecialization::ReduceJSStoreScriptContext(Node* node) {
         context, effect, control);
   }
 
-  GenerateCheckConstTrackingLetSideData(context, &effect, &control,
-                                        side_data_index, jsgraph_);
+  GenerateCheckConstTrackingLetSideData(context, &effect, &control, index,
+                                        jsgraph_);
 
   // If we're still here (not deopted) the side data implied that the value was
   // already not a constant, so we can just store into it.

@@ -105,8 +105,8 @@ TNode<Object> AsyncBuiltinsAssembler::Await(
       UncheckedCast<Context>(AllocateInNewSpace(kClosureContextSize));
   {
     // Initialize the await context, storing the {generator} as extension.
-    TNode<Map> map = CAST(
-        LoadContextElement(native_context, Context::AWAIT_CONTEXT_MAP_INDEX));
+    TNode<Map> map = LoadContextElementAsMap(native_context,
+                                             Context::AWAIT_CONTEXT_MAP_INDEX);
     StoreMapNoWriteBarrier(closure_context, map);
     StoreObjectFieldNoWriteBarrier(
         closure_context, Context::kLengthOffset,

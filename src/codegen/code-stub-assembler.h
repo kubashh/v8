@@ -31,6 +31,7 @@
 #include "src/objects/js-proxy.h"
 #include "src/objects/objects.h"
 #include "src/objects/oddball.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/smi.h"
 #include "src/objects/string.h"
@@ -4238,6 +4239,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     double d_value = static_cast<double>(i_value);
     CHECK_EQ(i_value, static_cast<int64_t>(d_value));
     return d_value;
+  }
+  intptr_t ConstexprContextSlotRepresentationToIntptr(
+      const ContextSlotRepresentation& i) {
+    return static_cast<intptr_t>(i);
   }
   bool ConstexprIntegerLiteralEqual(IntegerLiteral lhs, IntegerLiteral rhs) {
     return lhs == rhs;

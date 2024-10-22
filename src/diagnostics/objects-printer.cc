@@ -24,6 +24,7 @@
 #include "src/objects/instance-type.h"
 #include "src/objects/js-function-inl.h"
 #include "src/objects/js-objects.h"
+#include "src/objects/property-cell.h"
 #include "src/regexp/regexp.h"
 #include "src/sandbox/isolate.h"
 #include "src/sandbox/js-dispatch-table.h"
@@ -2336,6 +2337,12 @@ void ConstTrackingLetCell::ConstTrackingLetCellPrint(std::ostream& os) {
   os << "\n";
 }
 
+void ContextSlotReprCell::ContextSlotReprCellPrint(std::ostream& os) {
+  PrintHeader(os, "ContextSlotReprCell");
+  os << "\n - dependent code: " << dependent_code();
+  os << "\n";
+}
+
 void InstructionStream::InstructionStreamPrint(std::ostream& os) {
   code(kAcquireLoad)->CodePrint(os);
 }
@@ -3581,6 +3588,10 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {
     }
     case CONST_TRACKING_LET_CELL_TYPE: {
       os << "<ConstTrackingLetCell>";
+      break;
+    }
+    case CONTEXT_SLOT_REPR_CELL_TYPE: {
+      os << "<ContextSlotReprCell>";
       break;
     }
     case ACCESSOR_INFO_TYPE: {

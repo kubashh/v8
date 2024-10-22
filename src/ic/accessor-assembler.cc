@@ -3981,8 +3981,8 @@ void AccessorAssembler::StoreGlobalIC(const StoreICParameters* pp) {
         Signed(DecodeWord<FeedbackNexus::SlotIndexBits>(lexical_handler));
     TNode<Context> script_context =
         LoadScriptContext(pp->context(), context_index);
-    StoreContextElementAndUpdateSideData(script_context, slot_index,
-                                         pp->value());
+    StoreScriptContextElementAndUpdateSideData(script_context, slot_index,
+                                               pp->value());
     Return(pp->value());
   }
 

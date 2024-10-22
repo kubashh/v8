@@ -12,20 +12,16 @@
 
 namespace v8::internal::compiler {
 
-int ConstTrackingLetSideDataIndexForAccess(size_t access_index) {
-  return static_cast<int>(access_index) - Context::MIN_CONTEXT_EXTENDED_SLOTS;
-}
-
 void GenerateCheckConstTrackingLetSideData(Node* context, Node** effect,
-                                           Node** control, int side_data_index,
+                                           Node** control, int index,
                                            JSGraph* jsgraph) {
   Node* side_data = *effect = jsgraph->graph()->NewNode(
       jsgraph->simplified()->LoadField(AccessBuilder::ForContextSlot(
-          Context::CONST_TRACKING_LET_SIDE_DATA_INDEX)),
+          Context::SCRIPT_CONTEXT_SIDE_DATA_INDEX)),
       context, *effect, *control);
   Node* side_data_value = *effect = jsgraph->graph()->NewNode(
-      jsgraph->simplified()->LoadField(
-          AccessBuilder::ForFixedArraySlot(side_data_index)),
+      jsgraph->simplified()->LoadField(AccessBuilder::ForFixedArraySlot(
+          Context::GetSideDataIndexForLetConst(index))),
       side_data, *effect, *control);
 
   // TODO(v8:13567): If the value is the same as the value we already have, we
@@ -44,25 +40,17 @@ void GenerateCheckConstTrackingLetSideData(Node* context, Node** effect,
 }
 
 bool IsConstTrackingLetVariableSurelyNotConstant(
-    OptionalContextRef maybe_context, size_t depth, int side_data_index,
+    OptionalContextRef maybe_context, size_t depth, int index,
     JSHeapBroker* broker) {
-  if (maybe_context.has_value() && depth == 0) {
-    ContextRef context = maybe_context.value();
-    OptionalObjectRef side_data =
-        context.get(broker, Context::CONST_TRACKING_LET_SIDE_DATA_INDEX);
-    if (side_data.has_value()) {
-      OptionalObjectRef side_data_value =
-          side_data->AsFixedArray().TryGet(broker, side_data_index);
-      if (side_data_value.has_value()) {
-        auto value = side_data_value.value();
-        if (value.IsSmi() &&
-            value.AsSmi() ==
-                Smi::ToInt(ConstTrackingLetCell::kNonConstMarker)) {
-          // The value is not a constant any more.
-          return true;
-        }
-      }
-    }
+  if (!maybe_context.has_value() || depth != 0) return false;
+  OptionalObjectRef maybe_let_const_data =
+      maybe_context->TryGetLetConstData(broker, index);
+  if (!maybe_let_const_data.has_value()) return false;
+  auto value = maybe_let_const_data.value();
+  if (value.IsSmi() &&
+      value.AsSmi() == Smi::ToInt(ConstTrackingLetCell::kNonConstMarker)) {
+    // The value is not a constant any more.
+    return true;
   }
   // Either the value is not a constant, or we don't know.
   return false;

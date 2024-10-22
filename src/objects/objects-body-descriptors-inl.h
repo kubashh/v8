@@ -35,6 +35,7 @@
 #include "src/objects/megadom-handler-inl.h"
 #include "src/objects/objects-body-descriptors.h"
 #include "src/objects/ordered-hash-table-inl.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/property-descriptor-object.h"
 #include "src/objects/source-text-module.h"
 #include "src/objects/swiss-name-dictionary-inl.h"
@@ -1634,6 +1635,8 @@ auto BodyDescriptorApply(InstanceType type, Args&&... args) {
       return CALL_APPLY(PropertyCell);
     case CONST_TRACKING_LET_CELL_TYPE:
       return CALL_APPLY(ConstTrackingLetCell);
+    case CONTEXT_SLOT_REPR_CELL_TYPE:
+      return CALL_APPLY(ContextSlotReprCell);
     case SYMBOL_TYPE:
       return CALL_APPLY(Symbol);
     case SMALL_ORDERED_HASH_SET_TYPE:

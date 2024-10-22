@@ -550,8 +550,8 @@ class ArrayPopulatorAssembler : public CodeStubAssembler {
     {
       Label allocate_js_array(this);
 
-      TNode<Map> array_map = CAST(LoadContextElement(
-          context, Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX));
+      TNode<Map> array_map = LoadContextElementAsMap(
+          context, Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX);
 
       TNode<IntPtrT> capacity = IntPtrConstant(0);
       TNode<Smi> length = SmiConstant(0);

@@ -3978,6 +3978,13 @@ class TurboshaftAssemblerOpInterface
         isolate, frame_state, context, lazy_deopt_on_throw,
         {object, prototype});
   }
+  V<Object> CallRuntime_InvalidateDependentCodeForContextSlot(
+      Isolate* isolate, V<turboshaft::FrameState> frame_state,
+      V<Context> native_context, V<Object> cell) {
+    return CallRuntime<
+        typename RuntimeCallDescriptor::InvalidateDependentCodeForContextSlot>(
+        isolate, frame_state, native_context, LazyDeoptOnThrow::kNo, {cell});
+  }
 
   void TailCall(V<CallTarget> callee, base::Vector<const OpIndex> arguments,
                 const TSCallDescriptor* descriptor) {

@@ -40,6 +40,7 @@
 #include "src/objects/arguments.h"
 #include "src/objects/bytecode-array.h"
 #include "src/objects/elements-kind.h"
+#include "src/objects/property-cell.h"
 #include "src/objects/string.h"
 #include "src/utils/memcopy.h"
 
@@ -1155,15 +1156,17 @@ class MaglevGraphBuilder {
   bool TrySpecializeLoadContextSlotToFunctionContext(
       ValueNode** context, size_t* depth, int slot_index,
       ContextSlotMutability slot_mutability);
-  ValueNode* LoadAndCacheContextSlot(ValueNode* context, int offset,
-                                     ContextSlotMutability slot_mutability);
-  void StoreAndCacheContextSlot(ValueNode* context, int offset,
-                                ValueNode* value);
+  ValueNode* LoadAndCacheContextSlot(ValueNode* context, int index,
+                                     ContextSlotMutability slot_mutability,
+                                     bool depend_on_representation = false);
+  void StoreAndCacheContextSlot(ValueNode* context, int index, ValueNode* value,
+                                bool depend_on_representation = false);
   ValueNode* TryGetParentContext(ValueNode* node);
   void MinimizeContextChainDepth(ValueNode** context, size_t* depth);
   void EscapeContext();
   void BuildLoadContextSlot(ValueNode* context, size_t depth, int slot_index,
-                            ContextSlotMutability slot_mutability);
+                            ContextSlotMutability slot_mutability,
+                            bool depend_on_representation = false);
   void BuildStoreContextSlotHelper(ValueNode* context, size_t depth,
                                    int slot_index, ValueNode* value,
                                    bool update_side_data);
