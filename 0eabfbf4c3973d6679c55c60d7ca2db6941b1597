@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f93b2f_86d4882c",
+        "filename": "src/api/api.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9250,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2024-10-22T04:20:56Z",
+      "side": 1,
+      "message": "Hmm.. So if v8 decides to use a larger heap buffer eventually, the clients will crash... on some array sizes? Looks like a landmine to me. We don\u0027t even expose a constant for the max size of inline storage in the API, do we?",
+      "revId": "0eabfbf4c3973d6679c55c60d7ca2db6941b1597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
