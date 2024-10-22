@@ -16,6 +16,29 @@
       "message": "Hello Victor, would you please take a look? Thanks.",
       "revId": "fff7606a73e13e59597eb75ffde5f28dc40be970",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "299242e4_7d8332d8",
+        "filename": "src/maglev/maglev-assembler-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2024-10-22T07:36:39Z",
+      "side": 1,
+      "message": "This has the bad effect that it needs an extra temporary register for all archs. Even if we don\u0027t use them.\n\nCould you instead specialize LoadTaggedFieldWithoutDecompressing in maglev-assembler-inl-ARCH.h ?",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 399,
+        "endChar": 1
+      },
+      "revId": "fff7606a73e13e59597eb75ffde5f28dc40be970",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
