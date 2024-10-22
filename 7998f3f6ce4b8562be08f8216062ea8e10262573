@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "522e6953_f458fbd3",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-22T23:50:52Z",
+      "side": 1,
+      "message": "Please surround the body of the macro in a `do { ... } while (false)` (see e.g. `ASSIGN_RETURN_ON_EXCEPTION_VALUE`. This is an old trick that does two things:\n\n- Uses a block scope so local variables that the macro needs don\u0027t pollute the outer scope. In this case, `current_error`.\n- Requires you to write a `;` after the macro, which makes code reading a little easier.",
+      "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf8007d_5241f22a",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-22T23:50:52Z",
+      "side": 1,
+      "message": "The control flow is a bit tortured now. Does the following work? I don\u0027t think we actually need two `TryCatch`es, because we only try to resolve a promise if the call to the dispose method itself didn\u0027t throw.\n\n```\nv8::TryCatch try_catch;\n// Do the Execution::Call\nif (result.ToHandle(\u0026result_handle)) {\n  resolved_promise \u003d ...;\n  if (resolved_promise.is_null()) {\n    CHECK_EXCEPTION_ON_DISPOSABLE(...);\n  } else {\n    return resolved_promise;\n  }\n} else {\n  CHECK_EXCEPTION_ON_DISPOSABLE(...);\n}\n```",
+      "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee48e52_8e8e2b50",
+        "filename": "test/mjsunit/harmony/regress/regress-369652654.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-22T23:50:52Z",
+      "side": 1,
+      "message": "Style nit: weird indentation.",
+      "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
