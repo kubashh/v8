@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9e36857_b5c124e6",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-23T16:46:11Z",
+      "side": 1,
+      "message": "I\u0027m wondering if it would be better to track this in the `CodeAssemblerState` associated with `assembler_` instead. Then things like this would still work:\n```\nCodeStubArguments(...).SetMayHavePaddingArguments();\n...\nCodeStubArguments(...).PopAndReturn();\n```\nThis would then probably also simplify the implementation for torque builtins, as they would probably end up emitting such a code pattern. WDYT?",
+      "range": {
+        "startLine": 4768,
+        "startChar": 0,
+        "endLine": 4771,
+        "endChar": 64
+      },
+      "revId": "62d7741ecbdd7d89dfbafd34cb671c048bf1f0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
