@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "776cce01_7a128d65",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-23T19:55:01Z",
+      "side": 1,
+      "message": "Sure, done.",
+      "parentUuid": "522e6953_f458fbd3",
+      "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bf8007d_5241f22a",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78338614_7f15533f",
+        "filename": "src/objects/js-disposable-stack.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-23T19:55:01Z",
+      "side": 1,
+      "message": "Makes sense, done.",
+      "parentUuid": "1bf8007d_5241f22a",
+      "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ee48e52_8e8e2b50",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-10-22T23:50:52Z",
       "side": 1,
       "message": "Style nit: weird indentation.",
+      "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54347db8_cc66fa53",
+        "filename": "test/mjsunit/harmony/regress/regress-369652654.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-23T19:55:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ee48e52_8e8e2b50",
       "revId": "7998f3f6ce4b8562be08f8216062ea8e10262573",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
