@@ -87,6 +87,24 @@
       "parentUuid": "42034d71_23031211",
       "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08ec680f_9da44f0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-23T12:48:58Z",
+      "side": 1,
+      "message": "\u003e I\u0027m focusing on jspi at the moment, is it possible for us to finalize the deopt ports later this year?\n\nI don\u0027t know what the ports are being used for. Does anyone expect `--future` to work correctly and never crash? If yes, then the implication would be an issue and we should probably drop it for any platform that doesn\u0027t support wasm deopts yet.\nIf not (as `--future` is not enabled by default), then I guess there aren\u0027t any concerns.\n\nAnother option to mitigate these issues (also including when we don\u0027t only imply it via `--future` but switch the default) would be to not use deopts independent of the flag value on unsupported platforms:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/turboshaft-graph-interface.cc;l\u003d8443? could be changed to unconditionally `false` for unsupported platforms.\nNote that for various reasons we\u0027ll need to be able to support this being false also once it is shipped and enabled by default because there are multiple reasons why we might not want to emit a deopt point or might not be able to do so.",
+      "parentUuid": "16333bb5_9304b10d",
+      "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
