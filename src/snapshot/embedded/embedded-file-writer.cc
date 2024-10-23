@@ -124,6 +124,57 @@ void EmbeddedFileWriter::WriteBuiltin(PlatformEmbeddedFileWriterBase* w,
   w->DeclareFunctionEnd(builtin_symbol.begin());
 }
 
+void EmbeddedFileWriter::WriteISXBuiltin(PlatformEmbeddedFileWriterBase* w,
+                                         const i::EmbeddedData* blob,
+                                         const Builtin builtin) const {
+  const bool is_default_variant =
+      std::strcmp(embedded_variant_, kDefaultEmbeddedVariant) == 0;
+
+  int32_t desc_idx = Builtins::GetISXBuiltinIdx(builtin);
+
+  base::EmbeddedVector<char, kTemporaryStringLength> builtin_symbol;
+  if (is_default_variant) {
+    base::SNPrintF(builtin_symbol, "Builtins_%s_ISX",
+                   i::Builtins::name(builtin));
+  } else {
+    base::SNPrintF(builtin_symbol, "%s_Builtins_%s_ISX", embedded_variant_,
+                   i::Builtins::name(builtin));
+  }
+
+  // Labels created here will show up in backtraces. We check in
+  // Isolate::SetEmbeddedBlob that the blob layout remains unchanged, i.e.
+  // that labels do not insert bytes into the middle of the blob byte
+  // stream.
+  w->DeclareFunctionBegin(builtin_symbol.begin(),
+                          blob->InstructionSizeOfISX(desc_idx));
+  const int builtin_id = static_cast<int>(builtin);
+  // TODO(Wenqin): we didn't care about the source position for isx builtins
+  // yet? maybe we should support them later? const std::vector<uint8_t>&
+  // current_positions = source_positions_[builtin_id];
+
+  // Some builtins (InterpreterPushArgsThenFastConstructFunction,
+  // JSConstructStubGeneric) have entry points located in the middle of them, we
+  // need to store their addresses since they are part of the list of allowed
+  // return addresses in the deoptimizer.
+  // TODO(Wenqin): not same as source position? We didn't allow ISX builtin has
+  // entry point inside the builtin yet.
+  const std::vector<LabelInfo>& current_labels = label_info_[builtin_id];
+  auto label = current_labels.begin();
+  CHECK_EQ(label, current_labels.end());
+
+  const uint8_t* data =
+      reinterpret_cast<const uint8_t*>(blob->InstructionStartOfISX(desc_idx));
+  uint32_t size = blob->PaddedInstructionSizeOfISX(desc_idx);
+  uint32_t i = 0;
+  uint32_t next_offset = size;
+  while (i < size) {
+    WriteBinaryContentsAsInlineAssembly(w, data + i, next_offset - i);
+    i = next_offset;
+  }
+
+  w->DeclareFunctionEnd(builtin_symbol.begin());
+}
+
 void EmbeddedFileWriter::WriteBuiltinLabels(PlatformEmbeddedFileWriterBase* w,
                                             std::string name) const {
   if (ENABLE_CONTROL_FLOW_INTEGRITY_BOOL) {
@@ -167,6 +218,9 @@ void EmbeddedFileWriter::WriteCodeSection(PlatformEmbeddedFileWriterBase* w,
        embedded_index < Builtins::kBuiltinCount; embedded_index++) {
     Builtin builtin = blob->GetBuiltinId(embedded_index);
     WriteBuiltin(w, blob, builtin);
+    if (Builtins::IsISXBuiltinId(builtin)) {
+      WriteISXBuiltin(w, blob, builtin);
+    }
   }
   w->AlignToPageSizeIfNeeded();
   w->DeclareLabelEpilogue();
