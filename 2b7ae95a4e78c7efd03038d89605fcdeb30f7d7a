@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "959487b5_6b828c88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3650664
+      },
+      "writtenOn": "2024-10-23T16:23:37Z",
+      "side": 1,
+      "message": "Fixed the typo in the commit message",
+      "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
