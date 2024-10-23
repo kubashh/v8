@@ -51,6 +51,24 @@
       "parentUuid": "b3f4ea40_8801c2d2",
       "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42034d71_23031211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-23T10:52:01Z",
+      "side": 1,
+      "message": "Thanks for clarifying. +1-ing this CL as it doesn\u0027t have any impact on non-big-endian.\nThis means however that all sort of test cases or other use cases could fail on big endian as most of the tests covering it are disabled and now `--future` implies deopt support.\n\nWhat\u0027s the state of the deopt test cases for your platforms? Does it need a lot of work? Otherwise it\u0027d probably good to catch up with the \"official\" platforms.",
+      "parentUuid": "2d9c25d0_795a1b7f",
+      "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
