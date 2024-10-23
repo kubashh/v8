@@ -4086,8 +4086,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return LoadBuiltinDispatchHandle(JSBuiltinDispatchHandleRoot::to_idx(idx));
   }
 
-  // Load a Code object from the JSDispatchTable.
-  TNode<Code> ResolveJSDispatchHandle(TNode<JSDispatchHandleT> dispatch_handle);
+  // Load the Code object of a JSDispatchTable entry.
+  TNode<Code> LoadCodeObjectFromJSDispatchTable(
+      TNode<JSDispatchHandleT> dispatch_handle);
+  // Load the parameter count of a JSDispatchTable entry.
+  TNode<Uint16T> LoadParameterCountFromJSDispatchTable(
+      TNode<JSDispatchHandleT> dispatch_handle);
 #endif
 
   // Figure out the SFI's code object using its data field.
@@ -4698,6 +4702,18 @@ class V8_EXPORT_PRIVATE CodeStubArguments {
         base_(torque_arguments.base),
         fp_(torque_arguments.frame) {}
 
+  // Indicate that there may be additional padding arguments on the stack. This
+  // is for example necessary for PopAndReturn to work correctly for code used
+  // on functions with a non-varargs parameter count. The target function
+  // object and the dispatch handle need to be passed in and are used to obtain
+  // the parameter count of the function, which in turn is necessary to
+  // determine if there are any padding arguments and if so, how many.
+  void SetMayHavePaddingArguments(TNode<JSFunction> target,
+                                  TNode<JSDispatchHandleT> dispatch_handle);
+
+  // Return true if there may be padding arguments, false otherwise.
+  bool MayHavePaddingArguments() const { return parameter_count_.has_value(); }
+
   TNode<Object> GetReceiver() const;
   // Replaces receiver argument on the expression stack. Should be used only
   // for manipulating arguments in trampoline builtins before tail calling
@@ -4749,6 +4765,10 @@ class V8_EXPORT_PRIVATE CodeStubArguments {
   TNode<IntPtrT> argc_;
   TNode<RawPtrT> base_;
   TNode<RawPtrT> fp_;
+  // Optional parameter count of the function object. This is used when there
+  // may be additional padding arguments on the stack, see PopAndReturn and
+  // SetMayHavePaddingArguments for more details.
+  std::optional<TNode<Uint16T>> parameter_count_ = std::nullopt;
 };
 
 class ToDirectStringAssembler : public CodeStubAssembler {
