@@ -208,13 +208,17 @@ MaybeHandle<Context> NewScriptContext(
       if (IsLexicalVariableMode(mode) || IsLexicalVariableMode(lookup.mode)) {
         DirectHandle<Context> context(script_context->get(lookup.context_index),
                                       isolate);
-        // If we are trying to re-declare a REPL-mode let as a let or REPL-mode
-        // const as a const, allow it.
-        // TODO(rezvan): Add check and related tests for VariableMode::kUsing.
+        // If we are trying to re-declare a REPL-mode let as a let, REPL-mode
+        // const as a const, REPL-mode using as a using and REPL-mode await
+        // using as an await using allow it.
         if (!(((mode == VariableMode::kLet &&
                 lookup.mode == VariableMode::kLet) ||
                (mode == VariableMode::kConst &&
-                lookup.mode == VariableMode::kConst)) &&
+                lookup.mode == VariableMode::kConst) ||
+               (mode == VariableMode::kUsing &&
+                lookup.mode == VariableMode::kUsing) ||
+               (mode == VariableMode::kAwaitUsing &&
+                lookup.mode == VariableMode::kAwaitUsing)) &&
               scope_info->IsReplModeScope() &&
               context->scope_info()->IsReplModeScope())) {
           // ES#sec-globaldeclarationinstantiation 5.b:
@@ -257,8 +261,8 @@ MaybeHandle<Context> NewScriptContext(
       isolate->factory()->NewScriptContext(native_context, scope_info);
 
   result->Initialize(isolate);
-  // In REPL mode, we are allowed to add/modify let/const variables.
-  // We use the previous defined script context for those.
+  // In REPL mode, we are allowed to add/modify let/const/using/await using
+  // variables. We use the previous defined script context for those.
   const bool ignore_duplicates = scope_info->IsReplModeScope();
   DirectHandle<ScriptContextTable> new_script_context_table =
       ScriptContextTable::Add(isolate, script_context, result,
