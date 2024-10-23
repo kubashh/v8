@@ -105,6 +105,24 @@
       "parentUuid": "16333bb5_9304b10d",
       "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29c3f2d_fd81f774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-10-23T18:59:16Z",
+      "side": 1,
+      "message": "Thank you for the information Matthias. We could definitely disable it for the time being on unsupported platforms. Tests seem to be ok for now, I can monitor the CI and disable it if another failure occurs? (i\u0027ll land this back port for now).",
+      "parentUuid": "08ec680f_9da44f0c",
+      "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
