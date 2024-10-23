@@ -16,6 +16,75 @@
       "message": "PTAL",
       "revId": "0751872b37205c7de15bd9e37d0ad5a624cb961d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c0cb3cf_3050ff1d",
+        "filename": "src/heap/base/bytes.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-23T15:22:53Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 10
+      },
+      "revId": "0751872b37205c7de15bd9e37d0ad5a624cb961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3dc84e5_70b766a6",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-23T15:22:53Z",
+      "side": 1,
+      "message": "Is the `BoundedAverageSpeed()` still used?",
+      "range": {
+        "startLine": 55,
+        "startChar": 7,
+        "endLine": 55,
+        "endChar": 26
+      },
+      "revId": "0751872b37205c7de15bd9e37d0ad5a624cb961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2295d66_dc4a307c",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-23T15:22:53Z",
+      "side": 1,
+      "message": "The previous methods used to provide (arbitrary) constants as defaults. I guess we never call them uninitialized these days?",
+      "range": {
+        "startLine": 1313,
+        "startChar": 17,
+        "endLine": 1313,
+        "endChar": 66
+      },
+      "revId": "0751872b37205c7de15bd9e37d0ad5a624cb961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
