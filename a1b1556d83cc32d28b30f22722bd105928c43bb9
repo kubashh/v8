@@ -69,6 +69,24 @@
       "parentUuid": "2d9c25d0_795a1b7f",
       "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16333bb5_9304b10d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2024-10-23T11:05:17Z",
+      "side": 1,
+      "message": "Beside from this one case nothing else is failing currently. I guess this was one of the main ports which is already done: https://chromium-review.googlesource.com/c/v8/v8/+/5889873\n\nppc might need more works tho as our Fp and Simd registers are separate.\n\nI\u0027m focusing on jspi at the moment, is it possible for us to finalize the deopt ports later this year?",
+      "parentUuid": "42034d71_23031211",
+      "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
