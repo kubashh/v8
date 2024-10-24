@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "202fb368_a5ccd810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2024-10-24T12:37:14Z",
+      "side": 1,
+      "message": "PTAL.\n\nDetailed background:\nIn `AsyncFuzzerResolver::OnCompilationSucceeded`, we call `ExecuteAgainstReference`, which (inside the further call to `CompileReferenceModule`) does `CHECK(!imports_error.has_error())` [1], which is implied by successful previous compilation -- but only if that earlier compilation used the same compile-time imports and hence enforced the same restrictions on the imports that were satisfied at compilation time.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/test/fuzzer/wasm-fuzzer-common.cc;l\u003d98?q\u003dexecuteagainstreference",
+      "revId": "37f850098d1f6b00e436eed31df5328c9a6eeb24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
