@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc084b00_8dd3ad8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2024-10-24T09:53:21Z",
+      "side": 1,
+      "message": "could you ptal at this reland? thanks! patch set 2 is the fix. if you want you can ofc have a look at the whole thing it\u0027s ofc welcome, hash maps are interesting!",
+      "revId": "1125969da60d483b2dc2bfb6c7f921ef7822eebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
