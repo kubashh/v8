@@ -123,6 +123,24 @@
       "parentUuid": "08ec680f_9da44f0c",
       "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7c8dcd_08d7f158",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-24T08:21:47Z",
+      "side": 1,
+      "message": "\u003e  I can monitor the CI and disable it if another failure occurs? (I\u0027ll land this back port for now).\n\nSounds good to me.",
+      "parentUuid": "f29c3f2d_fd81f774",
+      "revId": "a1b1556d83cc32d28b30f22722bd105928c43bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
