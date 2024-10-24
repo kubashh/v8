@@ -1,0 +1,71 @@
+Checks if catch prediction works on new `using` and `await using` syntax.
+
+Running test: testPauseOnInitialState
+
+evaluate 'disposalThrowsInUsingSyntax()'..
+
+evaluate 'disposalThrowsInAwaitUsingSyntax()'..
+
+Running test: testPauseOnExceptionOff
+
+evaluate 'disposalThrowsInUsingSyntax()'..
+
+evaluate 'disposalThrowsInAwaitUsingSyntax()'..
+
+Running test: testBreakOnCaughtException
+
+evaluate 'disposalThrowsInUsingSyntax()'..
+
+evaluate 'disposalThrowsInAwaitUsingSyntax()'..
+
+Running test: testBreakOnUncaughtException
+
+evaluate 'disposalThrowsInUsingSyntax()'..
+paused on exception:
+{
+    className : ReferenceError
+    description : ReferenceError: disposalThrowsInUsingSyntax is not defined     at <anonymous>:86:103
+    objectId : <objectId>
+    subtype : error
+    type : object
+    uncaught : true
+}
+
+evaluate 'disposalThrowsInAwaitUsingSyntax()'..
+paused on exception:
+{
+    className : ReferenceError
+    description : ReferenceError: disposalThrowsInAwaitUsingSyntax is not defined     at <anonymous>:86:103
+    objectId : <objectId>
+    subtype : error
+    type : object
+    uncaught : true
+}
+
+Running test: testBreakOnAll
+
+evaluate 'disposalThrowsInUsingSyntax()'..
+paused on exception:
+{
+    className : ReferenceError
+    description : ReferenceError: disposalThrowsInUsingSyntax is not defined     at <anonymous>:86:103
+    objectId : <objectId>
+    subtype : error
+    type : object
+    uncaught : true
+}
+
+evaluate 'disposalThrowsInAwaitUsingSyntax()'..
+paused on exception:
+{
+    className : ReferenceError
+    description : ReferenceError: disposalThrowsInAwaitUsingSyntax is not defined     at <anonymous>:86:103
+    objectId : <objectId>
+    subtype : error
+    type : object
+    uncaught : true
+}
+
+Running test: testBreakOnExceptionInSilentMode
+evaluate 'disposalThrowsInUsingSyntax()'
+evaluate 'disposalThrowsInAwaitUsingSyntax()'
