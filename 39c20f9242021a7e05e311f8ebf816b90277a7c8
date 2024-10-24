@@ -16,6 +16,23 @@
       "message": "PTAL, I found that this reduces the overhead of switching stacks for synchronous JS imports by 25%, but I am not completely confident that this is data-race proof, wdyt?",
       "revId": "39c20f9242021a7e05e311f8ebf816b90277a7c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "739a91d3_ecbf75a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1545467
+      },
+      "writtenOn": "2024-10-24T19:56:20Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "39c20f9242021a7e05e311f8ebf816b90277a7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
