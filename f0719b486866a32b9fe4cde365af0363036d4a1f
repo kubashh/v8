@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0576f914_c1860f27",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2024-10-24T07:47:30Z",
+      "side": 1,
+      "message": "Why this line keeps as old interface? \nAs in the changed assembler-riscv.h, the function declaration is: \n\n---------------------------------------------------------------------\n  static int PatchBranchlongOffset(\n      Address pc, Instr auipc, Instr instr_I, int32_t offset,\n      WritableJitAllocation* jit_allocation \u003d nullptr);",
+      "revId": "f0719b486866a32b9fe4cde365af0363036d4a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
