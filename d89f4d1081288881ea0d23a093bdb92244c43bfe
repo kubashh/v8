@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe1889d_8c16a866",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-10-24T13:59:46Z",
+      "side": 1,
+      "message": "Hello Nikolaos, could you please also review it? We need two votes to be able to submit it",
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
