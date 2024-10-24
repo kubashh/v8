@@ -231,8 +231,8 @@ class Deserializer : public SerializerDeserializer {
   int ReadAllocateJSDispatchEntry(uint8_t data, SlotAccessor slot_accessor);
   template <typename SlotAccessor>
   int ReadProtectedPointerPrefix(uint8_t data, SlotAccessor slot_accessor);
-  template <typename SlotAccessor>
-  int ReadRootArrayConstants(uint8_t data, SlotAccessor slot_accessor);
+  template <RootIndex kRootIndex, typename SlotAccessor>
+  int ReadRootArrayConstants(SlotAccessor slot_accessor);
   template <typename SlotAccessor>
   int ReadHotObject(uint8_t data, SlotAccessor slot_accessor);
   template <typename SlotAccessor>

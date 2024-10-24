@@ -929,6 +929,32 @@ constexpr uint8_t VerifyBytecodeCount(uint8_t bytecode) {
 #define CASE_R16(byte_code) CASE_R8(byte_code) : case CASE_R8(byte_code + 8)
 #define CASE_R32(byte_code) CASE_R16(byte_code) : case CASE_R16(byte_code + 16)
 
+#define CASE_RANGE_APPLY(byte_code, num_bytecodes, APPLY)                \
+  CASE_RANGE_R##num_bytecodes##_APPLY(                                   \
+      (VerifyBytecodeCount<byte_code##Count, num_bytecodes>(byte_code)), \
+      APPLY)
+#define CASE_RANGE_R1_APPLY(byte_code, APPLY) \
+  case byte_code:                             \
+    APPLY(byte_code)
+#define CASE_RANGE_R2_APPLY(byte_code, APPLY) \
+  CASE_RANGE_R1_APPLY(byte_code, APPLY)       \
+  CASE_RANGE_R1_APPLY(byte_code + 1, APPLY)
+#define CASE_RANGE_R3_APPLY(byte_code, APPLY) \
+  CASE_RANGE_R2_APPLY(byte_code, APPLY)       \
+  CASE_RANGE_R1_APPLY(byte_code + 2, APPLY)
+#define CASE_RANGE_R4_APPLY(byte_code, APPLY) \
+  CASE_RANGE_R2_APPLY(byte_code, APPLY)       \
+  CASE_RANGE_R2_APPLY(byte_code + 2, APPLY)
+#define CASE_RANGE_R8_APPLY(byte_code, APPLY) \
+  CASE_RANGE_R4_APPLY(byte_code, APPLY)       \
+  CASE_RANGE_R4_APPLY(byte_code + 4, APPLY)
+#define CASE_RANGE_R16_APPLY(byte_code, APPLY) \
+  CASE_RANGE_R8_APPLY(byte_code, APPLY)        \
+  CASE_RANGE_R8_APPLY(byte_code + 8, APPLY)
+#define CASE_RANGE_R32_APPLY(byte_code, APPLY) \
+  CASE_RANGE_R16_APPLY(byte_code, APPLY)       \
+  CASE_RANGE_R16_APPLY(byte_code + 16, APPLY)
+
 // This generates a case range for all the spaces.
 // clang-format off
 #define CASE_RANGE_ALL_SPACES(bytecode)                                \
@@ -1024,8 +1050,11 @@ int Deserializer<IsolateT>::ReadSingleBytecodeData(uint8_t data,
       return ReadAllocateJSDispatchEntry(data, slot_accessor);
     case kProtectedPointerPrefix:
       return ReadProtectedPointerPrefix(data, slot_accessor);
-    case CASE_RANGE(kRootArrayConstants, 32):
-      return ReadRootArrayConstants(data, slot_accessor);
+#define READ_ROOT_ARRAY_CONSTANT(static_data)                            \
+  return ReadRootArrayConstants<RootArrayConstant::Decode(static_data)>( \
+      slot_accessor);
+      CASE_RANGE_APPLY(kRootArrayConstants, 32, READ_ROOT_ARRAY_CONSTANT)
+#undef READ_ROOT_ARRAY_CONSTANT
     case CASE_RANGE(kHotObject, 8):
       return ReadHotObject(data, slot_accessor);
     case CASE_RANGE(kFixedRawData, 32):
@@ -1517,23 +1546,22 @@ int Deserializer<IsolateT>::ReadProtectedPointerPrefix(
 }
 
 template <typename IsolateT>
-template <typename SlotAccessor>
-int Deserializer<IsolateT>::ReadRootArrayConstants(uint8_t data,
-                                                   SlotAccessor slot_accessor) {
+template <RootIndex kRootIndex, typename SlotAccessor>
+int Deserializer<IsolateT>::ReadRootArrayConstants(SlotAccessor slot_accessor) {
   // First kRootArrayConstantsCount roots are guaranteed to be in
   // the old space.
   static_assert(static_cast<int>(RootIndex::kFirstImmortalImmovableRoot) == 0);
   static_assert(kRootArrayConstantsCount <=
                 static_cast<int>(RootIndex::kLastImmortalImmovableRoot));
 
-  RootIndex root_index = RootArrayConstant::Decode(data);
-  Handle<HeapObject> heap_object =
-      Cast<HeapObject>(isolate()->root_handle(root_index));
   if (v8_flags.trace_deserialization) {
     PrintF("%*sRootArrayConstants [%u] : %s\n", depth_, "",
-           static_cast<int>(root_index), RootsTable::name(root_index));
+           static_cast<int>(kRootIndex), RootsTable::name(kRootIndex));
   }
-  return slot_accessor.Write(heap_object, HeapObjectReferenceType::STRONG, 0,
+
+  ReadOnlyRoots roots(isolate());
+  return slot_accessor.Write(Cast<HeapObject>(roots.object_at(kRootIndex)),
+                             HeapObjectReferenceType::STRONG, 0,
                              SKIP_WRITE_BARRIER);
 }
 

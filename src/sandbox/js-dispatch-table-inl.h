@@ -123,7 +123,6 @@ void JSDispatchEntry::SetCodeAndEntrypointPointer(Address new_object,
 void JSDispatchEntry::MakeFreelistEntry(uint32_t next_entry_index) {
   Address payload = kFreeEntryTag | next_entry_index;
   entrypoint_.store(payload, std::memory_order_relaxed);
-  encoded_word_.store(kNullAddress, std::memory_order_relaxed);
 }
 
 bool JSDispatchEntry::IsFreelistEntry() const {
