@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ef32c4d_02100125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-24T12:09:10Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "62d7741ecbdd7d89dfbafd34cb671c048bf1f0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9e36857_b5c124e6",
@@ -14,6 +31,30 @@
       "writtenOn": "2024-10-23T16:46:11Z",
       "side": 1,
       "message": "I\u0027m wondering if it would be better to track this in the `CodeAssemblerState` associated with `assembler_` instead. Then things like this would still work:\n```\nCodeStubArguments(...).SetMayHavePaddingArguments();\n...\nCodeStubArguments(...).PopAndReturn();\n```\nThis would then probably also simplify the implementation for torque builtins, as they would probably end up emitting such a code pattern. WDYT?",
+      "range": {
+        "startLine": 4768,
+        "startChar": 0,
+        "endLine": 4771,
+        "endChar": 64
+      },
+      "revId": "62d7741ecbdd7d89dfbafd34cb671c048bf1f0c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "299aa7ec_6ba53fd4",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4771,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-24T12:09:10Z",
+      "side": 1,
+      "message": "Yes, it would be nice to add some automation here in a follow-up CL.\nIt seems that `RawMachineAssembler::PopAndReturn()` is a better place for implementing this. We could make respective CallDescriptors aware about whether `JSDispatchHandle` parameter is available for current builtin (for example via flags).",
+      "parentUuid": "f9e36857_b5c124e6",
       "range": {
         "startLine": 4768,
         "startChar": 0,
