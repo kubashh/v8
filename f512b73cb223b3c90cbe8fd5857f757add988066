@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e68f662_c869012b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2024-10-24T07:27:28Z",
+      "side": 1,
+      "message": "Thanks for fixing this bug in the wasm-serialization",
+      "revId": "f512b73cb223b3c90cbe8fd5857f757add988066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
