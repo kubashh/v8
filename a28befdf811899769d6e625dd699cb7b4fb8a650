@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "a28befdf811899769d6e625dd699cb7b4fb8a650",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "121fb85f_4f66bbb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-24T13:31:53Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "a28befdf811899769d6e625dd699cb7b4fb8a650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "338068f9_fd7dcf8e",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2628,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2024-10-24T13:31:53Z",
+      "side": 1,
+      "message": "with the intention to give more slack and avoid an immediate large finalization pause.",
+      "range": {
+        "startLine": 2628,
+        "startChar": 67,
+        "endLine": 2628,
+        "endChar": 68
+      },
+      "revId": "a28befdf811899769d6e625dd699cb7b4fb8a650",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
