@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3caa0a73_889318b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3529302
+      },
+      "writtenOn": "2024-10-24T07:52:15Z",
+      "side": 1,
+      "message": "JFYI: my apologies, this patch introduced regressions into `gm riscv.release.check` tests which has been fixed by follow-up https://chromium-review.googlesource.com/c/v8/v8/+/5949564.",
+      "revId": "e23693fa9924e9766fbe362afd4942abbfe878c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
