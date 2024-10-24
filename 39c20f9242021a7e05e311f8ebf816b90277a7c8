@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e8d6487_65d7f782",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-24T16:57:03Z",
+      "side": 1,
+      "message": "PTAL, I found that this reduces the overhead of switching stacks for synchronous JS imports by 25%, but I am not completely confident that this is data-race proof, wdyt?",
+      "revId": "39c20f9242021a7e05e311f8ebf816b90277a7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
