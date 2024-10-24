@@ -164,7 +164,7 @@ void SetWasmCalleeTag(WritableRelocInfo* rinfo, uint32_t tag) {
     Assembler::PatchBranchlongOffset(rinfo->pc(), auipc, jalr, (int32_t)tag);
   } else {
     Assembler::set_target_address_at(rinfo->pc(), rinfo->constant_pool(),
-                                     static_cast<Address>(tag),
+                                     static_cast<Address>(tag), nullptr,
                                      SKIP_ICACHE_FLUSH);
   }
 #else
