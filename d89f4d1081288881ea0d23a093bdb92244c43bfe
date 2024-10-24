@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "810ebb3b_865a2772",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-10-24T14:07:47Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "e046358a_46e1a3f5",
+      "range": {
+        "startLine": 13,
+        "startChar": 25,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "351a5eb2_2a4c4fb0",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-24T14:04:04Z",
       "side": 1,
       "message": "Remove one space.",
+      "range": {
+        "startLine": 14,
+        "startChar": 33,
+        "endLine": 14,
+        "endChar": 35
+      },
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de454851_ac38db3c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-10-24T14:07:47Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "351a5eb2_2a4c4fb0",
       "range": {
         "startLine": 14,
         "startChar": 33,
@@ -77,6 +125,24 @@
       "writtenOn": "2024-10-24T14:04:04Z",
       "side": 1,
       "message": "LGTM",
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "650bfe6f_3346ffc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2024-10-24T14:07:47Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "83d33300_aad41c46",
       "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
