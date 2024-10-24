@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e046358a_46e1a3f5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-24T14:04:04Z",
+      "side": 1,
+      "message": "Typo: \"before\".",
+      "range": {
+        "startLine": 13,
+        "startChar": 25,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "351a5eb2_2a4c4fb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-24T14:04:04Z",
+      "side": 1,
+      "message": "Remove one space.",
+      "range": {
+        "startLine": 14,
+        "startChar": 33,
+        "endLine": 14,
+        "endChar": 35
+      },
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dbe1889d_8c16a866",
@@ -14,6 +60,23 @@
       "writtenOn": "2024-10-24T13:59:46Z",
       "side": 1,
       "message": "Hello Nikolaos, could you please also review it? We need two votes to be able to submit it",
+      "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83d33300_aad41c46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2024-10-24T14:04:04Z",
+      "side": 1,
+      "message": "LGTM",
       "revId": "d89f4d1081288881ea0d23a093bdb92244c43bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
