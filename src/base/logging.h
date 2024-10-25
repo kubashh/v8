@@ -187,8 +187,7 @@ namespace detail {
 template <typename... Ts>
 std::string PrintToString(Ts&&... ts) {
   CheckMessageStream oss;
-  int unused_results[]{((oss << std::forward<Ts>(ts)), 0)...};
-  (void)unused_results;  // Avoid "unused variable" warning.
+  (..., (oss << std::forward<Ts>(ts)));
   return oss.str();
 }
 
@@ -204,27 +203,20 @@ auto GetUnderlyingEnumTypeForPrinting(T val) {
   return static_cast<int_t>(static_cast<underlying_t>(val));
 }
 
-template <typename T, typename Enable = void>
-struct is_forward_iterable : public std::false_type {};
-template <typename T>
-struct is_forward_iterable<
-    T, std::enable_if_t<std::is_convertible_v<
-           typename std::iterator_traits<
-               decltype(std::declval<T>().begin())>::iterator_category,
-           std::forward_iterator_tag>>> : public std::true_type {};
-
-static_assert(is_forward_iterable<const std::vector<int>&>::value);
-
 }  // namespace detail
+
+// Define default PrintCheckOperand<T> for non-printable types.
+template <typename T>
+std::string PrintCheckOperand(T val) {
+  return "<unprintable>";
+}
 
 // Define PrintCheckOperand<T> for each T which defines operator<< for ostream.
 template <typename T>
-typename std::enable_if<
-    !std::is_function<typename std::remove_pointer<T>::type>::value &&
-        !std::is_enum<T>::value &&
-        has_output_operator<T, CheckMessageStream>::value,
-    std::string>::type
-PrintCheckOperand(T val) {
+  requires(!std::is_function<typename std::remove_pointer<T>::type>::value &&
+           !std::is_enum<T>::value &&
+           has_output_operator<T, CheckMessageStream>::value)
+std::string PrintCheckOperand(T val) {
   return detail::PrintToString(std::forward<T>(val));
 }
 
@@ -234,60 +226,44 @@ PrintCheckOperand(T val) {
 // standards-conforming here and converts function pointers to regular
 // pointers, so this is a no-op for MSVC.)
 template <typename T>
-typename std::enable_if<
-    std::is_function<typename std::remove_pointer<T>::type>::value,
-    std::string>::type
-PrintCheckOperand(T val) {
+  requires(std::is_function_v<typename std::remove_pointer_t<T>>)
+std::string PrintCheckOperand(T val) {
   return PrintCheckOperand(reinterpret_cast<const void*>(val));
 }
 
-// Define PrintCheckOperand<T> for enums with an output operator.
+// Define PrintCheckOperand<T> for enums.
 template <typename T>
-typename std::enable_if<std::is_enum<T>::value &&
-                            has_output_operator<T, CheckMessageStream>::value,
-                        std::string>::type
-PrintCheckOperand(T val) {
-  std::string val_str = detail::PrintToString(val);
+  requires(std::is_enum_v<T>)
+std::string PrintCheckOperand(T val) {
   std::string int_str =
       detail::PrintToString(detail::GetUnderlyingEnumTypeForPrinting(val));
-  // Printing the original enum might have printed a single non-printable
-  // character. Ignore it in that case. Also ignore if it printed the same as
-  // the integral representation.
-  // TODO(clemensb): Can we somehow statically find out if the output operator
-  // is the default one, printing the integral value?
-  if ((val_str.length() == 1 && !std::isprint(val_str[0])) ||
-      val_str == int_str) {
+  if constexpr (has_output_operator<T, CheckMessageStream>::value) {
+    std::string val_str = detail::PrintToString(val);
+    // Printing the original enum might have printed a single non-printable
+    // character. Ignore it in that case. Also ignore if it printed the same as
+    // the integral representation.
+    // TODO(clemensb): Can we somehow statically find out if the output operator
+    // is the default one, printing the integral value?
+    if ((val_str.length() == 1 && !std::isprint(val_str[0])) ||
+        val_str == int_str) {
+      return int_str;
+    }
+    return detail::PrintToString(val_str, " (", int_str, ")");
+  } else {
     return int_str;
   }
-  return detail::PrintToString(val_str, " (", int_str, ")");
-}
-
-// Define PrintCheckOperand<T> for enums without an output operator.
-template <typename T>
-typename std::enable_if<std::is_enum<T>::value &&
-                            !has_output_operator<T, CheckMessageStream>::value,
-                        std::string>::type
-PrintCheckOperand(T val) {
-  return detail::PrintToString(detail::GetUnderlyingEnumTypeForPrinting(val));
-}
-
-// Define default PrintCheckOperand<T> for non-printable types.
-template <typename T>
-typename std::enable_if<!has_output_operator<T, CheckMessageStream>::value &&
-                            !std::is_enum<T>::value &&
-                            !detail::is_forward_iterable<T>::value,
-                        std::string>::type
-PrintCheckOperand(T val) {
-  return "<unprintable>";
 }
 
 // Define PrintCheckOperand<T> for forward iterable containers without an output
 // operator.
 template <typename T>
-typename std::enable_if<detail::is_forward_iterable<T>::value &&
-                            !has_output_operator<T, CheckMessageStream>::value,
-                        std::string>::type
-PrintCheckOperand(T container) {
+  requires(!has_output_operator<T, CheckMessageStream>::value &&
+           requires(T t) {
+             std::is_convertible_v<typename std::iterator_traits<
+                                       decltype(t.begin())>::iterator_category,
+                                   std::forward_iterator_tag>;
+           })
+std::string PrintCheckOperand(T container) {
   CheckMessageStream oss;
   oss << "{";
   bool first = true;
@@ -390,18 +366,40 @@ struct is_signed_vs_unsigned {
 template <typename Lhs, typename Rhs>
 struct is_unsigned_vs_signed : public is_signed_vs_unsigned<Rhs, Lhs> {};
 
-// Specialize the compare functions for signed vs. unsigned comparisons.
-// std::enable_if ensures that this template is only instantiable if both Lhs
-// and Rhs are integral types, and their signedness does not match.
+static_assert(!is_signed_vs_unsigned<unsigned, int>::value);
+static_assert(is_unsigned_vs_signed<unsigned, int>::value);
+static_assert(is_signed_vs_unsigned<int, unsigned>::value);
+static_assert(!is_unsigned_vs_signed<int, unsigned>::value);
+static_assert(!is_signed_vs_unsigned<unsigned, unsigned>::value);
+static_assert(!is_signed_vs_unsigned<int, int>::value);
+
+// Define the default implementation of Cmp##NAME##Impl to be used by
+// CHECK##NAME##Impl.
+// Note the specializations below for integral types with mismatching
+// signedness.
+#define DEFINE_CMP_IMPL(NAME, op)                              \
+  template <typename Lhs, typename Rhs>                        \
+  V8_INLINE constexpr bool Cmp##NAME##Impl(Lhs lhs, Rhs rhs) { \
+    return lhs op rhs;                                         \
+  }
+DEFINE_CMP_IMPL(EQ, ==)
+DEFINE_CMP_IMPL(NE, !=)
+DEFINE_CMP_IMPL(LE, <=)
+DEFINE_CMP_IMPL(LT, <)
+DEFINE_CMP_IMPL(GE, >=)
+DEFINE_CMP_IMPL(GT, >)
+#undef DEFINE_CMP_IMPL
+
+// Specialize the compare functions for signed vs. unsigned comparisons (via the
+// `requires` clause).
 #define MAKE_UNSIGNED(Type, value)         \
   static_cast<typename std::make_unsigned< \
       typename comparison_underlying_type<Type>::type>::type>(value)
-#define DEFINE_SIGNED_MISMATCH_COMP(CHECK, NAME, IMPL)            \
-  template <typename Lhs, typename Rhs>                           \
-  V8_INLINE constexpr                                             \
-      typename std::enable_if<CHECK<Lhs, Rhs>::value, bool>::type \
-          Cmp##NAME##Impl(Lhs lhs, Rhs rhs) {                     \
-    return IMPL;                                                  \
+#define DEFINE_SIGNED_MISMATCH_COMP(CHECK, NAME, IMPL)         \
+  template <typename Lhs, typename Rhs>                        \
+    requires(CHECK<Lhs, Rhs>::value)                           \
+  V8_INLINE constexpr bool Cmp##NAME##Impl(Lhs lhs, Rhs rhs) { \
+    return IMPL;                                               \
   }
 DEFINE_SIGNED_MISMATCH_COMP(is_signed_vs_unsigned, EQ,
                             lhs >= 0 && MAKE_UNSIGNED(Lhs, lhs) ==
@@ -424,44 +422,32 @@ DEFINE_SIGNED_MISMATCH_COMP(is_unsigned_vs_signed, GE, CmpLEImpl(rhs, lhs))
 #undef MAKE_UNSIGNED
 #undef DEFINE_SIGNED_MISMATCH_COMP
 
+// Define the implementation of Check##NAME##Impl, using Cmp##NAME##Impl defined
+// above.
+#define DEFINE_CHECK_OP_IMPL(NAME)                                      \
+  template <typename Lhs, typename Rhs>                                 \
+  V8_INLINE constexpr std::string* Check##NAME##Impl(Lhs lhs, Rhs rhs,  \
+                                                     char const* msg) { \
+    using LhsPassT = typename pass_value_or_ref<Lhs>::type;             \
+    using RhsPassT = typename pass_value_or_ref<Rhs>::type;             \
+    bool cmp = Cmp##NAME##Impl<LhsPassT, RhsPassT>(lhs, rhs);           \
+    return V8_LIKELY(cmp)                                               \
+               ? nullptr                                                \
+               : MakeCheckOpString<LhsPassT, RhsPassT>(lhs, rhs, msg);  \
+  }
+DEFINE_CHECK_OP_IMPL(EQ)
+DEFINE_CHECK_OP_IMPL(NE)
+DEFINE_CHECK_OP_IMPL(LE)
+DEFINE_CHECK_OP_IMPL(LT)
+DEFINE_CHECK_OP_IMPL(GE)
+DEFINE_CHECK_OP_IMPL(GT)
+#undef DEFINE_CHECK_OP_IMPL
+
 // For CHECK_BOUNDS, define to-unsigned conversion helpers.
 template <typename T>
 constexpr std::make_unsigned_t<T> ToUnsigned(T val) {
   return static_cast<std::make_unsigned_t<T>>(val);
 }
-
-// Helper functions for CHECK_OP macro.
-// The (float, float) and (double, double) instantiations are explicitly
-// externalized to ensure proper 32/64-bit comparisons on x86.
-// The Cmp##NAME##Impl function is only instantiable if one of the two types is
-// not integral or their signedness matches (i.e. whenever no specialization is
-// required, see above). Otherwise it is disabled by the enable_if construct,
-// and the compiler will pick a specialization from above.
-#define DEFINE_CHECK_OP_IMPL(NAME, op)                                        \
-  template <typename Lhs, typename Rhs>                                       \
-  V8_INLINE constexpr                                                         \
-      typename std::enable_if<!is_signed_vs_unsigned<Lhs, Rhs>::value &&      \
-                                  !is_unsigned_vs_signed<Lhs, Rhs>::value,    \
-                              bool>::type Cmp##NAME##Impl(Lhs lhs, Rhs rhs) { \
-    return lhs op rhs;                                                        \
-  }                                                                           \
-  template <typename Lhs, typename Rhs>                                       \
-  V8_INLINE constexpr std::string* Check##NAME##Impl(Lhs lhs, Rhs rhs,        \
-                                                     char const* msg) {       \
-    using LhsPassT = typename pass_value_or_ref<Lhs>::type;                   \
-    using RhsPassT = typename pass_value_or_ref<Rhs>::type;                   \
-    bool cmp = Cmp##NAME##Impl<LhsPassT, RhsPassT>(lhs, rhs);                 \
-    return V8_LIKELY(cmp)                                                     \
-               ? nullptr                                                      \
-               : MakeCheckOpString<LhsPassT, RhsPassT>(lhs, rhs, msg);        \
-  }
-DEFINE_CHECK_OP_IMPL(EQ, ==)
-DEFINE_CHECK_OP_IMPL(NE, !=)
-DEFINE_CHECK_OP_IMPL(LE, <=)
-DEFINE_CHECK_OP_IMPL(LT, < )
-DEFINE_CHECK_OP_IMPL(GE, >=)
-DEFINE_CHECK_OP_IMPL(GT, > )
-#undef DEFINE_CHECK_OP_IMPL
 
 #define CHECK_EQ(lhs, rhs) CHECK_OP(EQ, ==, lhs, rhs)
 #define CHECK_NE(lhs, rhs) CHECK_OP(NE, !=, lhs, rhs)
