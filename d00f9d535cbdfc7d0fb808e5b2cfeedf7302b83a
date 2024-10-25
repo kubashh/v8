@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b25ef9_436f9084",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-10-25T13:11:21Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "d00f9d535cbdfc7d0fb808e5b2cfeedf7302b83a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10dc0aa1_aadb11ad",
+        "filename": "src/compiler/raw-machine-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2024-10-25T13:11:21Z",
+      "side": 1,
+      "message": "Can we `DCHECK` this? E.g. using `dynamic_js_parameter_count_`?",
+      "range": {
+        "startLine": 632,
+        "startChar": 2,
+        "endLine": 632,
+        "endChar": 72
+      },
+      "revId": "d00f9d535cbdfc7d0fb808e5b2cfeedf7302b83a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
