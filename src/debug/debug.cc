@@ -2237,6 +2237,7 @@ Handle<Object> Debug::FindInnermostContainingFunctionInfo(Handle<Script> script,
       shared = FindSharedFunctionInfoCandidate(position, script, isolate_);
       if (shared.is_null()) {
         if (iteration > 0) break;
+        if (script->is_wrapped()) break;
         // It might be that the shared function info is not available as the
         // top level functions are removed due to the GC. Try to recompile
         // the top level functions.
