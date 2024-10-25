@@ -4086,9 +4086,21 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return LoadBuiltinDispatchHandle(JSBuiltinDispatchHandleRoot::to_idx(idx));
   }
 
-  // Load a Code object from the JSDispatchTable.
-  TNode<Code> ResolveJSDispatchHandle(TNode<JSDispatchHandleT> dispatch_handle);
+  // Load the Code object of a JSDispatchTable entry.
+  TNode<Code> LoadCodeObjectFromJSDispatchTable(
+      TNode<JSDispatchHandleT> dispatch_handle);
+  // Load the parameter count of a JSDispatchTable entry.
+  TNode<Uint16T> LoadParameterCountFromJSDispatchTable(
+      TNode<JSDispatchHandleT> dispatch_handle);
 #endif
+
+  // Support for code with a dynamic parameter count.
+  // This is used for builtins that must work on functions with different
+  // parameter counts and will fetch the parameter count of the function
+  // through which the code was invoked. The parameter count is subsequently
+  // available through the corresponding CodeAssembler accessors.
+  void FetchDynamicJSParameterCount(TNode<JSFunction> callee,
+                                    TNode<JSDispatchHandleT> dispatch_handle);
 
   // Figure out the SFI's code object using its data field.
   // If |data_type_out| is provided, the instance type of the function data will
@@ -4697,6 +4709,23 @@ class V8_EXPORT_PRIVATE CodeStubArguments {
         argc_(torque_arguments.actual_count),
         base_(torque_arguments.base),
         fp_(torque_arguments.frame) {}
+
+  // Indicate that there may be additional padding arguments on the stack. This
+  // is for example necessary for PopAndReturn to work correctly for code used
+  // on functions with a non-varargs parameter count. The target function
+  // object and the dispatch handle need to be passed in and are used to obtain
+  // the parameter count of the function, which in turn is necessary to
+  // determine if there are any padding arguments and if so, how many.
+  //
+  // TODO(saelo): it would be a bit nicer if this would happen automatically in
+  // the function prologue for functions marked as requiring this (e.g. via the
+  // call descriptor). It's not clear if that's worth the effort though for the
+  // handful of builtins that require this.
+  void SetMayHavePaddingArguments(TNode<JSFunction> target,
+                                  TNode<JSDispatchHandleT> dispatch_handle);
+
+  // Return true if there may be padding arguments, false otherwise.
+  bool MayHavePaddingArguments() const;
 
   TNode<Object> GetReceiver() const;
   // Replaces receiver argument on the expression stack. Should be used only
