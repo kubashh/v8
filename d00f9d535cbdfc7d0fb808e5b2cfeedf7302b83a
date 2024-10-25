@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1efada_bd9daaed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-25T13:36:21Z",
+      "side": 1,
+      "message": "Thanks for the swift review!",
+      "revId": "d00f9d535cbdfc7d0fb808e5b2cfeedf7302b83a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10dc0aa1_aadb11ad",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-10-25T13:11:21Z",
       "side": 1,
       "message": "Can we `DCHECK` this? E.g. using `dynamic_js_parameter_count_`?",
+      "range": {
+        "startLine": 632,
+        "startChar": 2,
+        "endLine": 632,
+        "endChar": 72
+      },
+      "revId": "d00f9d535cbdfc7d0fb808e5b2cfeedf7302b83a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad1b87a5_e51520ba",
+        "filename": "src/compiler/raw-machine-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2024-10-25T13:36:21Z",
+      "side": 1,
+      "message": "I tried, but couldn\u0027t come up with anything better than the `CHECK_EQ` that\u0027s already here. One idea would be to also have a `CHECK(IsJSFunctionCall())`, but that doesn\u0027t always hold. For example here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/builtins-shadow-realm-gen.cc;l\u003d291;drc\u003d7e5f34d1c1dfde9855b90d3f3767504be6e2fdae we have a builtin that isn\u0027t a TFJ builtin and doesn\u0027t even exactly use the JS calling convention (it uses some CallTrampoline descriptor), but that still wants to do PopAndReturn (and it\u0027s valid there). The `dynamic_js_parameter_count_` will also be nullptr for most of these builtins. Just a few special ones have will use it.",
+      "parentUuid": "10dc0aa1_aadb11ad",
       "range": {
         "startLine": 632,
         "startChar": 2,
