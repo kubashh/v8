@@ -1,0 +1,62 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "258776fa_d16ff1e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-25T14:52:39Z",
+      "side": 1,
+      "message": "Note that this can\u0027t land until we turn off our old gcc bots.",
+      "revId": "d31b079a4a8f03ea63e283e55dafcd4a8bf61541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9ccc1ed_1d7d9c30",
+        "filename": "src/base/logging.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-25T14:52:39Z",
+      "side": 1,
+      "message": "if we want this to be a forward iterator, you could use the type constraint syntax on t.begin() and check the forward_iterator concept:\n\n```\n{t.begin()} -\u003e std::forward_iterator;\n```\nhttps://godbolt.org/z/Y37a7f47x",
+      "range": {
+        "startLine": 262,
+        "startChar": 18,
+        "endLine": 262,
+        "endChar": 34
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "4c41fde2_7e1db09d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/base/logging.h",
+              "range": {
+                "startLine": 262,
+                "startChar": 0,
+                "endLine": 265,
+                "endChar": 0
+              },
+              "replacement": "             std::is_convertible_v\u003c\n                 typename std::iterator_traits\u003cdecltype(t.begin())\u003e::\n                     iterator_category,\n                 std::forward_iterator_tag\u003e;\n"
+            }
+          ]
+        }
+      ],
+      "revId": "d31b079a4a8f03ea63e283e55dafcd4a8bf61541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
