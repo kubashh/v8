@@ -175,6 +175,10 @@ InspectorTest.ContextGroup = class {
     utils.compileAndRunWithOrigin(this.id, string, url, lineOffset || 0, columnOffset || 0, true);
   }
 
+  compileFunction(string, url, lineOffset, columnOffset) {
+    utils.compileFunction(this.id, string, url, lineOffset || 0, columnOffset || 0);
+  }
+
   loadScript(fileName) {
     this.addScript(utils.read(fileName));
   }

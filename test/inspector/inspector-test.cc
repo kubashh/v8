@@ -108,6 +108,9 @@ class UtilsExtension : public InspectorIsolateData::SetupGlobalTask {
     utils->Set(
         isolate, "waitForDebugger",
         v8::FunctionTemplate::New(isolate, &UtilsExtension::WaitForDebugger));
+    utils->Set(
+        isolate, "compileFunction",
+        v8::FunctionTemplate::New(isolate, &UtilsExtension::CompileFunction));
     global->Set(isolate, "utils", utils);
   }
 
@@ -252,14 +255,13 @@ class UtilsExtension : public InspectorIsolateData::SetupGlobalTask {
     std::vector<uint16_t> details =
         ToVector(info.GetIsolate(), info[2].As<v8::String>());
     int context_group_id = info[0].As<v8::Int32>()->Value();
-    RunSyncTask(backend_runner_,
-                [&context_group_id, &reason,
-                 &details](InspectorIsolateData* data) {
-                  data->SchedulePauseOnNextStatement(
-                      context_group_id,
-                      v8_inspector::StringView(reason.data(), reason.size()),
-                      v8_inspector::StringView(details.data(), details.size()));
-                });
+    RunSyncTask(backend_runner_, [&context_group_id, &reason,
+                                  &details](InspectorIsolateData* data) {
+      data->SchedulePauseOnNextStatement(
+          context_group_id,
+          v8_inspector::StringView(reason.data(), reason.size()),
+          v8_inspector::StringView(details.data(), details.size()));
+    });
   }
 
   static void CancelPauseOnNextStatement(
@@ -337,12 +339,12 @@ class UtilsExtension : public InspectorIsolateData::SetupGlobalTask {
     std::vector<uint16_t> name =
         ToVector(info.GetIsolate(), info[1].As<v8::String>());
 
-    RunSyncTask(backend_runner_, [&context_group_id,
-                                  name](InspectorIsolateData* data) {
-      CHECK(data->CreateContext(
-          context_group_id,
-          v8_inspector::StringView(name.data(), name.size())));
-    });
+    RunSyncTask(backend_runner_,
+                [&context_group_id, name](InspectorIsolateData* data) {
+                  CHECK(data->CreateContext(
+                      context_group_id,
+                      v8_inspector::StringView(name.data(), name.size())));
+                });
   }
 
   static void ResetContextGroup(
@@ -443,6 +445,26 @@ class UtilsExtension : public InspectorIsolateData::SetupGlobalTask {
           data->WaitForDebugger(context_group_id);
         },
         info[1].As<v8::Function>());
+  }
+
+  static void CompileFunction(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    if (info.Length() != 5 || !info[0]->IsInt32() || !info[1]->IsString() ||
+        !info[2]->IsString() || !info[3]->IsInt32() || !info[4]->IsInt32()) {
+      FATAL(
+          "Internal error: compile(context_group_id, source, "
+          "name, line, column, is_module).");
+    }
+
+    int context_group_id = info[0].As<v8::Int32>()->Value();
+    const std::vector<uint16_t> source =
+        ToVector(info.GetIsolate(), info[1].As<v8::String>());
+    v8::Local<v8::String> url = info[2].As<v8::String>();
+    v8::Local<v8::Integer> line_offset = info[3].As<v8::Integer>();
+    v8::Local<v8::Integer> column_offset = info[4].As<v8::Integer>();
+
+    backend_runner_->Append(std::make_unique<CompileFunctionTask>(
+        info.GetIsolate(), context_group_id, source, url, line_offset,
+        column_offset));
   }
 };
 
