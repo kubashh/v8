@@ -1,0 +1,3 @@
+Check fail compile and recompile
+hasBreakpoint: false
+hasBreakpoint: true
