@@ -39,6 +39,30 @@
       },
       "revId": "ce117637b15420dce425752d01b7739b552b8edb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37e0d418_65405894",
+        "filename": "src/base/logging.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-25T16:11:42Z",
+      "side": 1,
+      "message": "Hm, according to the spec it needs the braces. But it compiles without. Has this a different semantic then?\nAnyway, added braces.",
+      "parentUuid": "46d9d5a2_1f4125ab",
+      "range": {
+        "startLine": 263,
+        "startChar": 27,
+        "endLine": 263,
+        "endChar": 36
+      },
+      "revId": "ce117637b15420dce425752d01b7739b552b8edb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
