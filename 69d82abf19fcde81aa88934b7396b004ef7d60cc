@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd88f0f_585e6f5d",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-25T13:02:02Z",
+      "side": 1,
+      "message": "Can we DCHECK that in this case the `old_jslimit` is indeed the `kInterruptLimit`?",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dbb2960_cf90b81b",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-25T13:02:02Z",
+      "side": 1,
+      "message": "Why? Wouldn\u0027t the thread set requested interrupt set this anyway?",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4672902e_4643bdd6",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-25T13:02:02Z",
+      "side": 1,
+      "message": "Same: We should DCHECK for `kInterruptLimit`.\n\nAnd then I think we also wouldn\u0027t need to set the JS limit back. The code above cannot have overwritten the `kInterruptLimit`, so we also don\u0027t need to change anything back.\n\nOverall I think this whole method just needs to be:\n1. try CAS jslimit\n2. try CAS climit (could be skipped if (1) fails, but does not hurt to try the CAS)\n3. set real limits\n\nNote that `base::Relaxed_CompareAndSwap` uses the \"strong\" variant of CAS which is guaranteed to succeed if (and only if!) the old value matches the expected value.",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
