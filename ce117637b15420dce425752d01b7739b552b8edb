@@ -63,6 +63,30 @@
       },
       "revId": "ce117637b15420dce425752d01b7739b552b8edb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e28d60c6_30c11c8a",
+        "filename": "src/base/logging.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-25T16:13:31Z",
+      "side": 1,
+      "message": "without the braces I\u0027d expect it to be an arrow operator, and check whether `t.begin()-\u003estd::forward_iterator` is valid syntax. I guess, since it\u0027s not, it would silently block this overload :/",
+      "parentUuid": "37e0d418_65405894",
+      "range": {
+        "startLine": 263,
+        "startChar": 27,
+        "endLine": 263,
+        "endChar": 36
+      },
+      "revId": "ce117637b15420dce425752d01b7739b552b8edb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
