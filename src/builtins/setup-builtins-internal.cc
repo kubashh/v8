@@ -7,6 +7,7 @@
 #include "src/builtins/builtins-inl.h"
 #include "src/builtins/profile-data-reader.h"
 #include "src/codegen/assembler-inl.h"
+#include "src/codegen/cpu-features.h"
 #include "src/codegen/interface-descriptors.h"
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/macro-assembler.h"
@@ -41,6 +42,40 @@ BUILTIN_LIST_C(FORWARD_DECLARE)
 #undef FORWARD_DECLARE
 
 namespace {
+
+enum class InstructionSetExtensionMode {
+  // Do not use extended instruction sets.
+  kNoExtension,
+  // Use extended instruction sets.
+  kExtension
+};
+
+// #if V8_BUILTINS_INSTRUCTION_SET_EXTENSION && V8_TARGET_ARCH_X64
+
+class InstructionSetExtensionScope {
+ public:
+  InstructionSetExtensionScope() {
+#if V8_ENABLE_ISX_BUILTIN
+    old_features_ = CpuFeatures::supported_features();
+    CpuFeatures::SetSupported(SSE4_1);
+    initialized_ = true;
+#endif
+  }
+
+  ~InstructionSetExtensionScope() {
+#if V8_ENABLE_ISX_BUILTIN
+    if (initialized_) {
+      CpuFeatures::set_supported_features(old_features_);
+    }
+#endif
+  }
+
+ private:
+#if V8_ENABLE_ISX_BUILTIN
+  bool initialized_ = false;
+  unsigned old_features_ = 0;
+#endif
+};
 
 const int kBufferSize = 128 * KB;
 
@@ -443,7 +478,7 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   index++;
 
   BUILTIN_LIST(BUILD_CPP, BUILD_TSJ, BUILD_TFJ, BUILD_TSC, BUILD_TFC, BUILD_TFS,
-               BUILD_TFH, BUILD_BCH, BUILD_ASM);
+               BUILD_TFH, BUILD_BCH, BUILD_ASM, IGNORE_BUILTIN);
 
 #undef BUILD_CPP
 #undef BUILD_TSJ
@@ -455,6 +490,24 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
 #undef BUILD_BCH
 #undef BUILD_ASM
   CHECK_EQ(Builtins::kBuiltinCount, index);
+
+  {
+    InstructionSetExtensionScope isx_scope;
+
+    // #define IGNORE_BUILTIN(...)
+
+#define BUILD_TFH_ISX(Name, InterfaceDescriptor)                  \
+  /* Return size is from the provided CallInterfaceDescriptor. */ \
+  code = BuildWithCodeStubAssemblerCS(                            \
+      isolate, Builtin::k##Name, &Builtins::Generate_##Name,      \
+      CallDescriptors::InterfaceDescriptor, #Name);               \
+  builtins->isx_builtins.push_back(code);
+
+    BUILTIN_LIST_ISX(BUILD_TFH_ISX);
+
+#undef BUILD_TFH_ISX
+#undef IGNORE_BUILTIN
+  }
 
   ReplacePlaceholders(isolate);
 

@@ -74,6 +74,10 @@ namespace heap::base {
 class Stack;
 }
 
+namespace v8::internal {
+class EmbeddedData;
+}
+
 namespace v8::base {
 
 // ----------------------------------------------------------------------------
@@ -366,6 +370,7 @@ class V8_BASE_EXPORT OS {
   friend class v8::base::PageAllocator;
   friend class v8::base::VirtualAddressSpace;
   friend class v8::base::VirtualAddressSubspace;
+  friend class v8::internal::EmbeddedData;
   FRIEND_TEST(OS, RemapPages);
 
   static size_t AllocatePageSize();
@@ -419,6 +424,11 @@ class V8_BASE_EXPORT OS {
   static void FreeAddressSpaceReservation(AddressSpaceReservation reservation);
 
   static const int msPerSecond = 1000;
+
+#if V8_OS_WIN
+  static bool SetPermissionForDataSegmentOnWin32(void* address, size_t size,
+                                                 MemoryPermission access);
+#endif  // defined(V8_OS_WIN)
 
 #if V8_OS_POSIX
   static const char* GetGCFakeMMapFile();
