@@ -87,7 +87,7 @@ CodeAssemblerState::CodeAssemblerState(Isolate* isolate, Zone* zone,
 CodeAssemblerState::~CodeAssemblerState() = default;
 
 int CodeAssemblerState::parameter_count() const {
-  return static_cast<int>(raw_assembler_->call_descriptor()->ParameterCount());
+  return static_cast<int>(raw_assembler_->parameter_count());
 }
 
 CodeAssembler::~CodeAssembler() = default;
@@ -431,6 +431,20 @@ TNode<Context> CodeAssembler::GetJSContextParameter() {
   DCHECK(call_descriptor->IsJSFunctionCall());
   return Parameter<Context>(Linkage::GetJSCallContextParamIndex(
       static_cast<int>(call_descriptor->JSParameterCount())));
+}
+
+bool CodeAssembler::HasDynamicJSParameterCount() {
+  return raw_assembler()->dynamic_js_parameter_count() != nullptr;
+}
+
+TNode<Uint16T> CodeAssembler::DynamicJSParameterCount() {
+  DCHECK(HasDynamicJSParameterCount());
+  return UncheckedCast<Uint16T>(raw_assembler()->dynamic_js_parameter_count());
+}
+
+void CodeAssembler::SetDynamicJSParameterCount(TNode<Uint16T> parameter_count) {
+  DCHECK(!HasDynamicJSParameterCount());
+  raw_assembler()->set_dynamic_js_parameter_count(parameter_count);
 }
 
 void CodeAssembler::Return(TNode<Object> value) {
