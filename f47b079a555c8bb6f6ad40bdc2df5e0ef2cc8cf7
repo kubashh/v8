@@ -54,6 +54,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f9406628_f9602f23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2024-10-25T12:09:18Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f47b079a555c8bb6f6ad40bdc2df5e0ef2cc8cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c7632a62_e2b66b61",
         "filename": "infra/mb/mb_config.pyl",
         "patchSetId": 1
