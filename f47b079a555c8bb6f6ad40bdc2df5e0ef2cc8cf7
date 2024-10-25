@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0d243d28_e56014bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2024-10-25T12:06:44Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f47b079a555c8bb6f6ad40bdc2df5e0ef2cc8cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c7632a62_e2b66b61",
         "filename": "infra/mb/mb_config.pyl",
         "patchSetId": 1
