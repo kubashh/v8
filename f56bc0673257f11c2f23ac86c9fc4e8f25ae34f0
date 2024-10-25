@@ -20,6 +20,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3afb4e0_538176db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-25T22:37:05Z",
+      "side": 1,
+      "message": "- Are there tests for that `using` and `await using` can be used in REPL mode?\n- What about that they cannot be used for debug-evaluate?",
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71dffb6e_28d3ddb8",
+        "filename": "src/execution/execution.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2024-10-25T22:37:05Z",
+      "side": 1,
+      "message": "This can be shortened to `mode \u003d\u003d lookup.mode \u0026\u0026 IsLexicalVariableMode(mode)`.",
+      "range": {
+        "startLine": 214,
+        "startChar": 14,
+        "endLine": 221,
+        "endChar": 58
+      },
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff0b57c8_e4b085ff",
         "filename": "test/inspector/debugger/break-on-exception-explicit-reource-management-expected.txt",
         "patchSetId": 9
