@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "44e7e120_75795d9e",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-25T13:12:37Z",
+      "side": 1,
+      "message": "... se sreat set requested...\nSorry, meant the thread *that* requested interrupt.",
+      "parentUuid": "5dbb2960_cf90b81b",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4672902e_4643bdd6",
         "filename": "src/execution/stack-guard.cc",
         "patchSetId": 2
