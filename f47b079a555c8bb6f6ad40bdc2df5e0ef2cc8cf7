@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9286f77_5bfaca60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-25T11:53:32Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "f47b079a555c8bb6f6ad40bdc2df5e0ef2cc8cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7632a62_e2b66b61",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-25T11:53:32Z",
+      "side": 1,
+      "message": "That\u0027s the same as the corresponding CI builder that already exists.",
+      "range": {
+        "startLine": 362,
+        "startChar": 38,
+        "endLine": 362,
+        "endChar": 92
+      },
+      "revId": "f47b079a555c8bb6f6ad40bdc2df5e0ef2cc8cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7ef9df_d3e0ab6c",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2024-10-25T11:53:32Z",
+      "side": 1,
+      "message": "1:1 copy of the TSAN configs below. We don\u0027t have a way currently to share this.",
+      "revId": "f47b079a555c8bb6f6ad40bdc2df5e0ef2cc8cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
