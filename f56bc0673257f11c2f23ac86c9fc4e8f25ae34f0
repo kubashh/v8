@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "630ef3af_9f4d8ec8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-25T17:44:49Z",
+      "side": 1,
+      "message": "Please take a look. Thanks!",
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff0b57c8_e4b085ff",
+        "filename": "test/inspector/debugger/break-on-exception-explicit-reource-management-expected.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2024-10-25T17:44:49Z",
+      "side": 1,
+      "message": "This is an incorrect exception. Any idea about what the problem is here?",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 102
+      },
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
