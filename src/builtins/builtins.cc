@@ -82,7 +82,7 @@ struct BuiltinMetadata {
 #define DECL_ASM(Name, ...) {#Name, Builtins::ASM, {}},
 const BuiltinMetadata builtin_metadata[] = {
     BUILTIN_LIST(DECL_CPP, DECL_TSJ, DECL_TFJ, DECL_TSC, DECL_TFC, DECL_TFS,
-                 DECL_TFH, DECL_BCH, DECL_ASM)};
+                 DECL_TFH, DECL_BCH, DECL_ASM, IGNORE_BUILTIN)};
 #undef DECL_CPP
 #undef DECL_TFJ
 #undef DECL_TSC
@@ -223,7 +223,8 @@ CallInterfaceDescriptor Builtins::CallInterfaceDescriptorFor(Builtin builtin) {
     break;                                             \
   }
     BUILTIN_LIST(IGNORE_BUILTIN, IGNORE_BUILTIN, IGNORE_BUILTIN, CASE_OTHER,
-                 CASE_OTHER, CASE_OTHER, CASE_OTHER, IGNORE_BUILTIN, CASE_OTHER)
+                 CASE_OTHER, CASE_OTHER, CASE_OTHER, IGNORE_BUILTIN, CASE_OTHER,
+                 IGNORE_BUILTIN)
 #undef CASE_OTHER
     default:
       Builtins::Kind kind = Builtins::KindOf(builtin);
