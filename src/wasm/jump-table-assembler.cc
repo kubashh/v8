@@ -160,33 +160,45 @@ void JumpTableAssembler::SkipUntil(int offset) {
 #elif V8_TARGET_ARCH_ARM
 void JumpTableAssembler::EmitLazyCompileJumpSlot(uint32_t func_index,
                                                  Address lazy_compile_target) {
-  // Load function index to a register.
-  // This generates [movw, movt] on ARMv7 and later, [ldr, constant pool marker,
-  // constant] on ARMv6.
-  Move32BitImmediate(kWasmCompileLazyFuncIndexRegister, Operand(func_index));
-  // EmitJumpSlot emits either [b], [movw, movt, mov] (ARMv7+), or [ldr,
-  // constant].
-  // In total, this is <=5 instructions on all architectures.
-  // TODO(arm): Optimize this for code size; lazy compile is not performance
-  // critical, as it's only executed once per function.
-  EmitJumpSlot(lazy_compile_target);
+  static_assert(kWasmCompileLazyFuncIndexRegister == r4);
+  // Note that below, [pc] points to the the instruction after the next.
+  const uint32_t inst[kLazyCompileTableSlotSize / 4] = {
+      0xe59f4000,  // ldr r4, [pc]
+      0xe59ff000,  // ldr pc, [pc]
+      0x00000000,  // func_index
+      0x00000000,  // target
+  };
+  base::Memory<uint32_t>(pc_ + (0 * kInstrSize)) = inst[0];
+  base::Memory<uint32_t>(pc_ + (1 * kInstrSize)) = inst[1];
+  base::Memory<uint32_t>(pc_ + (2 * kInstrSize)) = func_index;
+  base::Memory<uint32_t>(pc_ + (3 * kInstrSize)) = lazy_compile_target;
+  pc_ += kLazyCompileTableSlotSize;
 }
 
 bool JumpTableAssembler::EmitJumpSlot(Address target) {
-  // Note that {Move32BitImmediate} emits [ldr, constant] for the relocation
-  // mode used below, we need this to allow concurrent patching of this slot.
-  Move32BitImmediate(pc, Operand(target, RelocInfo::WASM_CALL));
-  CheckConstPool(true, false);  // force emit of const pool
+  static_assert(kInstrSize == kInt32Size);
+  static_assert(kJumpTableSlotSize == 2 * kInstrSize);
+
+  // Load from [pc + kInstrSize] to pc. Note that {pc} points two instructions
+  // after the currently executing one.
+  const uint32_t inst[kJumpTableSlotSize / kInstrSize] = {
+      0xe51ff004,  // ldr pc, [pc, -4]
+      0x00000000,  // target
+  };
+
+  // This function is also used for patching existing jump slots and the writes
+  // need to be atomic.
+  reinterpret_cast<std::atomic<Address>*>(pc_)->store(
+      inst[0], std::memory_order_relaxed);
+  reinterpret_cast<std::atomic<Address>*>(pc_ + kInstrSize)
+      ->store(target, std::memory_order_relaxed);
+  pc_ += kJumpTableSlotSize;
   return true;
 }
 
 void JumpTableAssembler::EmitFarJumpSlot(Address target) {
-  // Load from [pc + kInstrSize] to pc. Note that {pc} points two instructions
-  // after the currently executing one.
-  ldr_pcrel(pc, -kInstrSize);  // 1 instruction
-  dd(target);                  // 4 bytes (== 1 instruction)
-  static_assert(kInstrSize == kInt32Size);
-  static_assert(kFarJumpTableSlotSize == 2 * kInstrSize);
+  static_assert(kJumpTableSlotSize == kFarJumpTableSlotSize);
+  EmitJumpSlot(target);
 }
 
 // static
