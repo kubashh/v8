@@ -87,6 +87,30 @@
       },
       "revId": "ce117637b15420dce425752d01b7739b552b8edb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "313059b4_8a64c4a3",
+        "filename": "src/base/logging.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-25T16:22:23Z",
+      "side": 1,
+      "message": "Oh, indeed! It prints collections as `\u003cunprintable\u003e` without braces :/ \n\nI added another unittest to cover this.\n\nThanks for catching this!",
+      "parentUuid": "e28d60c6_30c11c8a",
+      "range": {
+        "startLine": 263,
+        "startChar": 27,
+        "endLine": 263,
+        "endChar": 36
+      },
+      "revId": "ce117637b15420dce425752d01b7739b552b8edb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
