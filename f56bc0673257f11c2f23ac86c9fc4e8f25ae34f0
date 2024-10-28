@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a946bb0_74f1788a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T05:39:03Z",
+      "side": 1,
+      "message": "For how to test these:\n* For REPL mode use `Runtime.evaluate({ expression: \u0027\u0027, replMode: true });`\n* For debug evaluate, you first need to pause (e.g. evaluating `debugger;`. Wait for the paused event (e.g. `await Debugger.oncePaused`) and then use `Debugger.evaluateOnCallFrame` with the callframe ID obtained from the paused event.",
+      "parentUuid": "b3afb4e0_538176db",
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "71dffb6e_28d3ddb8",
         "filename": "src/execution/execution.cc",
         "patchSetId": 9
@@ -77,6 +95,64 @@
         "endLine": 27,
         "endChar": 102
       },
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83325360_67e3811e",
+        "filename": "test/inspector/debugger/break-on-exception-explicit-reource-management-expected.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T05:39:03Z",
+      "side": 1,
+      "message": "Can you check the result of the previous `Runtime.evaluate` invocations? It might be that all the `Runtime.evaluate` calls actually throw but we just notice it here.\n\nDoes the new `using` syntax need any flags to work? If so you have to enable it in the test file with the standard `// Flags: ` comment. It could be that the `addInlineScript` fails with a parse error, so the function is never defined.",
+      "parentUuid": "ff0b57c8_e4b085ff",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 102
+      },
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8910a1e5_c0fab31a",
+        "filename": "test/inspector/debugger/break-on-exception-explicit-reource-management.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T05:39:03Z",
+      "side": 1,
+      "message": "nit: Typo in the filename",
+      "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "957f2a64_be2ec049",
+        "filename": "test/inspector/debugger/break-on-exception-explicit-reource-management.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T05:39:03Z",
+      "side": 1,
+      "message": "After seeing the other test, this needs probably a `// Flags: --js-explicit-resource-management`.",
       "revId": "f56bc0673257f11c2f23ac86c9fc4e8f25ae34f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
