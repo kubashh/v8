@@ -67,6 +67,30 @@
       ],
       "revId": "421665c201fafe01cc41d5792571ba4e2a33f486",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba77db57_c38cad2a",
+        "filename": "src/base/platform/mutex.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-28T13:51:21Z",
+      "side": 1,
+      "message": "D\u0027oh. Thanks. Fix applied.",
+      "parentUuid": "327f7560_292aa41c",
+      "range": {
+        "startLine": 73,
+        "startChar": 49,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "revId": "421665c201fafe01cc41d5792571ba4e2a33f486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
