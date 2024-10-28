@@ -33,6 +33,24 @@
       "message": "unfortunately, there are a lot of failing tests that require fixing",
       "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e604639_646a4eb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3650664
+      },
+      "writtenOn": "2024-10-28T08:43:10Z",
+      "side": 1,
+      "message": "I fail to see how they are related to the change",
+      "parentUuid": "ee5bc39a_b7fad781",
+      "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
