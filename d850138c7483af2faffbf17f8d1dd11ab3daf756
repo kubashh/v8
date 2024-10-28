@@ -16,6 +16,69 @@
       "message": "Simon, Philip, can you take a look please?",
       "revId": "d850138c7483af2faffbf17f8d1dd11ab3daf756",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47a71b8a_8d2112d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T07:12:06Z",
+      "side": 1,
+      "message": "Thanks a lot for looking into this. I especially appreciate the lengths you went to add a regression test.\n\nI\u0027m not sure this is the right fix so please see the comment in-line.",
+      "revId": "d850138c7483af2faffbf17f8d1dd11ab3daf756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aba77aca_3028ff0d",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2240,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T07:12:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is the right fix. The fundamental problem is that we fail to recompile a script originating from `::CompileFunction`. That node.js recompiles the script as a module is immaterial. For the crash to reproduce it should be enough to GC the `Script` produced by `::CompileFunction` and then attempt to set a breakpoint. This should already cause the crash. It\u0027s fine if that recompilation again fails with a parse error, but we should not crash.\n\nThe underlying crash happens because we configure the recompile wrongly. There is a missmatch between the parser/compile options from the initial compilation and how we re-compile here.\n\nI think the right fix would be to adjust `CompileTopLevel` to account for wrapped scripts and re-compile using `::CompileFunction` instead of a normal script compile. Could you try to see if that\u0027s possible?",
+      "range": {
+        "startLine": 2240,
+        "startChar": 8,
+        "endLine": 2240,
+        "endChar": 40
+      },
+      "revId": "d850138c7483af2faffbf17f8d1dd11ab3daf756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5416ca87_cedff0b4",
+        "filename": "test/inspector/debugger/fail-compile-wrapped-and-recompile-module.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2024-10-28T07:12:06Z",
+      "side": 1,
+      "message": "super nit: 2024 😊",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "d850138c7483af2faffbf17f8d1dd11ab3daf756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
