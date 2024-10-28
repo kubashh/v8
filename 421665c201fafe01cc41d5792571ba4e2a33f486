@@ -16,6 +16,57 @@
       "message": "Michael is still OOO. Leszek, can you use your ENG_REVIEW_OWNERS powers to LGTM src/libplatform?",
       "revId": "421665c201fafe01cc41d5792571ba4e2a33f486",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "327f7560_292aa41c",
+        "filename": "src/base/platform/mutex.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2024-10-28T13:48:21Z",
+      "side": 1,
+      "message": "nit: `do` or `use`",
+      "range": {
+        "startLine": 73,
+        "startChar": 49,
+        "endLine": 73,
+        "endChar": 51
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "64c3b3df_0a989273",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/base/platform/mutex.h",
+              "range": {
+                "startLine": 73,
+                "startChar": 0,
+                "endLine": 74,
+                "endChar": 0
+              },
+              "replacement": "  // Note: Instead of `DCHECK(!mutex.TryLock())` use `mutex.AssertHeld()`.\n"
+            },
+            {
+              "path": "src/base/platform/mutex.h",
+              "range": {
+                "startLine": 185,
+                "startChar": 0,
+                "endLine": 186,
+                "endChar": 0
+              },
+              "replacement": "  // Note: Instead of `DCHECK(!mutex.TryLock())` use `mutex.AssertHeld()`.\n"
+            }
+          ]
+        }
+      ],
+      "revId": "421665c201fafe01cc41d5792571ba4e2a33f486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
