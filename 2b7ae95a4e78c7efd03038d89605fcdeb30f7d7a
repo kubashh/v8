@@ -51,6 +51,24 @@
       "parentUuid": "ee5bc39a_b7fad781",
       "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832167c5_7ffd7d34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-28T08:51:45Z",
+      "side": 1,
+      "message": "I guess the expected tests\u0027 outputs require updating. For example, test`//message/fail/iterator-non-callable-2//instruction_scheduling` expects the old `at Function.from (\u003canonymous\u003e)` stack trace item while after your change it looks like `at Uint8Array.from (\u003canonymous\u003e)`.",
+      "parentUuid": "0e604639_646a4eb1",
+      "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
