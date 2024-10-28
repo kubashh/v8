@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a940e89e_0328fa37",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-28T10:01:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ecd88f0f_585e6f5d",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dbb2960_cf90b81b",
@@ -53,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e3fb5e3_c32f70f3",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-28T10:01:35Z",
+      "side": 1,
+      "message": "Oh, you\u0027re totally right! For some reason I thought that we could still accidentally overwrite the other limit, but using a CAS for both already prevents that as you noted on the other comment.\nI\u0027ve uploaded a follow-up commit.",
+      "parentUuid": "44e7e120_75795d9e",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4672902e_4643bdd6",
@@ -66,6 +102,24 @@
       "writtenOn": "2024-10-25T13:02:02Z",
       "side": 1,
       "message": "Same: We should DCHECK for `kInterruptLimit`.\n\nAnd then I think we also wouldn\u0027t need to set the JS limit back. The code above cannot have overwritten the `kInterruptLimit`, so we also don\u0027t need to change anything back.\n\nOverall I think this whole method just needs to be:\n1. try CAS jslimit\n2. try CAS climit (could be skipped if (1) fails, but does not hurt to try the CAS)\n3. set real limits\n\nNote that `base::Relaxed_CompareAndSwap` uses the \"strong\" variant of CAS which is guaranteed to succeed if (and only if!) the old value matches the expected value.",
+      "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eba3e10_eafb9d83",
+        "filename": "src/execution/stack-guard.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2024-10-28T10:01:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4672902e_4643bdd6",
       "revId": "69d82abf19fcde81aa88934b7396b004ef7d60cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
