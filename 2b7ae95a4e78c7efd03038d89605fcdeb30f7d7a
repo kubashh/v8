@@ -69,6 +69,24 @@
       "parentUuid": "0e604639_646a4eb1",
       "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95968efc_e7189d13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2024-10-28T08:54:28Z",
+      "side": 1,
+      "message": "See the expected output template in `test/message/fail/iterator-non-callable-2.out`.\nTry to run the test suite locally: `tools/dev/gm.py x64.optdebug.check`.",
+      "parentUuid": "832167c5_7ffd7d34",
+      "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
