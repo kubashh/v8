@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e72c0f14_d5992c1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2024-10-28T13:34:45Z",
+      "side": 1,
+      "message": "Michael is still OOO. Leszek, can you use your ENG_REVIEW_OWNERS powers to LGTM src/libplatform?",
+      "revId": "421665c201fafe01cc41d5792571ba4e2a33f486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
