@@ -1048,6 +1048,22 @@ void OS::Release(void* address, size_t size) {
 }
 
 // static
+bool OS::SetPermissionForDataSegmentOnWin32(void* address, size_t size,
+                                            MemoryPermission access) {
+  DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
+  DCHECK_EQ(0, size % CommitPageSize());
+  if (access == MemoryPermission::kNoAccess) {
+    return VirtualFree(address, size, MEM_DECOMMIT) != 0;
+  }
+
+  DWORD protect = GetProtectionFromMemoryPermission(access);
+  DWORD old_protection;
+  bool result = VirtualProtect(address, size, protect, &old_protection);
+  CHECK(old_protection);
+  return result;
+}
+
+// static
 bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
   DCHECK_EQ(0, size % CommitPageSize());
