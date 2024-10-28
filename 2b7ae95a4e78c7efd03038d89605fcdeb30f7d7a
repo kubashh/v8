@@ -87,6 +87,24 @@
       "parentUuid": "832167c5_7ffd7d34",
       "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17112500_fb30e36e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3650664
+      },
+      "writtenOn": "2024-10-28T08:57:08Z",
+      "side": 1,
+      "message": "Ah, I see. Thanks for the pointer. I\u0027ll see if I can reproduce them and update the expected output. But it\u0027ll take me a few days to find free time for it.",
+      "parentUuid": "95968efc_e7189d13",
+      "revId": "2b7ae95a4e78c7efd03038d89605fcdeb30f7d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
