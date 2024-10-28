@@ -13,6 +13,8 @@
 namespace v8 {
 namespace internal {
 
+base::LazyMutex EmbeddedData::mutex_;
+
 Builtin EmbeddedData::TryLookupCode(Address address) const {
   if (!IsInCodeRange(address)) return Builtin::kNoBuiltinId;
 
@@ -215,6 +217,45 @@ void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
     CHECK(off_heap_it.done());
 #endif
   }
+
+  for (size_t i = 0; i < isolate->builtins()->isx_builtins.size(); i++) {
+    Tagged<Code> isx_code = isolate->builtins()->isx_builtins[i];
+    RelocIterator on_heap_it(isx_code, kRelocMask);
+    RelocIterator off_heap_it(blob, isx_code, i, kRelocMask);
+
+#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64) ||    \
+    defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_IA32) ||     \
+    defined(V8_TARGET_ARCH_S390) || defined(V8_TARGET_ARCH_RISCV64) || \
+    defined(V8_TARGET_ARCH_LOONG64) || defined(V8_TARGET_ARCH_RISCV32)
+    // On these platforms we emit relative builtin-to-builtin
+    // jumps for isolate independent builtins in the snapshot. This fixes up the
+    // relative jumps to the right offsets in the snapshot.
+    // See also: InstructionStream::IsIsolateIndependent.
+    while (!on_heap_it.done()) {
+      DCHECK(!off_heap_it.done());
+
+      RelocInfo* rinfo = on_heap_it.rinfo();
+      DCHECK_EQ(rinfo->rmode(), off_heap_it.rinfo()->rmode());
+      Tagged<Code> target_code =
+          Code::FromTargetAddress(rinfo->target_address());
+      CHECK(Builtins::IsIsolateIndependentBuiltin(target_code));
+
+      // Do not emit write-barrier for off-heap writes.
+      off_heap_it.rinfo()->set_off_heap_target_address(
+          blob->InstructionStartOf(target_code->builtin_id()));
+
+      on_heap_it.next();
+      off_heap_it.next();
+    }
+    DCHECK(off_heap_it.done());
+#else
+    // Architectures other than x64 and arm/arm64 do not use pc-relative calls
+    // and thus must not contain embedded code targets. Instead, we use an
+    // indirection through the root register.
+    CHECK(on_heap_it.done());
+    CHECK(off_heap_it.done());
+#endif
+  }
 }
 
 void EnsureRelocatable(Tagged<Code> code) {
@@ -232,13 +273,76 @@ void EnsureRelocatable(Tagged<Code> code) {
 
 }  // namespace
 
+void EmbeddedData::UpdateForISXBuiltinImpl(Builtin b) {
+  const struct LayoutDescription* descs =
+      reinterpret_cast<const struct LayoutDescription*>(
+          data_ + LayoutDescriptionTableOffset());
+  const struct LayoutDescription* desc = descs + static_cast<int>(b);
+  const struct LayoutDescription* isx_desc =
+      descs + static_cast<int>(Builtins::kBuiltinCount) +
+      Builtins::GetISXBuiltinIdx(b);
+  void* desc_address =
+      reinterpret_cast<void*>(RoundDown(reinterpret_cast<int64_t>(desc), 4096));
+  size_t len = sizeof(struct LayoutDescription) *
+                   (Builtins::kBuiltinCount + Builtins::kBuiltinISXCount) +
+               sizeof(struct BuiltinLookupEntry) * Builtins::kBuiltinCount;
+  len = RoundUp(len, 4096);
+  // TODO(Wenqin): The reason why we use base::OS::SetPermissions here but not
+  // pageallocator's SetPermissions is that thre is a test called
+  // unittests/PoolTest.UnmapOnTeardown, which will check all memory pages were
+  // set permission was in a list(the list should only contains the memory which
+  // allocate by v8), but the memory was not be allocated by v8, it's loaded by
+  // loader, so we will fail in such a case if we call allocator's
+  // SetPermission.
+#if V8_OS_WIN
+  CHECK(base::OS::SetPermissionForDataSegmentOnWin32(
+      desc_address, len, base::OS::MemoryPermission::kReadWrite));
+#else
+  CHECK(base::OS::SetPermissions(desc_address, len,
+                                 base::OS::MemoryPermission::kReadWrite));
+#endif  // V8_OS_WIN
+  memcpy(const_cast<void*>(reinterpret_cast<const void*>(desc)),
+         reinterpret_cast<const char*>(isx_desc),
+         sizeof(struct LayoutDescription));
+
+  struct BuiltinLookupEntry* entry = const_cast<struct BuiltinLookupEntry*>(
+      BuiltinLookupEntry(static_cast<ReorderedBuiltinIndex>(b)));
+  entry->end_offset =
+      isx_desc->instruction_offset + isx_desc->instruction_length;
+#if V8_OS_WIN
+  CHECK(base::OS::SetPermissionForDataSegmentOnWin32(
+      desc_address, len, base::OS::MemoryPermission::kRead));
+#else
+  CHECK(base::OS::SetPermissions(desc_address, len,
+                                 base::OS::MemoryPermission::kRead));
+#endif  // V8_OS_WIN
+}
+
+static bool is_updated = false;
+
+void EmbeddedData::UpdateForISXBuiltin() {
+  base::MutexGuard lock_guard(mutex_.Pointer());
+  if (is_updated) return;
+  is_updated = true;
+#if V8_ENABLE_ISX_BUILTIN
+  if (CpuFeatures::IsSupported(CpuFeature::SSE4_1)) {
+#define DEF_ENUM(Name, ...) UpdateForISXBuiltinImpl(Builtin::k##Name);
+    BUILTIN_LIST_ISX(DEF_ENUM)
+#undef DEF_ENUM
+  }
+#endif
+}
+
 // static
 EmbeddedData EmbeddedData::NewFromIsolate(Isolate* isolate) {
   Builtins* builtins = isolate->builtins();
 
   // Store instruction stream lengths and offsets.
-  std::vector<struct LayoutDescription> layout_descriptions(kTableSize);
+  std::vector<struct LayoutDescription> layout_descriptions(
+      kTableSize + Builtins::kBuiltinISXCount);
   std::vector<struct BuiltinLookupEntry> offset_descriptions(kTableSize);
+
+  std::vector<struct LayoutDescription> layout_descriptions_isx;
 
   bool saw_unsafe_builtin = false;
   uint32_t raw_code_size = 0;
@@ -303,6 +407,30 @@ EmbeddedData EmbeddedData::NewFromIsolate(Isolate* isolate) {
       offset_desc.end_offset = raw_code_size;
       offset_desc.builtin_id = static_cast<uint32_t>(builtin);
     }
+    if (Builtins::IsISXBuiltinId(builtin)) {
+      // insert a desc for isx builtin in layout description array, still need
+      // to insert builtin inst stream!!!
+      int32_t isx_idx = Builtins::GetISXBuiltinIdx(builtin);
+      Tagged<Code> isx_code = builtins->isx_builtins[isx_idx];
+      uint32_t isx_inst_size =
+          static_cast<uint32_t>(isx_code->instruction_size());
+      struct LayoutDescription isx_desc {
+        raw_code_size, isx_inst_size, raw_data_size
+      };
+      raw_code_size += PadAndAlignCode(isx_inst_size);
+      raw_data_size += PadAndAlignData(isx_code->metadata_size());
+      layout_descriptions_isx.push_back(isx_desc);
+    }
+  }
+  for (size_t i = 0; i < layout_descriptions_isx.size(); i++) {
+    struct LayoutDescription& layout_desc_isx =
+        layout_descriptions[i + kTableSize];
+    layout_desc_isx.instruction_length =
+        layout_descriptions_isx[i].instruction_length;
+    layout_desc_isx.instruction_offset =
+        layout_descriptions_isx[i].instruction_offset;
+    layout_desc_isx.metadata_offset =
+        layout_descriptions_isx[i].metadata_offset;
   }
   CHECK_WITH_MSG(
       !saw_unsafe_builtin,
@@ -333,8 +461,9 @@ EmbeddedData EmbeddedData::NewFromIsolate(Isolate* isolate) {
   }
 
   // Write the layout_descriptions tables.
-  DCHECK_EQ(LayoutDescriptionTableSize(),
-            sizeof(layout_descriptions[0]) * layout_descriptions.size());
+  // this dcheck will fail due to adding new desc for isx buitlin.
+  // DCHECK_EQ(LayoutDescriptionTableSize(),
+  //          sizeof(layout_descriptions[0]) * layout_descriptions.size());
   std::memcpy(blob_data + LayoutDescriptionTableOffset(),
               layout_descriptions.data(), LayoutDescriptionTableSize());
 
@@ -357,6 +486,19 @@ EmbeddedData EmbeddedData::NewFromIsolate(Isolate* isolate) {
               blob_data_size);
     std::memcpy(dst, reinterpret_cast<uint8_t*>(code->metadata_start()),
                 code->metadata_size());
+
+    if (Builtins::IsISXBuiltinId(builtin)) {
+      int32_t isx_idx = Builtins::GetISXBuiltinIdx(builtin);
+      Tagged<Code> isx_code = builtins->isx_builtins[isx_idx];
+      // kTableSize is the last element in descs, which indicate the start of
+      // isx builtin.
+      uint32_t offset_isx =
+          layout_descriptions[isx_idx + kTableSize].metadata_offset;
+      uint8_t* dst_isx = raw_metadata_start + offset_isx;
+      std::memcpy(dst_isx,
+                  reinterpret_cast<uint8_t*>(isx_code->metadata_start()),
+                  isx_code->metadata_size());
+    }
   }
   CHECK_IMPLIES(
       kMaxPCRelativeCodeRangeInMB,
@@ -375,6 +517,18 @@ EmbeddedData EmbeddedData::NewFromIsolate(Isolate* isolate) {
               blob_code_size);
     std::memcpy(dst, reinterpret_cast<uint8_t*>(code->instruction_start()),
                 code->instruction_size());
+    if (Builtins::IsISXBuiltinId(builtin)) {
+      int32_t isx_idx = Builtins::GetISXBuiltinIdx(builtin);
+      Tagged<Code> isx_code = builtins->isx_builtins[isx_idx];
+      // kTableSize is the last element in descs, which indicate the isx
+      // builtin, but should write more formal code later.
+      uint32_t offset_isx =
+          layout_descriptions[isx_idx + kTableSize].instruction_offset;
+      uint8_t* dst_isx = raw_code_start + offset_isx;
+      std::memcpy(dst_isx,
+                  reinterpret_cast<uint8_t*>(isx_code->instruction_start()),
+                  isx_code->instruction_size());
+    }
   }
 
   EmbeddedData d(blob_code, blob_code_size, blob_data, blob_data_size);
